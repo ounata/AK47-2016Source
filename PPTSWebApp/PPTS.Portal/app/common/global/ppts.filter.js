@@ -46,6 +46,12 @@ ppts.ng.filter('parentFemale', function () {
         return mcs.util.getDictionaryItemValue(ppts.dict[ppts.config.dictMappingConfig.parentFemale], current);
     };
 });
+// 学年过滤器
+ppts.ng.filter('academicYear', function () {
+    return function (current) {
+        return mcs.util.getDictionaryItemValue(ppts.dict[ppts.config.dictMappingConfig.academicYear], current);
+    };
+});
 // vip客户类型过滤器
 ppts.ng.filter('vipType', function () {
     return function (current) {

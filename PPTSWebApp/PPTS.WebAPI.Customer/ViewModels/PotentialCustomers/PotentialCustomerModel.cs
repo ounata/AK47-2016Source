@@ -29,5 +29,27 @@ namespace PPTS.WebAPI.Customer.ViewModels.PotentialCustomers
             get;
             set;
         }
+
+        /// <summary>
+        /// 转介绍员工信息
+        /// </summary>
+        [NoMapping]
+        public string ReferralStaffInfo
+        {
+            get
+            {
+                var referralStaff = this.ReferralStaffName;
+                if (!String.IsNullOrEmpty(this.ReferralStaffJobName))
+                {
+                    referralStaff += "(" + this.ReferralStaffJobName;
+                    if (!String.IsNullOrEmpty(this.ReferralStaffCode))
+                    {
+                        referralStaff += " " + this.ReferralStaffCode;
+                    }
+                    referralStaff += ")";
+                }
+                return referralStaff;
+            }
+        }
     }
 }

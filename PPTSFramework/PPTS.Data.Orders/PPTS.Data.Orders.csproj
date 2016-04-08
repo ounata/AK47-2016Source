@@ -20,7 +20,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\PPTSBin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -60,6 +60,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -68,16 +69,36 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Adapters\AssetAdapter.cs" />
+    <Compile Include="Adapters\CustomerSearchAdapter.cs" />
+    <Compile Include="Adapters\CustomerSearchBase.cs" />
+    <Compile Include="Adapters\OrderAdapter.cs" />
+    <Compile Include="Adapters\OrderAdapterBase.cs" />
+    <Compile Include="Adapters\OrderItemAdapter.cs" />
     <Compile Include="Common\ConnectionDefine.cs" />
+    <Compile Include="DataSources\GenericOrderDataSource.cs" />
+    <Compile Include="DataSources\GenericSearchDataSource.cs" />
+    <Compile Include="Entities\AccompanyAssign.cs" />
+    <Compile Include="Entities\Asset.cs" />
+    <Compile Include="Entities\AssetConfirm.cs" />
+    <Compile Include="Entities\Assign.cs" />
+    <Compile Include="Entities\AssignCondition.cs" />
+    <Compile Include="Entities\Class.cs" />
+    <Compile Include="Entities\ClassLesson.cs" />
+    <Compile Include="Entities\ClassLessonItem.cs" />
+    <Compile Include="Entities\CustomerSearch.cs" />
+    <Compile Include="Entities\DebookOrder.cs" />
+    <Compile Include="Entities\DebookOrderItem.cs" />
+    <Compile Include="Entities\Order.cs" />
+    <Compile Include="Entities\OrderItem.cs" />
+    <Compile Include="Entities\Room.cs" />
+    <Compile Include="Entities\ShoppingCart.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MCS.Library.snk" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Adapters\" />
-    <Folder Include="DataSources\" />
-    <Folder Include="Entities\" />
     <Folder Include="Executors\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

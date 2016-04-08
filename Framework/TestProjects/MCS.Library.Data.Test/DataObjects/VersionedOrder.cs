@@ -30,6 +30,7 @@ namespace MCS.Library.Data.Test.DataObjects
             set;
         }
 
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update)]
         public DateTime VersionEndTime
         {
             get;

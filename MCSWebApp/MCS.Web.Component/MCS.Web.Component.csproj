@@ -143,6 +143,14 @@
     <Content Include="libs\bootstrap-3.3.5\js\bootstrap.js" />
     <Content Include="libs\bootstrap-3.3.5\js\bootstrap.min.js" />
     <Content Include="libs\bootstrap-3.3.5\js\npm.js" />
+    <Content Include="libs\jquery-2.2.1\plugins\chosen\chosen.css" />
+    <Content Include="libs\jquery-2.2.1\plugins\chosen\jquery.chosen.min.js" />
+    <Content Include="libs\jquery-2.2.1\plugins\datetime\bootstrap-datepicker.min.js" />
+    <Content Include="libs\jquery-2.2.1\plugins\datetime\bootstrap-timepicker.min.js" />
+    <Content Include="libs\jquery-2.2.1\plugins\datetime\daterangepicker.css" />
+    <Content Include="libs\jquery-2.2.1\plugins\datetime\daterangepicker.min.js" />
+    <Content Include="libs\jquery-2.2.1\plugins\datetime\moment.min.js" />
+    <Content Include="libs\jquery-2.2.1\plugins\datetime\datepicker.css" />
     <Content Include="libs\laycode-v1.1\laycode.css" />
     <Content Include="libs\laycode-v1.1\laycode.js" />
     <Content Include="libs\mcs-jslib-1.0.0\component\mcs.component.css" />
@@ -174,6 +182,8 @@
     <Content Include="samples\app\component\mcs-radiobuttongroup\mcs-radiobuttongroup.controller.js" />
     <Content Include="samples\app\component\mcs-tab\main.html" />
     <Content Include="samples\app\component\mcs-tab\mcs-tab.controller.js" />
+    <Content Include="samples\app\issue\date-serialize.html" />
+    <Content Include="samples\app\issue\mcs-date-serialize.controller.js" />
     <Content Include="samples\app\lib\ui-select\main.html" />
     <Content Include="samples\app\lib\vertical-tabs\list_arrow.gif" />
     <Content Include="samples\app\lib\vertical-tabs\main.html" />
@@ -571,7 +581,8 @@
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
-  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="'$(Solutions.VSVersion)' == '8.0'" /> 
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v9.0\WebApplications\Microsoft.WebApplication.targets" Condition="'$(Solutions.VSVersion)' == '9.0'" /> 
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
   <ProjectExtensions>
     <VisualStudio>

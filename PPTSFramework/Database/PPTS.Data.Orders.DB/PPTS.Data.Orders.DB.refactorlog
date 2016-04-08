@@ -749,4 +749,25 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="AssetSourceID" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="f62e3e2f-f4b3-4eac-a5ec-0920b20dcee7" ChangeDateTime="04/08/2016 01:12:51">
+    <Property Name="ElementName" Value="[OM].[Assets].[CustomerName]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[OM].[Assets]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="CustomerCode" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="b01bb503-ef42-41b4-98e6-92889f5e28a1" ChangeDateTime="04/08/2016 01:19:27">
+    <Property Name="ElementName" Value="[OM].[Assets].[AssetSource]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[OM].[Assets]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="AssetRefType" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="64077284-4593-46ea-a1f1-cbc51ff918ec" ChangeDateTime="04/08/2016 01:19:32">
+    <Property Name="ElementName" Value="[OM].[Assets].[AssetSourceID]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[OM].[Assets]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="AssetRefID" />
+  </Operation>
 </Operations>

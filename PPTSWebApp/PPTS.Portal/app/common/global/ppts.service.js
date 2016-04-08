@@ -34,3 +34,26 @@
 
     return service;
 });
+
+ppts.ng.service('userService', function () {
+    var service = this;
+
+    service.initRole = function () {
+        var parameters = jQuery('#portalParameters');
+        if (!parameters.val()) return;
+        var ssoUser = ng.fromJson(parameters.val());
+        parameters.val('');
+        if (ssoUser && ssoUser.allJobs.length) {
+            ssoUser.currentRole = ssoUser.allJobs[0];
+            ppts.user.currentRoleId = ssoUser.currentRole.ID;
+        }
+        return ssoUser;
+    };
+
+    service.switchRole = function (ssoUser, role) {
+        ssoUser.currentRole = role;
+        ppts.user.currentRoleId = role.ID;
+    };
+
+    return service;
+});

@@ -12,6 +12,24 @@ namespace PPTS.WebAPI.Customer.ViewModels.PotentialCustomers
             set;
         }
 
+        public Parent Parent
+        {
+            get;
+            set;
+        }
+
+        public CustomerStaffRelationCollection CustomerStaffRelation
+        {
+            get;
+            set;
+        }
+
+        public Phone Phone
+        {
+            get;
+            set;
+        }
+
         public IDictionary<string, IEnumerable<BaseConstantEntity>> Dictionaries
         {
             get;

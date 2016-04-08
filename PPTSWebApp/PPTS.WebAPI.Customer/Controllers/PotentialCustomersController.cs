@@ -7,6 +7,7 @@ using PPTS.Data.Customers.DataSources;
 using PPTS.Data.Customers.Entities;
 using PPTS.WebAPI.Customer.Executors;
 using PPTS.WebAPI.Customer.ViewModels.PotentialCustomers;
+using System.Linq;
 
 namespace PPTS.WebAPI.Customer.Controllers
 {
@@ -78,6 +79,18 @@ namespace PPTS.WebAPI.Customer.Controllers
                     customer => result.Customer = customer
                 );
 
+            CustomerParentRelation customerParentRelation = CustomerParentRelationAdapter.Instance.Load(action =>
+                {
+                    action.AppendItem("CustomerID", id).AppendItem("IsPrimary", 1);
+                }).FirstOrDefault();
+
+            result.Parent = ParentAdapter.Instance.Load(customerParentRelation.ParentID);
+
+            result.CustomerStaffRelation = CustomerStaffRelationAdapter.Instance.Load(action =>
+            {
+                action.AppendItem("CustomerID", id);
+            });
+
             PhoneAdapter.Instance.LoadByOwnerIDInContext(
                 id,
                 phones => result.Customer.FillFromPhones(phones)
@@ -105,11 +118,11 @@ namespace PPTS.WebAPI.Customer.Controllers
         [HttpPost]
         public PotentialCustomer GetCustomerInfo(PotentialCustomerQueryCriteriaModel criteria)
         {
-            string customerCode = criteria.CustomerCode;
+            var customerCode = criteria.CustomerCode;
             return PotentialCustomerAdapter.Instance.Load((action) =>
             {
                 action.AppendItem("CustomerCode", customerCode);
-            }).Find(c => c.CustomerCode == customerCode);
+            }).FirstOrDefault();
         }
 
         #endregion

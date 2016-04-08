@@ -5,18 +5,21 @@
                 '$scope', '$state', 'dataSyncService', 'studentassignmentDataService',
                 function ($scope, $state, dataSyncService, studentassignmentDataService) {
                     var vm = this;
-                    vm.dataContent = "页面固定的内容";
+
+                    //vm.dataContent = "页面固定的内容";
 
                    
-                    studentassignmentDataService.getAllStuUnAsgmt(
-                        function (result) {
-                            vm.dataContent = result;
-                            var temp = 0;
-                        },
-                        function () {
-                        }
-                        );
-               /*     vm.data = {
+                    //studentassignmentDataService.getAllStuUnAsgmt(
+                    //    function (result) {
+                    //        vm.dataContent = result;
+                    //        var temp = 0;
+                    //    },
+                    //    function (error) {
+                    //        vm.dataContent = error;
+                    //    }
+                    //    );
+
+                   vm.data = {
                         selection: 'checkbox',
                         headers: [{
                             field: "customerName",
@@ -27,57 +30,31 @@
                             field: "customerCode",
                             name: "学员编号",
                             template: '<a ui-sref="ppts.customer-view({id:row.customerID,page:\'info\'})">{{row.customerCode}}</a>'
-                        }, {
-                            field: "parentName",
-                            name: "家长姓名"
-                        }, {
-                            field: "grade",
-                            name: "当前年级",
-                            template: '<span>{{row.entranceGrade | grade}}</span>'
-                        }, {
-                            field: "sourceMainType",
-                            name: "信息来源",
-                            template: '<span>{{row.sourceMainType}}</span>'
-                        }, {
-                            name: "归属地",
-                            template: '<span></span>'
-                        }, {
-                            field: "createTime",
-                            name: "建档日期",
-                            template: '<span>{{row.createTime | date:"yyyy-MM-dd"}}</span>'
-                        }, {
-                            field: "createTime",
-                            name: "建档人",
-                            template: '<span>{{row.creatorName}}</span>',
-                            description: 'customer creatorName'
-                        }, {
-                            name: "建档人岗位",
-                            template: '<span></span>'
-                        }, {
-                            name: "归属咨询师",
-                            template: '<span></span>'
-                        }, {
-                            name: "跟进次数",
-                            template: '<span></span>'
-                        }, {
-                            field: "lastFollowupTime",
-                            name: "最后一次跟进时间",
-                            template: '<span>{{row.lastFollowupTime | date:"yyyy-MM-dd"}}</span>',
-                            description: 'customer followTime'
-                        }, {
-                            name: "归属市场专员",
-                            template: '<span></span>'
-                        }, {
-                            name: "跟进阶段",
-                            template: '<span></span>'
-                        }, {
-                            field: "vipLevel",
-                            name: "客户级别",
-                            template: '<span>{{row.vipLevel}}</span>',
-                            description: 'customer vipLevel'
-                        }, {
-                            name: "已签约金额",
-                            template: '<span></span>'
+                        },
+                        //{
+                        //    field: "parentName",
+                        //    name: "性别"
+                        //}, {
+                        //    field: "createTime",
+                        //    name: "出生日期",
+                        //    template: '<span>{{row.createTime | date:"yyyy-MM-dd"}}</span>'
+                        //}, {
+                        //    field: "sourceMainType",
+                        //    name: "在读学校",
+                        //    template: '<span>{{row.sourceMainType}}</span>'
+                        //}, {
+                        //    field: "sourceMainType",
+                        //    name: "当前年级",
+                        //    template: '<span>{{row.sourceMainType}}</span>'
+                        //}, {
+                        //    field: "sourceMainType",
+                        //    name: "班主任",
+                        //    template: '<span>{{row.sourceMainType}}</span>'
+                        //},
+                        {
+                            field: "remainAmount",
+                            name: "剩余数量",
+                            template: '<span>{{row.remainAmount}}</span>'
                         }],
                         pager: {
                             pageIndex: 1,
@@ -94,13 +71,13 @@
                     }
 
                     // 页面初始化加载或重新搜索时查询
-                    vm.init = function () {
+                   vm.init = function () {
                         dataSyncService.initCriteria(vm);
-                        customerDataService.getAllCustomers(vm.criteria, function (result) {
+                        customerDataService.getAllStuUnAsgmt(vm.criteria, function (result) {
                             vm.data.rows = result.queryResult.pagedData;
                             dataSyncService.injectDictData();
                             dataSyncService.updateTotalCount(vm, result.queryResult);
-                            $scope.$broadcast('dictionaryReady');
+                            //$scope.$broadcast('dictionaryReady');
                         });
                     };
                     vm.init();

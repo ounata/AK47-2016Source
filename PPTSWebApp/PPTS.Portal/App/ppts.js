@@ -16,9 +16,13 @@ define(['angular', 'mcsComponent',
                 'ppts.dashboard', 'ppts.auditing', 'ppts.customer', 'ppts.payment', 'ppts.product',
                 'ppts.schedule', 'ppts.order', 'ppts.infra', 'ppts.custcenter', 'ppts.contract']);
 
-            ppts.ng.controller('appController', ['$rootScope', '$scope', function ($rootScope, $scope) {
+            ppts.ng.controller('appController', ['$rootScope', '$scope', 'userService', function ($rootScope, $scope, user) {
                 var vm = this;
-                vm.ssoUserIndentity = angular.element('#portalParameters').val();
+
+                vm.currentUser = vm.currentUser || user.initRole();
+                vm.switch = function(role) {
+                    user.switchRole(vm.currentUser, role);
+                };
 
                 //展开当前菜单
                 vm.currentMenu = {
@@ -100,6 +104,12 @@ ppts.ng.filter('parentMale', function () {
 ppts.ng.filter('parentFemale', function () {
     return function (current) {
         return mcs.util.getDictionaryItemValue(ppts.dict[ppts.config.dictMappingConfig.parentFemale], current);
+    };
+});
+// 学年过滤器
+ppts.ng.filter('academicYear', function () {
+    return function (current) {
+        return mcs.util.getDictionaryItemValue(ppts.dict[ppts.config.dictMappingConfig.academicYear], current);
     };
 });
 // vip客户类型过滤器
@@ -341,6 +351,29 @@ ppts.ng.service('dataSyncService', function () {
             var field = fields[index];
             vmObj[field] = resultObj[field];
         }
+    };
+
+    return service;
+});
+
+ppts.ng.service('userService', function () {
+    var service = this;
+
+    service.initRole = function () {
+        var parameters = jQuery('#portalParameters');
+        if (!parameters.val()) return;
+        var ssoUser = ng.fromJson(parameters.val());
+        parameters.val('');
+        if (ssoUser && ssoUser.allJobs.length) {
+            ssoUser.currentRole = ssoUser.allJobs[0];
+            ppts.user.currentRoleId = ssoUser.currentRole.ID;
+        }
+        return ssoUser;
+    };
+
+    service.switchRole = function (ssoUser, role) {
+        ssoUser.currentRole = role;
+        ppts.user.currentRoleId = role.ID;
     };
 
     return service;

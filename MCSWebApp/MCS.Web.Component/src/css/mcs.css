@@ -1,4 +1,7 @@
-﻿.mcs-margin-right-5 {
+﻿.mcs-margin-top-15 {
+    margin-top: 15px !important;
+}
+.mcs-margin-right-5 {
     margin-right: 5px !important;
 }
 
@@ -15,7 +18,7 @@
 }
 
 .mcs-padding-0 {
-    padding:0 !important;
+    padding: 0 !important;
 }
 
 .mcs-padding-right-15 {
@@ -46,10 +49,12 @@
     width: 150px;
     height: 25px;
     padding-left: 5px;
-    background:transparent;
+    background: transparent;
 }
 
+
 /*搜索区域的样式*/
+
 .mcs-panel-search {
     /*padding-bottom: 10px;*/
     margin-bottom: 10px!important;
@@ -59,12 +64,12 @@
     color: #4c8fbd;
     font-weight: 700;
     font-size: 13px;
-    line-height:1;  
-    padding:0 6px;
+    line-height: 1;
+    padding: 0 6px;
 }
 
 .mcs-advance-search .profile-user-info {
-    width:100%;
+    width: 100%;
 }
 
 .mcs-advance-search .profile-user-info .profile-info-name {
@@ -74,4 +79,22 @@
 
 .mcs-advance-search.panel-group {
     margin-bottom: 0px;
+}
+
+
+/* datatable 列样式 */
+
+.mcs-datatable-column-currency {
+    text-align: right;
+    color: red;
+    width: 120px;
+}
+
+.mcs-datatable-column-number {
+    text-align: right;
+    width: 150px;
+}
+
+.mcs-datatable-column.solidWidth {
+    width: 130px;
 }

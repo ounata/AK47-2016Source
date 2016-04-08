@@ -15,8 +15,11 @@
 
 
             vm.data = {
-                selection: 'radio',
-                keyField: 'customerId',
+                selection: 'checkbox',
+                rowsSelected: [{
+                    customeId: 1
+                }],
+                keyFields: ['customerId'],
                 orderBy: [{
                     dataField: 'customerAge',
                     sortDirection: 1
@@ -24,7 +27,7 @@
                 headers: [{
                         field: "customerName",
                         name: "姓名",
-                        headerCss: 'datatable-header-align-right',
+                        headerCss: 'mcs-datatable-column-currency',
                         sortable: false,
                         template: '<input type="text" ng-model="row.customerName" />',
                         description: 'customer name'
@@ -33,7 +36,7 @@
                     {
                         field: "customerAge",
                         name: "年龄",
-                        headerCss: 'datatable-header-align-right',
+                        headerCss: 'mcs-datatable-column-number',
                         template: '<span>{{row.customerAge|currency}}</span>',
                         sortable: true,
                         description: 'customer age'
@@ -92,9 +95,6 @@
 
                 ],
                 pager: {
-
-                    pagesLength: 15,
-
 
                     pageIndex: 1,
                     pageSize: 10,

@@ -40,7 +40,13 @@ angular.module(&#39;app.component&#39;).controller(&#39;MCSDatatableController&#
         var vm = this;
 
         vm.data = {
-            showCheckbox: true,
+                selection: 'checkbox',
+                rowsSelected: [],
+                keyFields: ['customerId'],
+                orderBy: [{
+                    dataField: 'customerAge',
+                    sortDirection: 1
+                }],
             headers: [{
                     field: &quot;customerName&quot;,
                     name: &quot;姓名&quot;,
@@ -102,10 +108,28 @@ angular.module(&#39;app.component&#39;).controller(&#39;MCSDatatableController&#
                         </thead>
                         <tbody>
                             <tr>
-                                <td>showCheckbox</td>
-                                <td>设置是否显示行选择框</td>
-                                <td>true/false</td>
-                                <td>showCheckbox = "true "</td>
+                                <td>selection</td>
+                                <td>设置行选择框</td>
+                                <td>checkbox/radio</td>
+                                <td>selection = "checkbox"</td>
+                            </tr>
+                            <tr>
+                                <td>rowsSelected</td>
+                                <td>存储选择的行</td>
+                                <td>数组</td>
+                                <td>rowsSelected = []</td>
+                            </tr>
+                            <tr>
+                                <td>keyFields</td>
+                                <td>指定数据关键列</td>
+                                <td>数组</td>
+                                <td>keyFields = ['customerId']</td>
+                            </tr>
+                            <tr>
+                                <td>orderBy</td>
+                                <td>存储排序规则</td>
+                                <td>JSON对象</td>
+                                <td>orderBy = {dataField:'customerName',sortDirection:1}</td>
                             </tr>
                             <tr>
                                 <td>headers</td>
@@ -146,7 +170,8 @@ description: 'customer name'
                     pager: {
                     pageIndex: 1,
                     pageSize: 10,
-                    totalCount: 2
+                    totalCount: 2,
+                    pageChange:vm.pageChange
                 }
                 </code>
                                 </td>

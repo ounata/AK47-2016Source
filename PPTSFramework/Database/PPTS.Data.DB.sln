@@ -9,6 +9,10 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "PPTS.Data.Orders.DB", "PPTS
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "PPTS.Data.Products.DB", "PPTS.Data.Products.DB\PPTS.Data.Products.DB.sqlproj", "{5F4B0CAC-76BA-4758-81B3-05A9B705BDDF}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "PPTS.Data.Common.DB", "PPTS.Data.Common.DB\PPTS.Data.Common.DB.sqlproj", "{17340F2E-3BFB-4E75-B7DD-797E39A4ECC8}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "PPTS.Data.Search.DB", "PPTS.Data.Search.DB\PPTS.Data.Search.DB.sqlproj", "{57340F2E-3BFB-4E75-B7DD-797E39A4ECC8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,12 +37,24 @@ Global
 		{5F4B0CAC-76BA-4758-81B3-05A9B705BDDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F4B0CAC-76BA-4758-81B3-05A9B705BDDF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5F4B0CAC-76BA-4758-81B3-05A9B705BDDF}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{17340F2E-3BFB-4E75-B7DD-797E39A4ECC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17340F2E-3BFB-4E75-B7DD-797E39A4ECC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17340F2E-3BFB-4E75-B7DD-797E39A4ECC8}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{17340F2E-3BFB-4E75-B7DD-797E39A4ECC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17340F2E-3BFB-4E75-B7DD-797E39A4ECC8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17340F2E-3BFB-4E75-B7DD-797E39A4ECC8}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{57340F2E-3BFB-4E75-B7DD-797E39A4ECC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57340F2E-3BFB-4E75-B7DD-797E39A4ECC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57340F2E-3BFB-4E75-B7DD-797E39A4ECC8}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{57340F2E-3BFB-4E75-B7DD-797E39A4ECC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57340F2E-3BFB-4E75-B7DD-797E39A4ECC8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57340F2E-3BFB-4E75-B7DD-797E39A4ECC8}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 4
+		SccNumberOfProjects = 6
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://10.1.56.70:8080/tfs/pptsv2.0
 		SccLocalPath0 = .
@@ -51,5 +67,11 @@ Global
 		SccProjectUniqueName3 = PPTS.Data.Products.DB\\PPTS.Data.Products.DB.sqlproj
 		SccProjectName3 = PPTS.Data.Products.DB
 		SccLocalPath3 = PPTS.Data.Products.DB
+		SccProjectUniqueName4 = PPTS.Data.Common.DB\\PPTS.Data.Common.DB.sqlproj
+		SccProjectName4 = PPTS.Data.Common.DB
+		SccLocalPath4 = PPTS.Data.Common.DB
+		SccProjectUniqueName5 = PPTS.Data.Search.DB\\PPTS.Data.Search.DB.sqlproj
+		SccProjectName5 = PPTS.Data.Search.DB
+		SccLocalPath5 = PPTS.Data.Search.DB
 	EndGlobalSection
 EndGlobal

@@ -16,9 +16,13 @@
                 'ppts.dashboard', 'ppts.auditing', 'ppts.customer', 'ppts.payment', 'ppts.product',
                 'ppts.schedule', 'ppts.order', 'ppts.infra', 'ppts.custcenter', 'ppts.contract']);
 
-            ppts.ng.controller('appController', ['$rootScope', '$scope', function ($rootScope, $scope) {
+            ppts.ng.controller('appController', ['$rootScope', '$scope', 'userService', function ($rootScope, $scope, user) {
                 var vm = this;
-                vm.ssoUserIndentity = angular.element('#portalParameters').val();
+
+                vm.currentUser = vm.currentUser || user.initRole();
+                vm.switch = function(role) {
+                    user.switchRole(vm.currentUser, role);
+                };
 
                 //展开当前菜单
                 vm.currentMenu = {

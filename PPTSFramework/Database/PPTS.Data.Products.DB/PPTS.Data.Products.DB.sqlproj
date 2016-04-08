@@ -69,6 +69,7 @@
     <Folder Include="PM" />
     <Folder Include="PM\Stored Procedures" />
     <Folder Include="PM\Tables" />
+    <Folder Include="Scripts" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Security\PM.sql" />
@@ -90,6 +91,8 @@
     <Build Include="PM\Tables\ProductSalaryRules.sql" />
     <Build Include="PM\Tables\Categories.sql" />
     <Build Include="PM\Tables\CategoryCatalogs.sql" />
+    <Build Include="PM\Stored Procedures\InitCategories.sql" />
+    <Build Include="PM\Stored Procedures\InitCategoryCatalogs.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PPTS.Data.Product.Local.Dev.DB.publish.xml" />
@@ -98,5 +101,8 @@
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PPTS.Data.Products.DB.refactorlog" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="Scripts\Script.PostDeployment.sql" />
   </ItemGroup>
 </Project>

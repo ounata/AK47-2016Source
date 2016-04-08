@@ -5,8 +5,7 @@ var ppts = ppts || mcs.app;
     ppts.name = 'ppts';
     ppts.version = '1.0';
     ppts.currentEnv = 'local';
-    ppts.util = ppts.util || {};
-    ppts.data = ppts.data || {};
+    ppts.user = ppts.user || {};
     ppts.rootUrl = mcs.config.baseUrl;
 
     // 加载基地址
@@ -54,6 +53,8 @@ var ppts = ppts || mcs.app;
             valid: 'c_codE_ABBR_Customer_Valid',
             period: 'c_codE_ABBR_Period',
             contactType: 'c_codE_ABBR_Customer_CRM_NewContactType',
+            // 学年
+            academicYear: 'c_codE_ABBR_ACDEMICYEAR',
             // 是否复读
             studyAgain: 'c_codE_ABBR_StudyAgain',
             // vip客户类型

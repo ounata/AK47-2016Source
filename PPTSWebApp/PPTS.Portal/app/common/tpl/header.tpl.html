@@ -173,41 +173,34 @@
                 </ul>
             </li>
             <!-- #开始：头部.下拉菜单区域.用户菜单 -->
-            <li class="light-blue">
+            <li class="light-blue" style="width:200px;">
                 <a data-toggle="dropdown" href="javascript:void(0)" class="dropdown-toggle">
-                    <img class="nav-user-photo" src="assets/images/user.png" alt="用户头像" />
-                    <span class="user-info">
-                        <small>您好,咨询师1</small>
-                        <small>校教育咨询师-方庄</small>
+                    <span class="pull-left">
+                        <img class="nav-user-photo" src="assets/images/user.png" alt="用户头像" />
+                        <span class="user-info">
+                            <small>您好, <b>{{vm.currentUser.displayName}}</b></small>
+                            <small ng-show="vm.currentUser.allJobs.length">{{vm.currentUser.currentRole.Name}}</small>
+                        </span>
                     </span>
-                    <i class="ace-icon fa fa-caret-down"></i>
+                    <i class="ace-icon fa fa-caret-down dropdown-menu-right pull-right mcs-margin-top-15"></i>
                 </a>
                 <ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
-                    <li class="dropdown-hover">
+                    <li class="dropdown-hover" ng-show="vm.currentUser.allJobs.length">
                         <a class="clearfix" tabindex="-1" href="#">
                             <i class="ace-icon fa fa-user"></i>切换角色
-                            <i class="ace-icon fa fa-caret-right pull-right"></i>
+                            <i class="ace-icon fa fa-caret-left pull-right"></i>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-right">
-                            <li>
-                                <a href="#" tabindex="-1">校教育咨询师-方庄</a>
-                            </li>
-                            <li>
-                                <a href="#" tabindex="-1">校学管主任-方庄</a>
-                            </li>
-                            <li>
-                                <a href="#" tabindex="-1">校教育咨询师-校区2</a>
-                            </li>
-                            <li>
-                                <a href="#" tabindex="-1">系统管理员-总部</a>
+                            <li ng-repeat="job in vm.currentUser.allJobs" ng-hide="job.ID==vm.currentUser.currentRole.ID">
+                                <a href="#" tabindex="-1" ng-click="vm.switch(job)">{{job.Name}}</a>
                             </li>
                         </ul>
                     </li>
-                    <li class="divider"></li>
+                    <li class="divider" ng-show="vm.currentUser.allJobs.length"></li>
                     <li class="dropdown-hover">
                         <a class="clearfix" tabindex="-1" href="#">
                             <i class="ace-icon fa fa-cogs"></i>页面设置
-                            <i class="ace-icon fa fa-caret-right pull-right"></i>
+                            <i class="ace-icon fa fa-caret-left pull-right"></i>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-right">
                             <li>

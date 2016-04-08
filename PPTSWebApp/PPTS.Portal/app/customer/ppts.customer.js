@@ -31,6 +31,12 @@
             templateUrl: 'app/customer/follow/follow-list/follow-list.html',
             controller: 'followListController',
             dependencies: ['app/customer/follow/follow-list/follow-list.controller']
+        }).loadRoute($stateProvider, {
+            name: 'ppts.customer-staffrelation',
+            url: '/customer/staffrelation/:id/:type',
+            templateUrl: 'app/customer/potentialcustomer/customer-staffrelation/customer-staffrelation.html',
+            controller: 'customerViewController',
+            dependencies: ['app/customer/potentialcustomer/customer-view/customer-view.controller']
         });
     });
 

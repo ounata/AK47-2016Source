@@ -12,6 +12,8 @@
     <script src="build/ppts.startup.min.js"></script>
     <script>
         mcs.g.loadCss([
+            //<!--#chosen插件样式-->
+            'libs/jquery-2.2.1/plugins/chosen/chosen',
             //<!--#bootstrap基础样式-->
             'libs/bootstrap-3.3.5/css/bootstrap.min',
             //<!--#boostrap组件样式-->

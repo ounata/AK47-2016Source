@@ -1,24 +1,36 @@
-﻿'use strict';
-(
+﻿(
     function() {
+
+        'use strict';
+
         angular.module('app.component')
-            .controller('MCSDialogController', ['$scope', 'dialogs', function($scope, dialogs) {
+            .controller('MCSDialogController', ['$scope', 'mcsDialogService', function($scope, mcsDialogService) {
                 var vm = {};
                 $scope.vm = vm;
 
 
+                vm.wait = function() {
 
-                vm.waiting = function() {
-
-                    dialogs.wait('waiting', 'data is loading, please wait!');
+                    mcsDialogService.wait(
+                        'waiting',
+                        'data is loading, please wait!'
+                    );
                 }
 
+
+
                 vm.confirm = function() {
-                    dialogs.confirm('confirm', 'are you sure?');
+                    mcsDialogService.confirm(
+                        'confirm',
+                        '<div>are you sure?<br/>please do more action!</div>'
+                    );
                 }
 
                 vm.error = function() {
-                    dialogs.error('Error', 'error occurs!');
+                    mcsDialogService.error(
+                        'Error',
+                        'error occurs!'
+                    );
                 }
 
 

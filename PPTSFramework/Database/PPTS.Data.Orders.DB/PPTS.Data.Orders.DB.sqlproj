@@ -87,7 +87,6 @@
     <Build Include="OM\Tables\Orders.sql" />
     <Build Include="OM\Tables\Rooms.sql" />
     <Build Include="OM\Tables\ShoppingCarts.sql" />
-    <Build Include="OM\Tables\Teachings.sql" />
     <Build Include="OM\Tables\AssetConfirms.sql" />
     <Build Include="OM\Tables\AccompanyAssigns.sql" />
   </ItemGroup>

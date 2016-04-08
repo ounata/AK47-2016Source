@@ -4,6 +4,7 @@
         baseUrl: '.',
         paths: {
             jquery: framework + 'libs/jquery-2.2.1/dist/jquery.min',
+            //jqueryChosen: framework + 'libs/jquery-2.2.1/plugins/chosen/jquery.chosen.min',
             bootstrap: framework + 'libs/bootstrap-3.3.5/js/bootstrap.min',
             ace: framework + 'libs/ace-1.2.3/ace.min',
             aceExtra: framework + 'libs/ace-1.2.3/ace-extra.min',
@@ -16,13 +17,17 @@
             uiBootstrapTpls: framework + 'libs/ui-bootstrap-1.1.0/ui-bootstrap-tpls-1.1.0.min',
             mcsComponent: framework + 'libs/mcs-jslib-1.0.0/component/mcs.component',
             uiSelect: framework + 'libs/angular-ui-select-0.13.2/dist/select.min',
-            //ppts: 'build/ppts.global.min'
+            dialogs: framework + 'libs/angular-dialog-service/dist/dialogs.min',
             ppts: 'app/ppts'
         },
         shim: {
             jquery: {
                 exports: 'jquery'
             },
+            //jqueryChosen: {
+            //    exports: 'jqueryChosen',
+            //    deps: ['jquery']
+            //},
             bootstrap: {
                 exports: 'bootstrap',
                 deps: ['jquery']
@@ -66,8 +71,8 @@
                 exports: 'uiSelect',
                 deps: ['angular']
             },
-            dialog: {
-                exports: 'dialog',
+            dialogs: {
+                exports: 'dialogs',
                 deps: ['angular']
             },
             mcsComponent: {
@@ -78,6 +83,7 @@
         callback: function () {
             require([
                 'jquery',
+                //'jqueryChosen',
                 'bootstrap',
                 'ace',
                 'aceExtra',
@@ -90,6 +96,7 @@
                 'uiBootstrapTpls',
                 'uiSelect',
                 'mcsComponent',
+                'dialogs',
                 'ppts'
             ], function () {
                 angular.element(document).ready(function () {

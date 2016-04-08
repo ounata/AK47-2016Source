@@ -13,6 +13,7 @@
                 (function () {
                     customerDataService.getCustomerForUpdate($stateParams.id, function (result) {
                         vm.customer = result.customer;
+                        vm.parent = result.parent;
                         $scope.$broadcast('dictionaryReady');
                     });
                 })();

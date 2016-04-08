@@ -27,6 +27,8 @@
     <!--paging style-->
     <link href="../src/css/paging.css" rel="stylesheet" />
     <link href="../src/css/tree.css" rel="stylesheet" />
+    <!--component css -->
+    <link here="../src/css/mcs.css" rel="stylesheet" />
     <!--#网站主样式-->
     <link href="assets/css/site.css" rel="stylesheet" />
     <style>
@@ -286,6 +288,23 @@
                         </li>
                     </ul>
                 </li>
+                <!--技术整理-->
+                <li class="">
+                    <a href="#" class="dropdown-toggle">
+                        <i class="menu-icon fa fa-question"></i>
+                        <span class="menu-text"> 技术整理 </span>
+                        <b class="arrow fa fa-angle-down"></b>
+                    </a>
+                    <b class="arrow"></b>
+                    <ul class="submenu">
+                        <li class="">
+                            <a href="#/serializedate">
+                                <i class="menu-icon fa fa-caret-right"></i> 日期序列化处理
+                            </a>
+                            <b class="arrow"></b>
+                        </li>
+                    </ul>
+                </li>
                 <!--开发规范-->
                 <li class="">
                     <a href="javascript:void(0)" class="dropdown-toggle">
@@ -408,6 +427,6 @@
     <!--#开始：页面布局-->
     <script src="app/page/mcs-page.controller.js"></script>
     <!--/结束：页面布局-->
+    <script src="app/issue/mcs-date-serialize.controller.js"></script>
 </body>
-
 </html>

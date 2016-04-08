@@ -78,6 +78,7 @@
     <Compile Include="DataObjects\UserCondition.cs" />
     <Compile Include="DataObjects\UserDataSource.cs" />
     <Compile Include="DataObjects\VersionedOrder.cs" />
+    <Compile Include="DataObjects\VersionedOrderItem.cs" />
     <Compile Include="DBContext\DbContextTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ConnectionMappingTest.cs" />

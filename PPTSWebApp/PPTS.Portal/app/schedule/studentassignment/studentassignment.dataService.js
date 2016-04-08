@@ -2,15 +2,15 @@
 
     schedule.registerFactory('studentassignmentDataService', ['$resource', function ($resource) {
 
-        var resource = $resource(ppts.config.orderApiBaseUrl + 'api/stuasgmt/:operation/:id',
+        var resource = $resource(ppts.config.orderApiBaseUrl + 'api/studentassignment/:operation/:id',
             { operation: '@operation', id: '@id' },
             {
                 'post': { method: 'POST' },
                 'query': { method: 'GET', isArray: false }
             });
         
-        resource.getAllStuUnAsgmt = function (success, error) {
-            resource.query({ operation: 'getAllStuUnAsgmt' }, success, error);
+        resource.getAllStuUnAsgmt = function (criteria,success, error) {
+            resource.query({ operation: 'GetAllStudentAssignment' },criteria,success, error);
         }
 
         return resource;

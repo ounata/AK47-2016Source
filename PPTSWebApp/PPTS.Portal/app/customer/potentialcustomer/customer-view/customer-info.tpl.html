@@ -17,7 +17,7 @@
     <div class="profile-info-row">
         <div class="profile-info-name"> 转介绍员工 </div>
         <div class="profile-info-value">
-            <span class="editable editable-click">{{ vm.customer.referralStaffName + "（" + vm.customer.referralStaffJobName + " " + vm.customer.referralStaffCode + "）"  }}</span>
+            <span class="editable editable-click">{{ vm.customer.referralStaffInfo }}</span>
         </div>
     </div>
     <div class="profile-info-row">
@@ -35,13 +35,13 @@
     <div class="profile-info-row">
         <div class="profile-info-name"> vip客户等级 </div>
         <div class="profile-info-value">
-            <span class="editable editable-click">{{ vm.customer.vipType | vipLevel }}</span>
+            <span class="editable editable-click">{{ vm.customer.vipLevel | vipLevel }}</span>
         </div>
     </div>
     <div class="profile-info-row">
         <div class="profile-info-name"> 学员的主监护人 </div>
         <div class="profile-info-value">
-            <span class="editable editable-click">{{  }}</span>
+            <span class="editable editable-click">{{ vm.parent.parentName }}</span>
         </div>
     </div>
     <div class="profile-info-row">
@@ -119,7 +119,7 @@
     <div class="profile-info-row">
         <div class="profile-info-name"> 联系方式 </div>
         <div class="profile-info-value">
-            <span class="editable editable-click">{{  }}</span>
+            <span class="editable editable-click">{{ vm.customer.primaryPhone }}</span>
         </div>
     </div>
     <div class="profile-info-row">
@@ -137,13 +137,15 @@
     <div class="profile-info-row">
         <div class="profile-info-name"> 归属咨询师 </div>
         <div class="profile-info-value">
-            <span class="editable editable-click">{{  }}</span>
+            <span class="editable editable-click" ng-repeat="relation in (vm.customerStaffRelation | filter:{'relationType':'1'})">{{ relation.staffName }}</span>
+            <a ui-sref="ppts.customer-staffrelation({id:vm.customer.customerID,type:\'1\'})">查看历史</a>
         </div>
     </div>
     <div class="profile-info-row">
         <div class="profile-info-name"> 归属学管师 </div>
         <div class="profile-info-value">
-            <span class="editable editable-click">{{ }}</span>
+            <span class="editable editable-click" ng-repeat="relation in (vm.customerStaffRelation | filter:{'relationType':'2'})">{{ relation.staffName }}</span>
+            <a ui-sref="ppts.customer-staffrelation({id:vm.customer.customerID,type:\'2\'})">查看历史</a>
         </div>
     </div>
     <div class="profile-info-row">

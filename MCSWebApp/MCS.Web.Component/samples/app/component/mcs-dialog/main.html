@@ -21,28 +21,67 @@
                 <div class="col-sm-12">
                     <h3 class="header smaller lighter green">应用范例</h3>
                     <div ng-controller="MCSDialogController">
-                        <button ng-click="vm.waiting()">waiting</button>
+                        <button ng-click="vm.wait()">waiting</button>
                         <button ng-click="vm.error()">error</button>
                         <button ng-click="vm.confirm()">confirm</button>
                     </div>
                 </div>
                 <div class="laycode col-sm-12">
                     <h3 class="header smaller lighter green">示例代码</h3>
-                    <div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> app <span class="pl-k">=</span> <span class="pl-smi">angular</span>.<span class="pl-en">module</span>(<span class="pl-s"><span class="pl-pds">"</span>MyApp<span class="pl-pds">"</span></span>, [<span class="pl-s"><span class="pl-pds">'</span>dialogs.main<span class="pl-pds">'</span></span>]);
+                    <article id="content" class="markdown-body">
+                        <h5>HTML</h5>
+                        <div class="codehilite"><pre>    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">ng-controller</span><span class="o">=</span><span class="s">&quot;MCSDialogController&quot;</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">button</span> <span class="na">ng-click</span><span class="o">=</span><span class="s">&quot;vm.wait()&quot;</span><span class="p">&gt;</span>waiting<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">button</span> <span class="na">ng-click</span><span class="o">=</span><span class="s">&quot;vm.error()&quot;</span><span class="p">&gt;</span>error<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">button</span> <span class="na">ng-click</span><span class="o">=</span><span class="s">&quot;vm.confirm()&quot;</span><span class="p">&gt;</span>confirm<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</pre></div>
+                        <h5>JS</h5>
+                        <div class="codehilite"><pre>    <span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">&#39;app.component&#39;</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">controller</span><span class="p">(</span><span class="s1">&#39;MCSDialogController&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;$scope&#39;</span><span class="p">,</span> <span class="s1">&#39;mcsDialogService&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$scope</span><span class="p">,</span> <span class="nx">mcsDialogService</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kd">var</span> <span class="nx">vm</span> <span class="o">=</span> <span class="p">{};</span>
+                <span class="nx">$scope</span><span class="p">.</span><span class="nx">vm</span> <span class="o">=</span> <span class="nx">vm</span><span class="p">;</span>
 
-<span class="pl-smi">app</span>.<span class="pl-en">controller</span>(<span class="pl-s"><span class="pl-pds">"</span>MyCtrl<span class="pl-pds">"</span></span>, <span class="pl-k">function</span>(<span class="pl-smi">dialogs</span>){
-  <span class="pl-c">// open dialogs here</span>
-});</pre></div>
-                    <p><code>dialogs.error('Error','An unknown error occurred preventing the completion of the requested action.');</code></p>
-                    <p><code>dialogs.wait('Creating User','Please wait while we attempt to create user "Michael Conroy."&lt;br&gt;&lt;br&gt;This should only take a moment.',50);</code></p>
-                    <p><code>dialogs.notify('Something Happened','Something happened at this point in the application that I wish to let you know about');</code></p>
-                    <p><code>dialogs.create('url/to/a/template','ctrlrToUse',{data: topass,anotherVar: 'value'},{},'ctrl');</code></p>
+
+                <span class="nx">vm</span><span class="p">.</span><span class="nx">wait</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+
+                    <span class="nx">mcsDialogService</span><span class="p">.</span><span class="nx">wait</span><span class="p">({</span>
+                        <span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;waiting&#39;</span><span class="p">,</span>
+                        <span class="nx">message</span><span class="o">:</span> <span class="s1">&#39;data is loading, please wait!&#39;</span>
+                    <span class="p">});</span>
+                <span class="p">}</span>
+
+                <span class="nx">vm</span><span class="p">.</span><span class="nx">wait</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                    <span class="nx">mcsDialogService</span><span class="p">.</span><span class="nx">wait</span><span class="p">({</span>
+                        <span class="nx">title</span><span class="o">:</span> <span class="s2">&quot;customer&quot;</span><span class="p">,</span>
+                        <span class="nx">message</span><span class="o">:</span> <span class="s1">&#39;&lt;div&gt;hello tom!&lt;/div&gt;&#39;</span>
+                    <span class="p">})</span>
+                <span class="p">}</span>
+
+                <span class="nx">vm</span><span class="p">.</span><span class="nx">confirm</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                    <span class="nx">mcsDialogService</span><span class="p">.</span><span class="nx">confirm</span><span class="p">({</span>
+                        <span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;confirm&#39;</span><span class="p">,</span>
+                        <span class="nx">message</span><span class="o">:</span> <span class="s1">&#39;&lt;div&gt;are you sure?&lt;br/&gt;please do more action!&lt;/div&gt;&#39;</span>
+                    <span class="p">});</span>
+                <span class="p">}</span>
+
+                <span class="nx">vm</span><span class="p">.</span><span class="nx">error</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                    <span class="nx">mcsDialogService</span><span class="p">.</span><span class="nx">error</span><span class="p">({</span>
+                        <span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Error&#39;</span><span class="p">,</span>
+                        <span class="nx">message</span><span class="o">:</span> <span class="s1">&#39;error occurs!&#39;</span>
+                    <span class="p">});</span>
+                <span class="p">}</span>
+
+
+        <span class="p">}]);</span>
+</pre></div>
+                    </article>
                 </div>
                 <div class="col-sm-12">
                     <h3 class="header smaller lighter green">使用说明</h3>
-                    <p><code>dialogs.error(header, msg, opts)</code></p>
-                    <p><code>dialogs.notify(header, msg, opts)</code></p>
-                    <p><code>dialogs.confirm(header, msg, opts)</code></p>
+                    <p><code>mcsDialogService.error(header, msg, opts)</code></p>
+                    <p><code>mcsDialogService.notify(header, msg, opts)</code></p>
+                    <p><code>mcsDialogService.confirm(header, msg, opts)</code></p>
                     <table class="table table-striped table-bordered table-hover" id="sample-table-1">
                         <thead>
                             <tr>

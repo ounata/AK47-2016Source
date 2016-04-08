@@ -1,0 +1,71 @@
+﻿<!-- #开始：位置条 -->
+<div class="breadcrumbs" id="breadcrumbs">
+    <script type="text/javascript">
+        try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }
+    </script>
+
+    <ul class="breadcrumb">
+        <li class="active">
+            <i class="ace-icon fa fa-home home-icon"></i>
+            首页
+        </li>
+        <li class="active">
+            <i class="ace-icon fa fa-buttons"></i>
+            日期序列化
+        </li>
+    </ul>
+</div>
+<!-- /结束：位置条 -->
+<div class="page-content">
+    <div class="page-content-area">
+        <div class="row">
+            <div class="col-sm-12">
+                <h3 class="header smaller lighter green">应用范例</h3>
+                <!-- 表达式中使用 -->
+                dt1: {{vm.dt1 | date:'yyyy-MM-dd HH:mm:ss'}}
+                <br />
+                dt2: {{vm.dt2}}
+                <!-- dt1 和 dt2 的输出结果是一样的 -->
+                <br />
+
+                <!-- 表达式中使用 -->
+                jsondt: {{vm.jsondt | jsonDate:'yyyy-MM-dd HH:mm:ss'}}
+
+                <br />
+
+                dt3: {{vm.dt3}}
+                <br />
+                dt4: {{vm.dt4}}
+                <br />
+                dt5: {{vm.dt5}}
+                <!-- 输出结果是一样的 -->
+
+            </div>
+            <div class="laycode col-sm-12">
+                <h3 class="header smaller lighter green">示例代码</h3>
+                <div class="code_box code_skin0">
+                    <span class="code_title">Html及Javascript</span>
+                    <pre class="codes">
+                    <code><b>Html</b></code><br />
+                    &lt;div class="mcs-panel-search well well-sm"&gt;
+	                    &lt;div class="portlet"&gt;
+		                    &lt;div class="portlet-title line"&gt;
+			                    &lt;div class="caption"&gt;
+				                    &lt;label class="quick-search"&gt;&lt;i class="ace-icon fa fa-search bigger-125"&gt;&lt;/i&gt; 快速查询&lt;/label&gt;
+			                    &lt;/div&gt;
+		                    &lt;/div&gt;
+		                    &lt;div class="portlet-body">
+			                    &lt;mcs-label text="学生/家长姓名" /&gt;
+			                    &lt;mcs-input placeholder="学生/家长姓名" model="vm.criteria.name" /&gt;
+			                    &lt;mcs-label text="学生编号" /&gt;
+			                    &lt;mcs-input placeholder="学生编号" model="vm.criteria.customerCode" /&gt;
+			                    &lt;mcs-button type="search" size="medium" /&gt;
+		                    &lt;/div&gt;
+	                    &lt;/div&gt;
+                    &lt;/div&gt;
+                        </pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -9,6 +9,7 @@
   <ItemGroup>
     <ProjectItem Include="PPTS.Data.Common\PPTS.Data.Common.csproj" />
     <ProjectItem Include="PPTS.Data.Customers\PPTS.Data.Customers.csproj" />
+    <ProjectItem Include="PPTS.Data.Orders\PPTS.Data.Orders.csproj" />
     <ProjectItem Include="PPTS.Data.Products\PPTS.Data.Products.csproj" />
 
     <ProjectItem Include="PPTS.Web.MVC.Library\PPTS.Web.MVC.Library.csproj" />

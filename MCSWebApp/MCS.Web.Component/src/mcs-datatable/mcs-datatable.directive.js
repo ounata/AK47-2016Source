@@ -40,19 +40,76 @@
                     }
                 }
 
+                function findoutRowFromSelectedSet(targetRow) {
+                    $scope.data.rowsSelected.forEach(function(row) {
+
+                    })
+                }
+
                 $scope.rowSelect = function(rowSelected) {
                     $scope.data.selectAll = false;
                     if ($scope.data.selection == 'radio') {
+                        var rowDataSelected = $scope.data.rowsSelected[0] = $scope.data.rowsSelected[0] || {};
+
+                        $scope.data.keyFields.forEach(function(key) {
+                            rowDataSelected[key] = rowSelected[key];
+                        });
+
+
+
                         rowSelected.selected = true;
                         $scope.data.rows.forEach(function(row) {
-                            if (rowSelected[$scope.data.keyField] != row[$scope.data.keyField]) {
+                            if (rowSelected[$scope.data.keyFields[0]] != row[$scope.data.keyFields[0]]) {
+
                                 row.selected = false;
                             }
                         })
 
+                    } else {
+
+                        var rowDataSelected = {};
+                        $scope.data.keyFields.forEach(function(key) {
+                            rowDataSelected[key] = rowSelected[key];
+                        });
+
+                        if (rowSelected.selected) {
+
+                            $scope.data.rowsSelected.push(rowDataSelected);
+                        } else {
+                            mcs.util.removeByObject($scope.data.rowsSelected, rowDataSelected);
+                        }
+
                     }
                 }
 
+                $scope.pageChange = function(callback) {
+                    callback();
+                    $scope.reMatchRowsSelected();
+                }
+
+                $scope.reMatchRowsSelected = function() {
+
+                    if ($scope.data.rowsSelected.length == 0) {
+                        return;
+                    }
+
+                    for (var rowDataSelected in $scope.data.rowsSelected) {
+                        for (var row in $scope.data.rows) {
+                            for (var key in $scope.data.keyFields) {
+                                if (row[key] !== rowDataSelected[key]) {
+                                    row.selected = false;
+                                    break;
+                                }
+
+                                if (row.selected == undefined) {
+                                    row.selected = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                }
 
 
                 $scope.reorder = function(header, callback) {
@@ -68,6 +125,7 @@
                             $scope.data.orderBy[0].dataField = header.field;
                             $scope.data.orderBy[0].sortDirection = header.orderDirection == 'asc' ? 0 : 1;
                             callback();
+                            $scope.reMatchRowsSelected();
                         }
 
                     }
@@ -105,7 +163,8 @@
 
 
                 dataHeaders.forEach(function(header, index) {
-                    var td = $compile('<td>' + (header.template || ('<span>{{row.' + header.field + '}}</span>')) + '</td>')(scope);
+                    var td = $compile('<td class="' + header.headerCss +
+                        '">' + (header.template || ('<span>{{row.' + header.field + '}}</span>')) + '</td>')(scope);
                     iElement.append(td);
                 });
 

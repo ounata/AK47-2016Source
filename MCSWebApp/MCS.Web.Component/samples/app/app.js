@@ -6,11 +6,11 @@ angular.module('app.component', []);
 
 angular.module('app.lib', ['ngSanitize', 'ui.select', 'app.common']);
 angular.module('app.page', []);
-
+angular.module('app.issue', []);
 
 angular.module('app', [
         'ngCookies', 'ngSanitize', 'ui.router', 'ui.bootstrap', 'blockUI', 'mcs.ng',
-        'app.common', 'app.main', 'app.lib', 'app.component', 'app.page', 'dialogs.main'
+        'app.common', 'app.main', 'app.lib', 'app.component', 'app.page', 'app.issue', 'dialogs.main'
     ])
     .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
         $urlRouterProvider.otherwise("/main");
@@ -125,6 +125,11 @@ angular.module('app', [
             url: '/edit',
             templateUrl: 'app/page/edit.html',
             controller: 'MCSPageController',
+            controllerAs: 'vm'
+        }).state('serializedate', {
+            url: '/serializedate',
+            templateUrl: 'app/issue/date-serialize.html',
+            controller: 'MCSDateSerializeController',
             controllerAs: 'vm'
         });
     }])

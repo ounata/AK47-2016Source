@@ -12,7 +12,10 @@ namespace PPTS.Data.Orders
     /// </summary>
     public static class ConnectionDefine
     {
-        public const string PPTSCustomerConnectionName = "PPTS_Order";
+        public const string PPTSOrderConnectionName = "PPTS_Order";
+
+        public const string PPTSSearchConnectionName = "PPTS_CustomerSearch";
+
 
         /// <summary>
         /// 得到默认的数据操作上下文
@@ -20,7 +23,7 @@ namespace PPTS.Data.Orders
         /// <returns></returns>
         public static DbContext GetDbContext()
         {
-            return DbContext.GetContext(PPTSCustomerConnectionName);
+            return DbContext.GetContext(PPTSOrderConnectionName);
         }
     }
 }
