@@ -13,7 +13,7 @@ namespace PPTS.Data.Customers.Adapters
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <typeparam name="TCollection"></typeparam>
-    public abstract class CustomerAdapterBase<T, TCollection> : UpdatableAndLoadableAdapterBase<T, TCollection> where TCollection : EditableDataObjectCollectionBase<T>, new()
+    public abstract class CustomerAdapterBase<T, TCollection> : UpdatableAndLoadableAdapterBase<T, TCollection> where TCollection : IList<T>, new()
     {
         protected override string GetConnectionName()
         {

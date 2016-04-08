@@ -16,92 +16,90 @@ using System.Transactions;
 
 namespace MCS.Library.SOA.DataObjects.Workflow
 {
-	public class WfRelativeProcessAdapter : UpdatableAndLoadableAdapterBase<WfRelativeProcess, WfRelativeProcessCollection>
-	{
-		public static readonly WfRelativeProcessAdapter Instance = new WfRelativeProcessAdapter();
+    public class WfRelativeProcessAdapter : UpdatableAndLoadableAdapterBase<WfRelativeProcess, WfRelativeProcessCollection>
+    {
+        public static readonly WfRelativeProcessAdapter Instance = new WfRelativeProcessAdapter();
 
-		private WfRelativeProcessAdapter()
-		{
-		}
+        private WfRelativeProcessAdapter()
+        {
+        }
 
-		public WfRelativeProcessCollection Load(string processID)
-		{
-			return LoadByInBuilder(b =>
-			{
-				b.DataField = "PROCESS_ID";
-				b.AppendItem(processID);
-			});
-		}
+        public WfRelativeProcessCollection Load(string processID)
+        {
+            return LoadByInBuilder(new InLoadingCondition(
+                b => b.AppendItem(processID),
+                "PROCESS_ID"));
+        }
 
-		public void Update(string processID, WfRelativeProcessCollection relativeProcesses)
-		{
-			processID.CheckStringIsNullOrEmpty("processID");
-			relativeProcesses.NullCheck("relativeProcesses");
+        public void Update(string processID, WfRelativeProcessCollection relativeProcesses)
+        {
+            processID.CheckStringIsNullOrEmpty("processID");
+            relativeProcesses.NullCheck("relativeProcesses");
 
             WhereSqlClauseBuilder wBuilder = new WhereSqlClauseBuilder();
 
             wBuilder.AppendItem("PROCESS_ID", processID);
             wBuilder.AppendTenantCodeSqlClause(typeof(WfProcessCurrentActivity));
 
-			ORMappingItemCollection mapping = ORMapping.GetMappingInfo<WfRelativeProcess>();
+            ORMappingItemCollection mapping = ORMapping.GetMappingInfo<WfRelativeProcess>();
 
-			string sqlDelete = string.Format(
-				"DELETE {0} WHERE {1}",
-				mapping.TableName,
+            string sqlDelete = string.Format(
+                "DELETE {0} WHERE {1}",
+                mapping.TableName,
                 wBuilder.ToSqlString(TSqlBuilder.Instance));
 
-			StringBuilder strB = new StringBuilder();
+            StringBuilder strB = new StringBuilder();
 
-			foreach (WfRelativeProcess relativeProcess in relativeProcesses)
-			{
-				if (strB.Length > 0)
-					strB.Append(TSqlBuilder.Instance.DBStatementSeperator);
+            foreach (WfRelativeProcess relativeProcess in relativeProcesses)
+            {
+                if (strB.Length > 0)
+                    strB.Append(TSqlBuilder.Instance.DBStatementSeperator);
 
-				strB.Append(ORMapping.GetInsertSql(relativeProcess, TSqlBuilder.Instance));
-			}
+                strB.Append(ORMapping.GetInsertSql(relativeProcess, TSqlBuilder.Instance));
+            }
 
-			string sql = sqlDelete;
+            string sql = sqlDelete;
 
-			if (strB.Length > 0)
-				sql += TSqlBuilder.Instance.DBStatementSeperator + strB.ToString();
+            if (strB.Length > 0)
+                sql += TSqlBuilder.Instance.DBStatementSeperator + strB.ToString();
 
-			DbHelper.RunSqlWithTransaction(sql, GetConnectionName());
-		}
+            DbHelper.RunSqlWithTransaction(sql, GetConnectionName());
+        }
 
-		public override void Delete(WfRelativeProcess data)
-		{
-			ORMappingItemCollection mapping = ORMapping.GetMappingInfo<WfRelativeProcess>();
+        public override void Delete(WfRelativeProcess data)
+        {
+            ORMappingItemCollection mapping = ORMapping.GetMappingInfo<WfRelativeProcess>();
 
             WhereSqlClauseBuilder wBuilder = new WhereSqlClauseBuilder();
 
             wBuilder.AppendItem("PROCESS_ID", data.ProcessID);
             wBuilder.AppendTenantCodeSqlClause(typeof(WfProcessCurrentActivity));
 
-			string sql = string.Format("DELETE {0} WHERE {1}", mapping.TableName, wBuilder.ToSqlString(TSqlBuilder.Instance));
-			DbHelper.RunSql(sql, GetConnectionName());
-		}
+            string sql = string.Format("DELETE {0} WHERE {1}", mapping.TableName, wBuilder.ToSqlString(TSqlBuilder.Instance));
+            DbHelper.RunSql(sql, GetConnectionName());
+        }
 
-		public void Delete(WfProcessCurrentInfoCollection processesInfo)
-		{
-			ORMappingItemCollection mapping = ORMapping.GetMappingInfo<WfRelativeProcess>();
-			InSqlClauseBuilder items = new InSqlClauseBuilder("PROCESS_ID");
+        public void Delete(WfProcessCurrentInfoCollection processesInfo)
+        {
+            ORMappingItemCollection mapping = ORMapping.GetMappingInfo<WfRelativeProcess>();
+            InSqlClauseBuilder items = new InSqlClauseBuilder("PROCESS_ID");
 
-			foreach (var process in processesInfo)
+            foreach (var process in processesInfo)
                 items.AppendItem(process.InstanceID);
 
-			if (items.Count > 0)
-			{
+            if (items.Count > 0)
+            {
                 string sql = string.Format("DELETE {0} WHERE {1}",
                     mapping.TableName,
                     items.AppendTenantCodeSqlClause(typeof(WfRelativeProcess)).ToSqlString(TSqlBuilder.Instance));
-				
-                DbHelper.RunSql(sql, GetConnectionName());
-			}
-		}
 
-		protected override string GetConnectionName()
-		{
-			return WfRuntime.ProcessContext.SimulationContext.GetConnectionName(WorkflowSettings.GetConfig().ConnectionName);
-		}
-	}
+                DbHelper.RunSql(sql, GetConnectionName());
+            }
+        }
+
+        protected override string GetConnectionName()
+        {
+            return WfRuntime.ProcessContext.SimulationContext.GetConnectionName(WorkflowSettings.GetConfig().ConnectionName);
+        }
+    }
 }

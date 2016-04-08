@@ -1,0 +1,190 @@
+﻿<div class="breadcrumbs" id="breadcrumbs">
+    <script type="text/javascript">
+    try {
+        ace.settings.check('breadcrumbs', 'fixed')
+    } catch (e) {}
+    </script>
+    <ul class="breadcrumb">
+        <li class="active">
+            <i class="ace-icon fa fa-home home-icon"></i> 首页
+        </li>
+        <li class="active">
+            <i class="ace-icon fa fa-buttons"></i> 弹出框
+        </li>
+    </ul>
+</div>
+<!-- /结束：位置条 -->
+<div class="page-content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h3 class="header smaller lighter green">应用范例</h3>
+                    <div ng-controller="MCSDialogController">
+                        <button ng-click="vm.waiting()">waiting</button>
+                        <button ng-click="vm.error()">error</button>
+                        <button ng-click="vm.confirm()">confirm</button>
+                    </div>
+                </div>
+                <div class="laycode col-sm-12">
+                    <h3 class="header smaller lighter green">示例代码</h3>
+                    <div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> app <span class="pl-k">=</span> <span class="pl-smi">angular</span>.<span class="pl-en">module</span>(<span class="pl-s"><span class="pl-pds">"</span>MyApp<span class="pl-pds">"</span></span>, [<span class="pl-s"><span class="pl-pds">'</span>dialogs.main<span class="pl-pds">'</span></span>]);
+
+<span class="pl-smi">app</span>.<span class="pl-en">controller</span>(<span class="pl-s"><span class="pl-pds">"</span>MyCtrl<span class="pl-pds">"</span></span>, <span class="pl-k">function</span>(<span class="pl-smi">dialogs</span>){
+  <span class="pl-c">// open dialogs here</span>
+});</pre></div>
+                    <p><code>dialogs.error('Error','An unknown error occurred preventing the completion of the requested action.');</code></p>
+                    <p><code>dialogs.wait('Creating User','Please wait while we attempt to create user "Michael Conroy."&lt;br&gt;&lt;br&gt;This should only take a moment.',50);</code></p>
+                    <p><code>dialogs.notify('Something Happened','Something happened at this point in the application that I wish to let you know about');</code></p>
+                    <p><code>dialogs.create('url/to/a/template','ctrlrToUse',{data: topass,anotherVar: 'value'},{},'ctrl');</code></p>
+                </div>
+                <div class="col-sm-12">
+                    <h3 class="header smaller lighter green">使用说明</h3>
+                    <p><code>dialogs.error(header, msg, opts)</code></p>
+                    <p><code>dialogs.notify(header, msg, opts)</code></p>
+                    <p><code>dialogs.confirm(header, msg, opts)</code></p>
+                    <table class="table table-striped table-bordered table-hover" id="sample-table-1">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>header</td>
+                                <td><code>string</code></td>
+                                <td>Dialog header text.</td>
+                            </tr>
+                            <tr>
+                                <td>msg</td>
+                                <td><code>string</code></td>
+                                <td>Dialog body text.</td>
+                            </tr>
+                            <tr>
+                                <td>opts</td>
+                                <td><code>object&lt;IDialogOptions&gt;</code></td>
+                                <td>Options for the dialog</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <h4><a id="user-content-dialogswait" class="anchor" href="#dialogswait" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" role="img" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path></svg></a>dialogs.wait</h4>
+                    <p><code>dialogs.wait(header, msg, progress, opts)</code></p>
+                    <table class="table table-striped table-bordered table-hover" id="sample-table-1">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>header</td>
+                                <td><code>string</code></td>
+                                <td>Dialog header text.</td>
+                            </tr>
+                            <tr>
+                                <td>msg</td>
+                                <td><code>string</code></td>
+                                <td>Dialog body text.</td>
+                            </tr>
+                            <tr>
+                                <td>progress</td>
+                                <td><code>int</code></td>
+                                <td>progress in percentage</td>
+                            </tr>
+                            <tr>
+                                <td>opts</td>
+                                <td><code>object&lt;IDialogOptions&gt;</code></td>
+                                <td>Options for the dialog</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <h4><a id="user-content-dialogscreate" class="anchor" href="#dialogscreate" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" role="img" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path></svg></a>dialogs.create</h4>
+                    <p><code>dialogs.create(url, ctrlr, data, opts, ctrlAs)</code></p>
+                    <table class="table table-striped table-bordered table-hover" id="sample-table-1">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>url</td>
+                                <td><code>string</code></td>
+                                <td>Template Url</td>
+                            </tr>
+                            <tr>
+                                <td>ctrlr</td>
+                                <td><code>string</code></td>
+                                <td>Dialog Controller</td>
+                            </tr>
+                            <tr>
+                                <td>data</td>
+                                <td><code>object</code></td>
+                                <td>data available as a "data" service in the controller</td>
+                            </tr>
+                            <tr>
+                                <td>opts</td>
+                                <td><code>object&lt;IDialogOptions&gt;</code></td>
+                                <td>Options for the dialog with the addition of <code>copy: false|true</code> which will copy the data instead of passing reference</td>
+                            </tr>
+                            <tr>
+                                <td>ctrlAs</td>
+                                <td><code>string</code></td>
+                                <td><code>controllerAs</code> reference</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <h4><a id="user-content-idialogoptions-properties" class="anchor" href="#idialogoptions-properties" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" role="img" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path></svg></a>IDialogOptions Properties</h4>
+                    <p>Note: All properties are optional</p>
+                    <table class="table table-striped table-bordered table-hover" id="sample-table-1">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>animation</td>
+                                <td><code>boolean</code></td>
+                                <td>Set to false to disable animations on new modal/backdrop. Does not toggle animations for modals/backdrops that are already displayed.</td>
+                            </tr>
+                            <tr>
+                                <td>backdrop</td>
+                                <td><code>boolean|string</code></td>
+                                <td>controls the presence of a backdrop Allowed values: - true (default) - false (no backdrop) - 'static' backdrop is present but modal window is not closed when clicking outside of the modal window</td>
+                            </tr>
+                            <tr>
+                                <td>keyboard</td>
+                                <td><code>boolean</code></td>
+                                <td>indicates whether the dialog should be closable by hitting the ESC key</td>
+                            </tr>
+                            <tr>
+                                <td>backdropClass</td>
+                                <td><code>string</code></td>
+                                <td>additional CSS class(es) to be added to a modal backdrop template</td>
+                            </tr>
+                            <tr>
+                                <td>windowClass</td>
+                                <td><code>string</code></td>
+                                <td>additional CSS class(es) to be added to a modal window template</td>
+                            </tr>
+                            <tr>
+                                <td>size</td>
+                                <td><code>string</code></td>
+                                <td>Optional suffix of modal window class. The value used is appended to the <code>modal-</code> class, i.e. a value of <code>sm</code> gives <code>modal-sm</code>.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

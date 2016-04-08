@@ -84,6 +84,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Bin\MCS.Library.SOA.DataObjects.Security.AUClient.dll</HintPath>
     </Reference>
+    <Reference Include="MCS.Library.SOA.Web.WebControls, Version=1.0.0.0, Culture=neutral, PublicKeyToken=62ea08f894871798, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Bin\MCS.Library.SOA.Web.WebControls.dll</HintPath>
+    </Reference>
     <Reference Include="MCS.Web.Library, Version=1.2.0.0, Culture=neutral, PublicKeyToken=62ea08f894871798, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Bin\MCS.Web.Library.dll</HintPath>
@@ -760,12 +764,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="CommonHttpHandler.ashx" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Framework\MCS.Library.SOA.Web.WebControls\MCS.Library.SOA.Web.WebControls.csproj">
-      <Project>{42c6d301-8ccb-4cbd-bc20-250d98a4c369}</Project>
-      <Name>MCS.Library.SOA.Web.WebControls</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

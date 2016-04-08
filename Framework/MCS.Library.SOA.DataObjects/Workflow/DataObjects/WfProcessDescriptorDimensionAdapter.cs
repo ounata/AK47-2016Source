@@ -23,11 +23,10 @@ namespace MCS.Library.SOA.DataObjects.Workflow
         {
             processKey.CheckStringIsNullOrEmpty("processKey");
 
-            return LoadByInBuilder(builder =>
-            {
-                builder.DataField = "PROCESS_KEY";
-                builder.AppendItem(processKey);
-            }).FirstOrDefault();
+            return LoadByInBuilder(new InLoadingCondition(
+                builder => builder.AppendItem(processKey),
+                "PROCESS_KEY")
+            ).FirstOrDefault();
         }
 
         public void DeleteByProcessKey(string processKey)

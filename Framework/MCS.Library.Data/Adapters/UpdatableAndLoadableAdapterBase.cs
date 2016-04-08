@@ -15,11 +15,11 @@ namespace MCS.Library.Data.Adapters
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <typeparam name="TCollection"></typeparam>
-    public abstract class UpdatableAndLoadableAdapterBase<T, TCollection> : UpdatableAdapterBase<T>
-        where TCollection : EditableDataObjectCollectionBase<T>, new()
+    //public abstract class UpdatableAndLoadableAdapterBase<T, TCollection> : UpdatableAdapterBase<T>
+    //    where TCollection : EditableDataObjectCollectionBase<T>, new()
+    public abstract partial class UpdatableAndLoadableAdapterBase<T, TCollection> : UpdatableAdapterBase<T>
+        where TCollection : IList<T>, IEnumerable<T>, new()
     {
-        private static readonly Dictionary<string, object> _FixedContext = new Dictionary<string, object>();
-
         /// <summary>
         /// 
         /// </summary>
@@ -40,24 +40,17 @@ namespace MCS.Library.Data.Adapters
         }
 
         /// <summary>
-        /// 数据是否存在
-        /// </summary>
-        /// <param name="whereAction"></param>
-        /// <returns></returns>
-        public virtual bool Exists(Action<WhereSqlClauseBuilder> whereAction)
-        {
-            return this.Exists(whereAction, this.GetQueryMappingInfo());
-        }
-
-        /// <summary>
         /// 
         /// </summary>
         /// <param name="whereAction"></param>
         /// <param name="mappings"></param>
         /// <returns></returns>
-        public bool Exists(Action<WhereSqlClauseBuilder> whereAction, ORMappingItemCollection mappings)
+        public bool Exists(Action<WhereSqlClauseBuilder> whereAction, ORMappingItemCollection mappings = null)
         {
             whereAction.NullCheck("whereAction");
+
+            if (mappings == null)
+                mappings = this.GetQueryMappingInfo();
 
             WhereSqlClauseBuilder builder = new WhereSqlClauseBuilder();
 
@@ -72,50 +65,40 @@ namespace MCS.Library.Data.Adapters
             return (int)DbHelper.RunSqlReturnDS(sql, GetConnectionName()).Tables[0].Rows.Count > 0;
         }
 
-        /// <summary>
-        /// 按照In条件加载对象
-        /// </summary>
-        /// <param name="inAction"></param>
-        /// <param name="dataFieldName">IN对应的数据字段名称</param>
-        /// <returns></returns>
-        public virtual TCollection LoadByInBuilder(Action<InSqlClauseBuilder> inAction, string dataFieldName = "")
-        {
-            return LoadByInBuilder(inAction, null, dataFieldName);
-        }
+        ///// <summary>
+        ///// 按照In条件加载对象
+        ///// </summary>
+        ///// <param name="inAction"></param>
+        ///// <param name="dataFieldName">IN对应的数据字段名称</param>
+        ///// <returns></returns>
+        //public virtual TCollection LoadByInBuilder(Action<InSqlClauseBuilder> inAction, string dataFieldName = "")
+        //{
+        //    inAction.NullCheck("whereAction");
 
-        /// <summary>
-        /// 按照In条件加载对象
-        /// </summary>
-        /// <param name="inAction"></param>
-        /// <param name="orderByAction"></param>
-        /// <param name="dataFieldName">IN对应的数据字段名称</param>
-        /// <returns></returns>
-        public virtual TCollection LoadByInBuilder(Action<InSqlClauseBuilder> inAction, Action<OrderBySqlClauseBuilder> orderByAction, string dataFieldName = "")
-        {
-            inAction.NullCheck("whereAction");
-
-            return this.LoadByInBuilder(inAction, orderByAction, this.GetQueryMappingInfo(), dataFieldName);
-        }
+        //    return this.LoadByInBuilder(new InLoadingCondition(inAction, null, dataFieldName));
+        //}
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="inAction"></param>
-        /// <param name="orderByAction"></param>
+        /// <param name="inCondition"></param>
         /// <param name="mappings"></param>
-        /// <param name="dataFieldName"></param>
         /// <returns></returns>
-        public TCollection LoadByInBuilder(Action<InSqlClauseBuilder> inAction, Action<OrderBySqlClauseBuilder> orderByAction, ORMappingItemCollection mappings, string dataFieldName = "")
+        public TCollection LoadByInBuilder(InLoadingCondition inCondition, ORMappingItemCollection mappings = null)
         {
-            inAction.NullCheck("whereAction");
+            inCondition.NullCheck("inCondition");
+            inCondition.BuilderAction.NullCheck("BuilderAction");
 
-            TCollection result = null;
+            if (mappings == null)
+                mappings = this.GetQueryMappingInfo();
+
+            TCollection result = default(TCollection);
 
             PerformanceMonitorHelper.GetDefaultMonitor().WriteExecutionDuration(string.Format("LoadByInBuilder({0})", this.GetType().FullName), () =>
             {
-                InSqlClauseBuilder inBuilder = new InSqlClauseBuilder(dataFieldName);
+                InSqlClauseBuilder inBuilder = new InSqlClauseBuilder(inCondition.DataField);
 
-                inAction(inBuilder);
+                inCondition.BuilderAction(inBuilder);
 
                 string condition = string.Empty;
 
@@ -128,11 +111,11 @@ namespace MCS.Library.Data.Adapters
 
                     OrderBySqlClauseBuilder orderByBuilder = null;
 
-                    if (orderByAction != null)
+                    if (inCondition.OrderByAction != null)
                     {
                         orderByBuilder = new OrderBySqlClauseBuilder();
 
-                        orderByAction(orderByBuilder);
+                        inCondition.OrderByAction(orderByBuilder);
                     }
 
                     result = InnerLoadByBuilder(condition, orderByBuilder, mappings);
@@ -147,29 +130,19 @@ namespace MCS.Library.Data.Adapters
         /// <summary>
         /// 根据外界的builder加载数据
         /// </summary>
-        /// <param name="builder"></param>
+        /// <param name="connectiveCondition"></param>
         /// <returns></returns>
-        public virtual TCollection LoadByBuilder(IConnectiveSqlClause builder)
+        public virtual TCollection LoadByBuilder(ConnectiveLoadingCondition connectiveCondition)
         {
-            return LoadByBuilder(builder, null);
-        }
+            connectiveCondition.NullCheck("connectiveCondition");
+            connectiveCondition.ConnectiveBuilder.NullCheck("ConnectiveBuilder");
 
-        /// <summary>
-        /// 根据外界的builder加载数据
-        /// </summary>
-        /// <param name="builder"></param>
-        /// <param name="orderByBuilder"></param>
-        /// <returns></returns>
-        public virtual TCollection LoadByBuilder(IConnectiveSqlClause builder, OrderBySqlClauseBuilder orderByBuilder)
-        {
-            builder.NullCheck("builder");
-
-            TCollection result = null;
+            TCollection result = default(TCollection);
 
             PerformanceMonitorHelper.GetDefaultMonitor().WriteExecutionDuration(string.Format("LoadByBuilder({0})", this.GetType().FullName), () =>
             {
-                result = InnerLoadByBuilder(builder.ToSqlString(TSqlBuilder.Instance),
-                    orderByBuilder,
+                result = this.InnerLoadByBuilder(connectiveCondition.ConnectiveBuilder.ToSqlString(TSqlBuilder.Instance),
+                    connectiveCondition.OrderByBuilder,
                     this.GetQueryMappingInfo());
             });
 
@@ -179,55 +152,49 @@ namespace MCS.Library.Data.Adapters
         /// <summary>
         /// 按照条件加载对象
         /// </summary>
-        /// <param name="whereAction">条件</param>
+        /// <param name="whereAction">筛选条件</param>
+        /// <param name="orderByAction">排序条件</param>
         /// <returns>对象集合</returns>
-        public virtual TCollection Load(Action<WhereSqlClauseBuilder> whereAction)
+        public TCollection Load(Action<WhereSqlClauseBuilder> whereAction, Action<OrderBySqlClauseBuilder> orderByAction = null)
         {
-            return Load(whereAction, null);
+            return Load(new WhereLoadingCondition(whereAction, orderByAction));
         }
 
         /// <summary>
         /// 按照条件加载对象
         /// </summary>
-        /// <param name="whereAction">筛选条件</param>
-        /// <param name="orderByAction">排序条件</param>
-        /// <returns>对象集合</returns>
-        public TCollection Load(Action<WhereSqlClauseBuilder> whereAction, Action<OrderBySqlClauseBuilder> orderByAction)
-        {
-            return Load(whereAction, orderByAction, this.GetQueryMappingInfo());
-        }
-
-        /// <summary>
-        /// 按照条件加载对象
-        /// </summary>
-        /// <param name="whereAction">筛选条件</param>
-        /// <param name="orderByAction">排序条件</param>
+        /// <param name="loadingCondition">筛选和排序条件</param>
         /// <param name="mappings"></param>
         /// <returns>对象集合</returns>
-        public TCollection Load(Action<WhereSqlClauseBuilder> whereAction, Action<OrderBySqlClauseBuilder> orderByAction, ORMappingItemCollection mappings)
+        public TCollection Load(WhereLoadingCondition loadingCondition, ORMappingItemCollection mappings = null)
         {
-            TCollection result = null;
+            loadingCondition.NullCheck("loadingCondition");
+
+            if (mappings == null)
+                mappings = this.GetQueryMappingInfo();
+
+            TCollection result = default(TCollection);
 
             PerformanceMonitorHelper.GetDefaultMonitor().WriteExecutionDuration(string.Format("Load({0})", this.GetType().FullName), () =>
             {
-                whereAction.NullCheck("whereAction");
+                loadingCondition.BuilderAction.NullCheck("whereAction");
 
                 WhereSqlClauseBuilder builder = new WhereSqlClauseBuilder();
 
-                whereAction(builder);
+                loadingCondition.BuilderAction(builder);
 
                 builder.AppendTenantCode(typeof(T));
 
                 OrderBySqlClauseBuilder orderByBuilder = null;
 
-                if (orderByAction != null)
+                if (loadingCondition.OrderByAction != null)
                 {
                     orderByBuilder = new OrderBySqlClauseBuilder();
 
-                    orderByAction(orderByBuilder);
+                    loadingCondition.OrderByAction(orderByBuilder);
                 }
 
-                result = InnerLoadByBuilder(builder.ToSqlString(TSqlBuilder.Instance), orderByBuilder, mappings);
+                result = this.InnerLoadByBuilder(builder.ToSqlString(TSqlBuilder.Instance), orderByBuilder, mappings);
             });
 
             return result;
@@ -242,13 +209,7 @@ namespace MCS.Library.Data.Adapters
         /// <returns></returns>
         protected TCollection InnerLoadByBuilder(string condition, OrderBySqlClauseBuilder orderByBuilder, ORMappingItemCollection mappings)
         {
-            string sql = string.Format("SELECT * FROM {0}", mappings.TableName);
-
-            if (condition.IsNotEmpty())
-                sql = sql + string.Format(" WHERE {0}", condition);
-
-            if (orderByBuilder != null)
-                sql = sql + string.Format(" ORDER BY {0}", orderByBuilder.ToSqlString(TSqlBuilder.Instance));
+            string sql = GetLoadSqlByBuilder(condition, orderByBuilder, mappings);
 
             TCollection result = QueryData(sql);
 
@@ -275,7 +236,7 @@ namespace MCS.Library.Data.Adapters
         /// <returns></returns>
         protected TDataCollection QueryData<TData, TDataCollection>(ORMappingItemCollection mapping, string sql)
             where TData : new()
-            where TDataCollection : EditableDataObjectCollectionBase<TData>, new()
+            where TDataCollection : IList<TData>, new()
         {
             TDataCollection result = new TDataCollection();
 
@@ -306,6 +267,27 @@ namespace MCS.Library.Data.Adapters
         }
 
         /// <summary>
+        /// 在上下文中注册查询返回的结果
+        /// </summary>
+        /// <param name="tableName"></param>
+        /// <param name="mapping"></param>
+        /// <param name="sql"></param>
+        /// <param name="action"></param>
+        protected void RegisterQueryData(string tableName, ORMappingItemCollection mapping, string sql, Action<TCollection> action)
+        {
+            SqlContextItem sqlContext = this.GetSqlContext();
+
+            sqlContext.AppendSqlWithSperatorInContext(TSqlBuilder.Instance, sql);
+            sqlContext.RegisterTableAction(tableName, (table) =>
+            {
+                TCollection collection = this.DataTableToCollection(mapping, table);
+
+                if (action != null)
+                    action(collection);
+            });
+        }
+
+        /// <summary>
         /// 
         /// </summary>
         /// <param name="mapping"></param>
@@ -313,9 +295,32 @@ namespace MCS.Library.Data.Adapters
         /// <returns></returns>
         protected TCollection QueryData(ORMappingItemCollection mapping, string sql)
         {
-            TCollection result = new TCollection();
-
             DataTable table = DbHelper.RunSqlReturnDS(sql, GetConnectionName()).Tables[0];
+
+            return this.DataTableToCollection(mapping, table);
+        }
+
+        /// <summary>
+        /// 得到查询数据时的ORMapping信息
+        /// </summary>
+        /// <returns></returns>
+        protected virtual ORMappingItemCollection GetQueryMappingInfo()
+        {
+            return base.GetMappingInfo(this.GetFixedContext());
+        }
+
+        /// <summary>
+        /// 得到一个静态的上下文
+        /// </summary>
+        /// <returns></returns>
+        protected Dictionary<string, object> GetFixedContext()
+        {
+            return _DefaultContext;
+        }
+
+        private TCollection DataTableToCollection(ORMappingItemCollection mapping, DataTable table)
+        {
+            TCollection result = new TCollection();
 
             foreach (DataRow row in table.Rows)
             {
@@ -332,13 +337,17 @@ namespace MCS.Library.Data.Adapters
             return result;
         }
 
-        /// <summary>
-        /// 得到查询数据时的ORMapping信息
-        /// </summary>
-        /// <returns></returns>
-        protected virtual ORMappingItemCollection GetQueryMappingInfo()
+        private static string GetLoadSqlByBuilder(string condition, OrderBySqlClauseBuilder orderByBuilder, ORMappingItemCollection mappings)
         {
-            return base.GetMappingInfo(_FixedContext);
+            string sql = string.Format("SELECT * FROM {0}", mappings.TableName);
+
+            if (condition.IsNotEmpty())
+                sql = sql + string.Format(" WHERE {0}", condition);
+
+            if (orderByBuilder != null)
+                sql = sql + string.Format(" ORDER BY {0}", orderByBuilder.ToSqlString(TSqlBuilder.Instance));
+
+            return sql;
         }
     }
 }

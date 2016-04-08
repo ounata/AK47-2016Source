@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace PPTS.Data.Common.Entities
 {
-    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = true, Inherited = true)]
     public class ConstantCategoryAttribute : Attribute
     {
         public ConstantCategoryAttribute()

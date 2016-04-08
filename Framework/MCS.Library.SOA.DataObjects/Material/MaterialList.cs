@@ -178,11 +178,6 @@ namespace MCS.Library.SOA.DataObjects
 
 		#region ¼¯ºÏ²Ù×÷
 
-		public void Insert(int index, Material material)
-		{
-			List.Insert(index, material);
-		}
-
         //public void Remove(Material material)
         //{
         //    List.Remove(material);

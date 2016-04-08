@@ -27,6 +27,8 @@ namespace MCS.Library.SOA.DataObjects
         /// <returns></returns>
         public int InsertData(UserOperationLog data)
         {
+            data.NullCheck("data");
+
             ORMappingItemCollection mappings = ORMapping.GetMappingInfo<UserOperationLog>();
 
             string sql = ORMapping.GetInsertSql(data, mappings, TSqlBuilder.Instance);
@@ -34,6 +36,20 @@ namespace MCS.Library.SOA.DataObjects
             decimal result = (decimal)DbHelper.RunSqlReturnScalar(string.Format("{0} \n SELECT @@IDENTITY", sql), this.GetConnectionName());
 
             return decimal.ToInt32(result);
+        }
+
+        /// <summary>
+        /// 在DB上下文中插入一条新日志，用于之入库
+        /// </summary>
+        /// <param name="data"></param>
+        public void InsertDataInContext(UserOperationLog data)
+        {
+            data.NullCheck("data");
+
+            SqlContextItem sqlContext = this.GetSqlContext();
+
+            this.InnerInsertInContext(data, sqlContext, this.GetFixedContext());
+            sqlContext.AppendSqlInContext(TSqlBuilder.Instance, TSqlBuilder.Instance.DBStatementSeperator);
         }
 
         public UserOperationLog Load(Int64 id)
@@ -59,7 +75,7 @@ namespace MCS.Library.SOA.DataObjects
                     r = -1;
                 else
                     if (l1.OperationDateTime < l2.OperationDateTime)
-                        r = 1;
+                    r = 1;
 
                 return r;
             });

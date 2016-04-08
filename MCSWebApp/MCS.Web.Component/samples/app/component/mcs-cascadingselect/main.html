@@ -1,0 +1,98 @@
+<div class="breadcrumbs" id="breadcrumbs">
+    <script type="text/javascript">
+    try {
+        ace.settings.check('breadcrumbs', 'fixed')
+    } catch (e) {}
+    </script>
+    <ul class="breadcrumb">
+        <li class="active">
+            <i class="ace-icon fa fa-home home-icon"></i> 首页
+        </li>
+        <li class="active">
+            <i class="ace-icon fa fa-buttons"></i> 级联选择框
+        </li>
+    </ul>
+</div>
+<!-- /结束：位置条 -->
+<div class="page-content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h3 class="header smaller lighter green">应用范例</h3>
+                    <div>
+                        <div id="cascading" ng-controller="MCSCascadingSelectController">
+                            <mcs-cascading-select data="vm.data" ng-model="vm.selection" /> 省:
+                            <label>{{vm.selection.province}}</label> 市:
+                            <label>{{vm.selection.city}}</label> 区:
+                            <lavel>{{vm.selection.district}}</lavel>
+                        </div>
+                    </div>
+                </div>
+                <div class="laycode col-sm-12">
+                    <h3 class="header smaller lighter green">示例代码</h3>
+                    <h5>HTML Code</h5>
+                    <div class="codehilite"><pre>&lt;mcs-cascading-select data=&quot;vm.data&quot; ng-model=&quot;vm.selection&quot; required=&quot;true&quot; /&gt;
+</pre></div>
+                    <h5>JS Code</h5>
+                    <div class="codehilite"><pre>&#39;use strict&#39;;
+(
+function() {
+    angular.module(&#39;app.component&#39;)
+
+    .controller(&#39;MCSCascadingSelectController&#39;, [&#39;$scope&#39;, &#39;$http&#39;, function($scope, $http) {
+        var vm = {};
+        $scope.vm = vm;
+        vm.data = {};
+
+        $http.get(&#39;../src/tpl/sample.json&#39;).success(function(result) {
+            vm.data = result;
+        });
+
+        vm.selection = {
+            province: &#39;&#39;,
+            city: &#39;&#39;,
+            district: &#39;&#39;
+        }
+    }])
+}
+)();
+</pre>
+                    </div>
+                    <div class="col-sm-12">
+                        <h3 class="header smaller lighter green">参数说明</h3>
+                        <table class="table table-striped table-bordered table-hover" id="sample-table-1">
+                            <thead>
+                                <tr>
+                                    <th>参数</th>
+                                    <th>用途</th>
+                                    <th>取值</th>
+                                    <th>示例</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>data</td>
+                                    <td>设置数据源</td>
+                                    <td>json对象</td>
+                                    <td><a href="" title="/src/tpl/sample.json">sample</a></td>
+                                </tr>
+                                <tr>
+                                    <td>ng-model</td>
+                                    <td>绑定到上下文scope的数据对象</td>
+                                    <td>js对象</td>
+                                    <td>ng-model="vm.address"</td>
+                                </tr>
+                                <tr>
+                                    <td>required</td>
+                                    <td>设置下拉选项是否为必选</td>
+                                    <td>boolean值</td>
+                                    <td>required="true"</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

@@ -1,37 +1,56 @@
 ﻿CREATE TABLE [CM].[PotentialCustomers]
 (
-	[CustomerID] NVARCHAR(36) NOT NULL PRIMARY KEY,
-	[CustomerName] NVARCHAR(128) NULL,
+	[OrgID] NVARCHAR(36) NULL,
+    [OrgName] NVARCHAR(128) NULL, 
+	[OrgType] NVARCHAR(32) NULL,
+	[CustomerID] NVARCHAR(36) NOT NULL DEFAULT newid() ,
 	[CustomerCode] NVARCHAR(64) NULL,
-    [IsSingleParent] INT NULL DEFAULT 0, 
-    [EntranceGrade] NVARCHAR(32) NULL, 
-    [Branch] NVARCHAR(32) NULL, 
-    [SchoolYear] NVARCHAR(32) NULL, 
+	[CustomerName] NVARCHAR(128) NULL,
+    [CustomerLevel] NVARCHAR(32) NULL, 
+    [InvalidReason] NVARCHAR(32) NULL, 
+	[CustomerStatus] NVARCHAR(32) NULL DEFAULT 0,
+    [IsOneParent] INT NULL DEFAULT 1, 
     [Character] NVARCHAR(MAX) NULL, 
     [Birthday] DATETIME NULL, 
-	[Email] nvarchar(255) NULL,
-    [Grade] NVARCHAR(32) NULL, 
-    [StudentType] NVARCHAR(32) NULL DEFAULT 51, 
-    [TeachingLocation] NVARCHAR(36) NULL, 
-    [ConsultingSite] NVARCHAR(36) NULL, 
-    [SalesStage] NVARCHAR(32) NULL, 
-    [PurchaseIntention] NVARCHAR(32) NULL DEFAULT 0, 
+	[Gender] NVARCHAR(32) NULL,
+    [Email] NVARCHAR(255) NULL, 
 	[IDType] NVARCHAR(32) NULL,
-	[IDNumbar] NVARCHAR(64) NULL,
+	[IDNumber] NVARCHAR(64) NULL,
+	[VipType] NVARCHAR(32) NULL,
+	[VipLevel] NVARCHAR(32) NULL,
+    [EntranceGrade] NVARCHAR(32) NULL, 
+    [Grade] NVARCHAR(32) NULL, 
+    [SchoolYear] NVARCHAR(32) NULL, 
+    [SubjectType] NVARCHAR(32) NULL, 
+    [StudentType] NVARCHAR(32) NULL DEFAULT 51, 
 	[ContactType] NVARCHAR(32) NULL,
 	[SourceMainType] NVARCHAR(32) NULL,
 	[SourceSubType] NVARCHAR(32) NULL,
-	[Status] NVARCHAR(32) NULL DEFAULT 0,
+	[SourceSystem] NVARCHAR(32) NULL,
+	[ReferralStaffID] [nvarchar](36) NULL,
+    [ReferralStaffCode] NVARCHAR(32) NULL, 
+	[ReferralStaffName] [nvarchar](64) NULL,
+	[ReferralStaffJobID] [nvarchar](36) NULL,
+	[ReferralStaffJobName] [nvarchar](64) NULL,
+    [ReferralCustomerID] NVARCHAR(36) NULL, 
+    [ReferralCustomerCode] NVARCHAR(32) NULL, 
+    [ReferralCustomerName] NVARCHAR(64) NULL, 
+    [PurchaseIntention] NVARCHAR(32) NULL , 
+	[SchoolID] NVARCHAR(32) NULL,
+    [IsStudyAgain] INT NULL DEFAULT 0, 
+    [FollowTime] DATETIME NULL , 
+    [FollowStage] NVARCHAR(32) NULL, 
+    [FollowedCount] INT NULL DEFAULT 0, 
+    [NextFollowTime] DATETIME NULL , 
 	[CreatorID] NVARCHAR(36) NULL,
 	[CreatorName] NVARCHAR(64) NULL,
-	[CreateTime] DATETIME NULL DEFAULT GETDATE(),
-	[SchoolID] NVARCHAR(32) NULL,
-	[Gender] NVARCHAR(32) NULL,
-	[VipType] NVARCHAR(32) NULL,
-	[VipLevel] NVARCHAR(32) NULL,
-	[LastFollowupTime] DATETIME NULL,
-	[NextFollowupTime] DATETIME NULL,
-    [TenantCode] NVARCHAR(36) NULL 
+	[CreateTime] DATETIME NULL DEFAULT getdate(),
+	[ModifierID] NVARCHAR(36) NULL,
+	[ModifierName] NVARCHAR(64) NULL,
+	[ModifyTime] DATETIME NULL DEFAULT getdate(),
+    [TenantCode] NVARCHAR(36) NULL, 
+    CONSTRAINT [PK_PotentialCustomers] PRIMARY KEY NONCLUSTERED ([CustomerID]), 
+    CONSTRAINT [IX_PotentialCustomers] UNIQUE ([CustomerCode]) 
 )
 
 GO
@@ -44,14 +63,7 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level2type = N'COLUMN',
     @level2name = N'CustomerID'
 GO
-EXEC sp_addextendedproperty @name = N'MS_Description',
-    @value = N'是否单亲',
-    @level0type = N'SCHEMA',
-    @level0name = N'CM',
-    @level1type = N'TABLE',
-    @level1name = N'PotentialCustomers',
-    @level2type = N'COLUMN',
-    @level2name = N'IsSingleParent'
+
 GO
 EXEC sp_addextendedproperty @name = N'MS_Description',
     @value = N'入学大年级。对应类别C_CODE_ABBR_CUSTOMER_GRADE（年级）',
@@ -69,7 +81,7 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level1type = N'TABLE',
     @level1name = N'PotentialCustomers',
     @level2type = N'COLUMN',
-    @level2name = N'Branch'
+    @level2name = N'SubjectType'
 GO
 EXEC sp_addextendedproperty @name = N'MS_Description',
     @value = N'学年制(C_CODE_ABBR_ACDEMICYEAR)',
@@ -108,7 +120,7 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level1type = N'TABLE',
     @level1name = N'PotentialCustomers',
     @level2type = N'COLUMN',
-    @level2name = N'Grade'
+    @level2name = 'Grade'
 GO
 EXEC sp_addextendedproperty @name = N'MS_Description',
     @value = N'学生类型(C_CODE_ABBR_CUSTOMER_STUDENTTYPE)，默认51',
@@ -119,33 +131,7 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level2type = N'COLUMN',
     @level2name = N'StudentType'
 GO
-EXEC sp_addextendedproperty @name = N'MS_Description',
-    @value = N'教学地点的ID',
-    @level0type = N'SCHEMA',
-    @level0name = N'CM',
-    @level1type = N'TABLE',
-    @level1name = N'PotentialCustomers',
-    @level2type = N'COLUMN',
-    @level2name = 'TeachingLocation'
-GO
-EXEC sp_addextendedproperty @name = N'MS_Description',
-    @value = N'咨询地点的ID',
-    @level0type = N'SCHEMA',
-    @level0name = N'CM',
-    @level1type = N'TABLE',
-    @level1name = N'PotentialCustomers',
-    @level2type = N'COLUMN',
-    @level2name = 'ConsultingSite'
-GO
-EXEC sp_addextendedproperty @name = N'MS_Description',
-    @value = N'销售阶段(C_CODE_ABBR_Customer_CRM_SalePhase)',
-    @level0type = N'SCHEMA',
-    @level0name = N'CM',
-    @level1type = N'TABLE',
-    @level1name = N'PotentialCustomers',
-    @level2type = N'COLUMN',
-    @level2name = N'SalesStage'
-GO
+
 EXEC sp_addextendedproperty @name = N'MS_Description',
     @value = N'购买意愿(C_CODE_ABBR_Customer_CRM_PurchaseIntent)',
     @level0type = N'SCHEMA',
@@ -225,7 +211,7 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level1type = N'TABLE',
     @level1name = N'PotentialCustomers',
     @level2type = N'COLUMN',
-    @level2name = N'Status'
+    @level2name = N'CustomerStatus'
 GO
 EXEC sp_addextendedproperty @name = N'MS_Description',
     @value = N'性别(C_CODE_ABBR_GENDER)。1--男，2--女',
@@ -237,7 +223,7 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level2name = N'Gender'
 GO
 EXEC sp_addextendedproperty @name = N'MS_Description',
-    @value = N'校区ID',
+    @value = N'在读学校ID',
     @level0type = N'SCHEMA',
     @level0name = N'CM',
     @level1type = N'TABLE',
@@ -265,31 +251,24 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
 GO
 
 EXEC sp_addextendedproperty @name = N'MS_Description',
-    @value = N'最后一次跟进时间',
+    @value = N'当前跟进时间',
     @level0type = N'SCHEMA',
     @level0name = N'CM',
     @level1type = N'TABLE',
     @level1name = N'PotentialCustomers',
     @level2type = N'COLUMN',
-    @level2name = N'LastFollowupTime'
+    @level2name = 'FollowTime'
 GO
 EXEC sp_addextendedproperty @name = N'MS_Description',
-    @value = N'预计下次回访时间',
+    @value = N'预计下次跟进时间',
     @level0type = N'SCHEMA',
     @level0name = N'CM',
     @level1type = N'TABLE',
     @level1name = N'PotentialCustomers',
     @level2type = N'COLUMN',
-    @level2name = N'NextFollowupTime'
+    @level2name = 'NextFollowTime'
 GO
-EXEC sp_addextendedproperty @name = N'MS_Description',
-    @value = N'邮件地址',
-    @level0type = N'SCHEMA',
-    @level0name = N'CM',
-    @level1type = N'TABLE',
-    @level1name = N'PotentialCustomers',
-    @level2type = N'COLUMN',
-    @level2name = N'Email'
+
 GO
 EXEC sp_addextendedproperty @name = N'MS_Description',
     @value = N'接触方式(C_CODE_ABBR_Customer_CRM_NewContactType)。"1：呼入 2：呼出 3：直访 4：在线咨询-乐语 5：在线咨询-其他"',
@@ -310,15 +289,6 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level2name = N'IDType'
 GO
 EXEC sp_addextendedproperty @name = N'MS_Description',
-    @value = N'证件号码',
-    @level0type = N'SCHEMA',
-    @level0name = N'CM',
-    @level1type = N'TABLE',
-    @level1name = N'PotentialCustomers',
-    @level2type = N'COLUMN',
-    @level2name = N'IDNumbar'
-GO
-EXEC sp_addextendedproperty @name = N'MS_Description',
     @value = N'信息来源一级分类(C_Code_Abbr_BO_Customer_Source)',
     @level0type = N'SCHEMA',
     @level0name = N'CM',
@@ -335,3 +305,211 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level1name = N'PotentialCustomers',
     @level2type = N'COLUMN',
     @level2name = N'SourceSubType'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'归属组织机构ID',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'PotentialCustomers',
+    @level2type = N'COLUMN',
+    @level2name = N'OrgID'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'归属组织机构类型',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'PotentialCustomers',
+    @level2type = N'COLUMN',
+    @level2name = N'OrgType'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'证件号',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'PotentialCustomers',
+    @level2type = N'COLUMN',
+    @level2name = N'IDNumber'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'来源系统',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'PotentialCustomers',
+    @level2type = N'COLUMN',
+    @level2name = N'SourceSystem'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'最后修改人ID',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'PotentialCustomers',
+    @level2type = N'COLUMN',
+    @level2name = N'ModifierID'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'最后修改人姓名',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'PotentialCustomers',
+    @level2type = N'COLUMN',
+    @level2name = N'ModifierName'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'最后修改时间',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'PotentialCustomers',
+    @level2type = N'COLUMN',
+    @level2name = N'ModifyTime'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'转介绍员工ID',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'PotentialCustomers',
+    @level2type = N'COLUMN',
+    @level2name = 'ReferralStaffID'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'转介绍员工OA编号',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'PotentialCustomers',
+    @level2type = N'COLUMN',
+    @level2name = 'ReferralStaffCode'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'转介绍员工姓名',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'PotentialCustomers',
+    @level2type = N'COLUMN',
+    @level2name = 'ReferralStaffName'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'转介绍员工岗位ID',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'PotentialCustomers',
+    @level2type = N'COLUMN',
+    @level2name = 'ReferralStaffJobID'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'转介绍员工岗位名称',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'PotentialCustomers',
+    @level2type = N'COLUMN',
+    @level2name = 'ReferralStaffJobName'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'转介绍学员ID',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'PotentialCustomers',
+    @level2type = N'COLUMN',
+    @level2name = 'ReferralCustomerID'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'转介绍学员编码',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'PotentialCustomers',
+    @level2type = N'COLUMN',
+    @level2name = 'ReferralCustomerCode'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'转介绍学员姓名',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'PotentialCustomers',
+    @level2type = N'COLUMN',
+    @level2name = 'ReferralCustomerName'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'是否仅登记一个家长',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'PotentialCustomers',
+    @level2type = N'COLUMN',
+    @level2name = 'IsOneParent'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'客户级别（A1,A2,A3...）',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'PotentialCustomers',
+    @level2type = N'COLUMN',
+    @level2name = N'CustomerLevel'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'跟进阶段（销售阶段）',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'PotentialCustomers',
+    @level2type = N'COLUMN',
+    @level2name = N'FollowStage'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'已跟进次数',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'PotentialCustomers',
+    @level2type = N'COLUMN',
+    @level2name = 'FollowedCount'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'是否复读',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'PotentialCustomers',
+    @level2type = N'COLUMN',
+    @level2name = N'IsStudyAgain'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'电子邮箱',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'PotentialCustomers',
+    @level2type = N'COLUMN',
+    @level2name = N'Email'
+GO
+
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'组织机构名称',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'PotentialCustomers',
+    @level2type = N'COLUMN',
+    @level2name = N'OrgName'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'无效客户理由代码（参考跟进）',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'PotentialCustomers',
+    @level2type = N'COLUMN',
+    @level2name = N'InvalidReason'

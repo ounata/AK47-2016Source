@@ -36,17 +36,17 @@ namespace MCS.Library.OGUPermission
         /// <returns>根机构对象</returns>
         IOrganization GetRoot();
 
-		/// <summary>
-		/// 用户认证，通常是判断用户的用户名和口令是否正确
-		/// </summary>
-		/// <param name="identity">用户的登录名、口令和域</param>
-		/// <returns>是否认证成功</returns>
-		bool AuthenticateUser(LogOnIdentity identity);
+        /// <summary>
+        /// 用户认证，通常是判断用户的用户名和口令是否正确
+        /// </summary>
+        /// <param name="identity">用户的登录名、口令和域</param>
+        /// <returns>是否认证成功</returns>
+        bool AuthenticateUser(LogOnIdentity identity);
 
-		/// <summary>
-		/// 清除所有Cache
-		/// </summary>
-		void RemoveAllCache();
+        /// <summary>
+        /// 清除所有Cache
+        /// </summary>
+        void RemoveAllCache();
     }
 
     /// <summary>
@@ -76,9 +76,9 @@ namespace MCS.Library.OGUPermission
         /// <returns></returns>
         OguObjectCollection<IOguObject> GetRolesObjects(RoleCollection roles, OguObjectCollection<IOrganization> depts, bool recursively);
 
-		/// <summary>
-		/// 清除所有Cache
-		/// </summary>
-		void RemoveAllCache();
+        /// <summary>
+        /// 清除所有Cache
+        /// </summary>
+        void RemoveAllCache();
     }
 }

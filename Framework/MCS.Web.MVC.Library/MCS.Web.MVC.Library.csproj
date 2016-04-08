@@ -63,7 +63,7 @@
     </Reference>
     <Reference Include="System.Web.Mvc, Version=4.0.0.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\AK47-2016\ThirdPartComponent\Bin\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+      <HintPath>..\..\ThirdPartComponent\Bin\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -74,6 +74,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Filters\ApiExceptionFilterAttribute.cs" />
+    <Compile Include="Filters\ApiPassportAuthenticationAttribute.cs" />
+    <Compile Include="Filters\ApiPermissionAuthorizeAttribute.cs" />
+    <Compile Include="Filters\ApiRoleAuthorizeAttribute.cs" />
+    <Compile Include="Filters\ApiAuthorizeAttributeBase.cs" />
+    <Compile Include="Filters\PassportAuthenticationFailureResult.cs" />
     <Compile Include="Filters\PassportAuthorizeAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

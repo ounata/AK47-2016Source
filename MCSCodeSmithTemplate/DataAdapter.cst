@@ -2,7 +2,6 @@
 <%@ Property Name="SourceTable" Type="SchemaExplorer.TableSchema" Category="Context" Description="" %>
 <%@ Property Name="NamespaceName" Type="System.String" Category="Options" Default="AutoGenerate.Adapters" Description="" %>
 <%@ Property Name="EntityClassName" Type="System.String" Category="ClassInfo" Description="数据实体的名称" %>
-<%@ Property Name="EntityCollectionClassName" Type="System.String" Category="ClassInfo" Description="数据实体集合类的名称" %>
 <%@ Property Name="AdapterClassSurfix" Type="System.String" Default="Adapter" Category="Options" Description="" %>
 <%@ Property Name="DataBaseConnectionStringKey" Type="System.String" Default="HB2004" Category="Options" Description="" %>
 <%@ Assembly Name="SchemaExplorer" %>
@@ -68,14 +67,21 @@ namespace <%= NamespaceName%>
 <script runat="template">
 public string GetEntityClassName(TableSchema table)
 {
-	if (table.Name.EndsWith("s"))
-	{
-		return table.Name.Substring(0, table.Name.Length - 1);
-	}
-	else
-	{
-		return table.Name;
-	}
+    string result = EntityClassName;
+    
+    if (string.IsNullOrEmpty(result))
+    {
+    	if (table.Name.EndsWith("s"))
+    	{
+    		result = table.Name.Substring(0, table.Name.Length - 1);
+    	}
+    	else
+    	{
+    		result = table.Name;
+    	}
+    }
+    
+    return result;
 }
 
 public string GetOperateClassName(string entityClassName, string AdapterClassSurfix)

@@ -7,7 +7,7 @@
     <TargetConnectionString>Data Source=MCSFramework;Integrated Security=True;Pooling=False</TargetConnectionString>
     <ScriptDatabaseOptions>True</ScriptDatabaseOptions>
     <BlockOnPossibleDataLoss>True</BlockOnPossibleDataLoss>
-    <DropObjectsNotInSource>True</DropObjectsNotInSource>
+    <DropObjectsNotInSource>False</DropObjectsNotInSource>
     <ProfileVersionNumber>1</ProfileVersionNumber>
     <CreateNewDatabase>False</CreateNewDatabase>
   </PropertyGroup>

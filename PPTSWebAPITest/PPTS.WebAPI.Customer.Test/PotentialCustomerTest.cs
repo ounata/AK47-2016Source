@@ -1,10 +1,12 @@
-﻿using System;
+﻿using MCS.Library.Core;
+using MCS.Library.Data;
+using MCS.Library.Data.Builder;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PPTS.WebAPI.Customer.Controllers;
-using PPTS.Data.Customers.Entities;
 using PPTS.Data.Customers.Adapters;
-using PPTS.WebAPI.Customer.Helper;
-using PPTS.WebAPI.Customer.ViewModels.Customer;
+using PPTS.Data.Customers.Entities;
+using PPTS.WebAPI.Customer.Controllers;
+using PPTS.WebAPI.Customer.ViewModels.PotentialCustomers;
+using System;
 
 namespace PPTS.WebAPI.Customer.Test
 {
@@ -14,31 +16,36 @@ namespace PPTS.WebAPI.Customer.Test
         [ClassInitialize()]
         public static void Init(TestContext context)
         {
-            MapperConfiguration.Configure();
         }
 
         [TestMethod]
         public void GetAllPotentialCustomersForGetAll()
         {
-            var controller = new PotentialCustomersController();
-            var model = controller.GetAllCustomers(new CustomerQueryCriteriaModel
+            PotentialCustomersController controller = PrepareController();
+
+            var model = new CreatablePortentialCustomerModel();
+
+            model.PrimaryParent = DataHelper.PrepareParentData();
+            model.Customer = DataHelper.PreparePotentialCustomerData();
+
+            controller.CreateCustomer(model);
+
+            PotentialCustomerQueryResult result = controller.GetAllCustomers(new PotentialCustomerQueryCriteriaModel
             {
-                Name = "11",
-                CustomerCode = "11",
-                VipLevels = new int[] { 1, 2 },
-                VipTypes = new int[] { 1, 2 },
-                StartDate = DateTime.Now,
-                EndDate = DateTime.Now.AddDays(2)
+                Name = model.Customer.CustomerName,
+                CustomerCode = model.Customer.CustomerCode,
+                PageParams = new PageRequestParams(),
+                OrderBy = new OrderBySqlClauseBuilder().AppendItem("CreateTime", FieldSortDirection.Descending).ToOrderByRequestItems()
             });
 
-            Assert.IsNotNull(model.ViewModelList);
-            Assert.IsNotNull(model.Dictionaries.Count > 0);
+            Assert.IsNotNull(result.QueryResult.PagedData.Count > 0);
+            Assert.IsNotNull(result.QueryResult.TotalCount > 0);
         }
 
         [TestMethod]
         public void CreatePotentialCustomerForGet()
         {
-            var controller = new PotentialCustomersController();
+            PotentialCustomersController controller = PrepareController();
 
             var model = controller.CreateCustomer();
 
@@ -50,26 +57,91 @@ namespace PPTS.WebAPI.Customer.Test
         [TestMethod]
         public void CreatePotentialCustomerForSave()
         {
-            var controller = new PotentialCustomersController();
+            PotentialCustomersController controller = PrepareController();
 
-            var model = new CreatableCustomerViewModel();
+            var model = new CreatablePortentialCustomerModel();
 
             model.PrimaryParent = DataHelper.PrepareParentData();
             model.Customer = DataHelper.PreparePotentialCustomerData();
 
             controller.CreateCustomer(model);
 
-            var customerLoaded = PotentialCustomerAdapter.Instance.Load(model.Customer.CustomerId);
-            var parentLoaded = ParentAdapter.Instance.Load(model.PrimaryParent.ParentId);
-            CustomerRelation relationLoaded = CustomerRelationAdapter.Instance.Load(model.Customer.CustomerId, model.PrimaryParent.ParentId);
+            PotentialCustomer customerLoaded = PotentialCustomerAdapter.Instance.Load(model.Customer.CustomerID);
+            Parent parentLoaded = ParentAdapter.Instance.Load(model.PrimaryParent.ParentID);
+            CustomerParentRelation relationLoaded = CustomerParentRelationAdapter.Instance.Load(model.Customer.CustomerID, model.PrimaryParent.ParentID);
+            PhoneCollection customerPhones = PhoneAdapter.Instance.LoadByOwnerID(model.Customer.CustomerID);
+            PhoneCollection parentPhones = PhoneAdapter.Instance.LoadByOwnerID(model.PrimaryParent.ParentID);
 
-            model.Customer.Equals(customerLoaded.ConvertToViewModel<PotentialCustomer, CustomerViewModel>());
-            model.PrimaryParent.Equals(parentLoaded.ConvertToViewModel<Parent, ParentViewModel>());
-
+            Assert.IsNotNull(customerLoaded);
+            Assert.IsNotNull(parentLoaded);
             Assert.IsNotNull(relationLoaded);
 
-            Assert.AreEqual(model.Customer.CustomerId, relationLoaded.CustomerID);
-            Assert.AreEqual(model.PrimaryParent.ParentId, relationLoaded.ParentID);
+            Assert.AreEqual(model.Customer.CustomerID, relationLoaded.CustomerID);
+            Assert.AreEqual(model.PrimaryParent.ParentID, relationLoaded.ParentID);
+
+            Assert.AreEqual(2, customerPhones.Count);
+            Assert.AreEqual(2, parentPhones.Count);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(SystemSupportException))]
+        public void CreatePotentialCustomerValidator()
+        {
+            PotentialCustomersController controller = PrepareController();
+
+            var model = new CreatablePortentialCustomerModel();
+
+            model.PrimaryParent = DataHelper.PrepareParentData();
+            model.PrimaryParent.ParentName = string.Empty;
+            model.Customer = DataHelper.PreparePotentialCustomerData();
+            model.Customer.CustomerName = string.Empty;
+
+            controller.CreateCustomer(model);
+        }
+
+        [TestMethod]
+        public void UpdatePotentialCustomerForGet()
+        {
+            PotentialCustomersController controller = PrepareController();
+
+            var model = new CreatablePortentialCustomerModel();
+
+            model.PrimaryParent = DataHelper.PrepareParentData();
+            model.Customer = DataHelper.PreparePotentialCustomerData();
+
+            controller.CreateCustomer(model);
+
+            EditablePotentialCustomerModel returnModel = controller.UpdateCustomer(model.Customer.CustomerID);
+
+            Assert.AreEqual(model.Customer.CustomerID, returnModel.Customer.CustomerID);
+            Assert.AreEqual(model.Customer.PrimaryPhone, returnModel.Customer.PrimaryPhone);
+            Assert.AreEqual(model.Customer.SecondaryPhone, returnModel.Customer.SecondaryPhone);
+        }
+
+        [TestMethod]
+        public void UpdatePotentialCustomerForSave()
+        {
+            PotentialCustomersController controller = PrepareController();
+
+            var model = new CreatablePortentialCustomerModel();
+
+            model.PrimaryParent = DataHelper.PrepareParentData();
+            model.Customer = DataHelper.PreparePotentialCustomerData();
+
+            controller.CreateCustomer(model);
+
+            EditablePotentialCustomerModel modelNeedToUpdate = controller.UpdateCustomer(model.Customer.CustomerID);
+
+            modelNeedToUpdate.Customer.CustomerName = "New Name";
+            modelNeedToUpdate.Customer.PrimaryPhone = "13601307607";
+
+            controller.UpdateCustomer(modelNeedToUpdate);
+
+            EditablePotentialCustomerModel returnModel = controller.UpdateCustomer(model.Customer.CustomerID);
+
+            Assert.AreEqual(modelNeedToUpdate.Customer.CustomerID, returnModel.Customer.CustomerID);
+            Assert.AreEqual(modelNeedToUpdate.Customer.PrimaryPhone, returnModel.Customer.PrimaryPhone);
+            Assert.AreEqual(modelNeedToUpdate.Customer.CustomerName, returnModel.Customer.CustomerName);
         }
 
         private static PotentialCustomersController PrepareController()

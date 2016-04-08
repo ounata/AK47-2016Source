@@ -1,7 +1,7 @@
 ﻿(function () {
     'use strict';
 
-    mcs.form.constant('buttonConfig', {
+    mcs.ng.constant('buttonConfig', {
         types: ['add', 'edit', 'delete', 'search', 'save', 'cancel'],
         defaultTexts: ['新 增', '编 辑', '删 除', '查 询', '保 存', '取 消'],
         sizes: ['mini', 'medium', 'large'],
@@ -15,6 +15,7 @@
             restrict: 'E',
             scope: {
                 type: '@',
+                disable: '=',
                 text: '@',
                 icon: '@',
                 size: '@',
@@ -22,7 +23,7 @@
                 click: '&'
             },
 
-            template: '<button class="btn mcs-width-130" ng-click="click()"><i class="ace-icon fa"></i><span></span></button>',
+            template: '<button class="btn mcs-width-130" ng-click="click()" ng-disabled="disable"><i class="ace-icon fa"></i><span></span></button>',
             replace: true,
             transclude: true,
             link: function ($scope, $elem, $attrs, $ctrl) {

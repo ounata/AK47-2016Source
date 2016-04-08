@@ -2,7 +2,7 @@
 AS
 BEGIN
 	TRUNCATE TABLE CM.CustomerStaffRelations
-	TRUNCATE TABLE CM.CustomerRelations
+	TRUNCATE TABLE CM.CustomerParentRelations
 	DELETE CM.Parents
 	DELETE CM.PotentialCustomers
 END

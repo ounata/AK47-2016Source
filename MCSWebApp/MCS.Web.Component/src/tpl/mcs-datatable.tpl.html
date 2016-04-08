@@ -1,0 +1,36 @@
+﻿<div class="datatable-container">
+    <table class="table table-striped table-bordered table-hover" style="margin-bottom:0px">
+        <thead class="thin-border-bottom">
+            <tr id="dataHeaders">
+                <th ng-show="data.selection" class="center" width="40">
+                    <label ng-show="data.selection=='checkbox'" class="position-relative">
+                        <input class="ace" type="{{data.selection}}" ng-disabled="data.pager.totalCount==0" ng-click="selectAll()" ng-checked="data.selectAll" ng-model="data.selectAll">
+                        <span class="lbl"></span>
+                    </label>
+                </th>
+                <th ng-repeat="header in data.headers" style="cursor: pointer" ng-click="reorder(header,data.pager.pageChange)" ng-class="header.headerCss">
+                    {{header.name}}
+                    <i ng-if="header.sortable" ng-class="{undefined:'fa fa-sort','desc':'fa fa-chevron-down','asc':'fa fa-chevron-up'}[header.orderDirection]"></i>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr mcs-datatable-row ng-show="data.pager.totalCount>0" ng-repeat="row in data.rows" ng-class="{'mcs-tr-selected': row.selected}">
+                <td ng-show="data.selection" class="center">
+                    <label class="position-relative">
+                        <input class="ace" type="{{data.selection}}" ng-click="rowSelect(row)" ng-checked="row.selected==true" ng-model="row.selected">
+                        <span class="lbl"></span>
+                    </label>
+                </td>
+            </tr>
+            <tr ng-show="data.pager.totalCount==0">
+                <td class="center well well-sm red bigger-110" colspan="{{data.headers.length+1}}">
+                    没有查询到任何记录，请重新设置条件查询。
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div ng-show="data.pager.totalCount>0" class="mcs-panel-pager well well-sm">
+        <tm-pagination conf="data.pager" page-change="data.pager.pageChange()"></tm-pagination>
+    </div>
+</div>

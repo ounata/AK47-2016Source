@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
     <TargetFrameworkProfile />
@@ -139,14 +139,9 @@
     <Compile Include="Common\Enumerations.cs" />
     <Compile Include="Common\IBusinessObject.cs" />
     <Compile Include="Common\IClonableBusinessObject.cs" />
-    <Compile Include="Common\IVersionDataObject.cs" />
     <Compile Include="Common\TicketDESEncryptor.cs" />
     <Compile Include="Common\RelativeTicket.cs" />
     <Compile Include="Common\RelativeTicketSettings.cs" />
-    <Compile Include="Common\DBTimePointActionContext.cs" />
-    <Compile Include="Common\VersionStrategyQuerySqlBuilder.cs" />
-    <Compile Include="Common\VersionStrategyUpdateSqlBuilder.cs" />
-    <Compile Include="Common\VersionStrategyUpdateSqlHelper.cs" />
     <Compile Include="Common\WorkflowObjectBase.cs" />
     <Compile Include="Configuration\ConnectionNameMappingSettings.cs" />
     <Compile Include="Configuration\EnumSettings.cs" />

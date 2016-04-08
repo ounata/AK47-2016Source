@@ -1,8 +1,8 @@
-﻿define(['customer'], function (customer) {
+﻿define([ppts.config.modules.customer], function (customer) {
 
-    customer.registerFactory('studentDataService', ['$resource', 'pptsConfiguration', function ($resource, pptsConfiguration) {
+    customer.registerFactory('studentDataService', ['$resource', function ($resource) {
 
-        var resource = $resource(pptsConfiguration.customerApiServerPath + 'api/students/:operation/:id', { operation: '@operation', id: '@id' }, { 'post': { method: 'POST' } });
+        var resource = $resource(ppts.config.customerApiServerPath + 'api/students/:operation/:id', { operation: '@operation', id: '@id' }, { 'post': { method: 'POST' } });
 
         resource.getAllStudents = function (criteria, success, error) {
             resource.post({ operation: 'getAllStudents' }, criteria, success, error);

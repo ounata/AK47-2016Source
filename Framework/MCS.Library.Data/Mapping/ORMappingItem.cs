@@ -34,6 +34,7 @@ namespace MCS.Library.Data.Mapping
         private string format = string.Empty;
         private bool isIdentity = false;
         private bool primaryKey = false;
+        private bool versionKey = false;
         private int length = 0;
         private bool isNullable = true;
         private string subClassTypeDescription = string.Empty;
@@ -71,6 +72,9 @@ namespace MCS.Library.Data.Mapping
 
             if (this.primaryKey)
                 XmlHelper.AppendNotNullAttr(writer, "primaryKey", this.primaryKey);
+
+            if (this.versionKey)
+                XmlHelper.AppendNotNullAttr(writer, "versionKey", this.versionKey);
 
             if (this.length != 0)
                 XmlHelper.AppendNotNullAttr(writer, "length", this.length);
@@ -115,6 +119,7 @@ namespace MCS.Library.Data.Mapping
 
             this.isIdentity = XmlHelper.GetAttributeValue(reader, "isIdentity", this.isIdentity);
             this.primaryKey = XmlHelper.GetAttributeValue(reader, "primaryKey", this.primaryKey);
+            this.versionKey = XmlHelper.GetAttributeValue(reader, "versionKey", this.versionKey);
             this.length = XmlHelper.GetAttributeValue(reader, "length", this.length);
 
             this.isNullable = XmlHelper.GetAttributeValue(reader, "isNullable", this.isNullable);
@@ -237,6 +242,15 @@ namespace MCS.Library.Data.Mapping
         }
 
         /// <summary>
+        /// 是否是版本相关的主键
+        /// </summary>
+        public bool VersionKey
+        {
+            get { return this.versionKey; }
+            set { this.versionKey = value; }
+        }
+
+        /// <summary>
         /// MemberInfo类
         /// </summary>
         /// <remarks>
@@ -306,6 +320,7 @@ namespace MCS.Library.Data.Mapping
             newItem.subClassPropertyName = this.subClassPropertyName;
             newItem.isIdentity = this.isIdentity;
             newItem.primaryKey = this.primaryKey;
+            newItem.versionKey = this.versionKey;
             newItem.length = this.length;
             newItem.isNullable = this.isNullable;
             newItem.subClassTypeDescription = this.subClassTypeDescription;

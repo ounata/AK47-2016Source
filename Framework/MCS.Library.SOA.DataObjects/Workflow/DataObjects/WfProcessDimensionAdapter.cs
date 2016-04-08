@@ -10,36 +10,34 @@ using MCS.Library.Data.Adapters;
 
 namespace MCS.Library.SOA.DataObjects.Workflow
 {
-	public class WfProcessDimensionAdapter : UpdatableAndLoadableAdapterBase<WfProcessDimension, WfProcessDimensionCollection>
-	{
-		public static readonly WfProcessDimensionAdapter Instance = new WfProcessDimensionAdapter();
+    public class WfProcessDimensionAdapter : UpdatableAndLoadableAdapterBase<WfProcessDimension, WfProcessDimensionCollection>
+    {
+        public static readonly WfProcessDimensionAdapter Instance = new WfProcessDimensionAdapter();
 
-		private WfProcessDimensionAdapter()
-		{
-		}
+        private WfProcessDimensionAdapter()
+        {
+        }
 
-		public WfProcessDimension Load(string processID)
-		{
-			processID.CheckStringIsNullOrEmpty("processID");
+        public WfProcessDimension Load(string processID)
+        {
+            processID.CheckStringIsNullOrEmpty("processID");
 
-			return LoadByInBuilder(builder =>
-				{
-					builder.DataField = "PROCESS_ID";
-					builder.AppendItem(processID);
-				}).FirstOrDefault();
-		}
+            return LoadByInBuilder(new InLoadingCondition(
+                builder => builder.AppendItem(processID),
+                "PROCESS_ID")).FirstOrDefault();
+        }
 
-		protected override void BeforeInnerUpdate(WfProcessDimension data, Dictionary<string, object> context)
-		{
-			data.UpdateTime = DateTime.MinValue;
+        protected override void BeforeInnerUpdate(WfProcessDimension data, Dictionary<string, object> context)
+        {
+            data.UpdateTime = DateTime.MinValue;
 
-			base.BeforeInnerUpdate(data, context);
-		}
+            base.BeforeInnerUpdate(data, context);
+        }
 
-		/// <summary>
-		/// 删除流程运行时活动节点的Assignees
-		/// </summary>
-		/// <param name="activityID"></param>
+        /// <summary>
+        /// 删除流程运行时活动节点的Assignees
+        /// </summary>
+        /// <param name="activityID"></param>
         public void Delete(WfProcessCurrentInfoCollection processesInfo)
         {
             InSqlClauseBuilder builder = new InSqlClauseBuilder("PROCESS_ID");
@@ -60,5 +58,5 @@ namespace MCS.Library.SOA.DataObjects.Workflow
         {
             return ConnectionDefine.DBConnectionName;
         }
-	}
+    }
 }

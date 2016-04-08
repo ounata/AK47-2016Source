@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -14,7 +14,7 @@
     <RootNamespace>PPTS.Portal</RootNamespace>
     <AssemblyName>PPTS.Portal</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -50,11 +50,22 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Bin\MCS.Library.dll</HintPath>
     </Reference>
+    <Reference Include="MCS.Library.OGUPermission, Version=1.3.0.0, Culture=neutral, PublicKeyToken=62ea08f894871798, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Bin\MCS.Library.OGUPermission.dll</HintPath>
+    </Reference>
     <Reference Include="MCS.Library.Passport, Version=1.3.0.0, Culture=neutral, PublicKeyToken=62ea08f894871798, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Bin\MCS.Library.Passport.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartComponent\Bin\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="PPTS.Data.Common">
+      <HintPath>..\..\PPTSBin\PPTS.Data.Common.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -69,10 +80,29 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="app\common\config\mcs.config.js" />
+    <Content Include="app\auditing\auditinglist\auditing.dataService.js" />
+    <Content Include="app\auditing\ppts.auditing.js" />
+    <Content Include="app\common\global\ppts.directive.js" />
+    <Content Include="app\common\global\ppts.interceptor.js" />
+    <Content Include="app\common\global\ppts.head.js" />
+    <Content Include="app\common\global\ppts.tail.js" />
+    <Content Include="app\common\global\ppts.filter.js" />
+    <Content Include="app\common\global\ppts.route.js" />
+    <Content Include="app\common\global\ppts.service.js" />
+    <Content Include="app\common\startup\mcs.min.js" />
+    <Content Include="app\common\layout.html" />
+    <Content Include="app\common\config\ppts.config.js" />
+    <Content Include="app\common\tpl\ctrls\select.tpl.html" />
     <Content Include="app\common\tpl\footer.tpl.html" />
     <Content Include="app\common\tpl\header.tpl.html" />
-    <None Include="Properties\PublishProfiles\ppts-portal-test.pubxml" />
+    <Content Include="app\customer\follow\follow-list\follow-list.controller.js" />
+    <Content Include="app\customer\follow\follow-list\follow-list.html" />
+    <Content Include="app\schedule\studentassignment\stuasgmt-list\stuasgmt-list.controller.js" />
+    <Content Include="app\schedule\studentassignment\stuasgmt-list\stuasgmt-list.html" />
+    <Content Include="build\ppts.global.min.js" />
+    <Content Include="index.aspx" />
+    <Content Include="package.json" />
+    <None Include="Properties\PublishProfiles\PPTS.Portal.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -82,36 +112,94 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\common\tpl\sidebar.tpl.html" />
-    <Content Include="app\common\route.js" />
     <Content Include="app\common\config\require.config.js" />
-    <Content Include="app\common\util\loader.js" />
-    <Content Include="app\common\util\mcs.global.js" />
-    <Content Include="app\common\util\mcs.global.min.js" />
+    <Content Include="app\contract\contractlist\contractlist.dataService.js" />
+    <Content Include="app\contract\paylist\paylist.dataService.js" />
+    <Content Include="app\contract\ppts.contract.js" />
+    <Content Include="app\contract\refundlist\refundlist.dataService.js" />
+    <Content Include="app\custcenter\custservice\custservice.dataService.js" />
+    <Content Include="app\custcenter\ppts.custcenter.js" />
+    <Content Include="app\customer\confirmdoor\confirmdoor.dataService.js" />
+    <Content Include="app\customer\feedback\feedback.dataService.js" />
+    <Content Include="app\customer\market\market.dataService.js" />
+    <Content Include="app\customer\parentsmeeting\parentsmeeting.dataService.js" />
     <Content Include="app\customer\potentialcustomer\customer-add\customer-add.controller.js" />
     <Content Include="app\customer\potentialcustomer\customer-add\customer-add.html" />
+    <Content Include="app\customer\potentialcustomer\customer-view\customer-view.controller.js" />
+    <Content Include="app\customer\potentialcustomer\customer-view\customer-view.html" />
+    <Content Include="app\customer\potentialcustomer\customer-view\customer-info.tpl.html" />
+    <Content Include="app\customer\potentialcustomer\customer-view\customer-edit.tpl.html" />
     <Content Include="app\customer\potentialcustomer\customer-list\customer-list.controller.js" />
     <Content Include="app\customer\potentialcustomer\customer-list\customer-list.html" />
     <Content Include="app\customer\potentialcustomer\potentialcustomer.dataService.js" />
-    <Content Include="app\customer\potentialcustomer\route.config.js" />
     <Content Include="app\customer\ppts.customer.js" />
+    <Content Include="app\customer\returnvisit\returnvisit.dataService.js" />
+    <Content Include="app\customer\score\score.dataService.js" />
+    <Content Include="app\customer\follow\follow.dataService.js" />
+    <Content Include="app\customer\weeklyfeedback\weeklyfeedback.dataService.js" />
     <Content Include="app\dashboard\dashboard.html" />
     <Content Include="app\dashboard\dashboard.controller.js" />
     <Content Include="app\dashboard\ppts.dashboard.js" />
+    <Content Include="app\infra\customerdiscount\customerdiscount.dataService.js" />
+    <Content Include="app\infra\dictionary\dictionary.dataService.js" />
+    <Content Include="app\infra\extragift\extragift.dataService.js" />
+    <Content Include="app\infra\noncustomerdiscount\noncustomerdiscount.dataService.js" />
+    <Content Include="app\infra\ppts.infra.js" />
+    <Content Include="app\infra\regulation\regulation.dataService.js" />
+    <Content Include="app\infra\servicefee\servicefee.dataService.js" />
+    <Content Include="app\order\classhour\classhour.dataService.js" />
+    <Content Include="app\order\ppts.order.js" />
+    <Content Include="app\order\purchase\purchase.dataService.js" />
+    <Content Include="app\order\unsubscribe\unsubscribe.dataService.js" />
+    <Content Include="app\payment\assetexchange\assetexchange.dataService.js" />
+    <Content Include="app\payment\pay\pay.dataService.js" />
+    <Content Include="app\payment\ppts.payment.js" />
+    <Content Include="app\payment\receipt\receipt.dataService.js" />
+    <Content Include="app\payment\refund\refund.dataService.js" />
+    <Content Include="app\payment\unionpay\unionPay.dataService.js" />
     <Content Include="app\ppts.js" />
     <Content Include="app\customer\student\student-add\student-add.controller.js" />
     <Content Include="app\customer\student\student-add\student-add.html" />
     <Content Include="app\customer\student\student-list\student-list.controller.js" />
     <Content Include="app\customer\student\student.dataService.js" />
     <Content Include="app\customer\student\student-list\student-list.html" />
-    <Content Include="app\customer\student\route.config.js" />
+    <Content Include="app\product\ppts.product.js" />
+    <Content Include="app\product\productlist\product-add\product-add-classgroup.html" />
+    <Content Include="app\product\productlist\product-add\product-add-onetoone.html" />
+    <Content Include="app\product\productlist\product-add\product-add-other.html" />
+    <Content Include="app\product\productlist\product-add\product-add.controller.js" />
+    <Content Include="app\product\productlist\product-add\product-add.html" />
+    <Content Include="app\product\productlist\product-copy\product-copy.controller.js" />
+    <Content Include="app\product\productlist\product-copy\product-copy.html" />
+    <Content Include="app\product\productlist\product-edit\product-edit.controller.js" />
+    <Content Include="app\product\productlist\product-edit\product-edit.html" />
+    <Content Include="app\product\productlist\product-list\product-list.controller.js" />
+    <Content Include="app\product\productlist\product-list\product-list.html" />
+    <Content Include="app\product\productlist\product-view\product-view-classgroup.html" />
+    <Content Include="app\product\productlist\product-view\product-view-onetoone.html" />
+    <Content Include="app\product\productlist\product-view\product-view-other.html" />
+    <Content Include="app\product\productlist\product-view\product-view.controller.js" />
+    <Content Include="app\product\productlist\product-view\product-view.html" />
+    <Content Include="app\product\productlist\product.dataService.js" />
+    <Content Include="app\schedule\classgroupcourse\classgroupcourse.dataService.js" />
+    <Content Include="app\schedule\classgroup\classgroup.dataService.js" />
+    <Content Include="app\schedule\confirmcourse\confirmcourse.dataService.js" />
+    <Content Include="app\schedule\ppts.schedule.js" />
+    <Content Include="app\schedule\settinglist\settinglist.dataService.js" />
+    <Content Include="app\schedule\studentassignment\studentassignment.dataService.js" />
+    <Content Include="app\schedule\studentcourse\studentcourse.dataService.js" />
+    <Content Include="app\schedule\teacherassignment\teacherassignment.dataService.js" />
+    <Content Include="app\schedule\teachercourse\teachercourse.dataService.js" />
     <Content Include="assets\images\avatar.png" />
     <Content Include="assets\images\dash.PNG" />
+    <Content Include="assets\images\loading.gif" />
     <Content Include="assets\images\logo.gif" />
     <Content Include="assets\images\user.png" />
-    <Content Include="assets\css\site.css" />
+    <Content Include="assets\styles\site.css" />
+    <Content Include="build\ppts.startup.js" />
+    <Content Include="build\ppts.startup.min.js" />
     <Content Include="favicon.ico" />
-    <Content Include="index.aspx" />
-    <Content Include="index.html" />
+    <Content Include="Gruntfile.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -131,41 +219,8 @@
     <Analyzer Include="..\..\Bin\MCS.Library.Passport.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="app\auditing\auditinglist\" />
-    <Folder Include="app\contract\contractlist\" />
-    <Folder Include="app\contract\paylist\" />
-    <Folder Include="app\contract\refundlist\" />
-    <Folder Include="app\custcenter\custservice\" />
-    <Folder Include="app\customer\confirmdoor\" />
-    <Folder Include="app\customer\feedback\" />
-    <Folder Include="app\customer\market\" />
-    <Folder Include="app\customer\parentsmeeting\" />
-    <Folder Include="app\customer\returnvisit\" />
-    <Folder Include="app\customer\score\" />
-    <Folder Include="app\customer\track\" />
-    <Folder Include="app\infra\customerdiscount\" />
-    <Folder Include="app\infra\dictionary\" />
-    <Folder Include="app\infra\extragift\" />
-    <Folder Include="app\infra\noncustomerdiscount\" />
-    <Folder Include="app\infra\regulation\" />
-    <Folder Include="app\infra\servicefee\" />
-    <Folder Include="app\order\classhour\" />
-    <Folder Include="app\order\purchase\" />
-    <Folder Include="app\order\unsubscribe\" />
-    <Folder Include="app\payment\pay\" />
-    <Folder Include="app\payment\receipt\" />
-    <Folder Include="app\payment\refund\" />
-    <Folder Include="app\payment\unionpay\" />
+    <Folder Include="app\customer\market\market-list\" />
     <Folder Include="app\product\productcategory\" />
-    <Folder Include="app\product\productlist\" />
-    <Folder Include="app\schedule\classgroupcourse\" />
-    <Folder Include="app\schedule\classgroup\" />
-    <Folder Include="app\schedule\confirmcourse\" />
-    <Folder Include="app\schedule\settinglist\" />
-    <Folder Include="app\schedule\studentassignment\" />
-    <Folder Include="app\schedule\studentcourse\" />
-    <Folder Include="app\schedule\teacherassignment\" />
-    <Folder Include="app\schedule\teachercourse\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -178,16 +233,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
-          <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>1360</DevelopmentServerPort>
-          <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/PPTS.Portal</IISUrl>
-          <NTLMAuthentication>False</NTLMAuthentication>
-          <UseCustomServer>False</UseCustomServer>
-          <CustomServerUrl>
-          </CustomServerUrl>
-          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+          <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
     </VisualStudio>

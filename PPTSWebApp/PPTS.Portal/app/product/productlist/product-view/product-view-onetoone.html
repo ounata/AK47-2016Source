@@ -1,0 +1,100 @@
+<!--一对一 开始-->
+<form class="form-horizontal" >
+    <div class="widget-box">
+        <div class="widget-header">
+            <h4>一对一产品
+            </h4>
+        </div>
+        <div class="widget-body">
+            <div class="widget-main no-padding">
+                <div class="clearfix form-actions mcs-form-actions">
+                    <div class="col-md-offset-3 col-md-9">
+                        <mcs-button type="cancel">返 回</mcs-button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="page-header">
+            <span>基础信息</span>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-6">
+                <mcs-label required="true" text="产品名称：" css="col-sm-3" />
+                <div class="col-sm-9">
+                    {{vm.product.onetoone.selectedGrade}}
+                    {{vm.product.onetoone.selectedDuation}}
+                    {{vm.product.onetoone.selectedLevel}}
+                </div>
+            </div>
+        </div>
+        <div class="space-4"></div>
+
+
+
+        <div class="form-group">
+            <div class="col-sm-6">
+                <mcs-label required="true" text="产品简介：" css="col-sm-3" />
+                <div class="col-sm-9">
+                    {{vm.product.onetoone.description}}
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <mcs-label required="true" text="单价：" css="col-sm-3" />
+                <div class="col-sm-9">
+                    {{vm.product.other.price}}
+                </div>
+            </div>
+        </div>
+        <div class="space-4"></div>
+
+        <div class="form-group">
+            <div class="col-sm-6">
+                <mcs-label required="true" text="产品启售时间：" css="col-sm-3" />
+                <div class="col-sm-9">
+                    {{vm.product.onetoone.selltime}}
+                </div>
+            </div>
+        </div>
+        <div class="space-4"></div>
+
+        <div class="page-header">
+            <span>销售范围</span>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-6">
+                <mcs-label required="true" text="销售分公司：" css="col-sm-3" />
+                <div class="col-sm-9">
+                    {{vm.product.onetoone.company}}
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <mcs-label required="true" text="销售校区：" css="col-sm-3" />
+                <div class="col-sm-9">
+                    {{vm.product.onetoone.campus}}
+                </div>
+            </div>
+        </div>
+        <div class="space-4"></div>
+
+
+        <div class="page-header">
+            <span>课时产品属性</span>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-6">
+                <mcs-label required="true" text="是否遵循客户折扣级别：" css="col-sm-3" />
+                <div class="col-sm-9">
+                    {{vm.dictionaries.customerdiscountlevel}}
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <form>
+<!--一对一 结束-->
+

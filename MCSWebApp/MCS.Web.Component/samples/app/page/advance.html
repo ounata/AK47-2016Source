@@ -1,0 +1,95 @@
+﻿<!-- #开始：位置条 -->
+<div class="breadcrumbs" id="breadcrumbs">
+    <script type="text/javascript">
+        try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }
+    </script>
+
+    <ul class="breadcrumb">
+        <li class="active">
+            <i class="ace-icon fa fa-home home-icon"></i>
+            首页
+        </li>
+        <li class="active">
+            <i class="ace-icon fa fa-buttons"></i>
+            高级查询
+        </li>
+    </ul>
+</div>
+<!-- /结束：位置条 -->
+<div class="page-content">
+    <div class="page-content-area">
+        <div class="row">
+            <div class="col-sm-12">
+                <h3 class="header smaller lighter green">应用范例</h3>
+                <!-- #开始：高级查询条件 -->
+                <div id="accordion" class="accordion-style1 panel-group mcs-advance-search">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#advance-search">
+                                    <i class="ace-icon fa fa-angle-right bigger-110" data-icon-hide="fa-angle-down" data-icon-show="fa-angle-right"></i>
+                                    &nbsp;高级查询
+                                </a>
+                            </h4>
+                        </div>
+                        <div class="panel-collapse collapse" id="advance-search">
+                            <div class="panel-body">
+                                <div class="profile-user-info">
+                                    <div class="profile-info-row">
+                                        <div class="profile-info-name">入学年级：</div>
+                                        <div class="profile-info-value">
+                                            <mcs-checkbox-group data="vm.dictionaries.grades" model="vm.criteria.entranceGrades">
+                                                <button class="btn btn-link" ng-click="vm.unSelectAll('entranceGrades')">清空</button>
+                                            </mcs-checkbox-group>
+                                        </div>
+                                    </div>
+
+                                    <div class="profile-info-row">
+                                        <div class="profile-info-name">学制：</div>
+                                        <div class="profile-info-value">
+                                            <mcs-checkbox-group data="vm.dictionaries.years" model="vm.criteria.selectYears">
+                                                <button class="btn btn-link" ng-click="vm.unSelectAll('selectYears')">清空</button>
+                                            </mcs-checkbox-group>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /结束：高级查询条件 -->
+                <!-- #开始：快速查询条件 -->
+                <div class="mcs-panel-search well well-sm">
+                    <div class="portlet">
+                        <div class="portlet-title line">
+                            <div class="caption">
+                                <label class="quick-search"><i class="ace-icon fa fa-search bigger-125"></i> 快速查询</label>
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <mcs-label text="学生/家长姓名" />
+                            <mcs-input placeholder="学生/家长姓名" model="vm.criteria.name" />
+                            <mcs-label text="学生编号" />
+                            <mcs-input placeholder="学生编号" model="vm.criteria.customerCode" />
+                            <mcs-button type="search" click="vm.init()" size="medium" />
+                        </div>
+                    </div>
+                </div>
+                <!-- /结束：快速查询条件 -->
+                <!-- #开始：潜客列表.工具条 -->
+                <div class="mcs-panel-toolbar">
+                    <mcs-button type="add" text="新增潜在客户"></mcs-button>
+                    <mcs-button type="add" text="新增跟进记录"></mcs-button>
+                    <mcs-button icon="mail-forward" css="btn-yellow" text="划转资源"></mcs-button>
+                    <mcs-button icon="user-plus" css="btn-success" text="分配咨询师"></mcs-button>
+                    <mcs-button icon="female" css="btn-success" text="分配坐席"></mcs-button>
+                    <mcs-button icon="cny" css="btn-purple" text="充 值"></mcs-button>
+                </div>
+                <!-- /结束：潜客列表.工具条 -->
+                <!--#开始：查询结果-->
+                <mcs-datatable data="vm.data" />
+                <!-- /结束：查询结果 -->
+            </div>
+        </div>
+    </div>
+</div>

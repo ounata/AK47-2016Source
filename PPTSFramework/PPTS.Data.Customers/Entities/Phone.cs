@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.Text;
 
 namespace PPTS.Data.Customers.Entities
 {
@@ -56,7 +57,7 @@ namespace PPTS.Data.Customers.Entities
         /// </summary>
         [ORFieldMapping("PhoneType")]
         [DataMember]
-        public int PhoneType
+        public PhoneTypeDefine PhoneType
         {
             get;
             set;
@@ -138,6 +139,32 @@ namespace PPTS.Data.Customers.Entities
         {
             get;
             set;
+        }
+
+        /// <summary>
+        /// 转换成字符串形式的电话号码
+        /// </summary>
+        /// <returns></returns>
+        public string ToPhoneNumber()
+        {
+            StringBuilder strB = new StringBuilder();
+
+            AppendPhoneNumberPart(strB, this.AreaNumber);
+            AppendPhoneNumberPart(strB, this.PhoneNumber);
+            AppendPhoneNumberPart(strB, this.Extension);
+
+            return strB.ToString();
+        }
+
+        private static void AppendPhoneNumberPart(StringBuilder strB, string numberPart)
+        {
+            if (numberPart.IsNotEmpty())
+            {
+                if (strB.Length > 0)
+                    strB.Append("-");
+
+                strB.Append(numberPart);
+            }
         }
     }
 

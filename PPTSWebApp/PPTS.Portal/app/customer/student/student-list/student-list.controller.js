@@ -1,4 +1,4 @@
-define(['customer', mcs.config.dataServiceConfig.studentDataService], function (customer) {
+define([ppts.config.modules.customer, mcs.config.dataServiceConfig.studentDataService], function (customer) {
     customer.registerController('studentListController', [
         '$scope', 'blockUI', 'studentDataService',
         function ($scope, blockUI, studentDataService) {

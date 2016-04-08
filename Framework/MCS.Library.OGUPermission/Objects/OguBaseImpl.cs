@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using MCS.Library.Core;
 using MCS.Library.OGUPermission.Properties;
 using System.Xml.Serialization;
+using System.Xml;
 
 namespace MCS.Library.OGUPermission
 {
@@ -28,6 +29,8 @@ namespace MCS.Library.OGUPermission
     [DebuggerDisplay("Name = {name}")]
     public abstract class OguBaseImpl : IOguObject, IOguPropertyAccessible
     {
+        private const string ExtraPropertyColumnName = "EXTRA_PROPERTIES";
+
         private string id = string.Empty;
         private string name = string.Empty;
         private string displayName = string.Empty;
@@ -260,15 +263,41 @@ namespace MCS.Library.OGUPermission
             }
 
             foreach (DataColumn column in row.Table.Columns)
-                Properties.Add(column.ColumnName, row[column.ColumnName]);
+            {
+                if (column.ColumnName != ExtraPropertyColumnName)
+                    Properties.Add(column.ColumnName, row[column.ColumnName]);
+            }
 
             if (Properties.Contains("OBJECTCLASS") == false)
                 Properties.Add("OBJECTCLASS", this.objectType.ToString().ToUpper());
-        }
 
+            this.FillExtraProperties(row);
+        }
         #endregion 保护的成员
 
         #region 私有的成员
+        private void FillExtraProperties(DataRow row)
+        {
+            if (row.Table.Columns.Contains(ExtraPropertyColumnName))
+            {
+                string extProperties = row[ExtraPropertyColumnName].ToString();
+
+                if (extProperties.IsNotEmpty())
+                {
+                    ExceptionHelper.DoSilentAction(() =>
+                    {
+                        XmlDocument xmlDoc = XmlHelper.CreateDomDocument(extProperties);
+
+                        foreach (XmlAttribute attr in xmlDoc.DocumentElement.Attributes)
+                        {
+                            if (this.Properties.Contains(attr.Name) == false)
+                                this.Properties.Add(attr.Name, attr.Value);
+                        }
+                    });
+                }
+            }
+        }
+   
         private IOrganization GetTopOUFromLevel(int level)
         {
             IOrganization dept = null;

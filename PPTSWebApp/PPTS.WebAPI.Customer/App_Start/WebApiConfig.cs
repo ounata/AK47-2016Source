@@ -1,5 +1,6 @@
 ﻿using System.Web.Http;
 using Newtonsoft.Json.Serialization;
+using MCS.Web.MVC.Library.Filters;
 
 namespace PPTS.WebAPI.Customer
 {
@@ -16,9 +17,9 @@ namespace PPTS.WebAPI.Customer
                 defaults: new { id = RouteParameter.Optional }
             );
 
-
             config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
 
+            config.Filters.Add(new ApiExceptionFilterAttribute());
         }
     }
 }

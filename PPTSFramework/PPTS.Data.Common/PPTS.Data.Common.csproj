@@ -47,6 +47,10 @@
     <Reference Include="MCS.Library.Data">
       <HintPath>..\..\Bin\MCS.Library.Data.dll</HintPath>
     </Reference>
+    <Reference Include="MCS.Library.OGUPermission, Version=1.3.0.0, Culture=neutral, PublicKeyToken=62ea08f894871798, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Bin\MCS.Library.OGUPermission.dll</HintPath>
+    </Reference>
     <Reference Include="MCS.Library.Passport">
       <HintPath>..\..\Bin\MCS.Library.Passport.dll</HintPath>
     </Reference>
@@ -56,6 +60,8 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -72,14 +78,18 @@
     <Compile Include="Entities\ConstantEntity.cs" />
     <Compile Include="Entities\Enumerations.cs" />
     <Compile Include="Entities\TypeConstantCategoriesCache.cs" />
+    <Compile Include="Executors\PPTSEditEntityExecutorBase.cs" />
+    <Compile Include="Executors\PPTSExecutorBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Security\Enumerations.cs" />
+    <Compile Include="Security\Extensions.cs" />
+    <Compile Include="Security\PPTSJob.cs" />
+    <Compile Include="Security\PPTSRole.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MCS.Library.snk" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Executors\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>IF NOT EXIST "$(ProjectDir)..\..\PPTSBin" MD "$(ProjectDir)..\..\PPTSBin"

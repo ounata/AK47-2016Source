@@ -8,6 +8,21 @@ using System.Threading.Tasks;
 namespace PPTS.Data.Customers
 {
     /// <summary>
+    /// 客户Vip类型
+    /// </summary>
+    public enum VipTypeDefine
+    {
+        [EnumItemDescription("关系Vip客户")]
+        RelationVip = 1,
+
+        [EnumItemDescription("大单Vip客户")]
+        BigOrderVip = 2,
+
+        [EnumItemDescription("非Vip客户")]
+        NoVip = 3
+    }
+
+    /// <summary>
     /// 销售阶段
     /// </summary>
     public enum SalesStageType
@@ -68,5 +83,23 @@ namespace PPTS.Data.Customers
 
         [EnumItemDescription("未分科")]
         NoBranch = 3
+    }
+
+    /// <summary>
+    /// 电话类型
+    /// </summary>
+    public enum PhoneTypeDefine
+    {
+        [EnumItemDescription("未知")]
+        Unknown = 0,
+
+        [EnumItemDescription("手机")]
+        MobilePhone = 1,
+
+        [EnumItemDescription("住宅电话")]
+        HomePhone = 2,
+
+        [EnumItemDescription("办公电话")]
+        WorkPhone = 3
     }
 }

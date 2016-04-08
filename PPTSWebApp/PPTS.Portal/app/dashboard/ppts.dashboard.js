@@ -1,13 +1,10 @@
 ﻿define(['angular'], function (ng) {
     var dashboard = ng.module('ppts.dashboard', []);
 
-    dashboard.config(function ($stateProvider, $urlRouterProvider, $locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide) {
-        dashboard.registerController = $controllerProvider.register;
-        dashboard.registerDirective = $compileProvider.directive;
-        dashboard.registerFilter = $filterProvider.register;
-        dashboard.registerFactory = $provide.factory;
-        dashboard.registerService = $provide.service;
+    // 配置provider
+    dashboard.config(function ($controllerProvider, $compileProvider, $filterProvider, $provide) {
+        mcs.util.configProvider(dashboard, $controllerProvider, $compileProvider, $filterProvider, $provide);
     });
-
+ 
     return dashboard;
 });

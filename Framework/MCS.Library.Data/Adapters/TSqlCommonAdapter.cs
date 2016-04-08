@@ -186,6 +186,8 @@ namespace MCS.Library.Data.Adapters
                             Assembly.GetExecutingAssembly(),
                             "MCS.Library.Data.Adapters.SplitPage.sql");
 
+            string orderBy = qc.OrderByClause;
+
             sql = string.Format(
                 sql,
                 qc.SelectFields,
@@ -206,6 +208,11 @@ namespace MCS.Library.Data.Adapters
         {
             string sql = GetQuerySql(qc, retrieveTotalCount);
 
+            string orderBy = qc.OrderByClause;
+
+            if (orderBy == null)
+                orderBy = string.Empty;
+
             using (DbContext context = DbContext.GetContext(this.ConnectionName))
             {
                 DataSet ds = null;
@@ -220,7 +227,7 @@ namespace MCS.Library.Data.Adapters
                         qc.SelectFields,
                         qc.FromClause,
                         qc.WhereClause,
-                        qc.OrderByClause,
+                        orderBy,
                         qc.PrimaryKey,
                         qc.RowIndex / qc.PageSize + 1,
                         qc.PageSize,

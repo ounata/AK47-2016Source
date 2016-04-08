@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="14.0">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -95,14 +95,23 @@
   <ItemGroup>
     <Compile Include="Accessories\CryptoHelper.cs" />
     <Compile Include="Accessories\DbTraceHelper.cs" />
+    <Compile Include="Adapters\ConnectiveLoadingCondition.cs" />
     <Compile Include="Adapters\DataViewDataSourceQueryAdapterBase.cs" />
     <Compile Include="Adapters\DbHelper.cs" />
+    <Compile Include="Adapters\InLoadingCondition.cs" />
+    <Compile Include="Adapters\LoadingConditionBase.cs" />
+    <Compile Include="Adapters\VersionedObjectAdapterBase.cs" />
+    <Compile Include="Adapters\VersionedObjectLoadableAdapterBase.cs" />
+    <Compile Include="Adapters\WhereLoadingCondition.cs" />
     <Compile Include="Adapters\ObjectDataSourceQueryAdapterBase.cs" />
     <Compile Include="Adapters\TSqlCommonAdapter.cs" />
     <Compile Include="Adapters\UpdatableAdapterBase.cs" />
     <Compile Include="Adapters\UpdatableAndLoadableAdapterBase.cs" />
+    <Compile Include="Adapters\UpdatableAndLoadableAdapterBaseInContext.cs" />
     <Compile Include="Builder\BytesDescriptionGenerator.cs" />
     <Compile Include="Builder\ExpressionDescriptionGenerator.cs" />
+    <Compile Include="Builder\IVersionDataObject.cs" />
+    <Compile Include="Builder\IVersionDataObjectWithoutID.cs" />
     <Compile Include="Builder\NullDescriptionGenerator.cs" />
     <Compile Include="Builder\StreamDescriptionGenerator.cs" />
     <Compile Include="Builder\GuidDescriptionGenerator.cs" />
@@ -113,6 +122,9 @@
     <Compile Include="Builder\DateTimeDescriptionGenerator.cs" />
     <Compile Include="Builder\DBNullDescriptionGenerator.cs" />
     <Compile Include="Builder\SqlClauseBuilderItems.cs" />
+    <Compile Include="Builder\VersionStrategyQuerySqlBuilder.cs" />
+    <Compile Include="Builder\VersionStrategyUpdateSqlBuilder.cs" />
+    <Compile Include="Builder\VersionStrategyUpdateSqlHelper.cs" />
     <Compile Include="Configuration\ConnectionStringConfigurationElementBase.cs" />
     <Compile Include="Configuration\DataProviderConfigurationElementCollection.cs" />
     <Compile Include="Configuration\DbEventArgsConfigurationElement.cs" />
@@ -123,9 +135,16 @@
     <Compile Include="DatabaseFactory.cs" />
     <Compile Include="Database_Async.cs" />
     <Compile Include="DbContext\AutoEnlistDbContext.cs" />
+    <Compile Include="DbContext\SqlContextItem.cs" />
     <Compile Include="DbContext\DeluxeDbContextBase.cs" />
     <Compile Include="DbContext\NotEnlistDbContext.cs" />
+    <Compile Include="DbContext\ReferenceConnection.cs" />
+    <Compile Include="DbContext\TableAction.cs" />
     <Compile Include="DbEventType.cs" />
+    <Compile Include="Executors\DataExecutionContext.cs" />
+    <Compile Include="Executors\DataExecutorBase.cs" />
+    <Compile Include="Executors\DataExecutorDescriptionAttribute.cs" />
+    <Compile Include="Executors\DataExecutorLogContextInfo.cs" />
     <Compile Include="Mapping\ConditionMapping.cs" />
     <Compile Include="Mapping\ConditionMappingCache.cs" />
     <Compile Include="Mapping\ConditionMappingItem.cs" />

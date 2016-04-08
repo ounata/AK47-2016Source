@@ -189,6 +189,13 @@
     <Build Include="SC\Functions\GetSchemaUserXml.sql" />
     <Build Include="SC\Functions\GetSchemaRelationXml.sql" />
     <Build Include="SC\Procedures\InitAllUsersPassword.sql" />
+    <Build Include="SC\Functions\GetSchemaGroupXml.sql" />
+    <Build Include="SC\Functions\GetInsertSchemaTableSnapshotSql.sql" />
+    <Build Include="SC\Types\ChangedObjects.sql" />
+    <Build Include="SC\Functions\GetSchemaMemberRelations.sql" />
+    <Build Include="SC\Functions\GetSchemaApplicationXml.sql" />
+    <Build Include="SC\Functions\GetSchemaPermissionXml.sql" />
+    <Build Include="SC\Functions\GetSchemaRoleXml.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PermissionsCenterDB.local.UnitTest.publish.xml" />

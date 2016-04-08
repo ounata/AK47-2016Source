@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>PPTS.Data.Customers.DB</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{d40ada13-f5f5-484e-9b13-715f58c18c72}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.SqlAzureV12DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>PPTS.Data.Orders.DB</RootNamespace>
+    <AssemblyName>PPTS.Data.Orders.DB</AssemblyName>
+    <ModelCollation>2052,CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <DefaultSchema>OM</DefaultSchema>
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+    <DefaultCollation>Chinese_PRC_CI_AS</DefaultCollation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="Security" />
+    <Folder Include="WF" />
+    <Folder Include="WF\Tables" />
+    <Folder Include="OM" />
+    <Folder Include="OM\Stored Procedures" />
+    <Folder Include="OM\Tables" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="Security\OM.sql" />
+    <Build Include="WF\Tables\USER_OPERATION_LOG.sql" />
+    <Build Include="Security\WF.sql" />
+    <Build Include="OM\Stored Procedures\ClearAllData.sql" />
+    <Build Include="OM\Tables\AssignConditions.sql" />
+    <Build Include="OM\Tables\Assigns.sql" />
+    <Build Include="OM\Tables\Classes.sql" />
+    <Build Include="OM\Tables\ClassLessonItems.sql" />
+    <Build Include="OM\Tables\ClassLessons.sql" />
+    <Build Include="OM\Tables\DebookOrderItems.sql" />
+    <Build Include="OM\Tables\DebookOrders.sql" />
+    <Build Include="OM\Tables\Assets.sql" />
+    <Build Include="OM\Tables\OrderItems.sql" />
+    <Build Include="OM\Tables\Orders.sql" />
+    <Build Include="OM\Tables\Rooms.sql" />
+    <Build Include="OM\Tables\ShoppingCarts.sql" />
+    <Build Include="OM\Tables\Teachings.sql" />
+    <Build Include="OM\Tables\AssetConfirms.sql" />
+    <Build Include="OM\Tables\AccompanyAssigns.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PPTS.Data.Order.Local.Dev.DB.publish.xml" />
+    <None Include="PPTS.Data.Order.Local.Test.DB.publish.xml" />
+    <None Include="PPTS.Data.Order.XueDa.Dev.DB.publish.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="PPTS.Data.Orders.DB.refactorlog" />
+  </ItemGroup>
+</Project>

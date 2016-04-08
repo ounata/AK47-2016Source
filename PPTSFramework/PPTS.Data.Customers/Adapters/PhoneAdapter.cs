@@ -1,5 +1,6 @@
 ﻿using MCS.Library.Core;
 using MCS.Library.Data;
+using MCS.Library.Data.Adapters;
 using MCS.Library.Data.Builder;
 using PPTS.Data.Customers.Entities;
 using System;
@@ -23,6 +24,11 @@ namespace PPTS.Data.Customers.Adapters
             return this.Load(builder => builder.AppendItem("OwnerID", ownerID));
         }
 
+        public void LoadByOwnerIDInContext(string ownerID, Action<PhoneCollection> action)
+        {
+            this.LoadInContext(new WhereLoadingCondition(builder => builder.AppendItem("OwnerID", ownerID)), action);
+        }
+
         public void UpdateByOwnerIDInContext(string ownerID, PhoneCollection phones)
         {
             ownerID.CheckStringIsNullOrEmpty("ownerID");
@@ -30,15 +36,14 @@ namespace PPTS.Data.Customers.Adapters
 
             Dictionary<string, object> context = new Dictionary<string, object>();
 
-            using (DbContext dbContext = this.GetDbContext())
-            {
-                this.DeleteInContext(builder => builder.AppendItem("OwnerID", ownerID));
+            SqlContextItem sqlContext = this.GetSqlContext();
 
-                foreach (Phone phone in phones)
-                {
-                    dbContext.AppendSqlInContext(TSqlBuilder.Instance, TSqlBuilder.Instance.DBStatementSeperator);
-                    this.InnerInsertInContext(phone, dbContext, context);
-                }
+            this.DeleteInContext(builder => builder.AppendItem("OwnerID", ownerID));
+
+            foreach (Phone phone in phones)
+            {
+                sqlContext.AppendSqlInContext(TSqlBuilder.Instance, TSqlBuilder.Instance.DBStatementSeperator);
+                this.InnerInsertInContext(phone, sqlContext, context);
             }
         }
     }

@@ -26,5 +26,11 @@ namespace MCS.Library.Data
         {
             get;
         }
+
+        /// <summary>
+        /// 从某个IOrderByRequestItem复制
+        /// </summary>
+        /// <param name="source"></param>
+        void CopyFrom(IOrderByRequestItem source);
     }
 }

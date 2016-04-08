@@ -34,7 +34,7 @@ namespace MCS.Library.SOA.DataObjects
             return this.Load(p =>
             {
                 p.AppendItem("Code", code);
-				p.AppendItem("VersionEndTime", ConnectionDefine.MaxVersionEndTime);
+				p.AppendItem("VersionEndTime", DBTimePointActionContext.MaxVersionEndTime);
             }).FirstOrDefault();
         }
 
@@ -49,7 +49,7 @@ namespace MCS.Library.SOA.DataObjects
             return this.Load(p =>
             {
                 p.AppendItem("resourceID", resourceID);
-				p.AppendItem("VersionEndTime", ConnectionDefine.MaxVersionEndTime);
+				p.AppendItem("VersionEndTime", DBTimePointActionContext.MaxVersionEndTime);
             });
         }
 
@@ -65,7 +65,7 @@ namespace MCS.Library.SOA.DataObjects
             {
                 p.AppendItem("resourceID", resourceID);
                 p.AppendItem("Class", telephoneClass);
-				p.AppendItem("VersionEndTime", ConnectionDefine.MaxVersionEndTime);
+				p.AppendItem("VersionEndTime", DBTimePointActionContext.MaxVersionEndTime);
             });
         }
 

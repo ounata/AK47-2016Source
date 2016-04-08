@@ -1,150 +1,117 @@
-﻿using MCS.Library.Core;
+﻿using System.Collections.Generic;
+using System.Web.Http;
 using MCS.Library.Data;
 using PPTS.Data.Common.Adapters;
 using PPTS.Data.Customers.Adapters;
 using PPTS.Data.Customers.DataSources;
 using PPTS.Data.Customers.Entities;
-using PPTS.WebAPI.Customer.Helper;
-using PPTS.WebAPI.Customer.ViewModels.Customer;
-using System.Transactions;
-using System.Web.Http;
+using PPTS.WebAPI.Customer.Executors;
+using PPTS.WebAPI.Customer.ViewModels.PotentialCustomers;
 
 namespace PPTS.WebAPI.Customer.Controllers
 {
     public class PotentialCustomersController : ApiController
     {
-        private static PotentialCustomerAdapter customerAdapter = PotentialCustomerAdapter.Instance;
-        private static ParentAdapter parentAdapter = ParentAdapter.Instance;
-        private static CustomerRelationAdapter relationAdapter = CustomerRelationAdapter.Instance;
-
         #region api/potentialcustomers/getallcustomers
-
-        [HttpPost]
-        public CustomerQueryResultModel GetAllCustomers(CustomerQueryCriteriaModel criteria)
-        {
-            var isInitialRequest = criteria.PagedParam == null;
-            if (isInitialRequest)
-            {
-                criteria.PagedParam = new PagedParam();
-            }
-
-            var result = new CustomerQueryResultModel(criteria.PagedParam);
-            var customers = customerAdapter.Load((builder) =>
-            {
-                builder.AppendItem("CustomerName", "1111");
-            });
-
-            result.ViewModelList.Data.AddRange(customers.ConvertToViewModelList<PotentialCustomer, CustomerViewModel>());
-
-            //foreach (var customer in customers)
-            //{
-            //    result.ViewModelList.Data.Add(customer.ConvertToViewModel<PotentialCustomer, CustomerViewModel>());
-            //}
-
-            //var customers = customerAdapter.LoadByBuilder(this.CreateQueryBuilder(criteria));
-            //result.ViewModelList.Data.AddRange(customers.ConvertToViewModelList<PotentialCustomer, CustomerViewModel>());
-            criteria.PagedParam.Initialize(1);
-
-            if (isInitialRequest)
-            {
-                // 初次请求需加载字典
-                DataHelper.LoadDictionaryData(result.Dictionaries, typeof(PotentialCustomer), typeof(Parent));
-            }
-
-            return result;
-        }
 
         /// <summary>
         /// 潜客查询，第一次。第一页，下载字典
         /// </summary>
-        /// <param name="criteria"></param>
-        /// <returns></returns>
+        /// <param name="criteria">查询条件</param>
+        /// <returns>返回带字典的潜客数据列表</returns>
         [HttpPost]
-        public PotentialCustomerQueryResult QueryAllCustomers(PotentialCustomerQueryCriteriaModel criteria)
+        public PotentialCustomerQueryResult GetAllCustomers(PotentialCustomerQueryCriteriaModel criteria)
         {
-            PotentialCustomerQueryResult result = new PotentialCustomerQueryResult();
-
-            result.QueryResult = GenericCustomerDataSource<PotentialCustomer, PotentialCustomerCollection>.Instance.Query(criteria.PageParams, criteria, criteria.OrderBy);
-            result.Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(PotentialCustomer), typeof(Parent));
-
-            return result;
+            return new PotentialCustomerQueryResult
+            {
+                QueryResult = GenericCustomerDataSource<PotentialCustomer, PotentialCustomerCollection>.Instance.Query(criteria.PageParams, criteria, criteria.OrderBy),
+                Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(PotentialCustomer), typeof(Parent))
+            };
         }
 
         /// <summary>
         /// 潜客查询，翻页或排序。不下载字典
         /// </summary>
-        /// <param name="criteria"></param>
-        /// <returns></returns>
+        /// <param name="criteria">查询条件</param>
+        /// <returns>返回不带字典的潜客数据列表</returns>
         [HttpPost]
-        public PagedQueryResult<PotentialCustomer, PotentialCustomerCollection> QueryPagedCustomers(PotentialCustomerQueryCriteriaModel criteria)
+        public PagedQueryResult<PotentialCustomer, PotentialCustomerCollection> GetPagedCustomers(PotentialCustomerQueryCriteriaModel criteria)
         {
             return GenericCustomerDataSource<PotentialCustomer, PotentialCustomerCollection>.Instance.Query(criteria.PageParams, criteria, criteria.OrderBy);
         }
-        #endregion
 
-        #region api/potentialcustomers/getcustomerbaseinfo
-        public CustomerViewModel GetCustomerBaseinfo(string customerId)
-        {
-            var result = new CustomerViewModel();
-            result = customerAdapter.Load(customerId).ConvertToViewModel<PotentialCustomer, CustomerViewModel>();
-            return result;
-        }
         #endregion
 
         #region api/potentialcustomers/createcustomer
 
         [HttpGet]
-        public CreatableCustomerViewModel CreateCustomer()
+        public CreatablePortentialCustomerModel CreateCustomer()
         {
-            var result = new CreatableCustomerViewModel();
-            DataHelper.LoadDictionaryData(result.Dictionaries, typeof(PotentialCustomer), typeof(Parent));
-            return result;
+            return new CreatablePortentialCustomerModel
+            {
+                Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(CreatablePortentialCustomerModel), typeof(PotentialCustomer), typeof(Parent))
+            };
         }
 
         [HttpPost]
-        public void CreateCustomer(CreatableCustomerViewModel model)
+        public void CreateCustomer(CreatablePortentialCustomerModel model)
         {
-            model.NullCheck("model");
-            model.Customer.NullCheck("Customer");
-            model.PrimaryParent.NullCheck("PrimaryParent");
+            AddPotentialCustomerExecutor executor = new AddPotentialCustomerExecutor(model);
 
-            var relation = new CustomerRelation
-            {
-                CustomerID = model.Customer.CustomerId,
-                ParentID = model.PrimaryParent.ParentId,
-                IsPrimary = true
-            };
-
-            using (var context = customerAdapter.GetDbContext())
-            {
-                customerAdapter.UpdateInContext(model.Customer.ConvertToModel<CustomerViewModel, PotentialCustomer>());
-                parentAdapter.UpdateInContext(model.PrimaryParent.ConvertToModel<ParentViewModel, Parent>());
-                relationAdapter.UpdateInContext(relation);
-
-                using (TransactionScope scope = new TransactionScope())
-                {
-                    context.ExecuteNonQuerySqlInContext();
-                    scope.Complete();
-                }
-            }
+            executor.Execute();
         }
 
         #endregion
 
         #region api/potentialcustomers/updatecustomer
+
         [HttpGet]
-        public EditableCustomerViewModel UpdateCustomer(string customerId)
+        public EditablePotentialCustomerModel UpdateCustomer(string id)
         {
-            var result = new EditableCustomerViewModel();
-            result.Customer = customerAdapter.Load(customerId).ConvertToViewModel<PotentialCustomer, CustomerViewModel>();
-            DataHelper.LoadDictionaryData(result.Dictionaries, typeof(PotentialCustomer));
+            EditablePotentialCustomerModel result = new EditablePotentialCustomerModel()
+            {
+                Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(PotentialCustomer))
+            };
+
+            GenericPotentialCustomerAdapter<PotentialCustomerModel, List<PotentialCustomerModel>>.Instance.LoadInContext(
+                    id,
+                    customer => result.Customer = customer
+                );
+
+            PhoneAdapter.Instance.LoadByOwnerIDInContext(
+                id,
+                phones => result.Customer.FillFromPhones(phones)
+            );
+
+            using (DbContext context = PhoneAdapter.Instance.GetDbContext())
+            {
+                context.ExecuteDataSetSqlInContext();
+            }
+
             return result;
         }
 
         [HttpPost]
-        public void UpdateCustomer(string customerId, EditableCustomerViewModel model)
+        public void UpdateCustomer(EditablePotentialCustomerModel model)
         {
+            EditPotentialCustomerExecutor executor = new EditPotentialCustomerExecutor(model);
+
+            executor.Execute();
         }
+        #endregion
+
+        #region api/potentialcustomers/getcustomerinfo
+
+        [HttpPost]
+        public PotentialCustomer GetCustomerInfo(PotentialCustomerQueryCriteriaModel criteria)
+        {
+            string customerCode = criteria.CustomerCode;
+            return PotentialCustomerAdapter.Instance.Load((action) =>
+            {
+                action.AppendItem("CustomerCode", customerCode);
+            }).Find(c => c.CustomerCode == customerCode);
+        }
+
         #endregion
     }
 }

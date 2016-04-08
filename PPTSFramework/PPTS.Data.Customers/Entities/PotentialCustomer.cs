@@ -1,12 +1,10 @@
-﻿using MCS.Library.Core;
+﻿using System;
+using System.Runtime.Serialization;
 using MCS.Library.Data.DataObjects;
 using MCS.Library.Data.Mapping;
+using MCS.Library.Validation;
 using PPTS.Data.Common;
 using PPTS.Data.Common.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
 
 namespace PPTS.Data.Customers.Entities
 {
@@ -37,6 +35,8 @@ namespace PPTS.Data.Customers.Entities
         /// 客户名称
         /// </summary>
         [ORFieldMapping("CustomerName")]
+        [StringLengthValidator(128, MessageTemplate = "客户名称的长度不能超过128个字符")]
+        [StringEmptyValidator(MessageTemplate = "客户名称不允许为空")]
         [DataMember]
         public string CustomerName
         {
@@ -58,9 +58,9 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 是否单亲
         /// </summary>
-        [ORFieldMapping("IsSingleParent")]
+        [ORFieldMapping("IsOneParent")]
         [DataMember]
-        public bool IsSingleParent
+        public bool IsOneParent
         {
             get;
             set;
@@ -78,23 +78,23 @@ namespace PPTS.Data.Customers.Entities
             set;
         }
 
-        private StudentBranchType _Branch = StudentBranchType.NoBranch;
+        private StudentBranchType _SubjectType = StudentBranchType.NoBranch;
 
         /// <summary>
         /// 文理科(C_CODE_ABBR_STUDENTBRANCH)。1:文科，2:理科，3:不分科
         /// </summary>
-        [ORFieldMapping("Branch")]
+        [ORFieldMapping("SubjectType")]
         [DataMember]
         [ConstantCategory("C_CODE_ABBR_STUDENTBRANCH")]
-        public StudentBranchType Branch
+        public StudentBranchType SubjectType
         {
             get
             {
-                return this._Branch;
+                return this._SubjectType;
             }
             set
             {
-                this._Branch = value;
+                this._SubjectType = value;
             }
         }
 
@@ -168,34 +168,12 @@ namespace PPTS.Data.Customers.Entities
         }
 
         /// <summary>
-        /// 教学地点的ID
+        /// 跟进阶段(C_CODE_ABBR_Customer_CRM_SalePhase)
         /// </summary>
-        [ORFieldMapping("TeachingLocation")]
-        [DataMember]
-        public string TeachingLocation
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 咨询地点的ID
-        /// </summary>
-        [ORFieldMapping("ConsultingSite")]
-        [DataMember]
-        public string ConsultingSite
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 销售阶段(C_CODE_ABBR_Customer_CRM_SalePhase)
-        /// </summary>
-        [ORFieldMapping("SalesStage")]
+        [ORFieldMapping("FollowStage")]
         [DataMember]
         [ConstantCategory("C_CODE_ABBR_Customer_CRM_SalePhase")]
-        public SalesStageType SalesStage
+        public SalesStageType FollowStage
         {
             get;
             set;
@@ -228,9 +206,9 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 证件号码
         /// </summary>
-        [ORFieldMapping("IDNumbar")]
+        [ORFieldMapping("IDNumber")]
         [DataMember]
-        public string IDNumbar
+        public string IDNumber
         {
             get;
             set;
@@ -275,10 +253,22 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 客户状态(C_Code_Abbr_BO_CTI_CustomerStatus)0=未确认客户信息, 1 = 确认客户信息, 9=无效用户（逻辑删除）
         /// </summary>
-        [ORFieldMapping("Status")]
+        [ORFieldMapping("CustomerStatus")]
         [DataMember]
         [ConstantCategory("C_Code_Abbr_BO_CTI_CustomerStatus")]
         public CustomerStatus Status
+        {
+            get;
+            set;
+        }
+
+
+        /// <summary>
+        /// 是否复读
+        /// </summary>
+        [ORFieldMapping("IsStudyAgain")]
+        [DataMember]
+        public int IsStudyAgain
         {
             get;
             set;
@@ -347,7 +337,7 @@ namespace PPTS.Data.Customers.Entities
         [ORFieldMapping("VipType")]
         [DataMember]
         [ConstantCategory("C_CODE_ABBR_CUSTOMER_VipType")]
-        public int VipType
+        public VipTypeDefine VipType
         {
             get;
             set;
@@ -368,9 +358,9 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 最后一次跟进时间
         /// </summary>
-        [ORFieldMapping("LastFollowupTime")]
+        [ORFieldMapping("FollowTime")]
         [DataMember]
-        public DateTime LastFollowupTime
+        public DateTime FollowTime
         {
             get;
             set;
@@ -379,9 +369,9 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 预计下次回访时间
         /// </summary>
-        [ORFieldMapping("NextFollowupTime")]
+        [ORFieldMapping("NextFollowTime")]
         [DataMember]
-        public DateTime NextFollowupTime
+        public DateTime NextFollowTime
         {
             get;
             set;
@@ -397,6 +387,95 @@ namespace PPTS.Data.Customers.Entities
             get;
             set;
         }
+
+        /// <summary>
+        /// 转介绍员工岗位ID
+        /// </summary>
+        [ORFieldMapping("ReferralStaffID")]
+        [DataMember]
+        public string ReferralStaffID
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 转介绍员工OA编号
+        /// </summary>
+        [ORFieldMapping("ReferralStaffCode")]
+        [DataMember]
+        public string ReferralStaffCode
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 转介绍员工姓名
+        /// </summary>
+        [ORFieldMapping("ReferralStaffName")]
+        [DataMember]
+        public string ReferralStaffName
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 转介绍员工岗位ID
+        /// </summary>
+        [ORFieldMapping("ReferralStaffJobID")]
+        [DataMember]
+        public string ReferralStaffJobID
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 转介绍员工岗位名称
+        /// </summary>
+        [ORFieldMapping("ReferralStaffJobName")]
+        [DataMember]
+        public string ReferralStaffJobName
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 转介绍学员ID
+        /// </summary>
+        [ORFieldMapping("ReferralCustomerID")]
+        [DataMember]
+        public string ReferralCustomerID
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 转介绍学员编码
+        /// </summary>
+        [ORFieldMapping("ReferralCustomerCode")]
+        [DataMember]
+        public string ReferralCustomerCode
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 转介绍学员姓名
+        /// </summary>
+        [ORFieldMapping("ReferralCustomerName")]
+        [DataMember]
+        public string ReferralCustomerName
+        {
+            get;
+            set;
+        }
+
     }
 
     [Serializable]

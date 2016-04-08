@@ -3,55 +3,29 @@ CREATE PROCEDURE [SC].[GenerateSchemaTableSnapshot]
 	@schemaName NVARCHAR(128),
 	@snapshotFieldMask INT,
 	@tableName NVARCHAR(255),
-	@snapshotTableName NVARCHAR(255)
+	@snapshotTableName NVARCHAR(255),
+	@timePoint DATETIME = NULL
 AS
 BEGIN
 	IF (@snapshotTableName IS NOT NULL)
 	BEGIN
-		IF @tableName IS NULL OR @tableName = ''
-			SET @tableName = 'SC.SchemaObject'
+		DECLARE @deleteSql NVARCHAR(MAX)
 
-		--DECLARE @clearSql NVARCHAR(MAX)
+		SET @deleteSql = 'DELETE ' + @snapshotTableName + ' WHERE SchemaType = ''' + @schemaName + ''''
 
-		--SET @clearSql = 'TRUNCATE TABLE ' + @snapshotTableName
-
-		--EXECUTE dbo.sp_executesql @clearSql
-
-		DECLARE @standardFields NVARCHAR(256)
-
-		SET @standardFields = 'VersionStartTime, VersionEndTime, SchemaType, Status, CreateDate, CreatorID, CreatorName'
-
-		DECLARE @valueFields NVARCHAR(MAX)
-		DECLARE @searchValueFields NVARCHAR(MAX)
-
-		SET @searchValueFields = SC.GetSchemaPropertySearchSnapshotFields(@schemaName, 8, ' ')
-		SET @valueFields = SC.GetSchemaPropertyValueSnapshotFields(@schemaName, @snapshotFieldMask, ', ')
-
-		DECLARE @selectFields NVARCHAR(MAX)
-		DECLARE @allValueFields NVARCHAR(MAX)
-
-		IF (@valueFields <> '')
-		BEGIN
-			SET @allValueFields = @standardFields + ', ' + @valueFields
-			SET @selectFields = @standardFields + ', ' + SC.GetSchemaPropertySnapshotFields(@schemaName, @snapshotFieldMask, ', ')
-		END
-		ELSE
-		BEGIN
-			SET @allValueFields = @standardFields
-			SET @selectFields = @standardFields
-		END
-	
-		IF (@searchValueFields <> '')
-		BEGIN
-			SET @allValueFields = @allValueFields + ', ' + @searchValueFields
-			SET @selectFields = @selectFields + ', SearchContent'
-		 END
-
+		IF (@timePoint IS NOT NULL)
+			SET @deleteSql = @deleteSql + ' AND VersionStartTime >= ''' + CONVERT(NVARCHAR(32), @timePoint, 121) + ''''
+			
 		DECLARE @sql NVARCHAR(MAX)
 
-		SET @sql = 'INSERT INTO ' + @snapshotTableName + '(' + @selectFields + ') SELECT ' + @allValueFields + ' FROM ' + @tableName + ' WHERE SchemaType = ''' + @schemaName + ''''
+		SET @sql = SC.GetInsertSchemaTableSnapshotSql(@schemaName, @snapshotFieldMask, @tableName, @snapshotTableName, @timePoint)
+
+		PRINT @deleteSql
+		PRINT CONVERT(NVARCHAR(32), GETDATE(), 121)
+		EXECUTE dbo.sp_executesql @deleteSql
 
 		PRINT @sql
+		PRINT CONVERT(NVARCHAR(32), GETDATE(), 121)
 
 		EXECUTE dbo.sp_executesql @sql
 	END

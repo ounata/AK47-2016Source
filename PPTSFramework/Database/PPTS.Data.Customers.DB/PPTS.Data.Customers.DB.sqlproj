@@ -67,15 +67,52 @@
     <Folder Include="CM\Tables" />
     <Folder Include="Security" />
     <Folder Include="CM\Stored Procedures" />
+    <Folder Include="WF" />
+    <Folder Include="WF\Tables" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Security\CM.sql" />
     <Build Include="CM\Tables\PotentialCustomers.sql" />
     <Build Include="CM\Tables\Parents.sql" />
-    <Build Include="CM\Tables\CustomerRelations.sql" />
-    <Build Include="CM\Tables\CustomerStaffRelations.sql" />
     <Build Include="CM\Stored Procedures\ClearAllData.sql" />
     <Build Include="CM\Tables\Phones.sql" />
+    <Build Include="WF\Tables\USER_OPERATION_LOG.sql" />
+    <Build Include="Security\WF.sql" />
+    <Build Include="CM\Tables\AccountRecords.sql" />
+    <Build Include="CM\Tables\Accounts.sql" />
+    <Build Include="CM\Tables\AccountChargeApplies.sql" />
+    <Build Include="CM\Tables\AccountChargeInvoices.sql" />
+    <Build Include="CM\Tables\AccountChargePaymentPrints.sql" />
+    <Build Include="CM\Tables\AccountChargePayments.sql" />
+    <Build Include="CM\Tables\CustomerExpenseRelations.sql" />
+    <Build Include="CM\Tables\CustomerFeedbacks.sql" />
+    <Build Include="CM\Tables\CustomerMeetingItems.sql" />
+    <Build Include="CM\Tables\CustomerMeetings.sql" />
+    <Build Include="CM\Tables\CustomerScoreItems.sql" />
+    <Build Include="CM\Tables\CustomerScores.sql" />
+    <Build Include="CM\Tables\CustomerFollows.sql" />
+    <Build Include="CM\Tables\CustomerVerifies.sql" />
+    <Build Include="CM\Tables\CustomerVisits.sql" />
+    <Build Include="CM\Tables\AccountDeductApplies.sql" />
+    <Build Include="CM\Tables\AccountRefundApplies.sql" />
+    <Build Include="CM\Tables\AccountRefundPayments.sql" />
+    <Build Include="CM\Tables\AccountTransferApplies.sql" />
+    <Build Include="CM\Tables\AccountsEx.sql" />
+    <Build Include="CM\Tables\CustomerTransferApplies.sql" />
+    <Build Include="CM\Tables\CustomerReplies.sql" />
+    <Build Include="CM\Tables\Schools.sql" />
+    <Build Include="CM\Tables\CustomerSchoolRelations.sql" />
+    <Build Include="CM\Tables\CustomerFollowItems.sql" />
+    <Build Include="CM\Tables\CustomerTransferResources.sql" />
+    <Build Include="CM\Tables\CustomerServices.sql" />
+    <Build Include="CM\Tables\CustomerServiceItems.sql" />
+    <Build Include="CM\Tables\AccountChargeAllots.sql" />
+    <Build Include="CM\Tables\AccountReturnApplies.sql" />
+    <Build Include="CM\Tables\AccountRefundAllots.sql" />
+    <Build Include="CM\Tables\CustomerTeacherRelations.sql" />
+    <Build Include="CM\Tables\CustomerParentRelations.sql" />
+    <Build Include="CM\Tables\Customers.sql" />
+    <Build Include="CM\Tables\CustomerStaffRelations.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PPTS.Data.Customers.DB.refactorlog" />

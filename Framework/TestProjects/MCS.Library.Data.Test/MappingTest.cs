@@ -25,6 +25,14 @@ namespace MCS.Library.Data.Test
         }
 
         [TestMethod]
+        public void UserObjectMapping()
+        {
+            User user = new User() { UserID = UuidHelper.NewUuidString(), UserName = "沈峥", Gender = GenderType.Male };
+
+            Console.WriteLine(ORMapping.GetInsertSql(user, TSqlBuilder.Instance));
+        }
+
+        [TestMethod]
         public void LocalTimeToUtcTest()
         {
             TimeZoneContext.Current.CurrentTimeZone = TimeZoneInfo.CreateCustomTimeZone("TimeZoneInfoContext", TimeSpan.FromMinutes(480), "TimeZoneInfoContext", "TimeZoneInfoContext");

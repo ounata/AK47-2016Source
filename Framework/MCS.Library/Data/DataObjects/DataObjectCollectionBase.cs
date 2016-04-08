@@ -272,7 +272,7 @@ namespace MCS.Library.Data.DataObjects
         {
             ExceptionHelper.FalseThrow<ArgumentNullException>(collection != null, "collection");
 
-            this.ForEach(delegate(T item)
+            this.ForEach(delegate (T item)
             {
                 if (predicate == null || predicate(item))
                 {
@@ -312,6 +312,7 @@ namespace MCS.Library.Data.DataObjects
 
             return result;
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -321,6 +322,18 @@ namespace MCS.Library.Data.DataObjects
             ExceptionHelper.FalseThrow<ArgumentNullException>(obj != null, "obj");
 
             List.Add(obj);
+        }
+
+        /// <summary>
+        /// 内部插入
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="obj"></param>
+        protected virtual void InnerInsert(int index, T obj)
+        {
+            ExceptionHelper.FalseThrow<ArgumentNullException>(obj != null, "obj");
+
+            List.Insert(index, obj);
         }
 
         #region IEnumerable<T> 成员
@@ -475,7 +488,7 @@ namespace MCS.Library.Data.DataObjects
     /// <typeparam name="T"></typeparam>
     [Serializable]
     [ComVisible(true)]
-    public abstract class EditableDataObjectCollectionBase<T> : DataObjectCollectionBase<T>, ICollection<T>
+    public abstract class EditableDataObjectCollectionBase<T> : DataObjectCollectionBase<T>, ICollection<T>, IList<T>
     {
         private bool _IsReadOnly = false;
 
@@ -538,6 +551,16 @@ namespace MCS.Library.Data.DataObjects
                 this.Add(data);
 
             return needToAdd;
+        }
+
+        /// <summary>
+        /// 插入一项
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="item"></param>
+        public virtual void Insert(int index, T item)
+        {
+            InnerInsert(index, item);
         }
 
         /// <summary>
@@ -682,7 +705,7 @@ namespace MCS.Library.Data.DataObjects
                                 result = obj.Equals(item);
                             else
                                 if (item == null)
-                                    result = true;
+                                result = true;
 
                             return result;
                         });

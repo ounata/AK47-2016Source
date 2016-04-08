@@ -37,7 +37,7 @@ namespace MCS.Web.WebControls
 			phonenumber.Description = DictionaryHelper.GetValue(dictionary, "description", "");
 			phonenumber.Changed = DictionaryHelper.GetValue(dictionary, "changed", false);
             phonenumber.VersionStartTime = DictionaryHelper.GetValue(dictionary, "versionStartTime", SNTPClient.AdjustedTime);
-			phonenumber.VersionEndTime = DictionaryHelper.GetValue(dictionary, "versionEndTime", ConnectionDefine.MaxVersionEndTime);
+			phonenumber.VersionEndTime = DictionaryHelper.GetValue(dictionary, "versionEndTime", DBTimePointActionContext.MaxVersionEndTime);
 
 			return phonenumber;
         }

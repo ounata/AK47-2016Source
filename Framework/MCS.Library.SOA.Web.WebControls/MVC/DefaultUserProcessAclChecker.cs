@@ -1,13 +1,14 @@
-﻿using System;
+﻿using MCS.Library.Core;
+using MCS.Library.Data.Adapters;
+using MCS.Library.Data.Builder;
+using MCS.Library.Globalization;
+using MCS.Library.OGUPermission;
+using MCS.Library.SOA.DataObjects.Workflow;
+using MCS.Web.WebControls;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using MCS.Library.Core;
-using MCS.Library.OGUPermission;
-using MCS.Library.SOA.DataObjects.Workflow;
-using MCS.Library.Globalization;
-using MCS.Web.WebControls;
-using MCS.Library.Data.Builder;
 
 namespace MCS.Web.Library.MVC
 {
@@ -35,7 +36,7 @@ namespace MCS.Web.Library.MVC
 
 			ConnectiveSqlClauseCollection connective = new ConnectiveSqlClauseCollection(inBuilder, whereBuilder);
 
-			WfAclItemCollection aclItems = WfAclAdapter.Instance.LoadByBuilder(connective);
+			WfAclItemCollection aclItems = WfAclAdapter.Instance.LoadByBuilder(new ConnectiveLoadingCondition(connective));
 
 			(aclItems.Count > 0).FalseThrow(
 							Translator.Translate(Define.DefaultCulture, "用户没有权限打开此文件"));

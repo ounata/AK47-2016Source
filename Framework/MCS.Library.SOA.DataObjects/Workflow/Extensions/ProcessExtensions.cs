@@ -1,4 +1,5 @@
 ﻿using MCS.Library.Core;
+using MCS.Library.Data.Adapters;
 using MCS.Library.Data.Builder;
 using MCS.Library.Data.DataObjects;
 using MCS.Library.Globalization;
@@ -42,7 +43,7 @@ namespace MCS.Library.SOA.DataObjects.Workflow
 
                 ConnectiveSqlClauseCollection connective = new ConnectiveSqlClauseCollection(inBuilder, whereBuilder);
 
-                WfAclItemCollection aclItems = WfAclAdapter.Instance.LoadByBuilder(connective);
+                WfAclItemCollection aclItems = WfAclAdapter.Instance.LoadByBuilder(new ConnectiveLoadingCondition(connective));
 
                 result = aclItems.Count > 0;
             }

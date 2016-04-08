@@ -1,0 +1,11 @@
+﻿<div>
+    <select ng-required="required" ng-model="ngModel[division.model['1'].name]" ng-options="key as key for (key,value) in division.data" ng-change="ngModel[division.model['2'].name]='';ngModel[division.model['3'].name]='';">
+        <option value="">{{division.model["1"].title}}</option>
+    </select>
+    <select ng-if="division.model.levelCount>1" ng-required="required" ng-model="ngModel[division.model['2'].name]" ng-options="key as key for (key,value) in division.data[ngModel[division.model['1'].name]]" ng-change="ngModel[division.model['3'].name]='';">
+        <option value="">{{division.model["2"].title}}</option>
+    </select>
+    <select ng-if="division.model.levelCount>2" ng-required="required" ng-model="ngModel[division.model['3'].name]" ng-options="value as value for value in division.data[ngModel[division.model['1'].name]][ngModel[division.model['2'].name]]">
+        <option value="">{{division.model["3"].title}}</option>
+    </select>
+</div>

@@ -598,6 +598,26 @@ namespace MCS.Library.Data.Builder
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public OrderByRequestItem[] ToOrderByRequestItems()
+        {
+            List<OrderByRequestItem> result = new List<OrderByRequestItem>();
+
+            foreach (SqlClauseBuilderItemOrd item in this.List)
+            {
+                OrderByRequestItem resultItem = new OrderByRequestItem();
+
+                resultItem.CopyFrom(item);
+
+                result.Add(resultItem);
+            }
+
+            return result.ToArray();
+        }
+
+        /// <summary>
         /// 创建一个包装好的OrderBySqlClauseBuilder
         /// </summary>
         /// <param name="sourceBuilder"></param>

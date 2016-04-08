@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Configuration;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
+using Newtonsoft.Json;
+using MCS.Library.Principal;
+using PPTS.Data.Common.Security;
 
 namespace PPTS.Portal
 {
@@ -13,6 +11,23 @@ namespace PPTS.Portal
         protected void Page_Load(object sender, EventArgs e)
         {
 
+        }
+
+        protected override void OnPreRender(EventArgs e)
+        {
+            //this.portalParameters.Value = JsonConvert.SerializeObject(PreparePortalParameters());
+            base.OnPreRender(e);
+        }
+
+        private static Dictionary<string, object> PreparePortalParameters()
+        {
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+
+            parameters["displayName"] = DeluxeIdentity.CurrentUser.DisplayName;
+            parameters["allJobs"] = DeluxeIdentity.CurrentUser.Jobs();
+            parameters["allFunctions"] = DeluxeIdentity.CurrentUser.AllFunctions();
+
+            return parameters;
         }
     }
 }

@@ -1,0 +1,186 @@
+<!--班组 开始-->
+<form class="form-horizontal" >
+    <div class="widget-box">
+        <div class="widget-header">
+            <h4>班组产品</h4>
+        </div>
+        <div class="widget-body">
+            <div class="widget-main no-padding">
+                <div class="clearfix form-actions mcs-form-actions">
+                    <div class="col-md-offset-3 col-md-9">
+                        <mcs-button type="cancel">返 回</mcs-button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="page-header">
+            <span>基础信息</span>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-6">
+                <mcs-label required="true" text="产品名称：" css="col-sm-3" />
+                <div class="col-sm-9">
+                    {{vm.product.classgroup.productname}}
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <mcs-label required="true" text="课程季节：" css="col-sm-3" />
+                <div class="col-sm-9">
+                    {{vm.product.classgroup.courseseaon}}
+                </div>
+            </div>
+        </div>
+
+        <div class="space-4"></div>
+        <div class="form-group">
+            <div class="col-sm-6">
+                <mcs-label required="true" text="课程年份：" css="col-sm-3" />
+                <div class="col-sm-9">
+                    {{vm.product.classgroup.courseyear}}
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <mcs-label required="true" text="年级：" css="col-sm-3" />
+                <div class="col-sm-9">
+                    {{vm.product.classgroup.grade}}
+                </div>
+            </div>
+        </div>
+
+        <div class="space-4"></div>
+        <div class="form-group">
+            <div class="col-sm-6">
+                <mcs-label required="true" text="科目：" css="col-sm-3" />
+                <div class="col-sm-9">
+                    {{vm.product.classgroup.subject}}
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <mcs-label required="true" text="产品简介：" css="col-sm-3" />
+                <div class="col-sm-9">
+                    {{vm.product.classgroup.description}}
+                </div>
+            </div>
+        </div>
+
+        <div class="space-4"></div>
+        <div class="form-group">
+            <div class="col-sm-6">
+                <mcs-label required="true" text="产品颗粒度：" css="col-sm-3" />
+                <div class="col-sm-9">
+                    {{vm.product.classgroup.granularity}}
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <mcs-label required="true" text="总课次：" css="col-sm-3" />
+                <div class="col-sm-9">
+                    {{vm.product.classgroup.totalcoursecount}}
+                </div>
+            </div>
+        </div>
+
+        <div class="space-4"></div>
+        <div class="form-group">
+            <div class="col-sm-6">
+                <mcs-label required="true" text="总金额：" css="col-sm-3" />
+                <div class="col-sm-9">
+                    {{vm.product.classgroup.totalamonut}}
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <mcs-label required="true" text="每课次时长：" css="col-sm-3" />
+                <div class="col-sm-9">
+                    {{vm.product.classgroup.selectedDuation}}
+                </div>
+            </div>
+        </div>
+
+
+        <div class="space-4"></div>
+        <div class="form-group">
+            <div class="col-sm-6">
+                <mcs-label required="true" text="实际课时：" css="col-sm-3" />
+                <div class="col-sm-9">
+                    {{vm.product.classgroup.selectedActualDuation}}
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <mcs-label required="true" text="本课次共计课时数：" css="col-sm-3" />
+                <div class="col-sm-9">
+                    {{vm.product.classgroup.selectedTotalCourseCount}}
+                </div>
+            </div>
+        </div>
+
+
+        <div class="space-4"></div>
+        <div class="form-group">
+            <div class="col-sm-6">
+                <mcs-label required="true" text="满班人数：" css="col-sm-3" />
+                <div class="col-sm-9">
+                    {{vm.product.classgroup.totalfullcount}}
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <mcs-label required="true" text="产品启售时间：" css="col-sm-3" />
+                <div class="col-sm-9">
+                    {{vm.product.classgroup.beginselltime}}
+                </div>
+            </div>
+        </div>
+
+        <div class="space-4"></div>
+        <div class="form-group">
+            <div class="col-sm-6">
+                <mcs-label required="true" text="产品止售时间：" css="col-sm-3" />
+                <div class="col-sm-9">
+                    {{vm.product.classgroup.endselltime}}
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="space-4"></div>
+        <div class="page-header">
+            <span>销售范围</span>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-6">
+                <mcs-label required="true" text="销售分公司：" css="col-sm-3" />
+                <div class="col-sm-9">
+                    {{vm.product.classgroup.company}}
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <mcs-label required="true" text="销售校区：" css="col-sm-3" />
+                <div class="col-sm-9">
+                    {{vm.product.classgroup.campus}}
+                </div>
+            </div>
+        </div>
+
+
+        <div class="space-4"></div>
+        <div class="page-header">
+            <span>销售范围</span>
+        </div>
+
+        <div class="form-group">
+
+            <div class="col-sm-6">
+                <mcs-label required="true" text="是否遵循客户折扣级别：" css="col-sm-3" />
+                <div class="col-sm-9">
+                    11111
+                </div>
+            </div>
+        </div>
+        <div class="space-4"></div>
+
+    </div>
+</form>
+<!--班组 结束-->
+

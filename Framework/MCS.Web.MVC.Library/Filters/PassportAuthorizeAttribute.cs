@@ -34,7 +34,7 @@ namespace MCS.Web.MVC.Library.Filters
 
             if (result == false)
             {
-                IPrincipal principal = DeluxePrincipal.CreateByRequest();
+                IPrincipal principal = DeluxePrincipal.CreateByRequest(true);
 
                 result = principal != null;
             }

@@ -1,25 +1,40 @@
 ﻿(function () {
-    var framework = mcs.config.componentBaseUrl;
+    var framework = ppts.config.componentBaseUrl;
     require.config({
         baseUrl: '.',
         paths: {
-            angular:framework + 'libs/angular-1.5.0/angular.min',
-            uiRouter:framework+ 'libs/angular-ui-router-0.2.18/release/angular-ui-router.min',
-            ngResource: framework +'libs/angular-resource-1.5.0/angular-resource.min',
-            blockUI:framework + 'libs/angular-block-ui-0.2.2/dist/angular-block-ui.min',
-            jquery:framework + 'libs/jquery-2.2.1/dist/jquery.min',
+            jquery: framework + 'libs/jquery-2.2.1/dist/jquery.min',
             bootstrap: framework + 'libs/bootstrap-3.3.5/js/bootstrap.min',
+            ace: framework + 'libs/ace-1.2.3/ace.min',
+            aceExtra: framework + 'libs/ace-1.2.3/ace-extra.min',
+            angular: framework + 'libs/angular-1.5.0/angular.min',
+            uiRouter: framework + 'libs/angular-ui-router-0.2.18/release/angular-ui-router.min',
+            ngSanitize: framework + 'libs/angular-sanitize-1.4.6/angular-sanitize.min',
+            ngResource: framework + 'libs/angular-resource-1.5.0/angular-resource.min',
+            blockUI: framework + 'libs/angular-block-ui-0.2.2/dist/angular-block-ui.min',
             uiBootstrap: framework + 'libs/ui-bootstrap-1.1.0/ui-bootstrap-1.1.0.min',
             uiBootstrapTpls: framework + 'libs/ui-bootstrap-1.1.0/ui-bootstrap-tpls-1.1.0.min',
-            ace:framework + 'libs/ace-1.2.3/ace.min',
-            aceExtra: framework + 'libs/ace-1.2.3/ace-extra.min',
-            mcsComponent: framework + 'libs/mcs-component-1.0.1/mcs.component',
-            ppts: 'app/ppts',
-            pptsRoute: 'app/common/route',
-            dashboard: 'app/dashboard/ppts.dashboard',
-            customer: 'app/customer/ppts.customer'
+            mcsComponent: framework + 'libs/mcs-jslib-1.0.0/component/mcs.component',
+            uiSelect: framework + 'libs/angular-ui-select-0.13.2/dist/select.min',
+            //ppts: 'build/ppts.global.min'
+            ppts: 'app/ppts'
         },
         shim: {
+            jquery: {
+                exports: 'jquery'
+            },
+            bootstrap: {
+                exports: 'bootstrap',
+                deps: ['jquery']
+            },
+            ace: {
+                exports: 'ace',
+                deps: ['jquery']
+            },
+            aceExtra: {
+                exports: 'aceExtra',
+                deps: ['ace']
+            },
             angular: {
                 exports: 'angular'
             },
@@ -35,26 +50,25 @@
                 exports: 'uiRouter',
                 deps: ['angular']
             },
-            jquery: { exports: 'jquery' },
-            bootstrap: {
-                exports: 'bootstrap',
-                deps: ['jquery']
-            },
-            ace: {
-                exports: 'ace',
-                deps: ['jquery']
-            },
-            aceExtra: {
-                exports: 'aceExtra',
-                deps: ['ace']
+            ngSanitize: {
+                exports: 'ngSanitize',
+                deps: ['angular']
             },
             uiBootstrap: {
                 exports: 'uiBootstrap',
-                deps:['angular']
+                deps: ['angular']
             },
             uiBootstrapTpls: {
                 exports: 'uiBootstrapTpls',
-                deps:['angular']
+                deps: ['angular']
+            },
+            uiSelect: {
+                exports: 'uiSelect',
+                deps: ['angular']
+            },
+            dialog: {
+                exports: 'dialog',
+                deps: ['angular']
             },
             mcsComponent: {
                 exports: 'mcsComponent',
@@ -62,24 +76,26 @@
             }
         },
         callback: function () {
-            require(['angular',
-                'blockUI',
-                'uiRouter',
-                'ngResource',
+            require([
                 'jquery',
                 'bootstrap',
                 'ace',
                 'aceExtra',
+                'angular',
+                'blockUI',
+                'uiRouter',
+                'ngSanitize',
+                'ngResource',
                 'uiBootstrap',
                 'uiBootstrapTpls',
+                'uiSelect',
                 'mcsComponent',
-                'ppts'                
-            ], function (ng) {
-                    ng.element(document).ready(function () {
-                        ng.bootstrap(document, ['ppts']);
+                'ppts'
+            ], function () {
+                angular.element(document).ready(function () {
+                    angular.bootstrap(document, ['ppts']);
                 });
             });
         }
     });
 })();
-

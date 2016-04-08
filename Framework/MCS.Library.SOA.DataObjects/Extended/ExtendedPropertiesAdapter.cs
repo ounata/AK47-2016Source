@@ -21,7 +21,7 @@ namespace MCS.Library.SOA.DataObjects
         {
             id.CheckStringIsNullOrEmpty("id");
 
-            return this.LoadByInBuilder(builder => builder.AppendItem(id), "ID").FirstOrDefault();
+            return this.LoadByInBuilder(new InLoadingCondition(builder => builder.AppendItem(id), "ID")).FirstOrDefault();
         }
 
         protected override string GetConnectionName()

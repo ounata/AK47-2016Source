@@ -1,6 +1,7 @@
 ﻿/* 生成一个Schema的快照  */
 CREATE PROCEDURE [SC].[GenerateSchemaSnapshot]
-	@schemaName NVARCHAR(128)
+	@schemaName NVARCHAR(128),
+	@timePoint DATETIME = NULL
 AS
 BEGIN
 	DECLARE @snapshotTableName NVARCHAR(255)
@@ -12,8 +13,8 @@ BEGIN
 	WHERE SD.Name = @schemaName
 
 	IF (@snapshotTableName IS NOT NULL)
-		EXECUTE SC.GenerateSchemaTableSnapshot @schemaName, 1, @tableName, @snapshotTableName
+		EXECUTE SC.GenerateSchemaTableSnapshot @schemaName, 1, @tableName, @snapshotTableName, @timePoint
 
 	IF (@toSchemaObjectSnapshot = 1)
-		EXECUTE SC.GenerateSchemaTableSnapshot @schemaName, 16, 'SC.SchemaObject', 'SC.SchemaObjectSnapshot'
+		EXECUTE SC.GenerateSchemaTableSnapshot @schemaName, 16, 'SC.SchemaObject', 'SC.SchemaObjectSnapshot', @timePoint
 END

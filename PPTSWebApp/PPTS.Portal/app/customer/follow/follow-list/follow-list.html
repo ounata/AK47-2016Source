@@ -1,0 +1,153 @@
+﻿<!-- #开始：位置条 -->
+<div class="breadcrumbs" id="breadcrumbs">
+    <script type="text/javascript">
+        try {
+            ace.settings.check('breadcrumbs', 'fixed');
+        } catch (e) { }
+    </script>
+    <ul class="breadcrumb">
+        <li class="active">
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a ui-sref="index">首页</a>
+        </li>
+        <li>
+            <i class="ace-icon fa fa-pencil-square-o"></i> 跟进管理
+        </li>
+        <li>
+           跟进列表
+        </li>
+    </ul>
+</div>
+<!-- /结束：位置条 -->
+<div class="page-content">
+    <div class="page-content-area">
+        <!-- #开始：潜客列表 -->
+        <div class="row">
+            <div class="col-sm-12">
+                <!-- #开始：潜客列表.高级查询条件 -->
+                <div id="accordion" class="accordion-style1 panel-group">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#advance-search">
+                                    <i class="ace-icon fa fa-angle-right bigger-110" data-icon-hide="fa-angle-down" data-icon-show="fa-angle-right"></i>
+                                    &nbsp;高级查询
+                                </a>
+                            </h4>
+                        </div>
+                        <div class="panel-collapse collapse mcs-advance-search" id="advance-search">
+                            <div class="panel-body">
+                                <div class="profile-user-info">
+                                    <div class="profile-info-row">
+                                        <div class="profile-info-name">记录人：</div>
+                                        <div class="profile-info-value">
+                                            <ppts-checkbox-group category="followStage" model="vm.criteria.entranceGrades" clear="vm.criteria.entranceGrades=[]" />
+                                        </div>
+                                    </div>
+                                    <div class="profile-info-row">
+                                        <div class="profile-info-name">建档人：</div>
+                                        <div class="profile-info-value">
+                                            <ppts-checkbox-group category="followStage" model="vm.criteria.entranceGrades" clear="vm.criteria.entranceGrades=[]" />
+                                        </div>
+                                    </div>
+                                    <div class="profile-info-row">
+                                        <div class="profile-info-name">跟进后阶段：</div>
+                                        <div class="profile-info-value">
+                                            <ppts-checkbox-group category="followStage" model="vm.criteria.followStages" clear="vm.criteria.followStages=[]" />
+                                        </div>
+                                    </div>
+                                    <div class="profile-info-row">
+                                        <div class="profile-info-name">购买意愿：</div>
+                                        <div class="profile-info-value">
+                                            <ppts-checkbox-group category="purchaseIntension" model="vm.criteria.purchaseIntensions" clear="vm.criteria.purchaseIntensions=[]" />
+                                        </div>
+                                    </div>
+                                    <div class="profile-info-row">
+                                        <div class="profile-info-name">客户级别：</div>
+                                        <div class="profile-info-value">
+                                            <ppts-checkbox-group category="vipLevel" model="vm.criteria.customerLevels" clear="vm.criteria.customerLevels=[]" />
+                                        </div>
+                                    </div>
+                                    <div class="profile-info-row">
+                                        <div class="profile-info-name">跟进方式：</div>
+                                        <div class="profile-info-value">
+                                            <ppts-checkbox-group category="contactType" model="vm.criteria.customerLevels" clear="vm.criteria.customerLevels=[]" />
+                                        </div>
+                                    </div>
+                                    
+
+                                    <div class="profile-info-row">
+                                        <div class="profile-info-name">跟进时间：</div>
+                                        <div class="profile-info-value">
+                                            <ppts-checkbox-group category="vipLevel" model="vm.criteria.customerLevels" clear="vm.criteria.customerLevels=[]" />
+                                        </div>
+                                    </div>
+
+
+                                    <div class="profile-info-row">
+                                        <div class="profile-info-name">下次沟通时间：</div>
+                                        <div class="profile-info-value">
+                                            <ppts-checkbox-group category="vipLevel" model="vm.criteria.customerLevels" clear="vm.criteria.customerLevels=[]" />
+                                        </div>
+                                    </div>
+                                    <div class="profile-info-row">
+                                        <div class="profile-info-name">是否在其它机构辅导：</div>
+                                        <div class="profile-info-value">
+                                            <ppts-checkbox-group category="vipLevel" model="vm.criteria.customerLevels" clear="vm.criteria.customerLevels=[]" />
+                                        </div>
+                                    </div>
+                                    <div class="profile-info-row">
+                                        <div class="profile-info-name">预计签约时间：</div>
+                                        <div class="profile-info-value">
+                                            <ppts-checkbox-group category="vipLevel" model="vm.criteria.customerLevels" clear="vm.criteria.customerLevels=[]" />
+                                        </div>
+                                    </div>
+                                   
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /结束：潜客列表.高级查询条件 -->
+                <!-- #开始：潜客列表.快速查询条件 -->
+                <div class="mcs-panel-search well well-sm">
+                    <div class="portlet">
+                        <div class="portlet-title line">
+                            <div class="caption">
+                                <label class="quick-search"><i class="ace-icon fa fa-search bigger-125"></i> 快速查询</label>
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <mcs-label text="大区/分公司/校区" />
+                            <mcs-input placeholder="大区/分公司/校区" model="" />
+                            <mcs-label text="学员/家长姓名" />
+                            <mcs-input placeholder="学员/家长姓名" model="vm.criteria.name" />
+                            <mcs-label text="学员编号" />
+                            <mcs-input placeholder="学员编号" model="vm.criteria.customerCode" />
+                            <mcs-label text="家长联系方式" />
+                            <mcs-input placeholder="家长联系方式" model="vm.criteria.parentContact" />
+                            <mcs-label text="咨询师姓名" />
+                            <mcs-input placeholder="咨询师姓名" model="vm.criteria.parentContact" />
+                            <mcs-button type="search" click="vm.init()" size="medium" />                          
+                        </div>
+                    </div>
+                </div>
+                <!-- /结束：潜客列表.快速查询条件 -->
+                <!-- #开始：潜客列表.工具栏 -->
+                <!--<div class="mcs-panel-toolbar">
+                    <mcs-button type="add" text="新增潜在客户" click="$state.go('ppts.customer-add')"></mcs-button>
+                    <mcs-button type="add" text="新增跟进记录"></mcs-button>
+                    <mcs-button icon="mail-forward" css="btn-yellow" text="划转资源"></mcs-button>
+                    <mcs-button icon="user-plus" css="btn-success" text="分配咨询师"></mcs-button>
+                    <mcs-button icon="female" css="btn-success" text="分配坐席"></mcs-button>
+                    <mcs-button icon="cny" css="btn-purple" text="充 值"></mcs-button>
+                </div>-->
+                <!-- /结束：潜客列表.工具栏 -->
+                <!-- #开始：潜客列表.数据表格 -->
+                <mcs-datatable data="vm.data" />
+                <!-- /结束：潜客列表.数据表格 -->
+            </div>
+        </div>
+        <!-- /结束：潜客列表 -->
+    </div>
+</div>

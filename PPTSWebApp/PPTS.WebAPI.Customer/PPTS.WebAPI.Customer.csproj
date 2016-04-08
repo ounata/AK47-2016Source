@@ -69,6 +69,9 @@
     <Reference Include="MCS.Library.SOA.DataObjects">
       <HintPath>..\..\Bin\MCS.Library.SOA.DataObjects.dll</HintPath>
     </Reference>
+    <Reference Include="MCS.Web.MVC.Library">
+      <HintPath>..\..\Bin\MCS.Web.MVC.Library.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -129,32 +132,31 @@
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\CustomerFollowsController.cs" />
     <Compile Include="Controllers\PotentialCustomersController.cs" />
     <Compile Include="Controllers\StudentsController.cs" />
+    <Compile Include="Executors\AddCustomerFollowExecutor.cs" />
+    <Compile Include="Executors\AddPotentialCustomerExecutor.cs" />
+    <Compile Include="Executors\EditCustomerFollowExecutor.cs" />
+    <Compile Include="Executors\EditPotentialCustomerExecutor.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Helper\DataHelper.cs" />
-    <Compile Include="Helper\MapperHelper.cs" />
-    <Compile Include="MapperConfiguration.cs" />
-    <Compile Include="PagedList.cs" />
-    <Compile Include="PagedParam.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModels\CustomerMappingProfile.cs" />
-    <Compile Include="ViewModels\Customer\CreatableCustomerViewModel.cs" />
-    <Compile Include="ViewModels\Customer\CustomerQueryCriteriaModel.cs" />
-    <Compile Include="ViewModels\Customer\CustomerQueryResultModel.cs" />
-    <Compile Include="ViewModels\Customer\CustomerViewModel.cs" />
-    <Compile Include="ViewModels\Customer\EditableCustomerViewModel.cs" />
-    <Compile Include="ViewModels\Customer\ParentViewModel.cs" />
-    <Compile Include="ViewModels\Customer\PotentialCustomerQueryCriteriaModel.cs" />
-    <Compile Include="ViewModels\Customer\PotentialCustomerQueryResult.cs" />
-    <Compile Include="ViewModels\Student\StudentQueryCriteriaModel.cs" />
-    <Compile Include="ViewModels\Student\StudentViewModel.cs" />
+    <Compile Include="ViewModels\CustomerFollows\CreatableCustomerFollowModel.cs" />
+    <Compile Include="ViewModels\CustomerFollows\CustomerFollowQueryCriteriaModel.cs" />
+    <Compile Include="ViewModels\CustomerFollows\CustomerFollowQueryResult.cs" />
+    <Compile Include="ViewModels\CustomerFollows\EditableCustomerFollowModel.cs" />
+    <Compile Include="ViewModels\PotentialCustomers\CreatablePortentialCustomerModel.cs" />
+    <Compile Include="ViewModels\PotentialCustomers\EditablePotentialCustomerModel.cs" />
+    <Compile Include="ViewModels\PotentialCustomers\ParentModel.cs" />
+    <Compile Include="ViewModels\PotentialCustomers\PotentialCustomerModel.cs" />
+    <Compile Include="ViewModels\PotentialCustomers\PotentialCustomerQueryCriteriaModel.cs" />
+    <Compile Include="ViewModels\PotentialCustomers\PotentialCustomerQueryResult.cs" />
+    <Compile Include="ViewModels\Students\StudentQueryCriteriaModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
-    <None Include="Properties\PublishProfiles\customer.webapi.testdev.pubxml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -162,9 +164,10 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <None Include="Properties\PublishProfiles\customerapi.pubxml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Properties\PublishProfiles\PPTS.WebAPI.Customer.pubxml" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

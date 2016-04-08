@@ -16,6 +16,7 @@ using MCS.Library.WF.Contracts.Ogu;
 using MCS.Library.WF.Contracts.Workflow.DataObjects;
 using MCS.Library.WF.Contracts.Workflow.Descriptors;
 using MCS.Library.WF.Contracts.Workflow.Runtime;
+using MCS.Library.Data.Adapters;
 
 namespace MCS.Library.WF.Contracts.Converters.Runtime
 {
@@ -70,7 +71,7 @@ namespace MCS.Library.WF.Contracts.Converters.Runtime
                 builder.AppendItem("ACTIVITY_ID", originalActivity.ID);
                 builder.AppendItem("ISSUE_PERSON_ID", user.ID);
 
-                GenericOpinion serverOpinion = GenericOpinionAdapter.Instance.LoadByBuilder(builder).FirstOrDefault();
+                GenericOpinion serverOpinion = GenericOpinionAdapter.Instance.LoadByBuilder(new ConnectiveLoadingCondition(builder)).FirstOrDefault();
 
                 if (serverOpinion != null)
                     WfClientOpinionConverter.Instance.ServerToClient(serverOpinion, ref opinion);

@@ -39,7 +39,7 @@ namespace MCS.Library.SOA.DataObjects.Schemas.Adapters
 			strB.AppendFormat("SELECT {0},{1},{2},{3} FROM {4} WHERE {5}",
 				string.Join(",", selectFieldNames),
 				"@currentTime",
-				TSqlBuilder.Instance.FormatDateTime(ConnectionDefine.MaxVersionEndTime),
+				TSqlBuilder.Instance.FormatDateTime(DBTimePointActionContext.MaxVersionEndTime),
 				(int)obj.Status,
 				GetTableName(obj, mapping),
 				this.PrepareWhereSqlBuilder(obj, mapping).ToSqlString(TSqlBuilder.Instance));

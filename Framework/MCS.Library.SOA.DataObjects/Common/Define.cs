@@ -32,8 +32,6 @@ namespace MCS.Library.SOA.DataObjects
 		private const string DefaultAccreditConnectionName = "AccreditAdmin";
 	    private const string DefaultKBConnectionName = "MCSKB";
 
-		public static readonly DateTime MaxVersionEndTime = new DateTime(9999, 9, 9);
-
 		public static string DBConnectionName
 		{
 			get

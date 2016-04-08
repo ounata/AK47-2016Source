@@ -39,63 +39,6 @@ namespace MCS.Library.Data
         protected static readonly object GraphWithTxSyncObject = new object();
 
         #region Protected type(Class)
-        protected class ReferenceConnection
-        {
-            private DbConnection connection = null;
-            private int referenceCount = 0;
-            private string name = string.Empty;
-            private StringBuilder sqlInContext = new StringBuilder(256);
-
-            /// <summary>
-            /// 引用连接
-            /// </summary>
-            /// <param name="connName">连接名称</param>
-            /// <param name="conn">数据库连接对象</param>
-            public ReferenceConnection(string connName, DbConnection conn)
-            {
-                this.name = connName;
-                this.connection = conn;
-                this.referenceCount++;
-            }
-
-            public string Name
-            {
-                get { return name; }
-                set { name = value; }
-            }
-
-            public DbConnection Connection
-            {
-                get { return this.connection; }
-                set { this.connection = value; }
-            }
-
-            public int ReferenceCount
-            {
-                get { return this.referenceCount; }
-                set { this.referenceCount = value; }
-            }
-
-            public void AppendSqlInContext(SqlBuilderBase sqlBuilder, bool withSeperator, string format, params object[] args)
-            {
-                sqlBuilder.NullCheck("sqlBuilder");
-
-                if (this.sqlInContext.Length > 0 && withSeperator)
-                    this.sqlInContext.Append(sqlBuilder.DBStatementSeperator);
-
-                this.sqlInContext.AppendFormat(format, args);
-            }
-
-            public void ClearSqlInContext()
-            {
-                this.sqlInContext.Clear();
-            }
-
-            public string GetSqlInContext()
-            {
-                return this.sqlInContext.ToString();
-            }
-        }
 
         protected class Connections : Dictionary<string, ReferenceConnection>
         {
@@ -122,6 +65,11 @@ namespace MCS.Library.Data
         /// </remarks>
         /// </summary>
         private const string NamePostfixWithoutTransaction = ".GraphWithoutTx";
+
+        /// <summary>
+        /// 上下文中的SQL语句缓存
+        /// </summary>
+        private const string NamePostfixSqlContext = ".SqlContext";
 
         /// <summary>
         /// Logical database name
@@ -233,47 +181,58 @@ namespace MCS.Library.Data
         #endregion
 
         #region Public Methods
-        /// <summary>
-        /// 在上下文中添加待执行的SQL语句，自动添加语句分隔符
-        /// </summary>
-        /// <param name="sqlBuilder"></param>
-        /// <param name="format"></param>
-        /// <param name="args"></param>
-        public override void AppendSqlWithSperatorInContext(SqlBuilderBase sqlBuilder, string format, params object[] args)
-        {
-            DoSafeConnectionOp(this.Name, this.GraphWithoutTx, refConnection => refConnection.AppendSqlInContext(sqlBuilder, true, format, args));
-        }
+        ///// <summary>
+        ///// 在上下文中添加待执行的SQL语句，自动添加语句分隔符
+        ///// </summary>
+        ///// <param name="sqlBuilder"></param>
+        ///// <param name="format"></param>
+        ///// <param name="args"></param>
+        //public override void AppendSqlWithSperatorInContext(SqlBuilderBase sqlBuilder, string format, params object[] args)
+        //{
+        //    this.GetSqlContext().AppendSqlInContext(sqlBuilder, true, format, args);
+        //    //DoSafeConnectionOp(this.Name, GetSqlContextReferenceConnections(), refConnection => refConnection.AppendSqlInContext(sqlBuilder, true, format, args));
+        //}
 
-        /// <summary>
-        /// 在上下文中添加待执行的SQL语句
-        /// </summary>
-        /// <param name="sqlBuilder"></param>
-        /// <param name="format"></param>
-        /// <param name="args"></param>
-        public override void AppendSqlInContext(SqlBuilderBase sqlBuilder, string format, params object[] args)
-        {
-            DoSafeConnectionOp(this.Name, this.GraphWithoutTx, refConnection => refConnection.AppendSqlInContext(sqlBuilder, false, format, args));
-        }
+        ///// <summary>
+        ///// 在上下文中添加待执行的SQL语句
+        ///// </summary>
+        ///// <param name="sqlBuilder"></param>
+        ///// <param name="format"></param>
+        ///// <param name="args"></param>
+        //public override void AppendSqlInContext(SqlBuilderBase sqlBuilder, string format, params object[] args)
+        //{
+        //    DoSafeConnectionOp(this.Name, GetSqlContextReferenceConnections(), refConnection => refConnection.AppendSqlInContext(sqlBuilder, false, format, args));
+        //}
 
-        /// <summary>
-        /// 清除上下文中的SQL语句
-        /// </summary>
-        public override void ClearSqlInContext()
-        {
-            DoSafeConnectionOp(this.Name, this.GraphWithoutTx, refConnection => refConnection.ClearSqlInContext());
-        }
+        ///// <summary>
+        ///// 在上下文中注册查询返回的集中表的结果操作
+        ///// </summary>
+        ///// <param name="tableName"></param>
+        ///// <param name="action"></param>
+        //public override void RegisterTableAction(string tableName, Action<DataTable> action)
+        //{
+        //    DoSafeConnectionOp(this.Name, GetSqlContextReferenceConnections(), refConnection => refConnection.RegisterTableAction(tableName, action));
+        //}
 
-        /// <summary>
-        /// 得到上下文中的SQL语句
-        /// </summary>
-        public override string GetSqlInContext()
-        {
-            string result = string.Empty;
+        ///// <summary>
+        ///// 清除上下文中的SQL语句
+        ///// </summary>
+        //public override void ClearSqlInContext()
+        //{
+        //    DoSafeConnectionOp(this.Name, GetSqlContextReferenceConnections(), refConnection => refConnection.ClearSqlInContext());
+        //}
 
-            DoSafeConnectionOp(this.Name, this.GraphWithoutTx, refConnection => result = refConnection.GetSqlInContext());
+        ///// <summary>
+        ///// 得到上下文中的SQL语句
+        ///// </summary>
+        //public override string GetSqlInContext()
+        //{
+        //    string result = string.Empty;
 
-            return result;
-        }
+        //    DoSafeConnectionOp(this.Name, GetSqlContextReferenceConnections(), refConnection => result = refConnection.GetSqlInContext());
+
+        //    return result;
+        //}
 
         /// <summary>
         /// 执行保存在上下文中的SQL语句，返回DataSet
@@ -285,7 +244,28 @@ namespace MCS.Library.Data
         {
             DataSet result = null;
 
-            this.ExecuteSqlInContext((db, sql) => result = db.ExecuteDataSet(CommandType.Text, sql, tableNames), clearSqlAfterExecute);
+            SqlContextItem sqlContext = this.GetSqlContext();
+
+            this.ExecuteSqlInContext((refConnection, db, sql) =>
+            {
+                if (tableNames == null || tableNames.Length == 0)
+                    tableNames = sqlContext.TableActions.ToTableNames();
+
+                result = db.ExecuteDataSet(CommandType.Text, sql, tableNames);
+
+                //根据Table回调到每个事件
+                for (int i = 0; i < result.Tables.Count; i++)
+                {
+                    if (i < sqlContext.TableActions.Count)
+                    {
+                        TableAction ta = sqlContext.TableActions[i];
+
+                        if (ta.Action != null)
+                            ta.Action(result.Tables[i]);
+                    }
+                }
+            },
+            clearSqlAfterExecute);
 
             return result;
         }
@@ -299,7 +279,7 @@ namespace MCS.Library.Data
         {
             DbDataReader result = null;
 
-            this.ExecuteSqlInContext((db, sql) => result = db.ExecuteReader(CommandType.Text, sql), clearSqlAfterExecute);
+            this.ExecuteSqlInContext((refConnection, db, sql) => result = db.ExecuteReader(CommandType.Text, sql), clearSqlAfterExecute);
 
             return result;
         }
@@ -313,7 +293,7 @@ namespace MCS.Library.Data
         {
             object result = null;
 
-            this.ExecuteSqlInContext((db, sql) => result = db.ExecuteScalar(CommandType.Text, sql), clearSqlAfterExecute);
+            this.ExecuteSqlInContext((refConnection, db, sql) => result = db.ExecuteScalar(CommandType.Text, sql), clearSqlAfterExecute);
 
             return result;
         }
@@ -326,25 +306,36 @@ namespace MCS.Library.Data
         {
             int result = 0;
 
-            this.ExecuteSqlInContext((db, sql) => result = db.ExecuteNonQuery(CommandType.Text, sql), clearSqlAfterExecute);
+            this.ExecuteSqlInContext((refConnection, db, sql) => result = db.ExecuteNonQuery(CommandType.Text, sql), clearSqlAfterExecute);
 
             return result;
         }
 
-        private void ExecuteSqlInContext(Action<Database, string> dbAction, bool clearSqlAfterExecute)
+        /// <summary>
+        /// 得到引用的数据库连接
+        /// </summary>
+        /// <returns></returns>
+        protected virtual Connections GetSqlContextReferenceConnections()
         {
-            DoSafeConnectionOp(this.Name, this.GraphWithoutTx, refConnection =>
+            return this.GraphWithoutTx;
+        }
+
+        private void ExecuteSqlInContext(Action<ReferenceConnection, Database, string> dbAction, bool clearSqlAfterExecute)
+        {
+            SqlContextItem sqlContext = this.GetSqlContext();
+
+            DoSafeConnectionOp(this.Name, this.GetSqlContextReferenceConnections(), refConnection =>
             {
-                string sql = refConnection.GetSqlInContext();
+                string sql = sqlContext.GetSqlInContext();
 
                 if (sql.IsNotEmpty() && dbAction != null)
                 {
                     Database db = DatabaseFactory.Create(this);
 
-                    dbAction(db, sql);
+                    dbAction(refConnection, db, sql);
 
                     if (clearSqlAfterExecute)
-                        refConnection.ClearSqlInContext();
+                        sqlContext.ClearSqlInContext();
                 }
             });
         }
@@ -415,6 +406,11 @@ namespace MCS.Library.Data
                     return gwt;
                 });
             }
+        }
+
+        protected SqlContextItem GetSqlContext()
+        {
+            return SqlContext.GetContext(this.Name);
         }
 
         /// <summary>
@@ -592,6 +588,11 @@ namespace MCS.Library.Data
             return new Tuple<DbConnection, bool>(connection, isConnectionCreator);
         }
 
+        /// <summary>
+        /// 根据连接的名称，从带事务的连接集合，或者不带事务的连接集合中获取连接
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         private DbConnection GetConnection(string name)
         {
             DbConnection connection = null;
@@ -615,7 +616,7 @@ namespace MCS.Library.Data
         /// <returns>GraphWithoutTx的连接对象</returns>
         protected DbConnection GetConnectionWithoutTx(string connName)
         {
-            ReferenceConnection refConnection = GetRefConnectionWithoutTx(connName);
+            ReferenceConnection refConnection = this.GetRefConnectionWithoutTx(connName);
 
             DbConnection connection = null;
 

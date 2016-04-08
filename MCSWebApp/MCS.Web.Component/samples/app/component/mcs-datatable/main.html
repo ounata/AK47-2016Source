@@ -1,0 +1,160 @@
+﻿<!-- #开始：位置条 -->
+<div class="breadcrumbs" id="breadcrumbs">
+    <script type="text/javascript">
+    try {
+        ace.settings.check('breadcrumbs', 'fixed')
+    } catch (e) {}
+    </script>
+    <ul class="breadcrumb">
+        <li class="active">
+            <i class="ace-icon fa fa-home home-icon"></i> 首页
+        </li>
+        <li class="active">
+            <i class="ace-icon fa fa-buttons"></i> 表格
+        </li>
+    </ul>
+</div>
+<!-- /结束：位置条 -->
+<div class="page-content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h3 class="header smaller lighter green">应用范例</h3>
+                    <div ng-controller="MCSDatatableController">
+                        <mcs-datatable on-order="vm.reorder(field,direction)" data="vm.data" />
+                    </div>
+                </div>
+                <div class=" laycode col-sm-12 ">
+                    <h3 class="header smaller lighter green ">示例代码</h3>
+                    <h5>HTML</h5>
+                    <div class="codehilite "><pre>&lt;div ng-controller=&quot;MCSDatatableController&quot;&gt;
+    &lt;mcs-datatable data=&quot;vm.data&quot; /&gt;
+&lt;/div&gt;
+</pre></div>
+                    <h5>JS</h5>
+                    <div class="codehilite "><pre>(function() {
+angular.module(&#39;app.component&#39;).controller(&#39;MCSDatatableController&#39;, [
+    &#39;$scope&#39;,
+    function($scope) {
+        var vm = this;
+
+        vm.data = {
+            showCheckbox: true,
+            headers: [{
+                    field: &quot;customerName&quot;,
+                    name: &quot;姓名&quot;,
+                    headerCss: &#39;datatable-header-align-right&#39;,
+                    sortable:false,
+                    description: &#39;customer name&#39;
+                },
+
+                {
+                    field: &quot;customerAge&quot;,
+                    name: &quot;年龄&quot;,
+                    headerCss: &#39;datatable-header-align-right&#39;,
+                    template: &#39;&lt;span&gt;{ {row.customerAge|currency} }&lt;/span&gt;&#39;,
+                    sortable:true,
+                    description: &#39;customer age&#39;
+                },
+
+                {
+                    name: &quot;操作1&quot;,
+                    template: &#39;&lt;a class=&quot;btn&quot; ng-click=&quot;editRow(row)&quot;&gt;hello&lt;/a&gt;&#39;
+                }, {
+                    name: &quot;操作2&quot;,
+                    template: &#39;&lt;a&gt;hello&lt;/a&gt;&#39;
+                }
+            ],
+            rows: [{
+                customerId: 1,
+                parentId: 11,
+                customerName: &#39;tom&#39;,
+                customerAge: 12
+
+
+            }, {
+                customerId: 2,
+                parentId: 22,
+                customerName: &#39;jack&#39;,
+                customerAge: 28
+
+            }],
+            pager: {
+                pageIndex: 1,
+                pageSize: 10,
+                totalCount: 2
+            }
+        }
+    }
+]);
+})();
+</pre></div>
+                </div>
+                <div class="col-sm-12 ">
+                    <h3 class="header smaller lighter green ">参数说明</h3>
+                    <table class="table table-striped table-bordered table-hover ">
+                        <thead>
+                            <th>参数</th>
+                            <th>用途</th>
+                            <th>取值范围</th>
+                            <th>示例</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>showCheckbox</td>
+                                <td>设置是否显示行选择框</td>
+                                <td>true/false</td>
+                                <td>showCheckbox = "true "</td>
+                            </tr>
+                            <tr>
+                                <td>headers</td>
+                                <td>
+                                    <pre>
+field       标识字段名
+name        标识列头名称
+headerCss   设置列头样式
+template    设置Cell模板
+sortable     该列是否可排序
+description 列描述
+</pre>
+                                </td>
+                                <td></td>
+                                <td>
+                                    <pre>
+field: "customerName "
+name: "姓名 "
+headerCss: 'db-header-align-right'
+template: '<span>{{row.customerName}}</span>'
+sortable: true
+description: 'customer name'
+</pre>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>rows</td>
+                                <td>设置行数据集</td>
+                                <td>JSON对象数组</td>
+                                <td>rows:[{name:'tom',age:18}]</td>
+                            </tr>
+                            <tr>
+                                <td>pager</td>
+                                <td>设定分页配置项</td>
+                                <td>JSON对象</td>
+                                <td>
+                                    <code>
+                    pager: {
+                    pageIndex: 1,
+                    pageSize: 10,
+                    totalCount: 2
+                }
+                </code>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

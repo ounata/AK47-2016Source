@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="14.0">
+  <PropertyGroup>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>2.0</OldToolsVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectItem Include="PPTS.WebAPI.Customer\PPTS.WebAPI.Customer.csproj" />
+    <ProjectItem Include="PPTS.WebAPI.Product\PPTS.WebAPI.Product.csproj" />
+    <ProjectItem Include="PPTS.WebAPI.Order\PPTS.WebAPI.Order.csproj" />
+    <ProjectItem Include="PPTS.Portal\PPTS.Portal.csproj" />	
+  </ItemGroup>
+  <Target Name="BuildOtherProjects">
+    <MSBuild Projects="@(ProjectItem)" RebaseOutputs="True" />
+  </Target>
+</Project>

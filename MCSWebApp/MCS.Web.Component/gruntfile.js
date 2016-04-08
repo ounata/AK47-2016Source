@@ -2,25 +2,39 @@
     grunt.initConfig({
 
         concat: {
-            dist: {
-                src: ['src/mcs.js','src/mcs-*/**/*.js'],
-                dest: 'libs/mcs-component-1.0.1/mcs.component.js'
+			global: {
+				src: ['src/mcs/global/mcs.js',
+					  'src/mcs/global/mcs.global.js'],
+                dest: 'libs/mcs-jslib-1.0.0/global/mcs.js'
+			},
+			
+			util: {
+                src: ['src/mcs/util/mcs.util.js',
+					  'src/mcs/util/mcs.browser.js'],
+                dest: 'libs/mcs-jslib-1.0.0/util/mcs.util.js'
             },
 			
+            component: {
+                src: ['src/mcs/angular/mcs.bootstrap.js',
+					  'src/mcs/angular/mcs.filter.js',
+					  'src/mcs-*/**/*.js'],
+                dest: 'libs/mcs-jslib-1.0.0/component/mcs.component.js'
+            },
+
             css: {
                 src: ['src/css/*.css'],
-                dest: 'libs/mcs-component-1.0.1/mcs.component.css'
+                dest: 'libs/mcs-jslib-1.0.0/component/mcs.component.css'
             }
         },
         uglify: {
-            buildComponent: {
-                src: 'libs/mcs-component-1.0.1/mcs.component.js',
-                dest: 'libs/mcs-component-1.0.1/mcs.component.min.js'
-            },
 			buildGlobal: {
-				src: ['src/mcs.config.js', 'src/mcs.global.js'],
-				dest: 'src/mcs.global.min.js'
-			}
+				src: ['libs/mcs-jslib-1.0.0/global/mcs.js', 'libs/mcs-jslib-1.0.0/util/mcs.util.js'],
+				dest: 'libs/mcs-jslib-1.0.0/global/mcs.min.js'
+			},
+            buildComponent: {
+                src: 'libs/mcs-jslib-1.0.0/component/mcs.component.js',
+                dest: 'libs/mcs-jslib-1.0.0/component/mcs.component.min.js'
+            }
         }
     });
     grunt.loadNpmTasks('grunt-contrib-uglify');

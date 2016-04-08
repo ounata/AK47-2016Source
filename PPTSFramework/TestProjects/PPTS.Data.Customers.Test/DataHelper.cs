@@ -11,9 +11,9 @@ namespace PPTS.Data.Customers.Test
 {
     internal static class DataHelper
     {
-        public static Parent PrepareParentData()
+        public static InheritedParent PrepareParentData()
         {
-            Parent result = new Parent();
+            InheritedParent result = new InheritedParent();
 
             result.ParentID = UuidHelper.NewUuidString();
             result.ParentName = string.Format("测试添加家长{0:yyyy-MM-dd HH:mm:ss}", DateTime.Now);
@@ -22,9 +22,9 @@ namespace PPTS.Data.Customers.Test
             return result;
         }
 
-        public static PotentialCustomer PreparePotentialCustomerData()
+        public static InheritedPotentialCustomer PreparePotentialCustomerData()
         {
-            PotentialCustomer result = new PotentialCustomer();
+            InheritedPotentialCustomer result = new InheritedPotentialCustomer();
 
             result.CustomerID = UuidHelper.NewUuidString();
             result.CustomerName = string.Format("测试添加潜在用户{0:yyyy-MM-dd HH:mm:ss}", DateTime.Now);

@@ -7,4 +7,25 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="UserID" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="68b0d529-ae37-4b3a-894b-cec743886458" ChangeDateTime="03/26/2016 15:40:57">
+    <Property Name="ElementName" Value="[dbo].[TEST_TABLE].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[TEST_TABLE]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="ID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="90e5b744-aa39-495a-95cf-8c8829fe3f30" ChangeDateTime="04/06/2016 14:21:34">
+    <Property Name="ElementName" Value="[dbo].[VersionedOrder].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[VersionedOrder]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="OrderID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="ab629815-ac51-4c24-8df5-d36130119392" ChangeDateTime="04/06/2016 15:08:04">
+    <Property Name="ElementName" Value="[dbo].[VersionedOrderItem].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[VersionedOrderItem]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="OrderID" />
+  </Operation>
 </Operations>

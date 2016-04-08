@@ -16,7 +16,10 @@ namespace MCS.Library.Data.Adapters
     /// <typeparam name="T"></typeparam>
     public abstract class UpdatableAdapterBase<T>
     {
-        private static readonly Dictionary<string, object> _DefaultContext = new Dictionary<string, object>();
+        /// <summary>
+        /// 默认的上下文对象
+        /// </summary>
+        protected static readonly Dictionary<string, object> _DefaultContext = new Dictionary<string, object>();
 
         /// <summary>
         /// 得到连接串的名称
@@ -36,6 +39,15 @@ namespace MCS.Library.Data.Adapters
         public DbContext GetDbContext()
         {
             return DbContext.GetContext(this.GetConnectionName());
+        }
+
+        /// <summary>
+        /// 得到SQL语句的上下文
+        /// </summary>
+        /// <returns></returns>
+        public SqlContextItem GetSqlContext()
+        {
+            return SqlContext.GetContext(this.GetConnectionName());
         }
 
         /// <summary>
@@ -75,20 +87,19 @@ namespace MCS.Library.Data.Adapters
 
             Dictionary<string, object> context = new Dictionary<string, object>();
 
-            using (DbContext dbContext = this.GetDbContext())
-            {
-                this.BeforeInnerUpdateInContext(data, dbContext, context);
+            SqlContextItem sqlContext = this.GetSqlContext();
 
-                this.InnerUpdateInContext(data, dbContext, context);
+            this.BeforeInnerUpdateInContext(data, sqlContext, context);
 
-                dbContext.AppendSqlWithSperatorInContext(TSqlBuilder.Instance, "IF @@ROWCOUNT = 0");
+            this.InnerUpdateInContext(data, sqlContext, context);
 
-                dbContext.AppendSqlInContext(TSqlBuilder.Instance, "\nBEGIN\n");
-                this.InnerInsertInContext(data, dbContext, context);
-                dbContext.AppendSqlInContext(TSqlBuilder.Instance, "\nEND\n");
+            sqlContext.AppendSqlWithSperatorInContext(TSqlBuilder.Instance, "IF @@ROWCOUNT = 0");
 
-                this.AfterInnerUpdateInContext(data, dbContext, context);
-            }
+            sqlContext.AppendSqlInContext(TSqlBuilder.Instance, "\nBEGIN\n");
+            this.InnerInsertInContext(data, sqlContext, context);
+            sqlContext.AppendSqlInContext(TSqlBuilder.Instance, "\nEND\n");
+
+            this.AfterInnerUpdateInContext(data, sqlContext, context);
         }
 
         /// <summary>
@@ -124,15 +135,17 @@ namespace MCS.Library.Data.Adapters
         {
             ExceptionHelper.FalseThrow<ArgumentNullException>(data != null, "data");
 
+            SqlContextItem sqlContext = this.GetSqlContext();
+
             using (DbContext dbContext = this.GetDbContext())
             {
                 Dictionary<string, object> context = new Dictionary<string, object>();
 
-                this.BeforeInnerDeleteInContext(data, dbContext, context);
+                this.BeforeInnerDeleteInContext(data, sqlContext, context);
 
-                this.InnerDeleteInContext(data, dbContext, context);
+                this.InnerDeleteInContext(data, sqlContext, context);
 
-                this.AfterInnerDeleteInContext(data, dbContext, context);
+                this.AfterInnerDeleteInContext(data, sqlContext, context);
             }
         }
 
@@ -184,18 +197,17 @@ namespace MCS.Library.Data.Adapters
 
             Dictionary<string, object> context = new Dictionary<string, object>();
 
-            using (DbContext dbContext = this.GetDbContext())
+            SqlContextItem sqlContext = this.GetSqlContext();
+
+            this.BeforeInnerDeleteInContext(builder, sqlContext, context);
+
+            string sql = this.GetDeleteSql(builder, context);
+
+            if (sql.IsNotEmpty())
             {
-                this.BeforeInnerDeleteInContext(builder, dbContext, context);
+                sqlContext.AppendSqlWithSperatorInContext(TSqlBuilder.Instance, sql);
 
-                string sql = this.GetDeleteSql(builder, context);
-
-                if (sql.IsNotEmpty())
-                {
-                    dbContext.AppendSqlWithSperatorInContext(TSqlBuilder.Instance, sql);
-
-                    this.AfterInnerDeleteInContext(builder, context);
-                }
+                this.AfterInnerDeleteInContext(builder, context);
             }
         }
 
@@ -231,9 +243,9 @@ namespace MCS.Library.Data.Adapters
         /// 
         /// </summary>
         /// <param name="builder"></param>
-        /// <param name="dbContext"></param>
+        /// <param name="sqlContext"></param>
         /// <param name="context"></param>
-        protected virtual void BeforeInnerDeleteInContext(WhereSqlClauseBuilder builder, DbContext dbContext, Dictionary<string, object> context)
+        protected virtual void BeforeInnerDeleteInContext(WhereSqlClauseBuilder builder, SqlContextItem sqlContext, Dictionary<string, object> context)
         {
         }
 
@@ -241,9 +253,9 @@ namespace MCS.Library.Data.Adapters
         /// 
         /// </summary>
         /// <param name="data"></param>
-        /// <param name="dbContext"></param>
+        /// <param name="sqlContext"></param>
         /// <param name="context"></param>
-        protected virtual void BeforeInnerDeleteInContext(T data, DbContext dbContext, Dictionary<string, object> context)
+        protected virtual void BeforeInnerDeleteInContext(T data, SqlContextItem sqlContext, Dictionary<string, object> context)
         {
         }
 
@@ -260,9 +272,9 @@ namespace MCS.Library.Data.Adapters
         /// 
         /// </summary>
         /// <param name="data"></param>
-        /// <param name="dbContext"></param>
+        /// <param name="sqlContext"></param>
         /// <param name="context"></param>
-        protected virtual void AfterInnerDeleteInContext(T data, DbContext dbContext, Dictionary<string, object> context)
+        protected virtual void AfterInnerDeleteInContext(T data, SqlContextItem sqlContext, Dictionary<string, object> context)
         {
         }
 
@@ -270,9 +282,9 @@ namespace MCS.Library.Data.Adapters
         /// 
         /// </summary>
         /// <param name="builder"></param>
-        /// <param name="dbContext"></param>
+        /// <param name="sqlContext"></param>
         /// <param name="context"></param>
-        protected virtual void AfterInnerDeleteInContext(WhereSqlClauseBuilder builder, DbContext dbContext, Dictionary<string, object> context)
+        protected virtual void AfterInnerDeleteInContext(WhereSqlClauseBuilder builder, SqlContextItem sqlContext, Dictionary<string, object> context)
         {
         }
 
@@ -314,9 +326,9 @@ namespace MCS.Library.Data.Adapters
         /// 
         /// </summary>
         /// <param name="data"></param>
-        /// <param name="dbContext"></param>
+        /// <param name="sqlContext"></param>
         /// <param name="context"></param>
-        protected virtual void BeforeInnerUpdateInContext(T data, DbContext dbContext, Dictionary<string, object> context)
+        protected virtual void BeforeInnerUpdateInContext(T data, SqlContextItem sqlContext, Dictionary<string, object> context)
         {
         }
 
@@ -333,9 +345,9 @@ namespace MCS.Library.Data.Adapters
         /// 
         /// </summary>
         /// <param name="data"></param>
-        /// <param name="dbContext"></param>
+        /// <param name="sqlContext"></param>
         /// <param name="context"></param>
-        protected virtual void AfterInnerUpdateInContext(T data, DbContext dbContext, Dictionary<string, object> context)
+        protected virtual void AfterInnerUpdateInContext(T data, SqlContextItem sqlContext, Dictionary<string, object> context)
         {
         }
 
@@ -362,16 +374,16 @@ namespace MCS.Library.Data.Adapters
         /// 
         /// </summary>
         /// <param name="data"></param>
-        /// <param name="dbContext"></param>
+        /// <param name="sqlContext"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        protected virtual string InnerDeleteInContext(T data, DbContext dbContext, Dictionary<string, object> context)
+        protected virtual string InnerDeleteInContext(T data, SqlContextItem sqlContext, Dictionary<string, object> context)
         {
             ORMappingItemCollection mappings = GetMappingInfo(context);
 
             string sql = this.GetDeleteSql(data, mappings, context);
 
-            dbContext.AppendSqlWithSperatorInContext(TSqlBuilder.Instance, sql);
+            sqlContext.AppendSqlWithSperatorInContext(TSqlBuilder.Instance, sql);
 
             return sql;
         }
@@ -418,16 +430,16 @@ namespace MCS.Library.Data.Adapters
         /// 
         /// </summary>
         /// <param name="data"></param>
-        /// <param name="dbContext"></param>
+        /// <param name="sqlContext"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        protected virtual string InnerUpdateInContext(T data, DbContext dbContext, Dictionary<string, object> context)
+        protected virtual string InnerUpdateInContext(T data, SqlContextItem sqlContext, Dictionary<string, object> context)
         {
             ORMappingItemCollection mappings = GetMappingInfo(context);
 
             string sql = this.GetUpdateSql(data, mappings, context);
 
-            dbContext.AppendSqlInContext(TSqlBuilder.Instance, sql);
+            sqlContext.AppendSqlInContext(TSqlBuilder.Instance, sql);
 
             return sql;
         }
@@ -436,16 +448,16 @@ namespace MCS.Library.Data.Adapters
         /// 
         /// </summary>
         /// <param name="data"></param>
-        /// <param name="dbContext"></param>
+        /// <param name="sqlContext"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        protected virtual string InnerInsertInContext(T data, DbContext dbContext, Dictionary<string, object> context)
+        protected virtual string InnerInsertInContext(T data, SqlContextItem sqlContext, Dictionary<string, object> context)
         {
             ORMappingItemCollection mappings = GetMappingInfo(context);
 
             string sql = this.GetInsertSql(data, mappings, context);
 
-            dbContext.AppendSqlInContext(TSqlBuilder.Instance, sql);
+            sqlContext.AppendSqlInContext(TSqlBuilder.Instance, sql);
 
             return sql;
         }

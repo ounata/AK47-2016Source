@@ -7,7 +7,6 @@ namespace PPTS.WebAPI.Customer
     {
         protected void Application_Start()
         {
-            MapperConfiguration.Configure();
             GlobalConfiguration.Configure(WebApiConfig.Register);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             GlobalConfiguration.Configuration.Formatters.XmlFormatter.SupportedMediaTypes.Clear();

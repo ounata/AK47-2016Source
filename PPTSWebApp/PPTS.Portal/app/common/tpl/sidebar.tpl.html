@@ -1,1 +1,373 @@
-﻿
+﻿<script>
+    try { ace.settings.check('sidebar', 'fixed') } catch (e) { }
+</script>
+<!-- #开始：网站主体内容区域.左侧区域.顶部快捷按钮 -->
+<div class="sidebar-shortcuts" id="sidebar-shortcuts">
+    <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
+        <button class="btn btn-success">
+            <i class="ace-icon fa fa-signal"></i>
+        </button>
+        <button class="btn btn-info">
+            <i class="ace-icon fa fa-pencil"></i>
+        </button>
+        <button class="btn btn-warning">
+            <i class="ace-icon fa fa-users"></i>
+        </button>
+        <button class="btn btn-danger">
+            <i class="ace-icon fa fa-cogs"></i>
+        </button>
+    </div>
+    <div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
+        <span class="btn btn-success"></span>
+        <span class="btn btn-info"></span>
+        <span class="btn btn-warning"></span>
+        <span class="btn btn-danger"></span>
+    </div>
+</div>
+<!-- /结束：网站主体内容区域.左侧区域.顶部快捷按钮 -->
+<!-- #开始：网站主体内容区域.左侧区域.主菜单 -->
+<ul class="nav nav-list">
+    <!--首页-->
+    <li ui-sref-active="active">
+        <a ui-sref="ppts.dashboard" ng-click="vm.reset()">
+            <i class="menu-icon fa fa-home"></i>
+            <span class="menu-text">首页 </span>
+        </a>
+        <b class="arrow"></b>
+    </li>
+    <!--审批管理-->
+    <li ui-sref-active="active">
+        <a ui-sref="#" ng-click="vm.reset()">
+            <i class="menu-icon fa fa-check-square-o"></i>
+            <span class="menu-text">审批管理 </span>
+        </a>
+        <b class="arrow"></b>
+    </li>
+    <!--客户管理-->
+    <li ui-sref-active="active" class="hsub" ng-class="{'open':vm.showSubMenu('customer')}">
+        <a href="#" class="dropdown-toggle" ng-click="vm.toggle('customer')">
+            <i class="menu-icon fa fa-user"></i>
+            <span class="menu-text">客户管理 </span>
+            <b class="arrow fa fa-angle-{{vm.showSubMenu('customer')?'left':'down'}}"></b>
+        </a>
+        <b class="arrow"></b>
+        <ul class="submenu" style="display:{{vm.showSubMenu('customer')?'block':'none'}}">
+            <li ng-class="{'active': $state.includes('ppts.customer')}">
+                <a ui-sref="ppts.customer">
+                    <i class="menu-icon fa fa-caret-right"></i>潜客管理
+                </a>
+                <b class="arrow"></b>
+            </li>
+            <li ng-class="{'active': $state.includes('ppts.market')}">
+                <a ui-sref="ppts.market">
+                    <i class="menu-icon fa fa-caret-right"></i>市场资源
+                </a>
+                <b class="arrow"></b>
+            </li>
+            <li ng-class="{'active': $state.includes('ppts.follow')}">
+                <a ui-sref="ppts.follow">
+                    <i class="menu-icon fa fa-caret-right"></i>跟进管理
+                </a>
+                <b class="arrow"></b>
+            </li>
+            <li ng-class="{'active': $state.includes('ppts.confirmdoor')}">
+                <a ui-sref="ppts.confirmdoor">
+                    <i class="menu-icon fa fa-caret-right"></i>上门管理
+                </a>
+                <b class="arrow"></b>
+            </li>
+            <li ng-class="{'active': $state.includes('ppts.student')}">
+                <a ui-sref="ppts.student">
+                    <i class="menu-icon fa fa-caret-right"></i>学员管理
+                </a>
+                <b class="arrow"></b>
+            </li>
+            <li ng-class="{'active': $state.includes('ppts.returnvisit')}">
+                <a ui-sref="ppts.returnvisit">
+                    <i class="menu-icon fa fa-caret-right"></i>回访记录
+                </a>
+                <b class="arrow"></b>
+            </li>
+            <li ng-class="{'active': $state.includes('ppts.score')}">
+                <a ui-sref="ppts.score">
+                    <i class="menu-icon fa fa-caret-right"></i>成绩管理
+                </a>
+                <b class="arrow"></b>
+            </li>
+            <li ng-class="{'active': $state.includes('ppts.feedback')}">
+                <a ui-sref="ppts.feedback">
+                    <i class="menu-icon fa fa-caret-right"></i>客户反馈
+                </a>
+                <b class="arrow"></b>
+            </li>
+            <li ng-class="{'active': $state.includes('ppts.weeklyfeedback')}">
+                <a ui-sref="ppts.weeklyfeedback">
+                    <i class="menu-icon fa fa-caret-right"></i>周反馈
+                </a>
+                <b class="arrow"></b>
+            </li>
+            <li ng-class="{'active': $state.includes('ppts.parentsmeeting')}">
+                <a ui-sref="ppts.parentsmeeting">
+                    <i class="menu-icon fa fa-caret-right"></i>学情会
+                </a>
+                <b class="arrow"></b>
+            </li>
+        </ul>
+    </li>
+    <!--缴费管理-->
+    <li ui-sref-active="active" class="hsub" ng-class="{'open':vm.showSubMenu('payment')}">
+        <a href="#" class="dropdown-toggle" ng-click="vm.toggle('payment')">
+            <i class="menu-icon fa fa-credit-card"></i>
+            <span class="menu-text">缴费管理 </span>
+            <b class="arrow fa fa-angle-{{vm.showSubMenu('payment')?'left':'down'}}"></b>
+        </a>
+        <b class="arrow"></b>
+        <ul class="submenu" style="display:{{vm.showSubMenu('payment')?'block':'none'}}">
+            <li ng-class="{'active': $state.includes('ppts.receipt')}">
+                <a ui-sref="ppts.receipt">
+                    <i class="menu-icon fa fa-caret-right"></i>缴费单管理
+                </a>
+                <b class="arrow"></b>
+            </li>
+            <li ng-class="{'active': $state.includes('ppts.pay')}">
+                <a ui-sref="ppts.pay">
+                    <i class="menu-icon fa fa-caret-right"></i>付费管理
+                </a>
+                <b class="arrow"></b>
+            </li>
+            <li ng-class="{'active': $state.includes('ppts.refund')}">
+                <a ui-sref="ppts.refund">
+                    <i class="menu-icon fa fa-caret-right"></i>退费管理
+                </a>
+                <b class="arrow"></b>
+            </li>
+            <li ng-class="{'active': $state.includes('ppts.assetexchange')}">
+                <a ui-sref="ppts.assetexchange">
+                    <i class="menu-icon fa fa-caret-right"></i>资产兑换
+                </a>
+                <b class="arrow"></b>
+            </li>
+            <li ng-class="{'active': $state.includes('ppts.unionpay')}">
+                <a ui-sref="ppts.unionpay">
+                    <i class="menu-icon fa fa-caret-right"></i>银联对接
+                </a>
+                <b class="arrow"></b>
+            </li>
+        </ul>
+    </li>
+    <!--订购管理-->
+    <li ui-sref-active="active" class="hsub" ng-class="{'open':vm.showSubMenu('order')}">
+        <a href="#" class="dropdown-toggle" ng-click="vm.toggle('order')">
+            <i class="menu-icon fa fa-shopping-bag"></i>
+            <span class="menu-text">订购管理 </span>
+            <b class="arrow fa fa-angle-{{vm.showSubMenu('order')?'left':'down'}}"></b>
+        </a>
+        <b class="arrow"></b>
+        <ul class="submenu" style="display:{{vm.showSubMenu('order')?'block':'none'}}">
+            <li ng-class="{'active': $state.includes('ppts.purchase')}">
+                <a ui-sref="ppts.purchase">
+                    <i class="menu-icon fa fa-caret-right"></i>订购列表
+                </a>
+                <b class="arrow"></b>
+            </li>
+            <li ng-class="{'active': $state.includes('ppts.unsubscribe')}">
+                <a ui-sref="ppts.unsubscribe">
+                    <i class="menu-icon fa fa-caret-right"></i>退订列表
+                </a>
+                <b class="arrow"></b>
+            </li>
+            <li ng-class="{'active': $state.includes('ppts.classhour')}">
+                <a ui-sref="ppts.classhour">
+                    <i class="menu-icon fa fa-caret-right"></i>剩余课时
+                </a>
+                <b class="arrow"></b>
+            </li>
+        </ul>
+    </li>
+    <!--排课管理-->
+    <li ui-sref-active="active" class="hsub" ng-class="{'open':vm.showSubMenu('schedule')}">
+        <a href="#" class="dropdown-toggle" ng-click="vm.toggle('schedule')">
+            <i class="menu-icon fa fa-calendar"></i>
+            <span class="menu-text">排课管理 </span>
+            <b class="arrow fa fa-angle-{{vm.showSubMenu('schedule')?'left':'down'}}"></b>
+        </a>
+        <b class="arrow"></b>
+        <ul class="submenu" style="display:{{vm.showSubMenu('schedule')?'block':'none'}}">
+            <li ng-class="{'active': $state.includes('ppts.studentcourse')}">
+                <a ui-sref="ppts.studentcourse">
+                    <i class="menu-icon fa fa-caret-right"></i>学员课表
+                </a>
+                <b class="arrow"></b>
+            </li>
+            <li ng-class="{'active': $state.includes('ppts.teachercourse')}">
+                <a ui-sref="ppts.teachercourse">
+                    <i class="menu-icon fa fa-caret-right"></i>教师课表
+                </a>
+                <b class="arrow"></b>
+            </li>
+            <li ng-class="{'active': $state.includes('ppts.schedule')}">
+                <a ui-sref="ppts.schedule">
+                    <i class="menu-icon fa fa-caret-right"></i>学员排课
+                </a>
+                <b class="arrow"></b>
+            </li>
+            <li ng-class="{'active': $state.includes('ppts.teacherassignment')}">
+                <a ui-sref="ppts.teacherassignment">
+                    <i class="menu-icon fa fa-caret-right"></i>教师排课
+                </a>
+                <b class="arrow"></b>
+            </li>
+            <li ng-class="{'active': $state.includes('ppts.settinglist')}">
+                <a ui-sref="ppts.settinglist">
+                    <i class="menu-icon fa fa-caret-right"></i>排课条件
+                </a>
+                <b class="arrow"></b>
+            </li>
+            <li ng-class="{'active': $state.includes('ppts.classgroupcourse')}">
+                <a ui-sref="ppts.classgroupcourse">
+                    <i class="menu-icon fa fa-caret-right"></i>班组课表
+                </a>
+                <b class="arrow"></b>
+            </li>
+            <li ng-class="{'active': $state.includes('ppts.confirmcourse')}">
+                <a ui-sref="ppts.confirmcourse">
+                    <i class="menu-icon fa fa-caret-right"></i>确认课时
+                </a>
+                <b class="arrow"></b>
+            </li>
+            <li ng-class="{'active': $state.includes('ppts.classgroup')}">
+                <a ui-sref="ppts.classgroup">
+                    <i class="menu-icon fa fa-caret-right"></i>班级管理
+                </a>
+                <b class="arrow"></b>
+            </li>
+        </ul>
+    </li>
+    <!--产品管理-->
+    <li ui-sref-active="active" class="hsub" ng-class="{'open':vm.showSubMenu('product')}">
+        <a href="#" class="dropdown-toggle" ng-click="vm.toggle('product')">
+            <i class="menu-icon fa fa-suitcase"></i>
+            <span class="menu-text">产品管理 </span>
+            <b class="arrow fa fa-angle-{{vm.showSubMenu('product')?'left':'down'}}"></b>
+        </a>
+        <b class="arrow"></b>
+        <ul class="submenu" style="display:{{vm.showSubMenu('product')?'block':'none'}}">
+            <li ng-class="{'active': $state.includes('ppts.product')}">
+                <a ui-sref="ppts.product">
+                    <i class="menu-icon fa fa-caret-right"></i>产品列表
+                </a>
+                <b class="arrow"></b>
+            </li>
+            <li ng-class="{'active': $state.includes('ppts.productcategory')}">
+                <a ui-sref="ppts.productcategory">
+                    <i class="menu-icon fa fa-caret-right"></i>产品类别
+                </a>
+                <b class="arrow"></b>
+            </li>
+        </ul>
+    </li>
+    <!--基础数据-->
+    <li ui-sref-active="active" class="hsub" ng-class="{'open':vm.showSubMenu('infra')}">
+        <a href="#" class="dropdown-toggle" ng-click="vm.toggle('infra')">
+            <i class="menu-icon fa fa-gear"></i>
+            <span class="menu-text">基础数据 </span>
+            <b class="arrow fa fa-angle-{{vm.showSubMenu('infra')?'left':'down'}}"></b>
+        </a>
+        <b class="arrow"></b>
+        <ul class="submenu" style="display:{{vm.showSubMenu('infra')?'block':'none'}}">
+            <li ng-class="{'active': $state.includes('ppts.dictionary')}">
+                <a ui-sref="ppts.dictionary">
+                    <i class="menu-icon fa fa-caret-right"></i>字典管理
+                </a>
+                <b class="arrow"></b>
+            </li>
+            <li ng-class="{'active': $state.includes('ppts.customerdiscount')}">
+                <a ui-sref="ppts.customerdiscount">
+                    <i class="menu-icon fa fa-caret-right"></i>拓路折扣
+                </a>
+                <b class="arrow"></b>
+            </li>
+            <li ng-class="{'active': $state.includes('ppts.noncustomerdiscount')}">
+                <a ui-sref="ppts.noncustomerdiscount">
+                    <i class="menu-icon fa fa-caret-right"></i>拓路折扣B
+                </a>
+                <b class="arrow"></b>
+            </li>
+            <li ng-class="{'active': $state.includes('ppts.servicefee')}">
+                <a ui-sref="ppts.servicefee">
+                    <i class="menu-icon fa fa-caret-right"></i>服务费管理
+                </a>
+                <b class="arrow"></b>
+            </li>
+            <li ng-class="{'active': $state.includes('ppts.extragift')}">
+                <a ui-sref="ppts.extragift">
+                    <i class="menu-icon fa fa-caret-right"></i>买赠表管理
+                </a>
+                <b class="arrow"></b>
+            </li>
+            <li ng-class="{'active': $state.includes('ppts.regulation')}">
+                <a ui-sref="ppts.regulation">
+                    <i class="menu-icon fa fa-caret-right"></i>规则管理
+                </a>
+                <b class="arrow"></b>
+            </li>
+        </ul>
+    </li>
+    <!--客服中心-->
+    <li ui-sref-active="active" class="hsub" ng-class="{'open':vm.showSubMenu('custcenter')}">
+        <a href="#" class="dropdown-toggle" ng-click="vm.toggle('custcenter')">
+            <i class="menu-icon fa fa-microphone"></i>
+            <span class="menu-text">客服中心 </span>
+            <b class="arrow fa fa-angle-{{vm.showSubMenu('custcenter')?'left':'down'}}"></b>
+        </a>
+        <b class="arrow"></b>
+        <ul class="submenu" style="display:{{vm.showSubMenu('custcenter')?'block':'none'}}">
+            <li ng-class="{'active': $state.includes('ppts.custservice')}">
+                <a ui-sref="ppts.custservice">
+                    <i class="menu-icon fa fa-caret-right"></i>客户服务
+                </a>
+                <b class="arrow"></b>
+            </li>
+        </ul>
+    </li>
+    <!--合同管理-->
+    <li ui-sref-active="active" class="hsub" ng-class="{'open':vm.showSubMenu('contract')}">
+        <a href="#" class="dropdown-toggle" ng-click="vm.toggle('contract')">
+            <i class="menu-icon fa fa-file-text"></i>
+            <span class="menu-text">合同管理 </span>
+            <b class="arrow fa fa-angle-{{vm.showSubMenu('contract')?'left':'down'}}"></b>
+        </a>
+        <b class="arrow"></b>
+        <ul class="submenu" style="display:{{vm.showSubMenu('contract')?'block':'none'}}">
+            <li ng-class="{'active': $state.includes('ppts.contractlist')}">
+                <a ui-sref="ppts.custservice">
+                    <i class="menu-icon fa fa-caret-right"></i>合同列表
+                </a>
+                <b class="arrow"></b>
+            </li>
+            <li ng-class="{'active': $state.includes('ppts.paylist')}">
+                <a ui-sref="ppts.custservice">
+                    <i class="menu-icon fa fa-caret-right"></i>收款列表
+                </a>
+                <b class="arrow"></b>
+            </li>
+            <li ng-class="{'active': $state.includes('ppts.refundlist')}">
+                <a ui-sref="ppts.custservice">
+                    <i class="menu-icon fa fa-caret-right"></i>退款列表
+                </a>
+                <b class="arrow"></b>
+            </li>
+        </ul>
+    </li>
+</ul>
+<!-- /结束：网站主体内容区域.左侧区域.主菜单 -->
+<!-- #开始：网站主体内容区域.左侧区域.最小化左侧区域按钮 -->
+<div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+    <i class="ace-icon fa fa-angle-double-{{vm.isMinimized?'right':'left'}}" ng-click="vm.minimizedSidebar()"></i>
+</div>
+<!-- /结束：网站主体内容区域.左侧区域.最小化左侧区域按钮 -->
+<script>
+    try {
+        ace.settings.check('sidebar', 'collapsed')
+    } catch (e) { }
+</script>

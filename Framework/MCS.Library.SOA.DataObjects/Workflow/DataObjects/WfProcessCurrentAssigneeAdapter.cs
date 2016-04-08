@@ -19,11 +19,10 @@ namespace MCS.Library.SOA.DataObjects.Workflow
 
         public WfProcessCurrentAssigneeCollection Load(string processID)
         {
-            return LoadByInBuilder(b =>
-            {
-                b.DataField = "PROCESS_ID";
-                b.AppendItem(processID);
-            });
+            return LoadByInBuilder(new InLoadingCondition(
+                b => b.AppendItem(processID),
+                "PROCESS_ID")
+            );
         }
 
         public void Update(string processID, WfProcessCurrentAssigneeCollection assignees)

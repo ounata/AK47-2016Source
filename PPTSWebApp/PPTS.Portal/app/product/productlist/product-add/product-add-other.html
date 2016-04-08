@@ -1,0 +1,166 @@
+<!--其他 开始-->
+<form class="form-horizontal">
+    <div class="widget-box">
+        <div class="widget-header">
+            <h4>{{tag}}其他产品
+                <small>
+                    <i class="icon-double-angle-right"></i>
+                    (<span class="required"> * </span>表示必填字段)
+                </small>
+            </h4>
+        </div>
+        <div class="widget-body">
+            <div class="widget-main no-padding">
+                <div class="clearfix form-actions mcs-form-actions">
+                    <div class="col-md-offset-3 col-md-9">
+                        <button class="btn mcs-width-130 ng-isolate-scope btn-success" ng-click="click()" type="save" click="vm.save()"><i class="ace-icon fa fa-save"></i><span>保 存</span></button>
+                        <button class="btn mcs-width-130 ng-isolate-scope btn-success" ng-click="click()" type="save" click="vm.save()"><i class="ace-icon fa fa-save"></i><span>提 交</span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="page-header">
+            <span>基础信息</span>
+        </div>
+
+
+        <div class="form-group">
+            <div class="col-sm-6">
+                <mcs-label required="true" text="产品名称：" css="col-sm-3" />
+                <div class="col-sm-9">
+                    <mcs-input placeholder="产品名称" model="vm.product.other.productname" css="col-xs-10 col-sm-10" />
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <mcs-label required="true" text="课程年份：" css="col-sm-3" />
+                <div class="col-sm-9">
+                    <mcs-input placeholder="课程年份" model="vm.product.other.courseyear" css="col-xs-10 col-sm-10" />
+                </div>
+            </div>
+        </div>
+        <div class="space-4"></div>
+
+
+        <div class="form-group">
+            <div class="col-sm-6">
+                <mcs-label required="true" text="年级：" css="col-sm-3" />
+                <div class="col-sm-9">
+                    <mcs-input placeholder="年级" model="vm.product.other.grade" css="col-xs-10 col-sm-10" />
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <mcs-label required="true" text="科目：" css="col-sm-3" />
+                <div class="col-sm-9">
+                    <mcs-input placeholder="科目" model="vm.product.other.subject" css="col-xs-10 col-sm-10" />
+                </div>
+            </div>
+        </div>
+        <div class="space-4"></div>
+
+        <div class="form-group">
+            <div class="col-sm-6">
+                <mcs-label required="true" text="产品简介：" css="col-sm-3" />
+                <div class="col-sm-9">
+                    <mcs-input placeholder="产品简介" model="vm.product.other.description" css="col-xs-10 col-sm-10" />
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <mcs-label required="true" text="产品颗粒度：" css="col-sm-3" />
+                <div class="col-sm-9">
+                    <mcs-input placeholder="产品颗粒度：" model="vm.product.other.granularity" css="col-xs-10 col-sm-10" />
+                </div>
+            </div>
+        </div>
+        <div class="space-4"></div>
+
+
+        <div class="form-group">
+            <div class="col-sm-6">
+                <mcs-label required="true" text="总课次：" css="col-sm-3" />
+                <div class="col-sm-9">
+                    <mcs-input placeholder="总课次" model="vm.product.other.totalcoursecount" css="col-xs-10 col-sm-10" />
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <mcs-label required="true" text="单价：" css="col-sm-3" />
+                <div class="col-sm-9">
+                    <mcs-input type="number" min="0" model="vm.product.other.price" css="col-xs-10 col-sm-10" />
+                </div>
+            </div>
+        </div>
+        <div class="space-4"></div>
+
+
+        <div class="form-group">
+            <div class="col-sm-6">
+                <mcs-label required="true" text="满班人数：" css="col-sm-3" />
+                <div class="col-sm-9">
+                    <mcs-input placeholder="满班人数" model="vm.product.other.totalfullcount" css="col-xs-10 col-sm-10" />
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <mcs-label required="true" text="产品启售时间：" css="col-sm-3" />
+                <div class="col-sm-9">
+                    <mcs-input placeholder="满班人数" model="vm.product.other.selltime" css="col-xs-10 col-sm-10" />
+                </div>
+            </div>
+        </div>
+        <div class="space-4"></div>
+
+
+
+        <div class="form-group">
+            <div class="col-sm-6">
+                <mcs-label required="true" text="产品止售时间：" css="col-sm-3" />
+                <div class="col-sm-9">
+                    <mcs-input placeholder="产品止售时间" model="vm.product.other.endselltime" css="col-xs-10 col-sm-10" />
+                </div>
+            </div>
+        </div>
+        <div class="space-4"></div>
+
+        <div class="page-header">
+            <span>销售范围</span>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-6">
+                <mcs-label required="true" text="销售分公司：" css="col-sm-3" />
+                <div class="col-sm-9">
+                    <mcs-input placeholder="销售分公司" model="vm.product.other.company" css="col-xs-10 col-sm-10" />
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <mcs-label required="true" text="销售校区：" css="col-sm-3" />
+                <div class="col-sm-9">
+                    <mcs-input placeholder="销售校区" model="vm.product.other.campus" css="col-xs-10 col-sm-10" />
+                </div>
+            </div>
+        </div>
+
+        <div class="space-4"></div>
+
+
+        <div class="page-header">
+            <span>销售范围</span>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-6">
+                <mcs-label required="true" text="是否遵循客户折扣级别：" css="col-sm-3" />
+                <div class="col-sm-9">
+                    <div class="radio">
+                        <mcs-radiobutton-group category="selectedCustomerDiscountLevel" data="vm.dictionaries.customerdiscountlevel" click="vm.select(category, key, eventargs)" defaultValue="G1" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="space-4"></div>
+
+
+
+    </div>
+</form>
+<!--其他 结束-->
+

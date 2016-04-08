@@ -23,11 +23,10 @@ namespace MCS.Library.SOA.DataObjects
         {
             processID.NullCheck("processID");
 
-            SysTaskProcessCollection processes = this.LoadByInBuilder(builder =>
-            {
-                builder.DataField = "ID";
-                builder.AppendItem(processID);
-            });
+            SysTaskProcessCollection processes = this.LoadByInBuilder(new InLoadingCondition(
+                builder => builder.AppendItem(processID),
+                "ID")
+            );
 
             (processes.Count > 0).FalseThrow("不能找到ID为{0}的任务流程", processID);
 
@@ -59,15 +58,11 @@ namespace MCS.Library.SOA.DataObjects
         {
             ownerActivityID.NullCheck("ownerActivityID");
 
-            return this.LoadByInBuilder(inBuilder =>
-                        {
-                            inBuilder.DataField = "OWNER_ACTIVITY_ID";
-                            inBuilder.AppendItem(ownerActivityID);
-                        },
-                        orderBuilder =>
-                        {
-                            orderBuilder.AppendItem("SEQUENCE", FieldSortDirection.Ascending);
-                        });
+            return this.LoadByInBuilder(new InLoadingCondition(
+                inBuilder => inBuilder.AppendItem(ownerActivityID),
+                orderBuilder => orderBuilder.AppendItem("SEQUENCE", FieldSortDirection.Ascending),
+                "OWNER_ACTIVITY_ID"
+            ));
         }
 
         protected override void AfterLoad(SysTaskProcessCollection data)

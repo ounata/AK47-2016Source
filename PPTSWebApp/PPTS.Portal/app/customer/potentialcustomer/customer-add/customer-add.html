@@ -1,1 +1,297 @@
-<span>add</span>
+﻿<!-- #开始：位置条 -->
+<div class="breadcrumbs" id="breadcrumbs">
+    <script type="text/javascript">
+        try {
+            ace.settings.check('breadcrumbs', 'fixed');
+        } catch (e) { }
+    </script>
+    <ul class="breadcrumb">
+        <li class="active">
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a ui-sref="index">首页</a>
+        </li>
+        <li>
+            <i class="ace-icon fa fa-pencil-square-o"></i> 潜客管理
+        </li>
+        <li>
+            新增潜客
+        </li>
+    </ul>
+</div>
+<!-- /结束：位置条 -->
+<div class="page-content">
+    <!-- #开始：添加潜客Form -->
+    <div class="page-content-area">
+        <div class="row">
+            <div class="col-sm-12">
+                <form class="form-horizontal" role="form">
+                    <div class="widget-box">
+                        <div class="widget-header">
+                            <h4>
+                                新增潜客
+                                <small>
+                                    <i class="icon-double-angle-right"></i>
+                                    (<span class="required"> * </span>表示必填字段)
+                                </small>
+                            </h4>
+                        </div>
+                        <div class="widget-body">
+                            <div class="widget-main no-padding">
+                                <form class="form-horizontal" role="form">
+                                    <div class="clearfix form-actions mcs-form-actions">
+                                        <div class="col-md-offset-3 col-md-9">
+                                            <mcs-button type="save" click="vm.save()"></mcs-button>
+                                            <mcs-button type="add" text="添加已有家长" click="vm.load()"></mcs-button>
+                                            <mcs-button type="cancel" text="清空家长信息" click="vm.reset()"></mcs-button>
+                                            <mcs-button type="cancel" text="返回潜客列表" click="$state.go('ppts.customer')"></mcs-button>
+                                        </div>
+                                    </div>
+                                    <div class="page-header">
+                                        <span>家长信息</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-6">
+                                            <mcs-label required="true" text="家长姓名" css="col-sm-3" />
+                                            <div class="col-sm-9">
+                                                <mcs-input model="vm.parent.parentName" css="col-xs-10 col-sm-9" />
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="col-sm-3 mcs-padding-0">
+                                                <ui-select ng-model="vm.parent.idType" theme="selectize">
+                                                    <ui-select-match placeholder="请选择">{{$select.selected.value}}</ui-select-match>
+                                                    <ui-select-choices repeat="item.key as item in vm.parent.idTypes | props: {value: $select.search}">
+                                                        <span ng-bind-html="item.value | highlight: $select.search"></span>
+                                                    </ui-select-choices>
+                                                </ui-select>
+                                            </div>
+                                            <div class="col-sm-9">
+                                                <mcs-input model="vm.parent.idNumber" css="col-xs-10 col-sm-9" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-6">
+                                            <mcs-label text="家长性别" css="col-sm-3" />
+                                            <div class="col-sm-9">
+                                                <ppts-radiobutton-group category="gender" model="vm.parent.gender" />
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <mcs-label text="家庭年总收入" css="col-sm-3" />
+                                            <div class="col-sm-9">
+                                                <ui-select ng-model="vm.parent.income" theme="selectize" class="col-xs-10 col-sm-9">
+                                                    <ui-select-match placeholder="请选择">{{$select.selected.value}}</ui-select-match>
+                                                    <ui-select-choices repeat="item.key as item in vm.parent.incomes | props: {value: $select.search}">
+                                                        <span ng-bind-html="item.value | highlight: $select.search"></span>
+                                                    </ui-select-choices>
+                                                </ui-select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-6">
+                                            <mcs-label text="亲属关系" css="col-sm-3" />
+                                            <div class="col-sm-9">
+                                                <table>
+                                                    <tr>
+                                                        <td>
+                                                            <div style="margin-right:5px;"><input class="mcs-readonly-input" readonly="readonly" ng-model="vm.customer.customerName" />是<input class="mcs-readonly-input" readonly="readonly" ng-model="vm.parent.parentName" />的</div>
+                                                        </td>
+                                                        <td style="width:39%;">
+                                                            <ui-select ng-model="vm.customerRole" theme="selectize" on-select="selectCustomerRole($item, $model)" ng-disabled="!vm.customer.gender">
+                                                                <ui-select-match placeholder="请选择">{{$select.selected.value}}</ui-select-match>
+                                                                <ui-select-choices repeat="item.key as item in vm.customerRoles | props: {value: $select.search}">
+                                                                    <span ng-bind-html="item.value | highlight: $select.search"></span>
+                                                                </ui-select-choices>
+                                                            </ui-select>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <div style="margin-right:5px;"><input class="mcs-readonly-input" readonly="readonly" ng-model="vm.parent.parentName" />是<input class="mcs-readonly-input" readonly="readonly" ng-model="vm.customer.customerName" />的</div>
+                                                        </td>
+                                                        <td>
+                                                            <ui-select ng-model="vm.parentRole" theme="selectize" ng-disabled="!(vm.parent.gender && vm.customer.gender && vm.customerRole && vm.parentRoles.length > 1)">
+                                                                <ui-select-match placeholder="请选择">{{$select.selected.value}}</ui-select-match>
+                                                                <ui-select-choices repeat="item.key as item in vm.parentRoles | props: {value: $select.search}">
+                                                                    <span ng-bind-html="item.value | highlight: $select.search"></span>
+                                                                </ui-select-choices>
+                                                            </ui-select>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <mcs-label text="现住址" css="col-sm-3" />
+                                            <div class="col-sm-9"></div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-6">
+                                            <mcs-label text="主要联系电话" css="col-sm-3" />
+                                            <div class="col-sm-9">
+                                                <mcs-input model="vm.parent.primaryPhone" css="col-xs-10 col-sm-9" />
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <mcs-label text="辅助联系电话" css="col-sm-3" />
+                                            <div class="col-sm-9">
+                                                <mcs-input model="vm.parent.secondaryPhone" css="col-xs-10 col-sm-9" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-6">
+                                            <mcs-label text="家长Email" css="col-sm-3" />
+                                            <div class="col-sm-9">
+                                                <mcs-input model="vm.parent.email" css="col-xs-10 col-sm-9" />
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6"></div>
+                                    </div>
+                                    <div class="page-header">
+                                        <span>学员信息</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-6">
+                                            <mcs-label required="true" text="学员姓名" css="col-sm-3" />
+                                            <div class="col-sm-9">
+                                                <mcs-input model="vm.customer.customerName" css="col-xs-10 col-sm-9" />
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <mcs-label text="入学大年级" css="col-sm-3" />
+                                            <div class="col-sm-9 mcs-padding-0">
+                                                <ppts-select category="grade" model="vm.customer.entranceGrade" class="col-xs-10 col-sm-9" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-6">
+                                            <mcs-label text="学员性别" css="col-sm-3" />
+                                            <div class="col-sm-9">
+                                                <ppts-radiobutton-group category="gender" model="vm.customer.gender" />
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <mcs-label text="文理科" css="col-sm-3" />
+                                            <div class="col-sm-9">
+                                                <ppts-radiobutton-group category="subjectType" model="vm.customer.subjectType" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-sm-6">
+                                            <mcs-label required="true" text="接触方式" css="col-sm-3" />
+                                            <div class="col-sm-9 mcs-padding-0">
+                                                <ppts-select category="contactType" model="vm.customer.contactType" class="col-xs-10 col-sm-9" />
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <mcs-label text="当前所在学校" css="col-sm-3" />
+                                            <div class="col-sm-9">
+                                                <mcs-input model="vm.customer.schoolName" css="col-xs-10 col-sm-9" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-6">
+                                            <mcs-label required="true" text="信息来源" css="col-sm-3" />
+                                            <div class="col-sm-9">
+                                                <div class="warning">注意：信息来源保存后无法修改，请正确填写</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <mcs-label text="学员出生日期" css="col-sm-3" />
+                                            <div class="col-sm-9">
+                                                <mcs-input model="vm.customer.birthday" css="col-xs-10 col-sm-9" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-6">
+                                            <mcs-label text="转介绍" css="col-sm-3" />
+                                            <div class="col-sm-9">
+                                                <mcs-input model="vm.customer.referralStaffName" placeholder="员工OA" css="col-xs-10 col-sm-9" />
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="col-sm-3 mcs-padding-0">
+                                                <ppts-select category="idtype" model="vm.customer.idType" />
+                                            </div>
+                                            <div class="col-sm-9">
+                                                <mcs-input model="vm.customer.idNumber" css="col-xs-10 col-sm-9" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-6">
+                                            <mcs-label text="岗位名称" css="col-sm-3" />
+                                            <div class="col-sm-9 mcs-padding-0">
+                                                <ppts-select category="idtype" model="vm.customer.referralStaffJobName" class="col-xs-10 col-sm-9" />
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <mcs-label text="vip客户" css="col-sm-3" />
+                                            <div class="col-sm-9">
+                                                <ppts-radiobutton-group category="vipType" model="vm.customer.vipType" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-6">
+                                            <mcs-label text="转介绍学员编号" css="col-sm-3" />
+                                            <div class="col-sm-5">
+                                                <mcs-input model="vm.customer.referralCustomerCode" ng-blur="vm.getCustomerInfo(vm.customer.referralCustomerCode)" css="col-xs-10 col-sm-9" />
+                                            </div>
+                                            <div class="col-sm-4 mcs-padding-0">
+                                                <mcs-label text="{{vm.customer.referralCustomerName}}" />
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <mcs-label text="vip等级" css="col-sm-3" />
+                                            <div class="col-sm-9 mcs-padding-0">
+                                                <ppts-select category="vipLevel" model="vm.customer.vipLevel" class="col-xs-10 col-sm-9" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-6">
+                                            <mcs-label css="col-sm-3" />
+                                            <div class="col-sm-9">
+                                                <div class="warning">注意：转介绍填写后无法修改，请正确填写</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <mcs-label text="是否复读" css="col-sm-3" />
+                                            <div class="col-sm-9 mcs-padding-0">
+                                                <ppts-radiobutton-group category="studyAgain" model="vm.customer.isStudyAgain" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-6">
+                                            <mcs-label text="主要联系方式" css="col-sm-3" />
+                                            <div class="col-sm-9">
+                                                <mcs-input model="vm.customer.primaryPhone" css="col-xs-10 col-sm-9" />
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <mcs-label text="辅助联系方式" css="col-sm-3" />
+                                            <div class="col-sm-9">
+                                                <mcs-input model="vm.customer.secondaryPhone" css="col-xs-10 col-sm-9" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

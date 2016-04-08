@@ -91,14 +91,14 @@ Global
 		SccNumberOfProjects = 4
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://10.1.56.70:8080/tfs/pptsv2.0
-		SccProjectUniqueName0 = ..\\PPTS.Data.Common\\PPTS.Data.Common.csproj
-		SccProjectName0 = ../PPTS.Data.Common
-		SccLocalPath0 = ..\\PPTS.Data.Common
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = PPTS.Data.Customers.Test.csproj
 		SccLocalPath1 = .
-		SccProjectUniqueName2 = PPTS.Data.Customers.Test.csproj
-		SccLocalPath2 = .
-		SccProjectUniqueName3 = ..\\PPTS.Data.Customers\\PPTS.Data.Customers.csproj
-		SccProjectName3 = ../PPTS.Data.Customers
-		SccLocalPath3 = ..\\PPTS.Data.Customers
+		SccProjectUniqueName2 = ..\\..\\PPTS.Data.Customers\\PPTS.Data.Customers.csproj
+		SccProjectName2 = ../../PPTS.Data.Customers
+		SccLocalPath2 = ..\\..\\PPTS.Data.Customers
+		SccProjectUniqueName3 = ..\\..\\PPTS.Data.Common\\PPTS.Data.Common.csproj
+		SccProjectName3 = ../../PPTS.Data.Common
+		SccLocalPath3 = ..\\..\\PPTS.Data.Common
 	EndGlobalSection
 EndGlobal

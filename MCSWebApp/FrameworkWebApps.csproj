@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="14.0">
   <PropertyGroup>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -39,6 +39,7 @@
     <ProjectItem Include="WfFormTemplate\WfFormTemplate.csproj" />
     <ProjectItem Include="DocServiceHost\DocServiceHost.csproj" />
     <ProjectItem Include="SyncMaterialFileToDocCenterService\SyncMaterialFileToDocCenterService.csproj" />
+    <ProjectItem Include="MCS.Web.Component\MCS.Web.Component.csproj" />
   </ItemGroup>
   <Target Name="BuildOtherProjects">
     <MSBuild Projects="@(ProjectItem)" RebaseOutputs="True" />

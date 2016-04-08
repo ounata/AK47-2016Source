@@ -89,51 +89,90 @@ namespace MCS.Library.Principal
         /// <summary>
         /// 判断当前用户是否属于某一角色
         /// </summary>
-        /// <param name="role">角色的描述(应用的名称1:角色名称11,角色名称12,...;应用名称2:角色名称21,角色名称22,...)</param>
+        /// <param name="roleDesp">角色的描述(应用的名称1:角色名称11,角色名称12,...;应用名称2:角色名称21,角色名称22,...)</param>
         /// <returns>用户是否属于某一角色</returns>
-        public bool IsInRole(string role)
+        public bool IsInRole(string roleDesp)
         {
-            return IsInRole(this.userIdentity.User, role);
+            return IsInRole(this.userIdentity.User, roleDesp);
         }
 
         /// <summary>
         /// 判断某个用户是否属于某一角色
         /// </summary>
         /// <param name="user"></param>
-        /// <param name="role">角色的描述(应用的名称1:角色名称11,角色名称12,...;应用名称2:角色名称21,角色名称22,...)</param>
+        /// <param name="roleDesp">角色的描述(应用的名称1:角色名称11,角色名称12,...;应用名称2:角色名称21,角色名称22,...)</param>
         /// <returns>用户是否属于某一角色</returns>
-        public static bool IsInRole(IUser user, string role)
+        public static bool IsInRole(IUser user, string roleDesp)
         {
-            user.NullCheck("user");
-            role.CheckStringIsNullOrEmpty("role");
+            bool result = false;
 
-            string[] appRoles = role.Split(';');
-
-            for (int i = 0; i < appRoles.Length; i++)
+            if (user != null)
             {
-                string[] oneAppRoles = appRoles[i].Split(':');
+                result = ParseRoleDescription(roleDesp,
+                    (appName, roleName) => user.Roles.ContainsApp(appName) && user.Roles[appName].ContainsKey(roleName));
+            }
 
-                ExceptionHelper.FalseThrow<AuthenticateException>(oneAppRoles.Length == 2, Resource.InvalidAppRoleNameDescription);
+            return result;
+        }
 
-                string appName = oneAppRoles[0].Trim();
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="permissionDesp"></param>
+        /// <returns></returns>
+        public static bool HavePermissions(IUser user, string permissionDesp)
+        {
+            bool result = false;
 
-                string[] roles = oneAppRoles[1].Split(',');
+            if (user != null)
+            {
+                result = ParseRoleDescription(permissionDesp,
+                    (appName, roleName) => user.Permissions.ContainsApp(appName) && user.Permissions[appName].ContainsKey(roleName));
+            }
 
-                for (int j = 0; j < roles.Length; j++)
+            return result;
+        }
+
+        /// <summary>
+        /// 分析某一角色（权限）的描述。将分析出的应用和角色（权限）作为参数传递到回调当中
+        /// </summary>
+        /// <param name="roleDesp">角色的描述(应用的名称1:角色名称11,角色名称12,...;应用名称2:角色名称21,角色名称22,...)</param>
+        /// <param name="roleFunc"></param>
+        /// <returns></returns>
+        public static bool ParseRoleDescription(string roleDesp, Func<string, string, bool> roleFunc)
+        {
+            bool result = false;
+
+            if (roleDesp.IsNotEmpty())
+            {
+                string[] appRoles = roleDesp.Split(';');
+
+                for (int i = 0; i < appRoles.Length; i++)
                 {
-                    string roleName = roles[j].Trim();
+                    string[] oneAppRoles = appRoles[i].Split(':');
 
-                    if (user.Roles.ContainsApp(appName))
+                    ExceptionHelper.FalseThrow<AuthenticateException>(oneAppRoles.Length == 2, Resource.InvalidAppRoleNameDescription);
+
+                    string appName = oneAppRoles[0].Trim();
+
+                    string[] roles = oneAppRoles[1].Split(',');
+
+                    for (int j = 0; j < roles.Length; j++)
                     {
-                        if (user.Roles[appName].ContainsKey(roleName))
-                            return true;
+                        string roleName = roles[j].Trim();
+
+                        result = roleFunc(appName, roleName);
+
+                        if (result)
+                            break;
                     }
                 }
             }
 
-            return false;
+            return result;
         }
-
+  
         /// <summary>
         /// 如果是Web App(有HttpContext的)，则通过设置Cookie失效的方式来清除缓存中的Principal
         /// </summary>
@@ -251,18 +290,19 @@ namespace MCS.Library.Principal
         /// <summary>
         /// 根据当前请求创建Principal
         /// </summary>
+        /// <param name="autoRedirect">是否自动跳转到登录页</param>
         /// <returns></returns>
-        public static IPrincipal CreateByRequest()
+        public static IPrincipal CreateByRequest(bool autoRedirect)
         {
-            return DoAuthentication();
+            return DoAuthentication(autoRedirect);
         }
 
-        private static IPrincipal DoAuthentication()
+        private static IPrincipal DoAuthentication(bool autoRedirect)
         {
             IPrincipal principal = null;
             ITicket ticket;
 
-            string logonName = InternalGetLogOnName(out ticket);
+            string logonName = InternalGetLogOnName(autoRedirect, out ticket);
 
             if (logonName.IsNotEmpty())
             {
@@ -279,7 +319,7 @@ namespace MCS.Library.Principal
             return principal;
         }
 
-        private static string InternalGetLogOnName(out ITicket ticket)
+        private static string InternalGetLogOnName(bool autoRedirect, out ITicket ticket)
         {
             string userID = string.Empty;
             ticket = null;
@@ -296,7 +336,7 @@ namespace MCS.Library.Principal
             }
 
             if (userID.IsNullOrEmpty())
-                userID = GetLogOnName(out ticket);
+                userID = GetLogOnName(autoRedirect, out ticket);
 
             return userID;
         }
@@ -304,12 +344,13 @@ namespace MCS.Library.Principal
         /// <summary>
         /// 进行认证，返回用户名
         /// </summary>
+        /// <param name="autoRedirect"></param>
         /// <param name="ticket"><see cref="ITicket"/> 对象。</param>
         /// <returns>用户名</returns>
-        private static string GetLogOnName(out ITicket ticket)
+        private static string GetLogOnName(bool autoRedirect, out ITicket ticket)
         {
             string userID = string.Empty;
-            ticket = CheckAuthenticatedAndGetTicket();
+            ticket = CheckAuthenticatedAndGetTicket(autoRedirect);
 
             if (ticket != null)
             {
@@ -322,14 +363,14 @@ namespace MCS.Library.Principal
             return userID;
         }
 
-        private static ITicket CheckAuthenticatedAndGetTicket()
+        private static ITicket CheckAuthenticatedAndGetTicket(bool autoRedirect)
         {
             AuthenticateDirElement aDir =
                 AuthenticateDirSettings.GetConfig().AuthenticateDirs.GetMatchedElement<AuthenticateDirElement>();
 
-            bool autoRedirect = (aDir == null || aDir.AutoRedirect);
+            bool needRedirect = autoRedirect && (aDir == null || aDir.AutoRedirect);
 
-            PassportManager.CheckAuthenticated(autoRedirect);
+            PassportManager.CheckAuthenticated(needRedirect);
 
             bool fromCookie = false;
 

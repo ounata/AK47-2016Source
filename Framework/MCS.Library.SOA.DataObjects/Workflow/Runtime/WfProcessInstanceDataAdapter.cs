@@ -8,42 +8,41 @@ using MCS.Library.Data.Adapters;
 
 namespace MCS.Library.SOA.DataObjects.Workflow
 {
-	/// <summary>
-	/// 直接读写流程信息表的访问类
-	/// </summary>
-	public class WfProcessInstanceDataAdapter : UpdatableAndLoadableAdapterBase<WfProcessInstanceData, WfProcessInstanceDataCollection>
-	{
-		public static readonly WfProcessInstanceDataAdapter Instance = new WfProcessInstanceDataAdapter();
+    /// <summary>
+    /// 直接读写流程信息表的访问类
+    /// </summary>
+    public class WfProcessInstanceDataAdapter : UpdatableAndLoadableAdapterBase<WfProcessInstanceData, WfProcessInstanceDataCollection>
+    {
+        public static readonly WfProcessInstanceDataAdapter Instance = new WfProcessInstanceDataAdapter();
 
-		private WfProcessInstanceDataAdapter()
-		{
-		}
+        private WfProcessInstanceDataAdapter()
+        {
+        }
 
-		public WfProcessInstanceDataCollection LoadByResourceID(string resourceID)
-		{
-			resourceID.CheckStringIsNullOrEmpty("resourceID");
+        public WfProcessInstanceDataCollection LoadByResourceID(string resourceID)
+        {
+            resourceID.CheckStringIsNullOrEmpty("resourceID");
 
-			return LoadByInBuilder(b =>
-			{
-				b.DataField = "RESOURCE_ID";
-				b.AppendItem(resourceID);
-			});
-		}
+            return LoadByInBuilder(new InLoadingCondition(
+                b => b.AppendItem(resourceID),
+                "RESOURCE_ID")
+            );
+        }
 
-		protected override ORMappingItemCollection GetMappingInfo(Dictionary<string, object> context)
-		{
-			ORMappingItemCollection result = base.GetMappingInfo(context).Clone();
+        protected override ORMappingItemCollection GetMappingInfo(Dictionary<string, object> context)
+        {
+            ORMappingItemCollection result = base.GetMappingInfo(context).Clone();
 
-			result["DATA"].BindingFlags = ClauseBindingFlags.All;
-			result["UPDATE_TAG"].BindingFlags = ClauseBindingFlags.All;
-			result["CREATE_TIME"].BindingFlags = ClauseBindingFlags.All;
+            result["DATA"].BindingFlags = ClauseBindingFlags.All;
+            result["UPDATE_TAG"].BindingFlags = ClauseBindingFlags.All;
+            result["CREATE_TIME"].BindingFlags = ClauseBindingFlags.All;
 
-			return result;
-		}
+            return result;
+        }
 
         protected override string GetConnectionName()
         {
             return ConnectionDefine.DBConnectionName;
         }
-	}
+    }
 }

@@ -245,6 +245,7 @@
     <Compile Include="Tables\AppElementTableBuilderBase.cs" />
     <Compile Include="Tables\ApplicationTableBuilder.cs" />
     <Compile Include="Tables\AppObjectTableBuilderBase.cs" />
+    <Compile Include="Tables\BuilderHelper.cs" />
     <Compile Include="Tables\OguGroupTableBuilder.cs" />
     <Compile Include="Tables\OguObjectTableBuilder.cs" />
     <Compile Include="Tables\OguOrganizationTableBuilder.cs" />

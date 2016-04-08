@@ -15,13 +15,13 @@ CREATE FUNCTION [SC].[GetSchemaUserXml]
 RETURNS XML
 AS
 BEGIN
-	DECLARE @tempTable TABLE([ID] NVARCHAR(36), Name NVARCHAR(255), DisplayName NVARCHAR(255), LastName NVARCHAR(255), FirstName NVARCHAR(255), CodeName NVARCHAR(64),
+	DECLARE @tempTable TABLE([ID] NVARCHAR(36), SchemaType NVARCHAR(32), Name NVARCHAR(255), DisplayName NVARCHAR(255), LastName NVARCHAR(255), FirstName NVARCHAR(255), CodeName NVARCHAR(64),
 		Mail NVARCHAR(64), WP NVARCHAR(64), MP NVARCHAR(64), [Description] NVARCHAR(255))
 
 	DECLARE @result XML
 
-	INSERT INTO @tempTable([ID], Name, DisplayName, LastName, FirstName, CodeName, Mail, WP, MP, [Description])
-	VALUES(@ID, @Name, @DisplayName, @LastName, @FirstName, @CodeName, @Mail, @WP, @MP, @Description)
+	INSERT INTO @tempTable([ID], SchemaType, Name, DisplayName, LastName, FirstName, CodeName, Mail, WP, MP, [Description])
+	VALUES(@ID, 'Users', @Name, @DisplayName, @LastName, @FirstName, @CodeName, @Mail, @WP, @MP, @Description)
 
 	SELECT @result = 
 		(SELECT * FROM @tempTable AS [Object] FOR XML AUTO)

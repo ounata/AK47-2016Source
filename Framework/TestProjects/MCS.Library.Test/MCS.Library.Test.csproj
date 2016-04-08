@@ -91,6 +91,10 @@
     <Compile Include="SNTP\SNTPTest.cs" />
     <Compile Include="Tenant\TenantContextTest.cs" />
     <Compile Include="TimeZoneRel\TimeZoneTest.cs" />
+    <Compile Include="Validators\CompositeObject.cs" />
+    <Compile Include="Validators\Customer.cs" />
+    <Compile Include="Validators\Order.cs" />
+    <Compile Include="Validators\ValidatorTest.cs" />
     <Compile Include="XmlLoader\XmlHelperTest.cs" />
   </ItemGroup>
   <ItemGroup>

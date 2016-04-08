@@ -388,6 +388,19 @@ namespace MCS.Library.Data.Builder
         }
 
         /// <summary>
+        /// 从源复制
+        /// </summary>
+        /// <param name="source"></param>
+        public void CopyFrom(IOrderByRequestItem source)
+        {
+            if (source != null)
+            {
+                this.DataField = source.DataField;
+                this.SortDirection = source.SortDirection;
+            }
+        }
+ 
+        /// <summary>
         /// 得到Data的Sql字符串描述
         /// </summary>
         /// <param name="builder">构造器</param>

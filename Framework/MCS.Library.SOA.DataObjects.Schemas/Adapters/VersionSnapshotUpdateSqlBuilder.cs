@@ -63,7 +63,7 @@ namespace MCS.Library.SOA.DataObjects.Schemas.Adapters
 			obj.SchemaToSqlClauseBuilder(this._ModeDefinition, builder);
 
 			builder.AppendItem(GetPropertyFieldName("VersionStartTime", mapping), "@currentTime", "=", true);
-			builder.AppendItem(GetPropertyFieldName("VersionEndTime", mapping), ConnectionDefine.MaxVersionEndTime);
+			builder.AppendItem(GetPropertyFieldName("VersionEndTime", mapping), DBTimePointActionContext.MaxVersionEndTime);
 
 			if (obj.CreateDate != DateTime.MinValue)
 				builder.AppendItem("CreateDate", obj.CreateDate);

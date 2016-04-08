@@ -17,7 +17,7 @@ namespace PPTS.WebAPI.Customer.Test
 
             Assert.AreEqual(expected.ParentID, actual.ParentID);
             Assert.AreEqual(expected.ParentName, actual.ParentName);
-            Assert.AreEqual(expected.CustomerCode, actual.CustomerCode);
+            Assert.AreEqual(expected.ParentCode, actual.ParentCode);
             Assert.AreEqual(expected.Gender, actual.Gender);
         }
 
@@ -59,7 +59,7 @@ namespace PPTS.WebAPI.Customer.Test
             }
         }
 
-        public static void AreEqual(this CustomerRelation expected, CustomerRelation actual)
+        public static void AreEqual(this CustomerParentRelation expected, CustomerParentRelation actual)
         {
             Assert.IsNotNull(expected);
             Assert.IsNotNull(actual);

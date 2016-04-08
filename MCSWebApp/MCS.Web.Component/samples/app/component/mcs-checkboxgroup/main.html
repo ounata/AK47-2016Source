@@ -21,52 +21,126 @@
         <div class="col-xs-12">
             <div class="row">
                 <div class="col-sm-12">
-                    <h3 class="header smaller lighter green">复选列表框</h3>
+                    <h3 class="header smaller lighter green">应用范例</h3>
                     <div>
-                        <mcs-checkbox-group category="selectedGrades" data="vm.dictionaries.grades" click="vm.select(category, key, eventargs)" />
-                        <hr /><p>已选中: {{vm.checkresult.selectedGrades}}</p>
+                        <mcs-button text="全选" click="vm.selectAll('grades', 'selectedGrades')" />
+                        <mcs-button text="清空" click="vm.unSelectAll('selectedGrades')" />
+                        <mcs-button text="反选" click="vm.inverseSelect('grades', 'selectedGrades')" />
+                        <hr />
+                        <mcs-checkbox-group data="vm.dictionaries.grades" model="vm.criteria.selectedGrades">
+                            <button class="btn btn-link" ng-click="vm.unSelectAll('selectedGrades')">清空</button>
+                        </mcs-checkbox-group>
+                        <hr /><p>已选中年级(带清空选项): {{vm.criteria.selectedGrades}}</p>
+                        <mcs-checkbox-group data="vm.dictionaries.grades" model="vm.criteria.selectedGrades">
+                            <button class="btn btn-link" ng-click="vm.selectAll('grades', 'selectedGrades')">全选</button>
+                            <button class="btn btn-link" ng-click="vm.unSelectAll('selectedGrades')">清空</button>
+                            <button class="btn btn-link" ng-click="vm.inverseSelect('grades', 'selectedGrades')">反选</button>
+                        </mcs-checkbox-group>
+                        <hr /><p>已选中年级(带全选，清空，反选选项): {{vm.criteria.selectedGrades}}</p>
+                        <mcs-checkbox-group data="vm.dictionaries.grades" model="vm.criteria.selectedGrades"/>
+                        <hr /><p>已选中年级(无任何选项): {{vm.criteria.selectedGrades}}</p>
+                        <mcs-checkbox-group data="vm.dictionaries.years" model="vm.criteria.selectedYears">
+                            <button class="btn btn-link" ng-click="vm.selectAll('years', 'selectedYears')">全选</button>
+                        </mcs-checkbox-group>
+                        <hr /><p>已选中学年(带全选选项): {{vm.criteria.selectedYears}}</p>
                     </div>
                 </div>
                 <div class="laycode col-sm-12">
+                    <h3 class="header smaller lighter green">示例代码</h3>
                     <div class="code_box code_skin0">
-                        <span class="code_title">代码</span>
+                        <span class="code_title">Html及Javascript</span>
                         <pre class="codes">
                         <code><b>Html</b></code><br />
-                            &lt;mcs-checkbox-group category="selectedGrades" data="vm.dictionaries.grades" click="vm.select(category, value, eventargs)" /&gt;
+                        &lt;mcs-button text="全选" click="vm.selectAll('grades', 'selectedGrades')" /&gt
+                        &lt;mcs-button text="清空" click="vm.unSelectAll('selectedGrades')" /&gt
+                        &lt;mcs-button text="反选" click="vm.inverseSelect('grades', 'selectedGrades')" /&gt
+                        &lt;hr /&gt
+                        &lt;mcs-checkbox-group data="vm.dictionaries.grades" model="vm.criteria.selectedGrades"&gt
+	                        &lt;button class="btn btn-link" ng-click="vm.unSelectAll('selectedGrades')"&gt清空&lt;/button&gt
+                        &lt;/mcs-checkbox-group&gt
+                        &lt;hr /&gt&lt;p&gt已选中年级(带清空选项): {{vm.criteria.selectedGrades}}&lt;/p&gt
+                        &lt;mcs-checkbox-group data="vm.dictionaries.grades" model="vm.criteria.selectedGrades"&gt
+	                        &lt;button class="btn btn-link" ng-click="vm.selectAll('grades', 'selectedGrades')"&gt全选&lt;/button&gt
+	                        &lt;button class="btn btn-link" ng-click="vm.unSelectAll('selectedGrades')"&gt清空&lt;/button&gt
+	                        &lt;button class="btn btn-link" ng-click="vm.inverseSelect('grades', 'selectedGrades')"&gt反选&lt;/button&gt
+                        &lt;/mcs-checkbox-group&gt
+                        &lt;hr /&gt&lt;p&gt已选中年级(带全选，清空，反选选项): {{vm.criteria.selectedGrades}}&lt;/p&gt
+                        &lt;mcs-checkbox-group data="vm.dictionaries.grades" model="vm.criteria.selectedGrades"/&gt
+                        &lt;hr /&gt&lt;p&gt已选中年级(无任何选项): {{vm.criteria.selectedGrades}}&lt;/p&gt
+                        &lt;mcs-checkbox-group data="vm.dictionaries.years" model="vm.criteria.selectedYears"&gt
+	                        &lt;button class="btn btn-link" ng-click="vm.selectAll('years', 'selectedYears')"&gt全选&lt;/button&gt
+                        &lt;/mcs-checkbox-group&gt
+                        &lt;hr /&gt&lt;p&gt已选中学年(带全选选项): {{vm.criteria.selectedYears}}&lt;/p&gt                     
                         <code><b>Javascript</b></code><br />
-                            (function () {
-                                angular.module('app.component').controller('MCSCheckboxGroupController', [
-                                    '$scope', function ($scope) {
-                                        var vm = this;
-                                        vm.checkresult = {
-                                            selectedGrades: []
-                                        };
-                                        vm.dictionaries = {
-                                            grades: [
-                                                { key: 'G1', value: '一年级' },
-                                                { key: 'G2', value: '二年级' },
-                                                { key: 'G3', value: '三年级' },
-                                                { key: 'G4', value: '四年级' },
-                                                { key: 'G5', value: '五年级' },
-                                                { key: 'G6', value: '六年级' },
-                                            ]
-                                        };
-                                        vm.select = function (category, key, eventargs) {
-                                            mcs.setSelectedItems(vm.checkresult[category], key, eventargs);
-                                        };
-                                    }
-                                ]);
-                            })();
+                        angular.module('app.component').controller('MCSCheckboxGroupController', [
+                            '$scope', function ($scope) {
+                                var vm = this;
+                                vm.criteria = {
+                                    selectedGrades: ['G1', 'G3', 'G4']
+                                };
+                                vm.dictionaries = {
+                                    grades: [
+                                        { key: 'G1', value: '一年级' },
+                                        { key: 'G2', value: '二年级' },
+                                        { key: 'G3', value: '三年级' },
+                                        { key: 'G4', value: '四年级' },
+                                        { key: 'G5', value: '五年级' },
+                                        { key: 'G6', value: '六年级' }
+                                    ],
+                                    years: [
+                                        { key: 'Y1', value: '三年制' },
+                                        { key: 'Y2', value: '五年制' },
+                                        { key: 'Y3', value: '六年制' },
+                                        { key: 'Y4', value: '九年制' }
+                                    ]
+                                };
+                                vm.selectAll = function (type, selectedType) {
+                                    vm.criteria[selectedType] = mcs.util.selectAll(vm.dictionaries[type]);
+                                };
+                                vm.unSelectAll = function (selectedType) {
+                                    vm.criteria[selectedType] = mcs.util.unSelectAll();
+                                };
+                                vm.inverseSelect = function (type, selectedType) {
+                                    vm.criteria[selectedType] = mcs.util.inverseSelect(vm.dictionaries[type], vm.criteria[selectedType]);
+                                };
+                                $scope.$watchCollection('vm.criteria.selectedYears', function () {
+                                    if (!vm.criteria.selectedYears.length) return;
+                                    alert('我选中了' + vm.criteria.selectedYears + '，但是我还想干点别的，来这里吧。');
+                                });
+                            }
+                        ]);                        
                         </pre>
                     </div>
                 </div>
                 <div class="col-sm-12">
-                    <h3 class="header smaller lighter green">使用说明</h3>
-                    <div>
-                        <h4> 1. 指定复选框所属类别category(如“selectedGrades”, 需与controller中接受选中结果的名字对应);</h4>
-                        <h4> 2. 指定复选框数据源data, 必须为数组结构且包含{key,value}的形式;</h4>
-                        <h4> 3. 如需要接受选中项结果, 必须设置click属性且指定<code>vm.select(category, value, eventargs)</code>,事件在controller中定义。</h4>
-                    </div>
+                    <h3 class="header smaller lighter green">参数说明</h3>
+                    <table class="table table-striped table-bordered table-hover" id="sample-table-1">
+                        <thead>
+                            <tr>
+                                <th>属性</th>
+                                <th style="width:600px;">用途</th>
+                                <th>范围</th>
+                                <th>默认值</th>
+                                <th>示例</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>data</code></td>
+                                <td>设置复选框数据源, 必须为数组结构且包含{key,value}的形式</td>
+                                <td>无</td>
+                                <td>无</td>
+                                <td>&lt;mcs-checkbox-group data="vm.dictionaries.grades" /&gt;</td>
+                            </tr>
+                            <tr>
+                                <td><code>model</code></td>
+                                <td>设置需要绑定的字段,一般为数组,可设置默认选中</td>
+                                <td>无</td>
+                                <td>无</td>
+                                <td>&lt;mcs-checkbox-group data="vm.dictionaries.grades" model="vm.criteria.selectedGrades" /&gt;</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

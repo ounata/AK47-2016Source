@@ -1,0 +1,23 @@
+﻿<div class="page-header">
+    <span>学员信息</span>
+</div>
+<div class="profile-user-info profile-user-info-striped">
+    <div class="profile-info-row">
+        <div class="profile-info-name"> 学员姓名 </div>
+        <div class="profile-info-value">
+            <mcs-input model="vm.customer.customerName" css="col-xs-10 col-sm-10" />
+        </div>
+    </div>
+    <div class="profile-info-row">
+        <div class="profile-info-name"> 入学大年级 </div>
+        <div class="profile-info-value">
+            <ppts-select category="grade" model="vm.customer.entranceGrade" style="width:300px;" />
+        </div>
+    </div>
+    <div class="profile-info-row">
+        <div class="profile-info-name"> 学员性别 </div>
+        <div class="profile-info-value">
+            <span class="editable editable-click">{{ vm.customer.gender | gender}}</span>
+        </div>
+    </div>
+</div>

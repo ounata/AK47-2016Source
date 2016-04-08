@@ -8,48 +8,44 @@ using MCS.Library.Data.Adapters;
 
 namespace MCS.Library.SOA.DataObjects
 {
-	public class SysTaskActivityAdapter : UpdatableAndLoadableAdapterBase<SysTaskActivity, SysTaskActivityCollection>
-	{
-		public static readonly SysTaskActivityAdapter Instance = new SysTaskActivityAdapter();
+    public class SysTaskActivityAdapter : UpdatableAndLoadableAdapterBase<SysTaskActivity, SysTaskActivityCollection>
+    {
+        public static readonly SysTaskActivityAdapter Instance = new SysTaskActivityAdapter();
 
-		private SysTaskActivityAdapter()
-		{
-		}
+        private SysTaskActivityAdapter()
+        {
+        }
 
-		public SysTaskActivityCollection LoadByProcessID(string processID)
-		{
-			return this.LoadByInBuilder(inBuilder =>
-						{
-							inBuilder.DataField = "PROCESS_ID";
-							inBuilder.AppendItem(processID);
-						},
-						orderBuilder =>
-						{
-							orderBuilder.AppendItem("SEQUENCE", FieldSortDirection.Ascending);
-						});
-		}
+        public SysTaskActivityCollection LoadByProcessID(string processID)
+        {
+            return this.LoadByInBuilder(new InLoadingCondition(
+                inBuilder => inBuilder.AppendItem(processID),
+                orderBuilder => orderBuilder.AppendItem("SEQUENCE", FieldSortDirection.Ascending),
+                "PROCESS_ID"
+            ));
+        }
 
-		protected override void AfterLoad(SysTaskActivityCollection data)
-		{
-			base.AfterLoad(data);
+        protected override void AfterLoad(SysTaskActivityCollection data)
+        {
+            base.AfterLoad(data);
 
-			data.ForEach(a => a.Loaded = true);
-		}
+            data.ForEach(a => a.Loaded = true);
+        }
 
-		protected override void BeforeInnerUpdate(SysTaskActivity data, Dictionary<string, object> context)
-		{
-			if (data.Loaded == false && data.Task != null)
-			{
-				data.Task.FillData(null);
-				data.TaskData = JSONSerializerExecute.Serialize(data.Task);
-			}
+        protected override void BeforeInnerUpdate(SysTaskActivity data, Dictionary<string, object> context)
+        {
+            if (data.Loaded == false && data.Task != null)
+            {
+                data.Task.FillData(null);
+                data.TaskData = JSONSerializerExecute.Serialize(data.Task);
+            }
 
-			base.BeforeInnerUpdate(data, context);
-		}
+            base.BeforeInnerUpdate(data, context);
+        }
 
         protected override string GetConnectionName()
         {
             return ConnectionDefine.DBConnectionName;
         }
-	}
+    }
 }

@@ -1,6 +1,7 @@
 ﻿using MCS.Library.Core;
 using MCS.Library.Data.DataObjects;
 using MCS.Library.Data.Mapping;
+using MCS.Library.Validation;
 using PPTS.Data.Common;
 using PPTS.Data.Common.Entities;
 using System;
@@ -38,6 +39,8 @@ namespace PPTS.Data.Customers.Entities
         /// 家长名称
         /// </summary>
         [ORFieldMapping("ParentName")]
+        [StringLengthValidator(128, MessageTemplate = "家长名称的长度不能超过128个字符")]
+        [StringEmptyValidator(MessageTemplate = "家长名称不允许为空")]
         [DataMember]
         public string ParentName
         {
@@ -48,9 +51,9 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 客户ID命名规则：家长P+年份后两位+月+日+999999，学生S+年份后两位+月份+日期+999999
         /// </summary>
-        [ORFieldMapping("CustomerCode")]
+        [ORFieldMapping("ParentCode")]
         [DataMember]
-        public string CustomerCode
+        public string ParentCode
         {
             get;
             set;
@@ -130,9 +133,9 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 证件号码
         /// </summary>
-        [ORFieldMapping("IDNumbar")]
+        [ORFieldMapping("IDNumber")]
         [DataMember]
-        public string IDNumbar
+        public string IDNumber
         {
             get;
             set;
@@ -188,6 +191,17 @@ namespace PPTS.Data.Customers.Entities
         [ORFieldMapping("AddressDetail")]
         [DataMember]
         public string AddressDetail
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 邮件地址
+        /// </summary>
+        [ORFieldMapping("Email")]
+        [DataMember]
+        public string Email
         {
             get;
             set;

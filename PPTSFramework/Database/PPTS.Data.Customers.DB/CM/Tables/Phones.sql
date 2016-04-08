@@ -1,17 +1,18 @@
 ﻿CREATE TABLE [CM].[Phones]
 (
-	[PhoneID] NVARCHAR(36) NOT NULL PRIMARY KEY,
+	[PhoneID] NVARCHAR(36) NOT NULL DEFAULT newid() ,
 	[OwnerID] NVARCHAR(36) NOT NULL, 
-    [IsPrimary] INT NULL DEFAULT 1, 
-    [PhoneType] NVARCHAR(32) NULL,
+    [IsPrimary] INT NOT NULL DEFAULT 1, 
+    [PhoneType] NVARCHAR(32) NOT NULL,
 	[CountryCode] NVARCHAR(32) NULL DEFAULT '0086',
     [AreaNumber] NVARCHAR(32) NULL, 
     [PhoneNumber] NVARCHAR(255) NULL, 
     [Extension] NVARCHAR(32) NULL,
 	[CreatorID] NVARCHAR(36) NULL,
 	[CreatorName] NVARCHAR(64) NULL,
-	[CreateTime] DATETIME NULL DEFAULT GETDATE(),
-    [TenantCode] NVARCHAR(36) NULL
+	[CreateTime] DATETIME NOT NULL DEFAULT getdate(),
+    [TenantCode] NVARCHAR(36) NULL, 
+    CONSTRAINT [PK_Phones] PRIMARY KEY NONCLUSTERED ([PhoneID])
 )
 
 GO
@@ -70,7 +71,7 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level2name = N'Extension'
 GO
 EXEC sp_addextendedproperty @name = N'MS_Description',
-    @value = N'电话号码',
+    @value = N'电话号码表',
     @level0type = N'SCHEMA',
     @level0name = N'CM',
     @level1type = N'TABLE',
@@ -115,7 +116,7 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level2name = N'CreateTime'
 GO
 EXEC sp_addextendedproperty @name = N'MS_Description',
-    @value = N'电话拥有者的ID',
+    @value = N'电话拥有者的ID（家长ID或学员ID）',
     @level0type = N'SCHEMA',
     @level0name = N'CM',
     @level1type = N'TABLE',
@@ -124,7 +125,7 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level2name = N'OwnerID'
 GO
 
-CREATE INDEX [IX_Phones_OwnerID] ON [CM].[Phones] ([OwnerID])
+CREATE INDEX [IX_Phones_1] ON [CM].[Phones] ([OwnerID])
 
 GO
 EXEC sp_addextendedproperty @name = N'MS_Description',

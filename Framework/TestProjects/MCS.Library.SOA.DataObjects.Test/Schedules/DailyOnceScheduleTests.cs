@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MCS.Library.Data;
+using MCS.Library.Data.Adapters;
 
 namespace MCS.Library.SOA.DataObjects.Test.Schedules
 {

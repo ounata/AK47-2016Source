@@ -529,6 +529,18 @@ namespace MCS.Library.OGUPermission
         }
 
         /// <summary>
+        /// 是否包含某个应用
+        /// </summary>
+        /// <param name="appCodeName"></param>
+        /// <returns></returns>
+        public bool ContainsApp(string appCodeName)
+        {
+            IApplication app = GetApplication(appCodeName, false);
+
+            return app != null;
+        }
+ 
+        /// <summary>
         /// 根据codeName得到应用对象
         /// </summary>
         /// <param name="codeName">应用的codeName</param>
@@ -611,18 +623,6 @@ namespace MCS.Library.OGUPermission
             {
                 return GetUserAppRoles(GetApplication(appCodeName));
             }
-        }
-
-        /// <summary>
-        /// 是否包含某个应用
-        /// </summary>
-        /// <param name="appCodeName"></param>
-        /// <returns></returns>
-        public bool ContainsApp(string appCodeName)
-        {
-            IApplication app = GetApplication(appCodeName, false);
-
-            return app != null;
         }
 
         /// <summary>

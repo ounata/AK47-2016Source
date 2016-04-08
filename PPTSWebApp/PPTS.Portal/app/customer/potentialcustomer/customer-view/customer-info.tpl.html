@@ -1,0 +1,167 @@
+﻿<div class="page-header">
+    <span>学员信息</span>
+</div>
+<div class="profile-user-info profile-user-info-striped mcs-user-profile">
+    <div class="profile-info-row">
+        <div class="profile-info-name"> 接触方式 </div>
+        <div class="profile-info-value">
+            <span class="editable editable-click">{{ vm.customer.contactType | contactType }}</span>
+        </div>
+    </div>
+    <div class="profile-info-row">
+        <div class="profile-info-name"> 信息来源 </div>
+        <div class="profile-info-value">
+            <span class="editable editable-click">{{ vm.customer.sourceMainType | source }}</span>
+        </div>
+    </div>
+    <div class="profile-info-row">
+        <div class="profile-info-name"> 转介绍员工 </div>
+        <div class="profile-info-value">
+            <span class="editable editable-click">{{ vm.customer.referralStaffName + "（" + vm.customer.referralStaffJobName + " " + vm.customer.referralStaffCode + "）"  }}</span>
+        </div>
+    </div>
+    <div class="profile-info-row">
+        <div class="profile-info-name"> 学员姓名 </div>
+        <div class="profile-info-value">
+            <span class="editable editable-click">{{ vm.customer.customerName }}</span>
+        </div>
+    </div>
+    <div class="profile-info-row">
+        <div class="profile-info-name"> vip客户 </div>
+        <div class="profile-info-value">
+            <span class="editable editable-click">{{ vm.customer.vipType | vipType }}</span>
+        </div>
+    </div>
+    <div class="profile-info-row">
+        <div class="profile-info-name"> vip客户等级 </div>
+        <div class="profile-info-value">
+            <span class="editable editable-click">{{ vm.customer.vipType | vipLevel }}</span>
+        </div>
+    </div>
+    <div class="profile-info-row">
+        <div class="profile-info-name"> 学员的主监护人 </div>
+        <div class="profile-info-value">
+            <span class="editable editable-click">{{  }}</span>
+        </div>
+    </div>
+    <div class="profile-info-row">
+        <div class="profile-info-name"> 客户资源所属地 </div>
+        <div class="profile-info-value">
+            <span class="editable editable-click">{{  }}</span>
+        </div>
+    </div>
+    <div class="profile-info-row">
+        <div class="profile-info-name"> 学员编号 </div>
+        <div class="profile-info-value">
+            <span class="editable editable-click">{{ vm.customer.customerCode }}</span>
+        </div>
+    </div>
+    <div class="profile-info-row">
+        <div class="profile-info-name"> 学员性别 </div>
+        <div class="profile-info-value">
+            <span class="editable editable-click">{{ vm.customer.gender | gender }}</span>
+        </div>
+    </div>
+    <div class="profile-info-row">
+        <div class="profile-info-name"> 学员出生日期 </div>
+        <div class="profile-info-value">
+            <span class="editable editable-click">{{ vm.customer.birthday | date:'yyyy-MM-dd' }}</span>
+        </div>
+    </div>
+    <div class="profile-info-row">
+        <div class="profile-info-name"> 学员身份证号码 </div>
+        <div class="profile-info-value">
+            <span class="editable editable-click">{{ vm.customer.idNumber }}</span>
+        </div>
+    </div>
+    <div class="profile-info-row">
+        <div class="profile-info-name"> 入学大年级 </div>
+        <div class="profile-info-value">
+            <span class="editable editable-click">{{ vm.customer.entranceGrade | grade }}</span>
+        </div>
+    </div>
+    <div class="profile-info-row">
+        <div class="profile-info-name"> 当前年级 </div>
+        <div class="profile-info-value">
+            <span class="editable editable-click">{{ vm.customer.grade | grade }}</span>
+        </div>
+    </div>
+    <div class="profile-info-row">
+        <div class="profile-info-name"> 在读学校 </div>
+        <div class="profile-info-value">
+            <span class="editable editable-click">{{ vm.customer.schoolID }}</span>
+        </div>
+    </div>
+    <div class="profile-info-row">
+        <div class="profile-info-name"> 当前状态 </div>
+        <div class="profile-info-value">
+            <span class="editable editable-click">{{ vm.customer.customerStatus }}</span>
+        </div>
+    </div>
+    <div class="profile-info-row">
+        <div class="profile-info-name"> 学年制 </div>
+        <div class="profile-info-value">
+            <span class="editable editable-click">{{ vm.customer.schoolYear }}</span>
+        </div>
+    </div>
+    <div class="profile-info-row">
+        <div class="profile-info-name"> 文理科 </div>
+        <div class="profile-info-value">
+            <span class="editable editable-click">{{ vm.customer.subjectType | subjectType }}</span>
+        </div>
+    </div>
+    <div class="profile-info-row">
+        <div class="profile-info-name"> 是否复读 </div>
+        <div class="profile-info-value">
+            <span class="editable editable-click">{{ vm.customer.isStudyAgain | studyAgain }}</span>
+        </div>
+    </div>
+    <div class="profile-info-row">
+        <div class="profile-info-name"> 联系方式 </div>
+        <div class="profile-info-value">
+            <span class="editable editable-click">{{  }}</span>
+        </div>
+    </div>
+    <div class="profile-info-row">
+        <div class="profile-info-name"> 初始签约人 </div>
+        <div class="profile-info-value">
+            <span class="editable editable-click">{{  }}</span>
+        </div>
+    </div>
+    <div class="profile-info-row">
+        <div class="profile-info-name"> 归属坐席 </div>
+        <div class="profile-info-value">
+            <span class="editable editable-click">{{  }}</span>
+        </div>
+    </div>
+    <div class="profile-info-row">
+        <div class="profile-info-name"> 归属咨询师 </div>
+        <div class="profile-info-value">
+            <span class="editable editable-click">{{  }}</span>
+        </div>
+    </div>
+    <div class="profile-info-row">
+        <div class="profile-info-name"> 归属学管师 </div>
+        <div class="profile-info-value">
+            <span class="editable editable-click">{{ }}</span>
+        </div>
+    </div>
+    <div class="profile-info-row">
+        <div class="profile-info-name"> 归属市场专员 </div>
+        <div class="profile-info-value">
+            <span class="editable editable-click">{{ }}</span>
+        </div>
+    </div>
+    <div class="profile-info-row">
+        <div class="profile-info-name"> 建档部门 </div>
+        <div class="profile-info-value">
+            <span class="editable editable-click">{{ }}</span>
+        </div>
+    </div>
+    <div class="profile-info-row">
+        <div class="profile-info-name"> 建档人 </div>
+        <div class="profile-info-value">
+            <span class="editable editable-click">{{ vm.customer.CreatorName }}</span>
+        </div>
+    </div>
+</div>

@@ -138,6 +138,19 @@ namespace MCS.Library.Data
                 }
             }
         }
+
+        protected override Connections GetSqlContextReferenceConnections()
+        {
+            Connections connections = null;
+
+            if (Transaction.Current != null)
+                GraphWithTx.TryGetValue(Transaction.Current, out connections);
+
+            if (connections == null)
+                connections = base.GetSqlContextReferenceConnections();
+
+            return connections;
+        }
         #endregion
 
         #region Private methods

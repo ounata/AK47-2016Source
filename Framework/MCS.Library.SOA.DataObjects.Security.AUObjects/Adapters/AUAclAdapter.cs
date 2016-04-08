@@ -328,7 +328,7 @@ namespace MCS.Library.SOA.DataObjects.Security.AUObjects.Adapters
 						aclitem.SortID = i;
 						strB.Append(TSqlBuilder.Instance.DBStatementSeperator);
 
-						aclitem.VersionEndTime = ConnectionDefine.MaxVersionEndTime;
+						aclitem.VersionEndTime = DBTimePointActionContext.MaxVersionEndTime;
 
 						InsertSqlClauseBuilder insertBuilder = ORMapping.GetInsertSqlClauseBuilder(aclitem, this.GetMappingInfo(), "VersionStartTime");
 

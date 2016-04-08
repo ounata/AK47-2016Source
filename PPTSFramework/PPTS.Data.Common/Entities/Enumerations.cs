@@ -12,6 +12,9 @@ namespace PPTS.Data.Common
     /// </summary>
     public enum GenderType
     {
+        [EnumItemDescription("未知")]
+        Unknown = 0,
+
         [EnumItemDescription("男")]
         Male = 1,
 

@@ -17,9 +17,15 @@ using MCS.Library.OGUPermission.Properties;
 
 namespace MCS.Library.OGUPermission
 {
-	internal sealed class AppAdminMechanism : IPermissionMechanism, IPermissionImplInterface
+    /// <summary>
+    /// 
+    /// </summary>
+	public class AppAdminMechanism : IPermissionMechanism, IPermissionImplInterface
 	{
-		public static readonly AppAdminMechanism Instance = new AppAdminMechanism();
+        /// <summary>
+        /// 得到实例
+        /// </summary>
+		internal static readonly AppAdminMechanism Instance = new AppAdminMechanism();
 
 		private AppAdminMechanism()
 		{
@@ -27,6 +33,10 @@ namespace MCS.Library.OGUPermission
 
 		#region IPermissionMechanism 成员
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
 		public ApplicationCollection GetAllApplications()
 		{
 			DataTable table = AppAdminServiceBroker.Instance.GetApplications().Tables[0];
@@ -34,6 +44,11 @@ namespace MCS.Library.OGUPermission
 			return new ApplicationCollection(BuildObjectsFromTable<IApplication>(table));
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="codeNames"></param>
+        /// <returns></returns>
 		public ApplicationCollection GetApplications(params string[] codeNames)
 		{
 			if (codeNames == null)
@@ -61,6 +76,13 @@ namespace MCS.Library.OGUPermission
 			return new ApplicationCollection(result);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="roles"></param>
+        /// <param name="depts"></param>
+        /// <param name="recursively"></param>
+        /// <returns></returns>
 		public OguObjectCollection<IOguObject> GetRolesObjects(RoleCollection roles, OguObjectCollection<IOrganization> depts, bool recursively)
 		{
 			OguObjectCollection<IOguObject> result = null;
@@ -110,6 +132,13 @@ namespace MCS.Library.OGUPermission
 		#endregion
 
 		#region IPermissionImplInterface
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="application"></param>
+        /// <param name="user"></param>
+        /// <returns></returns>
 		public RoleCollection GetUserRoles(IApplication application, IUser user)
 		{
 			application.NullCheck("application");
@@ -143,6 +172,11 @@ namespace MCS.Library.OGUPermission
 			return roles;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         public List<IRole> GetAllUserRoles(IUser user)
         {
             user.NullCheck("user");
@@ -167,6 +201,12 @@ namespace MCS.Library.OGUPermission
             return BuildObjectsFromTable<IRole>(table);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="application"></param>
+        /// <param name="user"></param>
+        /// <returns></returns>
 		public PermissionCollection GetUserPermissions(IApplication application, IUser user)
 		{
 			application.NullCheck("application");
@@ -190,6 +230,11 @@ namespace MCS.Library.OGUPermission
 			return permissions;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="application"></param>
+        /// <returns></returns>
 		public RoleCollection GetRoles(IApplication application)
 		{
 			application.NullCheck("application");
@@ -204,6 +249,11 @@ namespace MCS.Library.OGUPermission
 			return roles;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="application"></param>
+        /// <returns></returns>
 		public PermissionCollection GetPermissions(IApplication application)
 		{
 			application.NullCheck("application");

@@ -10,7 +10,8 @@
   <ItemGroup>
     <ProjectItem Include="Framework\Framework.csproj" />
     <ProjectItem Include="PPTSFramework\PPTSFramework.csproj" />
-    <ProjectItem Include="MCSWebApp\FrameworkWebApps.csproj" />	
+    <ProjectItem Include="MCSWebApp\FrameworkWebApps.csproj" />
+    <ProjectItem Include="PPTSWebApp\PPTSWebApp.csproj" />
   </ItemGroup>
   <Target Name="BuildOtherProjects">
     <MSBuild Projects="@(ProjectItem)" RebaseOutputs="True" />

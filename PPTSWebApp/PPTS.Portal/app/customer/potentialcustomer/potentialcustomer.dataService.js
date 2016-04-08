@@ -1,41 +1,40 @@
-﻿define(['customer'], function (customer) {
+﻿define([ppts.config.modules.customer], function (customer) {
 
-    customer.registerFactory('customerDataService', ['$resource', 'pptsConfiguration', function ($resource, pptsConfiguration) {
+    customer.registerFactory('customerDataService', ['$resource', function ($resource) {
 
-        var resource = $resource(pptsConfiguration.customerApiServerPath + 'api/potentialcustomers/:operation/:id', { operation: '@operation', id: '@id' }, { 'post': { method: 'POST' } });
+        var resource = $resource(ppts.config.customerApiBaseUrl + 'api/potentialcustomers/:operation/:id',
+            { operation: '@operation', id: '@id' },
+            {
+                'post': { method: 'POST' },
+                'query': { method: 'GET', isArray: false }
+            });
 
         resource.getAllCustomers = function (criteria, success, error) {
             resource.post({ operation: 'getAllCustomers' }, criteria, success, error);
         }
 
-        resource.getCustomer = function (customerId) {
-            resource.query({ operation: 'getCustomerBaseinfo', id: customerId }, function (customer) {
+        resource.getPagedCustomers = function (criteria, success, error) {
+            resource.post({ operation: 'getPagedCustomers' }, criteria, success, error);
+        }
 
-            });
+        resource.getCustomerForCreate = function (success, error) {
+            resource.query({ operation: 'createCustomer' }, success, error);
+        }
+
+        resource.getCustomerForUpdate = function (id, success, error) {
+            resource.query({ operation: 'updateCustomer', id: id }, success, error);
+        }
+
+        resource.createCustomer = function (model, success, error) {
+            resource.save({ operation: 'createCustomer' }, model, success, error);
         };
 
-        resource.addCustomer = function () {
-            resource.query({ operation: 'createCustomer' }, function (customer) {
+        resource.updateCustomer = function (model, success, error) {
+            resource.save({ operation: 'updateCustomer' }, model, success, error);
+        };
 
-            });
-        }
-
-        resource.editCustomer = function (customerId) {
-            resource.query({ operation: 'updateCustomer', id: customerId }, function (customer) {
-
-            });
-        }
-
-        resource.saveCustomer = function (customer, customerId) {
-            if (!customerId) {
-                resource.save({ operation: 'createCustomer' }, customer, function (result) {
-
-                });
-            } else {
-                resource.save({ operation: 'updateCustomer', id: customerId }, customer, function (result) {
-
-                });
-            }
+        resource.getCustomerInfo = function (code, success, error) {
+            resource.post({ operation: 'getCustomerInfo' }, { customerCode: code }, success, error);
         };
 
         return resource;

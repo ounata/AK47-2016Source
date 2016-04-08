@@ -62,6 +62,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -71,26 +72,35 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Adapters\CustomerAdapterBase.cs" />
-    <Compile Include="Adapters\CustomerRelationAdapter.cs" />
+    <Compile Include="Adapters\CustomerFollowAdapter.cs" />
+    <Compile Include="Adapters\CustomerFollowItemAdapter.cs" />
+    <Compile Include="Adapters\CustomerParentRelationAdapter.cs" />
+    <Compile Include="Adapters\CustomerUserOperationLogAdapter.cs" />
+    <Compile Include="Adapters\GenericParentAdapter.cs" />
+    <Compile Include="Adapters\GenericPotentialCustomerAdapter.cs" />
     <Compile Include="Adapters\ParentAdapter.cs" />
     <Compile Include="Adapters\PhoneAdapter.cs" />
     <Compile Include="Adapters\PotentialCustomerAdapter.cs" />
     <Compile Include="Common\ConnectionDefine.cs" />
     <Compile Include="Common\Helper.cs" />
     <Compile Include="DataSources\GenericCustomerDataSource.cs" />
-    <Compile Include="Entities\CustomerRelation.cs" />
+    <Compile Include="Entities\CustomerFollow.cs" />
+    <Compile Include="Entities\CustomerFollowItem.cs" />
+    <Compile Include="Entities\CustomerParentRelation.cs" />
     <Compile Include="Entities\Enumerations.cs" />
+    <Compile Include="Entities\Extensions.cs" />
+    <Compile Include="Entities\IContactPhoneNumbers.cs" />
     <Compile Include="Entities\Parent.cs" />
     <Compile Include="Entities\Phone.cs" />
     <Compile Include="Entities\PotentialCustomer.cs" />
+    <Compile Include="Executors\PPTSCustomerExecutorBase.cs" />
+    <Compile Include="Executors\PPTSEditCustomerExecutorBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MCS.Library.snk" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Executors\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>IF NOT EXIST "$(ProjectDir)..\..\PPTSBin" MD "$(ProjectDir)..\..\PPTSBin"

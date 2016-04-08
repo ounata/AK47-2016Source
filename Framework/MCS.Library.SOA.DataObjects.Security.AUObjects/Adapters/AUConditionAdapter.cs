@@ -150,7 +150,7 @@ namespace MCS.Library.SOA.DataObjects.Security.AUObjects.Adapters
 					condition.SortID = i;
 					strB.Append(TSqlBuilder.Instance.DBStatementSeperator);
 
-					condition.VersionEndTime = ConnectionDefine.MaxVersionEndTime;
+					condition.VersionEndTime = DBTimePointActionContext.MaxVersionEndTime;
 					condition.Type = type;
 					InsertSqlClauseBuilder insertBuilder = ORMapping.GetInsertSqlClauseBuilder(condition, this.GetMappingInfo(), "VersionStartTime");
 

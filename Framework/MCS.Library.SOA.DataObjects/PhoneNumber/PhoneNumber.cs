@@ -13,7 +13,7 @@ namespace MCS.Library.SOA.DataObjects
     /// </summary>
     [Serializable]
     [ORTableMapping("WF.PHONENUMBER")]
-	public class PhoneNumber:IVersionDataObject
+    public class PhoneNumber : IVersionDataObject
     {
         /// <summary>
         /// 转为字符串
@@ -37,7 +37,7 @@ namespace MCS.Library.SOA.DataObjects
             //    int number = Convert.ToInt32(formatArray[i].Substring(1));
 
             //    string innerFormatStr = string.Format("0:D{0}", number);
-   
+
             //    switch (firstWord)
             //    {
             //        case "C":
@@ -92,15 +92,15 @@ namespace MCS.Library.SOA.DataObjects
             set;
         }
 
-		/// <summary>
-		/// 国别号
-		/// </summary>
-		[ORFieldMapping("StateCode")]
-		public string StateCode
-		{
-			get;
-			set;
-		}
+        /// <summary>
+        /// 国别号
+        /// </summary>
+        [ORFieldMapping("StateCode")]
+        public string StateCode
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// 区号
@@ -182,15 +182,15 @@ namespace MCS.Library.SOA.DataObjects
             set;
         }
 
-		/// <summary>
-		/// 电话号码更改状态
-		/// </summary>
-		[NoMapping]
-		public bool Changed
-		{
-			get;
-			set;
-		}
+        /// <summary>
+        /// 电话号码更改状态
+        /// </summary>
+        [NoMapping]
+        public bool Changed
+        {
+            get;
+            set;
+        }
 
     }
 
@@ -198,9 +198,9 @@ namespace MCS.Library.SOA.DataObjects
 	/// PhoneNumber集合类
 	/// </summary>
     [Serializable]
-	public class PhoneNumberList : EditableDataObjectCollectionBase<PhoneNumber>
+    public class PhoneNumberList : EditableDataObjectCollectionBase<PhoneNumber>
     {
- 
+
     }
 
 }

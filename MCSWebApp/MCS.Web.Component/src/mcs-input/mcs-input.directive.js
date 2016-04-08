@@ -1,26 +1,33 @@
 ﻿(function () {
     'use strict';
 
-    mcs.form.constant('inputConfig', {
+    mcs.ng.constant('inputConfig', {
         types: ['text']
     }).directive('mcsInput', ['inputConfig', 'mcsComponentConfig', function (config, mcsComponentConfig) {
         return {
             restrict: 'E',
-            replace: false,
+            replace: true,
             scope: {
+                id: '@',
                 type: '@',
-                label: '@',
                 placeholder: '@',
-                model: '='
+                fixed: '@',
+                readonly: '@',
+                css: '@',
+                model: '=',
             },
-            template: '<label class="mcs-margin-right-5"></label><input class="mcs-default-size-input mcs-margin-right-20" ng-model="model" />',
-            //templateUrl: mcsComponentConfig.rootUrl + 'src/mcs-input/mcs-input.tpl.html',
+            template: '<input placeholder="{{placeholder}}" class="mcs-default-size-input mcs-margin-right-20 {{css}}" ng-model="model" />',
             link: function ($scope, $elem, $attrs) {
-                if (!$scope.label) return;
-                if (!$scope.placeholder) $scope.placeholder = $scope.label;
-                $scope.type = $scope.type || 'text';
-                $elem.find('input').attr({ 'type': $scope.type, 'placeholder': $scope.placeholder });
-                $elem.find('label').text($scope.label);
+                if ($scope.id) {
+                    $elem.attr('id', $scope.id);
+                }
+                $elem.attr('type', $scope.type || 'text');
+                if ($scope.fixed) {
+                    $elem.addClass('fixed');
+                }
+                if ($scope.readonly) {
+                    $elem.attr('readonly', 'readonly');
+                }
             }
         };
     }]);

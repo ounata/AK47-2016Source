@@ -496,11 +496,9 @@ namespace WfOperationServices.Services
         {
             OperationContext.Current.FillContextToOguServiceContext();
 
-            GenericOpinionCollection serverOpinions = GenericOpinionAdapter.Instance.LoadByInBuilder(builder =>
-            {
-                builder.DataField = "PROCESS_ID";
-                builder.AppendItem(processID);
-            });
+            GenericOpinionCollection serverOpinions = GenericOpinionAdapter.Instance.LoadByInBuilder(
+                new InLoadingCondition(builder => builder.AppendItem(processID), "PROCESS_ID")
+            );
 
             return WfClientOpinionConverter.Instance.ServerToClient(serverOpinions);
         }

@@ -10,29 +10,12 @@ using System.Threading.Tasks;
 
 namespace PPTS.Data.Customers.Adapters
 {
-    public class PotentialCustomerAdapter : CustomerAdapterBase<PotentialCustomer, PotentialCustomerCollection>
+    public class PotentialCustomerAdapter : GenericPotentialCustomerAdapter<PotentialCustomer, PotentialCustomerCollection>
     {
-        public static PotentialCustomerAdapter Instance = new PotentialCustomerAdapter();
+        public new static PotentialCustomerAdapter Instance = new PotentialCustomerAdapter();
 
         private PotentialCustomerAdapter()
         {
-        }
-
-        public PotentialCustomer Load(string customerID)
-        {
-            return this.Load(builder => builder.AppendItem("CustomerID", customerID)).SingleOrDefault();
-        }
-
-        protected override void BeforeInnerUpdateInContext(PotentialCustomer data, DbContext dbContext, Dictionary<string, object> context)
-        {
-            if (data.CustomerCode.IsNullOrEmpty())
-                data.CustomerCode = Helper.GetCustomerCode("S");
-        }
-
-        protected override void BeforeInnerUpdate(PotentialCustomer data, Dictionary<string, object> context)
-        {
-            if (data.CustomerCode.IsNullOrEmpty())
-                data.CustomerCode = Helper.GetCustomerCode("S");
         }
     }
 }
