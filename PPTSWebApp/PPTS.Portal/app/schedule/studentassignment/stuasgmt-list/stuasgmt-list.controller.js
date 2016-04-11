@@ -5,56 +5,41 @@
                 '$scope', '$state', 'dataSyncService', 'studentassignmentDataService',
                 function ($scope, $state, dataSyncService, studentassignmentDataService) {
                     var vm = this;
-
-                    //vm.dataContent = "页面固定的内容";
-
-                   
-                    //studentassignmentDataService.getAllStuUnAsgmt(
-                    //    function (result) {
-                    //        vm.dataContent = result;
-                    //        var temp = 0;
-                    //    },
-                    //    function (error) {
-                    //        vm.dataContent = error;
-                    //    }
-                    //    );
-
-                   vm.data = {
+                    vm.data = {
                         selection: 'checkbox',
                         headers: [{
                             field: "customerName",
                             name: "学员姓名",
-                            template: '<a ui-sref="ppts.customer-view({id:row.customerID,page:\'info\'})">{{row.customerName}}</a>',
+                            template: '<span>{{row.customerName}}</span>',
                             sortable: true
                         }, {
                             field: "customerCode",
-                            name: "学员编号",
-                            template: '<a ui-sref="ppts.customer-view({id:row.customerID,page:\'info\'})">{{row.customerCode}}</a>'
-                        },
-                        //{
-                        //    field: "parentName",
-                        //    name: "性别"
-                        //}, {
-                        //    field: "createTime",
-                        //    name: "出生日期",
-                        //    template: '<span>{{row.createTime | date:"yyyy-MM-dd"}}</span>'
-                        //}, {
-                        //    field: "sourceMainType",
-                        //    name: "在读学校",
-                        //    template: '<span>{{row.sourceMainType}}</span>'
-                        //}, {
-                        //    field: "sourceMainType",
-                        //    name: "当前年级",
-                        //    template: '<span>{{row.sourceMainType}}</span>'
-                        //}, {
-                        //    field: "sourceMainType",
-                        //    name: "班主任",
-                        //    template: '<span>{{row.sourceMainType}}</span>'
-                        //},
-                        {
-                            field: "remainAmount",
+                            name: "学员编号",   
+                            template: '<span>{{row.customerCode}}</span>'
+                        },{
+                            field: "gender",
+                            name: "性别",
+                            template: '<span>{{row.gender | gender }}</span>'
+                        }, {
+                            field: "birthday",
+                            name: "出生日期",
+                            template: '<span>{{row.birthday | date:"yyyy-MM-dd"}}</span>'
+                        }, {
+                            field: "schoolName",
+                            name: "在读学校",
+                            template: '<span>{{row.schoolName}}</span>'
+                        }, {
+                            field: "grade",
+                            name: "当前年级",
+                            template: '<span>{{row.grade | grade}}</span>'
+                        }, {
+                            field: "educatorName",
+                            name: "学管师",
+                            template: '<span>{{row.educatorName}}</span>'
+                        }, {
+                            field: "remainOne2Ones",
                             name: "剩余数量",
-                            template: '<span>{{row.remainAmount}}</span>'
+                            template: '<span>{{row.remainOne2Ones}}</span>'
                         }],
                         pager: {
                             pageIndex: 1,
@@ -62,22 +47,22 @@
                             totalCount: -1,
                             pageChange: function () {
                                 dataSyncService.initCriteria(vm);
-                                customerDataService.getPagedCustomers(vm.criteria, function (result) {
+                                studentassignmentDataService.getPagedStuUnAsgmt(vm.criteria, function (result) {
                                     vm.data.rows = result.pagedData;
                                 });
                             }
                         },
-                        orderBy: [{ dataField: 'CreateTime', sortDirection: 1 }]
+                        orderBy: [{ dataField: 'CustomerCode', sortDirection: 1 }]
                     }
 
                     // 页面初始化加载或重新搜索时查询
-                   vm.init = function () {
+                    vm.init = function () {
                         dataSyncService.initCriteria(vm);
-                        customerDataService.getAllStuUnAsgmt(vm.criteria, function (result) {
+                        studentassignmentDataService.getAllStuUnAsgmt(vm.criteria, function (result) {
                             vm.data.rows = result.queryResult.pagedData;
                             dataSyncService.injectDictData();
                             dataSyncService.updateTotalCount(vm, result.queryResult);
-                            //$scope.$broadcast('dictionaryReady');
+                            $scope.$broadcast('dictionaryReady');
                         });
                     };
                     vm.init();

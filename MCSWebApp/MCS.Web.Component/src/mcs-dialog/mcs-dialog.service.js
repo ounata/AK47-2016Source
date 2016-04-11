@@ -1,7 +1,7 @@
-(function() {
+(function () {
         'use strict';
 
-        mcs.ng.service('mcsDialogService', ['dialogs', function(dialogs) {
+        mcs.ng.service('mcsDialogService', ['dialogs', function (dialogs) {
             var mcsDialogService = this;
             mcsDialogService.messageConfig = {
                 wait: {
@@ -18,18 +18,22 @@
                 }
 
             };
-            this.wait = function(title, msg, opts) {
-                dialogs.wait(title || mcsDialogService.messageConfig.wait.title, msg || mcsDialogService.messageConfig.wait.message);
+            this.wait = function (title, msg, opts) {
+                return dialogs.wait(title || mcsDialogService.messageConfig.wait.title, msg || mcsDialogService.messageConfig.wait.message);
             }
 
-            this.error = function(title, msg, opts) {
-                dialogs.error(title || mcsDialogService.messageConfig.error.title, msg || mcsDialogService.messageConfig.error.message);
+            this.error = function (title, msg, opts) {
+                return dialogs.error(title || mcsDialogService.messageConfig.error.title, msg || mcsDialogService.messageConfig.error.message);
             }
 
 
-            this.confirm = function(title, msg, opts) {
-                dialogs.confirm(title || mcsDialogService.messageConfig.confirm.title, msg || mcsDialogService.messageConfig.confirm.message);
+            this.confirm = function (title, msg, opts) {
+                return dialogs.confirm(title || mcsDialogService.messageConfig.confirm.title, msg || mcsDialogService.messageConfig.confirm.message);
 
+            }
+
+            this.create = function (url, ctrlr, data, opts) {
+                return dialogs.create(url, ctrlr, data, opts);
             }
 
 

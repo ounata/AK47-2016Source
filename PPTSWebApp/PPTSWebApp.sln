@@ -3,13 +3,23 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPTS.Data.Common", "..\PPTSFramework\PPTS.Data.Common\PPTS.Data.Common.csproj", "{0414177E-283E-4E91-8032-37228B715F16}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPTS.Data.Customers", "..\PPTSFramework\PPTS.Data.Customers\PPTS.Data.Customers.csproj", "{96802A24-2E16-4B0E-83BE-AC8A54E19155}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPTS.Data.Orders", "..\PPTSFramework\PPTS.Data.Orders\PPTS.Data.Orders.csproj", "{8B8AB24B-A8F7-420C-834E-52517F178D30}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPTS.Data.Products", "..\PPTSFramework\PPTS.Data.Products\PPTS.Data.Products.csproj", "{FC0E93D0-1D5C-4BDC-95CA-D77052D2F9D2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPTS.Web.MVC.Library", "..\PPTSFramework\PPTS.Web.MVC.Library\PPTS.Web.MVC.Library.csproj", "{3AC762A7-49D7-4CCD-AB46-62FE9F88A766}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPTS.WebAPI.Customers", "PPTS.WebAPI.Customers\PPTS.WebAPI.Customers.csproj", "{CE7CE1AF-FBD4-4187-9091-211E51BC1517}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPTS.WebAPI.Orders", "PPTS.WebAPI.Orders\PPTS.WebAPI.Orders.csproj", "{6A483A50-C71F-4312-A2ED-49B10AF30D90}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPTS.WebAPI.Products", "PPTS.WebAPI.Products\PPTS.WebAPI.Products.csproj", "{0EFFF8CB-44E8-48F6-B8C2-782E0077C70B}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPTS.Portal", "PPTS.Portal\PPTS.Portal.csproj", "{CF87C51B-3D83-4C79-8FDD-FF5FC6D5C869}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPTS.WebAPI.Customer", "PPTS.WebAPI.Customer\PPTS.WebAPI.Customer.csproj", "{CE7CE1AF-FBD4-4187-9091-211E51BC1517}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPTS.WebAPI.Customer.Test", "..\PPTSWebAPITest\PPTS.WebAPI.Customer.Test\PPTS.WebAPI.Customer.Test.csproj", "{C347538A-6D85-46C0-9E82-2DF7B0A75F14}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPTS.WebAPI.Product", "PPTS.WebAPI.Product\PPTS.WebAPI.Product.csproj", "{6A483A50-C71F-4312-A2ED-49B10AF30D90}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,42 +27,77 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{CF87C51B-3D83-4C79-8FDD-FF5FC6D5C869}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CF87C51B-3D83-4C79-8FDD-FF5FC6D5C869}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CF87C51B-3D83-4C79-8FDD-FF5FC6D5C869}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CF87C51B-3D83-4C79-8FDD-FF5FC6D5C869}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0414177E-283E-4E91-8032-37228B715F16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0414177E-283E-4E91-8032-37228B715F16}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0414177E-283E-4E91-8032-37228B715F16}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0414177E-283E-4E91-8032-37228B715F16}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96802A24-2E16-4B0E-83BE-AC8A54E19155}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96802A24-2E16-4B0E-83BE-AC8A54E19155}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96802A24-2E16-4B0E-83BE-AC8A54E19155}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96802A24-2E16-4B0E-83BE-AC8A54E19155}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B8AB24B-A8F7-420C-834E-52517F178D30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B8AB24B-A8F7-420C-834E-52517F178D30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B8AB24B-A8F7-420C-834E-52517F178D30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B8AB24B-A8F7-420C-834E-52517F178D30}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC0E93D0-1D5C-4BDC-95CA-D77052D2F9D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC0E93D0-1D5C-4BDC-95CA-D77052D2F9D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC0E93D0-1D5C-4BDC-95CA-D77052D2F9D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC0E93D0-1D5C-4BDC-95CA-D77052D2F9D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3AC762A7-49D7-4CCD-AB46-62FE9F88A766}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3AC762A7-49D7-4CCD-AB46-62FE9F88A766}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3AC762A7-49D7-4CCD-AB46-62FE9F88A766}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3AC762A7-49D7-4CCD-AB46-62FE9F88A766}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CE7CE1AF-FBD4-4187-9091-211E51BC1517}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CE7CE1AF-FBD4-4187-9091-211E51BC1517}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CE7CE1AF-FBD4-4187-9091-211E51BC1517}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CE7CE1AF-FBD4-4187-9091-211E51BC1517}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C347538A-6D85-46C0-9E82-2DF7B0A75F14}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C347538A-6D85-46C0-9E82-2DF7B0A75F14}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C347538A-6D85-46C0-9E82-2DF7B0A75F14}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C347538A-6D85-46C0-9E82-2DF7B0A75F14}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6A483A50-C71F-4312-A2ED-49B10AF30D90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6A483A50-C71F-4312-A2ED-49B10AF30D90}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6A483A50-C71F-4312-A2ED-49B10AF30D90}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6A483A50-C71F-4312-A2ED-49B10AF30D90}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0EFFF8CB-44E8-48F6-B8C2-782E0077C70B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0EFFF8CB-44E8-48F6-B8C2-782E0077C70B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0EFFF8CB-44E8-48F6-B8C2-782E0077C70B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0EFFF8CB-44E8-48F6-B8C2-782E0077C70B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF87C51B-3D83-4C79-8FDD-FF5FC6D5C869}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF87C51B-3D83-4C79-8FDD-FF5FC6D5C869}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF87C51B-3D83-4C79-8FDD-FF5FC6D5C869}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF87C51B-3D83-4C79-8FDD-FF5FC6D5C869}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 5
+		SccNumberOfProjects = 10
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://10.1.56.70:8080/tfs/pptsv2.0
 		SccLocalPath0 = .
-		SccProjectUniqueName1 = PPTS.Portal\\PPTS.Portal.csproj
-		SccProjectName1 = PPTS.Portal
-		SccLocalPath1 = PPTS.Portal
-		SccProjectUniqueName2 = PPTS.WebAPI.Customer\\PPTS.WebAPI.Customer.csproj
-		SccProjectName2 = PPTS.WebAPI.Customer
-		SccLocalPath2 = PPTS.WebAPI.Customer
-		SccProjectUniqueName3 = ..\\PPTSWebAPITest\\PPTS.WebAPI.Customer.Test\\PPTS.WebAPI.Customer.Test.csproj
-		SccProjectName3 = ../PPTSWebAPITest/PPTS.WebAPI.Customer.Test
-		SccLocalPath3 = ..\\PPTSWebAPITest\\PPTS.WebAPI.Customer.Test
-		SccProjectUniqueName4 = PPTS.WebAPI.Product\\PPTS.WebAPI.Product.csproj
-		SccProjectName4 = PPTS.WebAPI.Product
-		SccLocalPath4 = PPTS.WebAPI.Product
+		SccProjectUniqueName1 = ..\\PPTSFramework\\PPTS.Data.Common\\PPTS.Data.Common.csproj
+		SccProjectName1 = ../PPTSFramework/PPTS.Data.Common
+		SccLocalPath1 = ..\\PPTSFramework\\PPTS.Data.Common
+		SccProjectUniqueName2 = ..\\PPTSFramework\\PPTS.Data.Customers\\PPTS.Data.Customers.csproj
+		SccProjectName2 = ../PPTSFramework/PPTS.Data.Customers
+		SccLocalPath2 = ..\\PPTSFramework\\PPTS.Data.Customers
+		SccProjectUniqueName3 = ..\\PPTSFramework\\PPTS.Data.Orders\\PPTS.Data.Orders.csproj
+		SccProjectName3 = ../PPTSFramework/PPTS.Data.Orders
+		SccLocalPath3 = ..\\PPTSFramework\\PPTS.Data.Orders
+		SccProjectUniqueName4 = ..\\PPTSFramework\\PPTS.Data.Products\\PPTS.Data.Products.csproj
+		SccProjectName4 = ../PPTSFramework/PPTS.Data.Products
+		SccLocalPath4 = ..\\PPTSFramework\\PPTS.Data.Products
+		SccProjectUniqueName5 = ..\\PPTSFramework\\PPTS.Web.MVC.Library\\PPTS.Web.MVC.Library.csproj
+		SccProjectName5 = ../PPTSFramework/PPTS.Web.MVC.Library
+		SccLocalPath5 = ..\\PPTSFramework\\PPTS.Web.MVC.Library
+		SccProjectUniqueName6 = PPTS.WebAPI.Customers\\PPTS.WebAPI.Customers.csproj
+		SccProjectName6 = PPTS.WebAPI.Customers
+		SccLocalPath6 = PPTS.WebAPI.Customers
+		SccProjectUniqueName7 = PPTS.WebAPI.Orders\\PPTS.WebAPI.Orders.csproj
+		SccProjectName7 = PPTS.WebAPI.Orders
+		SccLocalPath7 = PPTS.WebAPI.Orders
+		SccProjectUniqueName8 = PPTS.WebAPI.Products\\PPTS.WebAPI.Products.csproj
+		SccProjectName8 = PPTS.WebAPI.Products
+		SccLocalPath8 = PPTS.WebAPI.Products
+		SccProjectUniqueName9 = PPTS.Portal\\PPTS.Portal.csproj
+		SccProjectName9 = PPTS.Portal
+		SccLocalPath9 = PPTS.Portal
 	EndGlobalSection
 EndGlobal

@@ -76,3 +76,4 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level1name = N'Constants',
     @level2type = N'COLUMN',
     @level2name = N'IsValidate'
+GO

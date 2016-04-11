@@ -68,5 +68,25 @@ namespace MCS.Library.Data.Mapping
         UseEnumString
     }
 
+    /// <summary>
+    /// 默认值的使用方式
+    /// </summary>
+    public enum DefaultValueUsageType
+    {
+        /// <summary>
+        /// 由调用者决定
+        /// </summary>
+        ByCaller = 0,
+
+        /// <summary>
+        /// 忽略默认值
+        /// </summary>
+        Ignore = 1,
+
+        /// <summary>
+        /// 使用默认值
+        /// </summary>
+        UseDefaultValue = 2,
+    }
     #endregion Enumeration
 }

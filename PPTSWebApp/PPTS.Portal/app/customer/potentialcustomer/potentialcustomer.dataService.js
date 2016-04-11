@@ -37,6 +37,14 @@
             resource.post({ operation: 'getCustomerInfo' }, { customerCode: code }, success, error);
         };
 
+        resource.getStaffRelations = function (criteria, success, error) {
+            resource.post({ operation: 'getStaffRelations' }, criteria, success, error);
+        };
+
+        resource.getPagedStaffRelations = function (criteria, success, error) {
+            resource.post({ operation: 'getPagedStaffRelations' }, criteria, success, error);
+        }
+
         return resource;
     }]);
 });

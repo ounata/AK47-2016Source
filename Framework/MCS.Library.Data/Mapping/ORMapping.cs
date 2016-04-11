@@ -176,6 +176,29 @@ namespace MCS.Library.Data.Mapping
             }
         }
 
+        private static void DoWhereSqlClauseBuilderByChangedFields<T>(SqlClauseBuilderIUW builder, ORMappingItem item, T graph)
+        {
+            object data = GetValueFromObject(item, graph);
+
+            if ((data == null || data == DBNull.Value))
+                builder.AppendItem(item.DataFieldName, data, SqlClauseBuilderBase.IsNot);
+            else
+                builder.AppendItem(item.DataFieldName, FormatValue(data, item), SqlClauseBuilderBase.NotEqualTo);
+        }
+
+        private static void DoWhereSqlClauseBuilderByChangedFieldsWithoutPrimaryKey<T>(SqlClauseBuilderIUW builder, ORMappingItem item, T graph)
+        {
+            if (item.PrimaryKey == false)
+            {
+                object data = GetValueFromObject(item, graph);
+
+                if ((data == null || data == DBNull.Value))
+                    builder.AppendItem(item.DataFieldName, data, SqlClauseBuilderBase.IsNot);
+                else
+                    builder.AppendItem(item.DataFieldName, FormatValue(data, item), SqlClauseBuilderBase.NotEqualTo);
+            }
+        }
+
         private static void DoWhereSqlClauseBuilder<T>(SqlClauseBuilderIUW builder, ORMappingItem item, T graph)
         {
             object data = GetValueFromObject(item, graph);
@@ -411,7 +434,7 @@ namespace MCS.Library.Data.Mapping
                 }
                 else
                     if (dataType == typeof(TimeSpan))
-                        data = ((TimeSpan)data).TotalSeconds;
+                    data = ((TimeSpan)data).TotalSeconds;
             }
 
             return data;
@@ -478,7 +501,10 @@ namespace MCS.Library.Data.Mapping
                 (ORTableMappingAttribute)ORTableMappingAttribute.GetCustomAttribute(type, typeof(ORTableMappingAttribute), true);
 
             if (tableAttr != null)
+            { 
                 result.TableName = tableAttr.TableName;
+                result.QueryTableName = tableAttr.QueryTableName;
+            }
             else
                 result.TableName = type.Name;
 
@@ -671,11 +697,11 @@ namespace MCS.Library.Data.Mapping
 
             PropertyInfo[] pis = type.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy);
 
-            Array.ForEach(pis, delegate(PropertyInfo pi) { list.Add(pi); });
+            Array.ForEach(pis, delegate (PropertyInfo pi) { list.Add(pi); });
 
             FieldInfo[] fis = type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.FlattenHierarchy);
 
-            Array.ForEach(fis, delegate(FieldInfo fi) { list.Add(fi); });
+            Array.ForEach(fis, delegate (FieldInfo fi) { list.Add(fi); });
 
             return list.ToArray();
         }
@@ -828,25 +854,25 @@ namespace MCS.Library.Data.Mapping
                 }
                 else
                     if (attr is SubClassORFieldMappingAttribute)
-                        result.SubClassFieldMappings.Add((SubClassORFieldMappingAttribute)attr);
-                    else
+                    result.SubClassFieldMappings.Add((SubClassORFieldMappingAttribute)attr);
+                else
                         if (attr is SubClassSqlBehaviorAttribute)
-                            result.SubClassFieldSqlBehaviors.Add((SubClassSqlBehaviorAttribute)attr);
-                        else
+                    result.SubClassFieldSqlBehaviors.Add((SubClassSqlBehaviorAttribute)attr);
+                else
                             if (attr is SubClassTypeAttribute)
-                                result.SubClassType = (SubClassTypeAttribute)attr;
-                            else
+                    result.SubClassType = (SubClassTypeAttribute)attr;
+                else
                                 if (attr is ORFieldMappingAttribute)
-                                    result.FieldMapping = (ORFieldMappingAttribute)attr;
-                                else
+                    result.FieldMapping = (ORFieldMappingAttribute)attr;
+                else
                                     if (attr is SqlBehaviorAttribute)
-                                        result.SqlBehavior = (SqlBehaviorAttribute)attr;
-                                    else
+                    result.SqlBehavior = (SqlBehaviorAttribute)attr;
+                else
                                         if (attr is SubClassPropertyEncryptionAttribute)
-                                            result.SubClassPropertyEncryptions.Add((SubClassPropertyEncryptionAttribute)attr);
-                                        else
+                    result.SubClassPropertyEncryptions.Add((SubClassPropertyEncryptionAttribute)attr);
+                else
                                             if (attr is PropertyEncryptionAttribute)
-                                                result.PropertyEncryption = (PropertyEncryptionAttribute)attr;
+                    result.PropertyEncryption = (PropertyEncryptionAttribute)attr;
             }
 
             return result;

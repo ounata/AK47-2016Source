@@ -180,7 +180,17 @@ RR.ObjectID = U.ID AND RR.ChildSchemaType = U.SchemaType AND {0}", new Connectiv
 			get { return string.IsNullOrEmpty(this.expression); }
 		}
 
-		public string ToSqlString(ISqlBuilder sqlBuilder)
+        public HashSet<string> GetFields()
+        {
+            return new HashSet<string>();
+        }
+
+        public IEnumerable<IConnectiveSqlClause> GetSubConnectiveSqlClause()
+        {
+            throw new NotImplementedException();
+        }
+
+        public string ToSqlString(ISqlBuilder sqlBuilder)
 		{
 			if (string.IsNullOrEmpty(this.expression))
 				return "(1=1)";

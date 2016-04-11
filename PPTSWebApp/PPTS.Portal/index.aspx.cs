@@ -21,11 +21,11 @@ namespace PPTS.Portal
 
         private static Dictionary<string, object> PreparePortalParameters()
         {
-            var parameters = new Dictionary<string, object>();
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
 
             parameters["displayName"] = DeluxeIdentity.CurrentUser.DisplayName;
             parameters["allJobs"] = DeluxeIdentity.CurrentUser.Jobs();
-            parameters["allFunctions"] = DeluxeIdentity.CurrentUser.AllFunctions();
+            parameters["allRoles"] = DeluxeIdentity.CurrentUser.PPTSRoles();
 
             return parameters;
         }

@@ -8,11 +8,19 @@ function (product) {
 
             vm.id = $stateParams.id;
 
-            $scope.load = function () {
-                //return 'app/product/productlist/product-view/product-view-onetoone.html';
-                return 'app/product/productlist/product-view/product-view-other.html';
-                //return 'app/product/productlist/product-view/product-view-classgroup.html';
-            };
+            //$scope.load = function () {
+            //    //return 'app/product/productlist/product-view/product-view-onetoone.html';
+            //    return 'app/product/productlist/product-view/product-view-other.html';
+            //    //return 'app/product/productlist/product-view/product-view-classgroup.html';
+            //};
+
+            productDataService.getProduct(vm.id, function (result) {
+                vm.product = result.product;
+                vm.productExOfCourse = result.productExOfCourse;
+                vm.salaryRules = result.salaryRules;
+
+                console.log(result);
+            });
 
 
         }]);

@@ -1,30 +1,229 @@
 <!-- #开始：位置条 -->
 <div class="breadcrumbs" id="breadcrumbs">
     <script type="text/javascript">
-try {
-    ace.settings.check('breadcrumbs', 'fixed');
-} catch (e) { }
+        try {
+            ace.settings.check('breadcrumbs', 'fixed');
+        } catch (e) { }
     </script>
     <ul class="breadcrumb">
         <li class="active">
-        <i class="ace-icon fa fa-home home-icon"></i>
-        <a ui-sref="index">首页</a>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a ui-sref="index">首页</a>
         </li>
         <li>
-        <i class="ace-icon fa fa-pencil-square-o"></i> 产品管理
+            <i class="ace-icon fa fa-pencil-square-o"></i> 产品管理
         </li>
         <li>
-        产品查看
+            产品查看
         </li>
     </ul>
 </div>
+
 <!-- /结束：位置条 -->
-<div class="page-content" >
+<div class="page-content">
     <div class="page-content-area">
         <div class="row">
-            <div class="col-sm-12" >
-                <ng-include src="load()"></ng-include>
+            <div class="col-sm-12">
+                <!--<ng-include src="load()"></ng-include>-->
+                <!--开始-->
+
+                <div class="widget-box">
+                    <div class="widget-header">
+                        <h4>
+                            {{vm.product.productName}}
+                        </h4>
+                    </div>
+                    <div class="page-header">
+                        <span>基础信息</span>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <mcs-label text="产品类型：" css="col-sm-3" />
+                            <div class="col-sm-9">
+                                {{vm.product.categoryType | categoryType }}
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <mcs-label text="产品分类：" css="col-sm-3" />
+                            <div class="col-sm-9">
+                                {{ vm.product.catalogName }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-4"></div>
+
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <mcs-label text="产品名称：" css="col-sm-3" />
+                            <div class="col-sm-9">
+                                {{vm.product.productName  }}
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <mcs-label text="产品编码：" css="col-sm-3" />
+                            <div class="col-sm-9">
+                                {{ vm.product.productCode }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-4"></div>
+
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <mcs-label text="创建时间：" css="col-sm-3" />
+                            <div class="col-sm-9">
+                                {{vm.product.createTime  }}
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <mcs-label text="颗粒度：" css="col-sm-3" />
+                            <div class="col-sm-9">
+                                {{ vm.product.productUnit | unit }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-4"></div>
+
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <mcs-label text="总课次：" css="col-sm-3" />
+                            <div class="col-sm-9">
+                                {{vm.product.lessonCount  }}
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <mcs-label text="每课次时长：" css="col-sm-3" />
+                            <div class="col-sm-9">
+                                {{ vm.product.lessonDuration }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-4"></div>
+
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <mcs-label text="产品单价：" css="col-sm-3" />
+                            <div class="col-sm-9">
+                                {{vm.product.productPrice  }}
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <mcs-label text="目标单价：" css="col-sm-3" />
+                            <div class="col-sm-9">
+                                {{ vm.product.targetPrice }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-4"></div>
+
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <mcs-label text="总课时：" css="col-sm-3" />
+                            <div class="col-sm-9">
+                                {{vm.product.lessonCount  }}
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <mcs-label text="总课时时长：" css="col-sm-3" />
+                            <div class="col-sm-9">
+                                {{ vm.product.lessonDuration }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-4"></div>
+                    <div class="form-group">
+                        <div class="col-sm-12">分账比例：学大占订购金额{{(1-vm.product.partnerRatio)*100}}%，合作方学院占订购金额{{vm.product.partnerRatio*100}}%，合作单价{{vm.product.productPrice * ( 1 - vm.product.partnerRatio )}}元/时</div>
+                    </div>
+                    <div class="space-4"></div>
+
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <mcs-label text="薪酬规则：" css="col-sm-3" />
+                            <div class="col-sm-9">
+                                <br/>教师课时收入：每课时按{{vm.salaryRules[2].moneyPerPeriod}}元核算
+                                <br />咨询师提成：每课时按{{vm.salaryRules[0].moneyPerPeriod}}元核算
+                                <br />学管师提成：每课时按{{vm.salaryRules[1].moneyPerPeriod}}元核算
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <mcs-label text="开班人数：" css="col-sm-3" />
+                            <div class="col-sm-9">
+                                {{vm.product.productExOfCourse.minPeoples}}
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <mcs-label text="满班人数：" css="col-sm-3" />
+                            <div class="col-sm-9">
+                                {{vm.product.productExOfCourse.maxPeoples}}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="page-header">
+                        <span>销售信息</span>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <mcs-label text="销售大区分公司：" css="col-sm-3" />
+                            <div class="col-sm-9">
+                                
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <mcs-label text="销售校区：" css="col-sm-3" />
+                            <div class="col-sm-9">
+                                
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <mcs-label text="产品启售时间：" css="col-sm-3" />
+                            <div class="col-sm-9">
+                                {{vm.product.startDate}}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <mcs-label text="产品止售时间：" css="col-sm-3" />
+                            <div class="col-sm-9">
+                                {{vm.product.endDate}}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <mcs-label text="创建人：" css="col-sm-3" />
+                            <div class="col-sm-9">
+                                {{vm.product.creatorName}}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="page-header">
+                        <span>折扣信息</span>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <mcs-label text="是否享受客户折扣：" css="col-sm-3" />
+                            <div class="col-sm-9">
+                                {{vm.product.tunlandAllowed}}
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <!--线束-->
             </div>
         </div>
     </div>
-</div>

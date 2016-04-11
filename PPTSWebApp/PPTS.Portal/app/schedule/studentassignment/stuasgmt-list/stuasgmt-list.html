@@ -19,7 +19,46 @@
     </ul>
 </div>
 <!-- /结束：位置条 -->
-<div>
-    {{ vm.dataContent }}
+<div class="page-content">
+    <div class="page-content-area">
+        <!-- #开始：潜客列表 -->
+        <div class="row">
+            <div class="col-sm-12">
+                <!-- #开始：潜客列表.快速查询条件 -->
+                <div class="mcs-panel-search well well-sm">
+                    <div class="portlet">
+                        <div class="portlet-title line">
+                            <div class="caption">
+                                <label class="quick-search"><i class="ace-icon fa fa-search bigger-125"></i> 快速查询</label>
+                            </div>
+                        </div>
+                        <div class="portlet-body">                        
+                            <ppts-select caption="上课班级" category="grade" model="vm.criteria.grade" class="col-sm-3" />                 
+                            <mcs-input placeholder="学员姓名" model="vm.criteria.customerName" />
+                            <mcs-input placeholder="学员编号" model="vm.criteria.customerCode" />
+                            <mcs-input placeholder="在读学校" model="vm.criteria.schoolName" />
+                            <mcs-input placeholder="学管师" model="vm.criteria.educatorName" />
+                            <mcs-button type="search" click="vm.init()" size="medium" />
+                        </div>
+                    </div>
+                </div>
+                <!-- /结束：潜客列表.快速查询条件 -->
+                <!-- #开始：潜客列表.工具栏 -->
+                <div class="mcs-panel-toolbar">
+                    <mcs-button icon="user-plus" css="btn-success" text="排课"></mcs-button>
+                </div>
+                <!-- /结束：潜客列表.工具栏 -->
+                <!-- #开始：潜客列表.数据表格 -->
+                <mcs-datatable data="vm.data" />
+                <!-- /结束：潜客列表.数据表格 -->
+            </div>
+        </div>
+    </div>
 </div>
+
+
+
+
+
+
 

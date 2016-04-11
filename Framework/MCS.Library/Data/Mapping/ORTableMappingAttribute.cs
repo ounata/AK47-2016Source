@@ -22,12 +22,32 @@ namespace MCS.Library.Data.Mapping
         }
 
         /// <summary>
+        /// 构造方法
+        /// </summary>
+        /// <param name="tableName">表名</param>
+        /// <param name="queryTableName">查询时所用的表名</param>
+        public ORTableMappingAttribute(string tableName, string queryTableName)
+        {
+            this.tableName = tableName;
+            this.QueryTableName = queryTableName;
+        }
+
+        /// <summary>
         /// 表名
         /// </summary>
         public string TableName
         {
             get { return this.tableName; }
             set { this.tableName = value; }
+        }
+
+        /// <summary>
+        /// 查询时所用的表名
+        /// </summary>
+        public string QueryTableName
+        {
+            get;
+            set;
         }
     }
 }

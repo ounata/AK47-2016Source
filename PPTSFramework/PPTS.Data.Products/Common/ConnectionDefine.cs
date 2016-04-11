@@ -12,7 +12,7 @@ namespace PPTS.Data.Products
     /// </summary>
     public static class ConnectionDefine
     {
-        public const string PPTSCustomerConnectionName = "PPTS_Product";
+        public const string PPTSProductConnectionName = "PPTS_Product";
 
         /// <summary>
         /// 得到默认的数据操作上下文
@@ -20,7 +20,7 @@ namespace PPTS.Data.Products
         /// <returns></returns>
         public static DbContext GetDbContext()
         {
-            return DbContext.GetContext(PPTSCustomerConnectionName);
+            return DbContext.GetContext(PPTSProductConnectionName);
         }
     }
 }

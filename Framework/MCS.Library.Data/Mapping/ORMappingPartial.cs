@@ -364,6 +364,45 @@ namespace MCS.Library.Data.Mapping
         }
 
         /// <summary>
+        /// 生成Field1 不等于 ... OR Field 2 不等于 ...的子句，用于判断某个对象是否与数据库中的值不一样
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="graph"></param>
+        /// <param name="includePK">是否包含主键，默认是包含的</param>
+        /// <param name="ignoreProperties"></param>
+        /// <returns></returns>
+        public static WhereSqlClauseBuilder GetWhereSqlClauseBuilderByChangedFields<T>(T graph, bool includePK = true, params string[] ignoreProperties)
+        {
+            return GetWhereSqlClauseBuilderByChangedFields(graph, InnerGetMappingInfoByObject(graph), includePK, ignoreProperties);
+        }
+
+        /// <summary>
+        /// 生成Field1 不等于 ... OR Field 2 不等于 ...的子句，用于判断某个对象是否与数据库中的值不一样
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="graph"></param>
+        /// <param name="mapping"></param>
+        /// <param name="includePK">是否包含主键，默认是包含的</param>
+        /// <param name="ignoreProperties"></param>
+        /// <returns></returns>
+        public static WhereSqlClauseBuilder GetWhereSqlClauseBuilderByChangedFields<T>(T graph, ORMappingItemCollection mapping, bool includePK = true, params string[] ignoreProperties)
+        {
+            ExceptionHelper.FalseThrow<ArgumentNullException>(graph != null, "graph");
+            ExceptionHelper.FalseThrow<ArgumentNullException>(mapping != null, "mapping");
+
+            WhereSqlClauseBuilder builder = new WhereSqlClauseBuilder(LogicOperatorDefine.Or);
+
+            if (includePK)
+                FillSqlClauseBuilder(builder, graph, mapping, ClauseBindingFlags.Where,
+                    new DoSqlClauseBuilder<T>(DoWhereSqlClauseBuilderByChangedFields<T>), ignoreProperties);
+            else
+                FillSqlClauseBuilder(builder, graph, mapping, ClauseBindingFlags.Where,
+                new DoSqlClauseBuilder<T>(DoWhereSqlClauseBuilderByChangedFieldsWithoutPrimaryKey<T>), ignoreProperties);
+
+            return builder;
+        }
+
+        /// <summary>
         /// 读取字段的主键的键值对
         /// </summary>
         /// <typeparam name="T"></typeparam>

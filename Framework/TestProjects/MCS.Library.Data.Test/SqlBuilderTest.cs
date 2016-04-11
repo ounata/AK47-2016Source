@@ -1,6 +1,7 @@
-﻿using System;
+﻿using MCS.Library.Data.Builder;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MCS.Library.Data.Builder;
+using System;
+using System.Linq;
 
 namespace MCS.Library.Data.Test
 {
@@ -26,6 +27,8 @@ namespace MCS.Library.Data.Test
             builder.AppendItem("CreateTime", "GETDATE()", "=", true);
 
             Console.WriteLine(builder.ToSqlString(TSqlBuilder.Instance));
+
+            Console.WriteLine(string.Join(", ", builder.GetFields().ToArray()));
         }
 
         [TestMethod]
@@ -36,6 +39,7 @@ namespace MCS.Library.Data.Test
             builder.AppendItem(1, 2, 3, 4, 5);
 
             Console.WriteLine(builder.ToSqlString(TSqlBuilder.Instance));
+            Console.WriteLine(string.Join(", ", builder.GetFields().ToArray()));
         }
 
         [TestMethod]
@@ -46,13 +50,14 @@ namespace MCS.Library.Data.Test
             builder.AppendItem("A", "A").AppendItem("B", DateTime.Now);
             builder.AppendItem("CreateTime", "GETDATE()", "=", true);
 
-            InSqlClauseBuilder inBuilder = new InSqlClauseBuilder("A");
+            InSqlClauseBuilder inBuilder = new InSqlClauseBuilder("C");
 
             inBuilder.AppendItem(1, 2, 3, 4, 5);
 
             ConnectiveSqlClauseCollection connective = new ConnectiveSqlClauseCollection(LogicOperatorDefine.Or, builder, inBuilder);
 
             Console.WriteLine(connective.ToSqlString(TSqlBuilder.Instance));
+            Console.WriteLine(string.Join(", ", connective.GetFields().ToArray()));
         }
     }
 }

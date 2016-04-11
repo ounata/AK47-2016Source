@@ -8,646 +8,635 @@ using System.Runtime.Serialization;
 
 namespace PPTS.Data.Customers.Entities
 {
-	/// <summary>
-	/// This object represents the properties and methods of a Customer.
-	/// 学员信息表
-	/// </summary>
-	[Serializable]
+    /// <summary>
+    /// This object represents the properties and methods of a Customer.
+    /// 学员信息表
+    /// </summary>
+    [Serializable]
     [ORTableMapping("Customers")]
     [DataContract]
-	public class Customer
-	{		
-		public Customer()
-		{
-		}		
+    public class Customer
+    {
+        public Customer()
+        {
+        }
 
-		/// <summary>
-		/// 校区ID
-		/// </summary>
-		[ORFieldMapping("CampusID")]
+        /// <summary>
+        /// 校区ID
+        /// </summary>
+        [ORFieldMapping("CampusID")]
         [DataMember]
-		public string CampusID
-		{
-			get;
+        public string CampusID
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 校区名称
-		/// </summary>
-		[ORFieldMapping("CampusName")]
+        /// <summary>
+        /// 校区名称
+        /// </summary>
+        [ORFieldMapping("CampusName")]
         [DataMember]
-		public string CampusName
-		{
-			get;
+        public string CampusName
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 学员ID
-		/// </summary>
-		[ORFieldMapping("CustomerID", PrimaryKey=true)]
+        /// <summary>
+        /// 学员ID
+        /// </summary>
+        [ORFieldMapping("CustomerID", PrimaryKey = true)]
         [DataMember]
-		public string CustomerID
-		{
-			get;
+        public string CustomerID
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 学员编码
-		/// </summary>
-		[ORFieldMapping("CustomerCode")]
+        /// <summary>
+        /// 学员编码
+        /// </summary>
+        [ORFieldMapping("CustomerCode")]
         [DataMember]
-		public string CustomerCode
-		{
-			get;
+        public string CustomerCode
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 学员姓名
-		/// </summary>
-		[ORFieldMapping("CustomerName")]
+        /// <summary>
+        /// 学员姓名
+        /// </summary>
+        [ORFieldMapping("CustomerName")]
         [DataMember]
-		public string CustomerName
-		{
-			get;
+        public string CustomerName
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 客户等级（A1,A2,A3...)
-		/// </summary>
-		[ORFieldMapping("CustomerLevel")]
+        /// <summary>
+        /// 客户等级（A1,A2,A3...)
+        /// </summary>
+        [ORFieldMapping("CustomerLevel")]
         [DataMember]
-		public string CustomerLevel
-		{
-			get;
+        public string CustomerLevel
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 学员状态（枚举-  正常，休学，冻结（高三毕业9月后），结业）
-		/// </summary>
-		[ORFieldMapping("CustomerStatus")]
+        /// <summary>
+        /// 学员状态（枚举-  正常，休学，冻结（高三毕业9月后），结业）
+        /// </summary>
+        [ORFieldMapping("CustomerStatus")]
         [DataMember]
-		public string CustomerStatus
-		{
-			get;
+        public string CustomerStatus
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 是否仅登记一个家长
-		/// </summary>
-		[ORFieldMapping("IsOneParent")]
+        /// <summary>
+        /// 是否仅登记一个家长
+        /// </summary>
+        [ORFieldMapping("IsOneParent")]
         [DataMember]
-		public int IsOneParent
-		{
-			get;
+        public int IsOneParent
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 学员描述
-		/// </summary>
-		[ORFieldMapping("Character")]
+        /// <summary>
+        /// 学员描述
+        /// </summary>
+        [ORFieldMapping("Character")]
         [DataMember]
-		public string Character
-		{
-			get;
+        public string Character
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 出生年月
-		/// </summary>
-		[ORFieldMapping("Birthday")]
+        /// <summary>
+        /// 出生年月
+        /// </summary>
+        [ORFieldMapping("Birthday")]
         [DataMember]
-		public DateTime Birthday
-		{
-			get;
+        public DateTime Birthday
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 性别代码
-		/// </summary>
-		[ORFieldMapping("Gender")]
+        /// <summary>
+        /// 性别代码
+        /// </summary>
+        [ORFieldMapping("Gender")]
         [DataMember]
-		public string Gender
-		{
-			get;
+        public string Gender
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 电子邮箱
-		/// </summary>
-		[ORFieldMapping("Email")]
+        /// <summary>
+        /// 电子邮箱
+        /// </summary>
+        [ORFieldMapping("Email")]
         [DataMember]
-		public string Email
-		{
-			get;
+        public string Email
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 证件类型
-		/// </summary>
-		[ORFieldMapping("IDType")]
+        /// <summary>
+        /// 证件类型
+        /// </summary>
+        [ORFieldMapping("IDType")]
         [DataMember]
-		public string IDType
-		{
-			get;
+        public string IDType
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 证件号码
-		/// </summary>
-		[ORFieldMapping("IDNumber")]
+        /// <summary>
+        /// 证件号码
+        /// </summary>
+        [ORFieldMapping("IDNumber")]
         [DataMember]
-		public string IDNumber
-		{
-			get;
+        public string IDNumber
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// VIP类型
-		/// </summary>
-		[ORFieldMapping("VipType")]
+        /// <summary>
+        /// VIP类型
+        /// </summary>
+        [ORFieldMapping("VipType")]
         [DataMember]
-		public string VipType
-		{
-			get;
+        public string VipType
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// VIP级别
-		/// </summary>
-		[ORFieldMapping("VipLevel")]
+        /// <summary>
+        /// VIP级别
+        /// </summary>
+        [ORFieldMapping("VipLevel")]
         [DataMember]
-		public string VipLevel
-		{
-			get;
+        public string VipLevel
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 入学年级代码
-		/// </summary>
-		[ORFieldMapping("EntranceGrade")]
+        /// <summary>
+        /// 入学年级代码
+        /// </summary>
+        [ORFieldMapping("EntranceGrade")]
         [DataMember]
-		public string EntranceGrade
-		{
-			get;
+        public string EntranceGrade
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 当前年级代码
-		/// </summary>
-		[ORFieldMapping("Grade")]
+        /// <summary>
+        /// 当前年级代码
+        /// </summary>
+        [ORFieldMapping("Grade")]
         [DataMember]
-		public string Grade
-		{
-			get;
+        public string Grade
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 学年制代码（五年制，六年制等）
-		/// </summary>
-		[ORFieldMapping("ShoolYear")]
+        /// <summary>
+        /// 学年制代码（五年制，六年制等）
+        /// </summary>
+        [ORFieldMapping("ShoolYear")]
         [DataMember]
-		public string ShoolYear
-		{
-			get;
+        public string ShoolYear
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 学科类型代码（文科，理科，不分科）
-		/// </summary>
-		[ORFieldMapping("SubjectType")]
+        /// <summary>
+        /// 学科类型代码（文科，理科，不分科）
+        /// </summary>
+        [ORFieldMapping("SubjectType")]
         [DataMember]
-		public string SubjectType
-		{
-			get;
+        public string SubjectType
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 学员类型代码
-		/// </summary>
-		[ORFieldMapping("StudentType")]
+        /// <summary>
+        /// 学员类型代码
+        /// </summary>
+        [ORFieldMapping("StudentType")]
         [DataMember]
-		public string StudentType
-		{
-			get;
+        public string StudentType
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 接触方式代码
-		/// </summary>
-		[ORFieldMapping("ContactType")]
+        /// <summary>
+        /// 接触方式代码
+        /// </summary>
+        [ORFieldMapping("ContactType")]
         [DataMember]
-		public string ContactType
-		{
-			get;
+        public string ContactType
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 信息来源一级分类代码
-		/// </summary>
-		[ORFieldMapping("SourceMainType")]
+        /// <summary>
+        /// 信息来源一级分类代码
+        /// </summary>
+        [ORFieldMapping("SourceMainType")]
         [DataMember]
-		public string SourceMainType
-		{
-			get;
+        public string SourceMainType
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 信息来源二级分类代码
-		/// </summary>
-		[ORFieldMapping("SourceSubType")]
+        /// <summary>
+        /// 信息来源二级分类代码
+        /// </summary>
+        [ORFieldMapping("SourceSubType")]
         [DataMember]
-		public string SourceSubType
-		{
-			get;
+        public string SourceSubType
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 来源系统代码
-		/// </summary>
-		[ORFieldMapping("SourceSystem")]
+        /// <summary>
+        /// 来源系统代码
+        /// </summary>
+        [ORFieldMapping("SourceSystem")]
         [DataMember]
-		public string SourceSystem
-		{
-			get;
+        public string SourceSystem
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 转介绍员工ID
-		/// </summary>
-		[ORFieldMapping("ReferralStaffID")]
+        /// <summary>
+        /// 转介绍员工ID
+        /// </summary>
+        [ORFieldMapping("ReferralStaffID")]
         [DataMember]
-		public string ReferralStaffID
-		{
-			get;
+        public string ReferralStaffID
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 转介绍员工OA账号
-		/// </summary>
-		[ORFieldMapping("ReferralStaffCode")]
+        /// <summary>
+        /// 转介绍员工OA账号
+        /// </summary>
+        [ORFieldMapping("ReferralStaffCode")]
         [DataMember]
-		public string ReferralStaffCode
-		{
-			get;
+        public string ReferralStaffCode
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 转介绍员工姓名
-		/// </summary>
-		[ORFieldMapping("ReferralStaffName")]
+        /// <summary>
+        /// 转介绍员工姓名
+        /// </summary>
+        [ORFieldMapping("ReferralStaffName")]
         [DataMember]
-		public string ReferralStaffName
-		{
-			get;
+        public string ReferralStaffName
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 转介绍员工岗位ID
-		/// </summary>
-		[ORFieldMapping("ReferralStaffJobID")]
+        /// <summary>
+        /// 转介绍员工岗位ID
+        /// </summary>
+        [ORFieldMapping("ReferralStaffJobID")]
         [DataMember]
-		public string ReferralStaffJobID
-		{
-			get;
+        public string ReferralStaffJobID
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 转介绍员工岗位名称
-		/// </summary>
-		[ORFieldMapping("ReferralStaffJobName")]
+        /// <summary>
+        /// 转介绍员工岗位名称
+        /// </summary>
+        [ORFieldMapping("ReferralStaffJobName")]
         [DataMember]
-		public string ReferralStaffJobName
-		{
-			get;
+        public string ReferralStaffJobName
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 转介绍学生ID
-		/// </summary>
-		[ORFieldMapping("ReferralCustomerID")]
+        /// <summary>
+        /// 转介绍学生ID
+        /// </summary>
+        [ORFieldMapping("ReferralCustomerID")]
         [DataMember]
-		public string ReferralCustomerID
-		{
-			get;
+        public string ReferralCustomerID
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 转介绍学生编号
-		/// </summary>
-		[ORFieldMapping("ReferralCustomerCode")]
+        /// <summary>
+        /// 转介绍学生编号
+        /// </summary>
+        [ORFieldMapping("ReferralCustomerCode")]
         [DataMember]
-		public string ReferralCustomerCode
-		{
-			get;
+        public string ReferralCustomerCode
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 转介绍学生姓名
-		/// </summary>
-		[ORFieldMapping("ReferralCustomerName")]
+        /// <summary>
+        /// 转介绍学生姓名
+        /// </summary>
+        [ORFieldMapping("ReferralCustomerName")]
         [DataMember]
-		public string ReferralCustomerName
-		{
-			get;
+        public string ReferralCustomerName
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 购买意向
-		/// </summary>
-		[ORFieldMapping("PurchaseIntention")]
+        /// <summary>
+        /// 购买意向
+        /// </summary>
+        [ORFieldMapping("PurchaseIntention")]
         [DataMember]
-		public string PurchaseIntention
-		{
-			get;
+        public string PurchaseIntention
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 是否锁定
-		/// </summary>
-		[ORFieldMapping("Locked")]
+        /// <summary>
+        /// 是否锁定
+        /// </summary>
+        [ORFieldMapping("Locked")]
         [DataMember]
-		public int Locked
-		{
-			get;
+        public int Locked
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 锁定描述（转学，毕业）
-		/// </summary>
-		[ORFieldMapping("LockMemo")]
+        /// <summary>
+        /// 锁定描述（转学，毕业）
+        /// </summary>
+        [ORFieldMapping("LockMemo")]
         [DataMember]
-		public long LockMemo
-		{
-			get;
+        public long LockMemo
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 是否高三毕业
-		/// </summary>
-		[ORFieldMapping("Graduated")]
+        /// <summary>
+        /// 是否高三毕业
+        /// </summary>
+        [ORFieldMapping("Graduated")]
         [DataMember]
-		public int Graduated
-		{
-			get;
+        public int Graduated
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 高三毕业年份
-		/// </summary>
-		[ORFieldMapping("GraduateYear")]
+        /// <summary>
+        /// 高三毕业年份
+        /// </summary>
+        [ORFieldMapping("GraduateYear")]
         [DataMember]
-		public string GraduateYear
-		{
-			get;
+        public string GraduateYear
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 在读学校ID
-		/// </summary>
-		[ORFieldMapping("SchoolID")]
+        /// <summary>
+        /// 在读学校ID
+        /// </summary>
+        [ORFieldMapping("SchoolID")]
         [DataMember]
-		public string SchoolID
-		{
-			get;
+        public string SchoolID
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 是否复读
-		/// </summary>
-		[ORFieldMapping("IsStudyAgain")]
+        /// <summary>
+        /// 是否复读
+        /// </summary>
+        [ORFieldMapping("IsStudyAgain")]
         [DataMember]
-		public int IsStudyAgain
-		{
-			get;
+        public int IsStudyAgain
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 首次签约时间
-		/// </summary>
-		[ORFieldMapping("FirstSignTime")]
+        /// <summary>
+        /// 首次签约时间
+        /// </summary>
+        [ORFieldMapping("FirstSignTime")]
         [DataMember]
-		public DateTime FirstSignTime
-		{
-			get;
+        public DateTime FirstSignTime
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 首次签约人ID
-		/// </summary>
-		[ORFieldMapping("FirstSignerID")]
+        /// <summary>
+        /// 首次签约人ID
+        /// </summary>
+        [ORFieldMapping("FirstSignerID")]
         [DataMember]
-		public string FirstSignerID
-		{
-			get;
+        public string FirstSignerID
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 首次签约人
-		/// </summary>
-		[ORFieldMapping("FirstSignerName")]
+        /// <summary>
+        /// 首次签约人
+        /// </summary>
+        [ORFieldMapping("FirstSignerName")]
         [DataMember]
-		public string FirstSignerName
-		{
-			get;
+        public string FirstSignerName
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 当前跟进时间
-		/// </summary>
-		[ORFieldMapping("FollowTime")]
+        /// <summary>
+        /// 当前跟进时间
+        /// </summary>
+        [ORFieldMapping("FollowTime")]
         [DataMember]
-		public DateTime FollowTime
-		{
-			get;
+        public DateTime FollowTime
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 当前跟进阶段
-		/// </summary>
-		[ORFieldMapping("FollowStage")]
+        /// <summary>
+        /// 当前跟进阶段
+        /// </summary>
+        [ORFieldMapping("FollowStage")]
         [DataMember]
-		public string FollowStage
-		{
-			get;
+        public string FollowStage
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 已跟进次数
-		/// </summary>
-		[ORFieldMapping("FollowedCount")]
+        /// <summary>
+        /// 已跟进次数
+        /// </summary>
+        [ORFieldMapping("FollowedCount")]
         [DataMember]
-		public int FollowedCount
-		{
-			get;
+        public int FollowedCount
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 下一次跟进时间
-		/// </summary>
-		[ORFieldMapping("NextFollowTime")]
+        /// <summary>
+        /// 下一次跟进时间
+        /// </summary>
+        [ORFieldMapping("NextFollowTime")]
         [DataMember]
-		public DateTime NextFollowTime
-		{
-			get;
+        public DateTime NextFollowTime
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 当前回访时间
-		/// </summary>
-		[ORFieldMapping("VistTime")]
+        /// <summary>
+        /// 当前回访时间
+        /// </summary>
+        [ORFieldMapping("VistTime")]
         [DataMember]
-		public DateTime VistTime
-		{
-			get;
+        public DateTime VistTime
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 已回访次数
-		/// </summary>
-		[ORFieldMapping("VisitedCount")]
+        /// <summary>
+        /// 已回访次数
+        /// </summary>
+        [ORFieldMapping("VisitedCount")]
         [DataMember]
-		public int VisitedCount
-		{
-			get;
+        public int VisitedCount
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 下次回访时间
-		/// </summary>
-		[ORFieldMapping("NextVistTime")]
+        /// <summary>
+        /// 下次回访时间
+        /// </summary>
+        [ORFieldMapping("NextVistTime")]
         [DataMember]
-		public DateTime NextVistTime
-		{
-			get;
+        public DateTime NextVistTime
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 创建人ID
-		/// </summary>
-		[ORFieldMapping("CreatorID")]
+        /// <summary>
+        /// 创建人ID
+        /// </summary>
+        [ORFieldMapping("CreatorID")]
         [DataMember]
-		public string CreatorID
-		{
-			get;
+        public string CreatorID
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 创建人姓名
-		/// </summary>
-		[ORFieldMapping("CreatorName")]
+        /// <summary>
+        /// 创建人姓名
+        /// </summary>
+        [ORFieldMapping("CreatorName")]
         [DataMember]
-		public string CreatorName
-		{
-			get;
+        public string CreatorName
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 创建时间
-		/// </summary>
-		[ORFieldMapping("CreateTime")]
+        /// <summary>
+        /// 创建时间
+        /// </summary>
+        [ORFieldMapping("CreateTime")]
         [DataMember]
-		public DateTime CreateTime
-		{
-			get;
+        public DateTime CreateTime
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 最后修改人ID
-		/// </summary>
-		[ORFieldMapping("ModifierID")]
+        /// <summary>
+        /// 最后修改人ID
+        /// </summary>
+        [ORFieldMapping("ModifierID")]
         [DataMember]
-		public string ModifierID
-		{
-			get;
+        public string ModifierID
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 最后修改人姓名
-		/// </summary>
-		[ORFieldMapping("ModifierName")]
+        /// <summary>
+        /// 最后修改人姓名
+        /// </summary>
+        [ORFieldMapping("ModifierName")]
         [DataMember]
-		public string ModifierName
-		{
-			get;
+        public string ModifierName
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 最后修改时间
-		/// </summary>
-		[ORFieldMapping("ModifyTime")]
+        /// <summary>
+        /// 最后修改时间
+        /// </summary>
+        [ORFieldMapping("ModifyTime")]
         [DataMember]
-		public DateTime ModifyTime
-		{
-			get;
+        public DateTime ModifyTime
+        {
+            get;
             set;
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		[ORFieldMapping("TenantCode")]
-        [DataMember]
-		public string TenantCode
-		{
-			get;
-            set;
-		}
-	}
+        }
+    }
 
     [Serializable]
     [DataContract]

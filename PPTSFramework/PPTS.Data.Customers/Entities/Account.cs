@@ -273,17 +273,6 @@ namespace PPTS.Data.Customers.Entities
 			get;
             set;
 		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		[ORFieldMapping("TenantCode")]
-        [DataMember]
-		public string TenantCode
-		{
-			get;
-            set;
-		}
 	}
 
     [Serializable]

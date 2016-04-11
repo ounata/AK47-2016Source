@@ -109,17 +109,6 @@ namespace PPTS.Data.Customers.Entities
             get;
             set;
         }
-
-        /// <summary>
-        /// 租户的ID
-        /// </summary>
-        [ORFieldMapping("TenantCode")]
-        [DataMember]
-        public string TenantCode
-        {
-            get;
-            set;
-        }
     }
 
     [Serializable]

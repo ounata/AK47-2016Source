@@ -5,11 +5,11 @@ using PPTS.Data.Common.Adapters;
 using PPTS.Data.Customers.Adapters;
 using PPTS.Data.Customers.DataSources;
 using PPTS.Data.Customers.Entities;
-using PPTS.WebAPI.Customer.Executors;
-using PPTS.WebAPI.Customer.ViewModels.PotentialCustomers;
+using PPTS.WebAPI.Customers.Executors;
+using PPTS.WebAPI.Customers.ViewModels.PotentialCustomers;
 using System.Linq;
 
-namespace PPTS.WebAPI.Customer.Controllers
+namespace PPTS.WebAPI.Customers.Controllers
 {
     public class PotentialCustomersController : ApiController
     {
@@ -84,7 +84,10 @@ namespace PPTS.WebAPI.Customer.Controllers
                     action.AppendItem("CustomerID", id).AppendItem("IsPrimary", 1);
                 }).FirstOrDefault();
 
-            result.Parent = ParentAdapter.Instance.Load(customerParentRelation.ParentID);
+            if (customerParentRelation != null)
+            {
+                result.Parent = ParentAdapter.Instance.Load(customerParentRelation.ParentID);
+            }
 
             result.CustomerStaffRelation = CustomerStaffRelationAdapter.Instance.Load(action =>
             {
@@ -123,6 +126,19 @@ namespace PPTS.WebAPI.Customer.Controllers
             {
                 action.AppendItem("CustomerCode", customerCode);
             }).FirstOrDefault();
+        }
+
+        #endregion
+
+        #region api/potentialcustomers/getcustomerinfo
+
+        [HttpPost]
+        public CustomerStaffRelationQueryResult GetStaffRelations(CustomerStaffRelationQueryCriteriaModel criteria)
+        {
+            return new CustomerStaffRelationQueryResult
+            {
+                QueryResult = GenericCustomerDataSource<CustomerStaffRelation, CustomerStaffRelationCollection>.Instance.Query(criteria.PageParams, criteria, criteria.OrderBy)
+            };
         }
 
         #endregion

@@ -135,7 +135,7 @@ namespace MCS.Library.Data.Adapters
                 select = "*";
 
             if (from.IsNullOrEmpty())
-                from = GetMappingInfo().TableName;
+                from = GetMappingInfo().GetQueryTableName();
 
             QueryCondition qc = new QueryCondition(startRowIndex,
                 maximumRows, select, from, orderBy, where);

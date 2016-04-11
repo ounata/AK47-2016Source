@@ -101,7 +101,9 @@
     <Compile Include="Adapters\InLoadingCondition.cs" />
     <Compile Include="Adapters\LoadingConditionBase.cs" />
     <Compile Include="Adapters\VersionedObjectAdapterBase.cs" />
-    <Compile Include="Adapters\VersionedObjectLoadableAdapterBase.cs" />
+    <Compile Include="Adapters\VersionedObjectAdapterBase_Context.cs" />
+    <Compile Include="Adapters\VersionedObjectAdapterBase_Load.cs" />
+    <Compile Include="Adapters\VersionedObjectAdapterBase_Load_Context.cs" />
     <Compile Include="Adapters\WhereLoadingCondition.cs" />
     <Compile Include="Adapters\ObjectDataSourceQueryAdapterBase.cs" />
     <Compile Include="Adapters\TSqlCommonAdapter.cs" />

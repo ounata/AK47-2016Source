@@ -5,7 +5,7 @@
         pkg: grunt.file.readJSON('package.json'),
         concat: {
             startup: {
-                src: ['app/common/startup/mcs.min.js',
+                src: ['app/common/startup/mcs.js',
             		  'app/common/config/ppts.config.js'],
                 dest: 'build/ppts.startup.js'
             },

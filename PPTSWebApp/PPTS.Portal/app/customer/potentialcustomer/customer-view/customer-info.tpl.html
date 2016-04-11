@@ -131,21 +131,22 @@
     <div class="profile-info-row">
         <div class="profile-info-name"> 归属坐席 </div>
         <div class="profile-info-value">
-            <span class="editable editable-click">{{  }}</span>
+            <span class="editable editable-click" ng-repeat="relation in (vm.customerStaffRelation | filter:{'relationType':'4'})">{{ relation.staffName }}</span>
+            <a ui-sref="ppts.customer-staffrelation({id:vm.customer.customerID,type:'4'})">查看历史</a>
         </div>
     </div>
     <div class="profile-info-row">
         <div class="profile-info-name"> 归属咨询师 </div>
         <div class="profile-info-value">
             <span class="editable editable-click" ng-repeat="relation in (vm.customerStaffRelation | filter:{'relationType':'1'})">{{ relation.staffName }}</span>
-            <a ui-sref="ppts.customer-staffrelation({id:vm.customer.customerID,type:\'1\'})">查看历史</a>
+            <a ui-sref="ppts.customer-staffrelation({id:vm.customer.customerID,type:'1'})">查看历史</a>
         </div>
     </div>
     <div class="profile-info-row">
         <div class="profile-info-name"> 归属学管师 </div>
         <div class="profile-info-value">
             <span class="editable editable-click" ng-repeat="relation in (vm.customerStaffRelation | filter:{'relationType':'2'})">{{ relation.staffName }}</span>
-            <a ui-sref="ppts.customer-staffrelation({id:vm.customer.customerID,type:\'2\'})">查看历史</a>
+            <a ui-sref="ppts.customer-staffrelation({id:vm.customer.customerID,type:'2'})">查看历史</a>
         </div>
     </div>
     <div class="profile-info-row">

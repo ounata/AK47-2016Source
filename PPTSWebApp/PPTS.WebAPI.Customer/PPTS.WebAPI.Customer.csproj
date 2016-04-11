@@ -11,7 +11,7 @@
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PPTS.WebAPI.Customer</RootNamespace>
+    <RootNamespace>PPTS.WebAPI.Customers</RootNamespace>
     <AssemblyName>PPTS.WebAPI.Customer</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
@@ -132,6 +132,7 @@
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\AccountsController.cs" />
     <Compile Include="Controllers\CustomerFollowsController.cs" />
     <Compile Include="Controllers\PotentialCustomersController.cs" />
     <Compile Include="Controllers\StudentsController.cs" />
@@ -143,6 +144,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\Accounts\AccountModel.cs" />
+    <Compile Include="ViewModels\Accounts\AccountCombinationModel.cs" />
     <Compile Include="ViewModels\CustomerFollows\CreatableCustomerFollowModel.cs" />
     <Compile Include="ViewModels\CustomerFollows\CustomerFollowQueryCriteriaModel.cs" />
     <Compile Include="ViewModels\CustomerFollows\CustomerFollowQueryResult.cs" />
@@ -151,7 +154,9 @@
     <Compile Include="ViewModels\PotentialCustomers\EditablePotentialCustomerModel.cs" />
     <Compile Include="ViewModels\PotentialCustomers\ParentModel.cs" />
     <Compile Include="ViewModels\PotentialCustomers\PotentialCustomerModel.cs" />
+    <Compile Include="ViewModels\PotentialCustomers\CustomerStaffRelationQueryCriteriaModel.cs" />
     <Compile Include="ViewModels\PotentialCustomers\PotentialCustomerQueryCriteriaModel.cs" />
+    <Compile Include="ViewModels\PotentialCustomers\CustomerStaffRelationQueryResult.cs" />
     <Compile Include="ViewModels\PotentialCustomers\PotentialCustomerQueryResult.cs" />
     <Compile Include="ViewModels\Students\StudentQueryCriteriaModel.cs" />
   </ItemGroup>
@@ -168,6 +173,7 @@
   <ItemGroup>
     <None Include="Properties\PublishProfiles\PPTS.WebAPI.Customer.pubxml" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

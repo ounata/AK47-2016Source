@@ -23,6 +23,8 @@ namespace MCS.Library.Data.Builder
     [Serializable]
     public abstract class SqlClauseBuilderBase : EditableDataObjectCollectionBase<SqlClauseBuilderItemBase>
     {
+        internal static List<IConnectiveSqlClause> StaticClauses = new List<IConnectiveSqlClause>();
+
         #region 条件项的运算符常量定义
         /// <summary>
         /// 等号
@@ -63,6 +65,11 @@ namespace MCS.Library.Data.Builder
         /// IS运算符
         /// </summary>
         internal const string Is = "IS";
+
+        /// <summary>
+        /// IS NOT运算符
+        /// </summary>
+        internal const string IsNot = "IS NOT";
 
         /// <summary>
         /// IN运算符
@@ -228,6 +235,29 @@ namespace MCS.Library.Data.Builder
         }
 
         /// <summary>
+        /// 得到相关的字段
+        /// </summary>
+        /// <returns></returns>
+        public HashSet<string> GetFields()
+        {
+            HashSet<string> result = new HashSet<string>();
+
+            if (this.DataField.IsNotEmpty())
+                result.Add(this.DataField);
+
+            return result;
+        }
+
+        /// <summary>
+        /// 得到子构造对象
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<IConnectiveSqlClause> GetSubConnectiveSqlClause()
+        {
+            return SqlClauseBuilderBase.StaticClauses;
+        }
+
+        /// <summary>
         /// 是否为空
         /// </summary>
         public bool IsEmpty
@@ -293,19 +323,19 @@ namespace MCS.Library.Data.Builder
             return this;
         }
 
-        /// <summary>
-        /// 得到所有的数据字段名
-        /// </summary>
-        /// <returns></returns>
-        public string[] GetAllDataFields()
-        {
-            List<string> result = new List<string>();
+        ///// <summary>
+        ///// 得到所有的数据字段名
+        ///// </summary>
+        ///// <returns></returns>
+        //public string[] GetAllDataFields()
+        //{
+        //    List<string> result = new List<string>();
 
-            foreach (SqlClauseBuilderItemIUW item in this)
-                result.Add(item.DataField);
+        //    foreach (SqlClauseBuilderItemIUW item in this)
+        //        result.Add(item.DataField);
 
-            return result.ToArray();
-        }
+        //    return result.ToArray();
+        //}
 
         /// <summary>
         /// 判断是否已经包含了某个数据字段（大小写相关）
@@ -326,6 +356,23 @@ namespace MCS.Library.Data.Builder
         protected virtual SqlClauseBuilderItemBase CreateBuilderItem()
         {
             return new SqlClauseBuilderItemIUW();
+        }
+
+        /// <summary>
+        /// 得到相关的字段
+        /// </summary>
+        /// <returns></returns>
+        public HashSet<string> GetFields()
+        {
+            HashSet<string> result = new HashSet<string>();
+
+            foreach (SqlClauseBuilderItemIUW item in this)
+            {
+                if (result.Contains(item.DataField) == false)
+                    result.Add(item.DataField);
+            }
+
+            return result;
         }
     }
 
@@ -470,6 +517,18 @@ namespace MCS.Library.Data.Builder
         }
 
         /// <summary>
+        /// 得到相关的字段
+        /// </summary>
+        /// <returns></returns>
+        HashSet<string> GetFields();
+
+        /// <summary>
+        /// 得到子构造对象
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<IConnectiveSqlClause> GetSubConnectiveSqlClause();
+
+        /// <summary>
         /// 生成Sql子句
         /// </summary>
         /// <param name="sqlBuilder"></param>
@@ -549,6 +608,31 @@ namespace MCS.Library.Data.Builder
                 item.ToSqlString(strB, sqlBuilder);
             }
             return strB.ToString();
+        }
+
+        /// <summary>
+        /// 得到子构造对象
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<IConnectiveSqlClause> GetSubConnectiveSqlClause()
+        {
+            return SqlClauseBuilderBase.StaticClauses;
+        }
+ 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dataField"></param>
+        /// <param name="action"></param>
+        public void IfExists(string dataField, Action<SqlClauseBuilderItemIUW> action)
+        {
+            if (action != null)
+            {
+                SqlClauseBuilderItemIUW builderItem = (SqlClauseBuilderItemIUW)this.Find(item => ((SqlClauseBuilderItemIUW)item).DataField == dataField);
+
+                if (builderItem != null)
+                    action(builderItem);
+            }
         }
     }
 
@@ -820,7 +904,44 @@ namespace MCS.Library.Data.Builder
                 return result;
             }
         }
-        #endregion
-    }
 
+        /// <summary>
+        /// 得到所有的字段
+        /// </summary>
+        /// <returns></returns>
+        public HashSet<string> GetFields()
+        {
+            HashSet<string> allFields = new HashSet<string>();
+
+            foreach (IConnectiveSqlClause connective in this)
+                InnerGetFields(connective, allFields);
+
+            return allFields;
+        }
+
+        /// <summary>
+        /// 得到子构造对象
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<IConnectiveSqlClause> GetSubConnectiveSqlClause()
+        {
+            foreach(IConnectiveSqlClause connective in this)
+                yield return connective;
+        }
+        #endregion
+
+        private static void InnerGetFields(IConnectiveSqlClause connective, HashSet<string> fields)
+        {
+            HashSet<string> innerFields = connective.GetFields();
+
+            foreach (string field in innerFields)
+            {
+                if (fields.Contains(field) == false)
+                    fields.Add(field);
+            }
+
+            foreach (IConnectiveSqlClause subConnective in connective.GetSubConnectiveSqlClause())
+                InnerGetFields(subConnective, fields);
+        }
+    }
 }

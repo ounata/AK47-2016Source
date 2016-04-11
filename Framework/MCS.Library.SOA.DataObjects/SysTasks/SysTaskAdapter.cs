@@ -102,7 +102,7 @@ namespace MCS.Library.SOA.DataObjects
 
             InsertSqlClauseBuilder insertBuilder = ORMapping.GetInsertSqlClauseBuilder(taskCompleted, "EndTime", "Status", "StatusText");
 
-            string[] fields = insertBuilder.GetAllDataFields();
+            string[] fields = insertBuilder.GetFields().ToArray();
 
             string affectedFields = string.Join(",", fields);
 

@@ -13,7 +13,7 @@ namespace PPTS.Data.Customers.Entities
 	/// 账户转让申请表
 	/// </summary>
 	[Serializable]
-    [ORTableMapping("AccountTransferApplys")]
+    [ORTableMapping("AccountTransferApplies")]
     [DataContract]
 	public class AccountTransferApply
 	{		
@@ -434,17 +434,6 @@ namespace PPTS.Data.Customers.Entities
 		[ORFieldMapping("ModifyTime")]
         [DataMember]
 		public DateTime ModifyTime
-		{
-			get;
-            set;
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		[ORFieldMapping("TenantCode")]
-        [DataMember]
-		public string TenantCode
 		{
 			get;
             set;

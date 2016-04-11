@@ -12,7 +12,7 @@ namespace PPTS.Data.Customers.Adapters
 {
     public class CustomerStaffRelationAdapter : CustomerAdapterBase<CustomerStaffRelation, CustomerStaffRelationCollection>
     {
-        public new static CustomerStaffRelationAdapter Instance = new CustomerStaffRelationAdapter();
+        public static CustomerStaffRelationAdapter Instance = new CustomerStaffRelationAdapter();
 
         private CustomerStaffRelationAdapter()
         {

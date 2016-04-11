@@ -79,6 +79,9 @@
     <Build Include="MT\Tables\Categories.sql" />
     <Build Include="MT\Stored Procedures\InitCategories.sql" />
     <Build Include="MT\Stored Procedures\InitConstants.sql" />
+    <Build Include="MT\Tables\TeacherTeachings.sql" />
+    <Build Include="MT\Tables\Teachers.sql" />
+    <Build Include="MT\Tables\TeacherJobs.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PPTS.Data.Common.DB.refactorlog" />

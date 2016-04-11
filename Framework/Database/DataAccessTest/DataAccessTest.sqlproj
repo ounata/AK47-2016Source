@@ -62,12 +62,15 @@
   <ItemGroup>
     <Folder Include="Properties" />
     <Folder Include="Tables" />
+    <Folder Include="Views" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Users.sql" />
     <Build Include="Tables\TEST_TABLE.sql" />
     <Build Include="Tables\VersionedOrder.sql" />
     <Build Include="Tables\VersionedOrderItem.sql" />
+    <Build Include="Views\VersionedOrder_Current.sql" />
+    <Build Include="Views\VersionedOrderItem_Current.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="DataAccessTest.refactorlog" />

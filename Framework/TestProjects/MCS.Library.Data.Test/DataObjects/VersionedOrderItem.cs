@@ -1,4 +1,5 @@
 ﻿using MCS.Library.Data.Builder;
+using MCS.Library.Data.DataObjects;
 using MCS.Library.Data.Mapping;
 using System;
 using System.Collections.Generic;
@@ -8,42 +9,46 @@ using System.Threading.Tasks;
 
 namespace MCS.Library.Data.Test.DataObjects
 {
-    [ORTableMapping("VersionedOrderItem")]
+    [ORTableMapping("VersionedOrderItem", "VersionedOrderItem_Current")]
     public class VersionedOrderItem : IVersionDataObjectWithoutID
     {
+        [ORFieldMapping("OrderID", PrimaryKey = true)]
         public string OrderID
         {
             get;
             set;
         }
 
+        [ORFieldMapping("ItemID", PrimaryKey = true)]
         public int ItemID
         {
             get;
             set;
         }
 
-        public int ItemName
+        public string ItemName
         {
             get;
             set;
         }
 
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.Select | ClauseBindingFlags.Where)]
         public DateTime VersionEndTime
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get;
+            set;
         }
 
+        [ORFieldMapping("VersionStartTime", PrimaryKey = true)]
         [SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update)]
         public DateTime VersionStartTime
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get;
+            set;
         }
+    }
+
+    public class VersionedOrderItemCollection : EditableDataObjectCollectionBase<VersionedOrderItem>
+    {
     }
 }

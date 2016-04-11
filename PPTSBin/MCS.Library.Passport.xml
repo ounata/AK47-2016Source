@@ -92,6 +92,49 @@
             在Web应用中，哪些目录需要认证的配置节
             </summary>
         </member>
+        <member name="T:MCS.Library.Passport.AuthenticateDirSettingsBase">
+            <summary>
+            待认证的目录设置的基类
+            </summary>
+        </member>
+        <member name="F:MCS.Library.Passport.AuthenticateDirSettingsBase.syncRoot">
+            <summary>
+            同步对象
+            </summary>
+        </member>
+        <member name="M:MCS.Library.Passport.AuthenticateDirSettingsBase.PageNeedAuthenticate(System.String)">
+            <summary>
+            页面是否需要认证
+            </summary>
+            <param name="appRelativePath">应用路径下的相对路径</param>
+            <returns>是否需要认证</returns>
+        </member>
+        <member name="M:MCS.Library.Passport.AuthenticateDirSettingsBase.PageNeedAuthenticate">
+            <summary>
+            当前页面是否需要认证
+            </summary>
+            <returns>当前页面是否需要认证</returns>
+        </member>
+        <member name="P:MCS.Library.Passport.AuthenticateDirSettingsBase.DefaultAnonymous">
+            <summary>
+            缺省是否是需要验证的
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Passport.AuthenticateDirSettingsBase.AuthenticateDirs">
+            <summary>
+            需要认证的目录定义
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Passport.AuthenticateDirSettingsBase.AnonymousDirs">
+            <summary>
+            匿名访问的目录定义
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Passport.AuthenticateDirSettingsBase.DefualtAuthenticateExts">
+            <summary>
+            缺省需要认证的后缀名
+            </summary>
+        </member>
         <member name="M:MCS.Library.Passport.AuthenticateDirSettings.GetConfig">
             <summary>
             获取配置认证目录信息
@@ -162,11 +205,6 @@
             认证或者匿名访问的目录的配置项基类
             </summary>
         </member>
-        <member name="P:MCS.Library.Passport.AuthenticateDirElementBase.Location">
-            <summary>
-            路径。
-            </summary>
-        </member>
         <member name="M:MCS.Library.Passport.AuthenticateDirElementBase.OnDeserializeUnrecognizedAttribute(System.String,System.String)">
             <summary>
             
@@ -181,6 +219,11 @@
             </summary>
             <param name="path">需要匹配的路径</param>
             <returns>是否匹配</returns>
+        </member>
+        <member name="P:MCS.Library.Passport.AuthenticateDirElementBase.Location">
+            <summary>
+            路径。
+            </summary>
         </member>
         <member name="T:MCS.Library.Passport.AuthorizationDirElementCollection">
             <summary>
@@ -198,6 +241,12 @@
             需要授权的目录配置项
             </summary>
         </member>
+        <member name="M:MCS.Library.Passport.AuthorizationDirElement.IsCurrentUserInRoles">
+            <summary>
+            当前用户是否在指定的角色中
+            </summary>
+            <returns></returns>
+        </member>
         <member name="P:MCS.Library.Passport.AuthorizationDirElement.RolesDefineName">
             <summary>
             RolesDefineConfig中的配置项的名称
@@ -207,12 +256,6 @@
             <summary>
             标准的角色名称。App1:Role1,Role2;App2:Role3,Role4
             </summary>
-        </member>
-        <member name="M:MCS.Library.Passport.AuthorizationDirElement.IsCurrentUserInRoles">
-            <summary>
-            当前用户是否在指定的角色中
-            </summary>
-            <returns></returns>
         </member>
         <member name="T:MCS.Library.Passport.AnonymousDirElement">
             <summary>
@@ -228,49 +271,6 @@
             <summary>
             如果发现用户访问该页面时没有认证，是否自动跳转到认证页面
             </summary>
-        </member>
-        <member name="T:MCS.Library.Passport.AuthenticateDirSettingsBase">
-            <summary>
-            待认证的目录设置的基类
-            </summary>
-        </member>
-        <member name="F:MCS.Library.Passport.AuthenticateDirSettingsBase.syncRoot">
-            <summary>
-            同步对象
-            </summary>
-        </member>
-        <member name="P:MCS.Library.Passport.AuthenticateDirSettingsBase.DefaultAnonymous">
-            <summary>
-            缺省是否是需要验证的
-            </summary>
-        </member>
-        <member name="P:MCS.Library.Passport.AuthenticateDirSettingsBase.AuthenticateDirs">
-            <summary>
-            需要认证的目录定义
-            </summary>
-        </member>
-        <member name="P:MCS.Library.Passport.AuthenticateDirSettingsBase.AnonymousDirs">
-            <summary>
-            匿名访问的目录定义
-            </summary>
-        </member>
-        <member name="P:MCS.Library.Passport.AuthenticateDirSettingsBase.DefualtAuthenticateExts">
-            <summary>
-            缺省需要认证的后缀名
-            </summary>
-        </member>
-        <member name="M:MCS.Library.Passport.AuthenticateDirSettingsBase.PageNeedAuthenticate(System.String)">
-            <summary>
-            页面是否需要认证
-            </summary>
-            <param name="appRelativePath">应用路径下的相对路径</param>
-            <returns>是否需要认证</returns>
-        </member>
-        <member name="M:MCS.Library.Passport.AuthenticateDirSettingsBase.PageNeedAuthenticate">
-            <summary>
-            当前页面是否需要认证
-            </summary>
-            <returns>当前页面是否需要认证</returns>
         </member>
         <member name="T:MCS.Library.Passport.DomainMappingSettings">
             <summary>
@@ -505,17 +505,17 @@
             应用Rsa配置
             </summary>
         </member>
-        <member name="P:MCS.Library.Passport.ClientRsaKeyValueConfigurationElement.Value">
-            <summary>
-            配置的string 值
-            </summary>
-        </member>
         <member name="M:MCS.Library.Passport.ClientRsaKeyValueConfigurationElement.DeserializeElement(System.Xml.XmlReader,System.Boolean)">
             <summary>
             读入配置信息
             </summary>
             <param name="reader">XmlReader</param>
             <param name="serializeCollectionKey"></param>
+        </member>
+        <member name="P:MCS.Library.Passport.ClientRsaKeyValueConfigurationElement.Value">
+            <summary>
+            配置的string 值
+            </summary>
         </member>
         <member name="T:MCS.Library.Passport.PassportEncryptionSettings">
             <summary>
@@ -690,17 +690,17 @@
             Rsa加密配置信息
             </summary>
         </member>
-        <member name="P:MCS.Library.Passport.SignInRsaKeyValueConfigurationElement.Value">
-            <summary>
-            Rsa配置的string值
-            </summary>
-        </member>
         <member name="M:MCS.Library.Passport.SignInRsaKeyValueConfigurationElement.DeserializeElement(System.Xml.XmlReader,System.Boolean)">
             <summary>
             读入Rsa配置信息
             </summary>
             <param name="reader">XmlReader</param>
             <param name="serializeCollectionKey"></param>
+        </member>
+        <member name="P:MCS.Library.Passport.SignInRsaKeyValueConfigurationElement.Value">
+            <summary>
+            Rsa配置的string值
+            </summary>
         </member>
         <member name="T:MCS.Library.Passport.RolesDefineConfig">
             <summary>
@@ -712,11 +712,6 @@
             得到配置节
             </summary>
             <returns></returns>
-        </member>
-        <member name="P:MCS.Library.Passport.RolesDefineConfig.RolesDefineCollection">
-            <summary>
-            每一个具体配置项
-            </summary>
         </member>
         <member name="M:MCS.Library.Passport.RolesDefineConfig.GetRolesInstances(System.String[])">
             <summary>
@@ -753,6 +748,11 @@
             <param name="user"></param>
             <param name="roleConfigKey"></param>
         </member>
+        <member name="P:MCS.Library.Passport.RolesDefineConfig.RolesDefineCollection">
+            <summary>
+            每一个具体配置项
+            </summary>
+        </member>
         <member name="T:MCS.Library.Passport.RolesDefineCollection">
             <summary>
             逻辑角色定义的集合
@@ -763,16 +763,182 @@
             逻辑角色
             </summary>
         </member>
-        <member name="P:MCS.Library.Passport.RolesDefine.Roles">
-            <summary>
-            授权系统中的角色
-            </summary>
-        </member>
         <member name="M:MCS.Library.Passport.RolesDefine.GetRolesInstances">
             <summary>
             得到定义的角色的实例
             </summary>
             <returns></returns>
+        </member>
+        <member name="P:MCS.Library.Passport.RolesDefine.Roles">
+            <summary>
+            授权系统中的角色
+            </summary>
+        </member>
+        <member name="T:MCS.Web.WebControls.AccessTicketCheckEventArgs">
+            <summary>
+            票据检查的所需要的事件参数
+            </summary>
+        </member>
+        <member name="P:MCS.Web.WebControls.AccessTicketCheckEventArgs.Ticket">
+            <summary>
+            检查的票据。只读属性。如果无法获得票据，则此属性为null
+            </summary>
+        </member>
+        <member name="P:MCS.Web.WebControls.AccessTicketCheckEventArgs.IsValid">
+            <summary>
+            票据是否合法。应用可以设置
+            </summary>
+        </member>
+        <member name="P:MCS.Web.WebControls.AccessTicketCheckEventArgs.ErrorMessage">
+            <summary>
+            错误信息
+            </summary>
+        </member>
+        <member name="T:MCS.Web.WebControls.AccessTicketCheckHandler">
+            <summary>
+            票据检查时抛出的事件。应用可以接收到此事件，进行自己的判断。在eventArgs中，
+            此控件已经进行了自己的判断，应用可以修改此结果
+            </summary>
+            <param name="sender"></param>
+            <param name="eventArgs"></param>
+        </member>
+        <member name="T:MCS.Web.WebControls.AccessTicketChecker">
+            <summary>
+            访问票据的检查器
+            </summary>
+        </member>
+        <member name="M:MCS.Web.WebControls.AccessTicketChecker.OnInit(System.EventArgs)">
+            <summary>
+            
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:MCS.Web.WebControls.AccessTicketChecker.OnLoad(System.EventArgs)">
+            <summary>
+            
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:MCS.Web.WebControls.AccessTicketChecker.OnPreRender(System.EventArgs)">
+            <summary>
+            
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:MCS.Web.WebControls.AccessTicketChecker.Render(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            渲染
+            </summary>
+            <param name="output"></param>
+        </member>
+        <member name="M:MCS.Web.WebControls.AccessTicketChecker.OnTicketChecking(MCS.Web.WebControls.AccessTicketCheckEventArgs)">
+            <summary>
+            票据检查
+            </summary>
+        </member>
+        <member name="M:MCS.Web.WebControls.AccessTicketChecker.IsCheckPhaseMatched(MCS.Web.WebControls.AccessTicketCheckPhase)">
+            <summary>
+            是否是需要检查票据的阶段
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="E:MCS.Web.WebControls.AccessTicketChecker.TicketChecking">
+            <summary>
+            票据检查出错时的事件
+            </summary>
+        </member>
+        <member name="P:MCS.Web.WebControls.AccessTicketChecker.CheckPhase">
+            <summary>
+            检查票据的阶段。默认是Init阶段
+            </summary>
+        </member>
+        <member name="P:MCS.Web.WebControls.AccessTicketChecker.CheckUrl">
+            <summary>
+            是否检查url的合法性
+            </summary>
+        </member>
+        <member name="P:MCS.Web.WebControls.AccessTicketChecker.UrlCheckParts">
+            <summary>
+            需要检查的Url的部分
+            </summary>
+        </member>
+        <member name="P:MCS.Web.WebControls.AccessTicketChecker.Enabled">
+            <summary>
+            是否启用
+            </summary>
+        </member>
+        <member name="P:MCS.Web.WebControls.AccessTicketChecker.Timeout">
+            <summary>
+            过期时间
+            </summary>
+        </member>
+        <member name="T:MCS.Web.WebControls.AccessTicketCheckPhase">
+            <summary>
+            票据检查阶段
+            </summary>
+        </member>
+        <member name="F:MCS.Web.WebControls.AccessTicketCheckPhase.None">
+            <summary>
+            空
+            </summary>
+        </member>
+        <member name="F:MCS.Web.WebControls.AccessTicketCheckPhase.Init">
+            <summary>
+            在OnInit阶段
+            </summary>
+        </member>
+        <member name="F:MCS.Web.WebControls.AccessTicketCheckPhase.Load">
+            <summary>
+            在OnLoad阶段
+            </summary>
+        </member>
+        <member name="F:MCS.Web.WebControls.AccessTicketCheckPhase.PreRender">
+            <summary>
+            在PreRender阶段
+            </summary>
+        </member>
+        <member name="F:MCS.Web.WebControls.AccessTicketCheckPhase.Post">
+            <summary>
+            POST时是否校验
+            </summary>
+        </member>
+        <member name="F:MCS.Web.WebControls.AccessTicketCheckPhase.CallBack">
+            <summary>
+            CallBack时是否校验
+            </summary>
+        </member>
+        <member name="T:MCS.Web.WebControls.AccessTicketHtmlAnchor">
+            <summary>
+            带AccessTicket的HtmlAnchor
+            </summary>
+        </member>
+        <member name="M:MCS.Web.WebControls.AccessTicketHtmlAnchor.RegisterScript(System.Web.UI.Page)">
+            <summary>
+            注册脚本
+            </summary>
+            <param name="page"></param>
+        </member>
+        <member name="M:MCS.Web.WebControls.AccessTicketHtmlAnchor.OnPreRender(System.EventArgs)">
+            <summary>
+            
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:MCS.Web.WebControls.AccessTicketHtmlAnchor.Render(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            渲染
+            </summary>
+            <param name="writer"></param>
+        </member>
+        <member name="P:MCS.Web.WebControls.AccessTicketHtmlAnchor.AutoMakeAbsolute">
+            <summary>
+            生成票据时，是否自动将相对地址转换为绝对地址
+            </summary>
+        </member>
+        <member name="P:MCS.Web.WebControls.AccessTicketHtmlAnchor.OnClientAccquiredAccessTicket">
+            <summary>
+            当客户端得到AccessTicket后的
+            </summary>
         </member>
         <member name="T:MCS.Library.Passport.AccessTicketUrlCheckParts">
             <summary>
@@ -799,10 +965,361 @@
             全部
             </summary>
         </member>
+        <member name="T:MCS.Library.Web.Controls.ChangePasswordControl">
+            <summary>
+            修改用户密码的控件
+            </summary>
+        </member>
+        <member name="M:MCS.Library.Web.Controls.ChangePasswordControl.OnLoad(System.EventArgs)">
+            <summary>
+            重载OnLoad
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:MCS.Library.Web.Controls.ChangePasswordControl.CreateChildControls">
+            <summary>
+            创建子控件
+            </summary>
+        </member>
+        <member name="M:MCS.Library.Web.Controls.ChangePasswordControl.OnPreRender(System.EventArgs)">
+            <summary>
+            OnPreRender
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="P:MCS.Library.Web.Controls.ChangePasswordControl.TemplatePath">
+            <summary>
+            页面模板的路径
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Web.Controls.ChangePasswordControl.SuccessUrl">
+            <summary>
+            成功以后返回的Url
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Web.Controls.ChangePasswordControl.BackUrl">
+            <summary>
+            返回的Url
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Web.Controls.ChangePasswordControl.AutoRedirect">
+            <summary>
+            自动重定向到Refer页面
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Web.Controls.ChangePasswordControl.ReferUrl">
+            <summary>
+            参照的Url
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Web.Controls.ChangePasswordControl.Template">
+            <summary>
+            模板控件的实例
+            </summary>
+        </member>
+        <member name="T:MCS.Library.Web.Controls.SignInResultType">
+            <summary>
+            认证结果
+            </summary>
+        </member>
+        <member name="F:MCS.Library.Web.Controls.SignInResultType.None">
+            <summary>
+            无状态
+            </summary>
+        </member>
+        <member name="F:MCS.Library.Web.Controls.SignInResultType.Success">
+            <summary>
+            认证成功
+            </summary>
+        </member>
+        <member name="F:MCS.Library.Web.Controls.SignInResultType.Fail">
+            <summary>
+            认证失败
+            </summary>
+        </member>
+        <member name="T:MCS.Library.Web.Controls.SignInContext">
+            <summary>
+            认证上下文
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Web.Controls.SignInContext.ResultType">
+            <summary>
+            认证结果
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Web.Controls.SignInContext.UserID">
+            <summary>
+            认证的用户ID
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Web.Controls.SignInContext.PageData">
+            <summary>
+            认证页面的信息
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Web.Controls.SignInContext.SignInInfo">
+            <summary>
+            认证信息。仅在认证通过后有效，否则为null
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Web.Controls.SignInContext.ClientInfo">
+            <summary>
+            认证过程中的客户端信息
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Web.Controls.SignInContext.Exception">
+            <summary>
+            认证过程中抛出的异常
+            </summary>
+        </member>
+        <member name="T:MCS.Library.Web.Controls.SignInClientInfo">
+            <summary>
+            客户端信息
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Web.Controls.SignInClientInfo.Item(System.String)">
+            <summary>
+            获取客户端信息
+            </summary>
+            <param name="key">信息名称</param>
+            <returns>客户端信息</returns>
+        </member>
+        <member name="T:MCS.Library.Web.Controls.SignInControl">
+            <summary>
+            单点登录控件类
+            </summary>
+        </member>
+        <member name="M:MCS.Library.Web.Controls.SignInControl.CreateChildControls">
+            <summary>
+            初始化通知器
+            </summary>
+        </member>
+        <member name="M:MCS.Library.Web.Controls.SignInControl.OnInit(System.EventArgs)">
+            <summary>
+            进行初始化，加载TemplatePath页面，JavaScript脚本，进行用户SignInInfo状态判断
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:MCS.Library.Web.Controls.SignInControl.Render(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            渲染控件
+            </summary>
+            <param name="writer"></param>
+        </member>
+        <member name="M:MCS.Library.Web.Controls.SignInControl.Initialize">
+            <summary>
+            判断SignInInfo状态，如果在SignInInfo合法情况下，基于Session的Cookie，或者用户选择自动登录的进行自动登录。
+            </summary>
+        </member>
+        <member name="M:MCS.Library.Web.Controls.SignInControl.AutoSignIn(MCS.Library.Passport.ISignInInfo)">
+            <summary>
+            如果登录信息依然有效，可以自动转到应用页面
+            </summary>
+            <param name="signInInfo">登录信息</param>
+        </member>
+        <member name="M:MCS.Library.Web.Controls.SignInControl.DefaultAuthenticate(System.String,System.String)">
+            <summary>
+            调用认证接口
+            </summary>
+            <param name="strSignInName">登录名</param>
+            <param name="strPasspord">密码</param>
+            <returns>用户认证的结果</returns>
+        </member>
+        <member name="E:MCS.Library.Web.Controls.SignInControl.InitSignInControl">
+            <summary>
+            初始化SignInControl的事件，如果提供了认证信息，则不再显示认证页面，自动转向
+            </summary>
+        </member>
+        <member name="E:MCS.Library.Web.Controls.SignInControl.BeforeAuthenticate">
+            <summary>
+            认证之前的事件定义。可以修改待认证的用户名和口令
+            </summary>
+        </member>
+        <member name="E:MCS.Library.Web.Controls.SignInControl.AfterSignIn">
+            <summary>
+            认证之后的事件定义。可以修改认证之后用户登录名，也可以截获认证时产生的异常
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Web.Controls.SignInControl.TemplatePath">
+            <summary>
+            页面模板的路径
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Web.Controls.SignInControl.Template">
+            <summary>
+            模板控件的实例
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Web.Controls.SignInControl.PageData">
+            <summary>
+            认证页面所保存在Cookie中的信息
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Web.Controls.SignInControl.IsSelfAuthenticate">
+            <summary>
+            是否是自认证页面，此类页面没有ru参数
+            </summary>
+            <returns>是否是自认证页面</returns>
+        </member>
+        <member name="T:MCS.Library.Web.Controls.SignInLogoControl">
+            <summary>
+            注销控件
+            </summary>
+        </member>
+        <member name="M:MCS.Library.Web.Controls.SignInLogoControl.OnPreRender(System.EventArgs)">
+            <summary>
+            渲染控件
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:MCS.Library.Web.Controls.SignInLogoControl.Render(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            渲染控件
+            </summary>
+            <param name="writer"></param>
+        </member>
+        <member name="M:MCS.Library.Web.Controls.SignInLogoControl.ChangeToAbsoluteUrl(System.String)">
+            <summary>
+            将需要返回的url变成绝对路径的url（如果本来是绝对地址，则忽略）
+            </summary>
+            <param name="ru"></param>
+            <returns></returns>
+        </member>
+        <member name="P:MCS.Library.Web.Controls.SignInLogoControl.SignInImage">
+            <summary>
+            登录链接的图片
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Web.Controls.SignInLogoControl.SignOutImage">
+            <summary>
+            注销图片的链接
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Web.Controls.SignInLogoControl.ReturnUrl">
+            <summary>
+            注销后返回的地址
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Web.Controls.SignInLogoControl.AutoRedirect">
+            <summary>
+            注销后，是否直接导航到返回地址。如果为false，则停留在注销页面
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Web.Controls.SignInLogoControl.LogOffAll">
+            <summary>
+            是否注销所有的应用（此参数已经没有意义）
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Web.Controls.SignInLogoControl.Target">
+            <summary>
+            导航的目标窗口
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Web.Controls.SignInLogoControl.IsDesignMode">
+            <summary>
+            是否是设计模式
+            </summary>
+        </member>
+        <member name="T:MCS.Library.Web.Controls.InitSignInControlDelegate">
+            <summary>
+            初始化SignInControl，如果提供了认证信息，则不再显示认证页面，自动转向
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:MCS.Library.Web.Controls.BeforeAuthenticateDelegate">
+            <summary>
+            认证之前的事件定义。可以修改待认证的用户名和口令
+            </summary>
+        </member>
+        <member name="T:MCS.Library.Web.Controls.AfterSignInDelegate">
+            <summary>
+            认证之后的事件定义。可以修改认证之后用户登录名，也可以截获认证时产生的异常
+            </summary>
+        </member>
+        <member name="T:MCS.Library.Web.Controls.SignInNotifyEventContainer">
+            <summary>
+            认证过程的事件容器
+            </summary>
+        </member>
+        <member name="E:MCS.Library.Web.Controls.SignInNotifyEventContainer.BeforeAuthenticate">
+            <summary>
+            认证之前的事件。可以修改需要认证用户的用户名和口令
+            </summary>
+        </member>
+        <member name="E:MCS.Library.Web.Controls.SignInNotifyEventContainer.AfterSignIn">
+            <summary>
+            认证之后的事件
+            </summary>
+        </member>
+        <member name="T:MCS.Library.Web.Controls.ISignInNotifier">
+            <summary>
+            用户登录的回调接口，会在认证过程中进行通知
+            </summary>
+        </member>
+        <member name="M:MCS.Library.Web.Controls.ISignInNotifier.Init(MCS.Library.Web.Controls.SignInNotifyEventContainer)">
+            <summary>
+            初始化。
+            </summary>
+            <param name="eventContainer">容器。</param>
+        </member>
+        <member name="T:MCS.Library.Web.Controls.SignInPageData">
+            <summary>
+            登录页面的配置信息
+            </summary>
+        </member>
+        <member name="M:MCS.Library.Web.Controls.SignInPageData.LoadFromCookie">
+            <summary>
+            从Cookie中装载页面配置信息
+            </summary>
+        </member>
+        <member name="M:MCS.Library.Web.Controls.SignInPageData.SaveToCookie">
+            <summary>
+            存入Cookie中
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Web.Controls.SignInPageData.DontSaveUserID">
+            <summary>
+            是否保存用户名
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Web.Controls.SignInPageData.AutoSignIn">
+            <summary>
+            是否自动登录
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Web.Controls.SignInPageData.UserID">
+            <summary>
+            用户ID
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Web.Controls.SignInPageData.Properties">
+            <summary>
+            扩展的属性信息
+            </summary>
+        </member>
         <member name="T:MCS.Library.Passport.StringEncryption">
             <summary>
             字符串加密，解密处理类
             </summary>
+        </member>
+        <member name="T:MCS.Library.Passport.IStringEncryption">
+            <summary>
+            实现string(Cookie)的加密、解密的接口
+            </summary>
+        </member>
+        <member name="M:MCS.Library.Passport.IStringEncryption.EncryptString(System.String)">
+            <summary>
+            加密字符串
+            </summary>
+            <param name="strData">字符串数据</param>
+            <returns>加密后的二进制流</returns>
+        </member>
+        <member name="M:MCS.Library.Passport.IStringEncryption.DecryptString(System.Byte[])">
+            <summary>
+            解密字符串
+            </summary>
+            <param name="encryptedData">加密过的数据</param>
+            <returns>解密后的字符串</returns>
         </member>
         <member name="M:MCS.Library.Passport.StringEncryption.#ctor">
             <summary>
@@ -849,6 +1366,27 @@
             <summary>
             使用Des算法的Ticket加密类
             </summary>
+        </member>
+        <member name="T:MCS.Library.Passport.ITicketEncryption">
+            <summary>
+            实现Ticket加密、解密的接口
+            </summary>
+        </member>
+        <member name="M:MCS.Library.Passport.ITicketEncryption.EncryptTicket(MCS.Library.Passport.ITicket,System.Object)">
+            <summary>
+            加密Ticket
+            </summary>
+            <param name="ticket">Ticket对象</param>
+            <param name="oParam">附加的参数</param>
+            <returns>返回一个加密过的二进制流</returns>
+        </member>
+        <member name="M:MCS.Library.Passport.ITicketEncryption.DecryptTicket(System.Byte[],System.Object)">
+            <summary>
+            解密Ticket
+            </summary>
+            <param name="encryptedData">加密过的ticket的二进制数据</param>
+            <param name="oParam">附加的参数</param>
+            <returns>解密后的ticket对象</returns>
         </member>
         <member name="M:MCS.Library.Passport.TicketDesEncryption.EncryptTicket(MCS.Library.Passport.ITicket,System.Object)">
             <summary>
@@ -988,21 +1526,6 @@
             默认的有效期
             </summary>
         </member>
-        <member name="P:MCS.Library.Passport.AccessTicket.SourceUrl">
-            <summary>
-            源Url
-            </summary>
-        </member>
-        <member name="P:MCS.Library.Passport.AccessTicket.DestinationUrl">
-            <summary>
-            目标Url
-            </summary>
-        </member>
-        <member name="P:MCS.Library.Passport.AccessTicket.GenerateTime">
-            <summary>
-            生成时间
-            </summary>
-        </member>
         <member name="M:MCS.Library.Passport.AccessTicket.FromString(System.String)">
             <summary>
             从字符串恢复AccessTicket，如果不能解析，则返回null
@@ -1045,10 +1568,40 @@
             <param name="url"></param>
             <returns></returns>
         </member>
+        <member name="P:MCS.Library.Passport.AccessTicket.SourceUrl">
+            <summary>
+            源Url
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Passport.AccessTicket.DestinationUrl">
+            <summary>
+            目标Url
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Passport.AccessTicket.GenerateTime">
+            <summary>
+            生成时间
+            </summary>
+        </member>
         <member name="T:MCS.Library.Passport.AuthenticationCode">
             <summary>
             短信验证码
             </summary>
+        </member>
+        <member name="M:MCS.Library.Passport.AuthenticationCode.GenerateCode(System.Int32)">
+            <summary>
+            随机生成一个符合长度的整数
+            </summary>
+            <param name="codeLength"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MCS.Library.Passport.AuthenticationCode.Create(System.String,System.Int32)">
+            <summary>
+            创建一个新的验证码
+            </summary>
+            <param name="authenticationType"></param>
+            <param name="codeLength"></param>
+            <returns></returns>
         </member>
         <member name="P:MCS.Library.Passport.AuthenticationCode.AuthenticationID">
             <summary>
@@ -1079,21 +1632,6 @@
             <summary>
             该字段仅用于返回值
             </summary>
-        </member>
-        <member name="M:MCS.Library.Passport.AuthenticationCode.GenerateCode(System.Int32)">
-            <summary>
-            随机生成一个符合长度的整数
-            </summary>
-            <param name="codeLength"></param>
-            <returns></returns>
-        </member>
-        <member name="M:MCS.Library.Passport.AuthenticationCode.Create(System.String,System.Int32)">
-            <summary>
-            创建一个新的验证码
-            </summary>
-            <param name="authenticationType"></param>
-            <param name="codeLength"></param>
-            <returns></returns>
         </member>
         <member name="T:MCS.Library.Passport.AuthenticationCodeAdapter">
             <summary>
@@ -1154,6 +1692,68 @@
             <summary>
             SignInInfo和Ticket信息持久化类
             </summary>
+        </member>
+        <member name="T:MCS.Library.Passport.IPersistSignInInfo">
+            <summary>
+            SignInInfo和Ticket的数据访问操作
+            </summary>
+        </member>
+        <member name="M:MCS.Library.Passport.IPersistSignInInfo.SaveSignInInfo(MCS.Library.Passport.ISignInInfo)">
+            <summary>
+            保存登录信息
+            </summary>
+            <param name="signInInfo">用户认证后生成的登录信息</param>
+        </member>
+        <member name="M:MCS.Library.Passport.IPersistSignInInfo.SaveTicket(MCS.Library.Passport.ITicket,System.Uri,System.Uri)">
+            <summary>
+            应用认证后生成的Ticket信息
+            </summary>
+            <param name="ticket"></param>
+            <param name="signInUrl"></param>
+            <param name="logOffCBUrl"></param>
+        </member>
+        <member name="M:MCS.Library.Passport.IPersistSignInInfo.DeleteRelativeSignInInfo(System.String)">
+            <summary>
+            删除相关的认证信息
+            </summary>
+            <param name="signInID">认证的SessionID</param>
+        </member>
+        <member name="M:MCS.Library.Passport.IPersistSignInInfo.GetAllRelativeAppsLogOffCallBackUrl(System.String)">
+            <summary>
+            得到某个登录Session的所有注销的回调Url
+            </summary>
+            <param name="sessionID">登录SessionID</param>
+            <returns>某个登录Session的所有注销的回调Url</returns>
+        </member>
+        <member name="T:MCS.Library.Passport.IPersistOpenIDBinding">
+            <summary>
+            访问OpenID和用户信息映射的
+            </summary>
+        </member>
+        <member name="M:MCS.Library.Passport.IPersistOpenIDBinding.SaveOpenIDBinding(MCS.Library.Passport.OpenIDBinding)">
+            <summary>
+            保存OpenIDBinding
+            </summary>
+            <param name="binding"></param>
+        </member>
+        <member name="M:MCS.Library.Passport.IPersistOpenIDBinding.RemoveOpenIDBinding(System.String)">
+            <summary>
+            删除OpenID的绑定信息
+            </summary>
+            <param name="openID"></param>
+        </member>
+        <member name="M:MCS.Library.Passport.IPersistOpenIDBinding.GetBindingByOpenID(System.String)">
+            <summary>
+            根据OpenID得到Binding信息
+            </summary>
+            <param name="openID"></param>
+        </member>
+        <member name="M:MCS.Library.Passport.IPersistOpenIDBinding.GetBindingsByUserID(System.String)">
+            <summary>
+            得到每个用户的所有绑定信息
+            </summary>
+            <param name="userID"></param>
+            <returns></returns>
         </member>
         <member name="M:MCS.Library.Passport.DataAdapter.SaveSignInInfo(MCS.Library.Passport.ISignInInfo)">
             <summary>
@@ -1230,6 +1830,25 @@
             构造方法
             </summary>
         </member>
+        <member name="M:MCS.Library.Passport.LogOffInfo.GetAllRelativeAppsLogOffCallBackUrl">
+            <summary>
+            得到每一个应用注销所使用的回调Url
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MCS.Library.Passport.LogOffInfo.FromUrl(System.String)">
+            <summary>
+            从Url中构造LogOffInfo
+            </summary>
+            <param name="url"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MCS.Library.Passport.LogOffInfo.FromRequest">
+            <summary>
+            从HttpContext中的Request中获取LogOffInfo。如果没有HttpContext，则返回null
+            </summary>
+            <returns></returns>
+        </member>
         <member name="P:MCS.Library.Passport.LogOffInfo.SessionID">
             <summary>
             登录Session ID
@@ -1284,25 +1903,6 @@
             <summary>
             当前请求是否从级联注销的页面重定向而来
             </summary>
-        </member>
-        <member name="M:MCS.Library.Passport.LogOffInfo.GetAllRelativeAppsLogOffCallBackUrl">
-            <summary>
-            得到每一个应用注销所使用的回调Url
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:MCS.Library.Passport.LogOffInfo.FromUrl(System.String)">
-            <summary>
-            从Url中构造LogOffInfo
-            </summary>
-            <param name="url"></param>
-            <returns></returns>
-        </member>
-        <member name="M:MCS.Library.Passport.LogOffInfo.FromRequest">
-            <summary>
-            从HttpContext中的Request中获取LogOffInfo。如果没有HttpContext，则返回null
-            </summary>
-            <returns></returns>
         </member>
         <member name="T:MCS.Library.Passport.OpenIDBinding">
             <summary>
@@ -1391,6 +1991,32 @@
             <code source="..\Framework\TestProjects\DeluxeWorks.Library.Passport.Test\DataObjectsTest.cs" region="SignInInfoTest" lang="cs" title="SignInInfo对象和Xml对象间的转换" />
             </remarks>
         </member>
+        <member name="M:MCS.Library.Passport.SignInInfo.SaveToCookie">
+            <summary>
+            保存入Cookie中
+            </summary>
+        </member>
+        <member name="M:MCS.Library.Passport.SignInInfo.SaveToXml">
+            <summary>
+            存储到xml结构数据中
+            </summary>
+            <returns>xml结构的SignInInfo</returns>
+            <remarks>
+            <code source="..\Framework\TestProjects\DeluxeWorks.Library.Passport.Test\DataObjectsTest.cs" region="SignInInfoTest" lang="cs" title="SignInInfo对象和Xml对象间的转换" />
+            </remarks>
+        </member>
+        <member name="M:MCS.Library.Passport.SignInInfo.IsValid">
+            <summary>
+            SignInInfo是否合法
+            </summary>
+            <returns>true 或者 false</returns>
+        </member>
+        <member name="M:MCS.Library.Passport.SignInInfo.GetLoadingCookieKey">
+            <summary>
+            得到加载时的Cookie的Key
+            </summary>
+            <returns></returns>
+        </member>
         <member name="P:MCS.Library.Passport.SignInInfo.UserID">
             <summary>
             用户名
@@ -1446,26 +2072,6 @@
             租户编码
             </summary>
         </member>
-        <member name="M:MCS.Library.Passport.SignInInfo.SaveToCookie">
-            <summary>
-            保存入Cookie中
-            </summary>
-        </member>
-        <member name="M:MCS.Library.Passport.SignInInfo.SaveToXml">
-            <summary>
-            存储到xml结构数据中
-            </summary>
-            <returns>xml结构的SignInInfo</returns>
-            <remarks>
-            <code source="..\Framework\TestProjects\DeluxeWorks.Library.Passport.Test\DataObjectsTest.cs" region="SignInInfoTest" lang="cs" title="SignInInfo对象和Xml对象间的转换" />
-            </remarks>
-        </member>
-        <member name="M:MCS.Library.Passport.SignInInfo.IsValid">
-            <summary>
-            SignInInfo是否合法
-            </summary>
-            <returns>true 或者 false</returns>
-        </member>
         <member name="P:MCS.Library.Passport.SignInInfo.Properties">
             <summary>
             扩展属性
@@ -1473,12 +2079,6 @@
             <remarks>
             存储应用中需要扩展的相应属性数据内容
             </remarks>
-        </member>
-        <member name="M:MCS.Library.Passport.SignInInfo.GetLoadingCookieKey">
-            <summary>
-            得到加载时的Cookie的Key
-            </summary>
-            <returns></returns>
         </member>
         <member name="T:MCS.Library.Passport.Ticket">
             <summary>
@@ -1546,36 +2146,6 @@
             <code source="..\Framework\TestProjects\DeluxeWorks.Library.Passport.Test\DataObjectsTest.cs" region="TicketTest" lang="cs" title="Ticket对象和Xml对象间的转换" />
             </remarks>
         </member>
-        <member name="P:MCS.Library.Passport.Ticket.SignInInfo">
-            <summary>
-            用户登录信息
-            </summary>
-        </member>
-        <member name="P:MCS.Library.Passport.Ticket.AppSignInSessionID">
-            <summary>
-            应用登录的SessionID
-            </summary>
-        </member>
-        <member name="P:MCS.Library.Passport.Ticket.AppID">
-            <summary>
-            应用ID
-            </summary>
-        </member>
-        <member name="P:MCS.Library.Passport.Ticket.AppSignInTime">
-            <summary>
-            应用登录时间
-            </summary>
-        </member>
-        <member name="P:MCS.Library.Passport.Ticket.AppSignInTimeout">
-            <summary>
-            应用登录超时时间
-            </summary>
-        </member>
-        <member name="P:MCS.Library.Passport.Ticket.AppSignInIP">
-            <summary>
-            应用登录IP
-            </summary>
-        </member>
         <member name="M:MCS.Library.Passport.Ticket.SaveToCookie">
             <summary>
             Ticket信息保存入Cookie中
@@ -1639,6 +2209,36 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="P:MCS.Library.Passport.Ticket.SignInInfo">
+            <summary>
+            用户登录信息
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Passport.Ticket.AppSignInSessionID">
+            <summary>
+            应用登录的SessionID
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Passport.Ticket.AppID">
+            <summary>
+            应用ID
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Passport.Ticket.AppSignInTime">
+            <summary>
+            应用登录时间
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Passport.Ticket.AppSignInTimeout">
+            <summary>
+            应用登录超时时间
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Passport.Ticket.AppSignInIP">
+            <summary>
+            应用登录IP
+            </summary>
+        </member>
         <member name="T:MCS.Library.Passport.AuthenticationModuleBase">
             <summary>
             认证的基类
@@ -1654,16 +2254,6 @@
             初始化函数
             </summary>
             <param name="context">HttpApplication</param>
-        </member>
-        <member name="P:MCS.Library.Passport.AuthenticationModuleBase.IsDeluxeWorksAuthenticate">
-            <summary>
-            认证是否通过DeluxeWorksAuthenticate来进行
-            </summary>
-        </member>
-        <member name="P:MCS.Library.Passport.AuthenticationModuleBase.CanLogOff">
-            <summary>
-            是否可以注销
-            </summary>
         </member>
         <member name="M:MCS.Library.Passport.AuthenticationModuleBase.GetLogOnName(MCS.Library.Passport.ITicket@)">
             <summary>
@@ -1687,6 +2277,16 @@
             设置租户的上下文信息
             </summary>
             <param name="ticket"></param>
+        </member>
+        <member name="P:MCS.Library.Passport.AuthenticationModuleBase.IsDeluxeWorksAuthenticate">
+            <summary>
+            认证是否通过DeluxeWorksAuthenticate来进行
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Passport.AuthenticationModuleBase.CanLogOff">
+            <summary>
+            是否可以注销
+            </summary>
         </member>
         <member name="T:MCS.Library.Passport.OpenIDAuthenticationModule">
             <summary>
@@ -1748,46 +2348,6 @@
             <summary>
             应用注销回调的Url
             </summary>
-        </member>
-        <member name="T:MCS.Library.Passport.ITicketEncryption">
-            <summary>
-            实现Ticket加密、解密的接口
-            </summary>
-        </member>
-        <member name="M:MCS.Library.Passport.ITicketEncryption.EncryptTicket(MCS.Library.Passport.ITicket,System.Object)">
-            <summary>
-            加密Ticket
-            </summary>
-            <param name="ticket">Ticket对象</param>
-            <param name="oParam">附加的参数</param>
-            <returns>返回一个加密过的二进制流</returns>
-        </member>
-        <member name="M:MCS.Library.Passport.ITicketEncryption.DecryptTicket(System.Byte[],System.Object)">
-            <summary>
-            解密Ticket
-            </summary>
-            <param name="encryptedData">加密过的ticket的二进制数据</param>
-            <param name="oParam">附加的参数</param>
-            <returns>解密后的ticket对象</returns>
-        </member>
-        <member name="T:MCS.Library.Passport.IStringEncryption">
-            <summary>
-            实现string(Cookie)的加密、解密的接口
-            </summary>
-        </member>
-        <member name="M:MCS.Library.Passport.IStringEncryption.EncryptString(System.String)">
-            <summary>
-            加密字符串
-            </summary>
-            <param name="strData">字符串数据</param>
-            <returns>加密后的二进制流</returns>
-        </member>
-        <member name="M:MCS.Library.Passport.IStringEncryption.DecryptString(System.Byte[])">
-            <summary>
-            解密字符串
-            </summary>
-            <param name="encryptedData">加密过的数据</param>
-            <returns>解密后的字符串</returns>
         </member>
         <member name="T:MCS.Library.Passport.IAuthenticator">
             <summary>
@@ -1862,68 +2422,6 @@
             <param name="strUserID">用户的ID，通常是登录名</param>
             <param name="oldPassword">原密码</param>
             <param name="newPassword">新密码</param>
-        </member>
-        <member name="T:MCS.Library.Passport.IPersistSignInInfo">
-            <summary>
-            SignInInfo和Ticket的数据访问操作
-            </summary>
-        </member>
-        <member name="M:MCS.Library.Passport.IPersistSignInInfo.SaveSignInInfo(MCS.Library.Passport.ISignInInfo)">
-            <summary>
-            保存登录信息
-            </summary>
-            <param name="signInInfo">用户认证后生成的登录信息</param>
-        </member>
-        <member name="M:MCS.Library.Passport.IPersistSignInInfo.SaveTicket(MCS.Library.Passport.ITicket,System.Uri,System.Uri)">
-            <summary>
-            应用认证后生成的Ticket信息
-            </summary>
-            <param name="ticket"></param>
-            <param name="signInUrl"></param>
-            <param name="logOffCBUrl"></param>
-        </member>
-        <member name="M:MCS.Library.Passport.IPersistSignInInfo.DeleteRelativeSignInInfo(System.String)">
-            <summary>
-            删除相关的认证信息
-            </summary>
-            <param name="signInID">认证的SessionID</param>
-        </member>
-        <member name="M:MCS.Library.Passport.IPersistSignInInfo.GetAllRelativeAppsLogOffCallBackUrl(System.String)">
-            <summary>
-            得到某个登录Session的所有注销的回调Url
-            </summary>
-            <param name="sessionID">登录SessionID</param>
-            <returns>某个登录Session的所有注销的回调Url</returns>
-        </member>
-        <member name="T:MCS.Library.Passport.IPersistOpenIDBinding">
-            <summary>
-            访问OpenID和用户信息映射的
-            </summary>
-        </member>
-        <member name="M:MCS.Library.Passport.IPersistOpenIDBinding.SaveOpenIDBinding(MCS.Library.Passport.OpenIDBinding)">
-            <summary>
-            保存OpenIDBinding
-            </summary>
-            <param name="binding"></param>
-        </member>
-        <member name="M:MCS.Library.Passport.IPersistOpenIDBinding.RemoveOpenIDBinding(System.String)">
-            <summary>
-            删除OpenID的绑定信息
-            </summary>
-            <param name="openID"></param>
-        </member>
-        <member name="M:MCS.Library.Passport.IPersistOpenIDBinding.GetBindingByOpenID(System.String)">
-            <summary>
-            根据OpenID得到Binding信息
-            </summary>
-            <param name="openID"></param>
-        </member>
-        <member name="M:MCS.Library.Passport.IPersistOpenIDBinding.GetBindingsByUserID(System.String)">
-            <summary>
-            得到每个用户的所有绑定信息
-            </summary>
-            <param name="userID"></param>
-            <returns></returns>
         </member>
         <member name="T:MCS.Library.Passport.AccessPermissionChecker">
             <summary>
@@ -2141,6 +2639,27 @@
             属性集合
             </summary>
         </member>
+        <member name="T:MCS.Library.Principal.DefaultPrincipalBuilder">
+            <summary>
+            缺省的Principal的构造器
+            </summary>
+        </member>
+        <member name="M:MCS.Library.Principal.DefaultPrincipalBuilder.CreatePrincipal(System.String,MCS.Library.Passport.ITicket)">
+            <summary>
+            创建 <see cref="T:System.Security.Principal.IPrincipal"/> 对象
+            </summary>
+            <param name="userID">用户标识</param>
+            <param name="ticket">票据</param>
+            <returns></returns>
+        </member>
+        <member name="M:MCS.Library.Principal.DefaultPrincipalBuilder.CreatePrincipal(MCS.Library.Passport.GenericTicketTokenContainer,MCS.Library.Passport.ITicket)">
+            <summary>
+            创建 <see cref="T:System.Security.Principal.IPrincipal"/> 对象
+            </summary>
+            <param name="tokenContainer">token的容器</param>
+            <param name="ticket">票据</param>
+            <returns></returns>
+        </member>
         <member name="T:MCS.Library.Passport.DomainUserUpdater">
             <summary>
             域用户的修改器
@@ -2335,6 +2854,18 @@
             认证所涉及到的性能监控指针
             </summary>
         </member>
+        <member name="M:MCS.Library.Passport.Performance.SignInPerformanceCounters.#ctor(System.String)">
+            <summary>
+            构造方法
+            </summary>
+            <param name="instanceName"></param>
+        </member>
+        <member name="M:MCS.Library.Passport.Performance.SignInPerformanceCounters.DoAction(System.Action)">
+            <summary>
+            执行认证动作
+            </summary>
+            <param name="action"></param>
+        </member>
         <member name="P:MCS.Library.Passport.Performance.SignInPerformanceCounters.GlobalInstance">
             <summary>
             
@@ -2344,12 +2875,6 @@
             <summary>
             
             </summary>
-        </member>
-        <member name="M:MCS.Library.Passport.Performance.SignInPerformanceCounters.#ctor(System.String)">
-            <summary>
-            构造方法
-            </summary>
-            <param name="instanceName"></param>
         </member>
         <member name="P:MCS.Library.Passport.Performance.SignInPerformanceCounters.SignInCount">
             <summary>
@@ -2381,11 +2906,259 @@
             每秒认证的次数
             </summary>
         </member>
-        <member name="M:MCS.Library.Passport.Performance.SignInPerformanceCounters.DoAction(System.Action)">
+        <member name="T:MCS.Library.Principal.DeluxeIdentity">
             <summary>
-            执行认证动作
+            通过DeluxeWorks认证机制，所产生的用户身份对象，实现了系统的IIdentity接口。
             </summary>
-            <param name="action"></param>
+        </member>
+        <member name="M:MCS.Library.Principal.DeluxeIdentity.#ctor(MCS.Library.OGUPermission.IUser)">
+            <summary>
+            构造函数
+            </summary>
+            <param name="logonUser">IUser</param>
+        </member>
+        <member name="M:MCS.Library.Principal.DeluxeIdentity.#ctor(MCS.Library.OGUPermission.IUser,MCS.Library.Passport.ITicket)">
+            <summary>
+            构造函数
+            </summary>
+            <param name="logonUser">IUser</param>
+            <param name="ticket">票据</param>
+        </member>
+        <member name="M:MCS.Library.Principal.DeluxeIdentity.#ctor(System.String,MCS.Library.Passport.ITicket)">
+            <summary>
+            构造函数
+            </summary>
+            <param name="logonName">用户名</param>
+            <param name="ticket">票据</param>
+        </member>
+        <member name="M:MCS.Library.Principal.DeluxeIdentity.#ctor(System.String)">
+            <summary>
+            构造函数
+            </summary>
+            <param name="logonName">用户名</param>
+        </member>
+        <member name="M:MCS.Library.Principal.DeluxeIdentity.#ctor(MCS.Library.Passport.GenericTicketTokenContainer,MCS.Library.Passport.ITicket)">
+            <summary>
+            从Ticket token构造Identity
+            </summary>
+            <param name="tokenContainer"></param>
+            <param name="ticket"></param>
+        </member>
+        <member name="P:MCS.Library.Principal.DeluxeIdentity.Current">
+            <summary>
+            用户身份对象
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Principal.DeluxeIdentity.CurrentUser">
+            <summary>
+            取得当前用户信息
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Principal.DeluxeIdentity.CurrentRealUser">
+            <summary>
+            取得当前真实用户信息
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Principal.DeluxeIdentity.Ticket">
+            <summary>
+            用户的票据
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Principal.DeluxeIdentity.User">
+            <summary>
+            用户属性，如果是扮演用户，那么User和RealUser是不一样的
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Principal.DeluxeIdentity.RealUser">
+            <summary>
+            真实的用户信息
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Principal.DeluxeIdentity.IsImpersonated">
+            <summary>
+            当前身份是否是扮演过的
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Principal.DeluxeIdentity.AuthenticationType">
+            <summary>
+            认证类型
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Principal.DeluxeIdentity.IsAuthenticated">
+            <summary>
+            是否通过认证
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Principal.DeluxeIdentity.Name">
+            <summary>
+            用户名
+            </summary>
+        </member>
+        <member name="T:MCS.Library.Principal.DeluxePrincipal">
+            <summary>
+            通过DeluxeWorks认证机制，所产生的用户身份及其授权信息，实现了系统的IPrincipal接口。
+            </summary>
+        </member>
+        <member name="M:MCS.Library.Principal.DeluxePrincipal.#ctor(MCS.Library.Principal.DeluxeIdentity)">
+            <summary>
+            构造函数
+            </summary>
+            <param name="identity"></param>
+        </member>
+        <member name="M:MCS.Library.Principal.DeluxePrincipal.IsInRole(System.String)">
+            <summary>
+            判断当前用户是否属于某一角色
+            </summary>
+            <param name="roleDesp">角色的描述(应用的名称1:角色名称11,角色名称12,...;应用名称2:角色名称21,角色名称22,...)</param>
+            <returns>用户是否属于某一角色</returns>
+        </member>
+        <member name="M:MCS.Library.Principal.DeluxePrincipal.IsInRole(MCS.Library.OGUPermission.IUser,System.String)">
+            <summary>
+            判断某个用户是否属于某一角色
+            </summary>
+            <param name="user"></param>
+            <param name="roleDesp">角色的描述(应用的名称1:角色名称11,角色名称12,...;应用名称2:角色名称21,角色名称22,...)</param>
+            <returns>用户是否属于某一角色</returns>
+        </member>
+        <member name="M:MCS.Library.Principal.DeluxePrincipal.HavePermissions(MCS.Library.OGUPermission.IUser,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="user"></param>
+            <param name="permissionDesp"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MCS.Library.Principal.DeluxePrincipal.ParseRoleDescription(System.String,System.Func{System.String,System.String,System.Boolean})">
+            <summary>
+            分析某一角色（权限）的描述。将分析出的应用和角色（权限）作为参数传递到回调当中
+            </summary>
+            <param name="roleDesp">角色的描述(应用的名称1:角色名称11,角色名称12,...;应用名称2:角色名称21,角色名称22,...)</param>
+            <param name="roleFunc"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MCS.Library.Principal.DeluxePrincipal.ClearCacheInWebApp">
+            <summary>
+            如果是Web App(有HttpContext的)，则通过设置Cookie失效的方式来清除缓存中的Principal
+            </summary>
+        </member>
+        <member name="M:MCS.Library.Principal.DeluxePrincipal.GetRoles(System.String)">
+            <summary>
+            根据描述得到一组角色集合
+            </summary>
+            <param name="rolesDesp"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MCS.Library.Principal.DeluxePrincipal.GetGenericTicketTokenContainer">
+            <summary>
+            得到票据相关的Token容器
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MCS.Library.Principal.DeluxePrincipal.CreateByRequest(System.Boolean)">
+            <summary>
+            根据当前请求创建Principal
+            </summary>
+            <param name="autoRedirect">是否自动跳转到登录页</param>
+            <returns></returns>
+        </member>
+        <member name="M:MCS.Library.Principal.DeluxePrincipal.GetLogOnName(System.Boolean,MCS.Library.Passport.ITicket@)">
+            <summary>
+            进行认证，返回用户名
+            </summary>
+            <param name="autoRedirect"></param>
+            <param name="ticket"><see cref="T:MCS.Library.Passport.ITicket"/> 对象。</param>
+            <returns>用户名</returns>
+        </member>
+        <member name="P:MCS.Library.Principal.DeluxePrincipal.Current">
+            <summary>
+            从当前线程中取得用户的登录和权限信息(Principal)
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Principal.DeluxePrincipal.IsAuthenticated">
+            <summary>
+            是否经过认证
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Principal.DeluxePrincipal.Identity">
+            <summary>
+            用户身份标识
+            </summary>
+        </member>
+        <member name="T:MCS.Library.Principal.OpenIDIdentity">
+            <summary>
+            包含OpenID的Identity
+            </summary>
+        </member>
+        <member name="M:MCS.Library.Principal.OpenIDIdentity.#ctor(System.String)">
+            <summary>
+            构造方法
+            </summary>
+            <param name="openID"></param>
+        </member>
+        <member name="M:MCS.Library.Principal.OpenIDIdentity.LoadFromUrl">
+            <summary>
+            从Url加载
+            </summary>
+        </member>
+        <member name="M:MCS.Library.Principal.OpenIDIdentity.LoadFromCookie">
+            <summary>
+            从Cookie中加载
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MCS.Library.Principal.OpenIDIdentity.SaveToCookie">
+            <summary>
+            保存到Cookie
+            </summary>
+        </member>
+        <member name="M:MCS.Library.Principal.OpenIDIdentity.SaveToContextCache">
+            <summary>
+            保存到上下文缓存中
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Principal.OpenIDIdentity.Current">
+            <summary>
+            得到上下文中的OpenIDIdentity
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Principal.OpenIDIdentity.AuthenticationType">
+            <summary>
+            认证类型
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Principal.OpenIDIdentity.IsAuthenticated">
+            <summary>
+            是否认证
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Principal.OpenIDIdentity.OpenID">
+            <summary>
+            OpenID
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Principal.OpenIDIdentity.Name">
+            <summary>
+            用户名，实际上是OpenID
+            </summary>
+        </member>
+        <member name="T:MCS.Library.Principal.PrincipalExtensions">
+            <summary>
+            与Principal相关的扩展方法
+            </summary>
+        </member>
+        <member name="M:MCS.Library.Principal.PrincipalExtensions.OriginalSimulateTime(System.DateTime)">
+            <summary>
+            原始仿真时间
+            </summary>
+            <param name="dt"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MCS.Library.Principal.PrincipalExtensions.SimulateTime(System.DateTime)">
+            <summary>
+            得到模拟的时间
+            </summary>
+            <param name="dt"></param>
+            <returns></returns>
         </member>
         <member name="T:MCS.Library.Passport.Properties.Resource">
             <summary>
@@ -2546,779 +3319,6 @@
             <summary>
               Looks up a localized string similar to 用户&apos;{0}&apos;认证失败，请检查用户名和密码是否正确。.
             </summary>
-        </member>
-        <member name="T:MCS.Library.Web.Controls.ChangePasswordControl">
-            <summary>
-            修改用户密码的控件
-            </summary>
-        </member>
-        <member name="P:MCS.Library.Web.Controls.ChangePasswordControl.TemplatePath">
-            <summary>
-            页面模板的路径
-            </summary>
-        </member>
-        <member name="P:MCS.Library.Web.Controls.ChangePasswordControl.SuccessUrl">
-            <summary>
-            成功以后返回的Url
-            </summary>
-        </member>
-        <member name="P:MCS.Library.Web.Controls.ChangePasswordControl.BackUrl">
-            <summary>
-            返回的Url
-            </summary>
-        </member>
-        <member name="P:MCS.Library.Web.Controls.ChangePasswordControl.AutoRedirect">
-            <summary>
-            自动重定向到Refer页面
-            </summary>
-        </member>
-        <member name="P:MCS.Library.Web.Controls.ChangePasswordControl.ReferUrl">
-            <summary>
-            参照的Url
-            </summary>
-        </member>
-        <member name="P:MCS.Library.Web.Controls.ChangePasswordControl.Template">
-            <summary>
-            模板控件的实例
-            </summary>
-        </member>
-        <member name="M:MCS.Library.Web.Controls.ChangePasswordControl.OnLoad(System.EventArgs)">
-            <summary>
-            重载OnLoad
-            </summary>
-            <param name="e"></param>
-        </member>
-        <member name="M:MCS.Library.Web.Controls.ChangePasswordControl.CreateChildControls">
-            <summary>
-            创建子控件
-            </summary>
-        </member>
-        <member name="M:MCS.Library.Web.Controls.ChangePasswordControl.OnPreRender(System.EventArgs)">
-            <summary>
-            OnPreRender
-            </summary>
-            <param name="e"></param>
-        </member>
-        <member name="T:MCS.Library.Web.Controls.SignInResultType">
-            <summary>
-            认证结果
-            </summary>
-        </member>
-        <member name="F:MCS.Library.Web.Controls.SignInResultType.None">
-            <summary>
-            无状态
-            </summary>
-        </member>
-        <member name="F:MCS.Library.Web.Controls.SignInResultType.Success">
-            <summary>
-            认证成功
-            </summary>
-        </member>
-        <member name="F:MCS.Library.Web.Controls.SignInResultType.Fail">
-            <summary>
-            认证失败
-            </summary>
-        </member>
-        <member name="T:MCS.Library.Web.Controls.SignInContext">
-            <summary>
-            认证上下文
-            </summary>
-        </member>
-        <member name="P:MCS.Library.Web.Controls.SignInContext.ResultType">
-            <summary>
-            认证结果
-            </summary>
-        </member>
-        <member name="P:MCS.Library.Web.Controls.SignInContext.UserID">
-            <summary>
-            认证的用户ID
-            </summary>
-        </member>
-        <member name="P:MCS.Library.Web.Controls.SignInContext.PageData">
-            <summary>
-            认证页面的信息
-            </summary>
-        </member>
-        <member name="P:MCS.Library.Web.Controls.SignInContext.SignInInfo">
-            <summary>
-            认证信息。仅在认证通过后有效，否则为null
-            </summary>
-        </member>
-        <member name="P:MCS.Library.Web.Controls.SignInContext.ClientInfo">
-            <summary>
-            认证过程中的客户端信息
-            </summary>
-        </member>
-        <member name="P:MCS.Library.Web.Controls.SignInContext.Exception">
-            <summary>
-            认证过程中抛出的异常
-            </summary>
-        </member>
-        <member name="T:MCS.Library.Web.Controls.SignInClientInfo">
-            <summary>
-            客户端信息
-            </summary>
-        </member>
-        <member name="P:MCS.Library.Web.Controls.SignInClientInfo.Item(System.String)">
-            <summary>
-            获取客户端信息
-            </summary>
-            <param name="key">信息名称</param>
-            <returns>客户端信息</returns>
-        </member>
-        <member name="T:MCS.Library.Web.Controls.SignInControl">
-            <summary>
-            单点登录控件类
-            </summary>
-        </member>
-        <member name="E:MCS.Library.Web.Controls.SignInControl.InitSignInControl">
-            <summary>
-            初始化SignInControl的事件，如果提供了认证信息，则不再显示认证页面，自动转向
-            </summary>
-        </member>
-        <member name="E:MCS.Library.Web.Controls.SignInControl.BeforeAuthenticate">
-            <summary>
-            认证之前的事件定义。可以修改待认证的用户名和口令
-            </summary>
-        </member>
-        <member name="E:MCS.Library.Web.Controls.SignInControl.AfterSignIn">
-            <summary>
-            认证之后的事件定义。可以修改认证之后用户登录名，也可以截获认证时产生的异常
-            </summary>
-        </member>
-        <member name="P:MCS.Library.Web.Controls.SignInControl.TemplatePath">
-            <summary>
-            页面模板的路径
-            </summary>
-        </member>
-        <member name="P:MCS.Library.Web.Controls.SignInControl.Template">
-            <summary>
-            模板控件的实例
-            </summary>
-        </member>
-        <member name="P:MCS.Library.Web.Controls.SignInControl.PageData">
-            <summary>
-            认证页面所保存在Cookie中的信息
-            </summary>
-        </member>
-        <member name="M:MCS.Library.Web.Controls.SignInControl.CreateChildControls">
-            <summary>
-            初始化通知器
-            </summary>
-        </member>
-        <member name="M:MCS.Library.Web.Controls.SignInControl.OnInit(System.EventArgs)">
-            <summary>
-            进行初始化，加载TemplatePath页面，JavaScript脚本，进行用户SignInInfo状态判断
-            </summary>
-            <param name="e"></param>
-        </member>
-        <member name="M:MCS.Library.Web.Controls.SignInControl.Render(System.Web.UI.HtmlTextWriter)">
-            <summary>
-            渲染控件
-            </summary>
-            <param name="writer"></param>
-        </member>
-        <member name="M:MCS.Library.Web.Controls.SignInControl.Initialize">
-            <summary>
-            判断SignInInfo状态，如果在SignInInfo合法情况下，基于Session的Cookie，或者用户选择自动登录的进行自动登录。
-            </summary>
-        </member>
-        <member name="M:MCS.Library.Web.Controls.SignInControl.AutoSignIn(MCS.Library.Passport.ISignInInfo)">
-            <summary>
-            如果登录信息依然有效，可以自动转到应用页面
-            </summary>
-            <param name="signInInfo">登录信息</param>
-        </member>
-        <member name="P:MCS.Library.Web.Controls.SignInControl.IsSelfAuthenticate">
-            <summary>
-            是否是自认证页面，此类页面没有ru参数
-            </summary>
-            <returns>是否是自认证页面</returns>
-        </member>
-        <member name="M:MCS.Library.Web.Controls.SignInControl.DefaultAuthenticate(System.String,System.String)">
-            <summary>
-            调用认证接口
-            </summary>
-            <param name="strSignInName">登录名</param>
-            <param name="strPasspord">密码</param>
-            <returns>用户认证的结果</returns>
-        </member>
-        <member name="T:MCS.Library.Web.Controls.SignInLogoControl">
-            <summary>
-            注销控件
-            </summary>
-        </member>
-        <member name="M:MCS.Library.Web.Controls.SignInLogoControl.OnPreRender(System.EventArgs)">
-            <summary>
-            渲染控件
-            </summary>
-            <param name="e"></param>
-        </member>
-        <member name="P:MCS.Library.Web.Controls.SignInLogoControl.SignInImage">
-            <summary>
-            登录链接的图片
-            </summary>
-        </member>
-        <member name="P:MCS.Library.Web.Controls.SignInLogoControl.SignOutImage">
-            <summary>
-            注销图片的链接
-            </summary>
-        </member>
-        <member name="P:MCS.Library.Web.Controls.SignInLogoControl.ReturnUrl">
-            <summary>
-            注销后返回的地址
-            </summary>
-        </member>
-        <member name="P:MCS.Library.Web.Controls.SignInLogoControl.AutoRedirect">
-            <summary>
-            注销后，是否直接导航到返回地址。如果为false，则停留在注销页面
-            </summary>
-        </member>
-        <member name="P:MCS.Library.Web.Controls.SignInLogoControl.LogOffAll">
-            <summary>
-            是否注销所有的应用（此参数已经没有意义）
-            </summary>
-        </member>
-        <member name="P:MCS.Library.Web.Controls.SignInLogoControl.Target">
-            <summary>
-            导航的目标窗口
-            </summary>
-        </member>
-        <member name="P:MCS.Library.Web.Controls.SignInLogoControl.IsDesignMode">
-            <summary>
-            是否是设计模式
-            </summary>
-        </member>
-        <member name="M:MCS.Library.Web.Controls.SignInLogoControl.Render(System.Web.UI.HtmlTextWriter)">
-            <summary>
-            渲染控件
-            </summary>
-            <param name="writer"></param>
-        </member>
-        <member name="M:MCS.Library.Web.Controls.SignInLogoControl.ChangeToAbsoluteUrl(System.String)">
-            <summary>
-            将需要返回的url变成绝对路径的url（如果本来是绝对地址，则忽略）
-            </summary>
-            <param name="ru"></param>
-            <returns></returns>
-        </member>
-        <member name="T:MCS.Library.Web.Controls.InitSignInControlDelegate">
-            <summary>
-            初始化SignInControl，如果提供了认证信息，则不再显示认证页面，自动转向
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="T:MCS.Library.Web.Controls.BeforeAuthenticateDelegate">
-            <summary>
-            认证之前的事件定义。可以修改待认证的用户名和口令
-            </summary>
-        </member>
-        <member name="T:MCS.Library.Web.Controls.AfterSignInDelegate">
-            <summary>
-            认证之后的事件定义。可以修改认证之后用户登录名，也可以截获认证时产生的异常
-            </summary>
-        </member>
-        <member name="T:MCS.Library.Web.Controls.SignInNotifyEventContainer">
-            <summary>
-            认证过程的事件容器
-            </summary>
-        </member>
-        <member name="E:MCS.Library.Web.Controls.SignInNotifyEventContainer.BeforeAuthenticate">
-            <summary>
-            认证之前的事件。可以修改需要认证用户的用户名和口令
-            </summary>
-        </member>
-        <member name="E:MCS.Library.Web.Controls.SignInNotifyEventContainer.AfterSignIn">
-            <summary>
-            认证之后的事件
-            </summary>
-        </member>
-        <member name="T:MCS.Library.Web.Controls.ISignInNotifier">
-            <summary>
-            用户登录的回调接口，会在认证过程中进行通知
-            </summary>
-        </member>
-        <member name="M:MCS.Library.Web.Controls.ISignInNotifier.Init(MCS.Library.Web.Controls.SignInNotifyEventContainer)">
-            <summary>
-            初始化。
-            </summary>
-            <param name="eventContainer">容器。</param>
-        </member>
-        <member name="T:MCS.Library.Web.Controls.SignInPageData">
-            <summary>
-            登录页面的配置信息
-            </summary>
-        </member>
-        <member name="P:MCS.Library.Web.Controls.SignInPageData.DontSaveUserID">
-            <summary>
-            是否保存用户名
-            </summary>
-        </member>
-        <member name="P:MCS.Library.Web.Controls.SignInPageData.AutoSignIn">
-            <summary>
-            是否自动登录
-            </summary>
-        </member>
-        <member name="P:MCS.Library.Web.Controls.SignInPageData.UserID">
-            <summary>
-            用户ID
-            </summary>
-        </member>
-        <member name="P:MCS.Library.Web.Controls.SignInPageData.Properties">
-            <summary>
-            扩展的属性信息
-            </summary>
-        </member>
-        <member name="M:MCS.Library.Web.Controls.SignInPageData.LoadFromCookie">
-            <summary>
-            从Cookie中装载页面配置信息
-            </summary>
-        </member>
-        <member name="M:MCS.Library.Web.Controls.SignInPageData.SaveToCookie">
-            <summary>
-            存入Cookie中
-            </summary>
-        </member>
-        <member name="T:MCS.Library.Principal.DefaultPrincipalBuilder">
-            <summary>
-            缺省的Principal的构造器
-            </summary>
-        </member>
-        <member name="M:MCS.Library.Principal.DefaultPrincipalBuilder.CreatePrincipal(System.String,MCS.Library.Passport.ITicket)">
-            <summary>
-            创建 <see cref="T:System.Security.Principal.IPrincipal"/> 对象
-            </summary>
-            <param name="userID">用户标识</param>
-            <param name="ticket">票据</param>
-            <returns></returns>
-        </member>
-        <member name="M:MCS.Library.Principal.DefaultPrincipalBuilder.CreatePrincipal(MCS.Library.Passport.GenericTicketTokenContainer,MCS.Library.Passport.ITicket)">
-            <summary>
-            创建 <see cref="T:System.Security.Principal.IPrincipal"/> 对象
-            </summary>
-            <param name="tokenContainer">token的容器</param>
-            <param name="ticket">票据</param>
-            <returns></returns>
-        </member>
-        <member name="T:MCS.Library.Principal.DeluxeIdentity">
-            <summary>
-            通过DeluxeWorks认证机制，所产生的用户身份对象，实现了系统的IIdentity接口。
-            </summary>
-        </member>
-        <member name="M:MCS.Library.Principal.DeluxeIdentity.#ctor(MCS.Library.OGUPermission.IUser)">
-            <summary>
-            构造函数
-            </summary>
-            <param name="logonUser">IUser</param>
-        </member>
-        <member name="M:MCS.Library.Principal.DeluxeIdentity.#ctor(MCS.Library.OGUPermission.IUser,MCS.Library.Passport.ITicket)">
-            <summary>
-            构造函数
-            </summary>
-            <param name="logonUser">IUser</param>
-            <param name="ticket">票据</param>
-        </member>
-        <member name="M:MCS.Library.Principal.DeluxeIdentity.#ctor(System.String,MCS.Library.Passport.ITicket)">
-            <summary>
-            构造函数
-            </summary>
-            <param name="logonName">用户名</param>
-            <param name="ticket">票据</param>
-        </member>
-        <member name="M:MCS.Library.Principal.DeluxeIdentity.#ctor(System.String)">
-            <summary>
-            构造函数
-            </summary>
-            <param name="logonName">用户名</param>
-        </member>
-        <member name="M:MCS.Library.Principal.DeluxeIdentity.#ctor(MCS.Library.Passport.GenericTicketTokenContainer,MCS.Library.Passport.ITicket)">
-            <summary>
-            从Ticket token构造Identity
-            </summary>
-            <param name="tokenContainer"></param>
-            <param name="ticket"></param>
-        </member>
-        <member name="P:MCS.Library.Principal.DeluxeIdentity.Current">
-            <summary>
-            用户身份对象
-            </summary>
-        </member>
-        <member name="P:MCS.Library.Principal.DeluxeIdentity.CurrentUser">
-            <summary>
-            取得当前用户信息
-            </summary>
-        </member>
-        <member name="P:MCS.Library.Principal.DeluxeIdentity.CurrentRealUser">
-            <summary>
-            取得当前真实用户信息
-            </summary>
-        </member>
-        <member name="P:MCS.Library.Principal.DeluxeIdentity.Ticket">
-            <summary>
-            用户的票据
-            </summary>
-        </member>
-        <member name="P:MCS.Library.Principal.DeluxeIdentity.User">
-            <summary>
-            用户属性，如果是扮演用户，那么User和RealUser是不一样的
-            </summary>
-        </member>
-        <member name="P:MCS.Library.Principal.DeluxeIdentity.RealUser">
-            <summary>
-            真实的用户信息
-            </summary>
-        </member>
-        <member name="P:MCS.Library.Principal.DeluxeIdentity.IsImpersonated">
-            <summary>
-            当前身份是否是扮演过的
-            </summary>
-        </member>
-        <member name="P:MCS.Library.Principal.DeluxeIdentity.AuthenticationType">
-            <summary>
-            认证类型
-            </summary>
-        </member>
-        <member name="P:MCS.Library.Principal.DeluxeIdentity.IsAuthenticated">
-            <summary>
-            是否通过认证
-            </summary>
-        </member>
-        <member name="P:MCS.Library.Principal.DeluxeIdentity.Name">
-            <summary>
-            用户名
-            </summary>
-        </member>
-        <member name="T:MCS.Library.Principal.DeluxePrincipal">
-            <summary>
-            通过DeluxeWorks认证机制，所产生的用户身份及其授权信息，实现了系统的IPrincipal接口。
-            </summary>
-        </member>
-        <member name="M:MCS.Library.Principal.DeluxePrincipal.#ctor(MCS.Library.Principal.DeluxeIdentity)">
-            <summary>
-            构造函数
-            </summary>
-            <param name="identity"></param>
-        </member>
-        <member name="P:MCS.Library.Principal.DeluxePrincipal.Current">
-            <summary>
-            从当前线程中取得用户的登录和权限信息(Principal)
-            </summary>
-        </member>
-        <member name="P:MCS.Library.Principal.DeluxePrincipal.IsAuthenticated">
-            <summary>
-            是否经过认证
-            </summary>
-        </member>
-        <member name="P:MCS.Library.Principal.DeluxePrincipal.Identity">
-            <summary>
-            用户身份标识
-            </summary>
-        </member>
-        <member name="M:MCS.Library.Principal.DeluxePrincipal.IsInRole(System.String)">
-            <summary>
-            判断当前用户是否属于某一角色
-            </summary>
-            <param name="roleDesp">角色的描述(应用的名称1:角色名称11,角色名称12,...;应用名称2:角色名称21,角色名称22,...)</param>
-            <returns>用户是否属于某一角色</returns>
-        </member>
-        <member name="M:MCS.Library.Principal.DeluxePrincipal.IsInRole(MCS.Library.OGUPermission.IUser,System.String)">
-            <summary>
-            判断某个用户是否属于某一角色
-            </summary>
-            <param name="user"></param>
-            <param name="roleDesp">角色的描述(应用的名称1:角色名称11,角色名称12,...;应用名称2:角色名称21,角色名称22,...)</param>
-            <returns>用户是否属于某一角色</returns>
-        </member>
-        <member name="M:MCS.Library.Principal.DeluxePrincipal.HavePermissions(MCS.Library.OGUPermission.IUser,System.String)">
-            <summary>
-            
-            </summary>
-            <param name="user"></param>
-            <param name="permissionDesp"></param>
-            <returns></returns>
-        </member>
-        <member name="M:MCS.Library.Principal.DeluxePrincipal.ParseRoleDescription(System.String,System.Func{System.String,System.String,System.Boolean})">
-            <summary>
-            分析某一角色（权限）的描述。将分析出的应用和角色（权限）作为参数传递到回调当中
-            </summary>
-            <param name="roleDesp">角色的描述(应用的名称1:角色名称11,角色名称12,...;应用名称2:角色名称21,角色名称22,...)</param>
-            <param name="roleFunc"></param>
-            <returns></returns>
-        </member>
-        <member name="M:MCS.Library.Principal.DeluxePrincipal.ClearCacheInWebApp">
-            <summary>
-            如果是Web App(有HttpContext的)，则通过设置Cookie失效的方式来清除缓存中的Principal
-            </summary>
-        </member>
-        <member name="M:MCS.Library.Principal.DeluxePrincipal.GetRoles(System.String)">
-            <summary>
-            根据描述得到一组角色集合
-            </summary>
-            <param name="rolesDesp"></param>
-            <returns></returns>
-        </member>
-        <member name="M:MCS.Library.Principal.DeluxePrincipal.GetGenericTicketTokenContainer">
-            <summary>
-            得到票据相关的Token容器
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:MCS.Library.Principal.DeluxePrincipal.CreateByRequest(System.Boolean)">
-            <summary>
-            根据当前请求创建Principal
-            </summary>
-            <param name="autoRedirect">是否自动跳转到登录页</param>
-            <returns></returns>
-        </member>
-        <member name="M:MCS.Library.Principal.DeluxePrincipal.GetLogOnName(System.Boolean,MCS.Library.Passport.ITicket@)">
-            <summary>
-            进行认证，返回用户名
-            </summary>
-            <param name="autoRedirect"></param>
-            <param name="ticket"><see cref="T:MCS.Library.Passport.ITicket"/> 对象。</param>
-            <returns>用户名</returns>
-        </member>
-        <member name="T:MCS.Library.Principal.OpenIDIdentity">
-            <summary>
-            包含OpenID的Identity
-            </summary>
-        </member>
-        <member name="P:MCS.Library.Principal.OpenIDIdentity.Current">
-            <summary>
-            得到上下文中的OpenIDIdentity
-            </summary>
-        </member>
-        <member name="M:MCS.Library.Principal.OpenIDIdentity.#ctor(System.String)">
-            <summary>
-            构造方法
-            </summary>
-            <param name="openID"></param>
-        </member>
-        <member name="M:MCS.Library.Principal.OpenIDIdentity.LoadFromUrl">
-            <summary>
-            从Url加载
-            </summary>
-        </member>
-        <member name="M:MCS.Library.Principal.OpenIDIdentity.LoadFromCookie">
-            <summary>
-            从Cookie中加载
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="P:MCS.Library.Principal.OpenIDIdentity.AuthenticationType">
-            <summary>
-            认证类型
-            </summary>
-        </member>
-        <member name="P:MCS.Library.Principal.OpenIDIdentity.IsAuthenticated">
-            <summary>
-            是否认证
-            </summary>
-        </member>
-        <member name="P:MCS.Library.Principal.OpenIDIdentity.OpenID">
-            <summary>
-            OpenID
-            </summary>
-        </member>
-        <member name="P:MCS.Library.Principal.OpenIDIdentity.Name">
-            <summary>
-            用户名，实际上是OpenID
-            </summary>
-        </member>
-        <member name="M:MCS.Library.Principal.OpenIDIdentity.SaveToCookie">
-            <summary>
-            保存到Cookie
-            </summary>
-        </member>
-        <member name="M:MCS.Library.Principal.OpenIDIdentity.SaveToContextCache">
-            <summary>
-            保存到上下文缓存中
-            </summary>
-        </member>
-        <member name="T:MCS.Library.Principal.PrincipalExtensions">
-            <summary>
-            与Principal相关的扩展方法
-            </summary>
-        </member>
-        <member name="M:MCS.Library.Principal.PrincipalExtensions.OriginalSimulateTime(System.DateTime)">
-            <summary>
-            原始仿真时间
-            </summary>
-            <param name="dt"></param>
-            <returns></returns>
-        </member>
-        <member name="M:MCS.Library.Principal.PrincipalExtensions.SimulateTime(System.DateTime)">
-            <summary>
-            得到模拟的时间
-            </summary>
-            <param name="dt"></param>
-            <returns></returns>
-        </member>
-        <member name="T:MCS.Web.WebControls.AccessTicketCheckEventArgs">
-            <summary>
-            票据检查的所需要的事件参数
-            </summary>
-        </member>
-        <member name="P:MCS.Web.WebControls.AccessTicketCheckEventArgs.Ticket">
-            <summary>
-            检查的票据。只读属性。如果无法获得票据，则此属性为null
-            </summary>
-        </member>
-        <member name="P:MCS.Web.WebControls.AccessTicketCheckEventArgs.IsValid">
-            <summary>
-            票据是否合法。应用可以设置
-            </summary>
-        </member>
-        <member name="P:MCS.Web.WebControls.AccessTicketCheckEventArgs.ErrorMessage">
-            <summary>
-            错误信息
-            </summary>
-        </member>
-        <member name="T:MCS.Web.WebControls.AccessTicketCheckHandler">
-            <summary>
-            票据检查时抛出的事件。应用可以接收到此事件，进行自己的判断。在eventArgs中，
-            此控件已经进行了自己的判断，应用可以修改此结果
-            </summary>
-            <param name="sender"></param>
-            <param name="eventArgs"></param>
-        </member>
-        <member name="T:MCS.Web.WebControls.AccessTicketChecker">
-            <summary>
-            访问票据的检查器
-            </summary>
-        </member>
-        <member name="E:MCS.Web.WebControls.AccessTicketChecker.TicketChecking">
-            <summary>
-            票据检查出错时的事件
-            </summary>
-        </member>
-        <member name="P:MCS.Web.WebControls.AccessTicketChecker.CheckPhase">
-            <summary>
-            检查票据的阶段。默认是Init阶段
-            </summary>
-        </member>
-        <member name="P:MCS.Web.WebControls.AccessTicketChecker.CheckUrl">
-            <summary>
-            是否检查url的合法性
-            </summary>
-        </member>
-        <member name="P:MCS.Web.WebControls.AccessTicketChecker.UrlCheckParts">
-            <summary>
-            需要检查的Url的部分
-            </summary>
-        </member>
-        <member name="P:MCS.Web.WebControls.AccessTicketChecker.Enabled">
-            <summary>
-            是否启用
-            </summary>
-        </member>
-        <member name="P:MCS.Web.WebControls.AccessTicketChecker.Timeout">
-            <summary>
-            过期时间
-            </summary>
-        </member>
-        <member name="M:MCS.Web.WebControls.AccessTicketChecker.OnInit(System.EventArgs)">
-            <summary>
-            
-            </summary>
-            <param name="e"></param>
-        </member>
-        <member name="M:MCS.Web.WebControls.AccessTicketChecker.OnLoad(System.EventArgs)">
-            <summary>
-            
-            </summary>
-            <param name="e"></param>
-        </member>
-        <member name="M:MCS.Web.WebControls.AccessTicketChecker.OnPreRender(System.EventArgs)">
-            <summary>
-            
-            </summary>
-            <param name="e"></param>
-        </member>
-        <member name="M:MCS.Web.WebControls.AccessTicketChecker.Render(System.Web.UI.HtmlTextWriter)">
-            <summary>
-            渲染
-            </summary>
-            <param name="output"></param>
-        </member>
-        <member name="M:MCS.Web.WebControls.AccessTicketChecker.OnTicketChecking(MCS.Web.WebControls.AccessTicketCheckEventArgs)">
-            <summary>
-            票据检查
-            </summary>
-        </member>
-        <member name="M:MCS.Web.WebControls.AccessTicketChecker.IsCheckPhaseMatched(MCS.Web.WebControls.AccessTicketCheckPhase)">
-            <summary>
-            是否是需要检查票据的阶段
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="T:MCS.Web.WebControls.AccessTicketCheckPhase">
-            <summary>
-            票据检查阶段
-            </summary>
-        </member>
-        <member name="F:MCS.Web.WebControls.AccessTicketCheckPhase.None">
-            <summary>
-            空
-            </summary>
-        </member>
-        <member name="F:MCS.Web.WebControls.AccessTicketCheckPhase.Init">
-            <summary>
-            在OnInit阶段
-            </summary>
-        </member>
-        <member name="F:MCS.Web.WebControls.AccessTicketCheckPhase.Load">
-            <summary>
-            在OnLoad阶段
-            </summary>
-        </member>
-        <member name="F:MCS.Web.WebControls.AccessTicketCheckPhase.PreRender">
-            <summary>
-            在PreRender阶段
-            </summary>
-        </member>
-        <member name="F:MCS.Web.WebControls.AccessTicketCheckPhase.Post">
-            <summary>
-            POST时是否校验
-            </summary>
-        </member>
-        <member name="F:MCS.Web.WebControls.AccessTicketCheckPhase.CallBack">
-            <summary>
-            CallBack时是否校验
-            </summary>
-        </member>
-        <member name="T:MCS.Web.WebControls.AccessTicketHtmlAnchor">
-            <summary>
-            带AccessTicket的HtmlAnchor
-            </summary>
-        </member>
-        <member name="P:MCS.Web.WebControls.AccessTicketHtmlAnchor.AutoMakeAbsolute">
-            <summary>
-            生成票据时，是否自动将相对地址转换为绝对地址
-            </summary>
-        </member>
-        <member name="P:MCS.Web.WebControls.AccessTicketHtmlAnchor.OnClientAccquiredAccessTicket">
-            <summary>
-            当客户端得到AccessTicket后的
-            </summary>
-        </member>
-        <member name="M:MCS.Web.WebControls.AccessTicketHtmlAnchor.RegisterScript(System.Web.UI.Page)">
-            <summary>
-            注册脚本
-            </summary>
-            <param name="page"></param>
-        </member>
-        <member name="M:MCS.Web.WebControls.AccessTicketHtmlAnchor.OnPreRender(System.EventArgs)">
-            <summary>
-            
-            </summary>
-            <param name="e"></param>
-        </member>
-        <member name="M:MCS.Web.WebControls.AccessTicketHtmlAnchor.Render(System.Web.UI.HtmlTextWriter)">
-            <summary>
-            渲染
-            </summary>
-            <param name="writer"></param>
         </member>
     </members>
 </doc>

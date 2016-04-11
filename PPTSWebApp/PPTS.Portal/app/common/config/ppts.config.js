@@ -30,7 +30,7 @@ var ppts = ppts || mcs.app;
             dashboard: 'app/dashboard/ppts.dashboard',
             auditing: 'app/auditing/ppts.auditing',
             customer: 'app/customer/ppts.customer',
-            payment: 'app/payment/ppts.payment',
+            account: 'app/account/ppts.account',
             product: 'app/product/ppts.product',
             order: 'app/order/ppts.order',
             schedule: 'app/schedule/ppts.schedule',
@@ -39,6 +39,10 @@ var ppts = ppts || mcs.app;
             contract: 'app/contract/ppts.contract',
         },
         dictMappingConfig: {
+            // 公共相关
+            dateRange: 'c_codE_ABBR_dateRange',
+            ifElse: 'c_codE_ABBR_ifelse',
+
             grade: 'c_codE_ABBR_CUSTOMER_GRADE',
             gender: 'c_codE_ABBR_GENDER',
             idtype: 'c_codE_ABBR_BO_Customer_CertificateType',
@@ -86,35 +90,35 @@ var ppts = ppts || mcs.app;
             * 产品相关
             */
             // 产品大类
-            categoryType: 'Product_CategoryType',
+            categoryType: 'c_codE_ABBR_Product_CategoryType',
             // 服务费类型
-            expenseType: 'Product_ExpenseType',
+            expenseType: 'c_codE_ABBR_Product_ExpenseType',
             // 年级类型
-            gradeType: 'Product_GradeType',
+            gradeType: 'c_codE_ABBR_Product_GradeType',
             // 科目类型
             subjectType: 'c_codE_ABBR_STUDENTBRANCH',
             // 科目
             subject: 'c_codE_ABBR_BO_Product_TeacherSubject',
             // 季节
-            season: 'Product_Season',
+            season: 'c_codE_ABBR_Product_Season',
             // 课次/课时时长
             duration: 'c_codE_ABBR_BO_ProductDuration',
             // 课程级别
-            courseLevel: 'Product_CourseLevel',
+            courseLevel: 'c_codE_ABBR_Product_CourseLevel',
             // 辅导类型
-            coachType: 'Product_CoachType',
+            coachType: 'c_codE_ABBR_Product_CoachType',
             // 班组类型
-            groupType: 'Product_GroupType',
+            groupType: 'c_codE_ABBR_Product_GroupType',
             // 班级类型
             classType: 'c_codE_ABBR_Product_GroupClassType',
             // 跨校区产品收入归属
-            belonging: 'Product_IncomeBelonging',
+            belonging: 'c_codE_ABBR_Product_IncomeBelonging',
             // 薪酬规则对象
-            rule: 'Product_RuleObject',
+            rule: 'c_codE_ABBR_Product_RuleObject',
             // 颗粒度
-            unit: 'Product_ProductUnit',
+            unit: 'c_codE_ABBR_Product_ProductUnit',
             // 合作类型
-            hasPartner: 'Product_HasPartner'
+            hasPartner: 'c_codE_ABBR_Product_HasPartner'
         },
         dataServiceConfig: {
             // Auditing Services
@@ -132,12 +136,19 @@ var ppts = ppts || mcs.app;
             followDataService: 'app/customer/follow/follow.dataService',
             weeklyFeedbackDataService: 'app/customer/weeklyfeedback/weeklyfeedback.dataService',
 
-            // Payment Services
-            payDataService: 'app/payment/pay/pay.dataService',
-            receiptDataService: 'app/payment/receipt/receipt.dataService',
-            refundDataService: 'app/payment/refund/refund.dataService',
-            unionpayDataService: 'app/payment/unionpay/unionpay.dataService',
-            assetExchangeDataService: 'app/payment/assetexchange/assetexchange.dataService',
+            // Account Services
+            // 账户显示
+            accountDisplayDataService: 'app/account/display/display.dataService',
+            // 账户充值
+            accountChargeDataService: 'app/account/charge/charge.dataService',
+            // 账户退费
+            accountRefundDataService: 'app/account/refund/refund.dataService',
+            // 账户服务费扣减
+            accountDeductDataService: 'app/account/deduct/deduct.dataService',
+            // 账户服务费返还
+            accountReturnDataService: 'app/account/return/return.dataService',
+            // 账户转让
+            accountTransferDataService: 'app/account/transfer/transfer.dataService',
 
             // Product Services
             productDataService: 'app/product/productlist/product.dataService',
@@ -175,11 +186,9 @@ var ppts = ppts || mcs.app;
         },
         webportalBaseUrl: ppts.rootUrl + '/PPTSWebApp/PPTS.Portal/',
         componentBaseUrl: ppts.rootUrl + '/MCSWebApp/MCS.Web.Component/',
-        customerApiBaseUrl: ppts.rootUrl + '/PPTSWebApp/PPTS.WebAPI.Customer/',
-        paymentApiBaseUrl: ppts.rootUrl + '/PPTSWebApp/PPTS.WebAPI.Payment/',
-        orderApiBaseUrl: ppts.rootUrl + '/PPTSWebApp/PPTS.WebAPI.Order/',
-        productApiBaseUrl: ppts.rootUrl + '/PPTSWebApp/PPTS.WebAPI.Product/',
-        scheduleApiBaseUrl: ppts.rootUrl + '/PPTSWebApp/PPTS.WebAPI.Schedule/'
+        customerApiBaseUrl: ppts.rootUrl + '/PPTSWebApp/PPTS.WebAPI.Customers/',
+        orderApiBaseUrl: ppts.rootUrl + '/PPTSWebApp/PPTS.WebAPI.Orders/',
+        productApiBaseUrl: ppts.rootUrl + '/PPTSWebApp/PPTS.WebAPI.Products/'
     };
 
     mcs.app.config.componentBaseUrl = ppts.config.componentBaseUrl;

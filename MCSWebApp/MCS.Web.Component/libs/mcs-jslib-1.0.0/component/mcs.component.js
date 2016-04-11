@@ -1,8 +1,8 @@
 // 依赖于mcs.js, angularjs, 将会在应用程序启动之后执行
-(function() {
+(function () {
     'use strict';
 
-    mcs.ng = mcs.ng || angular.module('mcs.ng', ['mcs.ng.datatable', 'mcs.ng.paging', 'dialogs.main']);
+    mcs.ng = mcs.ng || angular.module('mcs.ng', ['mcs.ng.datatable', 'mcs.ng.treeControl', 'mcs.ng.paging', 'dialogs.main']);
     mcs.ng.constant('mcsComponentConfig', {
         rootUrl: mcs.app.config.componentBaseUrl
     })
@@ -14,10 +14,10 @@
         'other': ''
     })
 
-    .service('httpErrorHandleService', function(httpErrorHandleMessage, dialogs) {
+    .service('httpErrorHandleService', function (httpErrorHandleMessage, dialogs) {
 
         var httpErrorHandleService = this;
-        httpErrorHandleService.process = function(response) {
+        httpErrorHandleService.process = function (response) {
             dialogs.error('error', httpErrorHandleMessage[response.StatusCode]);
         }
 
@@ -25,7 +25,6 @@
 
     });
 })();
-
 (function () {
     'use strict';
 
@@ -570,10 +569,10 @@
     });
 })();
 
-(function() {
+(function () {
         'use strict';
 
-        mcs.ng.service('mcsDialogService', ['dialogs', function(dialogs) {
+        mcs.ng.service('mcsDialogService', ['dialogs', function (dialogs) {
             var mcsDialogService = this;
             mcsDialogService.messageConfig = {
                 wait: {
@@ -590,18 +589,22 @@
                 }
 
             };
-            this.wait = function(title, msg, opts) {
-                dialogs.wait(title || mcsDialogService.messageConfig.wait.title, msg || mcsDialogService.messageConfig.wait.message);
+            this.wait = function (title, msg, opts) {
+                return dialogs.wait(title || mcsDialogService.messageConfig.wait.title, msg || mcsDialogService.messageConfig.wait.message);
             }
 
-            this.error = function(title, msg, opts) {
-                dialogs.error(title || mcsDialogService.messageConfig.error.title, msg || mcsDialogService.messageConfig.error.message);
+            this.error = function (title, msg, opts) {
+                return dialogs.error(title || mcsDialogService.messageConfig.error.title, msg || mcsDialogService.messageConfig.error.message);
             }
 
 
-            this.confirm = function(title, msg, opts) {
-                dialogs.confirm(title || mcsDialogService.messageConfig.confirm.title, msg || mcsDialogService.messageConfig.confirm.message);
+            this.confirm = function (title, msg, opts) {
+                return dialogs.confirm(title || mcsDialogService.messageConfig.confirm.title, msg || mcsDialogService.messageConfig.confirm.message);
 
+            }
+
+            this.create = function (url, ctrlr, data, opts) {
+                return dialogs.create(url, ctrlr, data, opts);
             }
 
 
@@ -609,7 +612,6 @@
     }
 
 )();
-
 (function () {
     'use strict';
 
@@ -710,6 +712,98 @@
     //        }
     //    }
     //}]);
+})();
+(function () {
+    'use strict';
+
+    mcs.ng.directive('mcsSelect', function () {
+
+        return {
+            restrict: 'E',
+            scope: {
+                data: '=',
+                model: '=',
+                caption: '@'
+            },
+
+            templateUrl: mcs.app.config.componentBaseUrl + '/src/tpl/mcs-select.tpl.html',
+            link: function ($scope, $elem, $attrs, $ctrl) {
+                
+            }
+        }
+    });
+})();
+(function () {
+    'use strict';
+
+    angular.module('mcs.ng.treeControl', [])
+        .constant('treeSetting', {
+            data: {
+                key: {
+                    checked: 'checked',
+                    children: 'children',
+                    name: 'name',
+                    title: 'name'
+                },
+                simpleData: {
+                    enable: true
+                }
+            },
+            view: {
+                selectedMulti: true,
+                showIcon: true,
+                showLine: true,
+                nameIsHTML: false,
+                fontCss: {
+
+                }
+
+            },
+            check: {
+                enable: true
+            },
+            async: {
+                enable: true,
+                autoParam: ["id"],
+                contentType: "application/json",
+                type: 'post',
+                dataType: "json",
+                url: ''
+            }
+
+        })
+        .directive('mcsTree', function (treeSetting, $http) {
+
+
+
+            return {
+                restrict: 'A',
+                scope: {
+                    setting: '=mcsTree',
+                    nodes: '='
+                },
+
+                link: function ($scope, iElm, iAttrs, controller) {
+                    angular.extend($scope.setting, treeSetting);
+                    if ($scope.nodes) {
+                        $.fn.zTree.init(iElm, $scope.setting, $scope.nodes);
+                    } else {
+                        if (setting.async.url) {
+                            $http.post(setting.async.url, {
+                                id: null
+                            }).success(function (data) {
+                                $.fn.zTree.init(iElm, setting, data.Data.List);
+                            })
+
+                        }
+
+                    }
+
+                }
+            };
+        });
+
+
 })();
 (
 function () {

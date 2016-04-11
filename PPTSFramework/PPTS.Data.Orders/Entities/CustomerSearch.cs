@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Runtime.Serialization;
+
+using PPTS.Data.Common.Entities;
 using MCS.Library.Data.DataObjects;
 using MCS.Library.Data.Mapping;
-using System.Runtime.Serialization;
 
 namespace PPTS.Data.Orders.Entities
 {
@@ -42,19 +44,65 @@ namespace PPTS.Data.Orders.Entities
         {
             get;
             set;
-        }
-
+        }     
+       
         /// <summary>
-        /// 剩余课时数
+        /// 性别代码
         /// </summary>
-        [ORFieldMapping("RemainAmount")]
+        [ORFieldMapping("Gender")]
+        [ConstantCategory("C_CODE_ABBR_GENDER")]
         [DataMember]
-        public decimal RemainAmount
+        public string Gender
+        {
+            get;set;
+        }
+        /// <summary>
+        /// 出生年月
+        /// </summary>
+        [ORFieldMapping("Birthday")]
+        [DataMember]
+        public DateTime Birthday
+        {
+            get;set;
+        }
+        /// <summary>
+        /// 在读学校名称
+        /// </summary>
+        [ORFieldMapping("SchoolName")]
+        [DataMember]
+        public string SchoolName
+        {
+            get;set;
+        }
+        /// <summary>
+        /// 当前年级代码
+        /// </summary>
+        [ORFieldMapping("Grade")]
+        [ConstantCategory("C_CODE_ABBR_CUSTOMER_GRADE")]
+        [DataMember]
+        public string Grade
+        {
+            get; set;
+        }
+        /// <summary>
+        /// 学管师/班主任
+        /// </summary>
+        [ORFieldMapping("EducatorName")]
+        [DataMember]
+        public string EducatorName
+        {
+            get;set;
+        }
+        /// <summary>
+        /// 一对一剩余课次数
+        /// </summary>
+        [ORFieldMapping("RemainOne2Ones")]
+        [DataMember]
+        public decimal RemainOne2Ones
         {
             get;
             set;
         }
-
     }
 
 

@@ -115,7 +115,7 @@ namespace MCS.Library.Data.Adapters
             string sql = GetLoadSqlByBuilder(condition, orderByBuilder, mappings);
 
             if (tableName.IsNullOrEmpty())
-                tableName = this.GetTableName();
+                tableName = mappings.GetQueryTableName();
 
             this.RegisterQueryData(tableName, mappings, sql, (collection) =>
             {

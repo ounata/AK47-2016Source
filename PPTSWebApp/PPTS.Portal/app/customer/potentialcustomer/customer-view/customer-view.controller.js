@@ -14,6 +14,7 @@
                     customerDataService.getCustomerForUpdate($stateParams.id, function (result) {
                         vm.customer = result.customer;
                         vm.parent = result.parent;
+                        vm.customerStaffRelation = result.customerStaffRelation;
                         $scope.$broadcast('dictionaryReady');
                     });
                 })();

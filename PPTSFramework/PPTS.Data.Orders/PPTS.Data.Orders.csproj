@@ -83,7 +83,7 @@
     <Compile Include="Entities\AssetConfirm.cs" />
     <Compile Include="Entities\Assign.cs" />
     <Compile Include="Entities\AssignCondition.cs" />
-    <Compile Include="Entities\Class.cs" />
+    <Compile Include="Entities\Classes.cs" />
     <Compile Include="Entities\ClassLesson.cs" />
     <Compile Include="Entities\ClassLessonItem.cs" />
     <Compile Include="Entities\CustomerSearch.cs" />

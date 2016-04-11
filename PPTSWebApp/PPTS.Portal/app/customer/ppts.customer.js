@@ -35,8 +35,8 @@
             name: 'ppts.customer-staffrelation',
             url: '/customer/staffrelation/:id/:type',
             templateUrl: 'app/customer/potentialcustomer/customer-staffrelation/customer-staffrelation.html',
-            controller: 'customerViewController',
-            dependencies: ['app/customer/potentialcustomer/customer-view/customer-view.controller']
+            controller: 'customerStaffRelationController',
+            dependencies: ['app/customer/potentialcustomer/customer-staffrelation/customer-staffrelation.controller']
         });
     });
 

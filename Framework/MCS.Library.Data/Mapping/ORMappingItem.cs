@@ -8,15 +8,15 @@
 // 1.0		    ¹¨ÎÄ·¼	    20070430		´´½¨
 // -------------------------------------------------
 #endregion
+using MCS.Library.Core;
 using System;
-using System.Xml;
-using System.Text;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Diagnostics;
+using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Soap;
-using MCS.Library.Core;
+using System.Text;
+using System.Xml;
 
 namespace MCS.Library.Data.Mapping
 {

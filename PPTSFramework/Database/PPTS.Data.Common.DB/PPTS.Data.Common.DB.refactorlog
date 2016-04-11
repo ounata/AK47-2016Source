@@ -21,4 +21,74 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="CategoryID" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="dc500b6f-9eb8-432f-9784-e42cabe28471" ChangeDateTime="04/08/2016 02:41:50">
+    <Property Name="ElementName" Value="[OM].[Tearchings].[Grade]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[OM].[Tearchings]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Grades" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="29ee7d3c-d0a3-47c7-8baf-f77e6a7e5a11" ChangeDateTime="04/08/2016 02:41:53">
+    <Property Name="ElementName" Value="[OM].[Tearchings].[Subject]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[OM].[Tearchings]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Subjects" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="1fc8fdf8-29ed-480d-a726-57a51e507087" ChangeDateTime="04/08/2016 02:46:14">
+    <Property Name="ElementName" Value="[OM].[Tearchings].[ID]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[OM].[Tearchings]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="TeachID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="d7ea2649-87d6-49aa-a578-f05a00a8cbb9" ChangeDateTime="04/08/2016 03:29:27">
+    <Property Name="ElementName" Value="[OM].[Tearchings].[Grades]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[OM].[Tearchings]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="GradeMemo" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="470e79f5-d58f-4ca1-b2e5-f413736e2706" ChangeDateTime="04/08/2016 03:29:30">
+    <Property Name="ElementName" Value="[OM].[Tearchings].[Subjects]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[OM].[Tearchings]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="SubjectMemo" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="8eac9e83-271c-4739-a7e3-d1ca261fbd18" ChangeDateTime="04/08/2016 03:35:37">
+    <Property Name="ElementName" Value="[MT].[TeacherJobs].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[MT].[TeacherJobs]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="JobID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="b6d99af5-95d8-45b5-a081-6d902f9567aa" ChangeDateTime="04/08/2016 06:32:35">
+    <Property Name="ElementName" Value="[MT].[Constants].[Attr]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[MT].[Constants]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Attr1" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="4f5108ec-9943-431a-9812-e315b2f09e10" ChangeDateTime="04/11/2016 03:00:19">
+    <Property Name="ElementName" Value="[OM].[IX_Teachers]" />
+    <Property Name="ElementType" Value="SqlUniqueConstraint" />
+    <Property Name="ParentElementName" Value="[OM].[Teachers]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[111]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="93ded54a-05ca-48d1-acd0-a424ae2518a6" ChangeDateTime="04/11/2016 03:01:04">
+    <Property Name="ElementName" Value="[MT].[TeacherTeachingRelations].[TeachID]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[MT].[TeacherTeachingRelations]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="ID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="0a86708c-f1de-4e66-bd53-31953dc373fa" ChangeDateTime="04/11/2016 03:05:06">
+    <Property Name="ElementName" Value="[MT].[TeacherTeachingRelations].[ID]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[MT].[TeacherTeachingRelations]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="TeachingID" />
+  </Operation>
 </Operations>

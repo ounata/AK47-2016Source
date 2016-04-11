@@ -43,5 +43,19 @@ namespace MCS.Library.Data.Test.DataObjects
             get;
             set;
         }
+
+        [ConditionMapping("AGE_1", Operation = ">", DefaultValueUsage = DefaultValueUsageType.UseDefaultValue)]
+        public int AgeWithDefaultValue
+        {
+            get;
+            set;
+        }
+
+        [ConditionMapping("AGE_2", Operation = ">")]
+        public int AgeIgnoreDefaultValue
+        {
+            get;
+            set;
+        }
     }
 }

@@ -10,7 +10,11 @@
             });
         
         resource.getAllStuUnAsgmt = function (criteria,success, error) {
-            resource.query({ operation: 'GetAllStudentAssignment' },criteria,success, error);
+            resource.post({ operation: 'getAllStudentAssignment' },criteria,success, error);
+        }
+
+        resource.getPagedStuUnAsgmt = function (criteria, success, error) {
+            resource.post({ operation: 'getPagedStudentAssignment' }, criteria, success, error);
         }
 
         return resource;

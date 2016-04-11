@@ -8,7 +8,6 @@
                 var vm = {};
                 $scope.vm = vm;
 
-
                 vm.wait = function() {
 
                     mcsDialogService.wait(

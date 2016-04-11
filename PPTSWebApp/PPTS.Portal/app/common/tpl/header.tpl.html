@@ -179,24 +179,24 @@
                         <img class="nav-user-photo" src="assets/images/user.png" alt="用户头像" />
                         <span class="user-info">
                             <small>您好, <b>{{vm.currentUser.displayName}}</b></small>
-                            <small ng-show="vm.currentUser.allJobs.length">{{vm.currentUser.currentRole.Name}}</small>
+                            <small ng-show="vm.currentUser.jobs.length">{{vm.currentUser.currentRole.Name}}</small>
                         </span>
                     </span>
                     <i class="ace-icon fa fa-caret-down dropdown-menu-right pull-right mcs-margin-top-15"></i>
                 </a>
                 <ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
-                    <li class="dropdown-hover" ng-show="vm.currentUser.allJobs.length">
+                    <li class="dropdown-hover" ng-show="vm.currentUser.jobs.length">
                         <a class="clearfix" tabindex="-1" href="#">
                             <i class="ace-icon fa fa-user"></i>切换角色
                             <i class="ace-icon fa fa-caret-left pull-right"></i>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-right">
-                            <li ng-repeat="job in vm.currentUser.allJobs" ng-hide="job.ID==vm.currentUser.currentRole.ID">
+                            <li ng-repeat="job in vm.currentUser.jobs" ng-hide="job.ID==vm.currentUser.currentRole.ID">
                                 <a href="#" tabindex="-1" ng-click="vm.switch(job)">{{job.Name}}</a>
                             </li>
                         </ul>
                     </li>
-                    <li class="divider" ng-show="vm.currentUser.allJobs.length"></li>
+                    <li class="divider" ng-show="vm.currentUser.jobs.length"></li>
                     <li class="dropdown-hover">
                         <a class="clearfix" tabindex="-1" href="#">
                             <i class="ace-icon fa fa-cogs"></i>页面设置

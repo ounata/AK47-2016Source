@@ -123,3 +123,12 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level1name = N'AccompanyAssigns',
     @level2type = N'COLUMN',
     @level2name = N'CreateTime'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'教师陪读记录',
+    @level0type = N'SCHEMA',
+    @level0name = N'OM',
+    @level1type = N'TABLE',
+    @level1name = N'AccompanyAssigns',
+    @level2type = NULL,
+    @level2name = NULL

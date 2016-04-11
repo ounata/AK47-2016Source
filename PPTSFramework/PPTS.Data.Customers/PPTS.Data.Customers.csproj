@@ -71,6 +71,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Adapters\CustomerAdapter.cs" />
+    <Compile Include="Adapters\AccountRefundPaymentAdapter.cs" />
+    <Compile Include="Adapters\AccountRefundApplyAdapter.cs" />
+    <Compile Include="Adapters\AccountRefundAllotAdapter.cs" />
+    <Compile Include="Adapters\AccountTransferApplyAdapter.cs" />
+    <Compile Include="Adapters\AccountReturnApplyAdapter.cs" />
+    <Compile Include="Adapters\AccountDeductApplyAdapter.cs" />
+    <Compile Include="Adapters\AccountChargePaymentAdapter.cs" />
+    <Compile Include="Adapters\AccountChargeApplyAdapter.cs" />
+    <Compile Include="Adapters\AccountChargeAllotAdapter.cs" />
+    <Compile Include="Adapters\AccountExAdapter.cs" />
+    <Compile Include="Adapters\AccountAdapterBase.cs" />
+    <Compile Include="Adapters\AccountAdapter.cs" />
+    <Compile Include="Adapters\SearchAdapterBase.cs" />
     <Compile Include="Adapters\CustomerAdapterBase.cs" />
     <Compile Include="Adapters\CustomerFollowAdapter.cs" />
     <Compile Include="Adapters\CustomerFollowItemAdapter.cs" />
@@ -125,7 +139,9 @@
     <Compile Include="Entities\Parent.cs" />
     <Compile Include="Entities\Phone.cs" />
     <Compile Include="Entities\PotentialCustomer.cs" />
+    <Compile Include="Executors\PPTSAccountExecutorBase.cs" />
     <Compile Include="Executors\PPTSCustomerExecutorBase.cs" />
+    <Compile Include="Executors\PPTSEditAccountExecutorBase.cs" />
     <Compile Include="Executors\PPTSEditCustomerExecutorBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

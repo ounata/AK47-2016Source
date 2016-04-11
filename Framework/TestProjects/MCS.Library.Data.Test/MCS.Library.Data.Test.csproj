@@ -65,8 +65,9 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Adapters\AdapterTest.cs" />
+    <Compile Include="AdapterTest.cs" />
     <Compile Include="Adapters\OrderAdapter.cs" />
+    <Compile Include="Adapters\OrderItemAdapter.cs" />
     <Compile Include="Adapters\TestObjectAdapter.cs" />
     <Compile Include="Adapters\UserAdapter.cs" />
     <Compile Include="Common.cs" />

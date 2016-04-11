@@ -14,6 +14,8 @@ namespace PPTS.Data.Customers
     {
         public const string PPTSCustomerConnectionName = "PPTS_Customer";
 
+        public const string PPTSSearchConnectionName = "PPTS_Search";
+
         /// <summary>
         /// 得到默认的数据操作上下文
         /// </summary>

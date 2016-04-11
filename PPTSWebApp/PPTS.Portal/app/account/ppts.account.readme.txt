@@ -1,0 +1,6 @@
+﻿
+charge - 账户充值
+record - 账户信息，账户流水
+refund - 账户退费
+return - 账户服务费返还
+transfer - 账户转让

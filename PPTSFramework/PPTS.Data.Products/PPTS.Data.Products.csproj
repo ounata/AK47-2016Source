@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{FC0E93D0-1D5C-4BDC-95CA-D77052D2F9D2}</ProjectGuid>
+    <ProjectGuid>{8B8AB24B-A8F7-420C-834E-52517F178D30}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PPTS.Data.Products</RootNamespace>
@@ -61,6 +61,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Runtime.Serialization.Formatters.Soap" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
@@ -71,6 +72,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Adapters\ProductViewAdapter.cs" />
+    <Compile Include="Adapters\ProductAdapter.cs" />
+    <Compile Include="Adapters\CategoryCatalogAdapter.cs" />
+    <Compile Include="Adapters\ProductExOfCourseAdapter.cs" />
+    <Compile Include="Adapters\ProductSalaryRulesAdapter.cs" />
+    <Compile Include="Adapters\ProductUserOperationLogAdapter.cs" />
+    <Compile Include="Adapters\GenericProductAdapter.cs" />
+    <Compile Include="Adapters\ProductAdapterBase.cs" />
     <Compile Include="Common\ConnectionDefine.cs" />
     <Compile Include="Entities\Discount.cs" />
     <Compile Include="Entities\DiscountItem.cs" />
@@ -82,16 +91,23 @@
     <Compile Include="Entities\PresentItem.cs" />
     <Compile Include="Entities\PresentPermission.cs" />
     <Compile Include="Entities\ProductPermission.cs" />
+    <Compile Include="Common\Helper.cs" />
+    <Compile Include="DataSources\GenericProductViewDataSource.cs" />
+    <Compile Include="Entities\CategoryCatalog.cs" />
+    <Compile Include="Entities\Enumerations.cs" />
+    <Compile Include="Entities\Extensions.cs" />
+    <Compile Include="Entities\Product.cs" />
+    <Compile Include="Entities\ProductExOfCourse.cs" />
+    <Compile Include="Entities\ProductSalaryRule.cs" />
+    <Compile Include="Entities\ProductView.cs" />
+    <Compile Include="Executors\PPTSProductExecutor.cs" />
+    <Compile Include="Executors\PPTSEditProductExecutorBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MCS.Library.snk" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Adapters\" />
-    <Folder Include="DataSources\" />
-    <Folder Include="Executors\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>IF NOT EXIST "$(ProjectDir)..\..\PPTSBin" MD "$(ProjectDir)..\..\PPTSBin"

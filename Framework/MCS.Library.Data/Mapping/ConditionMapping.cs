@@ -246,7 +246,19 @@ namespace MCS.Library.Data.Mapping
         {
             if (data != null)
             {
-                if (ignoreDefaultValue == false || (ignoreDefaultValue == true && IsTypeDefaultValue(item, data) == false))
+                bool needIgnoreDefaultValue = ignoreDefaultValue;
+
+                switch(item.DefaultValueUsage)
+                {
+                    case DefaultValueUsageType.Ignore:
+                        needIgnoreDefaultValue = true;
+                        break;
+                    case DefaultValueUsageType.UseDefaultValue:
+                        needIgnoreDefaultValue = false;
+                        break;
+                }
+
+                if (needIgnoreDefaultValue == false || (needIgnoreDefaultValue == true && IsTypeDefaultValue(item, data) == false))
                 {
                     bool ignored = false;
 

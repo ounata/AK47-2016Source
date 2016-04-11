@@ -9,9 +9,10 @@ using System.Threading.Tasks;
 
 namespace MCS.Library.Data.Test.DataObjects
 {
-    [ORTableMapping("VersionedOrder")]
+    [ORTableMapping("VersionedOrder", "VersionedOrder_Current")]
     public class VersionedOrder : IVersionDataObjectWithoutID
     {
+        [ORFieldMapping("OrderID", PrimaryKey = true)]
         public string OrderID
         {
             get;
@@ -30,13 +31,15 @@ namespace MCS.Library.Data.Test.DataObjects
             set;
         }
 
-        [SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update)]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.Select | ClauseBindingFlags.Where)]
         public DateTime VersionEndTime
         {
             get;
             set;
         }
 
+        [ORFieldMapping("VersionStartTime", PrimaryKey = true)]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update)]
         public DateTime VersionStartTime
         {
             get;

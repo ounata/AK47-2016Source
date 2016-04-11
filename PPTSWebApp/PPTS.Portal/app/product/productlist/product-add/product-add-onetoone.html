@@ -1,127 +1,201 @@
-<!--一对一 开始-->
-<form class="form-horizontal" >
-    <div class="widget-box">
-        <div class="widget-header">
-            <h4>{{tag}}一对一产品
-                <small>
-                    <i class="icon-double-angle-right"></i>
-                    (<span class="required"> * </span>表示必填字段)
-                </small>
-            </h4>
-        </div>
-        <div class="widget-body">
-            <div class="widget-main no-padding">
-                <div class="clearfix form-actions mcs-form-actions">
-                    <div class="col-md-offset-3 col-md-9">
-                        <button class="btn mcs-width-130 ng-isolate-scope btn-success" ng-click="click()" type="save" click="vm.save()"><i class="ace-icon fa fa-save"></i><span>保 存</span></button>
-                        <button class="btn mcs-width-130 ng-isolate-scope btn-success" ng-click="click()" type="save" click="vm.save()"><i class="ace-icon fa fa-save"></i><span>提 交</span></button>
+
+
+                <!--一对一 开始-->
+
+                <div class="widget-box">
+                    <div class="widget-header">
+                        <h4>
+                            {{tag}}一对一产品
+                            <small>
+                                <i class="icon-double-angle-right"></i>
+                                (<span class="required"> * </span>表示必填字段)
+                            </small>
+                        </h4>
                     </div>
+                    <div class="widget-body">
+                        <div class="widget-main no-padding">
+                            <div class="clearfix form-actions mcs-form-actions">
+                                <div class="col-md-offset-3 col-md-9">
+                                    <mcs-button type="save" click="vm.submit()" text="提交审批"></mcs-button>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="page-header">
+                        <span>基础信息</span>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <mcs-label required="true" text="分类：" css="col-sm-3" />
+                            <div class="col-sm-6">
+                                <ppts-select category="categoryCustom" model="vm.m.onetoone.product.catalog" caption="产品分类" />
+                            </div>
+                        </div>
+                        <br />
+                        常规1对1：学大独立运营，收入完全归学大所有的1对1产品
+                        <br />
+                        合作1对1：学大与合作商一起运营，收入与合作商按比例分账的1对1产品
+                    </div>
+                    <div class="space-4"></div>
+
+                    <!-- 合作 -->
+
+                    <div class="form-group" ng-show="vm.isPartner()">
+                        <div class="col-sm-6">
+                            <mcs-label required="true" text="分账比例：" css="col-sm-3" />
+                            <div class="col-sm-9">
+                                <mcs-label text="合作方：" css="col-xs-3 col-sm-3" />
+                                <mcs-input model="vm.m.onetoone.product.partnerName" css="col-xs-3 col-sm-3" />
+                                <br />
+                                <mcs-label text="分成比例：" css="col-xs-3 col-sm-3" />
+                                <mcs-input type="number" min="0" model="vm.m.onetoone.product.partnerRatio" css="col-xs-3 col-sm-3" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-4"></div>
+
+                    <div class="form-group" ng-show="vm.isPartner()">
+                        <div class="col-sm-6">
+                            <mcs-label required="true" text="薪酬规则：" css="col-sm-3" />
+                            <div class="col-sm-9">
+                                咨询师提成：<mcs-input model="vm.m.onetoone.salaryRules[0].moneyPerPeriod" css="col-xs-10 col-sm-10" />
+                                <br />
+                                学管师提成：<mcs-input model="vm.m.onetoone.salaryRules[1].moneyPerPeriod" css="col-xs-10 col-sm-10" />
+                                <br />
+                                教师课时收入：<mcs-input model="vm.m.onetoone.salaryRules[2].moneyPerPeriod" css="col-xs-10 col-sm-10" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-4"></div>
+
+                    <!-- 合作 -->
+
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <mcs-label required="true" text="产品名称：" css="col-sm-3" />
+                            <div class="col-sm-3">
+                                <ppts-select category="grade" model="vm.m.onetoone.product.grade" caption="年级" />
+                            </div>
+                            <div class="col-sm-3">
+                                <ppts-select category="subject" model="vm.m.onetoone.product.subject" caption="产品科目" />
+                            </div>
+                            <div class="col-sm-3">
+                                <ppts-select category="duration" model="vm.m.onetoone.productExOfCourse.periodDuration" caption="单个时长" />
+                            </div>
+                            <div class="col-sm-3">
+                                <ppts-select category="courseLevel" model="vm.m.onetoone.productExOfCourse.courseLevel" caption="课程级别" />
+                            </div>
+
+                            <div class="col-sm-3">
+                                <ppts-select category="coachType" model="vm.m.onetoone.productExOfCourse.coachType" caption="辅导类型" />
+                            </div>
+
+                            例：高中三年级 30分钟 3A 常规
+                        </div>
+                    </div>
+                    <div class="space-4"></div>
+
+
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <mcs-label required="true" text="产品简介：" css="col-sm-3" />
+                            <div class="col-sm-9">
+                                <textarea class="form-control" rows="3" id="textArea" ng-model="vm.m.onetoone.product.productMemo"></textarea>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="space-4"></div>
+
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <mcs-label required="true" text="产品单价：" css="col-sm-3" />
+                            <div class="col-sm-9">
+                                <mcs-input type="number" min="0" model="vm.m.onetoone.product.productPrice" css="col-xs-10 col-sm-10" />
+                                元/课时
+                            </div>
+                            <br />
+                            备注：
+                            <br />
+                            -产品单价：产品的基本价格
+                            <br />
+                            -目标单价：完成预算任务的平均订购单价
+                            <br />
+                            以上的价格也会用于数据分析，请正确填写
+                        </div>
+                        <div class="col-sm-6">
+                            <mcs-label required="true" text="目标单价：" css="col-sm-3" />
+                            <div class="col-sm-9">
+                                <mcs-input type="number" min="0" model="vm.m.onetoone.product.targetPrice" css="col-xs-10 col-sm-10" />
+                                元/课时
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-4"></div>
+
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <mcs-label required="true" text="颗粒度：" css="col-sm-3" />
+                            <div class="col-sm-9">
+                                {{vm.m.onetoone.product.productUnit | unit }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-4"></div>
+
+
+
+
+                    <div class="page-header">
+                        <span>销售信息</span>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <mcs-label required="true" text="销售范围：" css="col-sm-3" />
+                            <div class="col-sm-9">
+                                <mcs-input placeholder="销售分公司" model="vm.m.onetoone.company" css="col-xs-10 col-sm-10" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-4"></div>
+
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <mcs-label required="true" text="产品启售时间：" css="col-sm-3" />
+                            <div class="col-sm-9">
+                                审批通过即可销售
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-4"></div>
+
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <mcs-label required="true" text="创建人：" css="col-sm-3" />
+                            <div class="col-sm-9">
+                                xxx
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-4"></div>
+
+                    <div class="page-header">
+                        <span>折扣信息</span>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <mcs-label required="true" text="是否享受客户折扣：" css="col-sm-3" />
+                            <div class="col-sm-9">
+                                <input type="checkbox" ng-model="vm.m.onetoone.product.tunlandAllowed" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-4"></div>
+
+
                 </div>
-            </div>
-        </div>
-        <div class="page-header">
-            <span>基础信息</span>
-        </div>
 
-
-
-        <div class="form-group">
-
-            <div class="col-sm-6">
-                <mcs-label required="true" text="产品名称：" css="col-sm-3" />
-                <div class="col-sm-3">
-                    <ui-select ng-model="vm.product.onetoone.selectedGrade" theme="selectize" class="col-xs-10 col-sm-10">
-                    <ui-select-match placeholder="年级">{{$select.selected.value}}</ui-select-match>
-                    <ui-select-choices repeat="x in vm.dictionaries.grades | props: {value: $select.search}">
-                    <span ng-bind-html="x.value | highlight: $select.search"></span>
-                    </ui-select-choices>
-                    </ui-select>
-                </div>
-                <div class="col-sm-3">
-                    <ui-select ng-model="vm.product.onetoone.selectedDuation" theme="selectize" class="col-xs-10 col-sm-10">
-                    <ui-select-match placeholder="时长">{{$select.selected.value}}</ui-select-match>
-                    <ui-select-choices repeat="x in vm.dictionaries.durations | props: {value: $select.search}">
-                    <span ng-bind-html="x.value | highlight: $select.search"></span>
-                    </ui-select-choices>
-                    </ui-select>
-                </div>
-                <div class="col-sm-3">
-                    <ui-select ng-model="vm.product.onetoone.selectedLevel" theme="selectize" class="col-xs-10 col-sm-10">
-                    <ui-select-match placeholder="年级">{{$select.selected.value}}</ui-select-match>
-                    <ui-select-choices repeat="x in vm.dictionaries.levels | props: {value: $select.search}">
-                    <span ng-bind-html="x.value | highlight: $select.search"></span>
-                    </ui-select-choices>
-                    </ui-select>
-                </div>
-            </div>
-        </div>
-        <div class="space-4"></div>
-
-
-
-        <div class="form-group">
-            <div class="col-sm-6">
-                <mcs-label required="true" text="产品简介：" css="col-sm-3" />
-                <div class="col-sm-9">
-                    <textarea class="form-control" rows="3" id="textArea" ng-model="vm.product.onetoone.description" ></textarea>
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <mcs-label required="true" text="单价：" css="col-sm-3" />
-                <div class="col-sm-9">
-                    <mcs-input type="number" min="0" model="vm.product.other.price" css="col-xs-10 col-sm-10" />
-                </div>
-            </div>
-        </div>
-        <div class="space-4"></div>
-
-        <div class="form-group">
-            <div class="col-sm-6">
-                <mcs-label required="true" text="产品启售时间：" css="col-sm-3" />
-                <div class="col-sm-9">
-                    <input type="date" class="form-control" ng-model="vm.product.onetoone.selltime"  /> 
-                </div>
-            </div>
-        </div>
-        <div class="space-4"></div>
-
-        <div class="page-header">
-            <span>销售范围</span>
-        </div>
-
-        <div class="form-group">
-            <div class="col-sm-6">
-                <mcs-label required="true" text="销售分公司：" css="col-sm-3" />
-                <div class="col-sm-9">
-                    <mcs-input placeholder="销售分公司" model="vm.product.onetoone.company" css="col-xs-10 col-sm-10" />
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <mcs-label required="true" text="销售校区：" css="col-sm-3" />
-                <div class="col-sm-9">
-                    <mcs-input placeholder="销售校区" model="vm.product.onetoone.campus" css="col-xs-10 col-sm-10" />
-                </div>
-            </div>
-        </div>
-        <div class="space-4"></div>
-
-
-        <div class="page-header">
-            <span>课时产品属性</span>
-        </div>
-
-        <div class="form-group">
-            <div class="col-sm-6">
-                <mcs-label required="true" text="是否遵循客户折扣级别：" css="col-sm-3" />
-                <div class="col-sm-9">
-                    <mcs-radiobutton-group category="selectedCustomerDiscountLevel" data="vm.dictionaries.customerdiscountlevel" click="vm.select(category, key, eventargs)" defaultValue="G1" />
-                </div>
-            </div>
-        </div>
-
-
-    </div>
-
-    <form>
-<!--一对一 结束-->
+                <!--一对一 结束-->
 

@@ -2,7 +2,7 @@
         ppts.config.modules.dashboard,
         ppts.config.modules.auditing,
         ppts.config.modules.customer,
-        ppts.config.modules.payment,
+        ppts.config.modules.account,
         ppts.config.modules.product,
         ppts.config.modules.schedule,
         ppts.config.modules.order,
@@ -13,7 +13,7 @@
 
             ppts.ng = ppts.ng || ng.module('ppts', [
                 'ui.router', 'ngResource', 'ngSanitize', 'blockUI', 'ui.bootstrap', 'ui.select', 'mcs.ng',
-                'ppts.dashboard', 'ppts.auditing', 'ppts.customer', 'ppts.payment', 'ppts.product',
+                'ppts.dashboard', 'ppts.auditing', 'ppts.customer', 'ppts.account', 'ppts.product',
                 'ppts.schedule', 'ppts.order', 'ppts.infra', 'ppts.custcenter', 'ppts.contract']);
 
             ppts.ng.controller('appController', ['$rootScope', '$scope', 'userService', function ($rootScope, $scope, user) {

@@ -2,7 +2,7 @@
 
 angular.module('app.common', []);
 angular.module('app.main', []);
-angular.module('app.component', []);
+angular.module('app.component', ['ui.router']);
 
 angular.module('app.lib', ['ngSanitize', 'ui.select', 'app.common']);
 angular.module('app.page', []);
@@ -18,10 +18,10 @@ angular.module('app', [
         $stateProvider.state('main', {
             url: '/main',
             templateUrl: 'app/main/main.html'
-        }).state('ui-select', {
-            url: '/ui-select',
-            templateUrl: 'app/lib/ui-select/main.html',
-            controller: 'AppUISelectController',
+        }).state('select', {
+            url: '/select',
+            templateUrl: 'app/component/mcs-select/main.html',
+            controller: 'MCSSelectController',
             controllerAs: 'vm'
         }).state('datatable', {
             url: '/datatable',
@@ -91,6 +91,13 @@ angular.module('app', [
             url: '/datepicker',
             templateUrl: 'app/component/mcs-datepicker/main.html',
             controller: 'MCSDatetimePickerController',
+            controllerAs: 'vm'
+        })
+
+        .state('router', {
+            url: '/router',
+            templateUrl: 'app/component/mcs-route/main.html',
+            controller: 'routeController',
             controllerAs: 'vm'
         })
 

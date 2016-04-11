@@ -10,8 +10,17 @@ namespace PPTS.WebAPI.Order.ViewModels.CustomerSearchs
 {
     public class CustomerSearchQueryCriteriaModel
     {
-        //[ConditionMapping("CustomerName", EscapeLikeString = true, Prefix = "%", Postfix = "%", Operation = "LIKE")]
-        //public string Name { get; set; }
+        [ConditionMapping("CustomerName", EscapeLikeString = true, Prefix = "%", Postfix = "%", Operation = "LIKE")]
+        public string CustomerName { get; set; }
+
+        [ConditionMapping("CustomerCode", EscapeLikeString = true, Prefix = "%", Postfix = "%", Operation = "LIKE")]
+        public string CustomerCode { get; set; }
+
+        [ConditionMapping("SchoolName", EscapeLikeString = true, Prefix = "%", Postfix = "%", Operation = "LIKE")]
+        public string SchoolName { get; set; }
+
+        [ConditionMapping("EducatorName", EscapeLikeString = true, Prefix = "%", Postfix = "%", Operation = "LIKE")]
+        public string EducatorName { get; set; }
 
         //[ConditionMapping("CustomerCode")]
         //public string CustomerCode { get; set; }
@@ -22,6 +31,8 @@ namespace PPTS.WebAPI.Order.ViewModels.CustomerSearchs
         //[ConditionMapping("CreateTime", Operation = ">=")]
         //public DateTime CreateTimeStart { get; set; }
 
+        [ConditionMapping("Grade")]
+        public string Grade { get; set; }
 
         [NoMapping]
         public PageRequestParams PageParams

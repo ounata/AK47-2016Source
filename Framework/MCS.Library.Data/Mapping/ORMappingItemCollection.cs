@@ -19,196 +19,222 @@ using MCS.Library.Data.DataObjects;
 
 namespace MCS.Library.Data.Mapping
 {
-	/// <summary>
-	/// 映射关系集合类
-	/// </summary>
-	/// <remarks>
-	/// 映射关系集合类
-	/// <seealso cref="MCS.Library.Data.Mapping.ORMappingItem"/>
-	/// </remarks>
-	public class ORMappingItemCollection : EditableKeyedDataObjectCollectionBase<string, ORMappingItem>
-	{
-		private string tableName = string.Empty;
+    /// <summary>
+    /// 映射关系集合类
+    /// </summary>
+    /// <remarks>
+    /// 映射关系集合类
+    /// <seealso cref="MCS.Library.Data.Mapping.ORMappingItem"/>
+    /// </remarks>
+    public class ORMappingItemCollection : EditableKeyedDataObjectCollectionBase<string, ORMappingItem>
+    {
+        private string tableName = string.Empty;
 
-		/// <summary>
-		/// ORMappingItemCollection类的构造函数
-		/// </summary>
-		/// <remarks>
-		/// ORMappingItemCollection类，一个ORMappingItem的集合类，不区分大小写
-		/// </remarks>
-		public ORMappingItemCollection()
-			: base(StringComparer.OrdinalIgnoreCase)
-		{
-		}
+        /// <summary>
+        /// ORMappingItemCollection类的构造函数
+        /// </summary>
+        /// <remarks>
+        /// ORMappingItemCollection类，一个ORMappingItem的集合类，不区分大小写
+        /// </remarks>
+        public ORMappingItemCollection()
+            : base(StringComparer.OrdinalIgnoreCase)
+        {
+        }
 
-		/// <summary>
-		/// 表名
-		/// </summary>
-		public string TableName
-		{
-			get { return this.tableName; }
-			set { this.tableName = value; }
-		}
+        /// <summary>
+        /// 表名
+        /// </summary>
+        public string TableName
+        {
+            get { return this.tableName; }
+            set { this.tableName = value; }
+        }
 
-		/// <summary>
-		/// 写入到XmlWriter
-		/// </summary>
-		/// <param name="writer">Xml编写器对象</param>
-		public void WriteToXml(XmlWriter writer)
-		{
-			ExceptionHelper.FalseThrow<ArgumentNullException>(writer != null, "writer");
+        /// <summary>
+        /// 查询时所用的表名
+        /// </summary>
+        public string QueryTableName
+        {
+            get;
+            set;
+        }
 
-			writer.WriteStartElement("ORMapping");
-			writer.WriteAttributeString("tableName", this.tableName);
+        /// <summary>
+        /// 得到查询所使用的表名，如果QueryTableName属性为空，则使用TableName属性
+        /// </summary>
+        /// <returns></returns>
+        public string GetQueryTableName()
+        {
+            string result = this.QueryTableName;
 
-			foreach (ORMappingItem item in this)
-			{
-				writer.WriteStartElement("Item");
-				item.WriteToXml(writer);
-				writer.WriteEndElement();
-			}
+            if (result.IsNullOrEmpty())
+                result = this.tableName;
 
-			writer.WriteEndElement();
-		}
+            return result;
+        }
 
-		/// <summary>
-		/// 从XmlReader中读取
-		/// </summary>
-		/// <param name="reader">Xml阅读器对象</param>
-		/// <param name="type">对象类型</param>
-		public void ReadFromXml(XmlReader reader, System.Type type)
-		{
-			ExceptionHelper.FalseThrow<ArgumentNullException>(reader != null, "reader");
-			ExceptionHelper.FalseThrow<ArgumentNullException>(type != null, "type");
+        /// <summary>
+        /// 写入到XmlWriter
+        /// </summary>
+        /// <param name="writer">Xml编写器对象</param>
+        public void WriteToXml(XmlWriter writer)
+        {
+            ExceptionHelper.FalseThrow<ArgumentNullException>(writer != null, "writer");
 
-			this.Clear();
-			Dictionary<string, MemberInfo> miDict = GetMemberInfoDict(type);
+            writer.WriteStartElement("ORMapping");
+            writer.WriteAttributeString("tableName", this.tableName);
+            writer.WriteAttributeString("queryTableName", this.QueryTableName);
 
-			while (reader.EOF == false)
-			{
-				reader.Read();
+            foreach (ORMappingItem item in this)
+            {
+                writer.WriteStartElement("Item");
+                item.WriteToXml(writer);
+                writer.WriteEndElement();
+            }
 
-				if (reader.IsStartElement("ORMapping"))
-				{
-					this.tableName = XmlHelper.GetAttributeValue(reader, "tableName", string.Empty);
-					reader.ReadToDescendant("Item");
-				}
+            writer.WriteEndElement();
+        }
 
-				if (reader.IsStartElement("Item"))
-				{
-					string propName = reader.GetAttribute("propertyName");
-					string subClassPropertyName = reader.GetAttribute("subClassPropertyName");
-					string subClassTypeDescription = reader.GetAttribute("subClassTypeDescription");
+        /// <summary>
+        /// 从XmlReader中读取
+        /// </summary>
+        /// <param name="reader">Xml阅读器对象</param>
+        /// <param name="type">对象类型</param>
+        public void ReadFromXml(XmlReader reader, System.Type type)
+        {
+            ExceptionHelper.FalseThrow<ArgumentNullException>(reader != null, "reader");
+            ExceptionHelper.FalseThrow<ArgumentNullException>(type != null, "type");
 
-					MemberInfo mi = null;
+            this.Clear();
+            Dictionary<string, MemberInfo> miDict = GetMemberInfoDict(type);
 
-					if (miDict.TryGetValue(propName, out mi))
-					{
-						if (string.IsNullOrEmpty(subClassPropertyName) == false)
-							if (string.IsNullOrEmpty(subClassTypeDescription) == false)
-								mi = ORMapping.GetSubClassMemberInfoByName(subClassPropertyName,
-									TypeCreator.GetTypeInfo(subClassTypeDescription));
-							else
-								mi = ORMapping.GetSubClassMemberInfoByName(subClassPropertyName, mi);
+            while (reader.EOF == false)
+            {
+                reader.Read();
 
-						if (mi != null)
-							ReadItemFromXml(reader, type, mi);
-					}
-				}
-			}
-		}
+                if (reader.IsStartElement("ORMapping"))
+                {
+                    this.tableName = XmlHelper.GetAttributeValue(reader, "tableName", string.Empty);
+                    this.QueryTableName = XmlHelper.GetAttributeValue(reader, "queryTableName", string.Empty);
 
-		/// <summary>
-		/// 根据映射关系的中的对象类型来过滤
-		/// </summary>
-		/// <param name="type"></param>
-		/// <returns></returns>
-		public ORMappingItemCollection FilterMappingInfoByDeclaringType(System.Type type)
-		{
-			ORMappingItemCollection result = new ORMappingItemCollection();
+                    reader.ReadToDescendant("Item");
+                }
 
-			result.TableName = this.TableName;
+                if (reader.IsStartElement("Item"))
+                {
+                    string propName = reader.GetAttribute("propertyName");
+                    string subClassPropertyName = reader.GetAttribute("subClassPropertyName");
+                    string subClassTypeDescription = reader.GetAttribute("subClassTypeDescription");
 
-			foreach (ORMappingItem item in this)
-			{
-				if (item.DeclaringType == type)
-					result.Add(item);
-			}
+                    MemberInfo mi = null;
 
-			return result;
-		}
+                    if (miDict.TryGetValue(propName, out mi))
+                    {
+                        if (string.IsNullOrEmpty(subClassPropertyName) == false)
+                            if (string.IsNullOrEmpty(subClassTypeDescription) == false)
+                                mi = ORMapping.GetSubClassMemberInfoByName(subClassPropertyName,
+                                    TypeCreator.GetTypeInfo(subClassTypeDescription));
+                            else
+                                mi = ORMapping.GetSubClassMemberInfoByName(subClassPropertyName, mi);
 
-		/// <summary>
-		/// 复制Mapping的集合
-		/// </summary>
-		/// <returns></returns>
-		public ORMappingItemCollection Clone()
-		{
-			ORMappingItemCollection items = new ORMappingItemCollection();
+                        if (mi != null)
+                            ReadItemFromXml(reader, type, mi);
+                    }
+                }
+            }
+        }
 
-			items.tableName = this.tableName;
+        /// <summary>
+        /// 根据映射关系的中的对象类型来过滤
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public ORMappingItemCollection FilterMappingInfoByDeclaringType(System.Type type)
+        {
+            ORMappingItemCollection result = new ORMappingItemCollection();
 
-			foreach (ORMappingItem item in this)
-			{
-				items.Add(item.Clone());
-			}
+            result.TableName = this.TableName;
 
-			return items;
-		}
+            foreach (ORMappingItem item in this)
+            {
+                if (item.DeclaringType == type)
+                    result.Add(item);
+            }
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="fieldName"></param>
-		/// <returns></returns>
-		public bool Contains(string fieldName)
-		{
-			return ContainsKey(fieldName);
-		}
+            return result;
+        }
 
-		/// <summary>
-		/// 删除
-		/// </summary>
-		/// <param name="fieldName"></param>
-		public void Remove(string fieldName)
-		{
-			fieldName.CheckStringIsNullOrEmpty("fieldName");
+        /// <summary>
+        /// 复制Mapping的集合
+        /// </summary>
+        /// <returns></returns>
+        public ORMappingItemCollection Clone()
+        {
+            ORMappingItemCollection items = new ORMappingItemCollection();
 
-			base.Remove(item => string.Compare(item.DataFieldName, fieldName, true) == 0);
-		}
+            items.tableName = this.tableName;
 
-		private Dictionary<string, MemberInfo> GetMemberInfoDict(System.Type type)
-		{
-			MemberInfo[] mis = type.GetMembers(BindingFlags.Instance | BindingFlags.Public | BindingFlags.FlattenHierarchy);
+            foreach (ORMappingItem item in this)
+            {
+                items.Add(item.Clone());
+            }
 
-			Dictionary<string, MemberInfo> dict = new Dictionary<string, MemberInfo>();
+            return items;
+        }
 
-			foreach (MemberInfo mi in mis)
-			{
-				if (mi.MemberType == MemberTypes.Property || mi.MemberType == MemberTypes.Field)
-					dict[mi.Name] = mi;
-			}
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="fieldName"></param>
+        /// <returns></returns>
+        public bool Contains(string fieldName)
+        {
+            return ContainsKey(fieldName);
+        }
 
-			return dict;
-		}
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <param name="fieldName"></param>
+        public void Remove(string fieldName)
+        {
+            fieldName.CheckStringIsNullOrEmpty("fieldName");
 
-		private void ReadItemFromXml(XmlReader reader, System.Type type, MemberInfo mi)
-		{
-			ORMappingItem item = new ORMappingItem();
+            base.Remove(item => string.Compare(item.DataFieldName, fieldName, true) == 0);
+        }
 
-			item.ReadFromXml(reader, type, mi);
+        private Dictionary<string, MemberInfo> GetMemberInfoDict(System.Type type)
+        {
+            MemberInfo[] mis = type.GetMembers(BindingFlags.Instance | BindingFlags.Public | BindingFlags.FlattenHierarchy);
 
-			this.Add(item);
-		}
+            Dictionary<string, MemberInfo> dict = new Dictionary<string, MemberInfo>();
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="item"></param>
-		/// <returns></returns>
-		protected override string GetKeyForItem(ORMappingItem item)
-		{
-			return item.DataFieldName;
-		}
-	}
+            foreach (MemberInfo mi in mis)
+            {
+                if (mi.MemberType == MemberTypes.Property || mi.MemberType == MemberTypes.Field)
+                    dict[mi.Name] = mi;
+            }
+
+            return dict;
+        }
+
+        private void ReadItemFromXml(XmlReader reader, System.Type type, MemberInfo mi)
+        {
+            ORMappingItem item = new ORMappingItem();
+
+            item.ReadFromXml(reader, type, mi);
+
+            this.Add(item);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        protected override string GetKeyForItem(ORMappingItem item)
+        {
+            return item.DataFieldName;
+        }
+    }
 }

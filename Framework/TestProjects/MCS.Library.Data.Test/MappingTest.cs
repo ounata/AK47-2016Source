@@ -33,6 +33,36 @@ namespace MCS.Library.Data.Test
         }
 
         [TestMethod]
+        public void ChangedFieldsBuilderTest()
+        {
+            TestObject data = new TestObject();
+
+            data.Name = "沈峥";
+            data.Amount = 1000;
+            data.LocalTime = DateTime.Now;
+            data.UtcTime = data.LocalTime;
+
+            WhereSqlClauseBuilder builder = ORMapping.GetWhereSqlClauseBuilderByChangedFields(data);
+
+            Console.WriteLine(builder.ToSqlString(TSqlBuilder.Instance));
+        }
+
+        [TestMethod]
+        public void ChangedFieldsBuilderWithoutPKTest()
+        {
+            TestObject data = new TestObject();
+
+            data.Name = "沈峥";
+            data.Amount = 1000;
+            data.LocalTime = DateTime.Now;
+            data.UtcTime = data.LocalTime;
+
+            WhereSqlClauseBuilder builder = ORMapping.GetWhereSqlClauseBuilderByChangedFields(data, false);
+
+            Console.WriteLine(builder.ToSqlString(TSqlBuilder.Instance));
+        }
+
+        [TestMethod]
         public void LocalTimeToUtcTest()
         {
             TimeZoneContext.Current.CurrentTimeZone = TimeZoneInfo.CreateCustomTimeZone("TimeZoneInfoContext", TimeSpan.FromMinutes(480), "TimeZoneInfoContext", "TimeZoneInfoContext");

@@ -8,228 +8,217 @@ using System.Runtime.Serialization;
 
 namespace PPTS.Data.Customers.Entities
 {
-	/// <summary>
-	/// This object represents the properties and methods of a AccountRecord.
-	/// 账户流水记录表
-	/// </summary>
-	[Serializable]
+    /// <summary>
+    /// This object represents the properties and methods of a AccountRecord.
+    /// 账户流水记录表
+    /// </summary>
+    [Serializable]
     [ORTableMapping("AccountRecords")]
     [DataContract]
-	public class AccountRecord
-	{		
-		public AccountRecord()
-		{
-		}		
+    public class AccountRecord
+    {
+        public AccountRecord()
+        {
+        }
 
-		/// <summary>
-		/// 校区ID
-		/// </summary>
-		[ORFieldMapping("CampusID")]
+        /// <summary>
+        /// 校区ID
+        /// </summary>
+        [ORFieldMapping("CampusID")]
         [DataMember]
-		public string CampusID
-		{
-			get;
+        public string CampusID
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 学员ID
-		/// </summary>
-		[ORFieldMapping("CustomerID")]
+        /// <summary>
+        /// 学员ID
+        /// </summary>
+        [ORFieldMapping("CustomerID")]
         [DataMember]
-		public string CustomerID
-		{
-			get;
+        public string CustomerID
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 账户ID
-		/// </summary>
-		[ORFieldMapping("AccountID")]
+        /// <summary>
+        /// 账户ID
+        /// </summary>
+        [ORFieldMapping("AccountID")]
         [DataMember]
-		public string AccountID
-		{
-			get;
+        public string AccountID
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 流水ID
-		/// </summary>
-		[ORFieldMapping("RecordID", PrimaryKey=true)]
+        /// <summary>
+        /// 流水ID
+        /// </summary>
+        [ORFieldMapping("RecordID", PrimaryKey = true)]
         [DataMember]
-		public string RecordID
-		{
-			get;
+        public string RecordID
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 流水时间
-		/// </summary>
-		[ORFieldMapping("RecordTime")]
+        /// <summary>
+        /// 流水时间
+        /// </summary>
+        [ORFieldMapping("RecordTime")]
         [DataMember]
-		public DateTime RecordTime
-		{
-			get;
+        public DateTime RecordTime
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 流水类型（收入，支出）
-		/// </summary>
-		[ORFieldMapping("RecordType")]
+        /// <summary>
+        /// 流水类型（收入，支出）
+        /// </summary>
+        [ORFieldMapping("RecordType")]
         [DataMember]
-		public string RecordType
-		{
-			get;
+        public string RecordType
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 流水方向（1是入，-1是出）
-		/// </summary>
-		[ORFieldMapping("RecordFlag")]
+        /// <summary>
+        /// 流水方向（1是入，-1是出）
+        /// </summary>
+        [ORFieldMapping("RecordFlag")]
         [DataMember]
-		public int RecordFlag
-		{
-			get;
+        public int RecordFlag
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 业务单ID
-		/// </summary>
-		[ORFieldMapping("BillID")]
+        /// <summary>
+        /// 业务单ID
+        /// </summary>
+        [ORFieldMapping("BillID")]
         [DataMember]
-		public string BillID
-		{
-			get;
+        public string BillID
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 业务单号
-		/// </summary>
-		[ORFieldMapping("BillNo")]
+        /// <summary>
+        /// 业务单号
+        /// </summary>
+        [ORFieldMapping("BillNo")]
         [DataMember]
-		public string BillNo
-		{
-			get;
+        public string BillNo
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 业务操作时间
-		/// </summary>
-		[ORFieldMapping("BillTime")]
+        /// <summary>
+        /// 业务操作时间
+        /// </summary>
+        [ORFieldMapping("BillTime")]
         [DataMember]
-		public DateTime BillTime
-		{
-			get;
+        public DateTime BillTime
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 业务类型
-		/// </summary>
-		[ORFieldMapping("BillType")]
+        /// <summary>
+        /// 业务类型
+        /// </summary>
+        [ORFieldMapping("BillType")]
         [DataMember]
-		public string BillType
-		{
-			get;
+        public string BillType
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 业务类型描述
-		/// </summary>
-		[ORFieldMapping("BillTypeName")]
+        /// <summary>
+        /// 业务类型描述
+        /// </summary>
+        [ORFieldMapping("BillTypeName")]
         [DataMember]
-		public string BillTypeName
-		{
-			get;
+        public string BillTypeName
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 业务金额
-		/// </summary>
-		[ORFieldMapping("BillMoney")]
+        /// <summary>
+        /// 业务金额
+        /// </summary>
+        [ORFieldMapping("BillMoney")]
         [DataMember]
-		public decimal BillMoney
-		{
-			get;
+        public decimal BillMoney
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 业务说明
-		/// </summary>
-		[ORFieldMapping("BillMemo")]
+        /// <summary>
+        /// 业务说明
+        /// </summary>
+        [ORFieldMapping("BillMemo")]
         [DataMember]
-		public string BillMemo
-		{
-			get;
+        public string BillMemo
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 业务操作人ID
-		/// </summary>
-		[ORFieldMapping("BillerID")]
+        /// <summary>
+        /// 业务操作人ID
+        /// </summary>
+        [ORFieldMapping("BillerID")]
         [DataMember]
-		public string BillerID
-		{
-			get;
+        public string BillerID
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 业务操作人姓名
-		/// </summary>
-		[ORFieldMapping("BillerName")]
+        /// <summary>
+        /// 业务操作人姓名
+        /// </summary>
+        [ORFieldMapping("BillerName")]
         [DataMember]
-		public string BillerName
-		{
-			get;
+        public string BillerName
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 业务操作人岗位ID
-		/// </summary>
-		[ORFieldMapping("BillerJobID")]
+        /// <summary>
+        /// 业务操作人岗位ID
+        /// </summary>
+        [ORFieldMapping("BillerJobID")]
         [DataMember]
-		public string BillerJobID
-		{
-			get;
+        public string BillerJobID
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 业务操作人岗位名称
-		/// </summary>
-		[ORFieldMapping("BillerJobName")]
+        /// <summary>
+        /// 业务操作人岗位名称
+        /// </summary>
+        [ORFieldMapping("BillerJobName")]
         [DataMember]
-		public string BillerJobName
-		{
-			get;
+        public string BillerJobName
+        {
+            get;
             set;
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		[ORFieldMapping("TenantCode")]
-        [DataMember]
-		public string TenantCode
-		{
-			get;
-            set;
-		}
-	}
+        }
+    }
 
     [Serializable]
     [DataContract]

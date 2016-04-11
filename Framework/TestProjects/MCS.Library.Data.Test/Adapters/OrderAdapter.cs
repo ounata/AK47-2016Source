@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MCS.Library.Data.Test.Adapters
 {
-    public class OrderAdapter : VersionedObjectLoadableAdapterBase<VersionedOrder, VersionedOrderCollection>
+    public class OrderAdapter : VersionedObjectAdapterBase<VersionedOrder, VersionedOrderCollection>
     {
         public static readonly OrderAdapter Instance = new OrderAdapter();
 
@@ -21,7 +21,12 @@ namespace MCS.Library.Data.Test.Adapters
             return OrderAdapter.Instance.LoadByInBuilder(
                 new InLoadingCondition(builder => builder.AppendItem(orderID), "OrderID"), DateTime.MinValue).SingleOrDefault();
         }
- 
+
+        public void LoadByIDInContext(string orderID, DateTime timePoint, Action<VersionedOrder> action)
+        {
+            this.LoadByInBuilderInContext(new InLoadingCondition(builder => builder.AppendItem(orderID), "OrderID"), orders => action(orders.SingleOrDefault()), timePoint);
+        }
+
         protected override string GetConnectionName()
         {
             return Common.ConnectionName;

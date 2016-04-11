@@ -19,6 +19,7 @@ namespace MCS.Library.Data.Mapping
         private string postfix = string.Empty;
         private double adjustDays = 0;
         private bool isExpression = false;
+        private DefaultValueUsageType defaultValueUsage = DefaultValueUsageType.ByCaller;
         private EnumUsageTypes enumUsage = EnumUsageTypes.UseEnumValue;
         private string subClassTypeDescription = string.Empty;
         private string subClassPropertyName = string.Empty;
@@ -79,6 +80,15 @@ namespace MCS.Library.Data.Mapping
         }
 
         /// <summary>
+        /// 默认值的操作方式
+        /// </summary>
+        public DefaultValueUsageType DefaultValueUsage
+        {
+            get { return this.defaultValueUsage; }
+            set { this.defaultValueUsage = value; }
+        }
+  
+        /// <summary>
         /// 枚举类型的使用方法（值/还是描述）
         /// </summary>
         public EnumUsageTypes EnumUsage
@@ -127,6 +137,7 @@ namespace MCS.Library.Data.Mapping
             this.postfix = attr.Postfix;
             this.adjustDays = attr.AdjustDays;
             this.isExpression = attr.IsExpression;
+            this.defaultValueUsage = attr.DefaultValueUsage;
         }
 
         /// <summary>

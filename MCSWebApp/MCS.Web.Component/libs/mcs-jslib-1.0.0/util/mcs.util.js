@@ -73,9 +73,11 @@
     /*
      * 字典对象合并
      */
-    mcs.util.merge = function(dictionary) {
+    mcs.util.merge = function (dictionary) {
         for (var item in dictionary) {
-            mcs.app.dict[item] = dictionary[item];
+            var prop = item;
+            item = item.indexOf('c_codE_ABBR_') == 0 ? item : 'c_codE_ABBR_' + item;
+            mcs.app.dict[item] = dictionary[prop];
         }
     };
 
@@ -109,6 +111,48 @@
     };
 
     /*
+    * 从指定的数组集合中找到字符串或数组子集合中是否存在
+    */
+    mcs.util.contains = function (data, elems, separator) {
+        if (!data || !elems) return false;
+        var array = mcs.util.toArray(elems, separator);
+        for (var j in array) {
+            if (jQuery.inArray(array[j], data) > -1) {
+                return true;
+            }
+        }
+
+        return false;
+    };
+
+    /*
+    * 将指定元素转化为数组
+    */
+    mcs.util.toArray = function (data, separator) {
+        var result = [];
+        if (typeof data == 'string') {
+            separator = separator || ',';
+            var array = data.split(separator);
+            if (array.length > 1) {
+                result = array;
+            } else {
+                result.push(data);
+            }
+        }
+        if (data instanceof Array) {
+            result = data;
+        }
+        return result;
+    };
+
+    /*
+    * 判断元素是否存在属性
+    */
+    mcs.util.hasAttr = function (elem, attrName) {
+        return typeof elem.attr(attrName) != 'undefined';
+    };
+
+    /*
     * 对象复制
     */
     mcs.util.clone = function (obj) {
@@ -132,6 +176,40 @@
             }
         }
         return -1;
+    };
+
+    /*
+    * 从指定的数组集合中找到字符串或数组子集合中是否存在
+    */
+    mcs.util.contains = function (data, elems, separator) {
+        if (!data || !elems) return false;
+        var array = mcs.util.toArray(elems, separator);
+        for (var j in array) {
+            if (jQuery.inArray(array[j], data)) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+    /*
+    * 将指定元素转化为数组
+    */
+    mcs.util.toArray = function (data, separator) {
+        var result = [];
+        if (typeof data == 'string') {
+            separator = separator || ',';
+            var array = data.split(separator);
+            if (array.length > 1) {
+                result = array;
+            } else {
+                result.push(data);
+            }
+        }
+        if (data instanceof Array) {
+            result = data;
+        }
+        return result;
     };
 
     /*

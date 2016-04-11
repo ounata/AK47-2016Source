@@ -57,7 +57,7 @@ namespace MCS.Library.Data.Adapters
             whereAction(builder);
             builder.AppendTenantCode(typeof(T));
 
-            string sql = string.Format("SELECT TOP 1 * FROM {0}", mappings.TableName);
+            string sql = string.Format("SELECT TOP 1 * FROM {0}", mappings.GetQueryTableName());
 
             if (builder.Count > 0)
                 sql = sql + string.Format(" WHERE {0}", builder.ToSqlString(TSqlBuilder.Instance));
@@ -310,6 +310,15 @@ namespace MCS.Library.Data.Adapters
         }
 
         /// <summary>
+        /// 得到查询所使用的表名
+        /// </summary>
+        /// <returns></returns>
+        protected virtual string GetQueryTableName()
+        {
+            return this.GetQueryMappingInfo().GetQueryTableName();
+        }
+
+        /// <summary>
         /// 得到一个静态的上下文
         /// </summary>
         /// <returns></returns>
@@ -339,7 +348,7 @@ namespace MCS.Library.Data.Adapters
 
         private static string GetLoadSqlByBuilder(string condition, OrderBySqlClauseBuilder orderByBuilder, ORMappingItemCollection mappings)
         {
-            string sql = string.Format("SELECT * FROM {0}", mappings.TableName);
+            string sql = string.Format("SELECT * FROM {0}", mappings.GetQueryTableName());
 
             if (condition.IsNotEmpty())
                 sql = sql + string.Format(" WHERE {0}", condition);

@@ -80,6 +80,10 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\account\display\display-view\account-view.controller.js" />
+    <Content Include="app\account\display\display-view\account-view.html" />
+    <Content Include="app\account\display\display.dataService.js" />
+    <Content Include="app\account\ppts.account.readme.txt" />
     <Content Include="app\auditing\auditinglist\auditing.dataService.js" />
     <Content Include="app\auditing\ppts.auditing.js" />
     <Content Include="app\common\global\ppts.directive.js" />
@@ -89,6 +93,7 @@
     <Content Include="app\common\global\ppts.filter.js" />
     <Content Include="app\common\global\ppts.route.js" />
     <Content Include="app\common\global\ppts.service.js" />
+    <Content Include="app\common\startup\mcs.js" />
     <Content Include="app\common\startup\mcs.min.js" />
     <Content Include="app\common\layout.html" />
     <Content Include="app\common\config\ppts.config.js" />
@@ -97,9 +102,13 @@
     <Content Include="app\common\tpl\header.tpl.html" />
     <Content Include="app\customer\follow\follow-list\follow-list.controller.js" />
     <Content Include="app\customer\follow\follow-list\follow-list.html" />
+    <Content Include="app\customer\potentialcustomer\customer-staffrelation\customer-staffrelation.controller.js" />
+    <Content Include="app\customer\potentialcustomer\customer-staffrelation\customer-staffrelation.html" />
     <Content Include="app\schedule\studentassignment\stuasgmt-list\stuasgmt-list.controller.js" />
     <Content Include="app\schedule\studentassignment\stuasgmt-list\stuasgmt-list.html" />
     <Content Include="build\ppts.global.min.js" />
+    <Content Include="build\ppts.startup.js" />
+    <Content Include="build\ppts.startup.min.js" />
     <Content Include="index.aspx" />
     <Content Include="package.json" />
     <None Include="Properties\PublishProfiles\PPTS.Portal.pubxml" />
@@ -151,12 +160,11 @@
     <Content Include="app\order\ppts.order.js" />
     <Content Include="app\order\purchase\purchase.dataService.js" />
     <Content Include="app\order\unsubscribe\unsubscribe.dataService.js" />
-    <Content Include="app\payment\assetexchange\assetexchange.dataService.js" />
-    <Content Include="app\payment\pay\pay.dataService.js" />
-    <Content Include="app\payment\ppts.payment.js" />
-    <Content Include="app\payment\receipt\receipt.dataService.js" />
-    <Content Include="app\payment\refund\refund.dataService.js" />
-    <Content Include="app\payment\unionpay\unionPay.dataService.js" />
+    <Content Include="app\account\transfer\transfer.dataService.js" />
+    <Content Include="app\account\charge\charge.dataService.js" />
+    <Content Include="app\account\ppts.account.js" />
+    <Content Include="app\account\refund\refund.dataService.js" />
+    <Content Include="app\account\return\return.dataService.js" />
     <Content Include="app\ppts.js" />
     <Content Include="app\customer\student\student-add\student-add.controller.js" />
     <Content Include="app\customer\student\student-add\student-add.html" />
@@ -196,8 +204,6 @@
     <Content Include="assets\images\logo.gif" />
     <Content Include="assets\images\user.png" />
     <Content Include="assets\styles\site.css" />
-    <Content Include="build\ppts.startup.js" />
-    <Content Include="build\ppts.startup.min.js" />
     <Content Include="favicon.ico" />
     <Content Include="Gruntfile.js" />
     <Content Include="Web.config">
@@ -219,6 +225,18 @@
     <Analyzer Include="..\..\Bin\MCS.Library.Passport.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="app\account\charge\charge-add\" />
+    <Folder Include="app\account\charge\charge-list\" />
+    <Folder Include="app\account\charge\charge-view\" />
+    <Folder Include="app\account\charge\payment-add\" />
+    <Folder Include="app\account\charge\payment-list\" />
+    <Folder Include="app\account\charge\payment-view\" />
+    <Folder Include="app\account\display\record-list\" />
+    <Folder Include="app\account\refund\payment-list\" />
+    <Folder Include="app\account\refund\refund-add\" />
+    <Folder Include="app\account\refund\refund-view\" />
+    <Folder Include="app\account\return\return-add\" />
+    <Folder Include="app\account\transfer\transfer-add\" />
     <Folder Include="app\customer\market\market-list\" />
     <Folder Include="app\product\productcategory\" />
   </ItemGroup>

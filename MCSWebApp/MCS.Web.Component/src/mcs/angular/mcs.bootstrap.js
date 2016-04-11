@@ -1,8 +1,8 @@
 ﻿// 依赖于mcs.js, angularjs, 将会在应用程序启动之后执行
-(function() {
+(function () {
     'use strict';
 
-    mcs.ng = mcs.ng || angular.module('mcs.ng', ['mcs.ng.datatable', 'mcs.ng.paging', 'dialogs.main']);
+    mcs.ng = mcs.ng || angular.module('mcs.ng', ['mcs.ng.datatable', 'mcs.ng.treeControl', 'mcs.ng.paging', 'dialogs.main']);
     mcs.ng.constant('mcsComponentConfig', {
         rootUrl: mcs.app.config.componentBaseUrl
     })
@@ -14,10 +14,10 @@
         'other': ''
     })
 
-    .service('httpErrorHandleService', function(httpErrorHandleMessage, dialogs) {
+    .service('httpErrorHandleService', function (httpErrorHandleMessage, dialogs) {
 
         var httpErrorHandleService = this;
-        httpErrorHandleService.process = function(response) {
+        httpErrorHandleService.process = function (response) {
             dialogs.error('error', httpErrorHandleMessage[response.StatusCode]);
         }
 

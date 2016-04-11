@@ -14,7 +14,7 @@ namespace PPTS.Data.Orders
     {
         public const string PPTSOrderConnectionName = "PPTS_Order";
 
-        public const string PPTSSearchConnectionName = "PPTS_CustomerSearch";
+        public const string PPTSSearchConnectionName = "PPTS_Search";
 
 
         /// <summary>

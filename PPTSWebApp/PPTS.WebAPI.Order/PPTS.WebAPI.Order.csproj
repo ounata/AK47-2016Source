@@ -7,11 +7,11 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{6A483A50-C71F-4312-A2ED-49B10AF30D90}</ProjectGuid>
+    <ProjectGuid>{DC505A86-B955-4488-BD89-49AD3B3A686A}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PPTS.WebAPI.Order</RootNamespace>
+    <RootNamespace>PPTS.WebAPI.Orders</RootNamespace>
     <AssemblyName>PPTS.WebAPI.Order</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>

@@ -102,6 +102,11 @@ namespace MCS.Library.Data
         /// <param name="clearSqlAfterExecute">执行完后是否清除上下文中的SQL，默认是true</param>
         public abstract int ExecuteNonQuerySqlInContext(bool clearSqlAfterExecute = true);
 
+        /// <summary>
+        /// 执行保存在上下文中的SQL语句，在前后增加时间上下下文变量
+        /// </summary>
+        /// <param name="clearSqlAfterExecute"></param>
+        public abstract void ExecuteTimePointSqlInContext(bool clearSqlAfterExecute = true);
         #endregion End Public Methods
 
         /// <summary>

@@ -17,6 +17,7 @@ namespace MCS.Library.Data.Mapping
         private string postfix = string.Empty;
         private double adjustDays = 0;
         private bool isExpression = false;
+        private DefaultValueUsageType defaultValueUsage = DefaultValueUsageType.ByCaller;
 
         /// <summary>
         /// 
@@ -86,6 +87,15 @@ namespace MCS.Library.Data.Mapping
         {
             get { return this.isExpression; }
             set { this.isExpression = value; }
+        }
+
+        /// <summary>
+        /// 默认值的操作方式
+        /// </summary>
+        public DefaultValueUsageType DefaultValueUsage
+        {
+            get { return this.defaultValueUsage; }
+            set { this.defaultValueUsage = value; }
         }
     }
 }

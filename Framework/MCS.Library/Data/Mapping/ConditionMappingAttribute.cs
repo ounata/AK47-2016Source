@@ -42,7 +42,7 @@ namespace MCS.Library.Data.Mapping
         {
             this.operation = op;
         }
-
+ 
         /// <summary>
         /// ²Ù×÷·û£¬È±Ê¡Îª¡°=¡±
         /// </summary>

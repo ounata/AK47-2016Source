@@ -1,216 +1,321 @@
-<!--班组 开始-->
-<form class="form-horizontal" >
-    <div class="widget-box">
-        <div class="widget-header">
-            <h4>{{tag}}班组产品
-                <small>
-                    <i class="icon-double-angle-right"></i>
-                    (<span class="required"> * </span>表示必填字段)
-                </small>
-            </h4>
-        </div>
-        <div class="widget-body">
-            <div class="widget-main no-padding">
-                <div class="clearfix form-actions mcs-form-actions">
-                    <div class="col-md-offset-3 col-md-9">
-                        <button class="btn mcs-width-130 ng-isolate-scope btn-success" ng-click="click()" type="save" click="vm.save()"><i class="ace-icon fa fa-save"></i><span>保 存</span></button>
-                        <button class="btn mcs-width-130 ng-isolate-scope btn-success" ng-click="click()" type="save" click="vm.save()"><i class="ace-icon fa fa-save"></i><span>提 交</span></button>
+
+
+                <!--班组 开始-->
+
+                <div class="widget-box">
+                    <div class="widget-header">
+                        <h4>
+                            {{tag}}班组产品
+                            <small>
+                                <i class="icon-double-angle-right"></i>
+                                (<span class="required"> * </span>表示必填字段)
+                            </small>
+                        </h4>
                     </div>
-                </div>
-            </div>
-        </div>
-        <div class="page-header">
-            <span>基础信息</span>
-        </div>
-        <div class="form-group">
-            <div class="col-sm-6">
-                <mcs-label required="true" text="产品名称：" css="col-sm-3" />
-                <div class="col-sm-9">
-                    <mcs-input placeholder="产品名称" model="vm.product.classgroup.productname" css="col-xs-10 col-sm-10" />
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <mcs-label required="true" text="课程季节：" css="col-sm-3" />
-                <div class="col-sm-9">
-                    <mcs-input placeholder="课程季节" model="vm.product.classgroup.courseseaon" css="col-xs-10 col-sm-10" />
-                </div>
-            </div>
-        </div>
-
-        <div class="space-4"></div>
-        <div class="form-group">
-            <div class="col-sm-6">
-                <mcs-label required="true" text="课程年份：" css="col-sm-3" />
-                <div class="col-sm-9">
-                    <mcs-input placeholder="课程年份" model="vm.product.classgroup.courseyear" css="col-xs-10 col-sm-10" />
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <mcs-label required="true" text="年级：" css="col-sm-3" />
-                <div class="col-sm-9">
-                    <mcs-input placeholder="课程年份" model="vm.product.classgroup.grade" css="col-xs-10 col-sm-10" />
-                </div>
-            </div>
-        </div>
-
-        <div class="space-4"></div>
-        <div class="form-group">
-            <div class="col-sm-6">
-                <mcs-label required="true" text="科目：" css="col-sm-3" />
-                <div class="col-sm-9">
-                    <mcs-input placeholder="科目" model="vm.product.classgroup.subject" css="col-xs-10 col-sm-10" />
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <mcs-label required="true" text="产品简介：" css="col-sm-3" />
-                <div class="col-sm-9">
-                    <textarea placeholder="产品简介" model="vm.product.classgroup.description" ></textarea>
-                </div>
-            </div>
-        </div>
-
-        <div class="space-4"></div>
-        <div class="form-group">
-            <div class="col-sm-6">
-                <mcs-label required="true" text="产品颗粒度：" css="col-sm-3" />
-                <div class="col-sm-9">
-                    <mcs-input placeholder="科目" model="vm.product.classgroup.granularity" css="col-xs-10 col-sm-10" />
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <mcs-label required="true" text="总课次：" css="col-sm-3" />
-                <div class="col-sm-9">
-                    <mcs-input placeholder="总课次" model="vm.product.classgroup.totalcoursecount" css="col-xs-10 col-sm-10" />
-                </div>
-            </div>
-        </div>
-
-        <div class="space-4"></div>
-        <div class="form-group">
-            <div class="col-sm-6">
-                <mcs-label required="true" text="总金额：" css="col-sm-3" />
-                <div class="col-sm-9">
-                    <mcs-input placeholder="总金额" model="vm.product.classgroup.totalamonut" css="col-xs-10 col-sm-10" />
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <mcs-label required="true" text="每课次时长：" css="col-sm-3" />
-                <div class="col-sm-9">
-                    <ui-select ng-model="vm.product.classgroup.selectedDuation" theme="selectize" class="col-xs-10 col-sm-10">
-                    <ui-select-match placeholder="时长">{{$select.selected.value}}</ui-select-match>
-                    <ui-select-choices repeat="x in vm.dictionaries.durations | props: {value: $select.search} ">
-                    <span ng-bind-html="x.value | highlight: $select.search "></span>
-                    </ui-select-choices>
-                    </ui-select>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="space-4"></div>
-        <div class="form-group">
-            <div class="col-sm-6">
-                <mcs-label required="true" text="实际课时：" css="col-sm-3" />
-                <div class="col-sm-9">
-                    <ui-select ng-model="vm.product.classgroup.selectedActualDuation" theme="selectize" class="col-xs-10 col-sm-10">
-                    <ui-select-match placeholder="实际课时">{{$select.selected.value}}</ui-select-match>
-                    <ui-select-choices repeat="x in vm.dictionaries.durations | props: {value: $select.search} ">
-                    <span ng-bind-html="x.value | highlight: $select.search "></span>
-                    </ui-select-choices>
-                    </ui-select>
-                </div>
-            </div>
-
-            <div class="col-sm-6">
-                <mcs-label required="true" text="本课次共计课时数：" css="col-sm-3" />
-                <div class="col-sm-9">
-                    <ui-select ng-model="vm.product.classgroup.selectedTotalCourseCount" theme="selectize" class="col-xs-10 col-sm-10">
-                    <ui-select-match placeholder="课时数">{{$select.selected.value}}</ui-select-match>
-                    <ui-select-choices repeat="x in vm.dictionaries.durations | props: {value: $select.search} ">
-                    <span ng-bind-html="x.value | highlight: $select.search "></span>
-                    </ui-select-choices>
-                    </ui-select>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="space-4"></div>
-        <div class="form-group">
-            <div class="col-sm-6">
-                <mcs-label required="true" text="满班人数：" css="col-sm-3" />
-                <div class="col-sm-9">
-                    <mcs-input placeholder="满班人数" model="vm.product.classgroup.totalfullcount" css="col-xs-10 col-sm-10" />
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <mcs-label required="true" text="产品启售时间：" css="col-sm-3" />
-                <div class="col-sm-9">
-                    <mcs-input placeholder="满班人数" model="vm.product.classgroup.beginselltime" css="col-xs-10 col-sm-10" />
-                </div>
-            </div>
-        </div>
-
-        <div class="space-4"></div>
-        <div class="form-group">
-            <div class="col-sm-6">
-                <mcs-label required="true" text="产品止售时间：" css="col-sm-3" />
-                <div class="col-sm-9">
-                    <!--
-                    <p class="input-group">
-                    <input type="text" class="form-control" uib-datepicker-popup ng-model="vm.product.classgroup.endselltime" is-open="popup2.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" />
-                    <span class="input-group-btn">
-                        <button type="button" class="btn btn-default" ng-click="open2()"><i class="glyphicon glyphicon-calendar"></i></button>
-                    </span>
-                    </p>
-                    -->
-                </div>
-            </div>
-
-        </div>
-
-
-        <div class="space-4"></div>
-        <div class="page-header">
-            <span>销售范围</span>
-        </div>
-
-        <div class="form-group">
-            <div class="col-sm-6">
-                <mcs-label required="true" text="销售分公司：" css="col-sm-3" />
-                <div class="col-sm-9">
-                    <mcs-input placeholder="总金额" model="vm.product.classgroup.company" css="col-xs-10 col-sm-10" />
-                </div>
-            </div>
-
-            <div class="col-sm-6">
-                <mcs-label required="true" text="销售校区：" css="col-sm-3" />
-                <div class="col-sm-9">
-                    <mcs-input placeholder="销售校区" model="vm.product.classgroup.campus" css="col-xs-10 col-sm-10" />
-                </div>
-            </div>
-        </div>
-
-
-        <div class="space-4"></div>
-        <div class="page-header">
-            <span>销售范围</span>
-        </div>
-
-        <div class="form-group">
-
-            <div class="col-sm-6">
-                <mcs-label required="true" text="是否遵循客户折扣级别：" css="col-sm-3" />
-                <div class="col-sm-9">
-                    <div class="radio">
-                        <mcs-radiobutton-group category="selectedCustomerDiscountLevel" data="vm.dictionaries.customerdiscountlevel" click="vm.select(category, key, eventargs)" defaultValue="G1" />
+                    <div class="widget-body">
+                        <div class="widget-main no-padding">
+                            <div class="clearfix form-actions mcs-form-actions">
+                                <div class="col-md-offset-3 col-md-9">
+                                    <mcs-button type="save" click="vm.submit()" text="提交审批"></mcs-button>
+                                    
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-        </div>
-        <div class="space-4"></div>
 
-    </div>
-</form>
-<!--班组 结束-->
+                    <div class="page-header">
+                        <span>基础信息</span>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <mcs-label required="true" text="分类：" css="col-sm-3" />
+                            <div class="col-sm-6">
+                                <ppts-select category="categoryCustom" model="vm.m.classgroup.product.catalog" caption="产品分类" />
+                            </div>
+                        </div>
+                        <br />
+                        常规班组：学大独立运营，收入完全归学大所有的班组产品
+                        <br />
+                        合作班组：学大与合作商一起运营，收入与合作商按比例分账的班组产品
+                    </div>
+                    <div class="space-4"></div>
+
+                    <!-- 合作 -->
+
+                    <div class="form-group" ng-show="vm.isPartner()">
+                        <div class="col-sm-6">
+                            <mcs-label required="true" text="分账比例：" css="col-sm-3" />
+                            <div class="col-sm-9">
+                                合作方：<mcs-input model="vm.m.classgroup.product.partnerName" css="col-xs-10 col-sm-10" />
+                                分成比例：<mcs-input type="number" min="0" model="vm.m.classgroup.product.partnerRatio" css="col-xs-10 col-sm-10" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-4"></div>
+
+                    <div class="form-group" ng-show="vm.isPartner()">
+                        <div class="col-sm-6">
+                            <mcs-label required="true" text="薪酬规则：" css="col-sm-3" />
+                            <div class="col-sm-9">
+                                咨询师提成：<mcs-input model="vm.m.classgroup.salaryRules[0].moneyPerPeriod" css="col-xs-10 col-sm-10" />
+                                <br />
+                                学管师提成：<mcs-input model="vm.m.classgroup.salaryRules[1].moneyPerPeriod" css="col-xs-10 col-sm-10" />
+                                <br />
+                                教师课时收入：<mcs-input model="vm.m.classgroup.salaryRules[2].moneyPerPeriod" css="col-xs-10 col-sm-10" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-4"></div>
+
+                    <!-- 合作 -->
+
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <mcs-label required="true" text="产品名称：" css="col-sm-3" />
+                            <div class="col-sm-3">
+                                <ppts-select category="grade" model="vm.m.classgroup.product.grade" caption="年级" />
+                            </div>
+                            <div class="col-sm-3">
+                                <ppts-select category="subject" model="vm.m.classgroup.product.subject" caption="产品科目" />
+                            </div>
+                            <div class="col-sm-3">
+                                <ppts-select category="duration" model="vm.m.classgroup.exOfCourse.periodDuration" caption="单个时长" />
+                            </div>
+                            <div class="col-sm-3">
+                                <ppts-select category="courseLevel" model="vm.m.classgroup.exOfCourse.courseLevel" caption="课程级别" />
+                            </div>
+
+                            <div class="col-sm-3">
+                                <ppts-select category="coachType" model="vm.m.classgroup.exOfCourse.coachType" caption="辅导类型" />
+                            </div>
+
+                            <div class="col-sm-3">
+                                <ppts-select category="season" model="vm.m.classgroup.product.season" caption="课程季节" />
+                            </div>
+
+                            例：2016年高中三年级语文秋季高考保过长期小班
+                        </div>
+                    </div>
+                    <div class="space-4"></div>
+
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <mcs-label required="true" text="班组类型：" css="col-sm-3" />
+                            <div class="col-sm-3">
+                                <ppts-select category="groupType" model="vm.m.classgroup.exOfCourse.groupType" caption="班组类型" />
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="space-4"></div>
+
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <mcs-label required="true" text="班级类型：" css="col-sm-3" />
+                            <div class="col-sm-3">
+                                <ppts-select category="classType" model="vm.m.classgroup.exOfCourse.classType" caption="班级类型" />
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="space-4"></div>
+
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <mcs-label required="true" text="产品简介：" css="col-sm-3" />
+                            <div class="col-sm-9">
+                                <textarea class="form-control" rows="3" id="textArea" ng-model="vm.m.classgroup.product.productMemo"></textarea>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="space-4"></div>
+
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <mcs-label required="true" text="产品单价：" css="col-sm-3" />
+                            <div class="col-sm-9">
+                                <mcs-input type="number" min="0" model="vm.m.classgroup.product.productPrice" css="col-xs-10 col-sm-10" />
+                                元/课时
+                            </div>
+                            <br />
+                            备注：
+                            <br />
+                            -产品单价：产品的基本价格
+                            <br />
+                            -目标单价：完成预算任务的平均订购单价
+                            <br />
+                            以上的价格也会用于数据分析，请正确填写
+                        </div>
+                        <div class="col-sm-6">
+                            <mcs-label required="true" text="目标单价：" css="col-sm-3" />
+                            <div class="col-sm-9">
+                                <mcs-input type="number" min="0" model="vm.m.classgroup.product.targetPrice" css="col-xs-10 col-sm-10" />
+                                元/课时
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-4"></div>
+
+
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <mcs-label required="true" text="总课次：" css="col-sm-3" />
+                            <div class="col-sm-3">
+                                <mcs-input type="number" min="0" model="vm.m.classgroup.exOfCourse.lessonCount" css="col-xs-10 col-sm-10" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-4"></div>
+
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <mcs-label required="true" text="每课次时长：" css="col-sm-3" />
+                            <div class="col-sm-3">
+                                <mcs-input type="number" min="0" model="vm.m.classgroup.exOfCourse.lessonDuration" css="col-xs-10 col-sm-10" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-4"></div>
+
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <mcs-label required="true" text="每课次课时：" css="col-sm-3" />
+                            <div class="col-sm-3">
+                                <mcs-input type="number" min="0" model="vm.m.classgroup.exOfCourse.periodsOfLesson" css="col-xs-10 col-sm-10" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-4"></div>
+
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <mcs-label required="true" text="每课时时长：" css="col-sm-3" />
+                            <div class="col-sm-3">
+                                <mcs-input type="number" min="0" model="vm.m.classgroup.exOfCourse.periodDuration" css="col-xs-10 col-sm-10" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-4"></div>
+
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <mcs-label required="true" text="开班人数：" css="col-sm-3" />
+                            <div class="col-sm-9">
+                                <mcs-input type="number" min="0" model="vm.m.classgroup.exOfCourse.minPeoples" css="col-xs-10 col-sm-10" />
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <mcs-label required="true" text="满班人数：" css="col-sm-3" />
+                            <div class="col-sm-9">
+                                <mcs-input type="number" min="0" model="vm.m.classgroup.exOfCourse.maxPeoples" css="col-xs-10 col-sm-10" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-4"></div>
+
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <mcs-label required="true" text="是否允许跨校区组班：" css="col-sm-3" />
+                            <div class="col-sm-3">
+                                <input type="checkbox" ng-model="vm.m.classgroup.product.isCrossCampus" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-4"></div>
+
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <mcs-label required="true" text="跨校区班组课收归属：" css="col-sm-3" />
+                            <div class="col-sm-3">
+                                <input type="checkbox" ng-model="vm.m.classgroup.product.incomeBelonging" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-4"></div>
+
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <mcs-label required="true" text="颗粒度：" css="col-sm-3" />
+                            <div class="col-sm-9">
+                                {{vm.m.classgroup.productUnit | unit }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-4"></div>
+
+
+
+
+                    <div class="page-header">
+                        <span>销售信息</span>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <mcs-label required="true" text="销售范围：" css="col-sm-3" />
+                            <div class="col-sm-9">
+                                <mcs-input placeholder="销售分公司" model="vm.m.classgroup.company" css="col-xs-10 col-sm-10" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-4"></div>
+
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <mcs-label required="true" text="产品启售时间：" css="col-sm-3" />
+                            <div class="col-sm-9">
+                                <p class="input-group">
+                                    <input type="text" class="form-control" uib-datepicker-popup="yyyy/MM/dd" ng-model="vm.m.classgroup.product.startDate" is-open="vm.popup1.opened" datepicker-options="vm.dateOptions" ng-required="true" close-text="Close" alt-input-formats="vm.altInputFormats" />
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="vm.open1()">
+                                            <i class="glyphicon glyphicon-calendar"></i>
+                                        </button>
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <mcs-label required="true" text="产品止售时间：" css="col-sm-3" />
+                            <div class="col-sm-9">
+                                <p class="input-group">
+                                    <input type="text" class="form-control" uib-datepicker-popup="yyyy/MM/dd" ng-model="vm.m.classgroup.product.endDate" is-open="vm.popup2.opened" datepicker-options="vm.dateOptions" ng-required="true" close-text="Close" alt-input-formats="vm.altInputFormats" />
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="vm.open2()">
+                                            <i class="glyphicon glyphicon-calendar"></i>
+                                        </button>
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-4"></div>
+
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <mcs-label required="true" text="创建人：" css="col-sm-3" />
+                            <div class="col-sm-9">
+                                xxx
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-4"></div>
+
+                    <div class="page-header">
+                        <span>折扣信息</span>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <mcs-label required="true" text="是否享受客户折扣：" css="col-sm-3" />
+                            <div class="col-sm-9">
+                                <input type="checkbox" ng-model="vm.m.classgroup.product.tunlandAllowed" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-4"></div>
+
+                </div>
+
+                <!--班组 结束-->
 

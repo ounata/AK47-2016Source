@@ -1,4 +1,50 @@
-﻿ppts.ng.directive('pptsCheckboxGroup', ['$compile', function ($compile) {
+﻿// 功能权限
+ppts.ng.directive('pptsRoles', function () {
+    return {
+        restrict: 'A',
+        link: function ($scope, $elem, $attrs, $ctrl) {
+            if (!$attrs.pptsRoles) return;
+            if (!mcs.util.hasAttr($elem, 'permission')) {
+                $elem.addClass('hide');
+                if (mcs.util.contains(ppts.user.functions, $attrs.pptsRoles)) {
+                    $elem.removeClass('hide').attr('permission', true);
+                }
+            }
+        }
+    };
+});
+
+ppts.ng.directive('pptsJobFunctions', function () {
+    return {
+        restrict: 'A',
+        link: function ($scope, $elem, $attrs, $ctrl) {
+            if (!$attrs.pptsJobFunctions) return;
+            if (!mcs.util.hasAttr($elem, 'permission')) {
+                $elem.addClass('hide');
+                if (mcs.util.contains(ppts.user.functions, $attrs.pptsJobFunctions)) {
+                    $elem.removeClass('hide').attr('permission', true);
+                }
+            }
+        }
+    };
+});
+
+ppts.ng.directive('pptsFunctions', function () {
+    return {
+        restrict: 'A',
+        link: function ($scope, $elem, $attrs, $ctrl) {
+            if (!$attrs.pptsFunctions) return;
+            if (!mcs.util.hasAttr($elem, 'permission')) {
+                $elem.addClass('hide');
+                if (mcs.util.contains(ppts.user.functions, $attrs.pptsFunctions)) {
+                    $elem.removeClass('hide').attr('permission', true);
+                }
+            }
+        }
+    };
+});
+
+ppts.ng.directive('pptsCheckboxGroup', ['$compile', function ($compile) {
     return {
         restrict: 'E',
         scope: {

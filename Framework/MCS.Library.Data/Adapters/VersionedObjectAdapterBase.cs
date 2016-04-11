@@ -15,7 +15,10 @@ namespace MCS.Library.Data.Adapters
     /// 带版本信息Adapter类的基类
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public abstract class VersionedObjectAdapterBase<T> where T : IVersionDataObjectWithoutID
+    /// <typeparam name="TCollection"></typeparam>
+    public abstract partial class VersionedObjectAdapterBase<T, TCollection>
+        where T : IVersionDataObjectWithoutID
+        where TCollection : IList<T>, IEnumerable<T>, new()
     {
         /// <summary>
         /// 
@@ -30,14 +33,42 @@ namespace MCS.Library.Data.Adapters
         {
             obj.NullCheck("obj");
 
-            //this.MergeExistsObjectInfo(obj);
             VersionStrategyUpdateSqlBuilder<T> builder = new VersionStrategyUpdateSqlBuilder<T>();
 
             string sql = builder.ToUpdateSql(obj, this.GetMappingInfo());
 
-            DateTime dt = (DateTime)DbHelper.RunSqlReturnScalar(sql, this.GetConnectionName());
+            using (TransactionScope scope = TransactionScopeFactory.Create())
+            {
+                DateTime dt = (DateTime)DbHelper.RunSqlReturnScalar(sql, this.GetConnectionName());
 
-            DBTimePointActionContext.Current.TimePoint.IsMinValue(() => DBTimePointActionContext.Current.TimePoint = dt);
+                DBTimePointActionContext.Current.TimePoint.IsMinValue(() => DBTimePointActionContext.Current.TimePoint = dt);
+
+                scope.Complete();
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ownerKeyBuilder"></param>
+        /// <param name="objs"></param>
+        public void UpdateCollection(IConnectiveSqlClause ownerKeyBuilder, IEnumerable<T> objs)
+        {
+            ownerKeyBuilder.NullCheck("ownerKeyBuilder");
+            objs.NullCheck("objs");
+
+            VersionStrategyUpdateSqlBuilder<T> builder = new VersionStrategyUpdateSqlBuilder<T>();
+
+            string sql = builder.ToUpdateCollectionSql(ownerKeyBuilder, this.GetMappingInfo(), objs);
+
+            using (TransactionScope scope = TransactionScopeFactory.Create())
+            {
+                DateTime dt = (DateTime)DbHelper.RunSqlReturnScalar(sql, this.GetConnectionName());
+
+                DBTimePointActionContext.Current.TimePoint.IsMinValue(() => DBTimePointActionContext.Current.TimePoint = dt);
+
+                scope.Complete();
+            }
         }
 
         /// <summary>

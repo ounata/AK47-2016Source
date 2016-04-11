@@ -312,6 +312,23 @@ namespace MCS.Library.Data
         }
 
         /// <summary>
+        /// 执行保存在上下文中的SQL语句，在前后增加时间上下下文变量。执行之前会清除DBTimePointActionContext.Current.TimePoint
+        /// </summary>
+        /// <param name="clearSqlAfterExecute"></param>
+        public override void ExecuteTimePointSqlInContext(bool clearSqlAfterExecute = true)
+        {
+            this.ExecuteSqlInContext((refConnection, db, sql) =>
+                {
+                    DateTime dt = (DateTime)db.ExecuteScalar(CommandType.Text,
+                        VersionStrategyUpdateSqlHelper.ConstructUpdateSql(null, (strB, context) =>
+                            strB.Append(sql), true));
+
+                    DBTimePointActionContext.Current.TimePoint.IsMinValue(() => DBTimePointActionContext.Current.TimePoint = dt);
+                },
+                clearSqlAfterExecute);
+        }
+
+        /// <summary>
         /// 得到引用的数据库连接
         /// </summary>
         /// <returns></returns>
