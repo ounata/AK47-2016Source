@@ -16,6 +16,10 @@ ppts.ng.config(function ($stateProvider, $urlRouterProvider) {
         url: '/dashboard',
         templateUrl: 'app/dashboard/dashboard.html',
         controller: 'dashboardController',
+        breadcrumb: {
+            label: '工作台',
+            parent: 'ppts'
+        },
         dependencies: ['app/dashboard/dashboard.controller']
     });
 });

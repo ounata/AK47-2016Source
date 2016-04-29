@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace PPTS.Data.Customers.Adapters
 {
-    public class PhoneAdapter : CustomerAdapterBase<Phone, PhoneCollection>
+    public class PhoneAdapter : VersionedCustomerAdapterBase<Phone, PhoneCollection>
     {
         public static readonly PhoneAdapter Instance = new PhoneAdapter();
 
@@ -21,30 +21,30 @@ namespace PPTS.Data.Customers.Adapters
 
         public PhoneCollection LoadByOwnerID(string ownerID)
         {
-            return this.Load(builder => builder.AppendItem("OwnerID", ownerID));
+            return this.Load(builder => builder.AppendItem("OwnerID", ownerID), DateTime.MinValue);
+        }
+
+        /// <summary>
+        /// 得到某个owner的主要电话
+        /// </summary>
+        /// <param name="ownerID"></param>
+        /// <returns></returns>
+        public Phone LoadPrimaryPhoneByOwnerID(string ownerID)
+        {
+            return this.Load(builder => builder.AppendItem("OwnerID", ownerID).AppendItem("IsPrimary", 1), DateTime.MinValue).SingleOrDefault();
         }
 
         public void LoadByOwnerIDInContext(string ownerID, Action<PhoneCollection> action)
         {
-            this.LoadInContext(new WhereLoadingCondition(builder => builder.AppendItem("OwnerID", ownerID)), action);
+            this.LoadInContext(new WhereLoadingCondition(builder => builder.AppendItem("OwnerID", ownerID)), action, DateTime.MinValue, this.GetQueryMappingInfo().GetQueryTableName());
         }
 
-        public void UpdateByOwnerIDInContext(string ownerID, PhoneCollection phones)
+        public void UpdateByOwnerIDInContext(string ownerID, IEnumerable<Phone> phones)
         {
             ownerID.CheckStringIsNullOrEmpty("ownerID");
             phones.NullCheck("phones");
 
-            Dictionary<string, object> context = new Dictionary<string, object>();
-
-            SqlContextItem sqlContext = this.GetSqlContext();
-
-            this.DeleteInContext(builder => builder.AppendItem("OwnerID", ownerID));
-
-            foreach (Phone phone in phones)
-            {
-                sqlContext.AppendSqlInContext(TSqlBuilder.Instance, TSqlBuilder.Instance.DBStatementSeperator);
-                this.InnerInsertInContext(phone, sqlContext, context);
-            }
-        }
+            this.UpdateCollectionInContext(new InSqlClauseBuilder("OwnerID").AppendItem("ownerID"), phones);
+        }        
     }
 }

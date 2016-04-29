@@ -1,50 +1,29 @@
-﻿define([ppts.config.modules.customer,
-        ppts.config.dataServiceConfig.customerDataService],
+﻿define([ppts.config.modules.customer],
     function (customer) {
-        customer.registerController('customerViewController', [
-            '$scope',
-            '$state',
-            '$stateParams',
-            'customerDataService',
-            function ($scope, $state, $stateParams, customerDataService) {
+        customer.registerController('customerViewController', ['$state', '$location',
+            function ($state, $location) {
                 var vm = this;
+                vm.page = $location.$$search.prev;
 
-                // 页面初始化加载
-                (function () {
-                    customerDataService.getCustomerForUpdate($stateParams.id, function (result) {
-                        vm.customer = result.customer;
-                        vm.parent = result.parent;
-                        vm.customerStaffRelation = result.customerStaffRelation;
-                        $scope.$broadcast('dictionaryReady');
+                vm.tabs = [{
+                    title: '基本信息',
+                    route: 'profiles({prev:vm.page})',
+                    active: $state.includes('ppts.customer-view.profiles') || $state.includes('ppts.customer-view.profiles-edit')
+                }, {
+                    title: '学员家长',
+                    route: 'parents({prev:vm.page})',
+                    active: $state.includes('ppts.customer-view.parents') || $state.includes('ppts.customer-view.parents-edit')
+                }, {
+                    title: '跟进记录',
+                    route: 'follows({prev:vm.page})',
+                    active: $state.includes('ppts.customer-view.follows')
+                }];
+
+                vm.switchTab = function (scope) {
+                    angular.forEach(vm.tabs, function (tab) {
+                        tab.active = false;
                     });
-                })();
-
-                // 切换子视图
-                vm.loadView = function () {
-                    var baseDir = ppts.config.webportalBaseUrl + 'app/customer/potentialcustomer/customer-view';
-                    switch ($stateParams.page) {
-                        case 'info':
-                            return baseDir + '/customer-info.tpl.html';
-                        case 'edit':
-                            return baseDir + '/customer-edit.tpl.html';
-                    }
-                };
-
-                // 保存数据
-                vm.save = function () {
-                    customerDataService.updateCustomer({
-                        customer: vm.customer
-                    }, function () {
-                        vm.redirect('info');
-                    });
-                };
-
-                // 切换页面(用于编辑和取消)
-                vm.redirect = function (page) {
-                    $state.go('ppts.customer-view', {
-                        id: $stateParams.id,
-                        page: page
-                    });
+                    scope.tab.active = true;
                 };
             }]);
     });

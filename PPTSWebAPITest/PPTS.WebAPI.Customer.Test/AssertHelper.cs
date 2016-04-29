@@ -37,8 +37,8 @@ namespace PPTS.WebAPI.Customer.Test
             Assert.IsNotNull(expected);
             Assert.IsNotNull(actual);
 
-            Assert.AreEqual(expected.PhoneID, actual.PhoneID);
             Assert.AreEqual(expected.OwnerID, actual.OwnerID);
+            Assert.AreEqual(expected.ItemID, actual.ItemID);
             Assert.AreEqual(expected.PhoneNumber, actual.PhoneNumber);
         }
 
@@ -51,7 +51,7 @@ namespace PPTS.WebAPI.Customer.Test
 
             foreach (Phone expectedItem in expected)
             {
-                Phone actualItem = actual.Find(p => p.PhoneID == expectedItem.PhoneID);
+                Phone actualItem = actual.Find(p => p.OwnerID == expectedItem.OwnerID && p.ItemID == expectedItem.ItemID);
 
                 Assert.IsNotNull(actualItem);
 

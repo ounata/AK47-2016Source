@@ -1,11 +1,12 @@
 ﻿CREATE TABLE [CM].[AccountRefundAllots]
 (
     [ApplyID] NVARCHAR(36) NULL, 
+    [SortNo] INT NULL DEFAULT 0, 
 	[AllotID] NVARCHAR(36) NOT NULL DEFAULT newid(), 
     [TeacherID] NVARCHAR(50) NULL, 
-    [TeacherCode] NVARCHAR(36) NULL, 
     [TeacherName] NCHAR(10) NULL, 
     [TeacherType] NVARCHAR(32) NULL, 
+    [TeacherOACode] NVARCHAR(36) NULL, 
     [Subject] NVARCHAR(36) NULL, 
     [CategoryType] NVARCHAR(32) NULL, 
     [AllotAmount] DECIMAL(18, 2) NULL DEFAULT 0, 
@@ -46,13 +47,13 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level2name = N'TeacherID'
 GO
 EXEC sp_addextendedproperty @name = N'MS_Description',
-    @value = N'教师编码',
+    @value = N'教师OA编码',
     @level0type = N'SCHEMA',
     @level0name = N'CM',
     @level1type = N'TABLE',
     @level1name = N'AccountRefundAllots',
     @level2type = N'COLUMN',
-    @level2name = N'TeacherCode'
+    @level2name = 'TeacherOACode'
 GO
 EXEC sp_addextendedproperty @name = N'MS_Description',
     @value = N'教师姓名',
@@ -116,3 +117,12 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level1name = N'AccountRefundAllots',
     @level2type = NULL,
     @level2name = NULL
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'顺序号',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'AccountRefundAllots',
+    @level2type = N'COLUMN',
+    @level2name = N'SortNo'

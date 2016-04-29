@@ -52,10 +52,18 @@
     <Reference Include="PPTS.Data.Common">
       <HintPath>..\..\..\PPTSBin\PPTS.Data.Common.dll</HintPath>
     </Reference>
-    <Reference Include="PPTS.Data.Customers">
+    <Reference Include="PPTS.Data.Common.Entities">
+      <HintPath>..\..\..\PPTSBin\PPTS.Data.Common.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="PPTS.Data.Customers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=62ea08f894871798, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\PPTSBin\PPTS.Data.Customers.dll</HintPath>
     </Reference>
+    <Reference Include="PPTS.Data.Customers.Entities">
+      <HintPath>..\..\..\PPTSBin\PPTS.Data.Customers.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -76,11 +84,15 @@
     <Compile Include="DataHelper.cs" />
     <Compile Include="FakePhoneNumbers.cs" />
     <Compile Include="InheritedObjects.cs" />
+    <Compile Include="OutputHelper.cs" />
     <Compile Include="PotentialCustomerAdapterTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ParentAdapterTest.cs" />
     <Compile Include="PhoneAdapterTest.cs" />
-    <Compile Include="CustomerRelationAdapterTest.cs" />
+    <Compile Include="CustomerParentRelationAdapterTest.cs" />
+    <Compile Include="CustomerFulltextInfoAdapterTest.cs" />
+    <Compile Include="CustomerInfoQueryAdapterTest.cs" />
+    <Compile Include="CustomerFollowSummaryAdapterTest.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

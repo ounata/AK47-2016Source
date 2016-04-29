@@ -78,6 +78,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\PPTSBin\PPTS.Data.Common.dll</HintPath>
     </Reference>
+    <Reference Include="PPTS.Data.Common.Entities">
+      <HintPath>..\..\..\PPTSBin\PPTS.Data.Common.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="PPTS.Web.MVC.Library">
       <HintPath>..\..\..\PPTSBin\PPTS.Web.MVC.Library.dll</HintPath>
     </Reference>

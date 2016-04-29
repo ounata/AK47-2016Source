@@ -1,0 +1,153 @@
+<!-- #开始：位置条 -->
+<style>
+.max-button {
+    width: 200px;
+    height: 100px;
+    background-color: #660e0b;
+}
+</style>
+<div class="breadcrumbs" id="breadcrumbs">
+    <script type="text/javascript">
+    try {
+        ace.settings.check('breadcrumbs', 'fixed')
+    } catch (e) {}
+    </script>
+    <ul class="breadcrumb">
+        <li class="active">
+            <i class="ace-icon fa fa-home home-icon"></i> 首页
+        </li>
+        <li class="active">
+            <i class="ace-icon fa fa-buttons"></i> AutoComplete输入
+        </li>
+    </ul>
+</div>
+<!-- /结束：位置条 -->
+<div class="page-content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h3 class="header smaller lighter green">应用范例</h3>
+                    <div class="well well-sm form-group">
+                        <tags-input class="mcs-tags-input-sm from-control" add-from-autocomplete-only="true" max-tags="1" add-on-space="true" add-on-enter="true" ng-model="vm.teachers" key-property="teacherId" display-property="name" placeholder="姓名">
+                            <auto-complete min-length="1" select-first-match="true" source="vm.queryTeacherList($query)"></auto-complete>
+                        </tags-input>
+                    </div>
+                    <ul>
+                        <li ng-repeat="t in vm.teachers">
+                            <span>{{t.name}}</span>
+                        </li>
+                    </ul>
+                    <h4>与树控件配合的使用说明:</h4>
+                    <p>在通过树控件选取节点后拿到已经选取的节点数据，加入到tags-input 绑定的数据集中，例如：vm.teachers = [{ "teacherId": "1", "name": "tom" }];
+                    </p>
+                </div>
+                <div class="laycode col-sm-12">
+                    <h3 class="header smaller lighter green">示例代码</h3>
+                    <div class="code_box code_skin0">
+                        <article id="content" class="markdown-body">
+                            <h4>HTML</h4>
+                            <div class="codehilite"><pre> <span class="p">&lt;</span><span class="nt">tags-input</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;mcs-tags-input-lg&quot;</span> <span class="na">ng-disable</span><span class="o">=</span><span class="s">&quot;true&quot;</span> <span class="na">ng-model</span><span class="o">=</span><span class="s">&quot;vm.teachers&quot;</span> <span class="na">key-property</span><span class="o">=</span><span class="s">&quot;teacherId&quot;</span> <span class="na">display-property</span><span class="o">=</span><span class="s">&quot;name&quot;</span> <span class="na">placeholder</span><span class="o">=</span><span class="s">&quot;姓名&quot;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">auto-complete</span> <span class="na">min-length</span><span class="o">=</span><span class="s">&quot;1&quot;</span> <span class="na">source</span><span class="o">=</span><span class="s">&quot;vm.queryTeacherList($query)&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">auto-complete</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">tags-input</span><span class="p">&gt;</span>
+</pre></div>
+                            <h4>JS</h4>
+                            <div class="codehilite"><pre><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="s1">&#39;use strict&#39;</span><span class="p">;</span>
+    <span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">&#39;app.component&#39;</span><span class="p">).</span><span class="nx">controller</span><span class="p">(</span><span class="s1">&#39;MCSAutoCompleteController&#39;</span><span class="p">,</span> <span class="p">[</span>
+        <span class="s1">&#39;$scope&#39;</span><span class="p">,</span> <span class="s1">&#39;$http&#39;</span><span class="p">,</span>
+
+        <span class="kd">function</span> <span class="p">(</span><span class="nx">$scope</span><span class="p">,</span> <span class="nx">$http</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">vm</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+            <span class="nx">$scope</span><span class="p">.</span><span class="nx">vm</span> <span class="o">=</span> <span class="nx">vm</span><span class="p">;</span>
+
+            <span class="nx">vm</span><span class="p">.</span><span class="nx">tags</span> <span class="o">=</span> <span class="p">[{</span>
+                <span class="nx">teacherId</span><span class="o">:</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span>
+                <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;tom&#39;</span>
+            <span class="p">},</span> <span class="p">{</span>
+                <span class="nx">teacherId</span><span class="o">:</span> <span class="s1">&#39;2&#39;</span><span class="p">,</span>
+                <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;jack&#39;</span>
+            <span class="p">},</span> <span class="p">{</span>
+                <span class="nx">teacherId</span><span class="o">:</span> <span class="s1">&#39;3&#39;</span><span class="p">,</span>
+                <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;jerry&#39;</span>
+            <span class="p">}];</span>
+
+            <span class="nx">vm</span><span class="p">.</span><span class="nx">queryTeacherList</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">query</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="p">[];</span>
+
+                <span class="nx">vm</span><span class="p">.</span><span class="nx">tags</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">item</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="nx">item</span><span class="p">.</span><span class="nx">name</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">query</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="nx">result</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">item</span><span class="p">);</span>
+                    <span class="p">}</span>
+
+                <span class="p">});</span>
+
+                <span class="k">return</span> <span class="nx">result</span><span class="p">;</span>
+            <span class="p">};</span>
+
+        <span class="p">}</span>
+    <span class="p">]);</span>
+<span class="p">})();</span>
+</pre></div>
+                        </article>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <h3 class="header smaller lighter green">参数说明</h3>
+                    <h5>tags-input</h5>
+                    <div class="codehilite"><pre>&lt;tags-input
+  ng-model=&quot;{string}&quot;
+  [template=&quot;{string}&quot;]
+  [display-property=&quot;{string}&quot;]
+  [key-property=&quot;{string}&quot;]
+  [type=&quot;{string}&quot;]
+  [text=&quot;{string}&quot;]
+  [tabindex=&quot;{number}&quot;]
+  [placeholder=&quot;{string}&quot;]
+  [min-length=&quot;{number}&quot;]
+  [max-length=&quot;{number}&quot;]
+  [min-tags=&quot;{number}&quot;]
+  [max-tags=&quot;{number}&quot;]
+  [allow-leftover-text=&quot;{boolean}&quot;]
+  [remove-tag-symbol=&quot;{string}&quot;]
+  [add-on-enter=&quot;{boolean}&quot;]
+  [add-on-space=&quot;{boolean}&quot;]
+  [add-on-comma=&quot;{boolean}&quot;]
+  [add-on-blur=&quot;{boolean}&quot;]
+  [add-on-paste=&quot;{boolean}&quot;]
+  [paste-split-pattern=&quot;{string}&quot;]
+  [replace-spaces-with-dashes=&quot;{boolean}&quot;]
+  [allowed-tags-pattern=&quot;{string}&quot;]
+  [enable-editing-last-tag=&quot;{boolean}&quot;]
+  [add-from-autocomplete-only=&quot;{boolean}&quot;]
+  [spellcheck=&quot;{boolean}&quot;]
+  [on-tag-adding=&quot;{expression}&quot;]
+  [on-tag-added=&quot;{expression}&quot;]
+  [on-invalid-tag=&quot;{expression}&quot;]
+  [on-tag-removing=&quot;{expression}&quot;]
+  [on-tag-removed=&quot;{expression}&quot;]
+  [on-tag-clicked=&quot;{expression}&quot;]&gt;
+&lt;/tags-input&gt;
+</pre></div>
+                    <h4>autocomplete</h4>
+                    <div class="codehilite"><pre>&lt;auto-complete
+  source=&quot;{expression}&quot;
+  [template=&quot;{string}&quot;]
+  [display-property=&quot;{string}&quot;]
+  [debounce-delay=&quot;{number}&quot;]
+  [min-length=&quot;{number}&quot;]
+  [highlight-matched-text=&quot;{boolean}&quot;]
+  [max-results-to-show=&quot;{number}&quot;]
+  [load-on-down-arrow=&quot;{boolean}&quot;]
+  [load-on-empty=&quot;{boolean}&quot;]
+  [load-on-focus=&quot;{boolean}&quot;]
+  [select-first-match=&quot;{boolean}&quot;]&gt;
+&lt;/auto-complete&gt;ng-app=&quot;string&quot;
+</pre></div>
+                    <p>Reference:
+                        <a href="http://mbenford.github.io/ngTagsInput/documentation/api">autocomplete</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

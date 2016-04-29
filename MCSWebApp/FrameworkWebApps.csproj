@@ -40,6 +40,7 @@
     <ProjectItem Include="DocServiceHost\DocServiceHost.csproj" />
     <ProjectItem Include="SyncMaterialFileToDocCenterService\SyncMaterialFileToDocCenterService.csproj" />
     <ProjectItem Include="MCS.Web.Component\MCS.Web.Component.csproj" />
+	<ProjectItem Include="MCS.Web.API\MCS.Web.API.csproj" />
   </ItemGroup>
   <Target Name="BuildOtherProjects">
     <MSBuild Projects="@(ProjectItem)" RebaseOutputs="True" />

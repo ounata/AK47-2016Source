@@ -54,6 +54,7 @@ namespace MCS.Library.Net.SNTP
                 }
                 catch (System.Exception)
                 {
+                    //Console.WriteLine(ex.Message);
                 }
 
                 try
@@ -189,10 +190,20 @@ namespace MCS.Library.Net.SNTP
         {
             get
             {
-                DateTime result = AdjustedLocalTime;
+                DateTime result = DateTime.MinValue;
 
-                if (SNTPSettings.GetConfigOrDefault().DefaultDateTimeKind == DateTimeKind.Utc)
-                    result = AdjustedUtcTime;
+                switch (SNTPSettings.GetConfigOrDefault().DefaultDateTimeKind)
+                {
+                    case SNTPDateTimeKind.ByTimeZoneContext:
+                        result = TimeZoneContext.Current.ConvertTimeFromUtc(AdjustedUtcTime);
+                        break;
+                    case SNTPDateTimeKind.Local:
+                        result = AdjustedLocalTime;
+                        break;
+                    case SNTPDateTimeKind.Utc:
+                        result = AdjustedUtcTime;
+                        break;
+                }
 
                 return result;
             }

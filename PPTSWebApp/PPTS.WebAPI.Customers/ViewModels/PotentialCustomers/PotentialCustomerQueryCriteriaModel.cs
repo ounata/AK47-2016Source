@@ -1,5 +1,4 @@
 ﻿using System;
-using MCS.Library.Data.Builder;
 using MCS.Library.Data.Mapping;
 using MCS.Library.Data;
 
@@ -7,11 +6,9 @@ namespace PPTS.WebAPI.Customers.ViewModels.PotentialCustomers
 {
     public class PotentialCustomerQueryCriteriaModel
     {
-        [ConditionMapping("CustomerName", EscapeLikeString = true, Prefix = "%", Postfix = "%", Operation = "LIKE")]
-        public string Name { get; set; }
-
-        [ConditionMapping("CustomerCode")]
-        public string CustomerCode { get; set; }
+        [ConditionMapping("", Template = "CONTAINS(pcf.*, ${Data}$)")]
+        //[ConditionMapping("ParentSearchContent", Template = "CONTAINS(${DataField}$, ${Data}$)")]
+        public string Keyword { get; set; }
 
         [InConditionMapping("EntranceGrade")]
         public int[] EntranceGrades { get; set; }

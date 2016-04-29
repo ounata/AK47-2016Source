@@ -1,20 +1,21 @@
 ﻿CREATE TABLE [CM].[CustomerStaffRelations]
 (
-	[ID] NVARCHAR(36) NOT NULL DEFAULT newid() , 
-    [RelationType] NVARCHAR(32) NOT NULL,
 	[CustomerID] NVARCHAR(36) NOT NULL , 
-    [OrgID] NVARCHAR(36) NOT NULL, 
-    [OrgName] NVARCHAR(64) NULL, 
     [StaffID] NVARCHAR(36) NOT NULL, 
     [StaffName] NVARCHAR(64) NULL, 
     [StaffJobID] NVARCHAR(36) NOT NULL, 
-    [StaffJobName] NVARCHAR(64) NULL, 
+    [StaffJobName] NVARCHAR(64) NULL,
+    [StaffJobOrgID] NVARCHAR(36) NOT NULL, 
+    [StaffJobOrgName] NVARCHAR(64) NULL, 
+    [RelationType] NVARCHAR(32) NOT NULL,
 	[CreatorID] NVARCHAR(36) NULL,
 	[CreatorName] NVARCHAR(64) NULL,
-	[CreateTime] DATETIME NOT NULL DEFAULT getdate(),
+	[CreateTime] DATETIME NULL DEFAULT GETUTCDATE(),
+    [VersionStartTime] DATETIME NOT NULL DEFAULT GETUTCDATE(), 
+    [VersionEndTime] DATETIME NULL DEFAULT '99990909 00:00:00', 
 	[TenantCode] NVARCHAR(36) NULL, 
-    CONSTRAINT [PK_CustomerStaffRelations] PRIMARY KEY NONCLUSTERED ([ID]), 
-    CONSTRAINT [IX_CustomerStaffRelations] UNIQUE ([CustomerID], [StaffJobID])
+	[RowUniqueID] NVARCHAR(36) NOT NULL
+    CONSTRAINT [PK_CustomerStaffRelations] PRIMARY KEY NONCLUSTERED ([CustomerID], [RelationType], [VersionStartTime]) DEFAULT (CONVERT([nvarchar](36),newid())) 
 )
 
 GO
@@ -59,7 +60,7 @@ CREATE INDEX [IX_CustomerStaffRelations_1] ON [CM].[CustomerStaffRelations] ([St
 
 GO
 EXEC sp_addextendedproperty @name = N'MS_Description',
-    @value = N'1 销售关系: 学生，销售（咨询师）[原来写的是家长，销售关系，但是看到逻辑是学生和销售关系];2 教管关系：学生，学管（班主任）;3 教学关系: 学生，老师;4 电销关系',
+    @value = N'1 咨询关系: 学生，咨询师;2 教管关系：学生，学管师;3 教学关系: 学生，老师; 4 电销关系：学生，坐席；5 市场关系：学生，市场专员',
     @level0type = N'SCHEMA',
     @level0name = N'CM',
     @level1type = N'TABLE',
@@ -103,14 +104,7 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level2type = N'COLUMN',
     @level2name = N'TenantCode'
 GO
-EXEC sp_addextendedproperty @name = N'MS_Description',
-    @value = N'主键',
-    @level0type = N'SCHEMA',
-    @level0name = N'CM',
-    @level1type = N'TABLE',
-    @level1name = N'CustomerStaffRelations',
-    @level2type = N'COLUMN',
-    @level2name = 'ID'
+
 GO
 EXEC sp_addextendedproperty @name = N'MS_Description',
     @value = N'员工岗位ID',
@@ -131,19 +125,48 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level2name = N'StaffJobName'
 GO
 EXEC sp_addextendedproperty @name = N'MS_Description',
-    @value = N'员工所属组织机构ID',
+    @value = N'岗位归属组织机构ID',
     @level0type = N'SCHEMA',
     @level0name = N'CM',
     @level1type = N'TABLE',
     @level1name = N'CustomerStaffRelations',
     @level2type = N'COLUMN',
-    @level2name = N'OrgID'
+    @level2name = 'StaffJobOrgID'
 GO
 EXEC sp_addextendedproperty @name = N'MS_Description',
-    @value = N'员工所属组织机构名称',
+    @value = N'岗位归属组织机构名称',
     @level0type = N'SCHEMA',
     @level0name = N'CM',
     @level1type = N'TABLE',
     @level1name = N'CustomerStaffRelations',
     @level2type = N'COLUMN',
-    @level2name = N'OrgName'
+    @level2name = 'StaffJobOrgName'
+GO
+
+
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'版本开始时间',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'CustomerStaffRelations',
+    @level2type = N'COLUMN',
+    @level2name = N'VersionStartTime'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'版本结束时间',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'CustomerStaffRelations',
+    @level2type = N'COLUMN',
+    @level2name = N'VersionEndTime'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'行ID。自动生成。代码上不使用',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'CustomerStaffRelations',
+    @level2type = N'COLUMN',
+    @level2name = N'RowUniqueID'

@@ -69,6 +69,7 @@
     <Folder Include="OM" />
     <Folder Include="OM\Stored Procedures" />
     <Folder Include="OM\Tables" />
+    <Folder Include="OM\Views" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Security\OM.sql" />
@@ -89,11 +90,17 @@
     <Build Include="OM\Tables\ShoppingCarts.sql" />
     <Build Include="OM\Tables\AssetConfirms.sql" />
     <Build Include="OM\Tables\AccompanyAssigns.sql" />
+    <Build Include="OM\Views\v_OrderItems.sql" />
+    <Build Include="WF\Tables\ProcessQueues.sql" />
+    <Build Include="WF\Tables\ProcessQueueLogs.sql" />
+    <Build Include="OM\Views\Assets_Current.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PPTS.Data.Order.Local.Dev.DB.publish.xml" />
     <None Include="PPTS.Data.Order.Local.Test.DB.publish.xml" />
     <None Include="PPTS.Data.Order.XueDa.Dev.DB.publish.xml" />
+    <None Include="PPTS.Data.Order.XueDa.Dev.Test.DB.publish.xml" />
+    <None Include="PPTS.Data.Order.Cloud.Test.DB.publish.xml" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PPTS.Data.Orders.DB.refactorlog" />

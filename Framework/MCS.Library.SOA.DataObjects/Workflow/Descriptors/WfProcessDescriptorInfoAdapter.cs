@@ -142,9 +142,9 @@ namespace MCS.Library.SOA.DataObjects.Workflow
             base.BeforeInnerUpdate(data, context);
         }
 
-        protected override string GetUpdateSql(WfProcessDescriptorInfo data, ORMappingItemCollection mappings, Dictionary<string, object> context)
+        protected override string GetUpdateSql(WfProcessDescriptorInfo data, ORMappingItemCollection mappings, Dictionary<string, object> context, string[] ignoreProperties)
         {
-            UpdateSqlClauseBuilder uBuilder = ORMapping.GetUpdateSqlClauseBuilder(data, mappings);
+            UpdateSqlClauseBuilder uBuilder = ORMapping.GetUpdateSqlClauseBuilder(data, mappings, ignoreProperties);
             uBuilder.AppendTenantCode();
 
             WhereSqlClauseBuilder wBuilder = ORMapping.GetWhereSqlClauseBuilderByPrimaryKey(data, mappings);
@@ -156,9 +156,9 @@ namespace MCS.Library.SOA.DataObjects.Workflow
                 wBuilder.ToSqlString(TSqlBuilder.Instance));
         }
 
-        protected override string GetInsertSql(WfProcessDescriptorInfo data, ORMappingItemCollection mappings, Dictionary<string, object> context)
+        protected override string GetInsertSql(WfProcessDescriptorInfo data, ORMappingItemCollection mappings, Dictionary<string, object> context, string[] ignoreProperties)
         {
-            InsertSqlClauseBuilder iBuilder = ORMapping.GetInsertSqlClauseBuilder(data, mappings);
+            InsertSqlClauseBuilder iBuilder = ORMapping.GetInsertSqlClauseBuilder(data, mappings, ignoreProperties);
 
             iBuilder.AppendTenantCode();
 

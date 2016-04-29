@@ -67,6 +67,9 @@
         var reMoz = new RegExp("rv:(\\d+\\.\\d+(?:\\.\\d+)?)");
         reMoz.test(sUserAgent);
         _browser.version = parseFloat(RegExp['$1']);
+        if (_browser.version == 11) {
+            _browser.msie = true; //fix the IE11
+        }
         _browser.mozilla = true;
     }
 

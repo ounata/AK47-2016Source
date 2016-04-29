@@ -7,9 +7,9 @@ using PPTS.WebAPI.Customers.ViewModels.CustomerFollows;
 namespace PPTS.WebAPI.Customers.Executors
 {
     [DataExecutorDescription("编辑跟进记录")]
-    public class EditCustomerFollowExecutor : PPTSEditCustomerExecutorBase<EditableCustomerFollowModel>
+    public class EditCustomerFollowExecutor : PPTSEditCustomerExecutorBase<EditableFollowModel>
     {
-        public EditCustomerFollowExecutor(EditableCustomerFollowModel model)
+        public EditCustomerFollowExecutor(EditableFollowModel model)
             : base(model, null)
         {
             //model.NullCheck("model");

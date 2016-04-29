@@ -265,6 +265,8 @@
     <None Include="MCSWorkflowDB.local.archive.publish.xml" />
     <None Include="Assemblies\MCS.SqlServer.Compression.dll" />
     <None Include="学大开发环境.publish.xml" />
+    <None Include="学大开发环境.Cloud.Test.publish.xml" />
+    <None Include="学大开发环境.Test.publish.xml" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />

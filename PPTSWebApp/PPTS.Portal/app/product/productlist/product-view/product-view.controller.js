@@ -2,8 +2,8 @@ define([ppts.config.modules.product,
         ppts.config.dataServiceConfig.productDataService],
 function (product) {
     product.registerController('productViewController', [
-        '$scope', '$state', '$stateParams', 'blockUI', 'productDataService',
-        function ($scope, $state, $stateParams, blockUI, productDataService) {
+        '$scope', '$state', 'dataSyncService', '$stateParams', 'blockUI', 'productDataService',
+        function ($scope, $state, dataSyncService, $stateParams, blockUI, productDataService) {
             var vm = this;
 
             vm.id = $stateParams.id;
@@ -18,6 +18,8 @@ function (product) {
                 vm.product = result.product;
                 vm.productExOfCourse = result.productExOfCourse;
                 vm.salaryRules = result.salaryRules;
+
+                dataSyncService.injectPageDict(['ifElse']);
 
                 console.log(result);
             });

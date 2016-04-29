@@ -1,0 +1,32 @@
+﻿<!--查看订单-->
+
+
+<div class="mcs-panel-search well well-sm">
+    <div class="portlet">
+        <div class="portlet-title line">
+            <div class="caption">
+                <label class="quick-search"><i class="ace-icon fa fa-search bigger-125"></i> 帐户信息</label>
+            </div>
+        </div>
+        <div class="portlet-body">
+
+            <!-- #开始：帐户信息列表.数据表格 -->
+            <mcs-datatable data="vm.account.data" />
+            <!-- /结束：帐户信息列表.数据表格 -->
+
+        </div>
+    </div>
+</div>
+<!-- /结束：订购列表.查询条件 -->
+<!-- #开始：订购列表.工具条 -->
+<div class="mcs-panel-toolbar">
+
+    <mcs-button category="edit" text="继续选购" click="vm.goBuy()"></mcs-button>
+    <mcs-button category="edit" text="删除已购产品" click="vm.delete()" ng-disabled="vm.data.rowsSelected.length<1"></mcs-button>
+    <mcs-button category="add" text="提交审批" click="vm.submit()" ng-disabled="vm.data.rowsSelected.length<1"></mcs-button>
+
+</div>
+<!-- /结束：订购列表.工具条 -->
+<!-- #开始：订购列表.数据表格 -->
+<mcs-datatable data="vm.data" />
+<!-- /结束：订购列表.数据表格 -->

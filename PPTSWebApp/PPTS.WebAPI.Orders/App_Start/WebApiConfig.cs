@@ -1,5 +1,9 @@
 ﻿using System.Web.Http;
 using Newtonsoft.Json.Serialization;
+using System.Net.Http.Formatting;
+using MCS.Web.MVC.Library.Converters;
+using MCS.Web.MVC.Library.Filters;
+using Newtonsoft.Json.Converters;
 
 namespace PPTS.WebAPI.Orders
 {
@@ -17,8 +21,12 @@ namespace PPTS.WebAPI.Orders
             );
 
 
-            config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+      config.Formatters.Clear();
+      config.Formatters.Add(new JsonMediaTypeFormatter());
+      config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+      config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new JavascriptUpwardDatetimeConverter());
+      config.Filters.Add(new ApiExceptionFilterAttribute());
 
-        }
+    }
     }
 }

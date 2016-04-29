@@ -32,6 +32,23 @@ namespace MCS.Library.Data.Test.DataObjects
             set;
         }
 
+        [ORFieldMapping("ModifierID")]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update)]
+        public string ModifierID
+        {
+            get;
+            set;
+        }
+
+        [ORFieldMapping("ModifyTime", UtcTimeToLocal = true)]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update, DefaultExpression = "GETUTCDATE()", ForceUseDefaultExpression = true)]
+        public DateTime ModifyTime
+        {
+            get;
+            set;
+        }
+
+        [ORFieldMapping("VersionEndTime", UtcTimeToLocal = true)]
         [SqlBehavior(BindingFlags = ClauseBindingFlags.Select | ClauseBindingFlags.Where)]
         public DateTime VersionEndTime
         {
@@ -39,7 +56,7 @@ namespace MCS.Library.Data.Test.DataObjects
             set;
         }
 
-        [ORFieldMapping("VersionStartTime", PrimaryKey = true)]
+        [ORFieldMapping("VersionStartTime", PrimaryKey = true, UtcTimeToLocal = true)]
         [SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update)]
         public DateTime VersionStartTime
         {

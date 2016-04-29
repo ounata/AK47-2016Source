@@ -100,7 +100,11 @@ namespace MCS.Library.Data
         }
     }
 
-    internal class SqlContext : Dictionary<string, SqlContextItem>
+    /// <summary>
+    /// SQL语句上下文
+    /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2237:MarkISerializableTypesWithSerializable")]
+    public class SqlContext : Dictionary<string, SqlContextItem>
     {
         private const string NamePostfixSqlContext = ".SqlContext";
 

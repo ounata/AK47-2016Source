@@ -92,13 +92,7 @@ namespace MCS.Library.Data.Adapters
             prp.NullCheck("prp");
 
             int totalCount = 0;
-            string where = string.Empty;
-
-            if (conditionObject != null)
-            {
-                IConnectiveSqlClause connectiveBuilder = ConditionMapping.GetConnectiveClauseBuilder(conditionObject);
-                where = connectiveBuilder.ToSqlString(TSqlBuilder.Instance);
-            }
+            string where = ConditionObjectToWhereString(conditionObject);
 
             string orderBy = string.Empty;
 
@@ -108,7 +102,11 @@ namespace MCS.Library.Data.Adapters
                 orderBy = wrappedBuilder.ToSqlString(TSqlBuilder.Instance);
             }
 
-            return this.InnerQuery(prp.ToRowIndex(), prp.PageSize, select, from, where, orderBy, totalCount);
+            PagedQueryResult<T, TCollection> result = this.InnerQuery(prp.ToRowIndex(), prp.PageSize, select, from, where, orderBy, totalCount);
+
+            this.OnAfterQuery(result.PagedData);
+
+            return result;
         }
 
         /// <summary>
@@ -124,9 +122,13 @@ namespace MCS.Library.Data.Adapters
 
             int totalCount = 0;
 
-            TCollection list = Query(prp.ToRowIndex(), prp.PageSize, where, orderBy, ref totalCount);
+            //TCollection list = Query(prp.ToRowIndex(), prp.PageSize, where, orderBy, ref totalCount);
 
-            return this.InnerQuery(prp.ToRowIndex(), prp.PageSize, string.Empty, string.Empty, where, orderBy, totalCount);
+            PagedQueryResult<T, TCollection> result = this.InnerQuery(prp.ToRowIndex(), prp.PageSize, string.Empty, string.Empty, where, orderBy, totalCount);
+
+            this.OnAfterQuery(result.PagedData);
+
+            return result;
         }
 
         private PagedQueryResult<T, TCollection> InnerQuery(int startRowIndex, int maximumRows, string select, string from, string where, string orderBy, int totalCount)
@@ -234,6 +236,24 @@ namespace MCS.Library.Data.Adapters
         protected virtual ORMappingItemCollection GetMappingInfo()
         {
             return ORMapping.GetMappingInfo<T>();
+        }
+
+        private static string ConditionObjectToWhereString(object conditionObject)
+        {
+            string result = string.Empty;
+
+            if (conditionObject != null)
+            {
+                if (conditionObject is string)
+                    result = (string)conditionObject;
+                else
+                {
+                    IConnectiveSqlClause connectiveBuilder = ConditionMapping.GetConnectiveClauseBuilder(conditionObject);
+                    result = connectiveBuilder.ToSqlString(TSqlBuilder.Instance);
+                }
+            }
+
+            return result;
         }
     }
 }

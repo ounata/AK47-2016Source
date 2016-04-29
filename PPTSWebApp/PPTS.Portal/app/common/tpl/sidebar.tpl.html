@@ -36,15 +36,24 @@
         <b class="arrow"></b>
     </li>
     <!--审批管理-->
-    <li ui-sref-active="active">
-        <a ui-sref="#" ng-click="vm.reset()">
+    <li ui-sref-active="active" class="hsub" ng-class="{'open':vm.showSubMenu('auditing')}" ppts-functions="审批管理">
+        <a href="#" class="dropdown-toggle" ng-click="vm.toggle('auditing')">
             <i class="menu-icon fa fa-check-square-o"></i>
             <span class="menu-text">审批管理 </span>
+            <b class="arrow fa fa-angle-{{vm.showSubMenu('auditing')?'left':'down'}}"></b>
         </a>
         <b class="arrow"></b>
+        <ul class="submenu" style="display:{{vm.showSubMenu('auditing')?'block':'none'}}" ppts-functions="审批管理">
+            <li ng-class="{'active': $state.includes('ppts.product')}">
+                <a ui-sref="ppts.product">
+                    <i class="menu-icon fa fa-caret-right"></i>审批管理
+                </a>
+                <b class="arrow"></b>
+            </li>
+        </ul>
     </li>
     <!--客户管理-->
-    <li ui-sref-active="active" class="hsub" ng-class="{'open':vm.showSubMenu('customer')}">
+    <li ui-sref-active="active" class="hsub" ng-class="{'open':vm.showSubMenu('customer')}" ppts-functions="潜客管理,市场潜客管理,跟进管理,上门管理,学员管理,回访记录管理,成绩管理,教学服务会管理,客户反馈管理,周反馈管理">
         <a href="#" class="dropdown-toggle" ng-click="vm.toggle('customer')">
             <i class="menu-icon fa fa-user"></i>
             <span class="menu-text">客户管理 </span>
@@ -52,70 +61,70 @@
         </a>
         <b class="arrow"></b>
         <ul class="submenu" style="display:{{vm.showSubMenu('customer')?'block':'none'}}">
-            <li ng-class="{'active': $state.includes('ppts.customer')}" ppts-job-functions="学员列表查看,jf2,jf3" ppts-functions="f1,f2,f3">
+            <li ng-class="{'active': $state.includes('ppts.customer')}" ppts-functions="潜客管理">
                 <a ui-sref="ppts.customer">
                     <i class="menu-icon fa fa-caret-right"></i>潜客管理
                 </a>
                 <b class="arrow"></b>
             </li>
-            <li ng-class="{'active': $state.includes('ppts.market')}" ppts-job-functions="jf1,jf2,jf3" ppts-functions="f1,f2,f3">
+            <li ng-class="{'active': $state.includes('ppts.market')}" ppts-functions="市场潜客管理">
                 <a ui-sref="ppts.market">
                     <i class="menu-icon fa fa-caret-right"></i>市场资源
                 </a>
                 <b class="arrow"></b>
             </li>
-            <li ng-class="{'active': $state.includes('ppts.follow')}">
+            <li ng-class="{'active': $state.includes('ppts.follow')}" ppts-functions="跟进管理">
                 <a ui-sref="ppts.follow">
                     <i class="menu-icon fa fa-caret-right"></i>跟进管理
                 </a>
                 <b class="arrow"></b>
             </li>
-            <li ng-class="{'active': $state.includes('ppts.confirmdoor')}">
+            <li ng-class="{'active': $state.includes('ppts.confirmdoor')}" ppts-functions="上门管理">
                 <a ui-sref="ppts.confirmdoor">
                     <i class="menu-icon fa fa-caret-right"></i>上门管理
                 </a>
                 <b class="arrow"></b>
             </li>
-            <li ng-class="{'active': $state.includes('ppts.student')}">
+            <li ng-class="{'active': $state.includes('ppts.student')}" ppts-functions="学员管理">
                 <a ui-sref="ppts.student">
                     <i class="menu-icon fa fa-caret-right"></i>学员管理
                 </a>
                 <b class="arrow"></b>
             </li>
-            <li ng-class="{'active': $state.includes('ppts.returnvisit')}">
+            <li ng-class="{'active': $state.includes('ppts.returnvisit')}" ppts-functions="回访记录管理">
                 <a ui-sref="ppts.returnvisit">
                     <i class="menu-icon fa fa-caret-right"></i>回访记录
                 </a>
                 <b class="arrow"></b>
             </li>
-            <li ng-class="{'active': $state.includes('ppts.score')}">
+            <li ng-class="{'active': $state.includes('ppts.score')}" ppts-functions="成绩管理">
                 <a ui-sref="ppts.score">
                     <i class="menu-icon fa fa-caret-right"></i>成绩管理
                 </a>
                 <b class="arrow"></b>
             </li>
-            <li ng-class="{'active': $state.includes('ppts.feedback')}">
+            <li ng-class="{'active': $state.includes('ppts.customermeeting')}" ppts-functions="教学服务会管理">
+                <a ui-sref="ppts.customermeeting">
+                    <i class="menu-icon fa fa-caret-right"></i>教学服务会
+                </a>
+                <b class="arrow"></b>
+            </li>
+            <li ng-class="{'active': $state.includes('ppts.feedback')}" ppts-functions="客户反馈管理">
                 <a ui-sref="ppts.feedback">
                     <i class="menu-icon fa fa-caret-right"></i>客户反馈
                 </a>
                 <b class="arrow"></b>
             </li>
-            <li ng-class="{'active': $state.includes('ppts.weeklyfeedback')}">
+            <li ng-class="{'active': $state.includes('ppts.weeklyfeedback')}" ppts-functions="学大反馈管理">
                 <a ui-sref="ppts.weeklyfeedback">
-                    <i class="menu-icon fa fa-caret-right"></i>周反馈
-                </a>
-                <b class="arrow"></b>
-            </li>
-            <li ng-class="{'active': $state.includes('ppts.parentsmeeting')}">
-                <a ui-sref="ppts.parentsmeeting">
-                    <i class="menu-icon fa fa-caret-right"></i>学情会
+                    <i class="menu-icon fa fa-caret-right"></i>学大反馈
                 </a>
                 <b class="arrow"></b>
             </li>
         </ul>
     </li>
     <!--缴费管理-->
-    <li ui-sref-active="active" class="hsub" ng-class="{'open':vm.showSubMenu('account')}">
+    <li ui-sref-active="active" class="hsub" ng-class="{'open':vm.showSubMenu('account')}" ppts-functions="缴费单管理,收费管理,退费管理,资产兑换查询">
         <a href="#" class="dropdown-toggle" ng-click="vm.toggle('account')">
             <i class="menu-icon fa fa-credit-card"></i>
             <span class="menu-text">缴费管理 </span>
@@ -123,40 +132,34 @@
         </a>
         <b class="arrow"></b>
         <ul class="submenu" style="display:{{vm.showSubMenu('account')?'block':'none'}}">
-            <li ng-class="{'active': $state.includes('ppts.receipt')}">
+            <li ng-class="{'active': $state.includes('ppts.receipt')}" ppts-functions="缴费单管理">
                 <a ui-sref="ppts.receipt">
                     <i class="menu-icon fa fa-caret-right"></i>缴费单管理
                 </a>
                 <b class="arrow"></b>
             </li>
-            <li ng-class="{'active': $state.includes('ppts.pay')}">
+            <li ng-class="{'active': $state.includes('ppts.pay')}" ppts-functions="收费管理">
                 <a ui-sref="ppts.pay">
-                    <i class="menu-icon fa fa-caret-right"></i>付费管理
+                    <i class="menu-icon fa fa-caret-right"></i>收费管理
                 </a>
                 <b class="arrow"></b>
             </li>
-            <li ng-class="{'active': $state.includes('ppts.refund')}">
+            <li ng-class="{'active': $state.includes('ppts.refund')}" ppts-functions="退费管理">
                 <a ui-sref="ppts.refund">
                     <i class="menu-icon fa fa-caret-right"></i>退费管理
                 </a>
                 <b class="arrow"></b>
             </li>
-            <li ng-class="{'active': $state.includes('ppts.assetexchange')}">
+            <li ng-class="{'active': $state.includes('ppts.assetexchange')}" ppts-functions="资产兑换查询">
                 <a ui-sref="ppts.assetexchange">
                     <i class="menu-icon fa fa-caret-right"></i>资产兑换
-                </a>
-                <b class="arrow"></b>
-            </li>
-            <li ng-class="{'active': $state.includes('ppts.unionpay')}">
-                <a ui-sref="ppts.unionpay">
-                    <i class="menu-icon fa fa-caret-right"></i>银联对接
                 </a>
                 <b class="arrow"></b>
             </li>
         </ul>
     </li>
     <!--订购管理-->
-    <li ui-sref-active="active" class="hsub" ng-class="{'open':vm.showSubMenu('order')}">
+    <li ui-sref-active="active" class="hsub" ng-class="{'open':vm.showSubMenu('order')}" ppts-functions="订购管理,退订管理">
         <a href="#" class="dropdown-toggle" ng-click="vm.toggle('order')">
             <i class="menu-icon fa fa-shopping-bag"></i>
             <span class="menu-text">订购管理 </span>
@@ -164,28 +167,22 @@
         </a>
         <b class="arrow"></b>
         <ul class="submenu" style="display:{{vm.showSubMenu('order')?'block':'none'}}">
-            <li ng-class="{'active': $state.includes('ppts.purchase')}">
+            <li ng-class="{'active': $state.includes('ppts.purchase')}" ppts-functions="订购管理">
                 <a ui-sref="ppts.purchase">
-                    <i class="menu-icon fa fa-caret-right"></i>订购列表
+                    <i class="menu-icon fa fa-caret-right"></i>订购管理
                 </a>
                 <b class="arrow"></b>
             </li>
-            <li ng-class="{'active': $state.includes('ppts.unsubscribe')}">
+            <li ng-class="{'active': $state.includes('ppts.unsubscribe')}" ppts-functions="退订管理">
                 <a ui-sref="ppts.unsubscribe">
-                    <i class="menu-icon fa fa-caret-right"></i>退订列表
-                </a>
-                <b class="arrow"></b>
-            </li>
-            <li ng-class="{'active': $state.includes('ppts.classhour')}">
-                <a ui-sref="ppts.classhour">
-                    <i class="menu-icon fa fa-caret-right"></i>剩余课时
+                    <i class="menu-icon fa fa-caret-right"></i>退订管理
                 </a>
                 <b class="arrow"></b>
             </li>
         </ul>
     </li>
     <!--排课管理-->
-    <li ui-sref-active="active" class="hsub" ng-class="{'open':vm.showSubMenu('schedule')}">
+    <li ui-sref-active="active" class="hsub" ng-class="{'open':vm.showSubMenu('schedule')}" ppts-functions="学员课表管理,按学员排课管理,单个教师上课记录管理,按教师排课管理,班组班级课表管理,教师课时量查询,多教师课表查询">
         <a href="#" class="dropdown-toggle" ng-click="vm.toggle('schedule')">
             <i class="menu-icon fa fa-calendar"></i>
             <span class="menu-text">排课管理 </span>
@@ -193,128 +190,116 @@
         </a>
         <b class="arrow"></b>
         <ul class="submenu" style="display:{{vm.showSubMenu('schedule')?'block':'none'}}">
-            <li ng-class="{'active': $state.includes('ppts.studentcourse')}">
+            <li ng-class="{'active': $state.includes('ppts.studentcourse')}" ppts-functions="学员课表管理">
                 <a ui-sref="ppts.studentcourse">
                     <i class="menu-icon fa fa-caret-right"></i>学员课表
                 </a>
                 <b class="arrow"></b>
             </li>
-            <li ng-class="{'active': $state.includes('ppts.teachercourse')}">
-                <a ui-sref="ppts.teachercourse">
-                    <i class="menu-icon fa fa-caret-right"></i>教师课表
-                </a>
-                <b class="arrow"></b>
-            </li>
-            <li ng-class="{'active': $state.includes('ppts.schedule')}">
+            <li ng-class="{'active': $state.includes('ppts.schedule')}" ppts-functions="按学员排课管理">
                 <a ui-sref="ppts.schedule">
                     <i class="menu-icon fa fa-caret-right"></i>学员排课
                 </a>
                 <b class="arrow"></b>
             </li>
-            <li ng-class="{'active': $state.includes('ppts.teacherassignment')}">
+            <li ng-class="{'active': $state.includes('ppts.teachercourse')}" ppts-functions="单个教师上课记录管理">
+                <a ui-sref="ppts.teachercourse">
+                    <i class="menu-icon fa fa-caret-right"></i>教师上课记录
+                </a>
+                <b class="arrow"></b>
+            </li>
+            <li ng-class="{'active': $state.includes('ppts.teacherassignment')}" ppts-functions="按教师排课管理">
                 <a ui-sref="ppts.teacherassignment">
                     <i class="menu-icon fa fa-caret-right"></i>教师排课
                 </a>
                 <b class="arrow"></b>
             </li>
-            <li ng-class="{'active': $state.includes('ppts.settinglist')}">
-                <a ui-sref="ppts.settinglist">
-                    <i class="menu-icon fa fa-caret-right"></i>排课条件
-                </a>
-                <b class="arrow"></b>
-            </li>
-            <li ng-class="{'active': $state.includes('ppts.classgroupcourse')}">
-                <a ui-sref="ppts.classgroupcourse">
-                    <i class="menu-icon fa fa-caret-right"></i>班组课表
-                </a>
-                <b class="arrow"></b>
-            </li>
-            <li ng-class="{'active': $state.includes('ppts.confirmcourse')}">
-                <a ui-sref="ppts.confirmcourse">
-                    <i class="menu-icon fa fa-caret-right"></i>确认课时
-                </a>
-                <b class="arrow"></b>
-            </li>
-            <li ng-class="{'active': $state.includes('ppts.classgroup')}">
+            <li ng-class="{'active': $state.includes('ppts.classgroup')}" ppts-functions="班组班级课表管理">
                 <a ui-sref="ppts.classgroup">
                     <i class="menu-icon fa fa-caret-right"></i>班级管理
+                </a>
+                <b class="arrow"></b>
+            </li>
+            <li ng-class="{'active': $state.includes('ppts.classgroupcourse')}" ppts-functions="教师课时量查询">
+                <a ui-sref="ppts.classgroupcourse">
+                    <i class="menu-icon fa fa-caret-right"></i>教师课时量
+                </a>
+                <b class="arrow"></b>
+            </li>
+            <li ng-class="{'active': $state.includes('ppts.confirmcourse')}" ppts-functions="多教师课表查询">
+                <a ui-sref="ppts.confirmcourse">
+                    <i class="menu-icon fa fa-caret-right"></i>教师课表
                 </a>
                 <b class="arrow"></b>
             </li>
         </ul>
     </li>
     <!--产品管理-->
-    <li ui-sref-active="active" class="hsub" ng-class="{'open':vm.showSubMenu('product')}">
+    <li ui-sref-active="active" class="hsub" ng-class="{'open':vm.showSubMenu('product')}" ppts-functions="产品管理">
         <a href="#" class="dropdown-toggle" ng-click="vm.toggle('product')">
             <i class="menu-icon fa fa-suitcase"></i>
             <span class="menu-text">产品管理 </span>
             <b class="arrow fa fa-angle-{{vm.showSubMenu('product')?'left':'down'}}"></b>
         </a>
         <b class="arrow"></b>
-        <ul class="submenu" style="display:{{vm.showSubMenu('product')?'block':'none'}}">
+        <ul class="submenu" style="display:{{vm.showSubMenu('product')?'block':'none'}}" ppts-functions="产品管理">
             <li ng-class="{'active': $state.includes('ppts.product')}">
                 <a ui-sref="ppts.product">
-                    <i class="menu-icon fa fa-caret-right"></i>产品列表
-                </a>
-                <b class="arrow"></b>
-            </li>
-            <li ng-class="{'active': $state.includes('ppts.productcategory')}">
-                <a ui-sref="ppts.productcategory">
-                    <i class="menu-icon fa fa-caret-right"></i>产品类别
+                    <i class="menu-icon fa fa-caret-right"></i>产品管理
                 </a>
                 <b class="arrow"></b>
             </li>
         </ul>
     </li>
     <!--基础数据-->
-    <li ui-sref-active="active" class="hsub" ng-class="{'open':vm.showSubMenu('infra')}">
+    <li ui-sref-active="active" class="hsub" ng-class="{'open':vm.showSubMenu('infra')}" ppts-functions="字典管理,拓路表管理,服务费管理,买赠表管理,校区信息增加,信息来源增加">
         <a href="#" class="dropdown-toggle" ng-click="vm.toggle('infra')">
             <i class="menu-icon fa fa-gear"></i>
             <span class="menu-text">基础数据 </span>
             <b class="arrow fa fa-angle-{{vm.showSubMenu('infra')?'left':'down'}}"></b>
         </a>
         <b class="arrow"></b>
-        <ul class="submenu" style="display:{{vm.showSubMenu('infra')?'block':'none'}}">
+        <ul class="submenu" style="display:{{vm.showSubMenu('infra')?'block':'none'}}" ppts-functions="字典管理">
             <li ng-class="{'active': $state.includes('ppts.dictionary')}">
                 <a ui-sref="ppts.dictionary">
                     <i class="menu-icon fa fa-caret-right"></i>字典管理
                 </a>
                 <b class="arrow"></b>
             </li>
-            <li ng-class="{'active': $state.includes('ppts.customerdiscount')}">
+            <li ng-class="{'active': $state.includes('ppts.customerdiscount')}" ppts-functions="拓路表管理">
                 <a ui-sref="ppts.customerdiscount">
-                    <i class="menu-icon fa fa-caret-right"></i>拓路折扣
+                    <i class="menu-icon fa fa-caret-right"></i>拓路表管理
                 </a>
                 <b class="arrow"></b>
             </li>
-            <li ng-class="{'active': $state.includes('ppts.noncustomerdiscount')}">
-                <a ui-sref="ppts.noncustomerdiscount">
-                    <i class="menu-icon fa fa-caret-right"></i>拓路折扣B
-                </a>
-                <b class="arrow"></b>
-            </li>
-            <li ng-class="{'active': $state.includes('ppts.servicefee')}">
+            <li ng-class="{'active': $state.includes('ppts.servicefee')}" ppts-functions="服务费管理">
                 <a ui-sref="ppts.servicefee">
                     <i class="menu-icon fa fa-caret-right"></i>服务费管理
                 </a>
                 <b class="arrow"></b>
             </li>
-            <li ng-class="{'active': $state.includes('ppts.extragift')}">
+            <li ng-class="{'active': $state.includes('ppts.extragift')}" ppts-functions="买赠表管理">
                 <a ui-sref="ppts.extragift">
                     <i class="menu-icon fa fa-caret-right"></i>买赠表管理
                 </a>
                 <b class="arrow"></b>
             </li>
-            <li ng-class="{'active': $state.includes('ppts.regulation')}">
+            <li ng-class="{'active': $state.includes('ppts.regulation')}" ppts-functions="校区信息增加">
                 <a ui-sref="ppts.regulation">
-                    <i class="menu-icon fa fa-caret-right"></i>规则管理
+                    <i class="menu-icon fa fa-caret-right"></i>校区维护
+                </a>
+                <b class="arrow"></b>
+            </li>
+            <li ng-class="{'active': $state.includes('ppts.regulation')}" ppts-functions="信息来源增加">
+                <a ui-sref="ppts.regulation">
+                    <i class="menu-icon fa fa-caret-right"></i>信息来源维护
                 </a>
                 <b class="arrow"></b>
             </li>
         </ul>
     </li>
     <!--客服中心-->
-    <li ui-sref-active="active" class="hsub" ng-class="{'open':vm.showSubMenu('custcenter')}">
+    <li ui-sref-active="active" class="hsub" ng-class="{'open':vm.showSubMenu('custcenter')}" ppts-functions="客户服务管理">
         <a href="#" class="dropdown-toggle" ng-click="vm.toggle('custcenter')">
             <i class="menu-icon fa fa-microphone"></i>
             <span class="menu-text">客服中心 </span>
@@ -322,7 +307,7 @@
         </a>
         <b class="arrow"></b>
         <ul class="submenu" style="display:{{vm.showSubMenu('custcenter')?'block':'none'}}">
-            <li ng-class="{'active': $state.includes('ppts.custservice')}">
+            <li ng-class="{'active': $state.includes('ppts.custservice')}" ppts-functions="客户服务管理">
                 <a ui-sref="ppts.custservice">
                     <i class="menu-icon fa fa-caret-right"></i>客户服务
                 </a>
@@ -340,19 +325,19 @@
         <b class="arrow"></b>
         <ul class="submenu" style="display:{{vm.showSubMenu('contract')?'block':'none'}}">
             <li ng-class="{'active': $state.includes('ppts.contractlist')}">
-                <a ui-sref="ppts.custservice">
+                <a ui-sref="ppts.contractlist">
                     <i class="menu-icon fa fa-caret-right"></i>合同列表
                 </a>
                 <b class="arrow"></b>
             </li>
             <li ng-class="{'active': $state.includes('ppts.paylist')}">
-                <a ui-sref="ppts.custservice">
+                <a ui-sref="ppts.paylist">
                     <i class="menu-icon fa fa-caret-right"></i>收款列表
                 </a>
                 <b class="arrow"></b>
             </li>
             <li ng-class="{'active': $state.includes('ppts.refundlist')}">
-                <a ui-sref="ppts.custservice">
+                <a ui-sref="ppts.refundlist">
                     <i class="menu-icon fa fa-caret-right"></i>退款列表
                 </a>
                 <b class="arrow"></b>

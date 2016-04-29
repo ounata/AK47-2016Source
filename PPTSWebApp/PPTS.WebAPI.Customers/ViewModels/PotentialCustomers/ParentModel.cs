@@ -1,8 +1,12 @@
-﻿using MCS.Library.Data.Mapping;
+﻿using MCS.Library.Core;
+using MCS.Library.Data.DataObjects;
+using MCS.Library.Data.Mapping;
 using PPTS.Data.Customers.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
+using System.Text;
 using System.Web;
 
 namespace PPTS.WebAPI.Customers.ViewModels.PotentialCustomers
@@ -11,17 +15,37 @@ namespace PPTS.WebAPI.Customers.ViewModels.PotentialCustomers
     public class ParentModel : Parent, IContactPhoneNumbers
     {
         [NoMapping]
-        public string PrimaryPhone
+        [DataMember]
+        public Phone PrimaryPhone
         {
             get;
             set;
         }
 
         [NoMapping]
-        public string SecondaryPhone
+        [DataMember]
+        public Phone SecondaryPhone
         {
             get;
             set;
         }
+
+        public string ToSearchContent()
+        {
+            StringBuilder strB = new StringBuilder();
+
+            this.ParentName.IsNotEmpty(s => strB.AppendWithSplitChars(s));
+            this.ParentCode.IsNotEmpty(s => strB.AppendWithSplitChars(s));
+
+            this.PrimaryPhone.IsNotNull(p => p.IsValidNumber((pi, phoneType) => strB.AppendWithSplitChars(pi.ToPhoneNumber())));
+            this.SecondaryPhone.IsNotNull(p => p.IsValidNumber((pi, phoneType) => strB.AppendWithSplitChars(pi.ToPhoneNumber())));
+
+            return strB.ToString();
+        }
+    }
+
+    [Serializable]
+    public class ParentModelCollection : EditableDataObjectCollectionBase<ParentModel>
+    {
     }
 }

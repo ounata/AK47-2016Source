@@ -1,9 +1,11 @@
 ﻿CREATE TABLE [CM].[PotentialCustomers]
 (
+	[CustomerID] NVARCHAR(36) NOT NULL DEFAULT newid(),
 	[OrgID] NVARCHAR(36) NULL,
     [OrgName] NVARCHAR(128) NULL, 
 	[OrgType] NVARCHAR(32) NULL,
-	[CustomerID] NVARCHAR(36) NOT NULL DEFAULT newid() ,
+    [CampusID] NVARCHAR(36) NULL, 
+    [CampusName] NVARCHAR(64) NULL, 
 	[CustomerCode] NVARCHAR(64) NULL,
 	[CustomerName] NVARCHAR(128) NULL,
     [CustomerLevel] NVARCHAR(32) NULL, 
@@ -28,10 +30,10 @@
 	[SourceSubType] NVARCHAR(32) NULL,
 	[SourceSystem] NVARCHAR(32) NULL,
 	[ReferralStaffID] [nvarchar](36) NULL,
-    [ReferralStaffCode] NVARCHAR(32) NULL, 
 	[ReferralStaffName] [nvarchar](64) NULL,
 	[ReferralStaffJobID] [nvarchar](36) NULL,
 	[ReferralStaffJobName] [nvarchar](64) NULL,
+    [ReferralStaffOACode] NVARCHAR(128) NULL, 
     [ReferralCustomerID] NVARCHAR(36) NULL, 
     [ReferralCustomerCode] NVARCHAR(32) NULL, 
     [ReferralCustomerName] NVARCHAR(64) NULL, 
@@ -44,13 +46,14 @@
     [NextFollowTime] DATETIME NULL , 
 	[CreatorID] NVARCHAR(36) NULL,
 	[CreatorName] NVARCHAR(64) NULL,
-	[CreateTime] DATETIME NULL DEFAULT getdate(),
+	[CreateTime] DATETIME NULL DEFAULT GETUTCDATE(),
 	[ModifierID] NVARCHAR(36) NULL,
 	[ModifierName] NVARCHAR(64) NULL,
-	[ModifyTime] DATETIME NULL DEFAULT getdate(),
-    [TenantCode] NVARCHAR(36) NULL, 
-    CONSTRAINT [PK_PotentialCustomers] PRIMARY KEY NONCLUSTERED ([CustomerID]), 
-    CONSTRAINT [IX_PotentialCustomers] UNIQUE ([CustomerCode]) 
+	[ModifyTime] DATETIME NULL DEFAULT GETUTCDATE(),
+    [TenantCode] NVARCHAR(36) NULL,
+	[VersionStartTime] DATETIME NOT NULL DEFAULT GETUTCDATE(),
+	[VersionEndTime] DATETIME NULL DEFAULT '99990909 00:00:00' ,
+    CONSTRAINT [PK_PotentialCustomers] PRIMARY KEY NONCLUSTERED ([CustomerID], [VersionStartTime]) 
 )
 
 GO
@@ -109,8 +112,6 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level1name = N'PotentialCustomers',
     @level2type = N'COLUMN',
     @level2name = N'Birthday'
-GO
-
 GO
 
 EXEC sp_addextendedproperty @name = N'MS_Description',
@@ -205,7 +206,7 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level2name = N'CustomerName'
 GO
 EXEC sp_addextendedproperty @name = N'MS_Description',
-    @value = N'客户状态(C_Code_Abbr_BO_CTI_CustomerStatus)0=未确认客户信息, 1 = 确认客户信息, 9=无效用户（逻辑删除）',
+    @value = N'客户状态(C_Code_Abbr_BO_CTI_CustomerStatus)0=未确认客户信息, 1 = 确认客户信息, 9=无效用户（逻辑删除），10=正式学员',
     @level0type = N'SCHEMA',
     @level0name = N'CM',
     @level1type = N'TABLE',
@@ -385,7 +386,7 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level1type = N'TABLE',
     @level1name = N'PotentialCustomers',
     @level2type = N'COLUMN',
-    @level2name = 'ReferralStaffCode'
+    @level2name = 'ReferralStaffOACode'
 GO
 EXEC sp_addextendedproperty @name = N'MS_Description',
     @value = N'转介绍员工姓名',
@@ -513,3 +514,39 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level1name = N'PotentialCustomers',
     @level2type = N'COLUMN',
     @level2name = N'InvalidReason'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'版本开始时间',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'PotentialCustomers',
+    @level2type = N'COLUMN',
+    @level2name = N'VersionStartTime'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'版本结束时间',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'PotentialCustomers',
+    @level2type = N'COLUMN',
+    @level2name = N'VersionEndTime'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'校区ID',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'PotentialCustomers',
+    @level2type = N'COLUMN',
+    @level2name = N'CampusID'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'校区名称',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'PotentialCustomers',
+    @level2type = N'COLUMN',
+    @level2name = N'CampusName'

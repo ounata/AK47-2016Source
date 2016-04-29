@@ -107,7 +107,7 @@ namespace MCS.Library.SOA.DataObjects
             data.XmlData = formatter.Serialize(data.SvcOperationDefs).ToString();
         }
 
-        protected override int InnerUpdate(InvokeWebServiceJob data, Dictionary<string, object> context)
+        protected override int InnerUpdate(InvokeWebServiceJob data, Dictionary<string, object> context, string[] ignoreProperties)
         {
             UpdateSqlClauseBuilder uBuilder = new UpdateSqlClauseBuilder();
 
@@ -130,7 +130,7 @@ namespace MCS.Library.SOA.DataObjects
             return result;
         }
 
-        protected override void InnerInsert(InvokeWebServiceJob data, Dictionary<string, object> context)
+        protected override void InnerInsert(InvokeWebServiceJob data, Dictionary<string, object> context, string[] ignoreProperties)
         {
             InsertSqlClauseBuilder builder = new InsertSqlClauseBuilder();
 

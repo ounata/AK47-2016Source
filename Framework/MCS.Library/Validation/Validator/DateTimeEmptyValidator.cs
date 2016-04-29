@@ -1,42 +1,42 @@
-﻿using System;
-using System.Text;
+﻿using MCS.Library.Core;
+using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace MCS.Library.Validation
 {
-	/// <summary>
-	/// 日期类型的为空判断的校验器
-	/// </summary>
+    /// <summary>
+    /// 日期类型的为空判断的校验器
+    /// </summary>
     public class DateTimeEmptyValidator : Validator, IClientValidatable
-	{
+    {
         /// <summary>
         /// 构造函数
         /// </summary>
         public DateTimeEmptyValidator()
         {
         }
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="messageTemplate"></param>
-		/// <param name="tag"></param>
-		public DateTimeEmptyValidator(string messageTemplate, string tag)
-			: base(messageTemplate, tag)
-		{
-		}
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="messageTemplate"></param>
+        /// <param name="tag"></param>
+        public DateTimeEmptyValidator(string messageTemplate, string tag)
+            : base(messageTemplate, tag)
+        {
+        }
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="objectToValidate"></param>
-		/// <param name="currentObject"></param>
-		/// <param name="key"></param>
-		/// <param name="validationResults"></param>
-		protected internal override void DoValidate(object objectToValidate, object currentObject, string key, ValidationResults validationResults)
-		{
-			if ((DateTime)objectToValidate == DateTime.MinValue)
-				RecordValidationResult(validationResults, this.MessageTemplate, currentObject, key);
-		}
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="objectToValidate"></param>
+        /// <param name="currentObject"></param>
+        /// <param name="key"></param>
+        /// <param name="validationResults"></param>
+        protected internal override void DoValidate(object objectToValidate, object currentObject, string key, ValidationResults validationResults)
+        {
+            ((DateTime)objectToValidate).IsMinValue(() => RecordValidationResult(validationResults, this.MessageTemplate, currentObject, key));
+        }
 
         /// <summary>
         /// 客户端校验函数名称
@@ -55,7 +55,7 @@ namespace MCS.Library.Validation
         /// <returns></returns>
         public string GetClientValidateScript()
         {
-            return Properties.ScriptResources.DatetimeEmptyValidator;;
+            return Properties.ScriptResources.DatetimeEmptyValidator; ;
         }
 
         /// <summary>

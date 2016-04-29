@@ -15,11 +15,12 @@
     <link href="../libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
     <!--#ace admin基础样式-->
     <link href="../libs/ace-1.2.3/ace.min.css" rel="stylesheet" />
-
-<!--zTree style -->
- <link href="../libs/zTree-3.5.22/css/metroStyle/metroStyle.css" rel="stylesheet" />
+    <!-- ngTags auto complete -->
+    <link href="../libs/ng-tags-input-3.0.0/ng-tags-input.css" rel="stylesheet" />
+    <!--zTree style -->
+    <link href="../libs/zTree-3.5.22/css/metroStyle/metroStyle.css" rel="stylesheet" />
     <!--dialog service style -->
-    <link rel="stylesheet" href="../libs/angular-dialog-service/dist/dialogs.min.css">
+    <link rel="stylesheet" href="../libs/angular-dialog-service-5.3.0/dist/dialogs.min.css">
     <!--#blockUI样式-->
     <link href="../libs/angular-block-ui-0.2.2/dist/angular-block-ui.css" rel="stylesheet" />
     <link href="../libs/laycode-v1.1/laycode.css" rel="stylesheet" />
@@ -30,7 +31,6 @@
     <link href="../libs/mcs-jslib-1.0.0/component/mcs.component.css" rel="stylesheet" />
     <!--paging style-->
     <link href="../src/css/paging.css" rel="stylesheet" />
-
     <!--component css -->
     <link here="../src/css/mcs.css" rel="stylesheet" />
     <!--#网站主样式-->
@@ -39,31 +39,31 @@
     .c-ul {
         border: 1px solid #abcdef;
     }
-
+    
     .c-li {
         background-color: #defacb
     }
-
+    
     .c-liSelected {
         background-color: #fedbca
     }
-
+    
     .c-iExpanded {
         border: 1px solid #77a
     }
-
+    
     .c-iCollapsed {
         border: 1px solid #7c7
     }
-
+    
     .c-iLeaf {
         border: 1px solid #a77
     }
-
+    
     treecontrol.tree-classic li .tree-label.c-label {
         color: #44c
     }
-
+    
     treecontrol.tree-classic li .tree-selected.c-labelSelected {
         background-color: yellow
     }
@@ -239,7 +239,13 @@
                             <b class="arrow"></b>
                         </li>
                         <li class="">
-                            <a href="#/radiobuttongroup">
+                            <a href="#/autoComplete">
+                                <i class="menu-icon fa fa-caret-right"></i> AutoComplete输入
+                            </a>
+                            <b class="arrow"></b>
+                        </li>
+                        <li class="">
+                            <a href="#/upload">
                                 <i class="menu-icon fa fa-caret-right"></i> 上传控件
                             </a>
                             <b class="arrow"></b>
@@ -315,7 +321,7 @@
                     <ul class="submenu">
                         <li class="">
                             <a href="#/serializedate">
-                                <i class="menu-icon fa fa-caret-right"></i> 日期序列化处理
+                                <i class="menu-icon fa fa-caret-right"></i> 日期格式化处理
                             </a>
                             <b class="arrow"></b>
                         </li>
@@ -331,6 +337,18 @@
                     <b class="arrow"></b>
                     <ul class="submenu">
                         <li ui-sref-active="active">
+                            <a ui-sref="layout">
+                                <i class="menu-icon fa fa-caret-right"></i> 布局规范及示例
+                            </a>
+                            <b class="arrow"></b>
+                        </li>
+                        <li ui-sref-active="active">
+                            <a ui-sref="validation">
+                                <i class="menu-icon fa fa-caret-right"></i> 表单验证
+                            </a>
+                            <b class="arrow"></b>
+                        </li>
+                        <li ui-sref-active="active">
                             <a ui-sref="student">
                                 <i class="menu-icon fa fa-caret-right"></i> 目录结构
                             </a>
@@ -345,6 +363,41 @@
                         <li ui-sref-active="active">
                             <a ui-sref="student">
                                 <i class="menu-icon fa fa-caret-right"></i> 配置管理
+                            </a>
+                            <b class="arrow"></b>
+                        </li>
+                    </ul>
+                </li>
+                <!-- 开发参考 -->
+                <li class="">
+                    <a href="javascript:void(0)" class="dropdown-toggle">
+                        <i class="menu-icon fa fa-pencil-square-o"></i>
+                        <span class="menu-text"> 开发参考 </span>
+                        <b class="arrow fa fa-angle-down"></b>
+                    </a>
+                    <b class="arrow"></b>
+                    <ul class="submenu">
+                        <li ui-sref-active="active">
+                            <a href="http://10.1.56.80/MCSWebApp/MCS.Web.Component/ace/" target="_blank">
+                                <i class="menu-icon fa fa-caret-right"></i> ACE框架
+                            </a>
+                            <b class="arrow"></b>
+                        </li>
+                        <li ui-sref-active="active">
+                            <a href="http://v3.bootcss.com/" target="_blank">
+                                <i class="menu-icon fa fa-caret-right"></i> Bootstrap
+                            </a>
+                            <b class="arrow"></b>
+                        </li>
+                        <li ui-sref-active="active">
+                            <a href="http://angular-ui.github.io/bootstrap/" target="_blank">
+                                <i class="menu-icon fa fa-caret-right"></i> UI Bootstrap
+                            </a>
+                            <b class="arrow"></b>
+                        </li>
+                        <li ui-sref-active="active">
+                            <a href="http://fontawesome.io/icons/" target="_blank">
+                                <i class="menu-icon fa fa-caret-right"></i> FontAwsome
                             </a>
                             <b class="arrow"></b>
                         </li>
@@ -396,6 +449,8 @@
     <script src="../libs/bootbox-4.2.0/bootbox.min.js"></script>
     <!--#AngularJS主文件-->
     <script src="../libs/angular-1.5.0/angular.min.js"></script>
+    <!--#AngularJS国际化-->
+    <script src="../libs/angular-1.5.0/angular-locale_zh-cn.js"></script>
     <!--#AngularJS cookie功能-->
     <script src="../libs/angular-cookies-1.4.6/angular-cookies.js"></script>
     <!--#AngularJS 客户端路由功能，暂时不使用-->
@@ -403,7 +458,7 @@
     <!--#提供对ng-bind-htm指令的支持-->
     <script src="../libs/angular-sanitize-1.4.6/angular-sanitize.js"></script>
     <!--dialog service -->
-    <script src="../libs/angular-dialog-service/dist/dialogs.min.js"></script>
+    <script src="../libs/angular-dialog-service-5.3.0/dist/dialogs.min.js"></script>
     <!--#blockUI插件是用来弹出遮罩层的-->
     <script src="../libs/angular-block-ui-0.2.2/dist/angular-block-ui.js"></script>
     <!--#angular-ui-bootstrap主文件-->
@@ -427,8 +482,12 @@
     <!--#开始：第三方组件模块-->
     <script src="app/lib/ui-select/app-ui-select.controller.js"></script>
     <script src="../libs/zTree-3.5.22/js/jquery.ztree.all.js"></script>
+    <script src="../libs/ng-file-upload/dist/ng-file-upload.js"></script>
     <!--/结束：第三方组件模块-->
     <!--#开始：公共组件模块-->
+    <!--auto complete -->
+    <script src="../libs/ng-tags-input-3.0.0/ng-tags-input.js"></script>
+    <script src="app/component/mcs-autocomplete/mcs-autocomplete.controller.js"></script>
     <script src="app/component/mcs-label/mcs-label.controller.js"></script>
     <script src="app/component/mcs-button/mcs-button.controller.js"></script>
     <script src="app/component/mcs-input/mcs-input.controller.js"></script>
@@ -443,10 +502,14 @@
     <script src="app/component/mcs-tree/mcs-tree.controller.js"></script>
     <script src="app/component/mcs-datepicker/mcs-datepicker.controller.js"></script>
     <script src="app/component/mcs-route/mcs-route.controller.js"></script>
+    <script src="app/component/mcs-upload/mcs-upload.controller.js"></script>
+    <script src="app/component/mcs-validation/mcs-validation.controller.js"></script>
     <!--/结束：公共组件模块-->
     <!--#开始：页面布局-->
     <script src="app/page/mcs-page.controller.js"></script>
     <!--/结束：页面布局-->
     <script src="app/issue/mcs-date-serialize.controller.js"></script>
+    <script src="../libs/angular-1.5.0/angular-locale_zh-cn.js"></script>
 </body>
+
 </html>

@@ -14,7 +14,7 @@ namespace PPTS.Data.Orders.DataSources
     {
         public static readonly GenericOrderDataSource<T, TCollection> Instance = new GenericOrderDataSource<T, TCollection>();
 
-        private GenericOrderDataSource()
+        public GenericOrderDataSource()
         {
         }
 

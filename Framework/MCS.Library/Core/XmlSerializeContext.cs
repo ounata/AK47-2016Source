@@ -137,6 +137,7 @@ namespace MCS.Library.Core
 
         private Dictionary<int, object> _ObjectContext = new Dictionary<int, object>();
         private Dictionary<int, Type> _TypeContext = new Dictionary<int, Type>();
+        private Dictionary<int, XElement> _ObjectElements = new Dictionary<int, XElement>();
         private List<XmlListDeserializeItem> _ListItems = new List<XmlListDeserializeItem>();
 
         /// <summary>
@@ -169,6 +170,17 @@ namespace MCS.Library.Core
             }
         }
 
+        /// <summary>
+        /// 对象ID所对应的Xml元素
+        /// </summary>
+        internal Dictionary<int, XElement> ObjectElements
+        {
+            get
+            {
+                return this._ObjectElements;
+            }
+        }
+
         internal void FillListItems()
         {
             this.ListItems.ForEach(itemAction => itemAction.List.Add(itemAction.Item));
@@ -197,7 +209,7 @@ namespace MCS.Library.Core
             var types = from typeNodes in parent.Descendants("Types").Descendants("T")
                         select new
                         {
-                            ID = typeNodes.Attribute("id", -1),
+                            ID = Convert.ToInt32(typeNodes.Attribute("id").Value),
                             TypeDesp = typeNodes.AttributeWithAlterName("name", "n", string.Empty),
                         };
 
@@ -205,7 +217,7 @@ namespace MCS.Library.Core
                 types = from typeNodes in parent.Descendants("Types").Descendants("Type")
                         select new
                         {
-                            ID = typeNodes.Attribute("id", -1),
+                            ID = Convert.ToInt32(typeNodes.Attribute("id").Value),
                             TypeDesp = typeNodes.AttributeWithAlterName("name", "n", string.Empty),
                         };
 
@@ -219,6 +231,32 @@ namespace MCS.Library.Core
                 {
                 }
             });
+        }
+
+        internal void DeserializeObjectElements(XElement parent)
+        {
+            var elements = (from element in parent.Descendants("O")
+                                       select element);
+
+            this.FillObjectElements(elements);
+
+            if (elements.FirstOrDefault() != null)
+            {
+                elements = (from element in parent.Descendants("Object")
+                            select element);
+
+                this.FillObjectElements(elements);
+            }
+        }
+
+        private void FillObjectElements(IEnumerable<XElement> elements)
+        {
+            foreach(XElement element in elements)
+            {
+                int id = Convert.ToInt32(element.Attribute("id").Value);
+
+                this.ObjectElements[id] = element;
+            }
         }
     }
 

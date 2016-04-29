@@ -6,5 +6,30 @@
         mcs.util.configProvider(custcenter, $controllerProvider, $compileProvider, $filterProvider, $provide);
     });
 
+    // 配置路由
+    custcenter.config(function ($stateProvider) {
+        mcs.util.loadRoute($stateProvider, {
+            name: 'ppts.custservice',
+            url: '/custservice',
+            templateUrl: 'app/custcenter/custservice/custservice-list/custservice-list.html',
+            controller: 'custserviceListController',
+            breadcrumb: {
+                label: '客户服务列表',
+                parent: 'ppts'
+            },
+            dependencies: ['app/custcenter/custservice/custservice-list/custservice-list.controller']
+        }).loadRoute($stateProvider, {
+            name: 'ppts.custservice-add',
+            url: '/custservice/add',
+            templateUrl: 'app/custcenter/custservice/custservice-add/custservice-add.html',
+            controller: 'custserviceAddController',
+            breadcrumb: {
+                label: '新增客户服务',
+                parent: 'ppts.custservice'
+            },
+            dependencies: ['app/custcenter/custservice/custservice-add/custservice-add.controller']
+        });
+    });
+
     return custcenter;
 });

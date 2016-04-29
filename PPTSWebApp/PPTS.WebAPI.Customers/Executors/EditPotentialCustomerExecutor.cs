@@ -3,6 +3,7 @@ using MCS.Library.Data;
 using MCS.Library.Data.Executors;
 using MCS.Library.SOA.DataObjects;
 using PPTS.Data.Common.Executors;
+using PPTS.Data.Common.Security;
 using PPTS.Data.Customers.Adapters;
 using PPTS.Data.Customers.Entities;
 using PPTS.WebAPI.Customers.ViewModels.PotentialCustomers;
@@ -33,10 +34,23 @@ namespace PPTS.WebAPI.Customers.Executors
         {
             base.PrepareData(context);
 
+            this.Model.Customer.FillModifier();
+
             PotentialCustomerAdapter.Instance.UpdateInContext(this.Model.Customer);
 
             PhoneAdapter.Instance.UpdateByOwnerIDInContext(this.Model.Customer.CustomerID,
                 this.Model.Customer.ToPhones(this.Model.Customer.CustomerID));
+
+            CustomerFulltextInfo fullText = CustomerFulltextInfo.Create(this.Model.Customer.CustomerID, CustomerFulltextInfo.PotentialCustomersType, this.Model.Customer.Status);
+
+            fullText.CustomerSearchContent = this.Model.Customer.ToSearchContent();
+
+            CustomerFulltextInfoAdapter.Instance.UpdateCustomerSearchContentInContext(fullText);
+        }
+
+        protected override void ExecuteNonQuerySqlInContext(DbContext dbContext)
+        {
+            dbContext.ExecuteTimePointSqlInContext();
         }
 
         /// <summary>

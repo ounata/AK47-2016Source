@@ -1,0 +1,2 @@
+"%windir%"\microsoft.net\framework\v4.0.30319\msbuild.exe /t:Publish /p:SqlPublishProfilePath=DataAccessTest.local.publish.xml /p:VisualStudioVersion=14.0 /p:DSP=Microsoft.Data.Tools.Schema.Sql.Sql120DatabaseSchemaProvider
+pause

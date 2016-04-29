@@ -69,6 +69,9 @@
     <Reference Include="MCS.Library.SOA.DataObjects">
       <HintPath>..\..\Bin\MCS.Library.SOA.DataObjects.dll</HintPath>
     </Reference>
+    <Reference Include="MCS.Web.MVC.Library">
+      <HintPath>..\..\Bin\MCS.Web.MVC.Library.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -80,8 +83,14 @@
     <Reference Include="PPTS.Data.Common">
       <HintPath>..\..\PPTSBin\PPTS.Data.Common.dll</HintPath>
     </Reference>
+    <Reference Include="PPTS.Data.Common.Entities">
+      <HintPath>..\..\PPTSBin\PPTS.Data.Common.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="PPTS.Data.Products">
       <HintPath>..\..\PPTSBin\PPTS.Data.Products.dll</HintPath>
+    </Reference>
+    <Reference Include="PPTS.Data.Products.Entities">
+      <HintPath>..\..\PPTSBin\PPTS.Data.Products.Entities.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -139,6 +148,7 @@
     <Compile Include="ViewModels\Products\ProductQueryCriteriaModel.cs" />
     <Compile Include="ViewModels\Products\ProductQueryResult.cs" />
     <Compile Include="ViewModels\Products\ProductViewModel.cs" />
+    <Compile Include="ViewModels\Products\QueryClassGroupCriteriaModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
@@ -154,7 +164,7 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Properties\PublishProfiles\PPTS.WebAPI.Product.pubxml" />
+    <None Include="Properties\PublishProfiles\PPTS.WebAPI.Products.pubxml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

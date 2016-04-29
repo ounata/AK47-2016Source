@@ -72,9 +72,9 @@ namespace MCS.Library.SOA.DataObjects
             data.ForEach(p => p.Loaded = true);
         }
 
-        protected override int InnerUpdate(SysTaskProcess data, Dictionary<string, object> context)
+        protected override int InnerUpdate(SysTaskProcess data, Dictionary<string, object> context, string[] ignoreProperties)
         {
-            int count = base.InnerUpdate(data, context);
+            int count = base.InnerUpdate(data, context, ignoreProperties);
 
             if (count == 0 && data.UpdateTag > 0)
                 throw new ApplicationException(string.Format("任务流程{0}的状态已经改变，不能更新", data.ID));
@@ -82,7 +82,7 @@ namespace MCS.Library.SOA.DataObjects
             return count;
         }
 
-        protected override string GetUpdateSql(SysTaskProcess data, ORMappingItemCollection mappings, Dictionary<string, object> context)
+        protected override string GetUpdateSql(SysTaskProcess data, ORMappingItemCollection mappings, Dictionary<string, object> context, string[] ignoreProperties)
         {
             UpdateSqlClauseBuilder uBuilder = ORMapping.GetUpdateSqlClauseBuilder(data, mappings, "UpdateTag");
             uBuilder.AppendItem("UPDATE_TAG", "UPDATE_TAG + 1", "=", true);

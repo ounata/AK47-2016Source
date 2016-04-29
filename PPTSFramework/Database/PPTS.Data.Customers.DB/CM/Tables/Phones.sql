@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [CM].[Phones]
 (
-	[PhoneID] NVARCHAR(36) NOT NULL DEFAULT newid() ,
-	[OwnerID] NVARCHAR(36) NOT NULL, 
+	[OwnerID] NVARCHAR(36) NOT NULL,
+	[ItemID] INT NOT NULL,
     [IsPrimary] INT NOT NULL DEFAULT 1, 
     [PhoneType] NVARCHAR(32) NOT NULL,
 	[CountryCode] NVARCHAR(32) NULL DEFAULT '0086',
@@ -10,9 +10,11 @@
     [Extension] NVARCHAR(32) NULL,
 	[CreatorID] NVARCHAR(36) NULL,
 	[CreatorName] NVARCHAR(64) NULL,
-	[CreateTime] DATETIME NOT NULL DEFAULT getdate(),
+	[CreateTime] DATETIME NULL DEFAULT GETUTCDATE(),
     [TenantCode] NVARCHAR(36) NULL, 
-    CONSTRAINT [PK_Phones] PRIMARY KEY NONCLUSTERED ([PhoneID])
+    [VersionStartTime] DATETIME NOT NULL DEFAULT GETUTCDATE(), 
+    [VersionEndTime] DATETIME NULL DEFAULT '99990909 00:00:00', 
+    CONSTRAINT [PK_Phones] PRIMARY KEY NONCLUSTERED ([OwnerID], [ItemID], [VersionStartTime])
 )
 
 GO
@@ -125,14 +127,23 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level2name = N'OwnerID'
 GO
 
-CREATE INDEX [IX_Phones_1] ON [CM].[Phones] ([OwnerID])
+CREATE INDEX [IX_Phones_OwnerID] ON [CM].[Phones] ([OwnerID])
 
 GO
 EXEC sp_addextendedproperty @name = N'MS_Description',
-    @value = N'Phone的主键，一般是GUID',
+    @value = N'版本开始时间',
     @level0type = N'SCHEMA',
     @level0name = N'CM',
     @level1type = N'TABLE',
     @level1name = N'Phones',
     @level2type = N'COLUMN',
-    @level2name = N'PhoneID'
+    @level2name = N'VersionStartTime'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'版本结束时间',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'Phones',
+    @level2type = N'COLUMN',
+    @level2name = N'VersionEndTime'

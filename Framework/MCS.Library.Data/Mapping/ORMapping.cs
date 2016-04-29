@@ -168,8 +168,9 @@ namespace MCS.Library.Data.Mapping
             {
                 object data = GetValueFromObject(item, graph);
 
-                if ((data == null || data == DBNull.Value || (data != null && data.Equals(TypeCreator.GetTypeDefaultValue(data.GetType())))) &&
-                        string.IsNullOrEmpty(item.DefaultExpression) == false)
+                bool considerNull = data == null || data == DBNull.Value || (data != null && data.Equals(TypeCreator.GetTypeDefaultValue(data.GetType())));
+
+                if ((item.ForceUseDefaultExpression || considerNull) && item.DefaultExpression.IsNotEmpty())
                     builder.AppendItem(item.DataFieldName, item.DefaultExpression, SqlClauseBuilderBase.EqualTo, true);
                 else
                     builder.AppendItem(item.DataFieldName, FormatValue(data, item));
@@ -196,6 +197,24 @@ namespace MCS.Library.Data.Mapping
                     builder.AppendItem(item.DataFieldName, data, SqlClauseBuilderBase.IsNot);
                 else
                     builder.AppendItem(item.DataFieldName, FormatValue(data, item), SqlClauseBuilderBase.NotEqualTo);
+            }
+        }
+
+        private static void DoSelectSqlClauseBuilder<T>(SqlClauseBuilderIUW builder, ORMappingItem item, T graph)
+        {
+            if (item.PrimaryKey == false)
+            {
+                object data = GetValueFromObject(item, graph);
+
+                if ((data == null || data == DBNull.Value || (data != null && data.Equals(TypeCreator.GetTypeDefaultValue(data.GetType())))))
+                {
+                    if (item.DefaultExpression.IsNullOrEmpty())
+                        builder.AppendItem(item.DataFieldName, "NULL", "");
+                    else
+                        builder.AppendItem(item.DataFieldName, item.DefaultExpression, "", true);
+                }
+                else
+                    builder.AppendItem(item.DataFieldName, FormatValue(data, item));
             }
         }
 
@@ -501,7 +520,7 @@ namespace MCS.Library.Data.Mapping
                 (ORTableMappingAttribute)ORTableMappingAttribute.GetCustomAttribute(type, typeof(ORTableMappingAttribute), true);
 
             if (tableAttr != null)
-            { 
+            {
                 result.TableName = tableAttr.TableName;
                 result.QueryTableName = tableAttr.QueryTableName;
             }
@@ -736,6 +755,7 @@ namespace MCS.Library.Data.Mapping
         {
             item.BindingFlags = sba.BindingFlags;
             item.DefaultExpression = sba.DefaultExpression;
+            item.ForceUseDefaultExpression = sba.ForceUseDefaultExpression;
             item.EnumUsage = sba.EnumUsage;
         }
 
@@ -853,26 +873,32 @@ namespace MCS.Library.Data.Mapping
                     break;
                 }
                 else
+                {
                     if (attr is SubClassORFieldMappingAttribute)
-                    result.SubClassFieldMappings.Add((SubClassORFieldMappingAttribute)attr);
-                else
+                        result.SubClassFieldMappings.Add((SubClassORFieldMappingAttribute)attr);
+                    else
+                    {
                         if (attr is SubClassSqlBehaviorAttribute)
-                    result.SubClassFieldSqlBehaviors.Add((SubClassSqlBehaviorAttribute)attr);
-                else
+                            result.SubClassFieldSqlBehaviors.Add((SubClassSqlBehaviorAttribute)attr);
+                        else
+                        {
                             if (attr is SubClassTypeAttribute)
-                    result.SubClassType = (SubClassTypeAttribute)attr;
-                else
-                                if (attr is ORFieldMappingAttribute)
-                    result.FieldMapping = (ORFieldMappingAttribute)attr;
-                else
-                                    if (attr is SqlBehaviorAttribute)
-                    result.SqlBehavior = (SqlBehaviorAttribute)attr;
-                else
-                                        if (attr is SubClassPropertyEncryptionAttribute)
-                    result.SubClassPropertyEncryptions.Add((SubClassPropertyEncryptionAttribute)attr);
-                else
-                                            if (attr is PropertyEncryptionAttribute)
-                    result.PropertyEncryption = (PropertyEncryptionAttribute)attr;
+                                result.SubClassType = (SubClassTypeAttribute)attr;
+                            else
+                            if (attr is ORFieldMappingAttribute)
+                                result.FieldMapping = (ORFieldMappingAttribute)attr;
+                            else
+                            if (attr is SqlBehaviorAttribute)
+                                result.SqlBehavior = (SqlBehaviorAttribute)attr;
+                            else
+                            if (attr is SubClassPropertyEncryptionAttribute)
+                                result.SubClassPropertyEncryptions.Add((SubClassPropertyEncryptionAttribute)attr);
+                            else
+                            if (attr is PropertyEncryptionAttribute)
+                                result.PropertyEncryption = (PropertyEncryptionAttribute)attr;
+                        }
+                    }
+                }
             }
 
             return result;

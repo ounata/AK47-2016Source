@@ -125,6 +125,8 @@ namespace MCS.Library.Data.Test
 
             VersionedOrderItemCollection loadedAgain = UpdateOrderItems(orderID, loaded);
 
+            loadedAgain.Output();
+
             AreEqual(loaded, loadedAgain);
         }
 
@@ -146,14 +148,42 @@ namespace MCS.Library.Data.Test
             Console.WriteLine("{0:yyyy-MM-dd HH:mm:ss.fff}", firstTimePoint);
 
             loaded[1].ItemName = "三星Galaxy";
+            loaded[1].ModifierID = UuidHelper.NewUuidString();
 
             VersionedOrderItemCollection loadedAgain = UpdateOrderItems(orderID, loaded);
 
+            Assert.AreEqual(loaded[1].ModifierID, loadedAgain[1].ModifierID);
             AreEqual(loaded, loadedAgain);
 
             VersionedOrderItemCollection oldItems = OrderItemAdapter.Instance.LoadByOrderID(orderID, firstTimePoint);
 
             AreEqual(originalLoaded, oldItems);
+        }
+
+        [TestMethod]
+        public void UpdateOrderItemsThenNullUpdateTest()
+        {
+            OrderItemAdapter.Instance.ClearAll();
+
+            string orderID = UuidHelper.NewUuidString();
+
+            VersionedOrderItemCollection items = PrepareOrderItems(orderID);
+
+            VersionedOrderItemCollection loaded = UpdateOrderItems(orderID, items);
+
+            VersionedOrderItemCollection originalLoaded = OrderItemAdapter.Instance.LoadByOrderID(orderID, DateTime.MinValue);
+
+            DateTime firstTimePoint = DBTimePointActionContext.Current.TimePoint;
+
+            Console.WriteLine("{0:yyyy-MM-dd HH:mm:ss.fff}", firstTimePoint);
+
+            //没有更新，仅仅修改了修改人的ID
+            loaded[1].ModifierID = UuidHelper.NewUuidString();
+
+            //实际上没有更新
+            VersionedOrderItemCollection loadedAgain = UpdateOrderItems(orderID, loaded);
+
+            AreEqual(originalLoaded, loadedAgain);
         }
 
         [TestMethod]
@@ -170,6 +200,8 @@ namespace MCS.Library.Data.Test
             loaded.RemoveAt(1);
 
             VersionedOrderItemCollection loadedAgain = UpdateOrderItems(orderID, loaded);
+
+            loadedAgain.Output();
 
             AreEqual(loaded, loadedAgain);
         }

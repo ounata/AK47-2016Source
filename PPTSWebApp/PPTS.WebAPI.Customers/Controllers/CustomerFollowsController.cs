@@ -5,6 +5,7 @@ using PPTS.Data.Customers.Entities;
 using PPTS.WebAPI.Customers.ViewModels.CustomerFollows;
 using MCS.Library.Data;
 using PPTS.WebAPI.Customers.Executors;
+using PPTS.WebAPI.Customers.DataSources;
 
 namespace PPTS.WebAPI.Customers.Controllers
 {
@@ -18,41 +19,46 @@ namespace PPTS.WebAPI.Customers.Controllers
         /// <param name="criteria">查询条件</param>
         /// <returns>返回带字典的跟进记录列表</returns>
         [HttpPost]
-        public CustomerFollowQueryResult GetAllFollows(CustomerFollowQueryCriteriaModel criteria)
+        public FollowQueryResult GetAllFollows(FollowQueryCriteriaModel criteria)
         {
-            return new CustomerFollowQueryResult
+            return new FollowQueryResult
             {
-                QueryResult = GenericCustomerDataSource<CustomerFollow, CustomerFollowCollection>.Instance.Query(criteria.PageParams, criteria, criteria.OrderBy),
+                QueryResult = CustomersFollowDataSource.Instance.LoadCustomerFollow(criteria.PageParams, criteria, criteria.OrderBy),
                 Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(CustomerFollow))
             };
         }
 
-        /// <summary>
+        /// <s6ummary>
         /// 跟进记录查询，翻页或排序。不下载字典
         /// </summary>
         /// <param name="criteria">查询条件</param>
         /// <returns>返回不带字典的跟进记录列表</returns>
         [HttpPost]
-        public PagedQueryResult<CustomerFollow, CustomerFollowCollection> GetPagedFollows(CustomerFollowQueryCriteriaModel criteria)
+        public PagedQueryResult<FollowQueryModel, CustomerFollowQueryCollection> GetPagedFollows(FollowQueryCriteriaModel criteria)
         {
-            return GenericCustomerDataSource<CustomerFollow, CustomerFollowCollection>.Instance.Query(criteria.PageParams, criteria, criteria.OrderBy);
+            return CustomersFollowDataSource.Instance.LoadCustomerFollow(criteria.PageParams, criteria, criteria.OrderBy);
         }
 
         #endregion
 
         #region api/customerfollows/createfollow
-
+        /// <summary>
+        /// 新建跟踪记录
+        /// </summary>
+        /// <param name="customerId"></param>
+        /// <param name="isPotential"></param>
+        /// <returns></returns>
         [HttpGet]
-        public CreatableCustomerFollowModel CreateFollow()
+        public CreatableFollowModel CreateFollow(string customerId, bool isPotential)
         {
-            return new CreatableCustomerFollowModel
+            return new CreatableFollowModel(customerId, isPotential)
             {
-                Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(CustomerFollow))
+                Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(CustomerFollow), typeof(CreatableFollowModel))
             };
         }
 
         [HttpPost]
-        public void CreateFollow(CreatableCustomerFollowModel model)
+        public void CreateFollow(CreatableFollowModel model)
         {
             AddCustomerFollowExecutor executor = new AddCustomerFollowExecutor(model);
 
@@ -64,9 +70,9 @@ namespace PPTS.WebAPI.Customers.Controllers
         #region api/customerfollows/updatefollow
 
         [HttpGet]
-        public EditableCustomerFollowModel UpdateFollow(string id)
+        public EditableFollowModel UpdateFollow(string id)
         {
-            EditableCustomerFollowModel result = new EditableCustomerFollowModel()
+            EditableFollowModel result = new EditableFollowModel()
             {
                 Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(CustomerFollow))
             };
@@ -90,7 +96,7 @@ namespace PPTS.WebAPI.Customers.Controllers
         }
 
         [HttpPost]
-        public void UpdateFollow(EditableCustomerFollowModel model)
+        public void UpdateFollow(EditableFollowModel model)
         {
             EditCustomerFollowExecutor executor = new EditCustomerFollowExecutor(model);
 

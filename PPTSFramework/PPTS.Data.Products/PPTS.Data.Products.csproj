@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{8B8AB24B-A8F7-420C-834E-52517F178D30}</ProjectGuid>
+    <ProjectGuid>{FC0E93D0-1D5C-4BDC-95CA-D77052D2F9D2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PPTS.Data.Products</RootNamespace>
@@ -58,6 +58,12 @@
     <Reference Include="PPTS.Data.Common">
       <HintPath>..\..\PPTSBin\PPTS.Data.Common.dll</HintPath>
     </Reference>
+    <Reference Include="PPTS.Data.Common.Entities">
+      <HintPath>..\..\PPTSBin\PPTS.Data.Common.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="PPTS.Data.Products.Entities">
+      <HintPath>..\..\PPTSBin\PPTS.Data.Products.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
@@ -72,6 +78,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Adapters\PresentItemAdapter.cs" />
+    <Compile Include="Adapters\PresentAdapter.cs" />
+    <Compile Include="Adapters\DiscountPermissionViewAdapter.cs" />
+    <Compile Include="Adapters\DiscountPermissionAdapter.cs" />
+    <Compile Include="Adapters\DiscountItemAdapter.cs" />
+    <Compile Include="Adapters\DiscountAdapter.cs" />
+    <Compile Include="Adapters\ExpenseAdapter.cs" />
+    <Compile Include="Adapters\ExpensePermissionAdapter.cs" />
     <Compile Include="Adapters\ProductViewAdapter.cs" />
     <Compile Include="Adapters\ProductAdapter.cs" />
     <Compile Include="Adapters\CategoryCatalogAdapter.cs" />
@@ -81,25 +95,8 @@
     <Compile Include="Adapters\GenericProductAdapter.cs" />
     <Compile Include="Adapters\ProductAdapterBase.cs" />
     <Compile Include="Common\ConnectionDefine.cs" />
-    <Compile Include="Entities\Discount.cs" />
-    <Compile Include="Entities\DiscountItem.cs" />
-    <Compile Include="Entities\DiscountPermission.cs" />
-    <Compile Include="Entities\Expense.cs" />
-    <Compile Include="Entities\ExpensePermission.cs" />
-    <Compile Include="Entities\Partner.cs" />
-    <Compile Include="Entities\Present.cs" />
-    <Compile Include="Entities\PresentItem.cs" />
-    <Compile Include="Entities\PresentPermission.cs" />
-    <Compile Include="Entities\ProductPermission.cs" />
     <Compile Include="Common\Helper.cs" />
-    <Compile Include="DataSources\GenericProductViewDataSource.cs" />
-    <Compile Include="Entities\CategoryCatalog.cs" />
-    <Compile Include="Entities\Enumerations.cs" />
-    <Compile Include="Entities\Extensions.cs" />
-    <Compile Include="Entities\Product.cs" />
-    <Compile Include="Entities\ProductExOfCourse.cs" />
-    <Compile Include="Entities\ProductSalaryRule.cs" />
-    <Compile Include="Entities\ProductView.cs" />
+    <Compile Include="DataSources\GenericProductDataSource.cs" />
     <Compile Include="Executors\PPTSProductExecutor.cs" />
     <Compile Include="Executors\PPTSEditProductExecutorBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

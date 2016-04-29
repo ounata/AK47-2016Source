@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using MCS.Library.SOA.DataObjects;
 using MCS.Web.Apps.WeChat.DataObjects;
+using MCS.Library.Data.Adapters;
 
 namespace MCS.Web.Apps.WeChat.Adapters
 {

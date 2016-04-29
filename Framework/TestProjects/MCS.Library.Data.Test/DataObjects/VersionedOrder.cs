@@ -31,6 +31,7 @@ namespace MCS.Library.Data.Test.DataObjects
             set;
         }
 
+        [ORFieldMapping("VersionEndTime", UtcTimeToLocal = true)]
         [SqlBehavior(BindingFlags = ClauseBindingFlags.Select | ClauseBindingFlags.Where)]
         public DateTime VersionEndTime
         {
@@ -38,7 +39,7 @@ namespace MCS.Library.Data.Test.DataObjects
             set;
         }
 
-        [ORFieldMapping("VersionStartTime", PrimaryKey = true)]
+        [ORFieldMapping("VersionStartTime", PrimaryKey = true, UtcTimeToLocal = true)]
         [SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update)]
         public DateTime VersionStartTime
         {

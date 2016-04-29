@@ -4,7 +4,7 @@
     <IncludeCompositeObjects>True</IncludeCompositeObjects>
     <TargetDatabaseName>PPTS_Order_Dev</TargetDatabaseName>
     <DeployScriptFileName>PPTS.Data.Orders.DB.sql</DeployScriptFileName>
-    <TargetConnectionString>Data Source=10.1.56.213;Persist Security Info=True;User ID=zhshen;Pooling=False</TargetConnectionString>
+    <TargetConnectionString>Data Source=10.1.56.213;Persist Security Info=True;User ID=msuser;Pooling=False</TargetConnectionString>
     <ProfileVersionNumber>1</ProfileVersionNumber>
   </PropertyGroup>
 </Project>

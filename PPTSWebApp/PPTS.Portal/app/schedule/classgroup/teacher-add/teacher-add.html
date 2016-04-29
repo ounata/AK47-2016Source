@@ -1,0 +1,23 @@
+﻿<div class="modal-header">
+    <button type="button" class="close" data-dismiss="alert" ng-click="vm.close()">
+        <i class="ace-icon fa fa-times"></i>
+    </button>
+    <h4 class="modal-title">选择教师</h4>
+</div>
+<div class="modal-body">
+    <div class="mcs-panel-search well well-sm">
+        <div class="portlet">            
+            <div class="portlet-body">
+                <mcs-input placeholder="教师姓名" model="vm.criteria.teacherName" ng-click="" class="mcs-input-search pull-left" />
+                <ppts-select category="grade" model="vm.criteria.gradeMemo" class="col-sm-3" caption="请选择年级" />
+                <ppts-select category="subject" model="vm.criteria.subjectMemo" class="col-sm-3" caption="请选择科目" />
+                <mcs-button category="search" click="vm.search()" size="medium" />
+            </div>
+        </div>
+    </div>
+    <mcs-datatable data="vm.data" retrieve-data="vm.search();" />
+</div>
+<div class="modal-footer">
+    <mcs-button category="save" click="vm.save()" />
+    <mcs-button category="close" click="vm.close()" />
+</div>

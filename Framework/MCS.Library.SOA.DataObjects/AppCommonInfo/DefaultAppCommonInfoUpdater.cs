@@ -20,7 +20,7 @@ namespace MCS.Library.SOA.DataObjects
         {
         }
 
-        public void Update(AppCommonInfo aci, params string[] ignoredUpdateProperties)
+        public new void Update(AppCommonInfo aci, params string[] ignoredUpdateProperties)
         {
             aci.NullCheck("aci");
             ExceptionHelper.FalseThrow<ArgumentNullException>(ignoredUpdateProperties != null, "ignoredUpdateProperties");
@@ -30,7 +30,7 @@ namespace MCS.Library.SOA.DataObjects
             using (TransactionScope scope = TransactionScopeFactory.Create(TransactionScopeOption.Required))
             {
                 if (InnerUpdate(aci, ignoredUpdateProperties) == 0)
-                    InnerInsert(aci, context);
+                    InnerInsert(aci, context, StringExtension.EmptyStringArray);
 
                 scope.Complete();
             }
@@ -83,9 +83,9 @@ namespace MCS.Library.SOA.DataObjects
             return DbHelper.RunSql(sql, this.GetConnectionName());
         }
 
-        protected override void InnerInsert(AppCommonInfo aci, Dictionary<string, object> context)
+        protected override void InnerInsert(AppCommonInfo aci, Dictionary<string, object> context, string[] ignoreProperties)
         {
-            string sql = ORMapping.GetInsertSql(aci, TSqlBuilder.Instance);
+            string sql = ORMapping.GetInsertSql(aci, TSqlBuilder.Instance, ignoreProperties);
 
             DbHelper.RunSql(sql, this.GetConnectionName());
         }

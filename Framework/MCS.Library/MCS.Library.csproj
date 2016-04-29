@@ -233,6 +233,9 @@
     <Compile Include="Configuration\ServerInfoConfigSettings.cs" />
     <Compile Include="Configuration\TenantContextSettings.cs" />
     <Compile Include="Configuration\TimePointSimulationSettings.cs" />
+    <Compile Include="Configuration\TimeZoneContextSettings.cs" />
+    <Compile Include="Configuration\UriGroupConfigurationElement.cs" />
+    <Compile Include="Configuration\UriSettings.cs" />
     <Compile Include="Contexts\ActionContextBase.cs" />
     <Compile Include="Contexts\ActionContextDescriptionAttribute.cs" />
     <Compile Include="Contexts\DBTimePointActionContext.cs" />
@@ -275,6 +278,8 @@
     <Compile Include="Core\NonXElementSerializedFieldsAttribute.cs" />
     <Compile Include="Core\ValidatorTypeConfigurationElement.cs" />
     <Compile Include="Core\XmlSerializableHashtable.cs" />
+    <Compile Include="Data\DataObjects\IVersionDataObject.cs" />
+    <Compile Include="Data\DataObjects\IVersionDataObjectWithoutID.cs" />
     <Compile Include="Data\FieldSortDirection.cs" />
     <Compile Include="Data\ConnectionMappingElement.cs" />
     <Compile Include="Data\DataObjects\ColumnDataType.cs" />
@@ -364,6 +369,7 @@
       <DependentUpon>SNTPClient.cs</DependentUpon>
     </Compile>
     <Compile Include="Net\SNTP\SNTPData.cs" />
+    <Compile Include="Net\SNTP\SNTPDateTimeKind.cs" />
     <Compile Include="Net\SNTP\SNTPSettings.cs" />
     <Compile Include="Net\SNTP\Stratum.cs" />
     <Compile Include="Net\SNTP\VersionNumber.cs" />

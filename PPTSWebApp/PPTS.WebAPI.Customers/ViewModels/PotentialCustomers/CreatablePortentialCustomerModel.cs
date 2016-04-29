@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
-using MCS.Library.Core;
+﻿using MCS.Library.Core;
 using MCS.Library.Validation;
 using PPTS.Data.Common;
 using PPTS.Data.Common.Entities;
-using PPTS.Data.Customers.Entities;
+using PPTS.Data.Common.Security;
 using PPTS.Data.Customers;
+using PPTS.Data.Customers.Entities;
+using System.Collections.Generic;
 
 namespace PPTS.WebAPI.Customers.ViewModels.PotentialCustomers
 {
@@ -54,14 +55,17 @@ namespace PPTS.WebAPI.Customers.ViewModels.PotentialCustomers
 
         public CreatablePortentialCustomerModel()
         {
-            this.Customer = new PotentialCustomerModel { CustomerID = UuidHelper.NewUuidString(), IDType = IDTypeDefine.IDCard,  VipType = VipTypeDefine.NoVip };
+            this.Customer = new PotentialCustomerModel { CustomerID = UuidHelper.NewUuidString(), IDType = IDTypeDefine.IDCard, VipType = VipTypeDefine.NoVip };
+            this.Customer.PrimaryPhone = string.Empty.ToPhone(this.Customer.CustomerID, true);
+            this.Customer.SecondaryPhone = string.Empty.ToPhone(this.Customer.CustomerID, false);
+
             this.PrimaryParent = new ParentModel { ParentID = UuidHelper.NewUuidString(), IDType = IDTypeDefine.IDCard };
             this.Dictionaries = new Dictionary<string, IEnumerable<BaseConstantEntity>>();
         }
 
         public CustomerParentRelation ToRelation()
         {
-            return new CustomerParentRelation
+            CustomerParentRelation relation = new CustomerParentRelation
             {
                 CustomerID = this.Customer.CustomerID,
                 ParentID = this.PrimaryParent.ParentID,
@@ -69,6 +73,8 @@ namespace PPTS.WebAPI.Customers.ViewModels.PotentialCustomers
                 ParentRole = this.ParentRole,
                 IsPrimary = true
             };
+
+            return relation;
         }
     }
 }

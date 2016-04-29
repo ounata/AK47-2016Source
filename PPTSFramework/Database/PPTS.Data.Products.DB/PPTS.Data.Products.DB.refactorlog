@@ -399,4 +399,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="Catalog" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="f5fd44d4-4266-45eb-a596-7520ef1ebad6" ChangeDateTime="04/19/2016 01:23:44">
+    <Property Name="ElementName" Value="[PM].[ProductStats].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[PM].[ProductStats]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="CampusID" />
+  </Operation>
 </Operations>

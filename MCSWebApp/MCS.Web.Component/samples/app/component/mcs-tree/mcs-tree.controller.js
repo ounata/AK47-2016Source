@@ -1,17 +1,18 @@
-(function () {
+(function() {
     angular.module('app.component')
 
-    .controller('MCSTreeController', ['$scope', function ($scope) {
+    .controller('MCSTreeController', ['$scope', function($scope) {
         var vm = this;
 
-        vm.nodeClick = function (event, treeId, treeNode) {
+
+        vm.nodeClick = function(event, treeId, treeNode) {
             alert('you are selecting ' + treeNode.name);
         }
-        vm.onCheck = function (event, treeId, treeNode) {
+        vm.onCheck = function(event, treeId, treeNode) {
             alert('you are selecting ' + treeNode.name);
         }
 
-        vm.loadDataWaiting = function (treeId, treeNode) {
+        vm.loadDataWaiting = function(treeId, treeNode) {
 
         }
 
@@ -41,8 +42,12 @@
 
             },
             async: {
-                enable: false,
+                enable: true,
                 autoParam: ["id"],
+                otherParam: {
+                    "age": "1",
+                    "name": "test"
+                },
                 contentType: "application/json",
                 type: 'post',
                 dataType: "json",
@@ -55,7 +60,9 @@
             }
         };
 
-
+        vm.setTreeData = function(callback) {
+            callback(vm.treeData);
+        }
 
         vm.treeData = [{
             id: '0',
@@ -67,15 +74,14 @@
                 id: '1',
                 name: 'company-1',
                 open: true,
+                iconSkin: 'depart',
                 children: [{
                     id: 11,
                     name: 'HR',
                     checked: true,
                     chkDisabled: false,
-                    icon: '',
-                    iconOpen: '',
-                    iconClose: '',
-                    iconSkin: '',
+
+                    iconSkin: 'user',
                     isHidden: false
 
 
@@ -86,12 +92,10 @@
             }, {
                 id: '2',
                 name: 'company-2',
+                isParent: true,
+                open: false,
 
-                children: [{
-                    id: '21',
-                    name: 'HR'
-
-                }]
+                children: []
             }]
         }];
 

@@ -7,8 +7,8 @@
     [AssignStatus] NVARCHAR(32) NULL, 
     [Amount] DECIMAL(18, 2) NULL, 
     [TeacherID] NVARCHAR(36) NULL, 
-    [TeacherCode] NVARCHAR(64) NULL, 
     [TeacherName] NVARCHAR(64) NULL, 
+    [TeacherJobID] NVARCHAR(36) NULL, 
     [CreatorID] NVARCHAR(36) NULL, 
     [CreatorName] NVARCHAR(64) NULL, 
     [CreateTime] DATETIME NULL DEFAULT getdate(), 
@@ -79,14 +79,7 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level2type = N'COLUMN',
     @level2name = N'TeacherID'
 GO
-EXEC sp_addextendedproperty @name = N'MS_Description',
-    @value = N'教师编码',
-    @level0type = N'SCHEMA',
-    @level0name = N'OM',
-    @level1type = N'TABLE',
-    @level1name = N'AccompanyAssigns',
-    @level2type = N'COLUMN',
-    @level2name = N'TeacherCode'
+
 GO
 EXEC sp_addextendedproperty @name = N'MS_Description',
     @value = N'教师姓名',
@@ -132,3 +125,12 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level1name = N'AccompanyAssigns',
     @level2type = NULL,
     @level2name = NULL
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'教师岗位ID',
+    @level0type = N'SCHEMA',
+    @level0name = N'OM',
+    @level1type = N'TABLE',
+    @level1name = N'AccompanyAssigns',
+    @level2type = N'COLUMN',
+    @level2name = N'TeacherJobID'

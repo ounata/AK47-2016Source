@@ -1,5 +1,5 @@
 ﻿<!-- #开始：位置条 -->
-<div class="breadcrumbs" id="breadcrumbs">
+<!--<div class="breadcrumbs" id="breadcrumbs">
     <script type="text/javascript">
         try {
             ace.settings.check('breadcrumbs', 'fixed');
@@ -17,7 +17,7 @@
             学员排课
         </li>
     </ul>
-</div>
+</div>-->
 <!-- /结束：位置条 -->
 <div class="page-content">
     <div class="page-content-area">
@@ -38,14 +38,14 @@
                             <mcs-input placeholder="学员编号" model="vm.criteria.customerCode" />
                             <mcs-input placeholder="在读学校" model="vm.criteria.schoolName" />
                             <mcs-input placeholder="学管师" model="vm.criteria.educatorName" />
-                            <mcs-button type="search" click="vm.init()" size="medium" />
+                            <mcs-button category="search" click="vm.init()" size="medium" />
                         </div>
                     </div>
                 </div>
                 <!-- /结束：潜客列表.快速查询条件 -->
                 <!-- #开始：潜客列表.工具栏 -->
                 <div class="mcs-panel-toolbar">
-                    <mcs-button icon="user-plus" css="btn-success" text="排课"></mcs-button>
+                    <mcs-button icon="user-plus" css="btn-success" text="排课" click="vm.stuAssignClick()"></mcs-button>
                 </div>
                 <!-- /结束：潜客列表.工具栏 -->
                 <!-- #开始：潜客列表.数据表格 -->

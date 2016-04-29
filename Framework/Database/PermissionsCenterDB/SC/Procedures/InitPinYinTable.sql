@@ -4,7 +4,7 @@ AS
 BEGIN
 	DECLARE @xml XML
 
-	SET @xml = '<Root><SC.PinYin PinYin="a" HZ="吖" Weight="0" />
+	SET @xml = N'<Root><SC.PinYin PinYin="a" HZ="吖" Weight="0" />
 	<SC.PinYin PinYin="a" HZ="阿" Weight="0" />
 	<SC.PinYin PinYin="a" HZ="啊" Weight="0" />
 	<SC.PinYin PinYin="a" HZ="锕" Weight="0" />

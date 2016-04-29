@@ -1,0 +1,93 @@
+﻿<div class="clearfix form-actions mcs-form-actions">
+    <div class="col-md-offset-3 col-md-9">
+        <mcs-button category="save" click="vm.save()"></mcs-button>
+        <mcs-button category="cancel" click="vm.cancel()"></mcs-button>
+    </div>
+</div>
+<div class="profile-user-info profile-user-info-striped mcs-user-profile">
+    <div class="profile-info-row">
+        <div class="profile-info-name"> 家长姓名 </div>
+        <div class="profile-info-value">
+            <mcs-input model="vm.parent.parentName" css="col-xs-5 col-sm-5" />
+        </div>
+    </div>
+    <div class="profile-info-row">
+        <div class="profile-info-name"> 家长性别 </div>
+        <div class="profile-info-value">
+            <ppts-radiobutton-group category="gender" model="vm.parent.gender" />
+        </div>
+    </div>
+    <div class="profile-info-row">
+        <div class="profile-info-name"> 亲属关系 </div>
+        <div class="profile-info-value">
+            <table>
+                <tr>
+                    <td>
+                        <div style="margin-right:5px;"><input class="mcs-readonly-input" readonly="readonly" ng-model="vm.customer.customerName" />是<input class="mcs-readonly-input" readonly="readonly" ng-model="vm.parent.parentName" />的</div>
+                    </td>
+                    <td style="width:39%;">
+                        <ui-select ng-model="vm.relation.customerRole" theme="selectize" on-select="selectCustomerRole($item, $model)" ng-disabled="!vm.customer.gender">
+                            <ui-select-match placeholder="请选择">
+                                {{$select.selected.value}}
+                            </ui-select-match>
+                            <ui-select-choices repeat="item.key as item in vm.customerRoles ">
+                                <span ng-bind-html="item.value | highlight: $select.search"></span>
+                            </ui-select-choices>
+                        </ui-select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div style="margin-right:5px;"><input class="mcs-readonly-input" readonly="readonly" ng-model="vm.parent.parentName" />是<input class="mcs-readonly-input" readonly="readonly" ng-model="vm.customer.customerName" />的</div>
+                    </td>
+                    <td>
+                        <ui-select ng-model="vm.relation.parentRole" theme="selectize" ng-disabled="!(vm.parent.gender && vm.customer.gender && vm.customerRole && vm.parentRoles.length > 1)">
+                            <ui-select-match placeholder="请选择">{{$select.selected.value}}</ui-select-match>
+                            <ui-select-choices repeat="item.key as item in vm.parentRoles | props: {value: $select.search}">
+                                <span ng-bind-html="item.value | highlight: $select.search"></span>
+                            </ui-select-choices>
+                        </ui-select>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="profile-info-row">
+        <div class="profile-info-name"> 是否是主监护人 </div>
+        <div class="profile-info-value">
+            <ppts-radiobutton-group category="ifElse" model="vm.relation.isPrimary" />
+        </div>
+    </div>
+    <div class="profile-info-row">
+        <div class="profile-info-name"> 联系方式1 </div>
+        <div class="profile-info-value">
+            <mcs-input model="vm.parent.primaryPhone.phoneNumber" css="col-xs-5 col-sm-5" />
+        </div>
+    </div>
+    <div class="profile-info-row">
+        <div class="profile-info-name"> 联系方式2 </div>
+        <div class="profile-info-value">
+            <mcs-input model="vm.parent.secondaryPhone.phoneNumber" css="col-xs-5 col-sm-5" />
+        </div>
+    </div>
+    <div class="profile-info-row">
+        <div class="profile-info-name"> 家长Email </div>
+        <div class="profile-info-value">
+            <mcs-input model="vm.parent.email" css="col-xs-5 col-sm-5" />
+        </div>
+    </div>
+    <div class="profile-info-row">
+        <div class="profile-info-name"> 
+            <ppts-select category="idtype" model="vm.parent.idType" css="col-xs-5 col-sm-5" style="margin-left:200px" /> 
+        </div>
+        <div class="profile-info-value">
+            <mcs-input model="vm.parent.idNumber" css="col-xs-5 col-sm-5" />
+        </div>
+    </div>
+    <div class="profile-info-row">
+        <div class="profile-info-name"> 家庭年总收入 </div>
+        <div class="profile-info-value">
+            <ppts-select category="income" model="vm.parent.income" css="col-xs-5 col-sm-5" />
+        </div>
+    </div>
+</div>

@@ -11,8 +11,9 @@
             },
             global: {
                 src: ['app/common/global/ppts.head.js',
-            		  'app/common/global/ppts.filter.js',
+                      'app/common/global/ppts.controller.js',
                       'app/common/global/ppts.route.js',
+                      'app/common/global/ppts.filter.js',
                       'app/common/global/ppts.service.js',
                       'app/common/global/ppts.directive.js',
                       'app/common/global/ppts.interceptor.js',

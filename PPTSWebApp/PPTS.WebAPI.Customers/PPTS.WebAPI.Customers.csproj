@@ -83,8 +83,25 @@
     <Reference Include="PPTS.Data.Common">
       <HintPath>..\..\PPTSBin\PPTS.Data.Common.dll</HintPath>
     </Reference>
-    <Reference Include="PPTS.Data.Customers">
+    <Reference Include="PPTS.Data.Common.Entities">
+      <HintPath>..\..\PPTSBin\PPTS.Data.Common.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="PPTS.Data.Customers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=62ea08f894871798, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\PPTSBin\PPTS.Data.Customers.dll</HintPath>
+    </Reference>
+    <Reference Include="PPTS.Data.Customers.Entities">
+      <HintPath>..\..\PPTSBin\PPTS.Data.Customers.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="PPTS.Data.Products, Version=1.0.0.0, Culture=neutral, PublicKeyToken=62ea08f894871798, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\PPTSBin\PPTS.Data.Products.dll</HintPath>
+    </Reference>
+    <Reference Include="PPTS.Data.Products.Entities">
+      <HintPath>..\..\PPTSBin\PPTS.Data.Products.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="PPTS.Web.MVC.Library">
+      <HintPath>..\..\PPTSBin\PPTS.Web.MVC.Library.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -134,30 +151,84 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountsController.cs" />
     <Compile Include="Controllers\CustomerFollowsController.cs" />
+    <Compile Include="Controllers\CustomerServicesController.cs" />
+    <Compile Include="Controllers\CustomerMeetingsController.cs" />
     <Compile Include="Controllers\PotentialCustomersController.cs" />
-    <Compile Include="Controllers\StudentsController.cs" />
+    <Compile Include="DataSources\CustomerServiceDataSource.cs" />
+    <Compile Include="DataSources\CustomersFollowDataSource.cs" />
+    <Compile Include="DataSources\CustomerMeetingDataSource.cs" />
+    <Compile Include="DataSources\ParentDataSource.cs" />
+    <Compile Include="DataSources\PotentialCustomerDataSource.cs" />
     <Compile Include="Executors\AddCustomerFollowExecutor.cs" />
+    <Compile Include="Executors\AddParentExecutor.cs" />
     <Compile Include="Executors\AddPotentialCustomerExecutor.cs" />
+    <Compile Include="Executors\EditChargePaymentItemExecutor.cs" />
+    <Compile Include="Executors\DeleteChargeApplyExecutor.cs" />
+    <Compile Include="Executors\EditChargePaymentExecutor.cs" />
+    <Compile Include="Executors\EditChargeApplyExecutor.cs" />
+    <Compile Include="Executors\EditableStudentExecutor.cs" />
     <Compile Include="Executors\EditCustomerFollowExecutor.cs" />
+    <Compile Include="Executors\EditableParentExecutor.cs" />
     <Compile Include="Executors\EditPotentialCustomerExecutor.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\Accounts\ChargeAllotItemModel.cs" />
+    <Compile Include="ViewModels\Accounts\ChargeAllotModel.cs" />
+    <Compile Include="ViewModels\Accounts\ChargeApplyQueryCriterialModel.cs" />
+    <Compile Include="ViewModels\Accounts\ChargeApplyViewModel.cs" />
+    <Compile Include="ViewModels\Accounts\ChargeApplyQueryResult.cs" />
+    <Compile Include="ViewModels\Accounts\ChargePaymentItemModel.cs" />
+    <Compile Include="ViewModels\Accounts\ChargePaymentQueryCriterialModel.cs" />
+    <Compile Include="ViewModels\Accounts\ChargePaymentQueryResult.cs" />
+    <Compile Include="ViewModels\Accounts\ChargePaymentViewModel.cs" />
+    <Compile Include="ViewModels\Accounts\CustomerModel.cs" />
     <Compile Include="ViewModels\Accounts\AccountModel.cs" />
-    <Compile Include="ViewModels\Accounts\AccountCombinationModel.cs" />
-    <Compile Include="ViewModels\CustomerFollows\CreatableCustomerFollowModel.cs" />
-    <Compile Include="ViewModels\CustomerFollows\CustomerFollowQueryCriteriaModel.cs" />
-    <Compile Include="ViewModels\CustomerFollows\CustomerFollowQueryResult.cs" />
-    <Compile Include="ViewModels\CustomerFollows\EditableCustomerFollowModel.cs" />
+    <Compile Include="ViewModels\Accounts\AccountQueryResult.cs" />
+    <Compile Include="ViewModels\Accounts\ChargeApplyModel.cs" />
+    <Compile Include="ViewModels\Accounts\ChargePaymentModel.cs" />
+    <Compile Include="ViewModels\Accounts\ChargeDisplayResult.cs" />
+    <Compile Include="ViewModels\Accounts\DiscountItemModel.cs" />
+    <Compile Include="ViewModels\Accounts\DiscountModel.cs" />
+    <Compile Include="ViewModels\Accounts\ChargePaymentPrintModel.cs" />
+    <Compile Include="ViewModels\Accounts\RefundApplyModel.cs" />
+    <Compile Include="ViewModels\Accounts\RefundDisplayResult.cs" />
+    <Compile Include="ViewModels\Accounts\RefundPaymentModel.cs" />
+    <Compile Include="ViewModels\Accounts\RefundPaymentQueryCriterialMode.cs" />
+    <Compile Include="ViewModels\Accounts\RefundPaymentQueryResult.cs" />
+    <Compile Include="ViewModels\Accounts\RefundPaymentViewModel.cs" />
+    <Compile Include="ViewModels\Accounts\ReturnApplyModel.cs" />
+    <Compile Include="ViewModels\Accounts\ReturnDisplayResult.cs" />
+    <Compile Include="ViewModels\Accounts\TeacherModel.cs" />
+    <Compile Include="ViewModels\Accounts\TransferApplyModel.cs" />
+    <Compile Include="ViewModels\CustomerFollows\CreatableFollowModel.cs" />
+    <Compile Include="ViewModels\CustomerFollows\EditableFollowModel.cs" />
+    <Compile Include="ViewModels\CustomerFollows\FollowQueryCriteriaModel.cs" />
+    <Compile Include="ViewModels\CustomerFollows\FollowQueryModel.cs" />
+    <Compile Include="ViewModels\CustomerFollows\FollowQueryResult.cs" />
+    <Compile Include="ViewModels\CustomerServices\CustomerServiceQueryCriteriaModel.cs" />
+    <Compile Include="ViewModels\CustomerServices\CustomerServiceQueryResult.cs" />
+    <Compile Include="ViewModels\CustomerMeetings\CustomerMeetingQueryModel.cs" />
+    <Compile Include="ViewModels\CustomerMeetings\CustomerMeetingCriteriaModel.cs" />
+    <Compile Include="ViewModels\CustomerMeetings\CustomerMeetingQueryResult.cs" />
+    <Compile Include="ViewModels\CustomerServices\CustomerServiceListMosel.cs" />
+    <Compile Include="ViewModels\CustomerServices\CustomerServiceListResult.cs" />
+    <Compile Include="ViewModels\Parents\ParentsSearchQueryCriteriaModel.cs" />
+    <Compile Include="ViewModels\Parents\ParentsSearchQueryResult.cs" />
     <Compile Include="ViewModels\PotentialCustomers\CreatablePortentialCustomerModel.cs" />
     <Compile Include="ViewModels\PotentialCustomers\CustomerStaffRelationQueryCriteriaModel.cs" />
     <Compile Include="ViewModels\PotentialCustomers\CustomerStaffRelationQueryResult.cs" />
+    <Compile Include="ViewModels\PotentialCustomers\EditableParentModel.cs" />
     <Compile Include="ViewModels\PotentialCustomers\EditablePotentialCustomerModel.cs" />
     <Compile Include="ViewModels\PotentialCustomers\ParentModel.cs" />
     <Compile Include="ViewModels\PotentialCustomers\PotentialCustomerModel.cs" />
     <Compile Include="ViewModels\PotentialCustomers\PotentialCustomerQueryCriteriaModel.cs" />
+    <Compile Include="ViewModels\PotentialCustomers\CustomerParentsQueryResult.cs" />
     <Compile Include="ViewModels\PotentialCustomers\PotentialCustomerQueryResult.cs" />
+    <Compile Include="ViewModels\PotentialCustomers\PotentialCustomerSearchModel.cs" />
+    <Compile Include="ViewModels\Students\EditableStudentModel.cs" />
+    <Compile Include="ViewModels\Students\StudentModel.cs" />
     <Compile Include="ViewModels\Students\StudentQueryCriteriaModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -171,9 +242,8 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Properties\PublishProfiles\PPTS.WebAPI.Customer.pubxml" />
+    <None Include="Properties\PublishProfiles\PPTS.WebAPI.Customers.pubxml" />
   </ItemGroup>
-  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

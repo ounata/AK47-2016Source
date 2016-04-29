@@ -17,17 +17,16 @@ CREATE TABLE [OM].[AssetConfirms](
 	[ConfirmerName] [nvarchar](64) NULL,
 	[ConfirmerJobID] [nvarchar](36) NULL,
 	[ConfirmerJobName] [nvarchar](64) NULL,
+	[ConfirmerJobType] [nvarchar](32) NULL,
     [ProcessStatus] NVARCHAR(32) NOT NULL DEFAULT 0, 
     [ProcessTime] DATETIME NULL, 
     [ProcessMemo] NVARCHAR(255) NULL, 
 	[ConsultantID] [nvarchar](36) NULL,
 	[ConsultantName] [nvarchar](64) NULL,
 	[ConsultantJobID] [nvarchar](36) NULL,
-	[ConsultantJobName] [nvarchar](64) NULL,
 	[EducatorID] [nvarchar](36) NULL,
 	[EducatorName] [nvarchar](64) NULL,
 	[EducatorJobID] [nvarchar](36) NULL,
-	[EducatorJobName] [nvarchar](64) NULL,
 	[CreatorID] [nvarchar](36) NULL,
 	[CreatorName] [nvarchar](64) NULL,
 	[CreateTime] [datetime] NULL,
@@ -102,7 +101,7 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'咨询师姓�
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'咨询师岗位ID' , @level0type=N'SCHEMA',@level0name=N'OM', @level1type=N'TABLE',@level1name=N'AssetConfirms', @level2type=N'COLUMN',@level2name=N'ConsultantJobID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'咨询师岗位名称' , @level0type=N'SCHEMA',@level0name=N'OM', @level1type=N'TABLE',@level1name=N'AssetConfirms', @level2type=N'COLUMN',@level2name=N'ConsultantJobName'
+
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'学管师ID' , @level0type=N'SCHEMA',@level0name=N'OM', @level1type=N'TABLE',@level1name=N'AssetConfirms', @level2type=N'COLUMN',@level2name=N'EducatorID'
 GO
@@ -110,7 +109,7 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'学管师姓�
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'学管师岗位ID' , @level0type=N'SCHEMA',@level0name=N'OM', @level1type=N'TABLE',@level1name=N'AssetConfirms', @level2type=N'COLUMN',@level2name=N'EducatorJobID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'学管师姓名' , @level0type=N'SCHEMA',@level0name=N'OM', @level1type=N'TABLE',@level1name=N'AssetConfirms', @level2type=N'COLUMN',@level2name=N'EducatorJobName'
+
 GO
 
 GO
@@ -280,3 +279,12 @@ GO
 GO
 
 GO
+
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'确认人岗位类型代码',
+    @level0type = N'SCHEMA',
+    @level0name = N'OM',
+    @level1type = N'TABLE',
+    @level1name = N'AssetConfirms',
+    @level2type = N'COLUMN',
+    @level2name = N'ConfirmerJobType'

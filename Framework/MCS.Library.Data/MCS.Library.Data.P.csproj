@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="14.0">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -11,22 +11,18 @@
     <RootNamespace>MCS.Library.Data</RootNamespace>
     <AssemblyName>MCS.Library.Data</AssemblyName>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
-    <SignAssembly>false</SignAssembly>
+    <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>MCS.Library.snk</AssemblyOriginatorKeyFile>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
-    <SccProjectName>
-    </SccProjectName>
-    <SccLocalPath>
-    </SccLocalPath>
-    <SccAuxPath>
-    </SccAuxPath>
-    <SccProvider>
-    </SccProvider>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -44,21 +40,43 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <TargetFrameworkProfile />
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugP|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\DebugPerformance\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE;GTNet40</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\DebugPerformance\MCS.Library.Data.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\MCS.Library.Data.xml</DocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <CodeAnalysisRules>
     </CodeAnalysisRules>
-    <CodeAnalysisRuleSet>Migrated rules for MCS.Library.Data.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;GTNet40</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DELUXEWORKSTEST|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\TestDebug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;DELUXEWORKSTEST;GTNet40</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -73,47 +91,67 @@
   <ItemGroup>
     <Compile Include="Accessories\CryptoHelper.cs" />
     <Compile Include="Accessories\DbTraceHelper.cs" />
+    <Compile Include="Adapters\ConnectiveLoadingCondition.cs" />
+    <Compile Include="Adapters\DataViewDataSourceQueryAdapterBase.cs" />
+    <Compile Include="Adapters\DbHelper.cs" />
+    <Compile Include="Adapters\InLoadingCondition.cs" />
+    <Compile Include="Adapters\LoadingConditionBase.cs" />
+    <Compile Include="Adapters\VersionedObjectAdapterBase.cs" />
+    <Compile Include="Adapters\VersionedObjectAdapterBase_Context.cs" />
+    <Compile Include="Adapters\VersionedObjectAdapterBase_Load.cs" />
+    <Compile Include="Adapters\VersionedObjectAdapterBase_Load_Context.cs" />
+    <Compile Include="Adapters\WhereLoadingCondition.cs" />
+    <Compile Include="Adapters\ObjectDataSourceQueryAdapterBase.cs" />
+    <Compile Include="Adapters\TSqlCommonAdapter.cs" />
+    <Compile Include="Adapters\UpdatableAdapterBase.cs" />
+    <Compile Include="Adapters\UpdatableAndLoadableAdapterBase.cs" />
+    <Compile Include="Adapters\UpdatableAndLoadableAdapterBaseInContext.cs" />
+    <Compile Include="Builder\BytesDescriptionGenerator.cs" />
+    <Compile Include="Builder\ExpressionDescriptionGenerator.cs" />
+    <Compile Include="Builder\Extensions.cs" />
+    <Compile Include="Builder\NullDescriptionGenerator.cs" />
+    <Compile Include="Builder\StreamDescriptionGenerator.cs" />
+    <Compile Include="Builder\GuidDescriptionGenerator.cs" />
+    <Compile Include="Builder\EnumDescriptionGenerator.cs" />
+    <Compile Include="Builder\StringDescriptionGenerator.cs" />
+    <Compile Include="Builder\BooleanDescriptionGenerator.cs" />
+    <Compile Include="Builder\DataDescriptionGeneratorBase.cs" />
+    <Compile Include="Builder\DateTimeDescriptionGenerator.cs" />
+    <Compile Include="Builder\DBNullDescriptionGenerator.cs" />
     <Compile Include="Builder\SqlClauseBuilderItems.cs" />
+    <Compile Include="Builder\VersionStrategyQuerySqlBuilder.cs" />
+    <Compile Include="Builder\VersionStrategyUpdateSqlBuilder.cs" />
+    <Compile Include="Builder\VersionStrategyUpdateSqlHelper.cs" />
     <Compile Include="Configuration\ConnectionStringConfigurationElementBase.cs" />
     <Compile Include="Configuration\DataProviderConfigurationElementCollection.cs" />
     <Compile Include="Configuration\DbEventArgsConfigurationElement.cs" />
     <Compile Include="Configuration\MetaConnectionStringConfigurationElement.cs" />
     <Compile Include="Configuration\TransactionConfigurationSection.cs" />
     <Compile Include="Database.cs" />
+    <Compile Include="DatabaseExtensions.cs" />
     <Compile Include="DatabaseFactory.cs" />
-    <Compile Include="DbConnectionMappingContext.cs" />
+    <Compile Include="Database_Async.cs" />
     <Compile Include="DbContext\AutoEnlistDbContext.cs" />
+    <Compile Include="DbContext\SqlContextItem.cs" />
     <Compile Include="DbContext\DeluxeDbContextBase.cs" />
     <Compile Include="DbContext\NotEnlistDbContext.cs" />
+    <Compile Include="DbContext\ReferenceConnection.cs" />
+    <Compile Include="DbContext\TableAction.cs" />
     <Compile Include="DbEventType.cs" />
+    <Compile Include="Executors\DataExecutionContext.cs" />
+    <Compile Include="Executors\DataExecutorBase.cs" />
+    <Compile Include="Executors\DataExecutorDescriptionAttribute.cs" />
+    <Compile Include="Executors\DataExecutorLogContextInfo.cs" />
     <Compile Include="Mapping\ConditionMapping.cs" />
-    <Compile Include="Mapping\ConditionMappingAttribute.cs" />
     <Compile Include="Mapping\ConditionMappingCache.cs" />
     <Compile Include="Mapping\ConditionMappingItem.cs" />
+    <Compile Include="Mapping\ConditionMappingItemBase.cs" />
     <Compile Include="Mapping\ConditionMappingItemCollection.cs" />
+    <Compile Include="Mapping\InConditionMappingItem.cs" />
     <Compile Include="Mapping\ORMappingContext.cs" />
     <Compile Include="Mapping\ORMappingPartial.cs" />
     <Compile Include="Mapping\ORMappintItemEncryption.cs" />
     <Compile Include="Mapping\ORMappintItemEncryptionHelper.cs" />
-    <Compile Include="Mapping\PropertyEncryptionAttribute.cs" />
-    <Compile Include="Mapping\SubClassPropertyEncryptionAttribute.cs" />
-    <Compile Include="ObjectModel\ColumnDefinitionBase.cs" />
-    <Compile Include="ObjectModel\DataObjectCollectionBase.cs" />
-    <Compile Include="ObjectModel\GroupNode.cs" />
-    <Compile Include="ObjectModel\GroupNodeCollection.cs" />
-    <Compile Include="ObjectModel\LruDataObjectCollectionBase.cs" />
-    <Compile Include="ObjectModel\ObjectCompareAttribute.cs" />
-    <Compile Include="ObjectModel\ObjectCompareHelper.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ObjectModel\ObjectCompareResult.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ObjectModel\RowValueBase.cs" />
-    <Compile Include="ObjectModel\TableBase.cs" />
-    <Compile Include="ObjectModel\TableRowBase.cs" />
-    <Compile Include="ObjectModel\TreeNodeBase.cs" />
-    <Compile Include="ObjectModel\TreeNodeBaseCollection.cs" />
     <Compile Include="DbParameterCache.cs" />
     <Compile Include="Builder\ISqlBuilder.cs" />
     <Compile Include="Builder\PlSqlBuilder.cs" />
@@ -128,17 +166,10 @@
     <Compile Include="DbConnectionManager.cs" />
     <Compile Include="DbEventArgs.cs" />
     <Compile Include="DbContext.cs" />
-    <Compile Include="Mapping\EnumDefine.cs" />
-    <Compile Include="Mapping\ORFieldMappingAttribute.cs" />
     <Compile Include="Mapping\ORMapping.cs" />
     <Compile Include="Mapping\ORMappingItem.cs" />
     <Compile Include="Mapping\ORMappingItemCollection.cs" />
     <Compile Include="Mapping\ORMappingsCache.cs" />
-    <Compile Include="Mapping\ORTableMappingAttribute.cs" />
-    <Compile Include="Mapping\SqlBehaviorAttribute.cs" />
-    <Compile Include="Mapping\SubClassORFieldMappingAttribute.cs" />
-    <Compile Include="Mapping\SubClassSqlBehaviorAttribute.cs" />
-    <Compile Include="Mapping\SubClassTypeAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resource.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -151,8 +182,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="Builder\Diagram\SqlBuilder.cd" />
-    <None Include="Builder\Diagram\SqlCaluseBuilder.cd" />
     <None Include="MCS.Library.snk" />
     <None Include="Properties\DeluxeWorks.Library.Data.Key.pfx" />
   </ItemGroup>
@@ -188,8 +217,11 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Adapters\SplitPage.sql" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\MCS.Library\MCS.Library.P.csproj">
-      <Project>{4077B0B7-062A-4F6D-8A45-A180A2ED3215}</Project>
+      <Project>{4077b0b7-062a-4f6d-8a45-a180a2ed3215}</Project>
       <Name>MCS.Library.P</Name>
     </ProjectReference>
   </ItemGroup>
@@ -199,9 +231,15 @@
     <!--<Copy SourceFiles="@(BinFiles)" DestinationFolder="..\..\Bin" SkipUnchangedFiles="True" />-->
   </Target>
   <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PreBuildEvent>IF NOT EXIST "$(ProjectDir)..\..\Bin" MD "$(ProjectDir)..\..\Bin"
+IF EXIST "$(ProjectDir)..\..\Bin\$(TargetFileName)" DEL "$(ProjectDir)..\..\Bin\$(TargetFileName)"
+IF EXIST "$(ProjectDir)..\..\Bin\$(TargetName).pdb" DEL "$(ProjectDir)..\..\Bin\$(TargetName).pdb"
+IF EXIST "$(ProjectDir)..\..\Bin\$(TargetName).xml" DEL "$(ProjectDir)..\..\Bin\$(TargetName).xml"</PreBuildEvent>
+    <PostBuildEvent>set path=%25path%25;C:\Windows\System32
+ 
+
+ XCOPY "$(TargetPath)"  "$(ProjectDir)..\..\Bin" /Y /D /R
+IF EXIST "$(TargetDir)$(TargetName).pdb" XCOPY "$(TargetDir)$(TargetName).pdb" "$(ProjectDir)..\..\Bin" /Y /D /R
+IF EXIST "$(TargetDir)$(TargetName).xml"  XCOPY "$(TargetDir)$(TargetName).xml" "$(ProjectDir)..\..\Bin" /Y /D /R</PostBuildEvent>
   </PropertyGroup>
 </Project>

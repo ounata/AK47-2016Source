@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseName>IT_Workflow_Dev_Test</TargetDatabaseName>
+    <DeployScriptFileName>MCSWorkflowDB.sql</DeployScriptFileName>
+    <TargetConnectionString>Data Source=tcp:pxov8krwm9.database.chinacloudapi.cn,1433;Persist Security Info=True;User ID=msuser;Pooling=False;MultipleActiveResultSets=False;Connect Timeout=60;Encrypt=False;TrustServerCertificate=True</TargetConnectionString>
+    <ProfileVersionNumber>1</ProfileVersionNumber>
+    <BlockOnPossibleDataLoss>True</BlockOnPossibleDataLoss>
+    <AllowIncompatiblePlatform>True</AllowIncompatiblePlatform>
+  </PropertyGroup>
+</Project>

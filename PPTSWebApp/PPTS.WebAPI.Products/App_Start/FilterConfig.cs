@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Mvc;
 
-namespace PPTS.WebAPI.Product
+namespace PPTS.WebAPI.Products
 {
     public class FilterConfig
     {

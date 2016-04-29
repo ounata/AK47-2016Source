@@ -59,5 +59,18 @@ namespace MCS.Library.Data.Test
             Console.WriteLine(connective.ToSqlString(TSqlBuilder.Instance));
             Console.WriteLine(string.Join(", ", connective.GetFields().ToArray()));
         }
+
+        [TestMethod]
+        public void SelectBuilderTest()
+        {
+            SelectSqlClauseBuilder builder = new SelectSqlClauseBuilder();
+
+            builder.AppendValue("Hello World");
+            builder.AppendValue(100);
+            builder.AppendItem("Name", "沈峥");
+            builder.AppendItem("CreateTime", "GETUTCDATE()", "", true);
+
+            Console.WriteLine(builder.ToSqlString(TSqlBuilder.Instance));
+        }
     }
 }

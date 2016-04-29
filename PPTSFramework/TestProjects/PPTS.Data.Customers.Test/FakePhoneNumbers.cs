@@ -9,13 +9,13 @@ namespace PPTS.Data.Customers.Test
 {
     public class FakePhoneNumbers : IContactPhoneNumbers
     {
-        public string PrimaryPhone
+        public Phone PrimaryPhone
         {
             get;
             set;
         }
 
-        public string SecondaryPhone
+        public Phone SecondaryPhone
         {
             get;
             set;

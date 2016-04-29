@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MCS.Library.Core;
+using MCS.Library.Configuration;
 
 namespace MCS.Library.Data.Builder
 {
@@ -22,7 +23,7 @@ namespace MCS.Library.Data.Builder
         {
             StringBuilder strB = new StringBuilder();
 
-            string currentTimeSql = TSqlBuilder.Instance.DBCurrentTimeFunction;
+            string currentTimeSql = TimePointContext.Current.DBCurrentTimeFunction(TSqlBuilder.Instance);
 
             DBTimePointActionContext.Current.TimePoint.IsNotMinValue(tp => currentTimeSql = TSqlBuilder.Instance.FormatDateTime(tp));
 

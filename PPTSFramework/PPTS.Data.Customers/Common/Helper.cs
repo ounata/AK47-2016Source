@@ -22,5 +22,19 @@ namespace PPTS.Data.Customers
 
             return string.Format("{0}{1:000000}", pattern, counterValue);
         }
+
+        /// <summary>
+        /// 计算申请单号
+        /// </summary>
+        /// <param name="prefix"></param>
+        /// <returns></returns>
+        public static string GetApplyNo(string prefix)
+        {
+            string pattern = string.Format("{0}{1:yyMMdd}", prefix, DateTime.UtcNow);
+
+            int counterValue = Counter.NewCountValue(pattern);
+
+            return string.Format("{0}{1:000000}", pattern, counterValue);
+        }
     }
 }

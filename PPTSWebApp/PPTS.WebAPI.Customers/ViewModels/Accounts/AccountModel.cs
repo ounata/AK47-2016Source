@@ -12,78 +12,37 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
     /// 账户信息
     /// </summary>
     [Serializable]
-    public class AccountModel
+    [DataContract]
+    public class AccountModel : Account
     {
         /// <summary>
-        /// 账户ID
+        /// 资产价值（剩余的资产的价值）
         /// </summary>
         [DataMember]
-        public string AccountID
+        public decimal AssetMoney
         {
             get;
             set;
         }
 
         /// <summary>
-        /// 账户编码
-        /// </summary>
-        [DataMember]
-        public string AccountCode
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 账户余额
-        /// </summary>
-        [DataMember]
-        public decimal AccountMoney
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 折扣基数
-        /// </summary>
-        [DataMember]
-        public decimal DiscountBase
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 折扣率
-        /// </summary>
-        [DataMember]
-        public decimal DiscountRate
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 冻结金额（订购冻结）
-        /// </summary>
-        [DataMember]
-        public decimal FrozenMoney
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 账户价值（订购冻结金额FrozenMoney+账户余额AccountMoney）
+        /// 账户价值（资产价值AssetMoney+账户余额AccountMoney）
         /// </summary>
         [DataMember]
         public decimal AccountValue
         {
             get
             {
-                return this.AccountMoney + this.FrozenMoney;
+                return this.AccountMoney + this.AssetMoney;
             }
+        }
+
+        public static AccountModel Load(Account account)
+        {
+            AccountModel model = AutoMapper.Mapper.DynamicMap<AccountModel>(account);
+            model.AssetMoney = 0;
+
+            return model;
         }
     }
 }

@@ -5,6 +5,7 @@ var mcs = mcs || {};
 
     mcs.g = mcs.g || {};
     mcs.util = mcs.util || {};
+    mcs.date = mcs.date || {};
     mcs.app = mcs.app || { name: "app", version: "1.0" };
     mcs.app.dict = mcs.app.dict || {};
     mcs.app.config = mcs.app.config || {};

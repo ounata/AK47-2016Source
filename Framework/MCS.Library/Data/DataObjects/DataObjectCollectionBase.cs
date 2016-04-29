@@ -65,12 +65,15 @@ namespace MCS.Library.Data.DataObjects
         /// 迭代处理每一个元素
         /// </summary>
         /// <param name="action"></param>
-        public virtual void ForEach(Action<T> action)
+        /// <returns>返回自己</returns>
+        public virtual ReadOnlyDataObjectCollectionBase<T> ForEach(Action<T> action)
         {
             ExceptionHelper.FalseThrow<ArgumentNullException>(action != null, "action");
 
             foreach (T item in List)
                 action(item);
+
+            return this;
         }
 
         /// <summary>

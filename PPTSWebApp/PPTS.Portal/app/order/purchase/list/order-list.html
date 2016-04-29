@@ -1,0 +1,113 @@
+﻿<form name="advQuery" novalidate>
+    <!--高级查询-开始-->
+    <div id="accordion" class="accordion-style1 panel-group">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#advance-search">
+                        <i class="ace-icon fa fa-angle-right bigger-110" data-icon-hide="fa-angle-down" data-icon-show="fa-angle-right"></i>
+                        &nbsp;高级查询条件
+                    </a>
+                </h4>
+            </div>
+            <div class="panel-collapse collapse mcs-advance-search" id="advance-search">
+                <div class="panel-body">
+                    <div class="profile-user-info">
+                        <div class="profile-info-row">
+                            <div class="profile-info-name"> 订单类型</div>
+                            <div class="profile-info-value">
+                                <ppts-checkbox-group category="categoryType" model="vm.criteria.selectedCategoryTypes" clear="vm.criteria.selectedCategoryTypes=[]" />
+                            </div>
+                        </div>
+                        <div class="profile-info-row">
+                            <div class="profile-info-name"> 订购日期</div>
+                            <div class="profile-info-value">
+                                <ppts-radiobutton-group category="dateRange" model="vm.criteria.dateRange" />
+                                <div ng-show="vm.criteria.dateRange == 5">
+                                    <ppts-daterangepicker start-Date="vm.criteria.customStartDate" end-Date="vm.criteria.customEndDate" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="profile-info-row">
+                            <div class="profile-info-name"> 订单状态</div>
+                            <div class="profile-info-value">
+                                <ppts-checkbox-group category="orderStatus" model="vm.criteria.selectedOrderStatus" clear="vm.criteria.selectedOrderStatus=[]" />
+                            </div>
+                        </div>
+                        <div class="profile-info-row">
+                            <div class="profile-info-name"> 学生年级</div>
+                            <div class="profile-info-value">
+                                <ppts-checkbox-group category="grade" model="vm.criteria.selectedStuGrades" clear="vm.criteria.selectedStuGrades=[]" />
+                            </div>
+                        </div>
+                        <div class="profile-info-row">
+                            <div class="profile-info-name"> 产品颗粒度</div>
+                            <div class="profile-info-value">
+                                <ppts-checkbox-group category="unit" model="vm.criteria.selectedUnits" clear="vm.criteria.selectedUnits=[]" />
+                            </div>
+                        </div>
+                        <div class="profile-info-row">
+                            <div class="profile-info-name"> 操作人岗位</div>
+                            <div class="profile-info-value">
+                                <ppts-checkbox-group category="post" model="vm.criteria.selectedPosts" clear="vm.criteria.selectedPosts=[]" />
+                            </div>
+                        </div>
+                        <div class="profile-info-row">
+                            <div class="profile-info-name"> 剩余课时</div>
+                            <div class="profile-info-value">
+                                <mcs-input model="vm.criteria.remainLessonStart" type="number" />到
+                                <mcs-input model="vm.criteria.remainLessonEnd" type="number" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--高级查询-结束-->
+</form>
+<div class="mcs-panel-search well well-sm">
+    <div class="portlet">
+        <div class="portlet-title line">
+            <div class="caption">
+                <label class="quick-search"><i class="ace-icon fa fa-search bigger-125"></i> 快速查询条件</label>
+            </div>
+        </div>
+        <div class="search-panel-body">
+            <form name="orderListForm">
+                <div class="col-sm-12">
+                    <select>
+                        <option>选择分公司</option>
+                    </select>
+                    <select>
+                        <option>选择校区</option>
+                    </select>
+                    <ppts-select category="subject" model="vm.criteria.subject" caption="科目" class="col-sm-3" />
+                    <ppts-select category="courseLevel" model="vm.criteria.courseLevel" caption="课程级别" class="col-sm-3" />
+                    <ppts-select category="duration" model="vm.criteria.duration" caption="课时时长" class="col-sm-3" />
+                </div>
+                <div class="col-sm-12  mcs-margin-top-5">
+                    <mcs-input placeholder="学生姓名" model="vm.criteria.stuName" class="mcs-margin-left-15" />
+                    <mcs-input placeholder="家长姓名" model="vm.criteria.parentName" />
+                    <mcs-input placeholder="学生编号" model="vm.criteria.stuCode" />
+                    <mcs-input placeholder="订单编号" model="vm.criteria.orderCode" />
+                </div>
+                <div class="col-sm-12 mcs-margin-top-15">
+                    <mcs-button category="search" click="vm.search()" size="medium" class="mcs-margin-left-15" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- /结束：订购列表.查询条件 -->
+<!-- #开始：订购列表.工具条 -->
+<div class="mcs-panel-toolbar">
+    <mcs-button category="edit" text="退订" ng-disabled="vm.data.rowsSelected.length!=1" click="vm.unsubscribe()"></mcs-button>
+    <mcs-button category="edit" text="编辑关联缴费单" ng-disabled="vm.data.rowsSelected.length!=1" click="vm.editChargePayment()"></mcs-button>
+    <mcs-button category="edit" text="打印订单"></mcs-button>
+    <mcs-button category="add" text="导出"></mcs-button>
+</div>
+<!-- /结束：订购列表.工具条 -->
+<!-- #开始：订购列表.数据表格 -->
+<mcs-datatable data="vm.data" />
+<!-- /结束：订购列表.数据表格 -->

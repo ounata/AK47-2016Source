@@ -15,7 +15,7 @@
     [Poster] NVARCHAR(32) NULL, 
     [CreatorID] NVARCHAR(36) NULL, 
     [CreatorName] NVARCHAR(64) NULL, 
-    [CreateTime] DATETIME NOT NULL DEFAULT getdate(), 
+    [CreateTime] DATETIME NULL DEFAULT getdate(), 
     CONSTRAINT [PK_CustomerReplies] PRIMARY KEY NONCLUSTERED ([ReplyID])  
 )
 

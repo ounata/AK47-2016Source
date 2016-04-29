@@ -13,6 +13,7 @@
 <body>
     <div>
         Hello, @Html.Label(MCS.Library.Principal.DeluxeIdentity.CurrentUser.DisplayName)
+        @Html.Label(MCS.Library.Principal.DeluxeIdentity.CurrentUser.Parent.Properties["ShortName"].ToString())
     </div>
 </body>
 </html>

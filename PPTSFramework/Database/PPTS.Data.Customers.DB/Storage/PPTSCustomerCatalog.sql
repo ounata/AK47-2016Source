@@ -1,0 +1,4 @@
+﻿/*创建全文检索目录*/
+CREATE FULLTEXT CATALOG [PPTSCustomerCatalog]
+    WITH ACCENT_SENSITIVITY = ON
+    AUTHORIZATION [dbo];

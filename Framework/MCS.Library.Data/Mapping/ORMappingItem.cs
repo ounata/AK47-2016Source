@@ -41,6 +41,7 @@ namespace MCS.Library.Data.Mapping
         private string subClassPropertyName = string.Empty;
         private ClauseBindingFlags bindingFlags = ClauseBindingFlags.All;
         private string defaultExpression = string.Empty;
+        private bool forceUseDefaultExpression = false;
 
         private bool encryptProperty = false;
         private string encryptorName = null;
@@ -100,6 +101,9 @@ namespace MCS.Library.Data.Mapping
 
             if (this.utcTimeToLocal)
                 XmlHelper.AppendNotNullAttr(writer, "utcTimeToLocal", this.utcTimeToLocal);
+
+            if (this.forceUseDefaultExpression)
+                XmlHelper.AppendNotNullAttr(writer, "forceUseDefaultExpression", this.forceUseDefaultExpression);
         }
 
         /// <summary>
@@ -134,6 +138,7 @@ namespace MCS.Library.Data.Mapping
             this.encryptProperty = XmlHelper.GetAttributeValue(reader, "encryptProperty", false);
             this.encryptorName = XmlHelper.GetAttributeValue(reader, "encryptorName", (string)null);
             this.utcTimeToLocal = XmlHelper.GetAttributeValue(reader, "utcTimeToLocal", false);
+            this.forceUseDefaultExpression = XmlHelper.GetAttributeValue(reader, "forceUseDefaultExpression", false);
         }
 
         /// <summary>
@@ -169,6 +174,15 @@ namespace MCS.Library.Data.Mapping
             }
         }
 
+        /// <summary>
+        /// 无论对象的属性值如何，在DefaultExpression不为空的情况下，强制使用默认表达式。
+        /// </summary>
+        public bool ForceUseDefaultExpression
+        {
+            get { return this.forceUseDefaultExpression; }
+            set { this.forceUseDefaultExpression = value; }
+        }
+ 
         /// <summary>
         /// 对应的属性值会出现在哪些Sql语句中
         /// </summary>

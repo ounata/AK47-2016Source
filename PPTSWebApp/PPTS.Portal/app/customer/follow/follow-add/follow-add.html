@@ -1,0 +1,131 @@
+﻿<form class="form-horizontal" role="form">
+    <div class="widget-box">
+        <div class="widget-header">
+            <h4>
+                新增跟进记录
+                <small>
+                    <i class="icon-double-angle-right"></i>
+                    (<span class="required"> * </span>表示必填字段)
+                </small>
+            </h4>
+        </div>
+        <div class="widget-body">
+            <div class="widget-main no-padding">
+                <div class="clearfix form-actions mcs-form-actions">
+                    <div class="col-md-offset-3 col-md-9">
+                        <mcs-button type="submit" category="save" click="vm.save()"></mcs-button>
+                        <mcs-button category="cancel" text="返回" click="vm.cancel()"></mcs-button>
+                    </div>
+                </div>
+                <div class="page-header">
+                    <span>跟进信息</span>
+                </div>
+                <div class="form-group">
+                    <mcs-label required="true" text="跟进方式" css="col-sm-3" />
+                    <div class="col-sm-9">
+                        <ppts-select category="followType" model="vm.follow.followType" css="col-sm-5 col-xs-5" class="ng-isolate-scope">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label required="true" text="跟进对象" css="col-sm-3" />
+                    <div class="col-sm-9">
+                        <ppts-select category="followObject" model="vm.follow.followObject" css="col-sm-5 col-xs-5" class="ng-isolate-scope">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label required="true" text="想要补习的科目" css="col-sm-3" />
+                    <div class="col-sm-9">
+                        <ppts-checkbox-group category="subject" model="vm.follow.intensionSubjects" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label required="true" text="购买意愿" css="col-sm-3" />
+                    <div class="col-sm-9">
+                        <ppts-radiobutton-group category="purchaseIntension" model="vm.follow.purchaseIntension" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label required="true" text="客户级别" css="col-sm-3" />
+                    <div class="col-sm-9">
+                        <ppts-radiobutton-group category="customerLevel" model="vm.follow.customerLevel" />
+                    </div>
+                </div>
+                <div class="form-group" ng-show="vm.follow.customerLevel == 11">
+                    <mcs-label required="true" text="无效理由" css="col-sm-3" />
+                    <div class="col-sm-9">
+                        <ppts-radiobutton-group category="invalidReason" model="vm.follow.invalidReason" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="沟通结果" css="col-sm-3" />
+                    <div class="col-sm-9">
+                        {{ vm.follow.subTalk }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="跟进前阶段" css="col-sm-3" />
+                    <div class="col-sm-9">
+                        {{ vm.follow.followStage }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="本次跟进阶段" css="col-sm-3" />
+                    <div class="col-sm-9">
+                        <ppts-select category="followStage" model="vm.follow.followStage" css="col-sm-5 col-xs-5" class="ng-isolate-scope">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label required="true" text="预计上门时间" css="col-sm-3" />
+                    <div class="col-sm-9">
+                        <ppts-datepicker model="vm.follow.planVerifyTime" css="col-xs-5 col-sm-5" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label required="true" text="预计下次沟通时间" css="col-sm-3" />
+                    <div class="col-sm-9">
+                        <ppts-datepicker model="vm.follow.nextTalkTime" css="col-xs-5 col-sm-5" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="预计签约时间" css="col-sm-3" />
+                    <div class="col-sm-9">
+                        <ppts-datepicker model="vm.follow.planSignDate" css="col-xs-5 col-sm-5" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="此次通电号码" css="col-sm-3" />
+                    <div class="col-sm-9">
+                        <mcs-input model="vm.follow.followPhone" css="col-xs-5 col-sm-5" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label required="true" text="是否在其他机构辅导" css="col-sm-3" />
+                    <div class="col-sm-9">
+                        <ppts-radiobutton-group category="ifElse" model="vm.criteria.isStudyThere" />
+                    </div>
+                </div>
+                <div class="form-group" ng-show="vm.criteria.isStudyThere==1">
+                    <div class="col-sm-3"></div>
+                    <div class="col-sm-6">
+                        <table>
+                            <tr>
+                                <td><ppts-select category="subject" style="width:120px"/></td>
+                                <td><input class="mcs-readonly-input" ng-model="vm.customer.customerName" style="margin: 0 0 0 15px" placeholder="请填写机构名称" /></td>
+                                <td><ppts-daterangepicker start-date="" end-date="" size="sm" /></td>
+                                <td><button ng-click="" class="btn btn-link"><i class="ace-icon fa fa-plus bigger-110"></i></button></td>
+                            </tr>
+                            <!--<tr ng-repeat="item in vm.instutionItems" ng-bind-html="item"></tr>-->
+                        </table>
+                    </div>
+                    <div class="col-sm-3"></div>
+                </div>
+                <div class="form-group">
+                    <mcs-label required="true" text="跟进情况备注" css="col-sm-3" />
+                    <div class="col-sm-6">
+                        <textarea rows="7" class="form-control" placeholder="请输入备注信息" ng-model="vm.criteria.followMemo">{{ vm.criteria.followMemo }}</textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

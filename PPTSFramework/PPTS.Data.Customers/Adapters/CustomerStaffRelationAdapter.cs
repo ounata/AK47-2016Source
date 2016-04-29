@@ -1,5 +1,6 @@
 ﻿using MCS.Library.Core;
 using MCS.Library.Data;
+using MCS.Library.Data.Adapters;
 using MCS.Library.SOA.DataObjects;
 using PPTS.Data.Customers.Entities;
 using System;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace PPTS.Data.Customers.Adapters
 {
-    public class CustomerStaffRelationAdapter : CustomerAdapterBase<CustomerStaffRelation, CustomerStaffRelationCollection>
+    public class CustomerStaffRelationAdapter : VersionedCustomerAdapterBase<CustomerStaffRelation, CustomerStaffRelationCollection>
     {
         public static CustomerStaffRelationAdapter Instance = new CustomerStaffRelationAdapter();
 
@@ -18,9 +19,26 @@ namespace PPTS.Data.Customers.Adapters
         {
         }
 
-        public CustomerStaffRelation Load(string id)
+        /// <summary>
+        /// 根据客户ID信息进行加载
+        /// </summary>
+        /// <param name="customerID"></param>
+        /// <returns></returns>
+        public CustomerStaffRelationCollection LoadByCustomerID(string customerID)
         {
-            return this.Load(builder => builder.AppendItem("ID", id)).SingleOrDefault();
+            customerID.CheckStringIsNullOrEmpty("customerID");
+
+            return this.Load(builder => builder.AppendItem("CustomerID", customerID), DateTime.MinValue);
+        }
+
+        /// <summary>
+        /// 在上下文中根据客户ID信息进行加载
+        /// </summary>
+        /// <param name="customerID"></param>
+        /// <param name="action"></param>
+        public void LoadByCustomerIDInContext(string customerID, Action<CustomerStaffRelationCollection> action)
+        {
+            this.LoadInContext(new WhereLoadingCondition(builder => builder.AppendItem("CustomerID", customerID)), action, DateTime.MinValue, this.GetMappingInfo().QueryTableName);
         }
     }
 }

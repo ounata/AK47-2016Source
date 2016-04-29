@@ -1,55 +1,7 @@
-﻿.mcs-margin-top-15 {
-    margin-top: 15px !important;
-}
-.mcs-margin-right-5 {
-    margin-right: 5px !important;
-}
+﻿/*修复IE的显示*/
 
-.mcs-margin-right-20 {
-    margin-right: 20px !important;
-}
-
-.mcs-default-size-input {
-    height: 35px;
-}
-
-.mcs-default-size-input.fixed {
-    width: 200px;
-}
-
-.mcs-padding-0 {
-    padding: 0 !important;
-}
-
-.mcs-padding-right-15 {
-    padding-right: 15px;
-}
-
-.mcs-margin-right-20 {
-    margin-right: 20px;
-}
-
-.mcs-width-100 {
-    width: 100px;
-}
-
-.mcs-width-120 {
-    width: 120px;
-}
-
-.mcs-width-130 {
-    width: 130px;
-}
-
-.mcs-readonly-input {
-    border-bottom: #b5b5b5 1px solid;
-    border-top-style: none;
-    border-right-style: none;
-    border-left-style: none;
-    width: 150px;
-    height: 25px;
-    padding-left: 5px;
-    background: transparent;
+.mcs-readonly-input.ie {
+    width: 155px;
 }
 
 
@@ -57,7 +9,7 @@
 
 .mcs-panel-search {
     /*padding-bottom: 10px;*/
-    margin-bottom: 10px!important;
+    margin-bottom: 10px !important;
 }
 
 .mcs-panel-search .quick-search {
@@ -97,4 +49,385 @@
 
 .mcs-datatable-column.solidWidth {
     width: 130px;
+}
+
+.datatable-container {
+    width: 100%;
+    overflow-y: auto;
+    _overflow: auto;
+    margin: 0 0 1em;
+}
+
+table {
+    border: 0;
+    border-collapse: collapse;
+}
+
+
+/*添加IOS下滚动条*/
+
+.datatable-container:-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 14px;
+    height: 14px;
+}
+
+.datatable-container::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    border: 3px solid #fff;
+    background-color: rgba(0, 0, 0, .3);
+}
+
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+    -webkit-overflow-scrolling: touch;
+}
+
+.table-responsive > .table {
+    margin-bottom: 0;
+}
+
+.table-responsive > .table > thead > tr > th,
+.table-responsive > .table > tbody > tr > th,
+.table-responsive > .table > tfoot > tr > th,
+.table-responsive > .table > thead > tr > td,
+.table-responsive > .table > tbody > tr > td,
+.table-responsive > .table > tfoot > tr > td {
+    white-space: nowrap;
+}
+
+
+/*--------------------以下是以mcs-打头的自定义样式-----------------------*/
+
+.mcs-margin-top-15 {
+    margin-top: 15px !important;
+}
+
+.mcs-margin-top-5 {
+    margin-top: 5px;
+}
+
+.mcs-margin-right-5 {
+    margin-right: 5px !important;
+}
+
+.mcs-margin-right-20 {
+    margin-right: 20px !important;
+}
+
+.mcs-default-size-input {
+    height: 30px;
+    line-height: 20px;
+    vertical-align: middle;
+}
+
+.mcs-input-search {
+    height: 35px;
+    width: 200px;
+    line-height: 25px;
+}
+
+.mcs-padding-0 {
+    padding: 0 !important;
+}
+
+.mcs-padding-5 {
+    padding: 5px !important;
+}
+
+.mcs-padding-left-15 {
+    padding-left: 15px;
+}
+
+.mcs-padding-right-15 {
+    padding-right: 15px;
+}
+
+.mcs-margin-right-20 {
+    margin-right: 20px;
+}
+
+.mcs-margin-left-15 {
+    margin-left: 15px;
+}
+
+.mcs-width-100 {
+    width: 100px;
+}
+
+.mcs-width-120 {
+    width: 120px;
+}
+
+.mcs-width-130 {
+    width: 130px;
+}
+
+.mcs-readonly-input {
+    border-bottom: #b5b5b5 1px solid;
+    border-top-style: none;
+    border-right-style: none;
+    border-left-style: none;
+    width: 100px;
+    height: 25px;
+    padding-left: 5px;
+    background: transparent;
+}
+
+.mcs-padding-right-15 {
+    padding-right: 15px;
+}
+
+.mcs-margin-right-20 {
+    margin-right: 20px;
+}
+
+.mcs-width-100 {
+    width: 100px;
+}
+
+.mcs-width-120 {
+    width: 120px;
+}
+
+
+/*表格选中的单元格高亮色*/
+
+.mcs-tr-selected {
+    /*background-color: #ffd800!important;*/
+}
+
+.mcs-tr-selected > td {
+    background-color: LemonChiffon !important;
+}
+
+
+/*左边框表示成功（未使用）*/
+
+.mcs-border-left-success {
+    border-left: 3px solid #87b87f !important;
+}
+
+
+/*左边框表示危险（未使用）*/
+
+.mcs-border-left-warning {
+    border-left: 3px solid #d15b47 !important;
+}
+
+.mcs-status-success {
+    color: #82af6f;
+}
+
+.mcs-status-danger {
+    color: #d15b47;
+}
+
+
+/*搜索区域的样式*/
+
+.mcs-panel-search {
+    /*padding-bottom: 10px;*/
+    margin-bottom: 10px !important;
+}
+
+.mcs-panel-search .quick-search {
+    color: #4c8fbd;
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 1;
+    padding: 0 6px;
+}
+
+
+/*工具条区域的样式*/
+
+.mcs-panel-toolbar {
+    padding-bottom: 10px;
+}
+
+.mcs-panel-toolbar button {
+    margin-bottom: 2px;
+    margin-right: 10px;
+}
+
+.mcs-panel-pager .pagination {
+    float: right;
+    margin-top: -5px;
+}
+
+.mcs-panel-pager.well {
+    margin-bottom: 0px;
+    border: 0px;
+}
+
+
+/*表单*/
+
+.mcs-form-td-left {
+    text-align: right;
+    width: 120px;
+    background-color: rgb(245, 245, 245);
+}
+
+ppts-select {
+    padding: 0px;
+}
+
+.mcs-form-actions {
+    background: none;
+    border-bottom: 1px solid #e5e5e5;
+    border-top: 0px;
+    margin-bottom: 0px;
+}
+
+.mcs-user-profile .profile-info-name {
+    background: none;
+}
+
+.mcs-user-profile .profile-info-row {
+    line-height: 30px;
+}
+
+.modal-footer {
+    text-align: center;
+}
+
+
+/*日程项目的样式*/
+
+.mcs-calendar-event .fc-time {
+    font-size: 14px !important;
+    display: none !important;
+}
+
+.mcs-calendar-event .fc-title {
+    font-size: 14px !important;
+}
+
+.mcs-calendar-event {
+    font-size: 14px !important;
+    cursor: pointer;
+    color: white;
+}
+
+.mcs-calendar-event-selected {
+    background-color: #4f99c6 !important;
+    border-color: #4f99c6 !important;
+    color: white !important;
+}
+
+.mcs-visible {
+    visibility: visible;
+}
+
+.mcs-hidden {
+    visibility: hidden;
+}
+
+.mcs-panel-search .portlet {
+    margin-bottom: 10px;
+}
+
+.mcs-search-tags {
+    border: 0;
+    background: none;
+    padding: 0px;
+    display: inline;
+}
+
+.mcs-input-small {
+    width: 50px;
+    height: 30px;
+    margin-right: 5px;
+    vertical-align: middle;
+    line-height: 25px;
+}
+
+.mcs-input-group {
+    width: 300px;
+    margin-right: 20px;
+}
+
+.mcs-input-group.large {
+    width: 500px;
+}
+
+.input-group-addon {
+    cursor: pointer;
+}
+
+
+/*修正表单验证 */
+
+.has-error .ng-invalid {
+    border-color: #a94442;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+}
+
+.has-error .ng-invalid:focus {
+    border-color: #843534;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #ce8483;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #ce8483;
+}
+
+
+/*增强布局能力*/
+
+.mcs-row-high-50 {
+    height: 50px;
+    line-height: 50px;
+}
+
+.table-layout {
+    border: 1px #a0c6e5;
+    cellspacing: 0px;
+    border-collapse: collapse;
+}
+
+.table-layout tr {
+    line-height: 50px
+}
+
+.table-layout tr td {
+    padding-left: 12px;
+    padding-right: 12px;
+}
+
+.input-with-160 {
+    width: 160px;
+}
+
+.input-width-200 {
+    width: 200px;
+}
+
+.input-width-180 {
+    width: 180px !important;
+}
+
+
+/*tree*/
+
+.ztree li span.button.depart_ico_open {
+    background: url(assets/images/department.png) no-repeat
+}
+
+.ztree li span.button.depart_ico_close {
+    background: url(assets/images/department.png) no-repeat
+}
+
+.ztree li span.button.user_ico_docu {
+    background: url(assets/images/person.png) no-repeat
+}
+
+
+/*解决日期选取控件在弹出窗口使用时被覆盖的问题 */
+
+.datepicker {
+    z-index: 1052
 }

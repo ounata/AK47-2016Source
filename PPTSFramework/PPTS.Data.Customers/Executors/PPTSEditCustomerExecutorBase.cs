@@ -49,13 +49,18 @@ namespace PPTS.Data.Common.Executors
         {
             using (DbContext dbContext = PPTS.Data.Customers.ConnectionDefine.GetDbContext())
             {
-                dbContext.ExecuteNonQuerySqlInContext();
+                this.ExecuteNonQuerySqlInContext(dbContext);
 
                 if (this.DataAction != null)
                     this.DataAction(this.Model);
             }
 
             return this.Model;
+        }
+
+        protected virtual void ExecuteNonQuerySqlInContext(DbContext dbContext)
+        {
+            dbContext.ExecuteNonQuerySqlInContext();
         }
     }
 }

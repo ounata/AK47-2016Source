@@ -28,29 +28,40 @@ namespace MCS.Library.Data.Builder
         {
         }
 
-		/// <summary>
-		/// 进行单引号检查，如果发现字符串中有单引号，那么替换成两个单引号，防止注入式攻击。然后在头尾各添加一个引号。然后添加Unicode前缀N
-		/// </summary>
-		/// <param name="data"></param>
-		/// <returns></returns>
-		public override string CheckUnicodeQuotationMark(string data)
-		{
-			string result = CheckQuotationMark(data, true);
+        /// <summary>
+        /// 进行单引号检查，如果发现字符串中有单引号，那么替换成两个单引号，防止注入式攻击。然后在头尾各添加一个引号。然后添加Unicode前缀N
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public override string CheckUnicodeQuotationMark(string data)
+        {
+            string result = CheckQuotationMark(data, true);
 
             if (result != null)
                 result = 'N' + result;
 
             return result;
-		}
+        }
 
         /// <summary>
-        /// 获取数据库同步时间函数
+        /// 获取数据库当前时间函数
         /// </summary>
         public override string DBCurrentTimeFunction
         {
             get
             {
                 return "GETDATE()";
+            }
+        }
+
+        /// <summary>
+        /// 获取数据库当前UTC时间函数
+        /// </summary>
+        public override string DBCurrentUtcTimeFunction
+        {
+            get
+            {
+                return "GETUTCDATE()";
             }
         }
 

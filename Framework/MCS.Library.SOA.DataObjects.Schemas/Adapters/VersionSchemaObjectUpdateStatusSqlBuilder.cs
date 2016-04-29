@@ -18,7 +18,7 @@ namespace MCS.Library.SOA.DataObjects.Schemas.Adapters
 		{
 		}
 
-		protected override string PrepareInsertSql(VersionedSchemaObjectBase obj, ORMappingItemCollection mapping)
+		public override string PrepareInsertSql(VersionedSchemaObjectBase obj, ORMappingItemCollection mapping, string[] ignoreProperties)
 		{
 			List<string> selectFieldNames = new List<string>(ORMapping.GetSelectFieldsName(mapping, "VersionStartTime", "VersionEndTime", "Status"));
 
@@ -42,7 +42,7 @@ namespace MCS.Library.SOA.DataObjects.Schemas.Adapters
 				TSqlBuilder.Instance.FormatDateTime(DBTimePointActionContext.MaxVersionEndTime),
 				(int)obj.Status,
 				GetTableName(obj, mapping),
-				this.PrepareWhereSqlBuilder(obj, mapping).ToSqlString(TSqlBuilder.Instance));
+				this.PrepareWhereSqlBuilder(obj, mapping, ignoreProperties).ToSqlString(TSqlBuilder.Instance));
 
 			return strB.ToString();
 		}

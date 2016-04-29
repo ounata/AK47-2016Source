@@ -2,7 +2,8 @@
 (
 	[UserID] NVARCHAR(36) NOT NULL PRIMARY KEY, 
     [UserName] NVARCHAR(64) NULL, 
-    [Gender] NVARCHAR(16) NULL
+    [Gender] NVARCHAR(16) NULL, 
+    [ModifyTime] DATETIME NULL
 )
 
 GO
@@ -32,3 +33,12 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level1name = N'Users',
     @level2type = N'COLUMN',
     @level2name = N'Gender'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'修改时间',
+    @level0type = N'SCHEMA',
+    @level0name = N'dbo',
+    @level1type = N'TABLE',
+    @level1name = N'Users',
+    @level2type = N'COLUMN',
+    @level2name = N'ModifyTime'

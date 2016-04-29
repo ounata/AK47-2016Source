@@ -28,4 +28,39 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="CustomerStatus" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="53b53568-b041-4b41-8a88-c41296d00367" ChangeDateTime="04/11/2016 02:13:08">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[RemainAmount]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="RemainOne2One" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="720a3f44-5621-4583-bed0-990b9648df09" ChangeDateTime="04/11/2016 02:13:13">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[RemainOne2One]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="RemainOne2Ones" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="07527acb-7f61-4f9e-a3c1-e93988dfbfcd" ChangeDateTime="04/11/2016 07:49:53">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[EducatorNae]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="EducatorName" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="dad39427-28d9-4a51-bbd3-0e248bd2ba0d" ChangeDateTime="04/11/2016 09:00:52">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[OrderDateOfOne2One]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="LastOrderDate" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="f9a17d55-3f10-4265-a568-e7046f2521f2" ChangeDateTime="04/11/2016 09:01:00">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[LastOrderDate]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="LatestOrderDate" />
+  </Operation>
 </Operations>

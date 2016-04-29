@@ -2,31 +2,58 @@
 using PPTS.Data.Common.Adapters;
 using PPTS.Data.Products.Adapters;
 using PPTS.Data.Products.DataSources;
-using PPTS.WebAPI.Product.Executors;
-using PPTS.WebAPI.Product.ViewModels.Products;
+using PPTS.WebAPI.Products.Executors;
+using PPTS.WebAPI.Products.ViewModels.Products;
 using System.Collections.Generic;
 using System.Web.Http;
 using MCS.Library.Core;
 
-using Entities = PPTS.Data.Products.Entities;
-using System;
+using PPTS.Data.Products.Entities;
 using PPTS.Data.Products;
+using System;
+using PPTS.Data.Products.Executors;
 
-namespace PPTS.WebAPI.Product.Controllers
+namespace PPTS.WebAPI.Products.Controllers
 {
     /// <summary>
     /// 产品管理
     /// </summary>
     public class ProductsController : ApiController
     {
-        #region api/Products/getallProducts
+        public ProductsController() { }
 
-        [HttpGet]
-        public ProductQueryCriteriaModel Test()
+        #region 班组订购
+
+        /// <summary>
+        /// 查询，第一次。第一页，下载字典
+        /// </summary>
+        /// <param name="criteria">查询条件</param>
+        /// <returns>返回带字典的潜客数据列表</returns>
+        [HttpPost]
+        public QueryClassGroupQueryResult GetClassGroupProducts(QueryClassGroupCriteriaModel criteria)
         {
-            //return new ProductQueryResult() {  QueryResult=new PagedQueryResult<Data.Products.Entities.Product, Data.Products.Entities.ProductCollection>()};
-            return new ProductQueryCriteriaModel() { PageParams = new PageRequestParams() };
+            return new QueryClassGroupQueryResult
+            {
+                QueryResult = GenericProductDataSource<OrderClassGroupProduct, OrderClassGroupProductCollection>.Instance.Query(criteria.PageParams, criteria, criteria.OrderBy),
+                Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(OrderClassGroupProduct)),
+            };
         }
+
+        /// <summary>
+        /// 查询，翻页或排序。不下载字典
+        /// </summary>
+        /// <param name="criteria">查询条件</param>
+        /// <returns>返回不带字典的潜客数据列表</returns>
+        [HttpPost]
+        public PagedQueryResult<OrderClassGroupProduct, OrderClassGroupProductCollection> GetPagedClassGroupProducts(QueryClassGroupCriteriaModel criteria)
+        {
+            return GenericProductDataSource<OrderClassGroupProduct, OrderClassGroupProductCollection>.Instance.Query(criteria.PageParams, criteria, criteria.OrderBy);
+        }
+
+
+        #endregion
+
+        #region api/Products/getallProducts
 
 
         /// <summary>
@@ -39,10 +66,12 @@ namespace PPTS.WebAPI.Product.Controllers
         {
             return new ProductQueryResult
             {
-                QueryResult = GenericProductViewDataSource<Entities.ProductView, Entities.ProductViewCollection>.Instance.Query(criteria.PageParams, criteria, criteria.OrderBy),
-                Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(Entities.ProductView)),
+                QueryResult = GenericProductDataSource<ProductView, ProductViewCollection>.Instance.Query(criteria.PageParams, criteria, criteria.OrderBy),
+                Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(ProductView)),
             };
         }
+
+
 
         /// <summary>
         /// 查询，翻页或排序。不下载字典
@@ -50,39 +79,29 @@ namespace PPTS.WebAPI.Product.Controllers
         /// <param name="criteria">查询条件</param>
         /// <returns>返回不带字典的潜客数据列表</returns>
         [HttpPost]
-        public PagedQueryResult<Entities.ProductView, Entities.ProductViewCollection> GetPagedProducts(ProductQueryCriteriaModel criteria)
+        public PagedQueryResult<ProductView, ProductViewCollection> GetPagedProducts(ProductQueryCriteriaModel criteria)
         {
-            return GenericProductViewDataSource<Entities.ProductView, Entities.ProductViewCollection>.Instance.Query(criteria.PageParams, criteria, criteria.OrderBy);
+            return GenericProductDataSource<ProductView, ProductViewCollection>.Instance.Query(criteria.PageParams, criteria, criteria.OrderBy);
         }
 
         [HttpGet]
         public ProductViewModel GetProduct(string id)
         {
-
-            var result = new ProductViewModel()
-            {
-                Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(
-                    typeof(Entities.Product),
-                    typeof(Entities.ProductExOfCourse),
-                    typeof(Entities.ProductSalaryRule)
-                )
-            };
-
-            Data.Products.Executors.PPTSProductExecutor getProductViewExecutor = new Data.Products.Executors.PPTSProductExecutor("GetProductView") { ProductId=id };
-            getProductViewExecutor.FillProductView = new Action<Entities.ProductView,
-                Entities.ProductExOfCourse,
-                Entities.ProductSalaryRuleCollection>(
-                (productView, exOfCourse, salaryRules) =>
-                {
-                    result.Product = productView;
-                    result.ExOfCourse = exOfCourse;
-                    result.SalaryRules = salaryRules;
-                }
-                );
-            getProductViewExecutor.Execute();
-
-            return result;
+            return ProductViewModel.GetProducViewtById(id);
         }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ProductViewCollectionModel GetProducts(string[] ids)
+        {
+            return ProductViewCollectionModel.GetProductViewCollectionByIds(ids);
+        }
+
 
         #endregion
 
@@ -91,29 +110,13 @@ namespace PPTS.WebAPI.Product.Controllers
         [HttpGet]
         public ProductModel CreateProduct(int type = 1)
         {
-            var categoryType = (CategoryType)type;
-
-            var model = ProductModel.ToCreateableProductModel(categoryType);
-            model.Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(
-                    typeof(Entities.Product),
-                    typeof(Entities.ProductExOfCourse),
-                    typeof(Entities.ProductSalaryRule)
-                );
-            model.Catalogs = CategoryCatalogAdapter.Instance.LoadByCategoryType(categoryType);
-            return model;
+            return ProductModel.ToCreateableProductModel((CategoryType)type); ;
         }
         
         [HttpPost]
         public ProductModel SubmitProduct(ProductModel model)
         {
-            if (string.IsNullOrWhiteSpace(model.Product.ProductID))
-            {
-                model.Product.ProductID = Guid.NewGuid().ToString();
-            }
-            if (model.CategoryType == CategoryType.OneToOne)
-            {
-                model.Product.StartDate = model.Product.EndDate = DateTime.Parse("3000-12-31");
-            }
+            
             ProductExecutor executor = new ProductExecutor(model);
             executor.Execute();
 
@@ -123,25 +126,8 @@ namespace PPTS.WebAPI.Product.Controllers
         [HttpGet]
         public ProductViewModel CopyProduct(string id)
         {
-            //var categoryType = (CategoryType)type;
-
-            var result = new ProductViewModel() { };
-
-            var getProductViewExecutor = new Data.Products.Executors.PPTSProductExecutor("GetProductView"){ ProductId=id };
-            getProductViewExecutor.FillProductView = new Action<Entities.ProductView,
-                Entities.ProductExOfCourse,
-                Entities.ProductSalaryRuleCollection>(
-                (productView, exOfCourse, salaryRules) =>
-                {
-                    result.CategoryType = (CategoryType)Convert.ToInt32(productView.CategoryType);
-                    result.Product = productView;
-                    result.ExOfCourse = exOfCourse;
-                    result.SalaryRules = salaryRules;
-                }
-                );
-            getProductViewExecutor.Execute();
-
-            result.Product.ProductID = string.Empty;
+            var result = ProductViewModel.GetProducViewtById(id);
+            result.Product.ProductID = result.Product.ProductCode = string.Empty;
             result.Catalogs = CategoryCatalogAdapter.Instance.LoadByCategoryType((CategoryType)Convert.ToInt32(result.Product.CategoryType));
             return result;
         }
@@ -156,12 +142,12 @@ namespace PPTS.WebAPI.Product.Controllers
             return (bool)executor.Execute();
         }
 
+
         [HttpPost]
-        public string StartSellProduct(string id,DateTime startDate)
+        public bool DelayProduct(dynamic param)
         {
-            var executor = new Data.Products.Executors.PPTSProductExecutor("StartSell") { ProductId = id , StartDate=startDate};
-            if ((bool)executor.Execute()) { return DateTime.Now.ToString("yyyy-MM-dd"); }
-            return string.Empty;
+            var executor = new Data.Products.Executors.PPTSProductExecutor("DelaySell") { ProductId = param.id, Date = param.endDate };
+            return (bool)executor.Execute();
         }
 
         [HttpPost]
@@ -171,7 +157,8 @@ namespace PPTS.WebAPI.Product.Controllers
             return (bool)executor.Execute();
         }
 
-
+        
     }
+
 
 }

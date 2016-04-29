@@ -57,5 +57,10 @@ namespace PPTS.Data.Common.Executors
 
             return this.Model;
         }
+
+        protected virtual void ExecuteNonQuerySqlInContext(DbContext dbContext)
+        {
+            dbContext.ExecuteNonQuerySqlInContext();
+        }
     }
 }

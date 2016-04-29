@@ -21,7 +21,7 @@ namespace PPTS.Data.Customers.Test
             {
                 PhoneAdapter.Instance.UpdateByOwnerIDInContext(ownerID, phones);
 
-                context.ExecuteNonQuerySqlInContext();
+                context.ExecuteTimePointSqlInContext();
             }
 
             PhoneCollection loaded = PhoneAdapter.Instance.LoadByOwnerID(ownerID);
@@ -66,8 +66,8 @@ namespace PPTS.Data.Customers.Test
         {
             FakePhoneNumbers numbers = new FakePhoneNumbers();
 
-            numbers.PrimaryPhone = "021-68767788-5461";
-            numbers.SecondaryPhone = "13501126279";
+            numbers.PrimaryPhone = "021-68767788-5461".ToPhone("abc", true);
+            numbers.SecondaryPhone = "13501126279".ToPhone("abc", false);
 
             PhoneCollection phones = numbers.ToPhones(UuidHelper.NewUuidString());
 
@@ -83,7 +83,7 @@ namespace PPTS.Data.Customers.Test
         {
             FakePhoneNumbers numbers = new FakePhoneNumbers();
 
-            numbers.PrimaryPhone = "021-68767788-5461";
+            numbers.PrimaryPhone = "021-68767788-5461".ToPhone("abc", true);
 
             PhoneCollection phones = numbers.ToPhones(UuidHelper.NewUuidString());
 
@@ -97,7 +97,7 @@ namespace PPTS.Data.Customers.Test
         {
             FakePhoneNumbers numbers = new FakePhoneNumbers();
 
-            numbers.SecondaryPhone = "13501126279";
+            numbers.SecondaryPhone = "13501126279".ToPhone("abc", false);
 
             PhoneCollection phones = numbers.ToPhones(UuidHelper.NewUuidString());
 

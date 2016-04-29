@@ -30,22 +30,22 @@
         var assets = { files: [], localFiles: [], container: '' };
 
         if (params.length == 1) {
-            if (params[0] instanceof Object) {
+            if (params[0] instanceof Object && params[0].constructor == Object) {
                 assets = params;
-            } else if (params[0] instanceof Array) {
+            } else if (params[0] instanceof Array && params[0].constructor == Array) {
                 assets.files = params[0];
-            } else if (arguments[0] instanceof String) {
+            } else if (typeof params[0] == 'string') {
                 assets.files = [params[0]];
             }
         } else {
-            if (params[0] instanceof Array) {
+            if (params[0] instanceof Array && params[0].constructor == Array) {
                 assets.files = params[0];
-            } else if (params[1] instanceof String) {
+            } else if (typeof params[0] == 'string') {
                 assets.files = [params[0]];
             }
-            if (params[1] instanceof Array) {
+            if (params[1] instanceof Array && params[1].constructor == Array) {
                 assets.localFiles = params[1];
-            } else if (params[1] instanceof String) {
+            } else if (typeof params[1] == 'string') {
                 assets.localFiles = [params[1]];
             }
 

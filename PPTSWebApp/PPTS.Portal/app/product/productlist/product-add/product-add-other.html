@@ -1,215 +1,154 @@
-
-                <!--其他 开始-->
-
-                <div class="widget-box">
-                    <div class="widget-header">
-                        <h4>
-                            {{tag}}{{title}}产品
-                            <small>
-                                <i class="icon-double-angle-right"></i>
-                                (<span class="required"> * </span>表示必填字段)
-                            </small>
-                        </h4>
+<div class="widget-box">
+    <div class="widget-header">
+        <h4>
+        {{tag}}{{title}}产品
+    </h4>
+    </div>
+    <div class="widget-body">
+        <div class="widget-main no-padding">
+            <form name="productCreateForm" class="form-horizontal">
+                <div class="clearfix form-actions mcs-form-actions">
+                    <div class=" col-md-offset-3 col-md-9">
+                        <mcs-button category="submit" click="vm.submit()" text="提交审批"></mcs-button>
                     </div>
-                    <div class="widget-body">
-                        <div class="widget-main no-padding">
-                            <div class="clearfix form-actions mcs-form-actions">
-                                <div class="col-md-offset-3 col-md-9">
-                                    <mcs-button type="save" click="vm.submit()" text="提交审批"></mcs-button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="page-header">
-                        <span>基础信息</span>
-                    </div>
-
-
-                    <div class="form-group">
-                        <div class="col-sm-6">
-                            <mcs-label required="true" text="分类：" css="col-sm-3" />
-                            <div class="col-sm-6">
-                                <ppts-select category="categoryCustom" model="vm.m[loadtype].product.catalog" caption="产品分类" />
-                            </div>
-                        </div>
-                        <br />
-                        <div ng-bind-html="description"></div>
-                    </div>
-                    <div class="space-4"></div>
-
-                    <!-- 合作 -->
-
-                    <div class="form-group" ng-show="vm.isPartner()">
-                        <div class="col-sm-6">
-                            <mcs-label required="true" text="分账比例：" css="col-sm-3" />
-                            <div class="col-sm-9">
-                                合作方：<mcs-input model="vm.m[loadtype].product.partnerName" css="col-xs-10 col-sm-10" />
-                                分成比例：<mcs-input type="number" min="0" model="vm.m[loadtype].product.partnerRatio" css="col-xs-10 col-sm-10" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="space-4"></div>
-
-                    <!-- 合作 -->
-
-
-
-
-                    <div class="form-group">
-                        <div class="col-sm-6">
-                            <mcs-label required="true" text="产品简介：" css="col-sm-3" />
-                            <div class="col-sm-9">
-                                <textarea class="form-control" rows="3" id="textArea" ng-model="vm.m[loadtype].product.productMemo"></textarea>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="space-4"></div>
-
-                    <div class="form-group">
-                        <div class="col-sm-6">
-                            <mcs-label required="true" text="产品单价：" css="col-sm-3" />
-                            <div class="col-sm-9">
-                                <mcs-input type="number" min="0" model="vm.m[loadtype].product.productPrice" css="col-xs-10 col-sm-10" />
-                                元/课时
-                            </div>
-                            <br />
-                            备注：
-                            <br />
-                            -产品单价：产品的基本价格
-                            <br />
-                            -目标单价：完成预算任务的平均订购单价
-                            <br />
-                            以上的价格也会用于数据分析，请正确填写
-                        </div>
-                        <div class="col-sm-6">
-                            <mcs-label required="true" text="目标单价：" css="col-sm-3" />
-                            <div class="col-sm-9">
-                                <mcs-input type="number" min="0" model="vm.m[loadtype].product.targetPrice" css="col-xs-10 col-sm-10" />
-                                元/课时
-                            </div>
-                        </div>
-                    </div>
-                    <div class="space-4"></div>
-
-                    <div class="form-group">
-                        <div class="col-sm-6">
-                            <mcs-label required="true" text="颗粒度：" css="col-sm-3" />
-                            <div class="col-sm-9">
-                                {{vm.m[loadtype].productUnit | unit }}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="space-4"></div>
-
-                    <div class="form-group">
-                        <div class="col-sm-6">
-                            <mcs-label required="true" text="研发机构：" css="col-sm-3" />
-                            <div class="col-sm-9">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="space-4"></div>
-
-                    <div class="page-header">
-                        <span>销售信息</span>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="col-sm-6">
-                            <mcs-label required="true" text="销售范围：" css="col-sm-3" />
-                            <div class="col-sm-9">
-                                <mcs-input placeholder="销售分公司" model="vm.m[loadtype].company" css="col-xs-10 col-sm-10" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="space-4"></div>
-
-                    <div class="form-group">
-                        <div class="col-sm-6">
-                            <mcs-label required="true" text="产品启售时间：" css="col-sm-3" />
-                            <div class="col-sm-9">
-                                <p class="input-group">
-                                    <input type="text" class="form-control" uib-datepicker-popup="yyyy/MM/dd" ng-model="vm.m[loadtype].product.startDate" is-open="vm.popup1.opened" datepicker-options="vm.dateOptions" ng-required="true" close-text="Close" alt-input-formats="vm.altInputFormats" />
-                                    <span class="input-group-btn">
-                                        <button type="button" class="btn btn-default" ng-click="vm.open1()">
-                                            <i class="glyphicon glyphicon-calendar"></i>
-                                        </button>
-                                    </span>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <mcs-label required="true" text="产品止售时间：" css="col-sm-3" />
-                            <div class="col-sm-9">
-                                <p class="input-group">
-                                    <input type="text" class="form-control" uib-datepicker-popup="yyyy/MM/dd" ng-model="vm.m[loadtype].product.endDate" is-open="vm.popup2.opened" datepicker-options="vm.dateOptions" ng-required="true" close-text="Close" alt-input-formats="vm.altInputFormats" />
-                                    <span class="input-group-btn">
-                                        <button type="button" class="btn btn-default" ng-click="vm.open2()">
-                                            <i class="glyphicon glyphicon-calendar"></i>
-                                        </button>
-                                    </span>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="space-4"></div>
-
-                    <div class="form-group">
-                        <div class="col-sm-6">
-                            <mcs-label required="true" text="创建人：" css="col-sm-3" />
-                            <div class="col-sm-9">
-                                xxx
-                            </div>
-                        </div>
-                    </div>
-                    <div class="space-4"></div>
-
-                    <div class="form-group">
-                        <div class="col-sm-6">
-                            <mcs-label required="true" text="收入确认开始时间：" css="col-sm-3" />
-                            <div class="col-sm-9">
-                                <p class="input-group">
-                                    <input type="text" class="form-control" uib-datepicker-popup="yyyy/MM/dd" ng-model="vm.m[loadtype].product.confirmStartDate" is-open="vm.popup3.opened" datepicker-options="vm.dateOptions" ng-required="true" close-text="Close" alt-input-formats="vm.altInputFormats" />
-                                    <span class="input-group-btn">
-                                        <button type="button" class="btn btn-default" ng-click="vm.open3()">
-                                            <i class="glyphicon glyphicon-calendar"></i>
-                                        </button>
-                                    </span>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <mcs-label required="true" text="收入确认结束时间：" css="col-sm-3" />
-                            <div class="col-sm-9">
-                                <p class="input-group">
-                                    <input type="text" class="form-control" uib-datepicker-popup="yyyy/MM/dd" ng-model="vm.m[loadtype].product.confirmEndDate" is-open="vm.popup4.opened" datepicker-options="vm.dateOptions" ng-required="true" close-text="Close" alt-input-formats="vm.altInputFormats" />
-                                    <span class="input-group-btn">
-                                        <button type="button" class="btn btn-default" ng-click="vm.open4()">
-                                            <i class="glyphicon glyphicon-calendar"></i>
-                                        </button>
-                                    </span>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="space-4"></div>
-
-                    <div class="page-header">
-                        <span>折扣信息</span>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-sm-6">
-                            <mcs-label required="true" text="是否享受客户折扣：" css="col-sm-3" />
-                            <div class="col-sm-9">
-                                <input type="checkbox" ng-model="vm.m[loadtype].product.tunlandAllowed" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="space-4"></div>
-
-
-
                 </div>
+                <div class="page-header"><span>基本信息</span></div>
+                <div class="form-group row">
+                    <label class="control-label col-sm-2">
+                        选择产品分类：
+                    </label>
+                    <div class="col-sm-4">
+                        <ppts-select category="categoryCustom" model="vm.m[loadtype].product.catalog" caption="产品分类" />
+                    </div>
+                </div>
+                <div class="col-sm-offset-2">
+                    <div ng-bind-html="description"></div>
+                </div>
+                <!-- 合作 -->
+                <!--分账比例-->
+                <!---->
+                <div class="form-group row" ng-show="vm.isPartner()">
+                    <div class="span4">
+                        <label class="control-label col-sm-2">
+                            <span>合作方：</span>
+                        </label>
+                        <div class="col-sm-2">
+                            <mcs-input model="vm.m[loadtype].product.partnerName" css="col-sm-10" />
+                        </div>
+                    </div>
+                    <div class="span4">
+                        <label class="control-label col-sm-2">
+                            <span>分成比例：</span>
+                        </label>
+                        <div class="col-sm-2">
+                            <mcs-input type="number" min="0.01" max="0.99" model="vm.m[loadtype].product.partnerRatio" css="col-sm-10" />
+                        </div>
+                    </div>
+                </div>
+                <!-- 合作 -->
+                <div class="form-group row">
+                    <label class="control-label col-sm-2">
+                        <span>产品简介：</span>
+                    </label>
+                    <div class="col-sm-6">
+                        <textarea class="form-control" rows="5" id="textArea" ng-model="vm.m[loadtype].product.productMemo" maxlength="400"></textarea>
+                        <span class="help-block text-right">不允许输入400个字符，已经输入{{ vm.calcCharCount() }}个</span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="span6">
+                        <label class="control-label col-sm-2">
+                            <span>产品单价：</span>
+                        </label>
+                        <div class="col-sm-3">
+                            <mcs-input type="number" min="0" model="vm.m[loadtype].product.productPrice" />
+                            <label>元/课时</label>
+                        </div>
+                    </div>
+                    <div class="span6">
+                        <label class="control-label col-sm-2">
+                            <span>目标单价：</span>
+                        </label>
+                        <div class="col-sm-3">
+                            <mcs-input type="number" min="0" model="vm.m[loadtype].product.targetPrice" />
+                            <label>元/课时</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-offset-2">
+                    <span class="help-block">备注</span>
+                    <span class="help-block">-产品单价：产品的基本报价</span>
+                    <span class="help-block">-目标单价：完成预算任务的平均单价</span>
+                    <span class="help-block">以上价格也会用于数据分析，请正确填写</span>
+                </div>
+                <div class="form-group row">
+                    <label class="control-label col-sm-2">
+                        
+                        <pan>颗粒度：</pan>
+                    </label>
+                    <div class="col-sm-4">
+                        {{vm.m.onetoone.product.productUnit | unit }}
+                    </div>
+                </div>
+                <div class="page-header"><span>销售信息</span></div>
+                <div class="form-group">
+                    <label class="control-label col-sm-2">
+                        
+                        <xpan>销售范围：</xpan>
+                    </label>
+                    <div class="col-sm-10">
+                        <select class="span2" name="productCatagory">
+                            <option value="1">一对一教学</option>
+                        </select>
+                        <span>（未选择校区则默认适用于所选分公司所有校区）</span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="span4">
+                        <label class="control-label col-sm-2">
+                            <span>产品启/止售时间：</span>
+                        </label>
+                        <div class="col-sm-2">
+                            <ppts-daterangepicker startDate="vm.m[loadtype].product.startDate" endDate="vm.m[loadtype].product.endDate" />
 
-                <!--其他 结束-->
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="span4">
+                        <label class="control-label col-sm-2">
+                            <span>收入确认启/止时间：</span>
+                        </label>
+                        <div class="col-sm-2">
+                            <ppts-daterangepicker startDate="vm.m[loadtype].product.confirmStartDate" endDate="vm.m[loadtype].product.confirmEndDate" />
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="from-group row">
+                    <label class="control-label col-sm-2">创建人：</label>
+                    <div class="col-sm-4">
+                        <label class="control-label">xxx</label>
+                    </div>
+                </div>
+                <div class="page-header"><span>折扣信息</span></div>
+                <div class="form-group">
+                    <div class="col-sm-4">
+                        <ppts-radiobutton-group category="discountInfo" model="vm.m[loadtype].product.tunlandAllowed" />
+                    </div>
+                </div>
+                <div class="form-group" ng-show=" vm.m[loadtype].product.tunlandAllowed ==1 ">
+                    <div class="col-sm-6">
+                        <ppts-radiobutton-group category="promotionInfo" model="vm.m[loadtype].product.promotionAllowed" />
+                    </div>
+                </div>
+                <div class="form-group row" ng-show=" vm.m[loadtype].product.promotionAllowed ==1 && vm.m[loadtype].product.tunlandAllowed ==1">
+                    <label class="control-label col-sm-2">实际订购金额比原订购金额少</label>
+                    <div class="col-sm-8">
+                        <mcs-input type="number" min="0" model="vm.m[loadtype].product.promotionQuota" css="col-sm-2" /><label>元以下（包括此金额），可直接订购，无需审批</label>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

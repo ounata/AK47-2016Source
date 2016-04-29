@@ -1,9 +1,7 @@
 ﻿(function () {
     'use strict';
 
-    mcs.ng.constant('inputConfig', {
-        types: ['text']
-    }).directive('mcsInput', ['inputConfig', 'mcsComponentConfig', function (config, mcsComponentConfig) {
+    mcs.ng.directive('mcsInput', function () {
         return {
             restrict: 'E',
             replace: true,
@@ -11,24 +9,31 @@
                 id: '@',
                 type: '@',
                 placeholder: '@',
-                fixed: '@',
                 readonly: '@',
                 css: '@',
+                integer: '@',
                 model: '=',
             },
             template: '<input placeholder="{{placeholder}}" class="mcs-default-size-input mcs-margin-right-20 {{css}}" ng-model="model" />',
             link: function ($scope, $elem, $attrs) {
+                var integer = mcs.util.bool($scope.integer);
                 if ($scope.id) {
                     $elem.attr('id', $scope.id);
                 }
-                $elem.attr('type', $scope.type || 'text');
-                if ($scope.fixed) {
-                    $elem.addClass('fixed');
+                if (integer) {
+                    $elem.keyup(function () {
+                        mcs.util.limit($elem);
+                    }).afterpaste(function () {
+                        mcs.util.limit($elem);
+                    });
                 }
-                if ($scope.readonly) {
-                    $elem.attr('readonly', 'readonly');
+                $elem.attr('type', $scope.type || 'text');
+                var readonly = mcs.util.bool($scope.readonly);
+                if (readonly) {
+                    //$elem.attr('readonly', 'readonly');
+                    $elem.attr('disabled', 'disabled');
                 }
             }
         };
-    }]);
+    });
 })();

@@ -17,8 +17,18 @@ namespace PPTS.Data.Customers.Test
 
             Assert.AreEqual(expected.ParentID, actual.ParentID);
             Assert.AreEqual(expected.ParentName, actual.ParentName);
-            Assert.AreEqual(expected.CustomerCode, actual.CustomerCode);
+            Assert.AreEqual(expected.ParentCode, actual.ParentCode);
             Assert.AreEqual(expected.Gender, actual.Gender);
+        }
+
+        public static void AreEqual(this IBasicCustomerInfo expected, IBasicCustomerInfo actual)
+        {
+            Assert.IsNotNull(expected);
+            Assert.IsNotNull(actual);
+
+            Assert.AreEqual(expected.CustomerID, actual.CustomerID);
+            Assert.AreEqual(expected.CustomerName, actual.CustomerName);
+            Assert.AreEqual(expected.CustomerCode, actual.CustomerCode);
         }
 
         public static void AreEqual(this PotentialCustomer expected, PotentialCustomer actual)
@@ -37,8 +47,8 @@ namespace PPTS.Data.Customers.Test
             Assert.IsNotNull(expected);
             Assert.IsNotNull(actual);
 
-            Assert.AreEqual(expected.PhoneID, actual.PhoneID);
             Assert.AreEqual(expected.OwnerID, actual.OwnerID);
+            Assert.AreEqual(expected.PhoneType, actual.PhoneType);
             Assert.AreEqual(expected.PhoneNumber, actual.PhoneNumber);
         }
 
@@ -51,7 +61,7 @@ namespace PPTS.Data.Customers.Test
 
             foreach (Phone expectedItem in expected)
             {
-                Phone actualItem = actual.Find(p => p.PhoneID == expectedItem.PhoneID);
+                Phone actualItem = actual.Find(p => p.OwnerID == expectedItem.OwnerID && p.ItemID == expectedItem.ItemID);
 
                 Assert.IsNotNull(actualItem);
 
@@ -59,7 +69,7 @@ namespace PPTS.Data.Customers.Test
             }
         }
 
-        public static void AreEqual(this CustomerRelation expected, CustomerRelation actual)
+        public static void AreEqual(this CustomerParentRelation expected, CustomerParentRelation actual)
         {
             Assert.IsNotNull(expected);
             Assert.IsNotNull(actual);

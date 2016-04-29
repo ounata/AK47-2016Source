@@ -1,0 +1,65 @@
+﻿<div class="modal-header">
+    <button type="button" class="close" data-dismiss="alert" ng-click="vm.close()">
+        <i class="ace-icon fa fa-times"></i>
+    </button>
+    <!--<h4 class="modal-title">查看现有家长，勾选查询结果，确认亲属关系</h4>-->
+    <h4 class="modal-title">{{ vm.title }}</h4>
+</div>
+<div class="mcs-panel-search well well-sm">
+    <div class="portlet-body mcs-padding-5">
+        <ppts-search placeholder="输入家长姓名，联系方式进行查询" click="vm.search()" model="vm.criteria.keyword" />
+        <mcs-button category="search" click="vm.search()" size="medium" />
+    </div>
+</div>
+
+<div class="modal-body">
+    <mcs-datatable data="vm.data" />
+    <div class="profile-info-row" ng-show="vm.type=='confirm'">
+        <div class="profile-info-name"> 亲属关系 </div>
+        <div class="profile-info-value">
+            <table>
+                <tr>
+                    <td>
+                        <div style="margin-right:5px;"><input class="mcs-readonly-input" readonly="readonly" ng-model="vm.customer.customerName" />是<input class="mcs-readonly-input" readonly="readonly" ng-model="vm.parent.parentName" />的</div>
+                    </td>
+                    <td>
+                        <ui-select ng-model="vm.customerRole" theme="selectize" on-select="selectCustomerRole($item, $model)" ng-disabled="!vm.customer.gender">
+                            <ui-select-match placeholder="请选择">
+                                {{$select.selected.value}}
+                            </ui-select-match>
+                            <ui-select-choices repeat="item.key as item in vm.customerRoles ">
+                                <span ng-bind-html="item.value | highlight: $select.search"></span>
+                            </ui-select-choices>
+                        </ui-select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div style="margin-right:5px;"><input class="mcs-readonly-input" readonly="readonly" ng-model="vm.parent.parentName" />是<input class="mcs-readonly-input" readonly="readonly" ng-model="vm.customer.customerName" />的</div>
+                    </td>
+                    <td>
+                        <ui-select ng-model="vm.parentRole" theme="selectize" ng-disabled="!(vm.parent.gender && vm.customer.gender && vm.customerRole && vm.parentRoles.length > 1)">
+                            <ui-select-match placeholder="请选择">{{$select.selected.value}}</ui-select-match>
+                            <ui-select-choices repeat="item.key as item in vm.parentRoles | props: {value: $select.search}">
+                                <span ng-bind-html="item.value | highlight: $select.search"></span>
+                            </ui-select-choices>
+                        </ui-select>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="alert alert-block alert-danger" ng-show="vm.errorMessage && !vm.data.rowsSelected.length">
+        <button type="button" class="close" data-dismiss="alert">
+            <i class="ace-icon fa fa-times"></i>
+        </button>
+        <i class="ace-icon fa fa-warning"></i>
+        {{vm.errorMessage}}
+    </div>
+</div>
+<div class="modal-footer">
+    <mcs-button category="ok" click="vm.add()"/>
+    <mcs-button category="add" text="新建家长" click="vm.new()" />
+    <mcs-button category="close" click="vm.close()" />
+</div>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MCS.Library.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -78,6 +79,21 @@ namespace MCS.Library.Core
             DateTime convertedTime = DateTime.SpecifyKind(localTime, DateTimeKind.Unspecified);
 
             return TimeZoneInfo.ConvertTime(localTime, TimeZoneInfo.Local, tz);
+        }
+
+        private TimeZoneInfo GetDefaultTimeZone()
+        {
+            TimeZoneInfo result = TimeZoneInfo.Local;
+
+            if (TimeZoneContextSettings.GetConfig().Enabled)
+            {
+                TimeZoneContextSettings settings = TimeZoneContextSettings.GetConfig();
+
+                result = TimeZoneInfo.CreateCustomTimeZone(settings.TimeZoneID,
+                    settings.TimeOffset, settings.TimeZoneName, settings.TimeZoneName);
+            }
+
+            return result;
         }
     }
 }

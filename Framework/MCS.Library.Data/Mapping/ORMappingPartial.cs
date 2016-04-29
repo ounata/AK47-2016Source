@@ -397,7 +397,71 @@ namespace MCS.Library.Data.Mapping
                     new DoSqlClauseBuilder<T>(DoWhereSqlClauseBuilderByChangedFields<T>), ignoreProperties);
             else
                 FillSqlClauseBuilder(builder, graph, mapping, ClauseBindingFlags.Where,
-                new DoSqlClauseBuilder<T>(DoWhereSqlClauseBuilderByChangedFieldsWithoutPrimaryKey<T>), ignoreProperties);
+                    new DoSqlClauseBuilder<T>(DoWhereSqlClauseBuilderByChangedFieldsWithoutPrimaryKey<T>), ignoreProperties);
+
+            return builder;
+        }
+
+        /// <summary>
+        /// 根据对象生成SELECT相关的字段。其builder会生成Field1, Field2 AS Name...
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="graph"></param>
+        /// <param name="ignoreProperties"></param>
+        /// <returns></returns>
+        public static string GetSelectSql<T>(T graph, params string[] ignoreProperties)
+        {
+            SelectSqlClauseBuilder builder = GetSelectSqlClauseBuilder<T>(graph, ignoreProperties);
+
+            return builder.ToSqlString(TSqlBuilder.Instance);
+        }
+
+        /// <summary>
+        /// 根据对象生成SELECT相关的字段。其builder会生成Field1, Field2 AS Name...
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="graph"></param>
+        /// <param name="mapping"></param>
+        /// <param name="ignoreProperties"></param>
+        /// <returns></returns>
+        public static string GetSelectSql<T>(T graph, ORMappingItemCollection mapping, params string[] ignoreProperties)
+        {
+            SelectSqlClauseBuilder builder = GetSelectSqlClauseBuilder<T>(graph, mapping, ignoreProperties);
+
+            return builder.ToSqlString(TSqlBuilder.Instance);
+        }
+
+        /// <summary>
+        /// 根据对象生成SELECT相关的字段。其builder会生成Field1, Field2 AS Name...
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="graph"></param>
+        /// <param name="ignoreProperties"></param>
+        /// <returns></returns>
+        public static SelectSqlClauseBuilder GetSelectSqlClauseBuilder<T>(T graph, params string[] ignoreProperties)
+        {
+            ExceptionHelper.FalseThrow<ArgumentNullException>(graph != null, "graph");
+
+            return GetSelectSqlClauseBuilder<T>(graph, InnerGetMappingInfoByObject(graph), ignoreProperties);
+        }
+
+        /// <summary>
+        /// 根据对象生成SELECT相关的字段。其builder会生成Field1, Field2 AS Name...
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="graph"></param>
+        /// <param name="mapping"></param>
+        /// <param name="ignoreProperties"></param>
+        /// <returns></returns>
+        public static SelectSqlClauseBuilder GetSelectSqlClauseBuilder<T>(T graph, ORMappingItemCollection mapping, params string[] ignoreProperties)
+        {
+            ExceptionHelper.FalseThrow<ArgumentNullException>(graph != null, "graph");
+            ExceptionHelper.FalseThrow<ArgumentNullException>(mapping != null, "mapping");
+
+            SelectSqlClauseBuilder builder = new SelectSqlClauseBuilder();
+
+            FillSqlClauseBuilder(builder, graph, mapping, ClauseBindingFlags.Select,
+                new DoSqlClauseBuilder<T>(DoSelectSqlClauseBuilder<T>), ignoreProperties);
 
             return builder;
         }

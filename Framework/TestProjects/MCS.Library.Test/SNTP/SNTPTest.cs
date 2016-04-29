@@ -1,4 +1,5 @@
-﻿using MCS.Library.Net.SNTP;
+﻿using MCS.Library.Core;
+using MCS.Library.Net.SNTP;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -33,6 +34,28 @@ namespace MCS.Library.Test.SNTP
             Console.WriteLine("Adjusted Default: {0}", SNTPClient.AdjustedTime);
             Console.WriteLine("Adjusted Local: {0}", SNTPClient.AdjustedLocalTime);
             Console.WriteLine("Adjusted Utc: {0}", SNTPClient.AdjustedUtcTime);
+        }
+
+        [TestMethod]
+        public void AdjestTimeTest()
+        {
+            Console.WriteLine("Local Offset: {0}", SNTPClient.LocalOffset);
+            Console.WriteLine("Adjusted Default: {0}", SNTPClient.AdjustedTime);
+            Thread.Sleep(1000);
+            Console.WriteLine("Local Offset: {0}", SNTPClient.LocalOffset);
+
+            TimeZoneInfo oldTimeZoneInfo = TimeZoneContext.Current.CurrentTimeZone;
+
+            TimeZoneContext.Current.CurrentTimeZone = TimeZoneInfo.CreateCustomTimeZone("SZ", TimeSpan.FromHours(4), "CHN", "CHN");
+            try
+            {
+                Console.WriteLine("Adjusted New Time Zone: {0}", SNTPClient.AdjustedTime);
+            }
+            finally
+            {
+                TimeZoneContext.Current.CurrentTimeZone = oldTimeZoneInfo;
+            }
+
         }
     }
 }

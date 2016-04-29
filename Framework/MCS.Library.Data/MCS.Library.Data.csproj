@@ -100,6 +100,7 @@
     <Compile Include="Adapters\DbHelper.cs" />
     <Compile Include="Adapters\InLoadingCondition.cs" />
     <Compile Include="Adapters\LoadingConditionBase.cs" />
+    <Compile Include="Adapters\UpdatableAdapterBase_Context.cs" />
     <Compile Include="Adapters\VersionedObjectAdapterBase.cs" />
     <Compile Include="Adapters\VersionedObjectAdapterBase_Context.cs" />
     <Compile Include="Adapters\VersionedObjectAdapterBase_Load.cs" />
@@ -112,9 +113,12 @@
     <Compile Include="Adapters\UpdatableAndLoadableAdapterBaseInContext.cs" />
     <Compile Include="Builder\BytesDescriptionGenerator.cs" />
     <Compile Include="Builder\ExpressionDescriptionGenerator.cs" />
-    <Compile Include="Builder\IVersionDataObject.cs" />
-    <Compile Include="Builder\IVersionDataObjectWithoutID.cs" />
+    <Compile Include="Builder\Extensions.cs" />
     <Compile Include="Builder\NullDescriptionGenerator.cs" />
+    <Compile Include="Builder\QueryInContextBuilder.cs" />
+    <Compile Include="Builder\QueryInContextBuilderBase.cs" />
+    <Compile Include="Builder\SelectSqlClauseBuilder.cs" />
+    <Compile Include="Builder\SqlClauseBuilderItemSelect.cs" />
     <Compile Include="Builder\StreamDescriptionGenerator.cs" />
     <Compile Include="Builder\GuidDescriptionGenerator.cs" />
     <Compile Include="Builder\EnumDescriptionGenerator.cs" />
@@ -124,6 +128,7 @@
     <Compile Include="Builder\DateTimeDescriptionGenerator.cs" />
     <Compile Include="Builder\DBNullDescriptionGenerator.cs" />
     <Compile Include="Builder\SqlClauseBuilderItems.cs" />
+    <Compile Include="Builder\VersionedQueryInContextBuilder.cs" />
     <Compile Include="Builder\VersionStrategyQuerySqlBuilder.cs" />
     <Compile Include="Builder\VersionStrategyUpdateSqlBuilder.cs" />
     <Compile Include="Builder\VersionStrategyUpdateSqlHelper.cs" />

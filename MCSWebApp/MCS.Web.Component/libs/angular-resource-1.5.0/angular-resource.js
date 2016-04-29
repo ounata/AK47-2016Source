@@ -659,7 +659,9 @@
                         var responseInterceptor = action.interceptor && action.interceptor.response ||
                             defaultResponseInterceptor;
                         var responseErrorInterceptor = action.interceptor && action.interceptor.responseError ||
-                            httpErrorHandleService.process;
+                            function (data) {
+                                httpErrorHandleService.process(data);
+                            };
                         var timeoutDeferred;
                         var numericTimeoutPromise;
 

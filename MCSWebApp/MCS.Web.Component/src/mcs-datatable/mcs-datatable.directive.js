@@ -22,20 +22,44 @@
             scope: {
 
                 data: '=',
-                onOrder: '&?',
-                pageChanged: '&'
+                retrieveData: '&?',
+                pageChanged: '&?',
+
 
             },
             link: function($scope, iElm, iAttrs, controller) {
 
+                if (!$scope.data) {
+                    return;
+                }
+
+                if ($scope.retrieveData) {
+                    $scope.retrieveData().then(function() {
+                        $scope.reMatchRowsSelected();
+                    })
+                }
+
+
                 $scope.selectAll = function() {
                     if ($scope.data.selectAll) {
-                        $scope.data.rows.forEach(function(row) {
-                            row.selected = true;
+                        $scope.data.rows.forEach(function(rowSelected) {
+                            rowSelected.selected = true;
+                            var rowDataSelected = {};
+                            $scope.data.keyFields.forEach(function(key) {
+                                rowDataSelected[key] = rowSelected[key];
+                            });
+                            mcs.util.removeByObject($scope.data.rowsSelected, rowDataSelected);
+                            $scope.data.rowsSelected.push(rowDataSelected);
+
                         })
                     } else {
-                        $scope.data.rows.forEach(function(row) {
-                            row.selected = false;
+                        $scope.data.rows.forEach(function(rowSelected) {
+                            rowSelected.selected = false;
+                            var rowDataSelected = {};
+                            $scope.data.keyFields.forEach(function(key) {
+                                rowDataSelected[key] = rowSelected[key];
+                            });
+                            mcs.util.removeByObject($scope.data.rowsSelected, rowDataSelected);
                         })
                     }
                 }
@@ -83,28 +107,38 @@
                 }
 
                 $scope.pageChange = function(callback) {
-                    callback();
-                    $scope.reMatchRowsSelected();
+                    callback().then(function() {
+                        $scope.reMatchRowsSelected();
+                    })
+
                 }
 
                 $scope.reMatchRowsSelected = function() {
 
-                    if ($scope.data.rowsSelected.length == 0) {
+                    var selecteds = $scope.data.rowsSelected;
+                    var rows = $scope.data.rows;
+                    var keys = $scope.data.keyFields;
+
+                    if (selecteds.length == 0 || keys.length == 0 || rows.length == 0) {
                         return;
                     }
 
-                    for (var rowDataSelected in $scope.data.rowsSelected) {
-                        for (var row in $scope.data.rows) {
-                            for (var key in $scope.data.keyFields) {
-                                if (row[key] !== rowDataSelected[key]) {
-                                    row.selected = false;
-                                    break;
+
+
+                    for (var indexSelected in selecteds) {
+                        for (var rowIndex in rows) {
+
+                            var counter = 0;
+                            for (var keyIndex in keys) {
+                                if (rows[rowIndex][keys[keyIndex]] == selecteds[indexSelected][keys[keyIndex]]) {
+                                    counter = counter + 1;
                                 }
 
-                                if (row.selected == undefined) {
-                                    row.selected = true;
-                                    break;
-                                }
+
+                            }
+
+                            if (counter == keys.length) {
+                                rows[rowIndex].selected = true;
                             }
                         }
                     }
@@ -138,12 +172,11 @@
                 $scope.data.headers.forEach(function(header, index) {
 
                     if (!header.field) {
-                        var results = header.template.match(reg);
+                        var results = header.template && header.template.match(reg);
                         if (results) {
                             results.forEach(function(r) {
                                 var fnName = r.replace('"', '\'').split('\'')[1];
                                 $scope[fnName] = $scope.$parent[fnName];
-
                             })
                         }
 
@@ -160,7 +193,7 @@
             link: function(scope, iElement, iAttrs) {
                 var dataHeaders = scope.$parent.data.headers;
                 var rowData = scope.row;
-
+                scope.vm = scope.$parent.$parent.vm;
 
                 dataHeaders.forEach(function(header, index) {
                     var td = $compile('<td class="' + header.headerCss +

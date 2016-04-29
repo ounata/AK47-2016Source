@@ -70,6 +70,7 @@
     <Folder Include="PM\Stored Procedures" />
     <Folder Include="PM\Tables" />
     <Folder Include="Scripts" />
+    <Folder Include="PM\Views" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Security\PM.sql" />
@@ -93,11 +94,16 @@
     <Build Include="PM\Tables\CategoryCatalogs.sql" />
     <Build Include="PM\Stored Procedures\InitCategories.sql" />
     <Build Include="PM\Stored Procedures\InitCategoryCatalogs.sql" />
+    <Build Include="PM\Views\v_CategoryCatalogs.sql" />
+    <Build Include="PM\Views\v_Products.sql" />
+    <Build Include="PM\Tables\ProductClassStats.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PPTS.Data.Product.Local.Dev.DB.publish.xml" />
     <None Include="PPTS.Data.Product.Local.Test.DB.publish.xml" />
     <None Include="PPTS.Data.Product.XueDa.Dev.DB.publish.xml" />
+    <None Include="PPTS.Data.Product.XueDa.Dev.Test.DB.publish.xml" />
+    <None Include="PPTS.Data.Product.Cloud.Test.DB.publish.xml" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PPTS.Data.Products.DB.refactorlog" />

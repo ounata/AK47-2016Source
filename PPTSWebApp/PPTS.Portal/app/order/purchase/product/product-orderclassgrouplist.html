@@ -1,0 +1,38 @@
+﻿
+<div class="mcs-panel-search well well-sm">
+    <div class="portlet">
+        <div class="portlet-title line">
+            <div class="caption">
+                <label class="quick-search"><i class="ace-icon fa fa-search bigger-125"></i> 快速查询条件</label>
+            </div>
+        </div>
+        <div class="portlet-body">
+            <select><option>选择分公司</option></select>
+            <select><option>选择校区</option></select>
+
+            <mcs-input placeholder="产品名称" model="vm.criteria.productName" />
+            <!--<mcs-input placeholder="班级名称" model="vm.criteria.className" />-->
+
+
+            <ppts-select category="grade" model="vm.criteria.grade" caption="年级" />
+
+            <ppts-select category="subject" model="vm.criteria.subject" caption="科目" />
+
+            <ppts-select category="duration" model="vm.criteria.duration" caption="课时时长" />
+
+            <mcs-button category="search" click="vm.search()" size="medium" />
+        </div>
+    </div>
+</div>
+<!-- /结束：订购列表.查询条件 -->
+<!-- #开始：订购列表.工具条 -->
+<div class="mcs-panel-toolbar">
+
+    <!--<mcs-button category="edit" text="放入订单清单"></mcs-button>-->
+    <mcs-button category="edit" text="查看订单清单" click="vm.showShoppingCart()"></mcs-button>
+
+</div>
+<!-- /结束：订购列表.工具条 -->
+<!-- #开始：订购列表.数据表格 -->
+<mcs-datatable data="vm.data" />
+<!-- /结束：订购列表.数据表格 -->

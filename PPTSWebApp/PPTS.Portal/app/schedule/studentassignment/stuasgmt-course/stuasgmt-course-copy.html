@@ -1,0 +1,45 @@
+﻿<form role="form">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="alert" ng-click="vm.cancel()">
+            <i class="ace-icon fa fa-times"></i>
+        </button>
+        <h4 class="modal-title">复制课表</h4>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <label class="control-label">复制类型：</label>
+            <ppts-radiobutton-group class="from-control" model="vm.copyType" async="false" />
+        </div>
+        <label class="control-label">复制来源：</label>
+        <div class="form-group">
+            <div class="input-group">
+                <div class="input-group-addon">从</div>
+                <ppts-datepicker class="from-control" model="vm.dt" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="input-group">
+                <div class="input-group-addon">至</div>
+                <ppts-datepicker class="from-control" model="vm.dt" />
+            </div>
+        </div>
+        <label class="control-label">复制目标：</label>
+        <div class="form-group">
+            <div class="input-group">
+                <div class="input-group-addon">从</div>
+                <ppts-datepicker class="from-control" model="vm.dt" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="input-group">
+                <div class="input-group-addon">至</div>
+                <ppts-datepicker class="from-control" model="vm.dt" />
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="modal-footer">
+        <mcs-button category="save" click="vm.save()" />
+        <mcs-button category="close" click="vm.cancel()" />
+    </div>
+</form>

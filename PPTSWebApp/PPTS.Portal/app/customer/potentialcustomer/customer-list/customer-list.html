@@ -1,201 +1,70 @@
-﻿<!-- #开始：位置条 -->
-<div class="breadcrumbs" id="breadcrumbs">
-    <script type="text/javascript">
-        try {
-            ace.settings.check('breadcrumbs', 'fixed');
-        } catch (e) { }
-    </script>
-    <ul class="breadcrumb">
-        <li class="active">
-            <i class="ace-icon fa fa-home home-icon"></i>
-            <a ui-sref="index">首页</a>
-        </li>
-        <li>
-            <i class="ace-icon fa fa-pencil-square-o"></i> 潜客管理
-        </li>
-        <li>
-            潜客列表
-        </li>
-    </ul>
-</div>
-<!-- /结束：位置条 -->
-<div class="page-content">
-    <div class="page-content-area">
-        <!-- #开始：潜客列表 -->
-        <div class="row">
-            <div class="col-sm-12">
-                <!-- #开始：潜客列表.高级查询条件 -->
-                <div id="accordion" class="accordion-style1 panel-group">
-                    <div class="panel panel-info">
-                        <div class="panel-heading">
-                            <h4 class="panel-title">
-                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#advance-search">
-                                    <i class="ace-icon fa fa-angle-right bigger-110" data-icon-hide="fa-angle-down" data-icon-show="fa-angle-right"></i>
-                                    &nbsp;高级查询
-                                </a>
-                            </h4>
-                        </div>
-                        <div class="panel-collapse collapse mcs-advance-search" id="advance-search">
-                            <div class="panel-body">
-                                <div class="profile-user-info">
-                                    <div class="profile-info-row">
-                                        <div class="profile-info-name">入学年级：</div>
-                                        <div class="profile-info-value">
-                                            <ppts-checkbox-group category="grade" model="vm.criteria.entranceGrades" clear="vm.criteria.entranceGrades=[]" />
-                                        </div>
-                                    </div>
-
-                                    <div class="profile-info-row">
-                                        <div class="profile-info-name">建档日期：</div>
-                                        <div class="profile-info-value">
-                                            <span>从：</span>
-                                            <mcs-input model="vm.criteria.createTimeStart" />
-                                            <span>凌晨0:00 到：</span>
-                                            <mcs-input model="vm.criteria.createTimeEnd" />
-                                            <span>凌晨0:00</span>
-                                        </div>
-                                    </div>
-
-                                    <div class="profile-info-row">
-                                        <div class="profile-info-name">充值日期：</div>
-                                        <div class="profile-info-value">
-                                            <span>从：</span>
-                                            <mcs-input model="vm.criteria.rechargeTimeStart" />
-                                            <span>凌晨0:00 到：</span>
-                                            <mcs-input model="vm.criteria.rechargeTimeEnd" />
-                                            <span>凌晨0:00</span>
-                                        </div>
-                                    </div>
-
-                                    <div class="profile-info-row">
-                                        <div class="profile-info-name">充值金额：</div>
-                                        <div class="profile-info-value">
-                                            <mcs-input model="vm.criteria.rechargeAmountStart" placeholder="充值金额起" />
-                                            <span>—</span>
-                                            <mcs-input model="vm.criteria.rechargeAmountEnd" placeholder="充值金额止" />
-                                        </div>
-                                    </div>
-
-                                    <div class="profile-info-row">
-                                        <div class="profile-info-name">跟进阶段：</div>
-                                        <div class="profile-info-value">
-                                            <ppts-checkbox-group category="followStage" model="vm.criteria.followStages" clear="vm.criteria.followStages=[]" />
-                                        </div>
-                                    </div>
-
-                                    <div class="profile-info-row">
-                                        <div class="profile-info-name">客户级别：</div>
-                                        <div class="profile-info-value">
-                                            <ppts-checkbox-group category="vipLevel" model="vm.criteria.customerLevels" clear="vm.criteria.customerLevels=[]" />
-                                        </div>
-                                    </div>
-
-                                    <!--<div class="profile-info-row">
-                                        <div class="profile-info-name"> 未跟进时长： </div>
-                                        <div class="profile-info-value">
-                                            <mcs-checkbox-group data="vm.dictionaries.c_codE_ABBR_CUSTOMER_VipLevel" model="vm.criteria.vipLevels">
-                                                <button class="btn btn-link" ng-click="vm.unSelectAll('vipLevels')">清空</button>
-                                            </mcs-checkbox-group>
-                                        </div>
-                                    </div>-->
-
-                                    <div class="profile-info-row">
-                                        <div class="profile-info-name">在读学校：</div>
-                                        <div class="profile-info-value">
-                                            <mcs-input model="vm.criteria.schoolName" css="col-xs-4 col-sm-4"/>
-                                        </div>
-                                    </div>
-
-                                    <div class="profile-info-row">
-                                        <div class="profile-info-name">家庭住址：</div>
-                                        <div class="profile-info-value">
-                                            <mcs-input model="vm.criteria.address"  css="col-xs-4 col-sm-4"/>
-                                        </div>
-                                    </div>
-
-                                    <!--<div class="profile-info-row">
-                                        <div class="profile-info-name">信息来源：</div>
-                                        <div class="profile-info-value">
-                                            <ppts-checkbox-group category="source" model="vm.criteria.sourceMainTypes" clear="vm.criteria.sourceMainTypes=[]" />
-                                        </div>
-                                    </div>-->
-
-                                    <div class="profile-info-row">
-                                        <div class="profile-info-name"> 归属坐席： </div>
-                                        <div class="profile-info-value">
-                                            <ppts-checkbox-group category="assignment" model="vm.criteria.isAssignSeat" clear="vm.criteria.isAssignSeat=[]"/>
-                                            <mcs-input placeholder="坐席姓名" model="vm.criteria.seatName" style="width:252px;"/>
-                                        </div>
-                                    </div>
-
-                                    <div class="profile-info-row">
-                                        <div class="profile-info-name">归属咨询师：</div>
-                                        <div class="profile-info-value">
-                                            <ppts-checkbox-group category="assignment" model="vm.criteria.isAssignConsultant" clear="vm.criteria.isAssignConsultant=[]" />
-                                            <mcs-input placeholder="坐席姓名" model="vm.criteria.consultantName" style="width:252px;"/>
-                                        </div>
-                                    </div>
-
-                                    <div class="profile-info-row">
-                                        <div class="profile-info-name">归属市场专员：</div>
-                                        <div class="profile-info-value">
-                                            <ppts-checkbox-group category="assignment" model="vm.criteria.isAssignMarket" clear="vm.criteria.isAssignMarket=[]"/>
-                                            <mcs-input placeholder="市场专员姓名" model="vm.criteria.marketName" style="width:252px;"/>
-                                        </div>
-                                    </div>
-
-                                    <div class="profile-info-row">
-                                        <div class="profile-info-name">建档人查询：</div>
-                                        <div class="profile-info-value">
-                                            <mcs-input model="vm.criteria.creatorName" placeholder="建档人姓名" css="col-xs-4 col-sm-4"/>
-                                        </div>
-                                    </div>
-
-                                    <div class="profile-info-row">
-                                        <div class="profile-info-name">有效/无效客户：</div>
-                                        <div class="profile-info-value">
-                                            <ppts-checkbox-group category="valid" model="vm.criteria.isValid" clear="vm.criteria.isValid=[]"/>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+﻿<!-- #开始：潜客列表.高级查询条件 -->
+<div id="accordion" class="accordion-style1 panel-group">
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#advance-search">
+                    <i class="ace-icon fa fa-angle-right bigger-110" data-icon-hide="fa-angle-down" data-icon-show="fa-angle-right"></i>
+                    &nbsp;高级查询
+                </a>
+            </h4>
+        </div>
+        <div class="panel-collapse collapse mcs-advance-search" id="advance-search">
+            <div class="panel-body">
+                <div class="profile-user-info mcs-user-profile">
+                    <div class="profile-info-row" ng-repeat="item in vm.searchItems">
+                        <div class="profile-info-name">{{item.name}}</div>
+                        <div class="profile-info-value" ppts-compile-html="item.template | trusted"></div>
                     </div>
                 </div>
-                <!-- /结束：潜客列表.高级查询条件 -->
-                <!-- #开始：潜客列表.快速查询条件 -->
-                <div class="mcs-panel-search well well-sm">
-                    <div class="portlet">
-                        <div class="portlet-title line">
-                            <div class="caption">
-                                <label class="quick-search"><i class="ace-icon fa fa-search bigger-125"></i> 快速查询</label>
-                            </div>
-                        </div>
-                        <div class="portlet-body">
-                            <mcs-input placeholder="大区/分公司/校区" model="" />
-                            <mcs-input placeholder="学员/家长姓名" model="vm.criteria.name" />
-                            <mcs-input placeholder="学员编号" model="vm.criteria.customerCode" />
-                            <mcs-input placeholder="家长联系方式" model="vm.criteria.parentContact" />
-                            <mcs-button type="search" click="vm.init()" size="medium" />
-                        </div>
-                    </div>
-                </div>
-                <!-- /结束：潜客列表.快速查询条件 -->
-                <!-- #开始：潜客列表.工具栏 -->
-                <div class="mcs-panel-toolbar">
-                    <mcs-button type="add" text="新增潜在客户" click="$state.go('ppts.customer-add')"></mcs-button>
-                    <mcs-button type="add" text="新增跟进记录"></mcs-button>
-                    <mcs-button icon="mail-forward" css="btn-yellow" text="划转资源"></mcs-button>
-                    <mcs-button icon="user-plus" css="btn-success" text="分配咨询师"></mcs-button>
-                    <mcs-button icon="female" css="btn-success" text="分配坐席"></mcs-button>
-                    <mcs-button icon="cny" css="btn-purple" text="充 值"></mcs-button>
-                </div>
-                <!-- /结束：潜客列表.工具栏 -->
-                <!-- #开始：潜客列表.数据表格 -->
-                <mcs-datatable data="vm.data" />
-                <!-- /结束：潜客列表.数据表格 -->
             </div>
         </div>
-        <!-- /结束：潜客列表 -->
     </div>
 </div>
+<!-- /结束：潜客列表.高级查询条件 -->
+<!-- #开始：潜客列表.快速查询条件 -->
+<div class="mcs-panel-search well well-sm">
+    <div class="portlet">
+        <div class="portlet-title line">
+            <div class="caption">
+                <label class="quick-search"><i class="ace-icon fa fa-search bigger-125"></i> 快速查询</label>
+            </div>
+        </div>
+        <div class="portlet-body">
+            <div class="input-group input-xlarge mcs-input-group pull-left">
+                <mcs-input placeholder="选择大区/分公司/校区" model="" readonly="true" css="form-control mcs-input-search" />
+                <span class="input-group-btn">
+                    <button class="btn btn-sm btn-info" type="button" ng-click="vm.select()">
+                        <i class="ace-icon fa fa-check bigger-110"></i>
+                        选择
+                    </button>
+                </span>
+            </div>
+            <ppts-search placeholder="输入学员、家长姓名，学员编号，联系方式进行查询" click="vm.search()" model="vm.criteria.keyword"/>
+        </div>
+    </div>
+    <div class="tags mcs-search-tags hide">
+        <label class="quick-search"><i class="ace-icon fa fa-filter bigger-125"></i> 查询条件</label>
+        <span class="tag" uib-tooltip="入学年级: 小学一年级、小学二年级、小学三年级">入学年级: 小学一年级、小学二年级...<button type="button" class="close">×</button></span>
+    </div>
+</div>
+<!-- /结束：潜客列表.快速查询条件 -->
+<!-- #开始：潜客列表.工具栏 -->
+<div class="mcs-panel-toolbar">
+    <mcs-button category="add" text="新增潜在客户" ppts-job-functions="新增潜在客户" click="$state.go('ppts.customer-add')"></mcs-button>
+    <mcs-button category="add" text="新增跟进记录" ppts-job-functions="新增跟进记录" click="vm.addFollow()"></mcs-button>
+    <mcs-button icon="user-plus" css="btn-success" text="分配咨询师" ppts-job-functions="分配咨询师" click="vm.assign(vm.relationType.consultant)"></mcs-button>
+    <mcs-button icon="female" css="btn-success" text="分配坐席" ppts-job-functions="分配坐席" click="vm.assign(vm.relationType.callcenter)"></mcs-button>
+    <mcs-button icon="cny" css="btn-purple" text="充 值" ppts-job-functions="充值" click="vm.pay()"></mcs-button>
+</div>
+<div class="alert alert-block alert-danger" ng-show="vm.errorMessage">
+    <button type="button" class="close" data-dismiss="alert">
+        <i class="ace-icon fa fa-times"></i>
+    </button>
+    <i class="ace-icon fa fa-warning"></i>
+    {{vm.errorMessage}}
+</div>
+<!-- /结束：潜客列表.工具栏 -->
+<!-- #开始：潜客列表.数据表格 -->
+<mcs-datatable data="vm.data" />
+<!-- /结束：潜客列表.数据表格 -->

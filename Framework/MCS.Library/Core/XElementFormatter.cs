@@ -359,8 +359,11 @@ namespace MCS.Library.Core
                 context.RootElement = root;
 
                 context.DeserializeTypeInfo(root);
+                context.DeserializeObjectElements(root);
 
-                XElement objectProperty = GetObjectElementByID(root, root.AttributeWithAlterName("value", "v", 0));
+                //SZ-P
+                //XElement objectProperty = GetObjectElementByID(root, root.AttributeWithAlterName("value", "v", 0));
+                XElement objectProperty = GetObjectElementByID(context, root.AttributeWithAlterName("value", "v", 0));
 
                 object result = DeserializeNodeToObject(objectProperty, false, context);
 
@@ -374,25 +377,44 @@ namespace MCS.Library.Core
             }
         }
 
-        private static XElement GetObjectElementByID(XElement parent, int id)
+        private static XElement GetObjectElementByID(XmlDeserializeContext context, int id)
         {
-            XElement objectProperty = (from property in parent.Descendants("O")
-                                       where property.Attribute("id", 0) == id
-                                       select property).FirstOrDefault();
+            XElement element = null;
 
-            if (objectProperty == null)
-                objectProperty = (from property in parent.Descendants("Object")
-                                  where property.Attribute("id", 0) == id
-                                  select property).FirstOrDefault();
+            context.ObjectElements.TryGetValue(id, out element);
 
-            return objectProperty;
+            return element;
         }
+
+        //private static XElement GetObjectElementByID(XElement parent, int id)
+        //{
+        //    //SZ-P
+        //    //XElement objectProperty = (from property in parent.Descendants("O")
+        //    //                           where property.Attribute("id", 0) == id
+        //    //                           select property).FirstOrDefault();
+        //    XElement objectProperty = (from property in parent.Descendants("O")
+        //                               where Convert.ToInt32(property.Attribute("id").Value) == id
+        //                               select property).FirstOrDefault();
+
+        //    //if (objectProperty == null)
+        //    //    objectProperty = (from property in parent.Descendants("Object")
+        //    //                      where property.Attribute("id", 0) == id
+        //    //                      select property).FirstOrDefault();
+        //    if (objectProperty == null)
+        //        objectProperty = (from property in parent.Descendants("Object")
+        //                          where Convert.ToInt32(property.Attribute("id").Value) == id
+        //                          select property).FirstOrDefault();
+
+        //    return objectProperty;
+        //}
 
         private object DeserializeNodeToObject(XElement objectNode, bool ignoreError, XmlDeserializeContext context)
         {
             object data = null;
 
-            int objID = objectNode.Attribute("id", 0);
+            //SZ-P
+            //int objID = objectNode.Attribute("id", 0);
+            int objID = Convert.ToInt32(objectNode.Attribute("id").Value);
 
             if (context.ObjectContext.TryGetValue(objID, out data) == false)
             {
@@ -490,17 +512,30 @@ namespace MCS.Library.Core
                 {
                     System.Type realType = efi.FieldInfo.FieldType;
 
+                    //SZ-P
+                    //var propertiesElement = from property in parent.Descendants("F")
+                    //                        where (property.AttributeWithAlterName("name", "n", string.Empty) == efi.AlternateFieldName
+                    //                            || property.AttributeWithAlterName("name", "n", string.Empty) == efi.FieldInfo.Name) &&
+                    //                            context.TypeContext[property.AttributeWithAlterName("ownerTypeID", "oti", -1)] == kp.Key.ObjectType
+                    //                        select property;
+
+                    //if (propertiesElement.FirstOrDefault() == null)
+                    //    propertiesElement = from property in parent.Descendants("Field")
+                    //                        where (property.AttributeWithAlterName("name", "n", string.Empty) == efi.AlternateFieldName
+                    //                            || property.AttributeWithAlterName("name", "n", string.Empty) == efi.FieldInfo.Name) &&
+                    //                            context.TypeContext[property.AttributeWithAlterName("ownerTypeID", "oti", -1)] == kp.Key.ObjectType
+                    //                        select property;
                     var propertiesElement = from property in parent.Descendants("F")
                                             where (property.AttributeWithAlterName("name", "n", string.Empty) == efi.AlternateFieldName
                                                 || property.AttributeWithAlterName("name", "n", string.Empty) == efi.FieldInfo.Name) &&
-                                                context.TypeContext[property.AttributeWithAlterName("ownerTypeID", "oti", -1)] == kp.Key.ObjectType
+                                                context.TypeContext[property.IntAttributeWithAlterName("ownerTypeID", "oti", -1)] == kp.Key.ObjectType
                                             select property;
 
                     if (propertiesElement.FirstOrDefault() == null)
                         propertiesElement = from property in parent.Descendants("Field")
                                             where (property.AttributeWithAlterName("name", "n", string.Empty) == efi.AlternateFieldName
                                                 || property.AttributeWithAlterName("name", "n", string.Empty) == efi.FieldInfo.Name) &&
-                                                context.TypeContext[property.AttributeWithAlterName("ownerTypeID", "oti", -1)] == kp.Key.ObjectType
+                                                context.TypeContext[property.IntAttributeWithAlterName("ownerTypeID", "oti", -1)] == kp.Key.ObjectType
                                             select property;
 
                     XElement propertyElement = propertiesElement.FirstOrDefault();
@@ -511,7 +546,10 @@ namespace MCS.Library.Core
 
                         if (propertyElement.AttributeWithAlterName("isRef", "r", false) == true)
                         {
-                            XElement objectElement = GetObjectElementByID(context.RootElement, propertyElement.AttributeWithAlterName("value", "v", 0));
+                            //SZ-P
+                            //XElement objectElement = GetObjectElementByID(context.RootElement, propertyElement.AttributeWithAlterName("value", "v", 0));
+                            //XElement objectElement = GetObjectElementByID(context.RootElement, propertyElement.IntAttributeWithAlterName("value", "v", 0));
+                            XElement objectElement = GetObjectElementByID(context, propertyElement.IntAttributeWithAlterName("value", "v", 0));
 
                             if (objectElement != null)
                             {
@@ -579,7 +617,11 @@ namespace MCS.Library.Core
 
                 if (item.AttributeWithAlterName("isRef", "r", false) == true)
                 {
-                    XElement objectElement = GetObjectElementByID(context.RootElement, item.AttributeWithAlterName("value", "v", 0));
+                    //SZ-P
+                    //XElement objectElement = GetObjectElementByID(context.RootElement, item.AttributeWithAlterName("value", "v", 0));
+                    //XElement objectElement = GetObjectElementByID(context.RootElement, item.IntAttributeWithAlterName("value", "v", 0));
+                    XElement objectElement = GetObjectElementByID(context, item.IntAttributeWithAlterName("value", "v", 0));
+
                     itemData = DeserializeNodeToObject(objectElement, false, context);
                 }
                 else
@@ -635,7 +677,7 @@ namespace MCS.Library.Core
                     }
                     else
                         if (dataType == typeof(TimeSpan))
-                            data = ((TimeSpan)data).TotalSeconds;
+                        data = ((TimeSpan)data).TotalSeconds;
                 }
             }
 

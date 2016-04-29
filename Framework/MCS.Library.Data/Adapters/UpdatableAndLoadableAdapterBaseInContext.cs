@@ -109,19 +109,33 @@ namespace MCS.Library.Data.Adapters
         /// <param name="action"></param>
         protected void RegisterLoadByBuilderInContext(string condition, OrderBySqlClauseBuilder orderByBuilder, Action<TCollection> action, string tableName, ORMappingItemCollection mappings)
         {
-            if (mappings == null)
-                mappings = this.GetQueryMappingInfo();
+            QueryInContextBuilder<T, TCollection>.Instance.RegisterLoadByBuilderInContext(
+                this.GetSqlContext(),
+                condition,
+                orderByBuilder,
+                (collection) => this.AfterLoad(collection),
+                (collection) => action(collection),
+                (row) => this.CreateNewData(row),
+                tableName,
+                mappings);
+        }
 
-            string sql = GetLoadSqlByBuilder(condition, orderByBuilder, mappings);
-
-            if (tableName.IsNullOrEmpty())
-                tableName = mappings.GetQueryTableName();
-
-            this.RegisterQueryData(tableName, mappings, sql, (collection) =>
-            {
-                AfterLoad(collection);
-                action(collection);
-            });
+        /// <summary>
+        /// 在上下文中注册查询返回的结果
+        /// </summary>
+        /// <param name="tableName"></param>
+        /// <param name="mapping"></param>
+        /// <param name="sql"></param>
+        /// <param name="action"></param>
+        protected void RegisterQueryData(string tableName, ORMappingItemCollection mapping, string sql, Action<TCollection> action)
+        {
+            QueryInContextBuilder<T, TCollection>.Instance.RegisterQueryData(
+                this.GetSqlContext(),
+                tableName,
+                mapping,
+                sql,
+                action,
+                (row) => this.CreateNewData(row));
         }
     }
 }

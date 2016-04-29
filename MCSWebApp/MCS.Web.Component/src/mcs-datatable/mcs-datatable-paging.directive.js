@@ -13,15 +13,15 @@
             restrict: 'EA',
             template: '<div class="page-list">' +
                 '<ul class="pagination" ng-show="conf.totalCount > 0">' +
-                '<li ng-class="{disabled: conf.pageIndex == 1}" ng-click="prevPage()"><span>&laquo;</span></li>' +
+                '<li ng-class="{disabled: conf.pageIndex == 1}" ng-click="prevPage()" style="cursor:pointer;"><span>&laquo;</span></li>' +
                 '<li ng-repeat="item in pageList track by $index" ng-class="{active: item == conf.pageIndex, separate: item == \'...\'}" ' +
-                'ng-click="changepageIndex(item)">' +
+                'ng-click="changepageIndex(item)" style="cursor:pointer;">' +
                 '<span>{{ item }}</span>' +
                 '</li>' +
-                '<li ng-class="{disabled: conf.pageIndex == conf.numberOfPages}" ng-click="nextPage()"><span>&raquo;</span></li>' +
+                '<li ng-class="{disabled: conf.pageIndex == conf.numberOfPages}" ng-click="nextPage()" style="cursor:pointer;"><span>&raquo;</span></li>' +
                 '</ul>' +
                 '<div class="page-total" ng-show="conf.totalCount > 0">' +
-                '第<input type="text" ng-model="jumpPageNum"  ng-keypress="jumpToPage($event)"/>页 ' +
+                '第 <input type="text" ng-model="jumpPageNum" class="mcs-input-small" ng-blur="jumpToPage($event)" onkeyup="mcs.util.limit(this)" onafterpaste="mcs.util.limit(this)"/>页 ' +
 
                 '共<strong>{{ conf.totalCount }}</strong>条记录' +
                 '</div>' +
@@ -179,11 +179,10 @@
 
                 // 跳转页
                 scope.jumpToPage = function() {
-                    scope.jumpPageNum = scope.jumpPageNum.replace(/[^0-9]/g, '');
-                    if (scope.jumpPageNum !== '') {
-                        scope.conf.pageIndex = scope.jumpPageNum;
-                        scope.pageChange();
-                    }
+                    //scope.jumpPageNum = scope.jumpPageNum.replace(/[^0-9]/g, '');
+                    if (!scope.jumpPageNum) return;
+                    scope.conf.pageIndex = scope.jumpPageNum;
+                    scope.pageChange();
                 };
 
 

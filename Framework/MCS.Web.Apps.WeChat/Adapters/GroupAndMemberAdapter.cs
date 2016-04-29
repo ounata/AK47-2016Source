@@ -1,10 +1,11 @@
-﻿using System;
+﻿using MCS.Library.Data.Adapters;
+using MCS.Library.Data.Builder;
+using MCS.Library.SOA.DataObjects;
+using MCS.Web.Apps.WeChat.DataObjects;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using MCS.Library.SOA.DataObjects;
-using MCS.Web.Apps.WeChat.DataObjects;
-using MCS.Library.Data.Builder;
 
 namespace MCS.Web.Apps.WeChat.Adapters
 {
@@ -18,11 +19,7 @@ namespace MCS.Web.Apps.WeChat.Adapters
 
         public GroupAndMemberCollection LoadByGroupID(string groupID)
         {
-            WhereSqlClauseBuilder builder = new WhereSqlClauseBuilder();
-
-            builder.AppendItem("GroupID", groupID);
-
-            return base.LoadByBuilder(builder);
+            return base.LoadByInBuilder(new InLoadingCondition(builder => builder.AppendItem("groupID"), "GroupID"));
         }
 
         public void DeleteByGroupID(string groupID)

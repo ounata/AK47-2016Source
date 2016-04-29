@@ -17,6 +17,22 @@
             resource.post({ operation: 'getPagedStudentAssignment' }, criteria, success, error);
         }
 
+        resource.getAssignCondition = function (criteria, success, error) {
+            resource.post({ operation: 'getAssignCondition' }, criteria, success, error);
+        }
+
+        resource.createAssignCondition = function (criteria, success, error) {
+            resource.post({ operation: 'createAssignCondition' }, criteria, success, error);
+        }
+
+        resource.getTearchBySubject = function (criteria, success, error) {
+            resource.post({ operation: 'getTearchBySubject' }, criteria, success, error);
+        }
+
+        resource.editStudentCourse = function (criteria, success, error) {
+            resource.post({ operation: 'editStudentCourse' }, criteria, success, error);
+        }
+
         return resource;
     }]);
 });

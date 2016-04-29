@@ -3357,6 +3357,96 @@
             持久化器
             </summary>
         </member>
+        <member name="T:MCS.Library.Configuration.TimeZoneContextSettings">
+            <summary>
+            时区偏移的配置信息
+            </summary>
+        </member>
+        <member name="M:MCS.Library.Configuration.TimeZoneContextSettings.GetConfig">
+            <summary>
+            得到时区偏移的配置信息
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:MCS.Library.Configuration.TimeZoneContextSettings.Enabled">
+            <summary>
+            是否启用时区偏移
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Configuration.TimeZoneContextSettings.TimeOffset">
+            <summary>
+            时区的偏移量
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Configuration.TimeZoneContextSettings.TimeZoneID">
+            <summary>
+            TimeZone的ID
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Configuration.TimeZoneContextSettings.TimeZoneName">
+            <summary>
+            TimeZone的ID
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Configuration.TimeZoneContextSettings.TimePointKind">
+            <summary>
+            时间点的类型，用于时间切片的默认当前时间。默认是Local。如果是UTC，则在使用时间片的时候
+            </summary>
+        </member>
+        <member name="T:MCS.Library.Configuration.UriGroupConfigurationElement">
+            <summary>
+            Uri配置组
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Configuration.UriGroupConfigurationElement.Urls">
+            <summary>
+            Uri的集合
+            </summary>
+        </member>
+        <member name="T:MCS.Library.Configuration.UriGroupConfigurationCollection">
+            <summary>
+            Uri配置组集合
+            </summary>
+        </member>
+        <member name="T:MCS.Library.Configuration.UriSettings">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:MCS.Library.Configuration.UriSettings.GetConfig">
+            <summary>
+            URL配置信息的配置节
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:MCS.Library.Configuration.UriSettings.Groups">
+            <summary>
+            Url组
+            </summary>
+        </member>
+        <member name="M:MCS.Library.Configuration.UriSettings.GetUrl(System.String,System.String)">
+            <summary>
+            得到Url，如果没有找到，则返回null
+            </summary>
+            <param name="groupName"></param>
+            <param name="urlName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MCS.Library.Configuration.UriSettings.CheckAndGet(System.String,System.String)">
+            <summary>
+            得到Url，如果没有找到，则抛出异常
+            </summary>
+            <param name="groupName"></param>
+            <param name="urlName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MCS.Library.Configuration.UriSettings.GetUrlsInGroup(System.String)">
+            <summary>
+            得到某个group下的UriConfigurationElement
+            </summary>
+            <param name="groupName"></param>
+            <returns></returns>
+        </member>
         <member name="T:MCS.Library.Configuration.NamedConfigurationElement">
             <summary>
             以名字为键值的配置项
@@ -4008,6 +4098,11 @@
         <member name="F:MCS.Library.Core.DBTimePointActionContext.MaxVersionEndTime">
             <summary>
             版本时间的上限（相当于无限大）
+            </summary>
+        </member>
+        <member name="F:MCS.Library.Core.DBTimePointActionContext.CurrentTimeTSqlVarName">
+            <summary>
+            在TSql中使用的表示当前时间的变量
             </summary>
         </member>
         <member name="M:MCS.Library.Core.DBTimePointActionContext.#ctor">
@@ -5460,6 +5555,7 @@
             </summary>
             <param name="data"></param>
             <param name="action"></param>
+            <returns>返回传入的data</returns>
         </member>
         <member name="M:MCS.Library.Core.Extensions.IsNotEmpty``1(System.String,System.Func{System.String,``0})">
             <summary>
@@ -5491,6 +5587,7 @@
             </summary>
             <param name="data"></param>
             <param name="action"></param>
+            <returns>返回传入的data</returns>
         </member>
         <member name="M:MCS.Library.Core.Extensions.IsNullOrWhiteSpace(System.String)">
             <summary>
@@ -5505,6 +5602,7 @@
             </summary>
             <param name="data"></param>
             <param name="action"></param>
+            <returns>返回传入的data</returns>
         </member>
         <member name="M:MCS.Library.Core.Extensions.IsNotWhiteSpace(System.String)">
             <summary>
@@ -5534,6 +5632,7 @@
             </summary>
             <param name="data"></param>
             <param name="action"></param>
+            <returns>返回传入的data</returns>
         </member>
         <member name="M:MCS.Library.Core.Extensions.IsNotNull``1(``0,System.Action{``0})">
             <summary>
@@ -5542,6 +5641,7 @@
             <typeparam name="T">对象的类型泛型</typeparam>
             <param name="data"></param>
             <param name="action"></param>
+            <returns>返回传入的data</returns>
         </member>
         <member name="M:MCS.Library.Core.Extensions.IsNotNull``2(``0,System.Func{``0,``1})">
             <summary>
@@ -5559,6 +5659,7 @@
             </summary>
             <param name="data"></param>
             <param name="action"></param>
+            <returns>返回传入的data</returns>
         </member>
         <member name="M:MCS.Library.Core.Extensions.TrueFunc(System.Boolean,System.Func{System.Boolean})">
             <summary>
@@ -5574,6 +5675,7 @@
             </summary>
             <param name="data"></param>
             <param name="action"></param>
+            <returns>返回传入的data</returns>
         </member>
         <member name="M:MCS.Library.Core.Extensions.ReferenceEqualWithNull(System.Object,System.Object,System.Boolean@)">
             <summary>
@@ -7282,6 +7384,16 @@
             <param name="defaultValue"></param>
             <returns></returns>
         </member>
+        <member name="M:MCS.Library.Core.XElementExtension.IntAttributeWithAlterName(System.Xml.Linq.XElement,System.Xml.Linq.XName,System.Xml.Linq.XName,System.Int32)">
+            <summary>
+            SZ-P
+            </summary>
+            <param name="parent"></param>
+            <param name="name"></param>
+            <param name="alterName"></param>
+            <param name="defaultValue"></param>
+            <returns></returns>
+        </member>
         <member name="M:MCS.Library.Core.XElementExtension.AttributeValueWithAlterName(System.Xml.Linq.XElement,System.Xml.Linq.XName,System.Xml.Linq.XName)">
             <summary>
             得到Attribute的字符串Value，先用AlterName去取，如果不存在，则使用name，如果还不存在，返回空串
@@ -7679,6 +7791,11 @@
         <member name="P:MCS.Library.Core.XmlDeserializeContext.TypeContext">
             <summary>
             类型上下文
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Core.XmlDeserializeContext.ObjectElements">
+            <summary>
+            对象ID所对应的Xml元素
             </summary>
         </member>
         <member name="T:MCS.Library.Core.IXmlDeserialize">
@@ -8280,6 +8397,7 @@
             </summary>
             <param name="data">被检查的对象</param>
             <param name="message">参数的名称</param>
+            <returns>返回传入的data，可以继续进行后续操作</returns>
         </member>
         <member name="M:MCS.Library.Core.ExceptionHelper.NullCheck``1(System.Object,System.String,System.Object[])">
             <summary>
@@ -8289,6 +8407,7 @@
             <param name="data"></param>
             <param name="message"></param>
             <param name="messageParams"></param>
+            <returns>返回传入的data，可以继续进行后续操作</returns>
         </member>
         <member name="M:MCS.Library.Core.ExceptionHelper.TrueThrow(System.Boolean,System.String,System.Object[])">
             <summary>
@@ -8297,6 +8416,7 @@
             <param name="parseExpressionResult">条件表达式</param>
             <param name="message">错误信息</param>
             <param name="messageParams">错误信息参数</param>
+            <returns>返回传入的parseExpressionResult</returns>
             <remarks>
             如果条件表达式boolExpression的结果值为真(true)，则抛出strMessage指定的错误信息
             <code source="..\Framework\TestProjects\DeluxeWorks.Library.Test\Core\ExceptionsTest.cs"  lang="cs" title="通过判断条件表达式boolExpression的结果值而判断是否抛出指定的异常信息" />
@@ -8317,6 +8437,7 @@
             <param name="message">错误信息</param>
             <param name="messageParams">错误信息的参数</param>
             <typeparam name="T">异常的类型</typeparam>
+            <returns>返回传入的parseExpressionResult</returns>
             <remarks>
             如果条件表达式boolExpression的结果值为真(true)，则抛出message指定的错误信息
             <code source="..\Framework\TestProjects\DeluxeWorks.Library.Test\Core\ExceptionsTest.cs" region = "TrueThrowTest" lang="cs" title="通过判断条件表达式boolExpression的结果值而判断是否抛出指定的异常信息" />
@@ -8331,6 +8452,7 @@
             <param name="parseExpressionResult">条件表达式</param>
             <param name="message">错误信息</param>
             <param name="messageParams">错误信息参数</param>
+            <returns>返回传入的parseExpressionResult</returns>
             <code source="..\Framework\TestProjects\DeluxeWorks.Library.Test\Core\ExceptionsTest.cs" region = "FalseThrowTest" lang="cs" title="通过判断条件表达式boolExpression的结果值而判断是否抛出指定的异常信息" />
             <seealso cref="M:MCS.Library.Core.ExceptionHelper.TrueThrow(System.Boolean,System.String,System.Object[])"/>
             <seealso cref="T:MCS.Library.Logging.LoggerFactory"/>
@@ -8351,6 +8473,7 @@
             <param name="parseExpressionResult">条件表达式</param>
             <param name="message">错误信息</param>
             <param name="messageParams">错误信息参数</param>
+            <returns>返回传入的parseExpressionResult</returns>
             <remarks>
             如果条件表达式boolExpression的结果值为假（false），则抛出strMessage指定的错误信息
             <code source="..\Framework\TestProjects\DeluxeWorks.Library.Test\Core\ExceptionsTest.cs" region="FalseThrowTest" lang="cs" title="通过判断条件表达式boolExpression的结果值而判断是否抛出指定的异常信息" />
@@ -8369,6 +8492,7 @@
             </summary>
             <param name="data">字符串参数值</param>
             <param name="paramName">字符串名称</param>
+            <returns>返回传入的data</returns>
             <remarks>
             若字符串参数为Null或空串，抛出ArgumentException异常
             <code source="..\Framework\TestProjects\DeluxeWorks.Library.Test\Core\ExceptionsTest.cs" region="CheckStringIsNullOrEmpty" lang="cs" title="检查字符串参数是否为Null或空串，若是，则抛出异常" />
@@ -8381,6 +8505,7 @@
             <typeparam name="T">异常的类型</typeparam>
             <param name="data">检查字符串参数是否为Null或空串，如果是，则抛出异常</param>
             <param name="message"></param>
+            <returns>返回传入的data</returns>
         </member>
         <member name="M:MCS.Library.Core.ExceptionHelper.GetRealException(System.Exception)">
             <summary>
@@ -8417,6 +8542,7 @@
             </summary>
             <param name="source"></param>
             <param name="ex"></param>
+            <returns>返回传入的Exception</returns>
         </member>
         <member name="M:MCS.Library.Core.ExceptionHelper.WriteToEventLog(System.Exception,System.String,System.Diagnostics.EventLogEntryType)">
             <summary>
@@ -8425,6 +8551,7 @@
             <param name="source"></param>
             <param name="entryType"></param>
             <param name="ex"></param>
+            <returns>返回传入的Exception</returns>
         </member>
         <member name="M:MCS.Library.Core.ExceptionHelper.WriteToEventLog(System.Exception,System.String,System.Diagnostics.EventLogEntryType,System.Int32)">
             <summary>
@@ -8434,6 +8561,7 @@
             <param name="entryType"></param>
             <param name="eventID"></param>
             <param name="ex"></param>
+            <returns>返回传入的Exception</returns>
         </member>
         <member name="T:MCS.Library.Core.XmlHelper">
             <summary>
@@ -9187,34 +9315,29 @@
             <param name="ignorProperties"></param>
             <returns></returns>
         </member>
-        <member name="T:MCS.Library.Data.FieldSortDirection">
+        <member name="T:MCS.Library.Data.DataObjects.IVersionDataObject">
             <summary>
-            字段的排序方向定义
+            带版本信息的数据实体
             </summary>
         </member>
-        <member name="F:MCS.Library.Data.FieldSortDirection.Ascending">
+        <member name="P:MCS.Library.Data.DataObjects.IVersionDataObject.ID">
             <summary>
-            升序
+            除版本信息之外的ID（主键）
             </summary>
         </member>
-        <member name="F:MCS.Library.Data.FieldSortDirection.Descending">
+        <member name="T:MCS.Library.Data.DataObjects.IVersionDataObjectWithoutID">
             <summary>
-            降序
+            带版本信息的数据实体（没有ID属性，ID由ORMapping时决定）
             </summary>
         </member>
-        <member name="T:MCS.Library.Data.Configuration.ConnectionMappingElement">
+        <member name="P:MCS.Library.Data.DataObjects.IVersionDataObjectWithoutID.VersionStartTime">
             <summary>
-            连接映射的配置节
+            版本的开始时间
             </summary>
         </member>
-        <member name="P:MCS.Library.Data.Configuration.ConnectionMappingElement.Destination">
+        <member name="P:MCS.Library.Data.DataObjects.IVersionDataObjectWithoutID.VersionEndTime">
             <summary>
-            目标连接串
-            </summary>
-        </member>
-        <member name="T:MCS.Library.Data.Configuration.ConnectionMappingElementCollection">
-            <summary>
-            接串映射信息集合
+            版本的结束时间
             </summary>
         </member>
         <member name="T:MCS.Library.Data.DataObjects.ColumnDataType">
@@ -9379,6 +9502,7 @@
             迭代处理每一个元素
             </summary>
             <param name="action"></param>
+            <returns>返回自己</returns>
         </member>
         <member name="M:MCS.Library.Data.DataObjects.ReadOnlyDataObjectCollectionBase`1.Exists(System.Predicate{`0})">
             <summary>
@@ -11078,6 +11202,36 @@
             </summary>
             <param name="value"></param>
         </member>
+        <member name="T:MCS.Library.Data.FieldSortDirection">
+            <summary>
+            字段的排序方向定义
+            </summary>
+        </member>
+        <member name="F:MCS.Library.Data.FieldSortDirection.Ascending">
+            <summary>
+            升序
+            </summary>
+        </member>
+        <member name="F:MCS.Library.Data.FieldSortDirection.Descending">
+            <summary>
+            降序
+            </summary>
+        </member>
+        <member name="T:MCS.Library.Data.Configuration.ConnectionMappingElement">
+            <summary>
+            连接映射的配置节
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Data.Configuration.ConnectionMappingElement.Destination">
+            <summary>
+            目标连接串
+            </summary>
+        </member>
+        <member name="T:MCS.Library.Data.Configuration.ConnectionMappingElementCollection">
+            <summary>
+            接串映射信息集合
+            </summary>
+        </member>
         <member name="T:MCS.Library.Data.DbConnectionMappingContext">
             <summary>
             数据库联接名称的映射。在上下文中维护一个连接名称的映射字典。
@@ -11515,6 +11669,11 @@
         <member name="P:MCS.Library.Data.Mapping.SqlBehaviorAttribute.DefaultExpression">
             <summary>
             对应的属性为空时，所提供的缺省值表达式
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Data.Mapping.SqlBehaviorAttribute.ForceUseDefaultExpression">
+            <summary>
+            无论对象的属性值如何，在DefaultExpression不为空的情况下，强制使用默认表达式。
             </summary>
         </member>
         <member name="P:MCS.Library.Data.Mapping.SqlBehaviorAttribute.BindingFlags">
@@ -13875,6 +14034,26 @@
             </summary>
             <param name="sntpPacket"></param>
             <returns></returns>
+        </member>
+        <member name="T:MCS.Library.Net.SNTP.SNTPDateTimeKind">
+            <summary>
+            日期类型
+            </summary>
+        </member>
+        <member name="F:MCS.Library.Net.SNTP.SNTPDateTimeKind.ByTimeZoneContext">
+            <summary>
+            由TimeZoneContext决定
+            </summary>
+        </member>
+        <member name="F:MCS.Library.Net.SNTP.SNTPDateTimeKind.Utc">
+            <summary>
+            Utc时间
+            </summary>
+        </member>
+        <member name="F:MCS.Library.Net.SNTP.SNTPDateTimeKind.Local">
+            <summary>
+            本地时间
+            </summary>
         </member>
         <member name="T:MCS.Library.Net.SNTP.SNTPSettings">
             <summary>

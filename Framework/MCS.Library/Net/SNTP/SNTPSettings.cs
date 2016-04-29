@@ -79,7 +79,7 @@ namespace MCS.Library.Net.SNTP
         /// <summary>
         /// 网络连接的超时时间
         /// </summary>
-        [ConfigurationProperty("timeout", IsRequired = false, DefaultValue = "00:00:01")]
+        [ConfigurationProperty("timeout", IsRequired = false, DefaultValue = "00:00:05")]
         public TimeSpan Timeout
         {
             get
@@ -103,12 +103,12 @@ namespace MCS.Library.Net.SNTP
         /// <summary>
         /// 默认的日期类型（Local或者Utc，默认为Local）
         /// </summary>
-        [ConfigurationProperty("defaultDateTimeKind", IsRequired = false, DefaultValue = DateTimeKind.Local)]
-        public DateTimeKind DefaultDateTimeKind
+        [ConfigurationProperty("defaultDateTimeKind", IsRequired = false, DefaultValue = SNTPDateTimeKind.ByTimeZoneContext)]
+        public SNTPDateTimeKind DefaultDateTimeKind
         {
             get
             {
-                return (DateTimeKind)this["defaultDateTimeKind"];
+                return (SNTPDateTimeKind)this["defaultDateTimeKind"];
             }
         }
     }

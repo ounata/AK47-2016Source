@@ -1,39 +1,28 @@
-﻿(function () {
+﻿(function() {
     'use strict';
 
-    /**
+    /*
      * 两个对象判等
-     *
      */
-    mcs.util.isObjectsEqual = function (a, b) {
-
+    mcs.util.isObjectsEqual = function(a, b) {
         var aProps = Object.getOwnPropertyNames(a);
         var bProps = Object.getOwnPropertyNames(b);
-
-
         if (aProps.length != bProps.length) {
             return false;
         }
-
         for (var i = 0; i < aProps.length; i++) {
             var propName = aProps[i];
-
-
             if (a[propName] !== b[propName]) {
                 return false;
             }
         }
-
-
         return true;
     };
 
-   
-    /**
+    /*
      * 删除数组中指定元素
-     *
      */
-    mcs.util.removeByValue = function (_array, val) {
+    mcs.util.removeByValue = function(_array, val) {
         for (var i = 0; i < _array.length; i++) {
             if (this[i] == val) {
                 _array.splice(i, 1);
@@ -42,12 +31,48 @@
         }
     };
 
+    /*
+     * 删除对象集合中具有指定特征的对象    
+     */
+
+    mcs.util.removeByObjectWithKeys = function(_array, obj) {
+        var props = Object.getOwnPropertyNames(obj);
+        var propsAmount = props.length;
+
+        for (var i = _array.length - 1; i >= 0; i--) {
+            var counter = 0;
+
+            for (var j = 0; j < propsAmount; j++) {
+                if (_array[i].hasOwnProperty(props[j]) && _array[i][props[j]] == obj[props[j]]) {
+                    counter = counter + 1;
+                }
+            }
+
+
+
+            if (counter == propsAmount) {
+                _array.splice(i, 1);
+            }
+
+        }
+    }
+
+
+    /*
+     * 删除对象集合中具有指定特征的对象集
+     */
+    mcs.util.removeByObjectsWithKeys = function(_array, targetArray) {
+        for (var i = targetArray.length - 1; i >= 0; i--) {
+            mcs.util.removeByObjectWithKeys(_array, targetArray[i]);
+        }
+    }
+
 
     /**
      * 从对象集合中删除指定对象
      *
      */
-    mcs.util.removeByObject = function (_array, obj) {
+    mcs.util.removeByObject = function(_array, obj) {
         for (var i = 0; i < _array.length; i++) {
             if (mcs.util.isObjectsEqual(_array[i], obj)) {
                 _array.splice(i, 1);
@@ -71,21 +96,28 @@
     };
 
     /*
+     * 判断是否为字符串
+     */
+    mcs.util.isString = function(value) {
+        return typeof value === 'string';
+    };
+
+    /*
      * 字典对象合并
      */
     mcs.util.merge = function (dictionary) {
         for (var item in dictionary) {
             var prop = item;
-            item = item.indexOf('c_codE_ABBR_') == 0 ? item : 'c_codE_ABBR_' + item;
+            item = item.toLowerCase().indexOf('c_code_abbr_') == 0 ? item : 'c_codE_ABBR_' + item;
             mcs.app.dict[item] = dictionary[prop];
         }
     };
 
     /*
-    * 对象列表映射成字典
-    * data 对象数组, kvp 键值对{key,value},category 所属类别
-    */
-    mcs.util.mapping = function (data, kvp, category) {
+     * 对象列表映射成字典
+     * data 对象数组, kvp 键值对{key,value},category 所属类别
+     */
+    mcs.util.mapping = function(data, kvp, category) {
         if (!data || !kvp.key || !kvp.value) return;
         if (category == undefined) {
             var result = [];
@@ -111,13 +143,37 @@
     };
 
     /*
-    * 从指定的数组集合中找到字符串或数组子集合中是否存在
-    */
-    mcs.util.contains = function (data, elems, separator) {
+     * 限制文本框只能输入整数
+     */
+    mcs.util.limit = function(input) {
+        if (input.value.length == 1) {
+            input.value = input.value.replace(/[^1-9]/g, '');
+        } else {
+            input.value = input.value.replace(/\D/g, '');
+        }
+    };
+
+    /*
+     * 检测只能输入小数
+     */
+    mcs.util.number = function(e) {
+        var re = /^\d+(?=\.{0,1}\d+$|$)/;
+        if (e.value != "") {
+            if (!re.test(e.value)) {
+                e.value = "";
+                e.focus();
+            }
+        }
+    };
+
+    /*
+     * 从指定的数组集合中找到字符串或数组子集合中是否存在
+     */
+    mcs.util.contains = function(data, elems, separator) {
         if (!data || !elems) return false;
         var array = mcs.util.toArray(elems, separator);
-        for (var j in array) {
-            if (jQuery.inArray(array[j], data) > -1) {
+        for (var i in array) {
+            if (jQuery.inArray(array[i], data) > -1) {
                 return true;
             }
         }
@@ -126,9 +182,22 @@
     };
 
     /*
-    * 将指定元素转化为数组
-    */
-    mcs.util.toArray = function (data, separator) {
+     * 判断对象数组中是否包含指定属性的对象
+     */
+    mcs.util.containsObject = function(data, elem, prop) {
+        if (!data || !data.length || !elem || !elem[prop]) return false;
+        for (var index in data) {
+            if (data[index][prop] == elem[prop]) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+    /*
+     * 将指定元素转化为数组
+     */
+    mcs.util.toArray = function(data, separator) {
         var result = [];
         if (typeof data == 'string') {
             separator = separator || ',';
@@ -146,17 +215,30 @@
     };
 
     /*
-    * 判断元素是否存在属性
-    */
-    mcs.util.hasAttr = function (elem, attrName) {
+     * 判断元素是否存在属性
+     */
+    mcs.util.hasAttr = function(elem, attrName) {
         return typeof elem.attr(attrName) != 'undefined';
     };
 
     /*
-    * 对象复制
-    */
-    mcs.util.clone = function (obj) {
-        if (typeof (obj) != 'object') return obj;
+     * 将字符串转化为bool类型, isIgnoreZero为解决单选框存在有0的选项
+     */
+    mcs.util.bool = function(str, isIgnoreZero) {
+        isIgnoreZero = isIgnoreZero || false;
+        if (typeof str === 'boolean') return str;
+        if (isIgnoreZero && str == '0') return true;
+        if (!str || !str.length) return false;
+        str = str.toLowerCase();
+        if (str === 'false' || str === '0' || str === 'undefined' || str === 'null') return false;
+        return true;
+    };
+
+    /*
+     * 对象复制
+     */
+    mcs.util.clone = function(obj) {
+        if (typeof(obj) != 'object') return obj;
         if (obj == null) return obj;
         var newObject = new Object();
         for (var i in obj)
@@ -165,9 +247,9 @@
     };
 
     /*
-    * 从对象数组中查找某属性值对应的索引
-    */
-    mcs.util.indexOf = function (data, key, value) {
+     * 从对象数组中查找某属性值对应的索引
+     */
+    mcs.util.indexOf = function(data, key, value) {
         if (!data || !data.length) return -1;
         for (var index in data) {
             if (!data[index][key]) return -1;
@@ -179,9 +261,9 @@
     };
 
     /*
-    * 从指定的数组集合中找到字符串或数组子集合中是否存在
-    */
-    mcs.util.contains = function (data, elems, separator) {
+     * 从指定的数组集合中找到字符串或数组子集合中是否存在
+     */
+    mcs.util.contains = function(data, elems, separator) {
         if (!data || !elems) return false;
         var array = mcs.util.toArray(elems, separator);
         for (var j in array) {
@@ -193,9 +275,9 @@
     };
 
     /*
-    * 将指定元素转化为数组
-    */
-    mcs.util.toArray = function (data, separator) {
+     * 将指定元素转化为数组
+     */
+    mcs.util.toArray = function(data, separator) {
         var result = [];
         if (typeof data == 'string') {
             separator = separator || ',';
@@ -304,11 +386,11 @@
     };
 
     /*
-    * 获取字典项的值
-    */
-    mcs.util.getDictionaryItemValue = function (items, key) {
-        if (key == 0) return '';
-        if (!items || !items.length || !key) return key;
+     * 获取字典项的值
+     */
+    mcs.util.getDictionaryItemValue = function(items, key) {
+        if (key == undefined) return '';
+        if (!items || !items.length) return key;
         for (var i = 0, len = items.length; i < len; i++) {
             var item = items[i];
             if (item.key == key) {
@@ -335,17 +417,48 @@
     };
 
     /*
+     * 配置面包屑
+     */
+    mcs.util.configBreadcrumb = function($breadcrumbProvider, templateUrl) {
+        $breadcrumbProvider.setOptions({
+            templateUrl: templateUrl
+        });
+    };
+
+    /*
+     * 获取URL中的Querystring参数
+     */
+    mcs.util.params = function(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]);
+        return null;
+    };
+
+    /*
      * 加载单独路由
      * $stateProvider, 路由提供者服务
      * route, 当前需要加载的路由
      */
     mcs.util.loadRoute = function($stateProvider, route) {
+        var parentState = null,
+            breadcrumb = route.breadcrumb;
+        if (breadcrumb) {
+            parentState = breadcrumb;
+            if (!route.abstract && !breadcrumb.parent) {
+                parentState.parent = function($lastViewScope) {
+                    return $lastViewScope.$state.params.prev;
+                }
+            }
+        }
+
         $stateProvider.state(route.name, {
             url: route.url,
+            abstract: route.abstract || false,
             templateUrl: route.templateUrl,
             controller: route.controller,
             controllerAs: route.controllerAs || 'vm',
-            //ncyBreadcrumb: defaultRoute.breadcrumb,
+            ncyBreadcrumb: parentState,
             resolve: mcs.util.loadDependencies(route.dependencies)
         });
         return mcs.util;
@@ -377,12 +490,13 @@
                 templateUrl: defaultRoute.layout.templateUrl
             });
         }
+
         $stateProvider.state(defaultRoute.name, {
             url: defaultRoute.url,
             templateUrl: defaultRoute.templateUrl,
             controller: defaultRoute.controller,
             controllerAs: defaultRoute.controllerAs || 'vm',
-            //ncyBreadcrumb: defaultRoute.breadcrumb,
+            ncyBreadcrumb: defaultRoute.breadcrumb,
             resolve: mcs.util.loadDependencies(defaultRoute.dependencies)
         });
         /*
@@ -423,6 +537,30 @@
      * 配置应用的拦截器以及设置白名单
      */
     mcs.util.configInterceptor = function($httpProvider, $sceDelegateProvider, interceptors) {
+        $httpProvider.defaults.transformResponse.unshift(function(data, headers) {
+            if (mcs.util.isString(data)) {
+                var JSON_PROTECTION_PREFIX = /^\)\]\}',?\n/;
+                var APPLICATION_JSON = 'application/json';
+                var JSON_START = /^\[|^\{(?!\{)/;
+                var JSON_ENDS = {
+                    '[': /]$/,
+                    '{': /}$/
+                };
+                // Strip json vulnerability protection prefix and trim whitespace
+                var tempData = data.replace(JSON_PROTECTION_PREFIX, '').trim();
+
+                if (tempData) {
+                    var contentType = headers('Content-Type');
+                    var jsonStart = tempData.match(JSON_START);
+                    if ((contentType && (contentType.indexOf(APPLICATION_JSON) === 0)) || jsonStart && JSON_ENDS[jsonStart[0]].test(tempData)) {
+                        data = (new Function("", "return " + tempData))();
+                    }
+                }
+            }
+
+            return data;
+        });
+
         if (interceptors) {
             for (var interceptor in interceptors) {
                 $httpProvider.interceptors.push(interceptors[interceptor]);

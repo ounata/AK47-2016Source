@@ -40,6 +40,14 @@ namespace MCS.Library.Data.Test.DataObjects
             get;
             set;
         }
+
+        [ORFieldMapping("ModifyTime", UtcTimeToLocal = true)]
+        [SqlBehavior(DefaultExpression = "GETUTCDATE()", ForceUseDefaultExpression = true)]
+        public DateTime ModifyTime
+        {
+            get;
+            set;
+        }
     }
 
     [Serializable]

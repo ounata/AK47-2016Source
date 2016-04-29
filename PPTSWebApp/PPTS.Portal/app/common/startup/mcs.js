@@ -5,6 +5,7 @@ var mcs = mcs || {};
 
     mcs.g = mcs.g || {};
     mcs.util = mcs.util || {};
+    mcs.date = mcs.date || {};
     mcs.app = mcs.app || { name: "app", version: "1.0" };
     mcs.app.dict = mcs.app.dict || {};
     mcs.app.config = mcs.app.config || {};
@@ -44,22 +45,22 @@ var mcs = mcs || {};
         var assets = { files: [], localFiles: [], container: '' };
 
         if (params.length == 1) {
-            if (params[0] instanceof Object) {
+            if (params[0] instanceof Object && params[0].constructor == Object) {
                 assets = params;
-            } else if (params[0] instanceof Array) {
+            } else if (params[0] instanceof Array && params[0].constructor == Array) {
                 assets.files = params[0];
-            } else if (arguments[0] instanceof String) {
+            } else if (typeof params[0] == 'string') {
                 assets.files = [params[0]];
             }
         } else {
-            if (params[0] instanceof Array) {
+            if (params[0] instanceof Array && params[0].constructor == Array) {
                 assets.files = params[0];
-            } else if (params[1] instanceof String) {
+            } else if (typeof params[0] == 'string') {
                 assets.files = [params[0]];
             }
-            if (params[1] instanceof Array) {
+            if (params[1] instanceof Array && params[1].constructor == Array) {
                 assets.localFiles = params[1];
-            } else if (params[1] instanceof String) {
+            } else if (typeof params[1] == 'string') {
                 assets.localFiles = [params[1]];
             }
 
@@ -164,42 +165,31 @@ var mcs = mcs || {};
     return mcs.g;
 
 })();
-(function () {
+(function() {
     'use strict';
 
-    /**
+    /*
      * 两个对象判等
-     *
      */
-    mcs.util.isObjectsEqual = function (a, b) {
-
+    mcs.util.isObjectsEqual = function(a, b) {
         var aProps = Object.getOwnPropertyNames(a);
         var bProps = Object.getOwnPropertyNames(b);
-
-
         if (aProps.length != bProps.length) {
             return false;
         }
-
         for (var i = 0; i < aProps.length; i++) {
             var propName = aProps[i];
-
-
             if (a[propName] !== b[propName]) {
                 return false;
             }
         }
-
-
         return true;
     };
 
-   
-    /**
+    /*
      * 删除数组中指定元素
-     *
      */
-    mcs.util.removeByValue = function (_array, val) {
+    mcs.util.removeByValue = function(_array, val) {
         for (var i = 0; i < _array.length; i++) {
             if (this[i] == val) {
                 _array.splice(i, 1);
@@ -208,12 +198,48 @@ var mcs = mcs || {};
         }
     };
 
+    /*
+     * 删除对象集合中具有指定特征的对象    
+     */
+
+    mcs.util.removeByObjectWithKeys = function(_array, obj) {
+        var props = Object.getOwnPropertyNames(obj);
+        var propsAmount = props.length;
+
+        for (var i = _array.length - 1; i >= 0; i--) {
+            var counter = 0;
+
+            for (var j = 0; j < propsAmount; j++) {
+                if (_array[i].hasOwnProperty(props[j]) && _array[i][props[j]] == obj[props[j]]) {
+                    counter = counter + 1;
+                }
+            }
+
+
+
+            if (counter == propsAmount) {
+                _array.splice(i, 1);
+            }
+
+        }
+    }
+
+
+    /*
+     * 删除对象集合中具有指定特征的对象集
+     */
+    mcs.util.removeByObjectsWithKeys = function(_array, targetArray) {
+        for (var i = targetArray.length - 1; i >= 0; i--) {
+            mcs.util.removeByObjectWithKeys(_array, targetArray[i]);
+        }
+    }
+
 
     /**
      * 从对象集合中删除指定对象
      *
      */
-    mcs.util.removeByObject = function (_array, obj) {
+    mcs.util.removeByObject = function(_array, obj) {
         for (var i = 0; i < _array.length; i++) {
             if (mcs.util.isObjectsEqual(_array[i], obj)) {
                 _array.splice(i, 1);
@@ -237,21 +263,28 @@ var mcs = mcs || {};
     };
 
     /*
+     * 判断是否为字符串
+     */
+    mcs.util.isString = function(value) {
+        return typeof value === 'string';
+    };
+
+    /*
      * 字典对象合并
      */
     mcs.util.merge = function (dictionary) {
         for (var item in dictionary) {
             var prop = item;
-            item = item.indexOf('c_codE_ABBR_') == 0 ? item : 'c_codE_ABBR_' + item;
+            item = item.toLowerCase().indexOf('c_code_abbr_') == 0 ? item : 'c_codE_ABBR_' + item;
             mcs.app.dict[item] = dictionary[prop];
         }
     };
 
     /*
-    * 对象列表映射成字典
-    * data 对象数组, kvp 键值对{key,value},category 所属类别
-    */
-    mcs.util.mapping = function (data, kvp, category) {
+     * 对象列表映射成字典
+     * data 对象数组, kvp 键值对{key,value},category 所属类别
+     */
+    mcs.util.mapping = function(data, kvp, category) {
         if (!data || !kvp.key || !kvp.value) return;
         if (category == undefined) {
             var result = [];
@@ -276,11 +309,34 @@ var mcs = mcs || {};
         }
     };
 
+    /*
+     * 限制文本框只能输入整数
+     */
+    mcs.util.limit = function(input) {
+        if (input.value.length == 1) {
+            input.value = input.value.replace(/[^1-9]/g, '');
+        } else {
+            input.value = input.value.replace(/\D/g, '');
+        }
+    };
 
     /*
-    * 从指定的数组集合中找到字符串或数组子集合中是否存在
-    */
-    mcs.util.contains = function (data, elems, separator) {
+     * 检测只能输入小数
+     */
+    mcs.util.number = function(e) {
+        var re = /^\d+(?=\.{0,1}\d+$|$)/;
+        if (e.value != "") {
+            if (!re.test(e.value)) {
+                e.value = "";
+                e.focus();
+            }
+        }
+    };
+
+    /*
+     * 从指定的数组集合中找到字符串或数组子集合中是否存在
+     */
+    mcs.util.contains = function(data, elems, separator) {
         if (!data || !elems) return false;
         var array = mcs.util.toArray(elems, separator);
         for (var i in array) {
@@ -293,9 +349,22 @@ var mcs = mcs || {};
     };
 
     /*
-    * 将指定元素转化为数组
-    */
-    mcs.util.toArray = function (data, separator) {
+     * 判断对象数组中是否包含指定属性的对象
+     */
+    mcs.util.containsObject = function(data, elem, prop) {
+        if (!data || !data.length || !elem || !elem[prop]) return false;
+        for (var index in data) {
+            if (data[index][prop] == elem[prop]) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+    /*
+     * 将指定元素转化为数组
+     */
+    mcs.util.toArray = function(data, separator) {
         var result = [];
         if (typeof data == 'string') {
             separator = separator || ',';
@@ -313,17 +382,30 @@ var mcs = mcs || {};
     };
 
     /*
-    * 判断元素是否存在属性
-    */
-    mcs.util.hasAttr = function (elem, attrName) {
+     * 判断元素是否存在属性
+     */
+    mcs.util.hasAttr = function(elem, attrName) {
         return typeof elem.attr(attrName) != 'undefined';
     };
 
     /*
-    * 对象复制
-    */
-    mcs.util.clone = function (obj) {
-        if (typeof (obj) != 'object') return obj;
+     * 将字符串转化为bool类型, isIgnoreZero为解决单选框存在有0的选项
+     */
+    mcs.util.bool = function(str, isIgnoreZero) {
+        isIgnoreZero = isIgnoreZero || false;
+        if (typeof str === 'boolean') return str;
+        if (isIgnoreZero && str == '0') return true;
+        if (!str || !str.length) return false;
+        str = str.toLowerCase();
+        if (str === 'false' || str === '0' || str === 'undefined' || str === 'null') return false;
+        return true;
+    };
+
+    /*
+     * 对象复制
+     */
+    mcs.util.clone = function(obj) {
+        if (typeof(obj) != 'object') return obj;
         if (obj == null) return obj;
         var newObject = new Object();
         for (var i in obj)
@@ -332,9 +414,9 @@ var mcs = mcs || {};
     };
 
     /*
-    * 从对象数组中查找某属性值对应的索引
-    */
-    mcs.util.indexOf = function (data, key, value) {
+     * 从对象数组中查找某属性值对应的索引
+     */
+    mcs.util.indexOf = function(data, key, value) {
         if (!data || !data.length) return -1;
         for (var index in data) {
             if (!data[index][key]) return -1;
@@ -346,9 +428,9 @@ var mcs = mcs || {};
     };
 
     /*
-    * 从指定的数组集合中找到字符串或数组子集合中是否存在
-    */
-    mcs.util.contains = function (data, elems, separator) {
+     * 从指定的数组集合中找到字符串或数组子集合中是否存在
+     */
+    mcs.util.contains = function(data, elems, separator) {
         if (!data || !elems) return false;
         var array = mcs.util.toArray(elems, separator);
         for (var j in array) {
@@ -360,9 +442,9 @@ var mcs = mcs || {};
     };
 
     /*
-    * 将指定元素转化为数组
-    */
-    mcs.util.toArray = function (data, separator) {
+     * 将指定元素转化为数组
+     */
+    mcs.util.toArray = function(data, separator) {
         var result = [];
         if (typeof data == 'string') {
             separator = separator || ',';
@@ -471,11 +553,11 @@ var mcs = mcs || {};
     };
 
     /*
-    * 获取字典项的值
-    */
-    mcs.util.getDictionaryItemValue = function (items, key) {
-        if (key == 0) return '';
-        if (!items || !items.length || !key) return key;
+     * 获取字典项的值
+     */
+    mcs.util.getDictionaryItemValue = function(items, key) {
+        if (key == undefined) return '';
+        if (!items || !items.length) return key;
         for (var i = 0, len = items.length; i < len; i++) {
             var item = items[i];
             if (item.key == key) {
@@ -502,17 +584,48 @@ var mcs = mcs || {};
     };
 
     /*
+     * 配置面包屑
+     */
+    mcs.util.configBreadcrumb = function($breadcrumbProvider, templateUrl) {
+        $breadcrumbProvider.setOptions({
+            templateUrl: templateUrl
+        });
+    };
+
+    /*
+     * 获取URL中的Querystring参数
+     */
+    mcs.util.params = function(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]);
+        return null;
+    };
+
+    /*
      * 加载单独路由
      * $stateProvider, 路由提供者服务
      * route, 当前需要加载的路由
      */
     mcs.util.loadRoute = function($stateProvider, route) {
+        var parentState = null,
+            breadcrumb = route.breadcrumb;
+        if (breadcrumb) {
+            parentState = breadcrumb;
+            if (!route.abstract && !breadcrumb.parent) {
+                parentState.parent = function($lastViewScope) {
+                    return $lastViewScope.$state.params.prev;
+                }
+            }
+        }
+
         $stateProvider.state(route.name, {
             url: route.url,
+            abstract: route.abstract || false,
             templateUrl: route.templateUrl,
             controller: route.controller,
             controllerAs: route.controllerAs || 'vm',
-            //ncyBreadcrumb: defaultRoute.breadcrumb,
+            ncyBreadcrumb: parentState,
             resolve: mcs.util.loadDependencies(route.dependencies)
         });
         return mcs.util;
@@ -544,12 +657,13 @@ var mcs = mcs || {};
                 templateUrl: defaultRoute.layout.templateUrl
             });
         }
+
         $stateProvider.state(defaultRoute.name, {
             url: defaultRoute.url,
             templateUrl: defaultRoute.templateUrl,
             controller: defaultRoute.controller,
             controllerAs: defaultRoute.controllerAs || 'vm',
-            //ncyBreadcrumb: defaultRoute.breadcrumb,
+            ncyBreadcrumb: defaultRoute.breadcrumb,
             resolve: mcs.util.loadDependencies(defaultRoute.dependencies)
         });
         /*
@@ -590,6 +704,30 @@ var mcs = mcs || {};
      * 配置应用的拦截器以及设置白名单
      */
     mcs.util.configInterceptor = function($httpProvider, $sceDelegateProvider, interceptors) {
+        $httpProvider.defaults.transformResponse.unshift(function(data, headers) {
+            if (mcs.util.isString(data)) {
+                var JSON_PROTECTION_PREFIX = /^\)\]\}',?\n/;
+                var APPLICATION_JSON = 'application/json';
+                var JSON_START = /^\[|^\{(?!\{)/;
+                var JSON_ENDS = {
+                    '[': /]$/,
+                    '{': /}$/
+                };
+                // Strip json vulnerability protection prefix and trim whitespace
+                var tempData = data.replace(JSON_PROTECTION_PREFIX, '').trim();
+
+                if (tempData) {
+                    var contentType = headers('Content-Type');
+                    var jsonStart = tempData.match(JSON_START);
+                    if ((contentType && (contentType.indexOf(APPLICATION_JSON) === 0)) || jsonStart && JSON_ENDS[jsonStart[0]].test(tempData)) {
+                        data = (new Function("", "return " + tempData))();
+                    }
+                }
+            }
+
+            return data;
+        });
+
         if (interceptors) {
             for (var interceptor in interceptors) {
                 $httpProvider.interceptors.push(interceptors[interceptor]);
@@ -608,6 +746,115 @@ var mcs = mcs || {};
     return mcs.util;
 })();
 
+(function () { 
+    /** * 获取本周、本季度、本月、上月的开端日期、停止日期 */
+    //当前日期 
+    var now = new Date();
+    //今天本周的第几天 
+    var nowDayOfWeek = now.getDay();
+    //当前日 
+    var nowDay = now.getDate();
+    //当前月
+    var nowMonth = now.getMonth();
+    //当前年
+    var nowYear = now.getYear();
+    nowYear += (nowYear < 2000) ? 1900 : 0;
+    //上月日期
+    var lastMonthDate = new Date();
+    lastMonthDate.setDate(1);
+    lastMonthDate.setMonth(lastMonthDate.getMonth() - 1);
+    //上年
+    var lastYear = lastMonthDate.getYear();
+    var lastMonth = lastMonthDate.getMonth();
+    //格局化日期：yyyy-MM-dd 
+    mcs.date.format = function(date) {
+        var myyear = date.getFullYear();
+        var mymonth = date.getMonth() + 1;
+        var myweekday = date.getDate();
+        if (mymonth < 10) {
+            mymonth = "0" + mymonth;
+        } if (myweekday < 10) {
+            myweekday = "0" + myweekday;
+        }
+        return (myyear + "-" + mymonth + "-" + myweekday);
+    }
+    //比较两个时间的大小
+    mcs.date.compare = function (beginTime, endTime) {
+        //将字符串转换为日期
+        var begin = new Date(beginTime.replace(/-/g, "/"));
+        var end = new Date(endTime.replace(/-/g, "/"));
+        return begin <= end;
+    };
+    //获得某月的天数 
+    mcs.date.getMonthDays = function(month) {
+        var monthStartDate = new Date(nowYear, month, 1);
+        var monthEndDate = new Date(nowYear, month + 1, 1);
+        var days = (monthEndDate - monthStartDate) / (1000 * 60 * 60 * 24);
+        return days;
+    }
+    //获得本季度的开端月份 
+    mcs.date.getQuarterStartMonth = function() {
+        var quarterStartMonth = 0;
+        if (nowMonth < 3) {
+            quarterStartMonth = 0;
+        } if (2 < nowMonth && nowMonth < 6) {
+            quarterStartMonth = 3;
+        } if (5 < nowMonth && nowMonth < 9) {
+            quarterStartMonth = 6;
+        } if (nowMonth > 8) {
+            quarterStartMonth = 9;
+        }
+        return quarterStartMonth;
+    }
+    // 获取今天
+    mcs.date.today = function () {
+        var todayDate = new Date(nowYear, nowMonth, nowDay);
+        return todayDate;
+    };
+    //获得本周的开始日期 
+    mcs.date.getWeekStartDate = function() {
+        var weekStartDate = new Date(nowYear, nowMonth, nowDay - nowDayOfWeek);
+        return mcs.date.format(weekStartDate);
+    }
+    //获得本周的停止日期 
+    mcs.date.getWeekEndDate = function() {
+        var weekEndDate = new Date(nowYear, nowMonth, nowDay + (6 - nowDayOfWeek));
+        return mcs.date.format(weekEndDate);
+    }
+    //获得本月的开始日期 
+    mcs.date.getMonthStartDate = function() {
+        var monthStartDate = new Date(nowYear, nowMonth, 1);
+        return mcs.date.format(monthStartDate);
+    }
+    //获得本月的停止日期 
+    mcs.date.getMonthEndDate = function() {
+        var monthEndDate = new Date(nowYear, nowMonth, getMonthDays(nowMonth));
+        return mcs.date.format(monthEndDate);
+    }
+    //获得上月开始日期 
+    mcs.date.getLastMonthStartDate = function() {
+        var lastMonthStartDate = new Date(nowYear, lastMonth, 1);
+        return mcs.date.format(lastMonthStartDate);
+    }
+    //获得上月停止日期 
+    mcs.date.getLastMonthEndDate = function() {
+        var lastMonthEndDate = new Date(nowYear, lastMonth, getMonthDays(lastMonth));
+        return mcs.date.format(lastMonthEndDate);
+    }
+    //获得本季度的开始日期 
+    mcs.date.getQuarterStartDate = function() {
+        var quarterStartDate = new Date(nowYear, getQuarterStartMonth(), 1);
+        return mcs.date.format(quarterStartDate);
+    }
+    //获得本季度的停止日期 
+    mcs.date.getQuarterEndDate = function() {
+        var quarterEndMonth = getQuarterStartMonth() + 2;
+        var quarterStartDate = new Date(nowYear, quarterEndMonth, getMonthDays(quarterEndMonth));
+        return mcs.date.format(quarterStartDate);
+    }
+
+    return mcs.date;
+})();
 mcs.browser = function () {
     var _browser = {};
     var sUserAgent = navigator.userAgent;
@@ -677,6 +924,9 @@ mcs.browser = function () {
         var reMoz = new RegExp("rv:(\\d+\\.\\d+(?:\\.\\d+)?)");
         reMoz.test(sUserAgent);
         _browser.version = parseFloat(RegExp['$1']);
+        if (_browser.version == 11) {
+            _browser.msie = true; //fix the IE11
+        }
         _browser.mozilla = true;
     }
 

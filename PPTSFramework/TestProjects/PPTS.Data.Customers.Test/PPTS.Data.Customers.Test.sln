@@ -1,20 +1,24 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPTS.Data.Customers.Test", "PPTS.Data.Customers.Test.csproj", "{F72C0601-64EA-4B74-9D3B-C35152100C51}"
 	ProjectSection(ProjectDependencies) = postProject
 		{96802A24-2E16-4B0E-83BE-AC8A54E19155} = {96802A24-2E16-4B0E-83BE-AC8A54E19155}
 		{0414177E-283E-4E91-8032-37228B715F16} = {0414177E-283E-4E91-8032-37228B715F16}
+		{33E530F9-6028-4884-BF6A-4F01CCAF4A84} = {33E530F9-6028-4884-BF6A-4F01CCAF4A84}
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPTS.Data.Customers", "..\..\PPTS.Data.Customers\PPTS.Data.Customers.csproj", "{96802A24-2E16-4B0E-83BE-AC8A54E19155}"
 	ProjectSection(ProjectDependencies) = postProject
 		{0414177E-283E-4E91-8032-37228B715F16} = {0414177E-283E-4E91-8032-37228B715F16}
+		{33E530F9-6028-4884-BF6A-4F01CCAF4A84} = {33E530F9-6028-4884-BF6A-4F01CCAF4A84}
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPTS.Data.Common", "..\..\PPTS.Data.Common\PPTS.Data.Common.csproj", "{0414177E-283E-4E91-8032-37228B715F16}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPTS.Data.Customers.Entities", "..\..\PPTS.Data.Customers.Entities\PPTS.Data.Customers.Entities.csproj", "{33E530F9-6028-4884-BF6A-4F01CCAF4A84}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -83,12 +87,30 @@ Global
 		{0414177E-283E-4E91-8032-37228B715F16}.Release|x64.Build.0 = Release|Any CPU
 		{0414177E-283E-4E91-8032-37228B715F16}.Release|x86.ActiveCfg = Release|Any CPU
 		{0414177E-283E-4E91-8032-37228B715F16}.Release|x86.Build.0 = Release|Any CPU
+		{33E530F9-6028-4884-BF6A-4F01CCAF4A84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33E530F9-6028-4884-BF6A-4F01CCAF4A84}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33E530F9-6028-4884-BF6A-4F01CCAF4A84}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{33E530F9-6028-4884-BF6A-4F01CCAF4A84}.Debug|x64.Build.0 = Debug|Any CPU
+		{33E530F9-6028-4884-BF6A-4F01CCAF4A84}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{33E530F9-6028-4884-BF6A-4F01CCAF4A84}.Debug|x86.Build.0 = Debug|Any CPU
+		{33E530F9-6028-4884-BF6A-4F01CCAF4A84}.DELUXEWORKSTEST|Any CPU.ActiveCfg = Debug|Any CPU
+		{33E530F9-6028-4884-BF6A-4F01CCAF4A84}.DELUXEWORKSTEST|Any CPU.Build.0 = Debug|Any CPU
+		{33E530F9-6028-4884-BF6A-4F01CCAF4A84}.DELUXEWORKSTEST|x64.ActiveCfg = Debug|Any CPU
+		{33E530F9-6028-4884-BF6A-4F01CCAF4A84}.DELUXEWORKSTEST|x64.Build.0 = Debug|Any CPU
+		{33E530F9-6028-4884-BF6A-4F01CCAF4A84}.DELUXEWORKSTEST|x86.ActiveCfg = Debug|Any CPU
+		{33E530F9-6028-4884-BF6A-4F01CCAF4A84}.DELUXEWORKSTEST|x86.Build.0 = Debug|Any CPU
+		{33E530F9-6028-4884-BF6A-4F01CCAF4A84}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33E530F9-6028-4884-BF6A-4F01CCAF4A84}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33E530F9-6028-4884-BF6A-4F01CCAF4A84}.Release|x64.ActiveCfg = Release|Any CPU
+		{33E530F9-6028-4884-BF6A-4F01CCAF4A84}.Release|x64.Build.0 = Release|Any CPU
+		{33E530F9-6028-4884-BF6A-4F01CCAF4A84}.Release|x86.ActiveCfg = Release|Any CPU
+		{33E530F9-6028-4884-BF6A-4F01CCAF4A84}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 4
+		SccNumberOfProjects = 5
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://10.1.56.70:8080/tfs/pptsv2.0
 		SccLocalPath0 = .
@@ -100,5 +122,8 @@ Global
 		SccProjectUniqueName3 = ..\\..\\PPTS.Data.Common\\PPTS.Data.Common.csproj
 		SccProjectName3 = ../../PPTS.Data.Common
 		SccLocalPath3 = ..\\..\\PPTS.Data.Common
+		SccProjectUniqueName4 = ..\\..\\PPTS.Data.Customers.Entities\\PPTS.Data.Customers.Entities.csproj
+		SccProjectName4 = ../../PPTS.Data.Customers.Entities
+		SccLocalPath4 = ..\\..\\PPTS.Data.Customers.Entities
 	EndGlobalSection
 EndGlobal

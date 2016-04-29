@@ -1,12 +1,13 @@
-﻿using System;
+﻿using MCS.Library.Core;
+using MCS.Library.Data.Adapters;
+using MCS.Library.Data.Builder;
+using MCS.Library.Data.Mapping;
+using MCS.Library.SOA.DataObjects;
+using MCS.Web.Apps.WeChat.DataObjects;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using MCS.Library.Core;
-using MCS.Web.Apps.WeChat.DataObjects;
-using MCS.Library.SOA.DataObjects;
-using MCS.Library.Data.Mapping;
-using MCS.Library.Data.Builder;
 
 namespace MCS.Web.Apps.WeChat.Adapters
 {
@@ -31,11 +32,7 @@ namespace MCS.Web.Apps.WeChat.Adapters
 
         public WeChatGroupCollection LoadAll()
         {
-            WhereSqlClauseBuilder builder = new WhereSqlClauseBuilder();
-
-            builder.AppendItem("1", 1);
-
-            return base.LoadByBuilder(builder);
+            return base.Load(new WhereLoadingCondition(builder => builder.AppendItem("1", 1)));
         }
     }
 }

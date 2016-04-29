@@ -1,46 +1,37 @@
-﻿define([ppts.config.modules.product], function (product) {
+﻿define([ppts.config.modules.schedule], function (schedule) {
 
-    product.registerFactory('productDataService', ['$resource', function ($resource) {
+    schedule.registerFactory('classgroupDataService', ['$resource', function ($resource) {
 
-        var resource = $resource(ppts.config.productApiServerPath + 'api/products/:operation/:id', { operation: '@operation', id: '@id' }, { 'post': { method: 'POST' } });
+        var resource = $resource(ppts.config.orderApiBaseUrl + 'api/classgroup/:operation/:id', { operation: '@operation', id: '@id' }, { 'post': { method: 'POST' } });
 
-        resource.getAllProducts = function (criteria, success, error) {
-            resource.post({ operation: 'getAllProducts' }, criteria, success, error);
+        resource.getAllClasses = function (criteria, success, error) {
+            resource.post({ operation: 'getAllClasses' }, criteria, success, error);
         }
 
-        resource.getPagedProducts = function (criteria, success, error) {
-            resource.post({ operation: 'getPagedProducts' }, criteria, success, error);
+        resource.getPageClasses = function (criteria, success, error) {
+            resource.post({ operation: 'getPageClasses' }, criteria, success, error);
         }
 
-        resource.getProduct = function (productId) {
-            resource.query({ operation: 'getProductBaseinfo', id: productId }, function (product) {
-
-            });
-        };
-
-        resource.addProduct = function () {
-            resource.query({ operation: 'createProduct' }, function (product) {
-
-            });
+        resource.createClass = function (model, success, error) {
+            resource.post({ operation: 'createClass' }, model, success, error);
         }
 
-        resource.editProduct = function (productId) {
-            resource.query({ operation: 'updateProduct', id: productId }, function (product) {
-
-            });
+        resource.getAllAssets = function (criteria, success, error) {
+            resource.post({ operation: 'getAllAssets' }, criteria, success, error);
         }
 
-        resource.saveProduct = function (product, productId) {
-            if (!productId) {
-                resource.save({ operation: 'createProduct' }, product, function (result) {
+        resource.getPageAssets = function (criteria, success, error) {
+            resource.post({ operation: 'getPageAssets' }, criteria, success, error);
+        }
 
-                });
-            } else {
-                resource.save({ operation: 'updateProduct', id: productId }, product, function (result) {
+        resource.getAllTeacherJobs = function (criteria, success, error) {
+            resource.post({ operation: 'getAllTeacherJobs' }, criteria, success, error);
+        }
 
-                });
-            }
-        };
+        resource.getPageTeacherJobs = function (criteria, success, error) {
+            resource.post({ operation: 'getPageTeacherJobs' }, criteria, success, error);
+        }
+        
 
         return resource;
     }]);

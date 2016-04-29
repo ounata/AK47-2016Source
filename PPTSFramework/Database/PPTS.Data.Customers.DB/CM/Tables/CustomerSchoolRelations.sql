@@ -1,16 +1,14 @@
 ﻿CREATE TABLE [CM].[CustomerSchoolRelations]
 (
-	[ID] NVARCHAR(36) NOT NULL DEFAULT newid(), 
     [CustomerID] NVARCHAR(36) NOT NULL, 
     [SchoolID] NVARCHAR(36) NOT NULL, 
     [CreatorID] NVARCHAR(36) NULL, 
     [CreatorName] NVARCHAR(64) NULL, 
-    [CreateTime] DATETIME NOT NULL DEFAULT getdate(), 
+    [CreateTime] DATETIME NULL DEFAULT getdate(), 
     [ModifierID] NVARCHAR(36) NULL, 
     [ModifierName] NVARCHAR(64) NULL, 
-    [ModifyTime] DATETIME NOT NULL DEFAULT getdate(), 
-    CONSTRAINT [PK_CustomerSchoolRelations] PRIMARY KEY NONCLUSTERED ([ID]), 
-    CONSTRAINT [AK_CustomerSchoolRelations] UNIQUE ([CustomerID], [SchoolID]) 
+    [ModifyTime] DATETIME NULL DEFAULT getdate(), 
+    CONSTRAINT [PK_CustomerSchoolRelations] PRIMARY KEY NONCLUSTERED ([SchoolID], [CustomerID]) 
 )
 
 GO

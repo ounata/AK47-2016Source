@@ -117,19 +117,16 @@ namespace MCS.Library.Data.Adapters
         /// <param name="mappings"></param>
         protected void RegisterLoadByBuilderInContext(string condition, OrderBySqlClauseBuilder orderByBuilder, Action<TCollection> action, DateTime timePoint, string tableName, ORMappingItemCollection mappings)
         {
-            if (mappings == null)
-                mappings = this.GetQueryMappingInfo();
-
-            string sql = GetLoadSqlByBuilder(condition, orderByBuilder, timePoint, mappings);
-
-            if (tableName.IsNullOrEmpty())
-                tableName = GetQueryTableName(mappings, timePoint);
-
-            this.RegisterQueryData(tableName, mappings, sql, (collection) =>
-            {
-                AfterLoad(collection);
-                action(collection);
-            });
+            VersionedQueryInContextBuilder<T, TCollection>.Instance.RegisterLoadByBuilderInContext(
+                this.GetSqlContext(),
+                condition,
+                orderByBuilder,
+                (collection) => this.AfterLoad(collection),
+                (collection) => action(collection),
+                (row) => this.CreateNewData(row),
+                timePoint,
+                tableName,
+                mappings);
         }
 
         /// <summary>
@@ -141,33 +138,13 @@ namespace MCS.Library.Data.Adapters
         /// <param name="action"></param>
         protected void RegisterQueryData(string tableName, ORMappingItemCollection mapping, string sql, Action<TCollection> action)
         {
-            SqlContextItem sqlContext = this.GetSqlContext();
-
-            sqlContext.AppendSqlWithSperatorInContext(TSqlBuilder.Instance, sql);
-            sqlContext.RegisterTableAction(tableName, (table) =>
-            {
-                TCollection collection = this.DataTableToCollection(mapping, table);
-
-                if (action != null)
-                    action(collection);
-            });
-        }
-
-        private static string GetLoadSqlByBuilder(string condition, OrderBySqlClauseBuilder orderByBuilder, DateTime timePoint, ORMappingItemCollection mappings)
-        {
-            string sql = string.Format("SELECT * FROM {0} WHERE ", GetQueryTableName(mappings, timePoint));
-
-            ConnectiveSqlClauseCollection timePointBuilder = VersionStrategyQuerySqlBuilder.Instance.TimePointToBuilder(timePoint);
-
-            if (condition.IsNotEmpty())
-                sql = sql + condition;
-
-            sql += " AND " + timePointBuilder.ToSqlString(TSqlBuilder.Instance);
-
-            if (orderByBuilder != null)
-                sql = sql + string.Format(" ORDER BY {0}", orderByBuilder.ToSqlString(TSqlBuilder.Instance));
-
-            return sql;
+            VersionedQueryInContextBuilder<T, TCollection>.Instance.RegisterQueryData(
+                this.GetSqlContext(),
+                tableName,
+                mapping,
+                sql,
+                action,
+                (row) => this.CreateNewData(row));
         }
     }
 }

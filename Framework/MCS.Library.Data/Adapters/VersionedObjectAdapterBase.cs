@@ -1,5 +1,6 @@
 ﻿using MCS.Library.Core;
 using MCS.Library.Data.Builder;
+using MCS.Library.Data.DataObjects;
 using MCS.Library.Data.Mapping;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace MCS.Library.Data.Adapters
     /// <typeparam name="TCollection"></typeparam>
     public abstract partial class VersionedObjectAdapterBase<T, TCollection>
         where T : IVersionDataObjectWithoutID
-        where TCollection : IList<T>, IEnumerable<T>, new()
+        where TCollection : IList<T>, new()
     {
         /// <summary>
         /// 
@@ -28,18 +29,22 @@ namespace MCS.Library.Data.Adapters
         /// <summary>
 		/// 将模式对象的修改提交到数据库
 		/// </summary>
-		/// <param name="obj">对其进行更新的<typeparamref name="T"/>对象。</param>
-		public void Update(T obj)
+		/// <param name="data">对其进行更新的<typeparamref name="T"/>对象。</param>
+		public void Update(T data)
         {
-            obj.NullCheck("obj");
+            data.NullCheck("obj");
 
-            VersionStrategyUpdateSqlBuilder<T> builder = new VersionStrategyUpdateSqlBuilder<T>();
+            Dictionary<string, object> context = new Dictionary<string, object>();
 
-            string sql = builder.ToUpdateSql(obj, this.GetMappingInfo());
+            this.BeforeInnerUpdate(data, context);
+
+            string sql = VersionStrategyUpdateSqlBuilder<T>.DefaultInstance.ToUpdateSql(data, this.GetMappingInfo());
 
             using (TransactionScope scope = TransactionScopeFactory.Create())
             {
                 DateTime dt = (DateTime)DbHelper.RunSqlReturnScalar(sql, this.GetConnectionName());
+
+                this.AfterInnerUpdate(data, context);
 
                 DBTimePointActionContext.Current.TimePoint.IsMinValue(() => DBTimePointActionContext.Current.TimePoint = dt);
 
@@ -51,19 +56,23 @@ namespace MCS.Library.Data.Adapters
         /// 
         /// </summary>
         /// <param name="ownerKeyBuilder"></param>
-        /// <param name="objs"></param>
-        public void UpdateCollection(IConnectiveSqlClause ownerKeyBuilder, IEnumerable<T> objs)
+        /// <param name="data"></param>
+        public void UpdateCollection(IConnectiveSqlClause ownerKeyBuilder, IEnumerable<T> data)
         {
             ownerKeyBuilder.NullCheck("ownerKeyBuilder");
-            objs.NullCheck("objs");
+            data.NullCheck("objs");
 
-            VersionStrategyUpdateSqlBuilder<T> builder = new VersionStrategyUpdateSqlBuilder<T>();
+            Dictionary<string, object> context = new Dictionary<string, object>();
 
-            string sql = builder.ToUpdateCollectionSql(ownerKeyBuilder, this.GetMappingInfo(), objs);
+            this.BeforeInnerUpdateCollection(data, context);
+
+            string sql = VersionStrategyUpdateSqlBuilder<T>.DefaultInstance.ToUpdateCollectionSql(ownerKeyBuilder, this.GetMappingInfo(), data);
 
             using (TransactionScope scope = TransactionScopeFactory.Create())
             {
                 DateTime dt = (DateTime)DbHelper.RunSqlReturnScalar(sql, this.GetConnectionName());
+
+                this.AfterInnerUpdateCollection(data, context);
 
                 DBTimePointActionContext.Current.TimePoint.IsMinValue(() => DBTimePointActionContext.Current.TimePoint = dt);
 
@@ -85,7 +94,7 @@ namespace MCS.Library.Data.Adapters
 		/// 在派生类中重写时， 获取映射信息的集合
 		/// </summary>
 		/// <returns><see cref="ORMappingItemCollection"/>，表示映射信息</returns>
-		protected virtual ORMappingItemCollection GetMappingInfo()
+		public virtual ORMappingItemCollection GetMappingInfo()
         {
             return ORMapping.GetMappingInfo(typeof(T));
         }
@@ -106,6 +115,42 @@ namespace MCS.Library.Data.Adapters
         protected Dictionary<string, object> GetFixedContext()
         {
             return _DefaultContext;
+        }
+
+        /// <summary>
+        /// 更新单一对象前
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="context"></param>
+        protected virtual void BeforeInnerUpdate(T data, Dictionary<string, object> context)
+        {
+        }
+
+        /// <summary>
+        /// 更新单一对象后
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="context"></param>
+        protected virtual void AfterInnerUpdate(T data, Dictionary<string, object> context)
+        {
+        }
+
+        /// <summary>
+        /// 更新集合对象前
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="context"></param>
+        protected virtual void BeforeInnerUpdateCollection(IEnumerable<T> data, Dictionary<string, object> context)
+        {
+        }
+
+        /// <summary>
+        /// 更新集合对象后
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="context"></param>
+        protected virtual void AfterInnerUpdateCollection(IEnumerable<T> data, Dictionary<string, object> context)
+        {
         }
 
         /// <summary>

@@ -6,6 +6,7 @@ using MCS.Library.Core;
 using MCS.Library.Data.Builder;
 using MCS.Library.Data.Mapping;
 using MCS.Library.SOA.DataObjects.Schemas.SchemaProperties;
+using MCS.Library.Data.DataObjects;
 
 namespace MCS.Library.SOA.DataObjects.Schemas.Adapters
 {
@@ -20,7 +21,7 @@ namespace MCS.Library.SOA.DataObjects.Schemas.Adapters
 		{
 		}
 
-		protected override string PrepareInsertSql(T obj, ORMappingItemCollection mapping)
+		public override string PrepareInsertSql(T obj, ORMappingItemCollection mapping, string[] ignoreProperties)
 		{
 			List<string> selectFieldNames = new List<string>(ORMapping.GetSelectFieldsName(mapping, "VersionStartTime", "VersionEndTime", "Status"));
 
@@ -42,7 +43,7 @@ namespace MCS.Library.SOA.DataObjects.Schemas.Adapters
 				TSqlBuilder.Instance.FormatDateTime(DBTimePointActionContext.MaxVersionEndTime),
 				(int)obj.Status,
 				GetTableName(obj, mapping),
-				this.PrepareWhereSqlBuilder(obj, mapping).ToSqlString(TSqlBuilder.Instance));
+				this.PrepareWhereSqlBuilder(obj, mapping, ignoreProperties).ToSqlString(TSqlBuilder.Instance));
 
 			return strB.ToString();
 		}

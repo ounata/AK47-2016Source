@@ -91,4 +91,46 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="TeachingID" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="7ccf1552-a70e-4736-81d6-6d7710002697" ChangeDateTime="04/14/2016 01:34:20">
+    <Property Name="ElementName" Value="[MT].[TeacherJobs].[OrgID]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[MT].[TeacherJobs]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="SubteamID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="ae7d8636-ae17-4b2c-a135-6afcfd546601" ChangeDateTime="04/14/2016 01:34:29">
+    <Property Name="ElementName" Value="[MT].[TeacherJobs].[OrgName]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[MT].[TeacherJobs]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="SubteamName" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="a4525c78-d1bf-4f46-9a87-baa79b78c0a3" ChangeDateTime="04/14/2016 01:43:25">
+    <Property Name="ElementName" Value="[MT].[TeacherJobs].[SubteamID]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[MT].[TeacherJobs]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="JobOrgID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="75c0773e-5e6c-4a83-af73-ec1fb65b8dd5" ChangeDateTime="04/14/2016 01:43:32">
+    <Property Name="ElementName" Value="[MT].[TeacherJobs].[SubteamName]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[MT].[TeacherJobs]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="JobOrgName" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="0191eb59-ece0-4411-be9b-42b791070fa3" ChangeDateTime="04/14/2016 02:01:28">
+    <Property Name="ElementName" Value="[MT].[Teachers].[Teacher]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[MT].[Teachers]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="TeacherOACode" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="ddfdab55-8af6-41fb-b4d4-93cb3f9358bb" ChangeDateTime="04/21/2016 01:12:57">
+    <Property Name="ElementName" Value="[MT].[Configs].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[MT].[Configs]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="ConfigKey" />
+  </Operation>
 </Operations>

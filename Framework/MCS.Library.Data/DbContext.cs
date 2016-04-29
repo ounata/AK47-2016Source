@@ -41,39 +41,6 @@ namespace MCS.Library.Data
         private TimeSpan _commandTimeout = TimeSpan.FromSeconds(30);
 
         #region Public Methods
-        ///// <summary>
-        ///// 在上下文中添加待执行的SQL语句，自动添加语句分隔符
-        ///// </summary>
-        ///// <param name="sqlBuilder"></param>
-        ///// <param name="format"></param>
-        ///// <param name="args"></param>
-        //public abstract void AppendSqlWithSperatorInContext(SqlBuilderBase sqlBuilder, string format, params object[] args);
-
-        ///// <summary>
-        ///// 在上下文中添加待执行的SQL语句
-        ///// </summary>
-        ///// <param name="sqlBuilder"></param>
-        ///// <param name="format"></param>
-        ///// <param name="args"></param>
-        //public abstract void AppendSqlInContext(SqlBuilderBase sqlBuilder, string format, params object[] args);
-
-        ///// <summary>
-        ///// 在上下文中注册查询返回的集中表的结果操作
-        ///// </summary>
-        ///// <param name="tableName"></param>
-        ///// <param name="action"></param>
-        //public abstract void RegisterTableAction(string tableName, Action<DataTable> action);
-
-        ///// <summary>
-        ///// 清除上下文中的SQL语句
-        ///// </summary>
-        //public abstract void ClearSqlInContext();
-
-        ///// <summary>
-        ///// 得到上下文中的SQL语句
-        ///// </summary>
-        //public abstract string GetSqlInContext();
-
         /// <summary>
         /// 执行保存在上下文中的SQL语句，返回DataSet
         /// </summary>
@@ -202,7 +169,6 @@ namespace MCS.Library.Data
         {
             return await GetContextAsync(name, true);
         }
-
         #region Public 成员
 
         /// <summary>
@@ -262,6 +228,25 @@ namespace MCS.Library.Data
         }
 
         /// <summary>
+        /// 执行操作，执行后Dispose
+        /// </summary>
+        /// <param name="action"></param>
+        public void DoAction(Action<DbContext> action)
+        {
+            if (action != null)
+            {
+                try
+                { 
+                    action(this);
+                }
+                finally
+                {
+                    this.Dispose();
+                }
+            }
+        }
+
+        /// <summary>
         /// 释放资源
         /// </summary>
         public void Dispose()
@@ -270,7 +255,6 @@ namespace MCS.Library.Data
 
             GC.SuppressFinalize(this);
         }
-
         #endregion
 
         /// <summary>

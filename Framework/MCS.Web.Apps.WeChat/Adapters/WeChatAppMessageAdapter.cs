@@ -1,10 +1,11 @@
-﻿using System;
+﻿using MCS.Library.Data.Adapters;
+using MCS.Library.Data.Builder;
+using MCS.Library.SOA.DataObjects;
+using MCS.Web.Apps.WeChat.DataObjects;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using MCS.Library.SOA.DataObjects;
-using MCS.Web.Apps.WeChat.DataObjects;
-using MCS.Library.Data.Builder;
 
 namespace MCS.Web.Apps.WeChat.Adapters
 {

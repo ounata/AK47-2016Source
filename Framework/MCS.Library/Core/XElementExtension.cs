@@ -122,6 +122,34 @@ namespace MCS.Library.Core
         }
 
         /// <summary>
+        /// SZ-P
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="name"></param>
+        /// <param name="alterName"></param>
+        /// <param name="defaultValue"></param>
+        /// <returns></returns>
+        public static int IntAttributeWithAlterName(this XElement parent, XName name, XName alterName, int defaultValue)
+        {
+            int result = defaultValue;
+
+            if (parent != null)
+            {
+                XAttribute attribute = parent.Attribute(alterName);
+
+                if (attribute == null)
+                    attribute = parent.Attribute(name);
+
+                if (attribute != null)
+                {
+                    result = Convert.ToInt32(attribute.Value);
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// 得到Attribute的字符串Value，先用AlterName去取，如果不存在，则使用name，如果还不存在，返回空串
         /// </summary>
         /// <param name="parent"></param>

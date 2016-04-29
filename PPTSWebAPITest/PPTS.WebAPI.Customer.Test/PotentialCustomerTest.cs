@@ -1,12 +1,16 @@
 ﻿using MCS.Library.Core;
 using MCS.Library.Data;
 using MCS.Library.Data.Builder;
+using MCS.Library.OGUPermission;
+using MCS.Library.Principal;
+using MCS.Library.SOA.DataObjects;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PPTS.Data.Customers.Adapters;
 using PPTS.Data.Customers.Entities;
-using PPTS.WebAPI.Customer.Controllers;
-using PPTS.WebAPI.Customer.ViewModels.PotentialCustomers;
+using PPTS.WebAPI.Customers.Controllers;
+using PPTS.WebAPI.Customers.ViewModels.PotentialCustomers;
 using System;
+using System.Threading;
 
 namespace PPTS.WebAPI.Customer.Test
 {
@@ -32,10 +36,9 @@ namespace PPTS.WebAPI.Customer.Test
 
             PotentialCustomerQueryResult result = controller.GetAllCustomers(new PotentialCustomerQueryCriteriaModel
             {
-                Name = model.Customer.CustomerName,
-                CustomerCode = model.Customer.CustomerCode,
+                Keyword = "用户",
                 PageParams = new PageRequestParams(),
-                OrderBy = new OrderBySqlClauseBuilder().AppendItem("CreateTime", FieldSortDirection.Descending).ToOrderByRequestItems()
+                OrderBy = new OrderBySqlClauseBuilder().AppendItem("pcf.CreateTime", FieldSortDirection.Descending).ToOrderByRequestItems()
             });
 
             Assert.IsNotNull(result.QueryResult.PagedData.Count > 0);
@@ -59,7 +62,7 @@ namespace PPTS.WebAPI.Customer.Test
         {
             PotentialCustomersController controller = PrepareController();
 
-            var model = new CreatablePortentialCustomerModel();
+            CreatablePortentialCustomerModel model = new CreatablePortentialCustomerModel();
 
             model.PrimaryParent = DataHelper.PrepareParentData();
             model.Customer = DataHelper.PreparePotentialCustomerData();
@@ -114,8 +117,10 @@ namespace PPTS.WebAPI.Customer.Test
             EditablePotentialCustomerModel returnModel = controller.UpdateCustomer(model.Customer.CustomerID);
 
             Assert.AreEqual(model.Customer.CustomerID, returnModel.Customer.CustomerID);
-            Assert.AreEqual(model.Customer.PrimaryPhone, returnModel.Customer.PrimaryPhone);
-            Assert.AreEqual(model.Customer.SecondaryPhone, returnModel.Customer.SecondaryPhone);
+
+            model.PrimaryParent.AreEqual(returnModel.Parent);
+            model.Customer.PrimaryPhone.AreEqual(returnModel.Customer.PrimaryPhone);
+            model.Customer.SecondaryPhone.AreEqual(returnModel.Customer.SecondaryPhone);
         }
 
         [TestMethod]
@@ -128,24 +133,32 @@ namespace PPTS.WebAPI.Customer.Test
             model.PrimaryParent = DataHelper.PrepareParentData();
             model.Customer = DataHelper.PreparePotentialCustomerData();
 
+            Console.WriteLine(model.Customer.CustomerID);
+
             controller.CreateCustomer(model);
+
+            DBTimePointActionContext.Current.TimePoint = DateTime.MinValue;
 
             EditablePotentialCustomerModel modelNeedToUpdate = controller.UpdateCustomer(model.Customer.CustomerID);
 
             modelNeedToUpdate.Customer.CustomerName = "New Name";
-            modelNeedToUpdate.Customer.PrimaryPhone = "13601307607";
+            modelNeedToUpdate.Customer.PrimaryPhone.PhoneNumber = "13601307607";
 
             controller.UpdateCustomer(modelNeedToUpdate);
 
             EditablePotentialCustomerModel returnModel = controller.UpdateCustomer(model.Customer.CustomerID);
 
             Assert.AreEqual(modelNeedToUpdate.Customer.CustomerID, returnModel.Customer.CustomerID);
-            Assert.AreEqual(modelNeedToUpdate.Customer.PrimaryPhone, returnModel.Customer.PrimaryPhone);
+            modelNeedToUpdate.Customer.PrimaryPhone.AreEqual(returnModel.Customer.PrimaryPhone);
             Assert.AreEqual(modelNeedToUpdate.Customer.CustomerName, returnModel.Customer.CustomerName);
         }
 
         private static PotentialCustomersController PrepareController()
         {
+            IUser user = OguObjectSettings.GetConfig().Objects["hq"].User;
+
+            Thread.CurrentPrincipal = new DeluxePrincipal(new DeluxeIdentity(user));
+
             return new PotentialCustomersController();
         }
     }

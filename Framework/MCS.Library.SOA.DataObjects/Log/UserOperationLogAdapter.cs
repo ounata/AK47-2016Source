@@ -48,7 +48,7 @@ namespace MCS.Library.SOA.DataObjects
 
             SqlContextItem sqlContext = this.GetSqlContext();
 
-            this.InnerInsertInContext(data, sqlContext, this.GetFixedContext());
+            this.InnerInsertInContext(data, sqlContext, this.GetFixedContext(), StringExtension.EmptyStringArray);
             sqlContext.AppendSqlInContext(TSqlBuilder.Instance, TSqlBuilder.Instance.DBStatementSeperator);
         }
 

@@ -3,7 +3,7 @@ using MCS.Library.Data.Builder;
 using MCS.Library.Data.Mapping;
 using MCS.Library.Data;
 
-namespace PPTS.WebAPI.Product.ViewModels.Products
+namespace PPTS.WebAPI.Products.ViewModels.Products
 {
     public class ProductQueryCriteriaModel
     {

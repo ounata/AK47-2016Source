@@ -275,6 +275,7 @@
   <ItemGroup />
   <ItemGroup>
     <None Include="MCS.Library.snk" />
+    <None Include="Properties\PublishProfiles\ResponsivePassportService.pubxml" />
     <None Include="Resources\Bootstrap\fonts\glyphicons-halflings-regular.eot" />
     <None Include="Resources\Bootstrap\fonts\glyphicons-halflings-regular.ttf" />
     <None Include="Resources\Bootstrap\fonts\glyphicons-halflings-regular.woff" />

@@ -4,15 +4,12 @@
         concat: {
 			global: {
 				src: ['src/mcs/global/mcs.js',
-					  'src/mcs/global/mcs.global.js'],
+					  'src/mcs/global/mcs.global.js',
+				      'src/mcs/util/mcs.util.js',
+                      'src/mcs/util/mcs.date.js',
+				      'src/mcs/util/mcs.browser.js'],
                 dest: 'libs/mcs-jslib-1.0.0/global/mcs.js'
 			},
-			
-			util: {
-                src: ['src/mcs/util/mcs.util.js',
-					  'src/mcs/util/mcs.browser.js'],
-                dest: 'libs/mcs-jslib-1.0.0/util/mcs.util.js'
-            },
 			
             component: {
                 src: ['src/mcs/angular/mcs.bootstrap.js',
@@ -28,7 +25,7 @@
         },
         uglify: {
 			buildGlobal: {
-				src: ['libs/mcs-jslib-1.0.0/global/mcs.js', 'libs/mcs-jslib-1.0.0/util/mcs.util.js'],
+				src: ['libs/mcs-jslib-1.0.0/global/mcs.js'],
 				dest: 'libs/mcs-jslib-1.0.0/global/mcs.min.js'
 			},
             buildComponent: {

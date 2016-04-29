@@ -15,10 +15,8 @@ namespace MCS.Library.Data.Adapters
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <typeparam name="TCollection"></typeparam>
-    //public abstract class UpdatableAndLoadableAdapterBase<T, TCollection> : UpdatableAdapterBase<T>
-    //    where TCollection : EditableDataObjectCollectionBase<T>, new()
     public abstract partial class UpdatableAndLoadableAdapterBase<T, TCollection> : UpdatableAdapterBase<T>
-        where TCollection : IList<T>, IEnumerable<T>, new()
+        where TCollection : IList<T>, new()
     {
         /// <summary>
         /// 
@@ -64,19 +62,6 @@ namespace MCS.Library.Data.Adapters
 
             return (int)DbHelper.RunSqlReturnDS(sql, GetConnectionName()).Tables[0].Rows.Count > 0;
         }
-
-        ///// <summary>
-        ///// 按照In条件加载对象
-        ///// </summary>
-        ///// <param name="inAction"></param>
-        ///// <param name="dataFieldName">IN对应的数据字段名称</param>
-        ///// <returns></returns>
-        //public virtual TCollection LoadByInBuilder(Action<InSqlClauseBuilder> inAction, string dataFieldName = "")
-        //{
-        //    inAction.NullCheck("whereAction");
-
-        //    return this.LoadByInBuilder(new InLoadingCondition(inAction, null, dataFieldName));
-        //}
 
         /// <summary>
         /// 
@@ -209,11 +194,11 @@ namespace MCS.Library.Data.Adapters
         /// <returns></returns>
         protected TCollection InnerLoadByBuilder(string condition, OrderBySqlClauseBuilder orderByBuilder, ORMappingItemCollection mappings)
         {
-            string sql = GetLoadSqlByBuilder(condition, orderByBuilder, mappings);
+            string sql = QueryInContextBuilder<T, TCollection>.Instance.GetLoadSqlByBuilder(condition, orderByBuilder, mappings.GetQueryTableName());
 
             TCollection result = QueryData(sql);
 
-            AfterLoad(result);
+            this.AfterLoad(result);
 
             return result;
         }
@@ -267,27 +252,6 @@ namespace MCS.Library.Data.Adapters
         }
 
         /// <summary>
-        /// 在上下文中注册查询返回的结果
-        /// </summary>
-        /// <param name="tableName"></param>
-        /// <param name="mapping"></param>
-        /// <param name="sql"></param>
-        /// <param name="action"></param>
-        protected void RegisterQueryData(string tableName, ORMappingItemCollection mapping, string sql, Action<TCollection> action)
-        {
-            SqlContextItem sqlContext = this.GetSqlContext();
-
-            sqlContext.AppendSqlWithSperatorInContext(TSqlBuilder.Instance, sql);
-            sqlContext.RegisterTableAction(tableName, (table) =>
-            {
-                TCollection collection = this.DataTableToCollection(mapping, table);
-
-                if (action != null)
-                    action(collection);
-            });
-        }
-
-        /// <summary>
         /// 
         /// </summary>
         /// <param name="mapping"></param>
@@ -295,16 +259,14 @@ namespace MCS.Library.Data.Adapters
         /// <returns></returns>
         protected TCollection QueryData(ORMappingItemCollection mapping, string sql)
         {
-            DataTable table = DbHelper.RunSqlReturnDS(sql, GetConnectionName()).Tables[0];
-
-            return this.DataTableToCollection(mapping, table);
+            return QueryInContextBuilder<T, TCollection>.Instance.QueryData(mapping, sql, this.GetConnectionName(), (row) => this.CreateNewData(row));
         }
 
         /// <summary>
         /// 得到查询数据时的ORMapping信息
         /// </summary>
         /// <returns></returns>
-        protected virtual ORMappingItemCollection GetQueryMappingInfo()
+        public virtual ORMappingItemCollection GetQueryMappingInfo()
         {
             return base.GetMappingInfo(this.GetFixedContext());
         }
@@ -325,38 +287,6 @@ namespace MCS.Library.Data.Adapters
         protected Dictionary<string, object> GetFixedContext()
         {
             return _DefaultContext;
-        }
-
-        private TCollection DataTableToCollection(ORMappingItemCollection mapping, DataTable table)
-        {
-            TCollection result = new TCollection();
-
-            foreach (DataRow row in table.Rows)
-            {
-                T data = CreateNewData(row);
-
-                ORMapping.DataRowToObject(row, mapping, data);
-
-                if (data is ILoadableDataEntity)
-                    ((ILoadableDataEntity)data).Loaded = true;
-
-                result.Add(data);
-            }
-
-            return result;
-        }
-
-        private static string GetLoadSqlByBuilder(string condition, OrderBySqlClauseBuilder orderByBuilder, ORMappingItemCollection mappings)
-        {
-            string sql = string.Format("SELECT * FROM {0}", mappings.GetQueryTableName());
-
-            if (condition.IsNotEmpty())
-                sql = sql + string.Format(" WHERE {0}", condition);
-
-            if (orderByBuilder != null)
-                sql = sql + string.Format(" ORDER BY {0}", orderByBuilder.ToSqlString(TSqlBuilder.Instance));
-
-            return sql;
         }
     }
 }

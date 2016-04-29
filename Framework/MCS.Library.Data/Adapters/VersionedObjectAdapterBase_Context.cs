@@ -14,32 +14,62 @@ namespace MCS.Library.Data.Adapters
         /// 
         /// </summary>
         /// <param name="data"></param>
-        public void UpdateInContext(T data)
+        /// <param name="ignoreProperties">需要忽略的属性</param>
+        public void UpdateInContext(T data, params string[] ignoreProperties)
         {
             data.NullCheck("data");
 
-            VersionStrategyUpdateSqlBuilder<T> builder = new VersionStrategyUpdateSqlBuilder<T>();
+            Dictionary<string, object> context = new Dictionary<string, object>();
 
-            string sql = builder.ToUpdateSql(data, this.GetMappingInfo(), false);
+            SqlContextItem sqlContext = this.GetSqlContext();
 
-            this.GetSqlContext().AppendSqlWithSperatorInContext(TSqlBuilder.Instance, sql);
+            this.BeforeInnerUpdateInContext(data, sqlContext, context);
+
+            string sql = VersionStrategyUpdateSqlBuilder<T>.DefaultInstance.ToUpdateSql(data, this.GetMappingInfo(), false, ignoreProperties);
+
+            sqlContext.AppendSqlWithSperatorInContext(TSqlBuilder.Instance, sql);
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="ownerKeyBuilder"></param>
-        /// <param name="objs"></param>
-        public void UpdateCollectionInContext(IConnectiveSqlClause ownerKeyBuilder, IEnumerable<T> objs)
+        /// <param name="data"></param>
+        /// <param name="ignoreProperties">需要忽略的属性</param>
+        public void UpdateCollectionInContext(IConnectiveSqlClause ownerKeyBuilder, IEnumerable<T> data, params string[] ignoreProperties)
         {
             ownerKeyBuilder.NullCheck("ownerKeyBuilder");
-            objs.NullCheck("objs");
+            data.NullCheck("objs");
 
-            VersionStrategyUpdateSqlBuilder<T> builder = new VersionStrategyUpdateSqlBuilder<T>();
+            Dictionary<string, object> context = new Dictionary<string, object>();
 
-            string sql = builder.ToUpdateCollectionSql(ownerKeyBuilder, this.GetMappingInfo(), objs, false);
+            SqlContextItem sqlContext = this.GetSqlContext();
 
-            this.GetSqlContext().AppendSqlWithSperatorInContext(TSqlBuilder.Instance, sql);
+            this.BeforeInnerUpdateCollectionInContext(data, sqlContext, context);
+
+            string sql = VersionStrategyUpdateSqlBuilder<T>.DefaultInstance.ToUpdateCollectionSql(ownerKeyBuilder, this.GetMappingInfo(), data, false, ignoreProperties);
+
+            sqlContext.AppendSqlWithSperatorInContext(TSqlBuilder.Instance, sql);
+        }
+
+        /// <summary>
+        /// 在上下文中更新单一对象前
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="sqlContext"></param>
+        /// <param name="context"></param>
+        protected virtual void BeforeInnerUpdateInContext(T data, SqlContextItem sqlContext, Dictionary<string, object> context)
+        {
+        }
+
+        /// <summary>
+        /// 在上下文中更新集合对象前
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="sqlContext"></param>
+        /// <param name="context"></param>
+        protected virtual void BeforeInnerUpdateCollectionInContext(IEnumerable<T> data, SqlContextItem sqlContext, Dictionary<string, object> context)
+        {
         }
 
         /// <summary>

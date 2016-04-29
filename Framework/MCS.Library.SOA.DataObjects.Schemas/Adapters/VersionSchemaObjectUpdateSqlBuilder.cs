@@ -20,7 +20,7 @@ namespace MCS.Library.SOA.DataObjects.Schemas.Adapters
 		{
 		}
 
-		protected override InsertSqlClauseBuilder PrepareInsertSqlBuilder(VersionedSchemaObjectBase obj, ORMappingItemCollection mapping)
+		public override InsertSqlClauseBuilder PrepareInsertSqlBuilder(VersionedSchemaObjectBase obj, ORMappingItemCollection mapping, string[] ignoreProperties)
 		{
 			VersionedSchemaObjectBase schemaObj = (VersionedSchemaObjectBase)obj;
 
@@ -30,7 +30,7 @@ namespace MCS.Library.SOA.DataObjects.Schemas.Adapters
 					schemaObj.Creator = DeluxeIdentity.CurrentUser;
 			}
 
-			InsertSqlClauseBuilder builder = base.PrepareInsertSqlBuilder(obj, mapping);
+			InsertSqlClauseBuilder builder = base.PrepareInsertSqlBuilder(obj, mapping, ignoreProperties);
 
 			builder.AppendItem("Data", obj.ToString());
 

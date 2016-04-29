@@ -4,7 +4,7 @@ using PPTS.Data.Common.Entities;
 using PPTS.Data.Products.Entities;
 
 
-namespace PPTS.WebAPI.Product.ViewModels.Products
+namespace PPTS.WebAPI.Products.ViewModels.Products
 {
     public class ProductQueryResult
     {

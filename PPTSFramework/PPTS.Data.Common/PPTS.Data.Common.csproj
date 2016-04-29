@@ -57,6 +57,9 @@
     <Reference Include="MCS.Library.SOA.DataObjects">
       <HintPath>..\..\Bin\MCS.Library.SOA.DataObjects.dll</HintPath>
     </Reference>
+    <Reference Include="PPTS.Data.Common.Entities">
+      <HintPath>..\..\PPTSBin\PPTS.Data.Common.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
@@ -70,26 +73,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Adapters\ConfigsCache.cs" />
     <Compile Include="Adapters\ConstantsCache.cs" />
     <Compile Include="Adapters\ConstantAdapter.cs" />
+    <Compile Include="Adapters\ConfigAdapter.cs" />
+    <Compile Include="Adapters\TeacherAdapter.cs" />
+    <Compile Include="Adapters\TeacherJobViewAdapter.cs" />
+    <Compile Include="Adapters\TeacherJobAdapter.cs" />
+    <Compile Include="Adapters\TeacherTeachingAdapter.cs" />
     <Compile Include="Common\ConnectionDefine.cs" />
-    <Compile Include="Entities\BaseConstantEntity.cs" />
-    <Compile Include="Entities\ConstantCategoryAttribute.cs" />
-    <Compile Include="Entities\ConstantEntity.cs" />
-    <Compile Include="Entities\Enumerations.cs" />
-    <Compile Include="Entities\TypeConstantCategoriesCache.cs" />
+    <Compile Include="DataSources\GenericCommonDataSource.cs" />
     <Compile Include="Executors\PPTSEditEntityExecutorBase.cs" />
     <Compile Include="Executors\PPTSExecutorBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Security\Enumerations.cs" />
     <Compile Include="Security\Extensions.cs" />
-    <Compile Include="Security\PPTSJob.cs" />
-    <Compile Include="Security\PPTSRole.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MCS.Library.snk" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>IF NOT EXIST "$(ProjectDir)..\..\PPTSBin" MD "$(ProjectDir)..\..\PPTSBin"

@@ -6,5 +6,7 @@
     <DeployScriptFileName>PPTS.Data.Common.DB.sql</DeployScriptFileName>
     <TargetConnectionString>Data Source=MCSFramework;Integrated Security=True;Pooling=False</TargetConnectionString>
     <ProfileVersionNumber>1</ProfileVersionNumber>
+    <BlockOnPossibleDataLoss>True</BlockOnPossibleDataLoss>
+    <AllowIncompatiblePlatform>True</AllowIncompatiblePlatform>
   </PropertyGroup>
 </Project>

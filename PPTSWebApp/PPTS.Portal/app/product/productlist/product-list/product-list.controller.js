@@ -6,15 +6,6 @@ define([ppts.config.modules.product,
                 function ($scope, $state, dataSyncService, mcsDialogService, productDataService) {
                     var vm = this;
 
-                    //查询条件
-                    vm.criteria = {
-                        name: '',
-                        productCode: '',
-                        startDate: '',
-                        endDate: '',
-                        pagedParam: { "pageIndex": 1, "pageSize": 10, "totalCount": -1 }
-                    };
-
                     vm.data = {
                         selection: 'checkbox',
                         rowsSelected: [],
@@ -29,14 +20,12 @@ define([ppts.config.modules.product,
                             name: "产品名称",
                             template: '<a ui-sref="ppts.productView({id:row.productID})">{{row.productName}}</a>'
                         }, {
-                            field: "parentName",
-                            name: "销售大区"
-                        }, {
-                            field: "catalog",
+                            field: "catalogName",
                             name: "产品类型"
                         }, {
                             field: "categoryType",
                             name: "产品分类",
+                            template: '<span>{{row.categoryType | categoryType}}</span>',
                         }, {
                             field: "grade",
                             name: "年级",
@@ -55,6 +44,7 @@ define([ppts.config.modules.product,
                         }, {
                             field: "coachType",
                             name: "辅导类型",
+                            template: '<span>{{ row.coachType | coachType }}</span>'
                         }, {
                             name: "启售时间",
                             template: '<span>{{row.startDate | date:"yyyy-MM-dd"}}</span>',
@@ -67,6 +57,7 @@ define([ppts.config.modules.product,
                         }, {
                             field: "productStatus",
                             name: "销售状态",
+                            template: '<span>{{row.productStatus | productStatus }}</span>',
                         }],
                         pager: {
                             pageIndex: 1,
@@ -82,12 +73,10 @@ define([ppts.config.modules.product,
                         orderBy: [{ dataField: 'CreateTime', sortDirection: 1 }]
                     }
 
-                    
-
                     dataSyncService.initCriteria(vm);
                     vm.search = function () {
 
-                        if ($.inArray('1', vm.criteria.priceTypes)>-1) {
+                        if ($.inArray('1', vm.criteria.priceTypes) > -1) {
                             vm.criteria.minProductPrice = vm.criteria.minPrice;
                             vm.criteria.maxProductPrice = vm.criteria.maxPrice;
                         }
@@ -101,7 +90,7 @@ define([ppts.config.modules.product,
                         }
 
                         if (vm.criteria.timeType == 1) {
-                            vm.criteria.startStartDate = vm.criteria.begainTime;
+                            vm.criteria.startStartDate = new Date(1461220356061);
                             vm.criteria.endStartDate = vm.criteria.endTime;
                         }
                         if (vm.criteria.timeType == 2) {
@@ -112,29 +101,20 @@ define([ppts.config.modules.product,
                             vm.criteria.startCreateDate = vm.criteria.begainTime;
                             vm.criteria.endCreateDate = vm.criteria.endTime;
                         }
-                        
-                        
+
+
                         console.log(vm.criteria)
                         //return;
 
                         productDataService.getAllProducts(vm.criteria, function (result) {
-                            console.warn('------------------------')
-                            console.warn(result);
-                            console.warn('------------------------')
-
+                            console.log(result)
                             vm.data.rows = result.queryResult.pagedData;
                             dataSyncService.updateTotalCount(vm, result.queryResult);
-
-                            dataSyncService.injectDictData(mcs.util.mapping(result.dictionaries["Product_ProductStatus"], { key: 'key', value: 'value' }, 'ProductStatus'));
-                            ppts.config.dictMappingConfig["productStatus"] = "product_ProductStatus";
-
-                            console.log(ppts)
-
                             $scope.$broadcast('dictionaryReady');
                         });
 
                     };
-                    
+
 
 
                     //复制
@@ -147,7 +127,7 @@ define([ppts.config.modules.product,
                         var goName = '';
                         switch (type) {
                             case 1: goName = 'onetoone'; break;
-                            case 2: goName='classgroup'; break;
+                            case 2: goName = 'classgroup'; break;
                             case 3: goName = 'youxue'; break;
                             case 4: goName = 'wukeshou'; break;
                             case 5: goName = 'other'; break;
@@ -158,36 +138,29 @@ define([ppts.config.modules.product,
 
                     vm.delete = function () {
                         var failProduct = $.grep(vm.data.rowsSelected, function (obj, index) {
-                            if (obj.productStatus != 2)return obj;
+                            if (obj.productStatus != 2) return obj;
                         });
                         if (failProduct.length > 0) {
-                            mcsDialogService.error('错误', '只允许删除 驳回状态 产品！');
+                            mcsDialogService.error({ title: '错误', message: '只允许删除 驳回状态 产品！' });
                             return;
                         }
 
-                        mcsDialogService.confirm('危险确认', '删除产品无法恢复，是否确认删除？')
+                        mcsDialogService.confirm({ title: '危险确认', message: '删除产品无法恢复，是否确认删除？' })
                             .result.then(function () {
-                                var productIds = getSelectedProductIds();
                                 productDataService.delProduct(productIds, function (isSuccess) {
-                                    if (isSuccess) {
-                                        var selectedIndexs = getSelectedIndexs();
-                                        $.each(selectedIndexs, function (i, v) { vm.data.rows.splice(v,1) });
-                                    } else {
-                                        mcsDialogService.error('错误', '操作失败！');
-                                    }
+                                    mcs.util.removeByObjectsWithKeys(vm.data.rows, vm.data.rowsSelected);
                                 });
-                            }, function () { });
+                            });
                     };
 
 
                     vm.stopProduct = function () {
                         var rowProduct = vm.data.rowsSelected[0];
                         if (rowProduct.productStatus == 1
-                            && new Date(rowProduct.endDate) >= new Date()
-                            )
-                        {
+                            && rowProduct.endDate >= new Date()
+                            ) {
                             productDataService.stopProduct(rowProduct.productID, function (date) {
-                                if(date.length>0)
+                                if (date.length > 0)
                                     vm.data.rows[getSelectedIndexs()].endDate = date;
                             })
                         }
@@ -197,24 +170,53 @@ define([ppts.config.modules.product,
                     vm.delayProduct = function () {
                         var rowProduct = vm.data.rowsSelected[0];
                         if (rowProduct.productStatus == 1
-                            && new Date(rowProduct.endDate) <new Date()
+                            && rowProduct.endDate < new Date()
                             )
                         {
-                            //var controlArray = new Array();
-                            //controlArray[controlArray.length] = '<p class="input-group">';
-                            //controlArray[controlArray.length] = '<input type="text" class="form-control" uib-datepicker-popup="yyyy/MM/dd" ng-model="vm.delayTime" is-open="vm.popup3.opened" datepicker-options="vm.dateOptions" ng-required="true" close-text="Close" alt-input-formats="vm.altInputFormats" />';
-                            //controlArray[controlArray.length] = '<span class="input-group-btn">';
-                            //controlArray[controlArray.length] = '<button type="button" class="btn btn-default" ng-click="vm.open3()"><i class="glyphicon glyphicon-calendar"></i>';
-                            //controlArray[controlArray.length] = '</button>';
-                            //controlArray[controlArray.length] = '</span>';
-                            //controlArray[controlArray.length] = '</p>';
-                            ////angular.element()
-                            //alert(controlArray.join(''))
-                            //mcsDialogService.create('延期', '<div>延期产品:' + controlArray.join('') + '</div>')
-                            mcsDialogService.create('app/product/productlist/product-list/startsell.html', 'productListController')
+                            mcsDialogService.create('app/product/productlist/product-list/product-delay.html', { controller: 'delayController', params: rowProduct.endDate })
+                                .result.then(function (data) {
+                                    productDataService.delayProduct({ id: rowProduct.productID, endDate: data.endDate }, function () {
+                                        var index = getSelectedIndexs(rowProduct.productID);
+                                        vm.data.rows[index].endDate = data.endDate;
+                                    });
+                                }, function () { });
                         }
 
                     };
+
+                    //创建班级
+                    vm.createClass = function () {
+                        var msg = createClassCheck();
+                        msg = "";//测试  不检查
+                        if (!msg) {
+                            var rowProduct = vm.data.rowsSelected[0];
+                            //1.获取产品信息  
+                            $state.go('ppts.classAdd', { id: rowProduct.productID });
+                        }
+                        else {
+                            mcsDialogService.error(
+                                { title:'Error', message: msg }
+                            );
+                        }
+                        
+                    }
+
+                    function createClassCheck() {
+                        //1.选择数量判断
+                        if (vm.data.rowsSelected.length != 1)
+                            return "请选择1条班组产品！";
+
+                        var rowPro = vm.data.rowsSelected[0];
+                        //2.产品类型
+                        if (rowPro.categoryType != 2)
+                            return "只有班组产品才可以创建班级！";
+
+                        //3.产品状态
+                        if (rowPro.productStatus!=4  && rowPro.productStatus!=5)
+                            return "只有产品状态是使用中、已停售的才可以创建班级！";
+
+                        return "";
+                    }
 
 
 
@@ -225,8 +227,8 @@ define([ppts.config.modules.product,
                         return productIds;
                     }
 
-                    function getSelectedIndexs() {
-                        var productIds = getSelectedProductIds();
+                    function getSelectedIndexs(productId) {
+                        var productIds = [productId] || getSelectedProductIds();
                         var selectedIndexs = $.map(vm.data.rows, function (obj, index) {
                             if ($.inArray(obj.productID, productIds) > -1) { return index; } return null;
                         });
@@ -235,86 +237,171 @@ define([ppts.config.modules.product,
 
 
                     vm.init = function () {
-                        var priceTypes = [{ key: '1', value: '产品单价' }, { key: '2', value: '目标单价' }, { key: '3', value: '合作单价' }, ];
                         var timeTypes = [{ key: '1', value: '启售时间' }, { key: '2', value: '止售时间' }, { key: '3', value: '创建时间' }, ];
-                        var isPartners = [{ key: '1', value: '全部' }, { key: '2', value: '无合作' }, { key: '3', value: '有合作' }, ];
-                        var saleStatus = [{ key: '1', value: '待审批' }, { key: '2', value: '审批通过' }, { key: '3', value: '驳回' }, { key: '4', value: '销售中' }, { key: '5', value: '已停售' }, ];
-                        var categoryTypes = [{ key: '1', value: '一对一' }, { key: '2', value: '班组' }, { key: '3', value: '游学' }, { key: '4', value: '无课收' }, { key: '5', value: '其他' }, ];
-
-
-
-                        dataSyncService.injectDictData(mcs.util.mapping(priceTypes, { key: 'key', value: 'value' }, 'PriceType'));
-                        ppts.config.dictMappingConfig["priceType"] = "c_codE_ABBR_PriceType";
 
                         dataSyncService.injectDictData(mcs.util.mapping(timeTypes, { key: 'key', value: 'value' }, 'TimeType'));
                         ppts.config.dictMappingConfig["timeType"] = "c_codE_ABBR_TimeType";
-
-                        dataSyncService.injectDictData(mcs.util.mapping(isPartners, { key: 'key', value: 'value' }, 'HasPartner'));
-                        ppts.config.dictMappingConfig["hasPartner"] = "c_codE_ABBR_HasPartner";
-
-                        dataSyncService.injectDictData(mcs.util.mapping(saleStatus, { key: 'key', value: 'value' }, 'SaleStatus'));
-                        ppts.config.dictMappingConfig["saleStatus"] = "c_codE_ABBR_SaleStatus";
-
-                        dataSyncService.injectDictData(mcs.util.mapping(categoryTypes, { key: 'key', value: 'value' }, 'CategoryType'));
-                        ppts.config.dictMappingConfig["categoryType"] = "c_codE_ABBR_CategoryType";
 
                         vm.search();
 
                     };
                     vm.init();
-                    
 
-                    vm.dateOptions = {
-                        // dateDisabled: disabled,
-                        formatYear: 'yy',
-                        // maxDate: new Date(2020, 5, 22),
-                        // minDate: new Date(),
-                        startingDay: 1
+                }]);
+
+
+            product.registerController('delayController', [
+                '$scope', '$uibModalInstance', 'data',
+                function ($scope, $uibModalInstance, data) {
+
+                    var vm = this;
+                    vm.entity = { endDate: data };
+                    $scope.vm = vm;
+
+                    vm.cancel = function () {
+                        $uibModalInstance.dismiss('Canceled');
                     };
 
-                    vm.popup1 = { opened: false };
-                    vm.open1 = function () { vm.popup1.opened = true; };
+                    vm.save = function () {
+                        $uibModalInstance.close(vm.entity);
+                    };
 
-                    vm.popup2 = { opened: false };
-                    vm.open2 = function () { vm.popup2.opened = true; };
+                    vm.hitEnter = function (evt) {
+                        if (angular.equals(evt.keyCode, 13) && !(angular.equals(vm.entity.endDate, null) || angular.equals(vm.entity.endDate, '')))
+                            vm.save();
+                    };
 
-                    vm.popup3 = { opened: false };
-                    vm.open3 = function () { vm.popup3.opened = true; };
+                }]);
 
 
 
-                    ////selected checkbox
-                    //vm.selectedCheckbox = [];
+            product.registerController('selectCategoryController', [
+                '$scope', '$uibModalInstance', '$state', 'dataSyncService', 'data',
+                function ($scope, $uibModalInstance, $state, dataSyncService, data) {
 
-                    ////修改
-                    //vm.modifyProduct= function (id) {
-                    //    $state.go('ppts.productEdit',{id:vm.selectedCheckbox[0] });
-                    //};
+                    //console.log(data)
+
+                    var vm = {};
+                    $scope.vm = vm;
+
+
+
+                    vm.nodeClick = function (event, treeId, treeNode) {
+                        alert('you are selecting ' + treeNode.name);
+                    }
+                    vm.onCheck = function (event, treeId, treeNode) {
+                        alert('you are selecting ' + treeNode.name);
+                    }
+
+                    vm.loadDataWaiting = function (treeId, treeNode) {
+
+                    }
+
+
+                    vm.treeSetting = {
+                        data: {
+                            key: {
+                                children: 'children',
+                                name: 'name',
+                                title: 'name'
+                            }
+                        },
+                        view: {
+                            selectedMulti: true,
+                            showIcon: true,
+                            showLine: true,
+                            nameIsHTML: false,
+                            fontCss: {
+
+                            }
+
+                        },
+                        check: {
+                            enable: true,
+                            chkStyle: 'checkbox'
+
+                        },
+                        async: {
+                            enable: false,
+                            autoParam: ["id"],
+                            contentType: "application/json",
+                            type: 'post',
+                            dataType: "json",
+                            url: 'api/users'
+                        },
+                        callback: {
+                            onClick: vm.nodeClick,
+                            onCheck: vm.nodeCheck,
+                            beforeAsync: vm.loadDataWaiting
+                        }
+                    };
+
+
+
+
+
+                    vm.treeData = [{
+                        id: '0',
+                        name: 'root',
+                        open: true,
+                        parent: true,
+
+                        children: [{
+
+                            id: '1',
+                            name: 'company-1',
+                            open: true,
+                            children: [{
+                                id: 11,
+                                name: 'HR',
+                                checked: true,
+                                chkDisabled: false,
+                                icon: '',
+                                iconOpen: '',
+                                iconClose: '',
+                                iconSkin: '',
+                                isHidden: false
+
+
+                            }, {
+                                id: 12,
+                                name: 'IT'
+                            }]
+                        }, {
+                            id: '2',
+                            name: 'company-2',
+
+                            children: [{
+                                id: '21',
+                                name: 'HR'
+
+                            }]
+                        }]
+                    }];
+
+
+
+
+
+
+
+
+                    vm.cancel = function () {
+                        //alert(1)
+                        $uibModalInstance.dismiss('Canceled');
+                    };
+
+                    vm.save = function () {
+                        $uibModalInstance.close(vm.entity);
+                    };
 
                     
-
-                    ////删除
-                    //vm.deleteProduct = function () { 
-                    //}
-
-                    ////止售
-                    //vm.stopSellProduct = function () {
-                    //}
-
-                    ////延期
-                    //vm.postponeProduct = function () {
-                    //}
-
-                    //vm.close = function (category, dictionary) {
-                    //    vm.criteria[category].length = 0;
-
-                    //    vm.dictionaries[dictionary].forEach(function(item,value) {
-                    //        item.checked = false;
-                    //    });
-                    //};
 
 
 
                 }]);
-            });
+
+
+            //
+        });
 

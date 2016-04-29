@@ -52,6 +52,9 @@
     <DefineTrace>true</DefineTrace>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <NoWarn>
+    </NoWarn>
+    <SuppressTSqlWarnings>71501</SuppressTSqlWarnings>
   </PropertyGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
@@ -69,6 +72,8 @@
     <Folder Include="CM\Stored Procedures" />
     <Folder Include="WF" />
     <Folder Include="WF\Tables" />
+    <Folder Include="CM\Views" />
+    <Folder Include="Storage" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Security\CM.sql" />
@@ -81,8 +86,6 @@
     <Build Include="CM\Tables\AccountRecords.sql" />
     <Build Include="CM\Tables\Accounts.sql" />
     <Build Include="CM\Tables\AccountChargeApplies.sql" />
-    <Build Include="CM\Tables\AccountChargeInvoices.sql" />
-    <Build Include="CM\Tables\AccountChargePaymentPrints.sql" />
     <Build Include="CM\Tables\AccountChargePayments.sql" />
     <Build Include="CM\Tables\CustomerExpenseRelations.sql" />
     <Build Include="CM\Tables\CustomerFeedbacks.sql" />
@@ -97,7 +100,6 @@
     <Build Include="CM\Tables\AccountRefundApplies.sql" />
     <Build Include="CM\Tables\AccountRefundPayments.sql" />
     <Build Include="CM\Tables\AccountTransferApplies.sql" />
-    <Build Include="CM\Tables\AccountsEx.sql" />
     <Build Include="CM\Tables\CustomerTransferApplies.sql" />
     <Build Include="CM\Tables\CustomerReplies.sql" />
     <Build Include="CM\Tables\Schools.sql" />
@@ -113,6 +115,21 @@
     <Build Include="CM\Tables\CustomerParentRelations.sql" />
     <Build Include="CM\Tables\Customers.sql" />
     <Build Include="CM\Tables\CustomerStaffRelations.sql" />
+    <Build Include="CM\Views\PotentialCustomers_Current.sql" />
+    <Build Include="CM\Tables\CustomerFulltextInfo.sql" />
+    <Build Include="CM\Views\Parents_Current.sql" />
+    <Build Include="CM\Views\Phones_Current.sql" />
+    <Build Include="CM\Views\CustomerParentRelations_Current.sql" />
+    <Build Include="CM\Views\PotentialCustomersFulltext.sql" />
+    <Build Include="CM\Views\CustomersFulltext.sql" />
+    <Build Include="CM\Views\CustomerStaffRelations_Current.sql" />
+    <Build Include="CM\Views\CustomerTeacherRelations_Current.sql" />
+    <Build Include="CM\Views\Customers_Current.sql" />
+    <Build Include="WF\Tables\ProcessQueueLogs.sql" />
+    <Build Include="WF\Tables\ProcessQueues.sql" />
+    <Build Include="CM\Views\Accounts_Current.sql" />
+    <Build Include="CM\Views\ParentsFulltext.sql" />
+    <Build Include="CM\Views\CustomersAndPotentialFulltext_1.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PPTS.Data.Customers.DB.refactorlog" />
@@ -121,5 +138,8 @@
     <None Include="PPTS.Data.Customer.Local.Test.DB.publish.xml" />
     <None Include="PPTS.Data.Customer.Local.Dev.DB.publish.xml" />
     <None Include="PPTS.Data.Customer.XueDa.Dev.DB.publish.xml" />
+    <Build Include="Storage\PPTSCustomerCatalog.sql" />
+    <None Include="PPTS.Data.Customer.XueDa.Dev.Test.DB.publish.xml" />
+    <None Include="PPTS.Data.Customer.Cloud.Test.DB.publish.xml" />
   </ItemGroup>
 </Project>

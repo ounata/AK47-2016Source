@@ -282,7 +282,7 @@ namespace MCS.Library.Data.Builder
         /// <returns>返回这个Builder自己，便于编写连续AppendItem语句，例如b.AppendItem(...).AppendItem(...)</returns>
         /// <param name="dataField">Sql语句中的字段名</param>
         /// <param name="data">操作的数据</param>
-        public SqlClauseBuilderIUW AppendItem<T>(string dataField, T data)
+        public virtual SqlClauseBuilderIUW AppendItem<T>(string dataField, T data)
         {
             return AppendItem<T>(dataField, data, SqlClauseBuilderBase.EqualTo);
         }
@@ -295,7 +295,7 @@ namespace MCS.Library.Data.Builder
         /// <param name="dataField">Sql语句中的字段名</param>
         /// <param name="data">操作的数据</param>
         /// <param name="op">操作运算符</param>
-        public SqlClauseBuilderIUW AppendItem<T>(string dataField, T data, string op)
+        public virtual SqlClauseBuilderIUW AppendItem<T>(string dataField, T data, string op)
         {
             return AppendItem<T>(dataField, data, op, false);
         }
@@ -309,7 +309,7 @@ namespace MCS.Library.Data.Builder
         /// <param name="data">操作的数据</param>
         /// <param name="op">操作运算符</param>
         /// <param name="isExpression">操作的数据是否是表达式</param>
-        public SqlClauseBuilderIUW AppendItem<T>(string dataField, T data, string op, bool isExpression)
+        public virtual SqlClauseBuilderIUW AppendItem<T>(string dataField, T data, string op, bool isExpression)
         {
             SqlClauseBuilderItemIUW item = (SqlClauseBuilderItemIUW)CreateBuilderItem();
 
@@ -400,7 +400,7 @@ namespace MCS.Library.Data.Builder
         /// <param name="data">操作的数据</param>
         /// <param name="op">操作运算符</param>
         /// <param name="template">模板的样式</param>
-        public SqlClauseBuilderUW AppendItem<T>(string dataField, T data, string op, string template)
+        public virtual SqlClauseBuilderUW AppendItem<T>(string dataField, T data, string op, string template)
         {
             return AppendItem<T>(dataField, data, op, template, false);
         }
@@ -415,7 +415,7 @@ namespace MCS.Library.Data.Builder
         /// <param name="op">操作运算符</param>
         /// <param name="template">模板的样式</param>
         /// <param name="isExpression">操作的数据是否是表达式</param>
-        public SqlClauseBuilderUW AppendItem<T>(string dataField, T data, string op, string template, bool isExpression)
+        public virtual SqlClauseBuilderUW AppendItem<T>(string dataField, T data, string op, string template, bool isExpression)
         {
             SqlClauseBuilderItemUW item = (SqlClauseBuilderItemUW)CreateBuilderItem();
 

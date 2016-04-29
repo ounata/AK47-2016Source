@@ -99,10 +99,13 @@ namespace MCS.Library.Core
         /// </summary>
         /// <param name="data"></param>
         /// <param name="action"></param>
-        public static void IsNotEmpty(this string data, Action<string> action)
+        /// <returns>返回传入的data</returns>
+        public static string IsNotEmpty(this string data, Action<string> action)
         {
             if (data.IsNotEmpty() && action != null)
                 action(data);
+
+            return data;
         }
 
         /// <summary>
@@ -153,10 +156,13 @@ namespace MCS.Library.Core
         /// </summary>
         /// <param name="data"></param>
         /// <param name="action"></param>
-        public static void IsNullOrEmpty(this string data, Action action)
+        /// <returns>返回传入的data</returns>
+        public static string IsNullOrEmpty(this string data, Action action)
         {
             if (string.IsNullOrEmpty(data) && action != null)
                 action();
+
+            return data;
         }
 
         /// <summary>
@@ -174,10 +180,13 @@ namespace MCS.Library.Core
         /// </summary>
         /// <param name="data"></param>
         /// <param name="action"></param>
-        public static void IsNullOrWhiteSpace(this string data, Action action)
+        /// <returns>返回传入的data</returns>
+        public static string IsNullOrWhiteSpace(this string data, Action action)
         {
             if (string.IsNullOrWhiteSpace(data) && action != null)
                 action();
+
+            return data;
         }
 
         /// <summary>
@@ -222,10 +231,13 @@ namespace MCS.Library.Core
         /// </summary>
         /// <param name="data"></param>
         /// <param name="action"></param>
-        public static void IsNull(this object data, Action action)
+        /// <returns>返回传入的data</returns>
+        public static object IsNull(this object data, Action action)
         {
             if (data == null && action != null)
                 action();
+
+            return data;
         }
 
         /// <summary>
@@ -234,10 +246,13 @@ namespace MCS.Library.Core
         /// <typeparam name="T">对象的类型泛型</typeparam>
         /// <param name="data"></param>
         /// <param name="action"></param>
-        public static void IsNotNull<T>(this T data, Action<T> action)
+        /// <returns>返回传入的data</returns>
+        public static T IsNotNull<T>(this T data, Action<T> action)
         {
             if (data != null && action != null)
                 action(data);
+
+            return data;
         }
 
         /// <summary>
@@ -263,10 +278,13 @@ namespace MCS.Library.Core
         /// </summary>
         /// <param name="data"></param>
         /// <param name="action"></param>
-        public static void IsMinValue(this DateTime data, Action action)
+        /// <returns>返回传入的data</returns>
+        public static DateTime IsMinValue(this DateTime data, Action action)
         {
             if (data == DateTime.MinValue && action != null)
                 action();
+
+            return data;
         }
 
         /// <summary>
@@ -290,10 +308,13 @@ namespace MCS.Library.Core
         /// </summary>
         /// <param name="data"></param>
         /// <param name="action"></param>
-        public static void IsNotMinValue(this DateTime data, Action<DateTime> action)
+        /// <returns>返回传入的data</returns>
+        public static DateTime IsNotMinValue(this DateTime data, Action<DateTime> action)
         {
             if (data != DateTime.MinValue && action != null)
                 action(data);
+
+            return data;
         }
 
         /// <summary>

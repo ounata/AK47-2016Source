@@ -12,35 +12,58 @@
             url: '/product',
             templateUrl: 'app/product/productlist/product-list/product-list.html',
             controller: 'productListController',
+            breadcrumb: {
+                label: '产品列表',
+                parent: 'ppts'
+            },
             dependencies: ['app/product/productlist/product-list/product-list.controller']
-        })
+            })
             .loadRoute($stateProvider, {
                 name: 'ppts.productAdd',
                 url: '/product/add',
                 templateUrl: 'app/product/productlist/product-add/product-add.html',
                 controller: 'productAddController',
-                dependencies: ['app/product/productlist/product-add/product-add.controller'],
-                
+                dependencies: ['app/product/productlist/product-add/product-add.controller']
             })
             .loadRoute($stateProvider, {
                 name: 'ppts.productAdd.onetoone',
                 url: '/onetoone',
+                breadcrumb: {
+                    label: '添加产品',
+                    parent: 'ppts.product'
+                },
                 templateUrl: 'app/product/productlist/product-add/product-add-onetoone.html',
             }).loadRoute($stateProvider, {
                 name: 'ppts.productAdd.classgroup',
                 url: '/classgroup',
+                breadcrumb: {
+                    label: '添加产品',
+                    parent: 'ppts.product'
+                },
                 templateUrl: 'app/product/productlist/product-add/product-add-classgroup.html',
             }).loadRoute($stateProvider, {
                 name: 'ppts.productAdd.youxue',
                 url: '/youxue',
+                breadcrumb: {
+                    label: '添加产品',
+                    parent: 'ppts.product'
+                },
                 templateUrl: 'app/product/productlist/product-add/product-add-other.html',
             }).loadRoute($stateProvider, {
                 name: 'ppts.productAdd.wukeshou',
                 url: '/wukeshou',
+                breadcrumb: {
+                    label: '添加产品',
+                    parent: 'ppts.product'
+                },
                 templateUrl: 'app/product/productlist/product-add/product-add-other.html',
             }).loadRoute($stateProvider, {
                 name: 'ppts.productAdd.other',
                 url: '/other',
+                breadcrumb: {
+                    label: '添加产品',
+                    parent: 'ppts.product'
+                },
                 templateUrl: 'app/product/productlist/product-add/product-add-other.html',
             })
 
@@ -49,6 +72,10 @@
                 url: '/product/view/:id',
                 templateUrl: 'app/product/productlist/product-view/product-view.html',
                 controller: 'productViewController',
+                breadcrumb: {
+                    label: '查看产品',
+                    parent: 'ppts.product'
+                },
                 dependencies: ['app/product/productlist/product-view/product-view.controller']
             }).loadRoute($stateProvider, {
                 name: 'ppts.productCopy',
@@ -60,28 +87,63 @@
             .loadRoute($stateProvider, {
                 name: 'ppts.productCopy.onetoone',
                 url: '/onetoone/:id',
+                breadcrumb: {
+                    label: '复制产品',
+                    parent: 'ppts.product'
+                },
                 templateUrl: 'app/product/productlist/product-add/product-add-onetoone.html',
                 controller: 'productCopyController',
             }).loadRoute($stateProvider, {
                 name: 'ppts.productCopy.classgroup',
                 url: '/classgroup/:id',
+                breadcrumb: {
+                    label: '复制产品',
+                    parent: 'ppts.product'
+                },
                 templateUrl: 'app/product/productlist/product-add/product-add-classgroup.html',
                 controller: 'productCopyController',
             }).loadRoute($stateProvider, {
                 name: 'ppts.productCopy.youxue',
                 url: '/youxue/:id',
+                breadcrumb: {
+                    label: '复制产品',
+                    parent: 'ppts.product'
+                },
                 templateUrl: 'app/product/productlist/product-add/product-add-other.html',
                 controller: 'productCopyController',
             }).loadRoute($stateProvider, {
                 name: 'ppts.productCopy.wukeshou',
                 url: '/wukeshou/:id',
+                breadcrumb: {
+                    label: '复制产品',
+                    parent: 'ppts.product'
+                },
                 templateUrl: 'app/product/productlist/product-add/product-add-other.html',
                 controller: 'productCopyController',
             }).loadRoute($stateProvider, {
                 name: 'ppts.productCopy.other',
                 url: '/other/:id',
+                breadcrumb: {
+                    label: '复制产品',
+                    parent: 'ppts.product'
+                },
                 templateUrl: 'app/product/productlist/product-add/product-add-other.html',
                 controller: 'productCopyController',
+            }).loadRoute($stateProvider, {
+                name: 'ppts.classAdd',
+                url: '/class/add/:id',
+                templateUrl: 'app/schedule/classgroup/class-add/class-add.html',
+                controller: 'classAddController',
+                dependencies: [
+                                'app/schedule/classgroup/class-add/class-add.controller',
+                                'app/schedule/classgroup/class-add/dayofweek.controller',
+                                'app/schedule/classgroup/customer-add/customer-add.controller',
+                                'app/schedule/classgroup/teacher-add/teacher-add.controller'
+                            ],
+                breadcrumb: {
+                    label: '新增班级',
+                    parent: 'ppts'
+                }
             });
 
         

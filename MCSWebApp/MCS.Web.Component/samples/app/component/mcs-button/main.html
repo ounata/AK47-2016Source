@@ -29,19 +29,28 @@
                 <div class="col-sm-12">
                     <h3 class="header smaller lighter green">应用范例</h3>
                     <div>
-                        <mcs-button type="add" text="新增潜在客户" click="vm.createCustomer()"></mcs-button>
-                        <mcs-button type="add" text="新增跟进记录"></mcs-button>
-                        <mcs-button type="edit"></mcs-button>
-                        <mcs-button type="delete"></mcs-button>
-                        <mcs-button type="search"></mcs-button>
-                        <mcs-button type="save"></mcs-button>
-                        <mcs-button type="cancel"></mcs-button>
+                        <mcs-button type="submit" category="add"/>
+                        <mcs-button category="add" text="新增潜在客户" click="vm.createCustomer()"></mcs-button>
+                        <mcs-button category="add" text="新增跟进记录"></mcs-button>
+                        <mcs-button category="edit"></mcs-button>
+                        <mcs-button category="delete"></mcs-button>
+                        <mcs-button category="search"></mcs-button>
+                        <mcs-button category="save"></mcs-button>
+                        <mcs-button category="cancel"></mcs-button>
+                        <mcs-button category="ok"></mcs-button>
+                        <mcs-button category="close"></mcs-button>
+                        <mcs-button category="print"></mcs-button>
+                        <mcs-button category="export"></mcs-button>
+                        <mcs-button category="refresh"></mcs-button>
+                        <mcs-button category="submit"></mcs-button>
+                        <mcs-button category="approve"></mcs-button>
+                        <mcs-button category="reject"></mcs-button>
                         <mcs-button icon="cny" text="充 值"></mcs-button>
                         <mcs-button text="我没有图标哦"></mcs-button>
-                        <mcs-button type="add" size="mini" text="我是小不点"></mcs-button>
-                        <mcs-button type="add" size="medium" text="我不大不小"></mcs-button>
-                        <mcs-button type="add" size="large" text="有点大哦"></mcs-button>
-                        <mcs-button type="add" size="large" text="没有最大,只有更大" css="max-button"></mcs-button>
+                        <mcs-button category="add" size="mini" text="我是小不点"></mcs-button>
+                        <mcs-button category="add" size="medium" text="我不大不小"></mcs-button>
+                        <mcs-button category="add" size="large" text="有点大哦"></mcs-button>
+                        <mcs-button category="add" size="large" text="没有最大,只有更大" css="max-button"></mcs-button>
                     </div>
                 </div>
                 <div class="laycode col-sm-12">
@@ -50,18 +59,27 @@
                         <span class="code_title">Html及Javascript</span>
                         <pre class="codes">
                             <code><b>Html</b></code><br />
-                            &lt;mcs-button type="add" text="新增潜在客户" click="vm.createCustomer()"&gt;&lt;/mcs-button&gt;
-                            &lt;mcs-button type="add" text="新增跟进记录"&gt;&lt;/mcs-button&gt;
-                            &lt;mcs-button type="edit"&gt;&lt;/mcs-button&gt;
-                            &lt;mcs-button type="delete"&gt;&lt;/mcs-button&gt;
-                            &lt;mcs-button type="save"&gt;&lt;/mcs-button&gt;
-                            &lt;mcs-button type="cancel"&gt;&lt;/mcs-button&gt;
-                            &lt;mcs-button icon="cny" text="充 值"&gt;&lt;/mcs-button&gt;
-                            &lt;mcs-button text="我没有图标哦"&gt;&lt;/mcs-button&gt;
-                            &lt;mcs-button type="add" size="mini" text="我是小不点"&gt;&lt;/mcs-button&gt;
-                            &lt;mcs-button type="add" size="medium" text="我不大不小"&gt;&lt;/mcs-button&gt;
-                            &lt;mcs-button type="add" size="large" text="有点大哦"&gt;&lt;/mcs-button&gt;
-                            &lt;mcs-button type="add" size="large" text="没有最大,只有更大" css="max-button"&gt;&lt;/mcs-button&gt;
+                            &lt;mcs-button type="submit" category="add" /&gt;
+                            &lt;mcs-button category="add" text="新增潜在客户" click="vm.createCustomer()"&gt;&lt;/mcs-button&gt;
+                            &lt;mcs-button category="add" text="新增跟进记录"&gt;&lt;/mcs-button&gt;
+                            &lt;mcs-button category="edit"&gt;&lt;/mcs-button&gt;
+                            &lt;mcs-button category="delete"&gt;&lt;/mcs-button&gt;
+                            &lt;mcs-button category="save"&gt;&lt;/mcs-button&gt;
+                            &lt;mcs-button category="cancel"&gt;&lt;/mcs-button&gt;
+                            &lt;mcs-button category="ok"&gt;&lt;/mcs-button&gt;
+                            &lt;mcs-button category="close"&gt;&lt;/mcs-button&gt;
+                            &lt;mcs-button category="print"&gt;&lt;/mcs-button&gt;
+                            &lt;mcs-button category="export"&gt;&lt;/mcs-button&gt;
+                            &lt;mcs-button category="refresh"&gt;&lt;/mcs-button&gt;
+                            &lt;mcs-button category="submit"&gt;&lt;/mcs-button&gt;
+                            &lt;mcs-button category="approve"&gt;&lt;/mcs-button&gt;
+                            &lt;mcs-button category="reject"&gt;&lt;/mcs-button&gt;
+                            &lt;mcs-button category="cny" text="充 值"&gt;&lt;/mcs-button&gt;
+                            &lt;mcs-button category="我没有图标哦"&gt;&lt;/mcs-button&gt;
+                            &lt;mcs-button category="add" size="mini" text="我是小不点"&gt;&lt;/mcs-button&gt;
+                            &lt;mcs-button category="add" size="medium" text="我不大不小"&gt;&lt;/mcs-button&gt;
+                            &lt;mcs-button category="add" size="large" text="有点大哦"&gt;&lt;/mcs-button&gt;
+                            &lt;mcs-button category="add" size="large" text="没有最大,只有更大" css="max-button"&gt;&lt;/mcs-button&gt;
                             <code><b>Javascript</b></code><br />
                             angular.module('app.component').controller('MCSButtonController', [
                                 '$scope', function ($scope) {
@@ -89,31 +107,38 @@
                         <tbody>
                             <tr>
                                 <td><code>type</code></td>
+                                <td>原有按钮的属性(如：submit, button)</td>
+                                <td>"submit", "button"....</td>
+                                <td>button</td>
+                                <td>&lt;mcs-button type="submit"&gt;&lt;/mcs-button&gt;</td>
+                            </tr>
+                            <tr>
+                                <td><code>category</code></td>
                                 <td>设置通用按钮的<code>类型</code>(带有默认文本和图标, 但定制按钮可以不设置type)如(“新 增”,“编 辑”,“删 除”,“查 询”,“保 存”, “取 消”等)</td>
                                 <td>"add", "edit", "delete", "search", "save", "cancel"....</td>
                                 <td>无</td>
-                                <td>&lt;mcs-button type="add"&gt;&lt;/mcs-button&gt;</td>
+                                <td>&lt;mcs-button category="add"&gt;&lt;/mcs-button&gt;</td>
                             </tr>
                             <tr>
                                 <td><code>text</code></td>
                                 <td>通用按钮无法满足时,设置通用按钮的<code>文本</code>如(“新增潜在客户”)</td>
                                 <td>无</td>
                                 <td>无</td>
-                                <td>&lt;mcs-button type="add" text="新增潜在客户"&gt;&lt;/mcs-button&gt;</td>
+                                <td>&lt;mcs-button category="add" text="新增潜在客户"&gt;&lt;/mcs-button&gt;</td>
                             </tr>
                             <tr>
                                 <td><code>icon</code></td>
                                 <td>通用按钮无法满足时,设置通用按钮的<code>图标</code>如(“人民币”图标可使用“cny”或“fa-cny”)</td>
                                 <td>无</td>
                                 <td>无</td>
-                                <td>&lt;mcs-button type="add" text="充 值" icon="cny"&gt;&lt;/mcs-button&gt;</td>
+                                <td>&lt;mcs-button category="add" text="充 值" icon="cny"&gt;&lt;/mcs-button&gt;</td>
                             </tr>
                             <tr>
                                 <td><code>size</code></td>
                                 <td>通用按钮无法满足时,设置通用按钮的<code>大小</code>如(默认按钮不设置大小)</td>
                                 <td>"mini", "medium", "large"</td>
                                 <td>无</td>
-                                <td>&lt;mcs-button type="add" text="我比你们大" icon="cny" size="large"&gt;&lt;/mcs-button&gt;</td>
+                                <td>&lt;mcs-button category="add" text="我比你们大" icon="cny" size="large"&gt;&lt;/mcs-button&gt;</td>
                             </tr>
                             <tr>
                                 <td><code>css</code></td>
@@ -121,7 +146,7 @@
                                 <td>无</td>
                                 <td>无</td>
                                 <td> .max-button { width: 200px; height: 100px; background-color: #660e0b; }
-                                    <br/> &lt;mcs-button type="add" text="没有最大,只有更大" icon="cny" size="large" css="max-button"&gt;&lt;/mcs-button&gt;</td>
+                                    <br/> &lt;mcs-button category="add" text="没有最大,只有更大" icon="cny" size="large" css="max-button"&gt;&lt;/mcs-button&gt;</td>
                             </tr>
                         </tbody>
                     </table>

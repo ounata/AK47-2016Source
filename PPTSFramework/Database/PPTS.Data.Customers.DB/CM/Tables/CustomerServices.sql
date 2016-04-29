@@ -30,18 +30,22 @@
     [ComplaintLevel] NVARCHAR(32) NULL, 
     [ComplaintUpgrade] NVARCHAR(32) NULL, 
     [IsUpgradeHandle] INT NOT NULL DEFAULT 0, 
-    [HandleJobType] NVARCHAR(32) NULL, 
+    [HandlerID] NVARCHAR(36) NULL, 
+    [HandlerName] NVARCHAR(64) NULL, 
+    [HandlerJobType] NVARCHAR(32) NULL, 
+    [HandleAdvice] NVARCHAR(MAX) NULL, 
     [IsSendEmail] INT NULL DEFAULT 0, 
     [HandlerEmail] NVARCHAR(255) NULL, 
     [IsSendMessage] INT NULL DEFAULT 0, 
     [HandlerPhone] NVARCHAR(255) NULL, 
+    [CallTime] DATETIME NULL DEFAULT getdate(), 
     [VoiceID] NVARCHAR(36) NULL, 
     [CreatorID] NVARCHAR(36) NULL, 
     [CreatorName] NVARCHAR(64) NULL, 
-    [CreateTime] DATETIME NOT NULL DEFAULT getdate(), 
+    [CreateTime] DATETIME NULL DEFAULT getdate(), 
     [ModifierID] NVARCHAR(36) NULL, 
     [ModifierName] NVARCHAR(64) NULL, 
-    [ModifyTime] DATETIME NOT NULL DEFAULT getdate(), 
+    [ModifyTime] DATETIME NULL DEFAULT getdate(), 
     CONSTRAINT [PK_CustomerServices] PRIMARY KEY NONCLUSTERED ([ServiceID]) 
 )
 
@@ -137,13 +141,13 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level2name = N'AccepterJobName'
 GO
 EXEC sp_addextendedproperty @name = N'MS_Description',
-    @value = N'下一处理岗类型（分客服专员，分客服经理，总客服经理...）',
+    @value = N'下一个处理人岗类型（分客服专员，分客服经理，总客服经理...）',
     @level0type = N'SCHEMA',
     @level0name = N'CM',
     @level1type = N'TABLE',
     @level1name = N'CustomerServices',
     @level2type = N'COLUMN',
-    @level2name = 'HandleJobType'
+    @level2name = 'HandlerJobType'
 GO
 EXEC sp_addextendedproperty @name = N'MS_Description',
     @value = N'处理人邮箱',
@@ -444,3 +448,39 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level1name = N'CustomerServices',
     @level2type = N'COLUMN',
     @level2name = N'AcceptLimitValue'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'来电时间',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'CustomerServices',
+    @level2type = N'COLUMN',
+    @level2name = N'CallTime'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'下一个处理人ID',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'CustomerServices',
+    @level2type = N'COLUMN',
+    @level2name = N'HandlerID'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'下一个处理人姓名',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'CustomerServices',
+    @level2type = N'COLUMN',
+    @level2name = N'HandlerName'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'处理意见',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'CustomerServices',
+    @level2type = N'COLUMN',
+    @level2name = N'HandleAdvice'

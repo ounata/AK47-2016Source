@@ -83,7 +83,7 @@ namespace MCS.Library.SOA.DataObjects
             }
         }
 
-        protected override void InnerInsert(StartWorkflowJob data, Dictionary<string, object> context)
+        protected override void InnerInsert(StartWorkflowJob data, Dictionary<string, object> context, string[] ignoreProperties)
         {
             InsertSqlClauseBuilder builder = new InsertSqlClauseBuilder();
 
@@ -98,7 +98,7 @@ namespace MCS.Library.SOA.DataObjects
             JobBaseAdapter.Instance.Update(data);
         }
 
-        protected override int InnerUpdate(StartWorkflowJob data, Dictionary<string, object> context)
+        protected override int InnerUpdate(StartWorkflowJob data, Dictionary<string, object> context, string[] ignoreProperties)
         {
             UpdateSqlClauseBuilder builder = new UpdateSqlClauseBuilder();
 

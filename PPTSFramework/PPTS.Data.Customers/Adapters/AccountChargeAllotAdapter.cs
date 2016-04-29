@@ -1,15 +1,17 @@
 using System.Linq;
 using PPTS.Data.Customers.Entities;
+using System;
+using MCS.Library.Data.Adapters;
 
 namespace PPTS.Data.Customers.Adapters
 {
     public class AccountChargeAllotAdapter : AccountAdapterBase<AccountChargeAllot, AccountChargeAllotCollection>
-	{
-		public static readonly AccountChargeAllotAdapter Instance = new AccountChargeAllotAdapter();
+    {
+        public static readonly AccountChargeAllotAdapter Instance = new AccountChargeAllotAdapter();
 
-		private AccountChargeAllotAdapter()
-		{
-		}
+        private AccountChargeAllotAdapter()
+        {
+        }
 
         /// <summary>
         /// 根据缴费申请单ID获取费用分摊列表。
@@ -17,8 +19,12 @@ namespace PPTS.Data.Customers.Adapters
         /// <param name="accountID"></param>
         /// <returns></returns>
         public AccountChargeAllotCollection LoadCollectionByApplyID(string applyID)
-		{
+        {
             return this.Load(builder => builder.AppendItem("ApplyID", applyID));
-		}
-	}
+        }
+        public void LoadCollectionByApplyIDInContext(string applyID, Action<AccountChargeAllotCollection> action)
+        {
+            this.LoadByInBuilderInContext(new InLoadingCondition(builder => builder.AppendItem(applyID), "ApplyID"), collection => action(collection));
+        }
+    }
 }

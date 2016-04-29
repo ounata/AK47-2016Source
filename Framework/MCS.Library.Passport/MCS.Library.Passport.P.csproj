@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="14.0">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -11,22 +11,18 @@
     <RootNamespace>MCS.Library.Passport</RootNamespace>
     <AssemblyName>MCS.Library.Passport</AssemblyName>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
-    <SignAssembly>false</SignAssembly>
+    <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>MCS.Library.snk</AssemblyOriginatorKeyFile>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
-    <SccProjectName>
-    </SccProjectName>
-    <SccLocalPath>
-    </SccLocalPath>
-    <SccAuxPath>
-    </SccAuxPath>
-    <SccProvider>
-    </SccProvider>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <TargetFrameworkProfile />
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
@@ -44,15 +40,15 @@
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugP|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\DebugPerformance\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE;GTNet40</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\DebugPerformance\MCS.Library.Passport.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\MCS.Library.Passport.xml</DocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -60,13 +56,35 @@
     </CodeAnalysisRules>
     <CodeAnalysisRuleSet>Migrated rules for MCS.Library.Passport.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;GTNet40</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DELUXEWORKSTEST|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\TestDebug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;DELUXEWORKSTEST;GTNet40</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
+    <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Data" />
     <Reference Include="System.Design" />
     <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Services" />
@@ -78,9 +96,13 @@
     </Compile>
     <Compile Include="Common\AuthenticateException.cs" />
     <Compile Include="Common\Define.cs" />
+    <Compile Include="Common\OpenIDBindingException.cs" />
+    <Compile Include="Configuration\AccessTicketSettings.cs" />
     <Compile Include="Configuration\AuthenticateDirSettings.cs" />
+    <Compile Include="Configuration\AuthenticateDirSettingsBase.cs" />
     <Compile Include="Configuration\DomainMappingSettings.cs" />
     <Compile Include="Configuration\ImpersonateSettings.cs" />
+    <Compile Include="Configuration\OpenIDAuthenticateDirSettings.cs" />
     <Compile Include="Configuration\PassportClientSettings.cs" />
     <Compile Include="Configuration\PassportEncryptionSettings.cs">
       <SubType>Code</SubType>
@@ -88,8 +110,11 @@
     <Compile Include="Configuration\PassportSectionGroup.cs" />
     <Compile Include="Configuration\PassportSignInSettings.cs" />
     <Compile Include="Configuration\RolesDefineConfig.cs" />
+    <Compile Include="Controls\AccessTicketCheckHandler.cs" />
     <Compile Include="Controls\AccessTicketChecker.cs" />
+    <Compile Include="Controls\AccessTicketCheckPhase.cs" />
     <Compile Include="Controls\AccessTicketHtmlAnchor.cs" />
+    <Compile Include="DataObjects\AccessTicketUrlCheckParts.cs" />
     <Compile Include="Controls\ChangePasswordControl.cs" />
     <Compile Include="Controls\PassportWebControlHelper.cs" />
     <Compile Include="Controls\SignInContext.cs" />
@@ -102,10 +127,15 @@
     <Compile Include="Crypto\TicketEncryptor.cs" />
     <Compile Include="Common\Common.cs" />
     <Compile Include="DataObjects\AccessTicket.cs" />
+    <Compile Include="DataObjects\AuthenticationCode.cs" />
+    <Compile Include="DataObjects\AuthenticationCodeAdapter.cs" />
     <Compile Include="DataObjects\DataAdapter.cs" />
+    <Compile Include="DataObjects\LogOffInfo.cs" />
+    <Compile Include="DataObjects\OpenIDBinding.cs" />
     <Compile Include="DataObjects\SignInInfo.cs" />
     <Compile Include="DataObjects\Ticket.cs" />
     <Compile Include="HttpModules\AuthenticationModuleBase.cs" />
+    <Compile Include="HttpModules\OpenIDAuthenticationModule.cs" />
     <Compile Include="HttpModules\PassportAuthenticationModule.cs" />
     <Compile Include="HttpModules\WindowsAuthenticationModule.cs" />
     <Compile Include="Interfaces\AppLogOffCallBackUrl.cs">
@@ -117,9 +147,8 @@
     <Compile Include="Interfaces\Operations.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Interfaces\SignInInfoAndTicket.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Mechanism\AccessPermissionChecker.cs" />
+    <Compile Include="Mechanism\AccessTicketCheckException.cs" />
     <Compile Include="Mechanism\AccessTicketManager.cs" />
     <Compile Include="Mechanism\ADSIUserUpdaterBase.cs" />
     <Compile Include="Mechanism\DefaultAuthenticator.cs" />
@@ -128,8 +157,16 @@
     <Compile Include="Mechanism\LocalUserUpdater.cs" />
     <Compile Include="Mechanism\PassportManager.cs" />
     <Compile Include="Mechanism\WindowsAuthenticator.cs" />
+    <Compile Include="Performance\PassportPerformanceCounterInstaller.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Performance\PassportPerformanceCounterInstaller.Designer.cs">
+      <DependentUpon>PassportPerformanceCounterInstaller.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Performance\SignInPerformanceCounters.cs" />
     <Compile Include="Principal\DeluxeIdentity.cs" />
     <Compile Include="Principal\DeluxePrincipal.cs" />
+    <Compile Include="Principal\OpenIDIdentity.cs" />
     <Compile Include="Principal\PrincipalExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resource.Designer.cs">
@@ -139,6 +176,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Performance\PassportPerformanceCounterInstaller.resx">
+      <DependentUpon>PassportPerformanceCounterInstaller.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resource.resx">
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
@@ -197,21 +237,32 @@
     <EmbeddedResource Include="Controls\AccessTicketScript.htm" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Controls\SignInControlInitScript.htm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DataObjects\SignInInfoMapping.xml" />
+    <EmbeddedResource Include="DataObjects\TicketInfoMapping.xml" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\MCS.Library.ADHelper\MCS.Library.ADHelper.P.csproj">
-      <Project>{2B0E10EE-F7E1-468B-84C0-ABD17A3A7319}</Project>
+      <Project>{2b0e10ee-f7e1-468b-84c0-abd17a3a7319}</Project>
       <Name>MCS.Library.ADHelper.P</Name>
     </ProjectReference>
     <ProjectReference Include="..\MCS.Library.Data\MCS.Library.Data.P.csproj">
-      <Project>{4313DE1E-738F-477D-B7FD-B237E9116670}</Project>
+      <Project>{4313de1e-738f-477d-b7fd-b237e9116670}</Project>
       <Name>MCS.Library.Data.P</Name>
     </ProjectReference>
     <ProjectReference Include="..\MCS.Library.OGUPermission\MCS.Library.OGUPermission.P.csproj">
-      <Project>{6EA98729-9A07-4D1F-B389-07C6B9D43B1D}</Project>
+      <Project>{6ea98729-9a07-4d1f-b389-07c6b9d43b1d}</Project>
       <Name>MCS.Library.OGUPermission.P</Name>
     </ProjectReference>
     <ProjectReference Include="..\MCS.Library\MCS.Library.P.csproj">
-      <Project>{4077B0B7-062A-4F6D-8A45-A180A2ED3215}</Project>
+      <Project>{4077b0b7-062a-4f6d-8a45-a180a2ed3215}</Project>
       <Name>MCS.Library.P</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MCS.Web.Responsive.Library\MCS.Web.Responsive.Library.P.csproj">
+      <Project>{31b6a252-182e-48c0-8d6a-56e3c2dd856f}</Project>
+      <Name>MCS.Web.Responsive.Library.P</Name>
     </ProjectReference>
   </ItemGroup>
   <Target Name="BeforeBuild">
@@ -220,9 +271,15 @@
     <!--<Copy SourceFiles="@(BinFiles)" DestinationFolder="..\..\Bin" SkipUnchangedFiles="True" />-->
   </Target>
   <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PreBuildEvent>IF NOT EXIST "$(ProjectDir)..\..\Bin" MD "$(ProjectDir)..\..\Bin"
+IF EXIST "$(ProjectDir)..\..\Bin\$(TargetFileName)" DEL "$(ProjectDir)..\..\Bin\$(TargetFileName)"
+IF EXIST "$(ProjectDir)..\..\Bin\$(TargetName).pdb" DEL "$(ProjectDir)..\..\Bin\$(TargetName).pdb"
+IF EXIST "$(ProjectDir)..\..\Bin\$(TargetName).xml" DEL "$(ProjectDir)..\..\Bin\$(TargetName).xml"</PreBuildEvent>
+    <PostBuildEvent>set path=%25path%25;C:\Windows\System32
+ 
+
+ XCOPY "$(TargetPath)"  "$(ProjectDir)..\..\Bin" /Y /D /R
+IF EXIST "$(TargetDir)$(TargetName).pdb" XCOPY "$(TargetDir)$(TargetName).pdb" "$(ProjectDir)..\..\Bin" /Y /D /R
+IF EXIST "$(TargetDir)$(TargetName).xml"  XCOPY "$(TargetDir)$(TargetName).xml" "$(ProjectDir)..\..\Bin" /Y /D /R</PostBuildEvent>
   </PropertyGroup>
 </Project>

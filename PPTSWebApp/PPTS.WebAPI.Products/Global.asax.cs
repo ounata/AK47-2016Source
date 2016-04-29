@@ -1,7 +1,7 @@
 ﻿using System.Web.Http;
 using System.Web.Mvc;
 
-namespace PPTS.WebAPI.Product
+namespace PPTS.WebAPI.Products
 {
     public class WebApiApplication : System.Web.HttpApplication
     {
@@ -9,7 +9,7 @@ namespace PPTS.WebAPI.Product
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
-            GlobalConfiguration.Configuration.Formatters.XmlFormatter.SupportedMediaTypes.Clear();
+            //GlobalConfiguration.Configuration.Formatters.XmlFormatter.SupportedMediaTypes.Clear();
         }
     }
 }

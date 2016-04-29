@@ -18,19 +18,31 @@ namespace PPTS.Data.Customers.Test
         {
             PotentialCustomer customer = DataHelper.PreparePotentialCustomerData();
 
-            using (DbContext context = PotentialCustomerAdapter.Instance.GetDbContext())
-            {
-                PotentialCustomerAdapter.Instance.UpdateInContext(customer);
+            Console.WriteLine("ID: {0}, Code: {1}", customer.CustomerID, customer.CustomerCode);
 
-                context.ExecuteNonQuerySqlInContext();
-            }
-
-            Console.WriteLine(customer.CustomerCode);
-
-            PotentialCustomer loaded = PotentialCustomerAdapter.Instance.Load(customer.CustomerID);
+            PotentialCustomer loaded = UpdateInContext(customer);
 
             Assert.IsNotNull(loaded);
+            loaded.Output();
             customer.AreEqual(loaded);
+        }
+
+        [TestMethod]
+        public void UpdatePotentialCustomerTwice()
+        {
+            PotentialCustomer customer = DataHelper.PreparePotentialCustomerData();
+
+            Console.WriteLine("ID: {0}, Code: {1}", customer.CustomerID, customer.CustomerCode);
+
+            PotentialCustomer loaded = UpdateInContext(customer);
+
+            loaded.CustomerName = string.Format("测试修改潜在用户{0:yyyy-MM-dd HH:mm:ss}", DateTime.Now);
+
+            PotentialCustomer loadedAgain = UpdateInContext(loaded);
+
+            Assert.IsNotNull(loadedAgain);
+            loaded.Output();
+            loaded.AreEqual(loadedAgain);
         }
 
         [TestMethod]
@@ -42,7 +54,7 @@ namespace PPTS.Data.Customers.Test
             {
                 PotentialCustomerAdapter.Instance.UpdateInContext(customer);
 
-                context.ExecuteNonQuerySqlInContext();
+                context.ExecuteTimePointSqlInContext();
             }
 
             Console.WriteLine(customer.CustomerCode);
@@ -50,7 +62,21 @@ namespace PPTS.Data.Customers.Test
             InheritedPotentialCustomer loaded = GenericPotentialCustomerAdapter<InheritedPotentialCustomer, List<InheritedPotentialCustomer>>.Instance.Load(customer.CustomerID);
 
             Assert.IsNotNull(loaded);
+
+            loaded.Output();
             customer.AreEqual(loaded);
+        }
+
+        private static PotentialCustomer UpdateInContext(PotentialCustomer customer)
+        {
+            PotentialCustomerAdapter.Instance.UpdateInContext(customer);
+            PotentialCustomerAdapter.Instance.GetDbContext().ExecuteTimePointSqlInContext();
+
+            DBTimePointActionContext.Current.TimePoint = DateTime.MinValue;
+
+            PotentialCustomer loaded = PotentialCustomerAdapter.Instance.Load(customer.CustomerID);
+
+            return loaded;
         }
     }
 }

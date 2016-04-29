@@ -2,34 +2,34 @@
     'use strict';
 
     mcs.ng.constant('buttonConfig', {
-        types: ['add', 'edit', 'delete', 'search', 'save', 'cancel'],
-        defaultTexts: ['新 增', '编 辑', '删 除', '查 询', '保 存', '取 消'],
+        categories: ['add', 'edit', 'delete', 'search', 'save', 'cancel', 'ok', 'close', 'print', 'export', 'refresh', 'submit', 'approve', 'reject'],
+        defaultTexts: ['新 增', '编 辑', '删 除', '查 询', '保 存', '取 消', '确 定', '关 闭', '打 印', '导 出', '刷 新', '提交审批', '同 意', '驳 回'],
         sizes: ['mini', 'medium', 'large'],
         sizeCss: ['btn-xs', 'btn-sm', 'btn-lg'],
-        //buttonClass: ['btn-primary', 'btn-success', 'btn-danger', 'btn-info'],
-        iconClass: ['fa-plus', 'fa-pencil', 'fa-trash-o', 'fa-search', 'fa-save', 'fa-undo']
+        iconClass: ['fa-plus', 'fa-pencil', 'fa-trash-o', 'fa-search', 'fa-save', 'fa-undo', 'fa-check', 'fa-times', 'fa-print', 'fa-share', 'fa-refresh', 'fa-arrow-right', 'fa-check-square', 'fa-undo']
     })
     .directive('mcsButton', function (buttonConfig) {
 
         return {
             restrict: 'E',
             scope: {
+                category: '@',
                 type: '@',
-                disable: '=',
                 text: '@',
                 icon: '@',
                 size: '@',
                 css: '@',
+                title: '&',
                 click: '&'
             },
 
-            template: '<button class="btn mcs-width-130" ng-click="click()" ng-disabled="disable"><i class="ace-icon fa"></i><span></span></button>',
+            template: '<button class="btn mcs-width-130" ng-click="click()"><i class="ace-icon fa bigger-110"></i><span></span></button>',
             replace: true,
-            transclude: true,
             link: function ($scope, $elem, $attrs, $ctrl) {
-                var index = buttonConfig.types.indexOf($scope.type);
+                $elem.attr('type', $scope.type || 'button');
+                var index = buttonConfig.categories.indexOf($scope.category);
                 var buttonCss = 'btn-info';
-                switch ($scope.type) {
+                switch ($scope.category) {
                     case 'search':
                         buttonCss = 'btn-primary';
                         break;
@@ -37,9 +37,21 @@
                         buttonCss = 'btn-danger';
                         break;
                     case 'save':
+                    case 'ok':
+                    case 'approve':
                         buttonCss = 'btn-success';
                         break;
+                    case 'print':
+                    case 'export':
+                    case 'refresh':
+                    case 'reject':
+                        buttonCss = 'btn-yellow';
+                        break;
+                    case 'submit':
+                        buttonCss = 'btn-purple';
+                        break;
                     case 'cancel':
+                    case 'close':
                         buttonCss = 'btn-light';
                         break;
                 }

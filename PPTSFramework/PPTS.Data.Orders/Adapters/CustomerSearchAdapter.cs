@@ -37,9 +37,6 @@ namespace PPTS.Data.Orders.Adapters
             return this.Load(builder => builder.AppendItem("CustomerSearch", customerSearchID)).SingleOrDefault();
         }
 
-        protected override string GetConnectionName()
-        {
-            throw new NotImplementedException();
-        }
+      
     }
 }

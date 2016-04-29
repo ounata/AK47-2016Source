@@ -194,7 +194,7 @@ namespace MCS.Library.Data.Adapters
         /// 得到查询数据时的ORMapping信息
         /// </summary>
         /// <returns></returns>
-        protected virtual ORMappingItemCollection GetQueryMappingInfo()
+        public virtual ORMappingItemCollection GetQueryMappingInfo()
         {
             return this.GetMappingInfo();
         }
@@ -209,7 +209,7 @@ namespace MCS.Library.Data.Adapters
         /// <returns></returns>
         protected TCollection InnerLoadByBuilder(string condition, OrderBySqlClauseBuilder orderByBuilder, DateTime timePoint, ORMappingItemCollection mappings)
         {
-            string sql = GetLoadSqlByBuilder(condition, orderByBuilder, timePoint, mappings);
+            string sql = VersionedQueryInContextBuilder<T, TCollection>.Instance.GetLoadSqlByBuilder(condition, orderByBuilder, timePoint, GetQueryTableName(mappings, timePoint));
 
             TCollection result = QueryData(mappings, sql);
 
@@ -234,9 +234,7 @@ namespace MCS.Library.Data.Adapters
         /// <returns></returns>
         protected TCollection QueryData(ORMappingItemCollection mapping, string sql)
         {
-            DataTable table = DbHelper.RunSqlReturnDS(sql, GetConnectionName()).Tables[0];
-
-            return this.DataTableToCollection(mapping, table);
+            return VersionedQueryInContextBuilder<T, TCollection>.Instance.QueryData(mapping, sql, this.GetConnectionName(), (row) => this.CreateNewData(row));
         }
 
         /// <summary>

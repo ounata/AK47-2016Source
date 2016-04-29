@@ -79,7 +79,7 @@ namespace MCS.Library.SOA.DataObjects
             return result != null && result.ToString() != "1";
         }
 
-        public void Update(AppCommonInfo aci, params string[] ignoredUpdateProperties)
+        public new void Update(AppCommonInfo aci, params string[] ignoredUpdateProperties)
         {
             using (TransactionScope scope = TransactionScopeFactory.Create(TransactionScopeOption.Required))
             {

@@ -33,10 +33,11 @@ namespace MCS.Library.Core
         /// </summary>
         /// <param name="data">被检查的对象</param>
         /// <param name="message">参数的名称</param>
+        /// <returns>返回传入的data，可以继续进行后续操作</returns>
         [DebuggerNonUserCode]
-        public static void NullCheck(this object data, string message)
+        public static object NullCheck(this object data, string message)
         {
-            NullCheck<ArgumentNullException>(data, message);
+            return NullCheck<ArgumentNullException>(data, message);
         }
 
         /// <summary>
@@ -46,10 +47,13 @@ namespace MCS.Library.Core
         /// <param name="data"></param>
         /// <param name="message"></param>
         /// <param name="messageParams"></param>
+        /// <returns>返回传入的data，可以继续进行后续操作</returns>
         [DebuggerNonUserCode]
-        public static void NullCheck<T>(this object data, string message, params object[] messageParams) where T : System.Exception
+        public static object NullCheck<T>(this object data, string message, params object[] messageParams) where T : System.Exception
         {
             (data == null).TrueThrow<T>(message, messageParams);
+
+            return data;
         }
 
         /// <summary>
@@ -58,6 +62,7 @@ namespace MCS.Library.Core
         /// <param name="parseExpressionResult">条件表达式</param>
         /// <param name="message">错误信息</param>
         /// <param name="messageParams">错误信息参数</param>
+        /// <returns>返回传入的parseExpressionResult</returns>
         /// <remarks>
         /// 如果条件表达式boolExpression的结果值为真(true)，则抛出strMessage指定的错误信息
         /// <code source="..\Framework\TestProjects\DeluxeWorks.Library.Test\Core\ExceptionsTest.cs"  lang="cs" title="通过判断条件表达式boolExpression的结果值而判断是否抛出指定的异常信息" />
@@ -70,9 +75,9 @@ namespace MCS.Library.Core
         /// </code>
         /// </example>
         [DebuggerNonUserCode]
-        public static void TrueThrow(this bool parseExpressionResult, string message, params object[] messageParams)
+        public static bool TrueThrow(this bool parseExpressionResult, string message, params object[] messageParams)
         {
-            TrueThrow<SystemSupportException>(parseExpressionResult, message, messageParams);
+            return TrueThrow<SystemSupportException>(parseExpressionResult, message, messageParams);
         }
 
         /// <summary>
@@ -82,6 +87,7 @@ namespace MCS.Library.Core
         /// <param name="message">错误信息</param>
         /// <param name="messageParams">错误信息的参数</param>
         /// <typeparam name="T">异常的类型</typeparam>
+        /// <returns>返回传入的parseExpressionResult</returns>
         /// <remarks>
         /// 如果条件表达式boolExpression的结果值为真(true)，则抛出message指定的错误信息
         /// <code source="..\Framework\TestProjects\DeluxeWorks.Library.Test\Core\ExceptionsTest.cs" region = "TrueThrowTest" lang="cs" title="通过判断条件表达式boolExpression的结果值而判断是否抛出指定的异常信息" />
@@ -89,7 +95,7 @@ namespace MCS.Library.Core
         /// <seealso cref="MCS.Library.Logging.LogEntity"/>
         /// </remarks>
         [DebuggerNonUserCode]
-        public static void TrueThrow<T>(this bool parseExpressionResult, string message, params object[] messageParams) where T : System.Exception
+        public static bool TrueThrow<T>(this bool parseExpressionResult, string message, params object[] messageParams) where T : System.Exception
         {
             if (parseExpressionResult)
             {
@@ -115,6 +121,8 @@ namespace MCS.Library.Core
 
                 throw (Exception)obj;
             }
+
+            return parseExpressionResult;
         }
 
         /// <summary>
@@ -123,6 +131,7 @@ namespace MCS.Library.Core
         /// <param name="parseExpressionResult">条件表达式</param>
         /// <param name="message">错误信息</param>
         /// <param name="messageParams">错误信息参数</param>
+        /// <returns>返回传入的parseExpressionResult</returns>
         /// <code source="..\Framework\TestProjects\DeluxeWorks.Library.Test\Core\ExceptionsTest.cs" region = "FalseThrowTest" lang="cs" title="通过判断条件表达式boolExpression的结果值而判断是否抛出指定的异常信息" />
         /// <seealso cref="TrueThrow"/>
         /// <seealso cref="MCS.Library.Logging.LoggerFactory"/>
@@ -135,9 +144,11 @@ namespace MCS.Library.Core
         /// </code>
         /// </example>
         [DebuggerNonUserCode]
-        public static void FalseThrow(this bool parseExpressionResult, string message, params object[] messageParams)
+        public static bool FalseThrow(this bool parseExpressionResult, string message, params object[] messageParams)
         {
             TrueThrow(false == parseExpressionResult, message, messageParams);
+
+            return parseExpressionResult;
         }
 
         /// <summary>
@@ -147,6 +158,7 @@ namespace MCS.Library.Core
         /// <param name="parseExpressionResult">条件表达式</param>
         /// <param name="message">错误信息</param>
         /// <param name="messageParams">错误信息参数</param>
+        /// <returns>返回传入的parseExpressionResult</returns>
         /// <remarks>
         /// 如果条件表达式boolExpression的结果值为假（false），则抛出strMessage指定的错误信息
         /// <code source="..\Framework\TestProjects\DeluxeWorks.Library.Test\Core\ExceptionsTest.cs" region="FalseThrowTest" lang="cs" title="通过判断条件表达式boolExpression的结果值而判断是否抛出指定的异常信息" />
@@ -159,9 +171,11 @@ namespace MCS.Library.Core
         /// </code>
         /// </example>
         [DebuggerNonUserCode]
-        public static void FalseThrow<T>(this bool parseExpressionResult, string message, params object[] messageParams) where T : System.Exception
+        public static bool FalseThrow<T>(this bool parseExpressionResult, string message, params object[] messageParams) where T : System.Exception
         {
             TrueThrow<T>(false == parseExpressionResult, message, messageParams);
+
+            return parseExpressionResult;
         }
 
         /// <summary>
@@ -169,15 +183,18 @@ namespace MCS.Library.Core
         /// </summary>
         /// <param name="data">字符串参数值</param>
         /// <param name="paramName">字符串名称</param>
+        /// <returns>返回传入的data</returns>
         /// <remarks>
         /// 若字符串参数为Null或空串，抛出ArgumentException异常
         /// <code source="..\Framework\TestProjects\DeluxeWorks.Library.Test\Core\ExceptionsTest.cs" region="CheckStringIsNullOrEmpty" lang="cs" title="检查字符串参数是否为Null或空串，若是，则抛出异常" />
         /// </remarks>
         [DebuggerNonUserCode]
-        public static void CheckStringIsNullOrEmpty(this string data, string paramName)
+        public static string CheckStringIsNullOrEmpty(this string data, string paramName)
         {
             if (string.IsNullOrEmpty(data))
                 throw new ArgumentException(string.Format(Resource.StringParamCanNotBeNullOrEmpty, paramName));
+
+            return data;
         }
 
         /// <summary>
@@ -186,10 +203,13 @@ namespace MCS.Library.Core
         /// <typeparam name="T">异常的类型</typeparam>
         /// <param name="data">检查字符串参数是否为Null或空串，如果是，则抛出异常</param>
         /// <param name="message"></param>
+        /// <returns>返回传入的data</returns>
         [DebuggerNonUserCode]
-        public static void CheckStringIsNullOrEmpty<T>(this string data, string message) where T : System.Exception
+        public static string CheckStringIsNullOrEmpty<T>(this string data, string message) where T : System.Exception
         {
             (string.IsNullOrEmpty(data)).TrueThrow(message);
+
+            return data;
         }
 
         /// <summary>
@@ -300,12 +320,15 @@ namespace MCS.Library.Core
         /// </summary>
         /// <param name="source"></param>
         /// <param name="ex"></param>
-        public static void WriteToEventLog(this System.Exception ex, string source)
+        /// <returns>返回传入的Exception</returns>
+        public static System.Exception WriteToEventLog(this System.Exception ex, string source)
         {
             source.CheckStringIsNullOrEmpty("source");
             ex.NullCheck("ex");
 
             DoSilentAction(() => EventLog.WriteEntry(source, BuildExceptionWithEnvironmentInfo(ex)));
+
+            return ex;
         }
 
         /// <summary>
@@ -314,12 +337,15 @@ namespace MCS.Library.Core
         /// <param name="source"></param>
         /// <param name="entryType"></param>
         /// <param name="ex"></param>
-        public static void WriteToEventLog(this System.Exception ex, string source, EventLogEntryType entryType)
+        /// <returns>返回传入的Exception</returns>
+        public static System.Exception WriteToEventLog(this System.Exception ex, string source, EventLogEntryType entryType)
         {
             source.CheckStringIsNullOrEmpty("source");
             ex.NullCheck("ex");
 
             DoSilentAction(() => EventLog.WriteEntry(source, BuildExceptionWithEnvironmentInfo(ex), entryType));
+
+            return ex;
         }
 
         /// <summary>
@@ -329,12 +355,15 @@ namespace MCS.Library.Core
         /// <param name="entryType"></param>
         /// <param name="eventID"></param>
         /// <param name="ex"></param>
-        public static void WriteToEventLog(this System.Exception ex, string source, EventLogEntryType entryType, int eventID)
+        /// <returns>返回传入的Exception</returns>
+        public static System.Exception WriteToEventLog(this System.Exception ex, string source, EventLogEntryType entryType, int eventID)
         {
             source.CheckStringIsNullOrEmpty("source");
             ex.NullCheck("ex");
 
             DoSilentAction(() => EventLog.WriteEntry(source, BuildExceptionWithEnvironmentInfo(ex), entryType, eventID));
+
+            return ex;
         }
 
         private static string BuildExceptionWithEnvironmentInfo(System.Exception ex)

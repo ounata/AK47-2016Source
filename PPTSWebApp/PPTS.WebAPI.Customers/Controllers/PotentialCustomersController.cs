@@ -1,13 +1,19 @@
-﻿using System.Collections.Generic;
-using System.Web.Http;
-using MCS.Library.Data;
+﻿using MCS.Library.Data;
+using MCS.Library.Data.Adapters;
+using MCS.Web.MVC.Library.Filters;
 using PPTS.Data.Common.Adapters;
 using PPTS.Data.Customers.Adapters;
 using PPTS.Data.Customers.DataSources;
 using PPTS.Data.Customers.Entities;
+using PPTS.Web.MVC.Library.Filters;
+using PPTS.WebAPI.Customers.DataSources;
 using PPTS.WebAPI.Customers.Executors;
+using PPTS.WebAPI.Customers.ViewModels.Parents;
 using PPTS.WebAPI.Customers.ViewModels.PotentialCustomers;
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Web.Http;
 
 namespace PPTS.WebAPI.Customers.Controllers
 {
@@ -21,11 +27,13 @@ namespace PPTS.WebAPI.Customers.Controllers
         /// <param name="criteria">查询条件</param>
         /// <returns>返回带字典的潜客数据列表</returns>
         [HttpPost]
+        //[ApiPassportAuthentication]
+        //[PPTSJobFunctionAuthorize("PPTS:潜在客户列表查看,jf2,jf3")]
         public PotentialCustomerQueryResult GetAllCustomers(PotentialCustomerQueryCriteriaModel criteria)
         {
             return new PotentialCustomerQueryResult
             {
-                QueryResult = GenericCustomerDataSource<PotentialCustomer, PotentialCustomerCollection>.Instance.Query(criteria.PageParams, criteria, criteria.OrderBy),
+                QueryResult = PotentialCustomerDataSource.Instance.LoadPotentialCustomers(criteria.PageParams, criteria, criteria.OrderBy),
                 Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(PotentialCustomer), typeof(Parent))
             };
         }
@@ -36,9 +44,12 @@ namespace PPTS.WebAPI.Customers.Controllers
         /// <param name="criteria">查询条件</param>
         /// <returns>返回不带字典的潜客数据列表</returns>
         [HttpPost]
-        public PagedQueryResult<PotentialCustomer, PotentialCustomerCollection> GetPagedCustomers(PotentialCustomerQueryCriteriaModel criteria)
+        //[ApiPassportAuthentication]
+        //[PPTSFunctionAuthorize("PPTS:f1,f2,f3")]
+        //[PPTSJobFunctionAuthorize("PPTS:潜在客户列表查看,jf2,jf3")]
+        public PagedQueryResult<PotentialCustomerSearchModel, PotentialCustomerSearchModelCollection> GetPagedCustomers(PotentialCustomerQueryCriteriaModel criteria)
         {
-            return GenericCustomerDataSource<PotentialCustomer, PotentialCustomerCollection>.Instance.Query(criteria.PageParams, criteria, criteria.OrderBy);
+            return PotentialCustomerDataSource.Instance.LoadPotentialCustomers(criteria.PageParams, criteria, criteria.OrderBy);
         }
 
         #endregion
@@ -69,42 +80,7 @@ namespace PPTS.WebAPI.Customers.Controllers
         [HttpGet]
         public EditablePotentialCustomerModel UpdateCustomer(string id)
         {
-            EditablePotentialCustomerModel result = new EditablePotentialCustomerModel()
-            {
-                Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(PotentialCustomer))
-            };
-
-            GenericPotentialCustomerAdapter<PotentialCustomerModel, List<PotentialCustomerModel>>.Instance.LoadInContext(
-                    id,
-                    customer => result.Customer = customer
-                );
-
-            CustomerParentRelation customerParentRelation = CustomerParentRelationAdapter.Instance.Load(action =>
-                {
-                    action.AppendItem("CustomerID", id).AppendItem("IsPrimary", 1);
-                }).FirstOrDefault();
-
-            if (customerParentRelation != null)
-            {
-                result.Parent = ParentAdapter.Instance.Load(customerParentRelation.ParentID);
-            }
-
-            result.CustomerStaffRelation = CustomerStaffRelationAdapter.Instance.Load(action =>
-            {
-                action.AppendItem("CustomerID", id);
-            });
-
-            PhoneAdapter.Instance.LoadByOwnerIDInContext(
-                id,
-                phones => result.Customer.FillFromPhones(phones)
-            );
-
-            using (DbContext context = PhoneAdapter.Instance.GetDbContext())
-            {
-                context.ExecuteDataSetSqlInContext();
-            }
-
-            return result;
+            return EditablePotentialCustomerModel.Load(id);
         }
 
         [HttpPost]
@@ -116,16 +92,25 @@ namespace PPTS.WebAPI.Customers.Controllers
         }
         #endregion
 
-        #region api/potentialcustomers/getcustomerinfo
+        #region api/potentialcustomers/getcustomerbycode
 
-        [HttpPost]
-        public PotentialCustomer GetCustomerInfo(PotentialCustomerQueryCriteriaModel criteria)
+        [HttpGet]
+        public PotentialCustomer GetCustomerByCode(string customerCode)
         {
-            var customerCode = criteria.CustomerCode;
             return PotentialCustomerAdapter.Instance.Load((action) =>
             {
                 action.AppendItem("CustomerCode", customerCode);
-            }).FirstOrDefault();
+            }, DateTime.MinValue).FirstOrDefault();
+        }
+
+        #endregion
+
+        #region api/potentialcustomers/getcustomerinfo
+
+        [HttpGet]
+        public EditablePotentialCustomerModel GetCustomerInfo(string id)
+        {
+            return this.UpdateCustomer(id);
         }
 
         #endregion
@@ -147,6 +132,140 @@ namespace PPTS.WebAPI.Customers.Controllers
             return GenericCustomerDataSource<CustomerStaffRelation, CustomerStaffRelationCollection>.Instance.Query(criteria.PageParams, criteria, criteria.OrderBy);
         }
 
+        #endregion
+
+        #region api/potentialcustomers/getcustomerparents
+
+        [HttpGet]
+        public CustomerParentsQueryResult GetCustomerParents(string id)
+        {
+            CustomerParentsQueryResult result = new CustomerParentsQueryResult();
+
+            result.CustomerParentRelations = CustomerParentRelationAdapter.Instance.Load(action =>
+            {
+                action.AppendItem("CustomerID", id);
+            }, DateTime.MinValue);
+
+            if (result.CustomerParentRelations != null && result.CustomerParentRelations.Count > 0)
+            {
+                var builder = new InLoadingCondition((p) =>
+                {
+                    result.CustomerParentRelations.ForEach((relation) =>
+                    {
+                        p.AppendItem(relation.ParentID);
+                    });
+                }, "ParentID");
+                result.Parents = ParentAdapter.Instance.LoadByInBuilder(builder, DateTime.MinValue);
+            }
+
+            result.Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(CreatablePortentialCustomerModel), typeof(Parent));
+
+            return result;
+        }
+        #endregion
+
+        #region api/potentialcustomers/GetCustomerParent
+        [HttpGet]
+        public EditableParentModel GetCustomerParent(string id, string customerId)
+        {
+            EditableParentModel result = new EditableParentModel()
+            {
+                Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(CreatablePortentialCustomerModel), typeof(PotentialCustomer), typeof(Parent))
+            };
+
+            GenericParentAdapter<ParentModel, List<ParentModel>>.Instance.LoadInContext(
+                    id,
+                    parent => result.Parent = parent
+                );
+
+            result.CustomerParentRelation = CustomerParentRelationAdapter.Instance.Load(customerId, id);
+
+            result.Customer = PotentialCustomerAdapter.Instance.Load(result.CustomerParentRelation.CustomerID);
+
+            PhoneAdapter.Instance.LoadByOwnerIDInContext(id, phones => result.Parent.FillFromPhones(phones));
+
+            PhoneAdapter.Instance.GetDbContext().DoAction(context => context.ExecuteDataSetSqlInContext());
+
+            return result;
+        }
+        #endregion
+
+        #region api/potentialcustomers/getparentinfo
+        [HttpGet]
+        public EditableParentModel GetParentInfo(string id)
+        {
+            EditableParentModel result = new EditableParentModel()
+            {
+                Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(CreatablePortentialCustomerModel), typeof(PotentialCustomer), typeof(Parent))
+            };
+
+            GenericParentAdapter<ParentModel, List<ParentModel>>.Instance.LoadInContext(id, parent => result.Parent = parent);
+
+            PhoneAdapter.Instance.LoadByOwnerIDInContext(id, phones => result.Parent.FillFromPhones(phones));
+
+            PhoneAdapter.Instance.GetDbContext().DoAction(context => context.ExecuteDataSetSqlInContext());
+
+            return result;
+        }
+        #endregion
+
+        #region api/potentialcustomers/updateparent
+
+        [HttpPost]
+        public void UpdateParent(EditableParentModel model)
+        {
+            EditableParentExecutor executor = new EditableParentExecutor(model);
+
+            executor.Execute();
+        }
+
+        #endregion
+
+        #region api/potentialcustomers/getallparents
+
+        [HttpPost]
+        public ParentsSearchQueryResult GetAllParents(ParentsSearchQueryCriteriaModel criteria)
+        {
+            return new ParentsSearchQueryResult
+            {
+                QueryResult = ParentDataSource.Instance.LoadParents(criteria.PageParams, criteria, criteria.OrderBy),
+                Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(CreatablePortentialCustomerModel), typeof(PotentialCustomer), typeof(Parent))
+            };
+        }
+
+        [HttpPost]
+        public PagedQueryResult<ParentModel, ParentModelCollection> GetPagedParents(ParentsSearchQueryCriteriaModel criteria)
+        {
+            return ParentDataSource.Instance.LoadParents(criteria.PageParams, criteria, criteria.OrderBy);
+        }
+
+        #endregion
+
+        #region api/potentialcustomers/addparent
+
+        [HttpPost]
+        public void AddParent(CreatablePortentialCustomerModel criteria)
+        {
+            AddParentExecutor executor = new AddParentExecutor(criteria);
+            executor.Execute();
+        }
+
+        #endregion
+
+        #region 判断当前潜客是否可以充值缴费
+
+        [HttpGet]
+        public AssertResult AssertAccountCharge(string customerID)
+        {
+            //CustomerStaffRelationCollection collection = CustomerStaffRelationAdapter.Instance.LoadByCustomerID(id);
+            //CustomerStaffRelation relation = collection.Find(x => x.RelationType == Data.Customers.CustomerRelationType.Consultant);
+            //if (relation != null)
+            //{
+
+            //}
+            //return new AssertResult(false, "当前用户不清楚岗位类型，无法进行充值");
+            return new AssertResult();
+        }
         #endregion
     }
 }

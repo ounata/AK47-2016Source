@@ -22,24 +22,24 @@ namespace PPTS.WebAPI.Orders.ViewModels.CustomerSearchs
         [ConditionMapping("EducatorName", EscapeLikeString = true, Prefix = "%", Postfix = "%", Operation = "LIKE")]
         public string EducatorName { get; set; }
 
-        //[ConditionMapping("CustomerCode")]
-        //public string CustomerCode { get; set; }
-
-        //[InConditionMapping("EntranceGrade")]
-        //public int[] EntranceGrades { get; set; }
-
-        //[ConditionMapping("CreateTime", Operation = ">=")]
-        //public DateTime CreateTimeStart { get; set; }
-
         [ConditionMapping("Grade")]
-        public string Grade { get; set; }
+        public string Grade
+        {
+            get; set;
+        }
+        [ConditionMapping("CampusID")]
+        public string CampusID
+        {
+            get; set;
+        }
+
         /// <summary>
         /// 一对一剩余课次数
         /// </summary>
-        [ConditionMapping("RemainOne2Ones", Operation = ">")]
+        [ConditionMapping("RemainOne2Ones", Operation = ">", DefaultValueUsage = DefaultValueUsageType.UseDefaultValue)]
         public int RemainOne2Ones
         {
-            get;set;
+            get; set;
         }
 
         [NoMapping]
@@ -58,7 +58,7 @@ namespace PPTS.WebAPI.Orders.ViewModels.CustomerSearchs
 
         public CustomerSearchQueryCriteriaModel()
         {
-           // this.RemainOne2Ones = 0;
+            // this.RemainOne2Ones = 0;
         }
 
 

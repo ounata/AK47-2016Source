@@ -21,10 +21,10 @@ namespace PPTS.Data.Customers.Test
             {
                 ParentAdapter.Instance.UpdateInContext(parent);
 
-                context.ExecuteNonQuerySqlInContext();
+                context.ExecuteTimePointSqlInContext();
             }
 
-            Console.WriteLine(parent.CustomerCode);
+            Console.WriteLine(parent.ParentCode);
 
             Parent loaded = ParentAdapter.Instance.Load(parent.ParentID);
 
@@ -41,14 +41,34 @@ namespace PPTS.Data.Customers.Test
             {
                 ParentAdapter.Instance.UpdateInContext(parent);
 
-                context.ExecuteNonQuerySqlInContext();
+                context.ExecuteTimePointSqlInContext();
             }
 
-            Console.WriteLine(parent.CustomerCode);
+            Console.WriteLine(parent.ParentCode);
 
             Parent loaded = GenericParentAdapter<InheritedParent, List<InheritedParent>>.Instance.Load(parent.ParentID);
 
             Assert.IsNotNull(loaded);
+            parent.AreEqual(loaded);
+        }
+
+        [TestMethod]
+        public void LoadPrimaryParentInContext()
+        {
+            InheritedPotentialCustomer customer = DataHelper.PreparePotentialCustomerData();
+            InheritedParent parent = DataHelper.PrepareParentData();
+            CustomerParentRelation relation = DataHelper.PrepareCustomerRelation(customer.CustomerID, parent.ParentID);
+
+            PotentialCustomerAdapter.Instance.Update(customer);
+            ParentAdapter.Instance.Update(parent);
+            CustomerParentRelationAdapter.Instance.Update(relation);
+
+            Parent loaded = null;
+
+            ParentAdapter.Instance.LoadPrimaryParentInContext(customer.CustomerID, p => loaded = p);
+
+            ParentAdapter.Instance.GetDbContext().DoAction(context => context.ExecuteDataSetSqlInContext());
+
             parent.AreEqual(loaded);
         }
     }

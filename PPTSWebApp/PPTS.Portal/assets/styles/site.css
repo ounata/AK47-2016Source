@@ -1,140 +1,136 @@
 ﻿/*全局字体修改*/
-body{
+
+body {
     font-family: "微软雅黑", Arial
 }
 
+
 /*顶部导航条背景色由ace.css里的浅蓝色#438eb9改成了白色*/
-#navbar{
+
+#navbar {
     background-color: #EBF4FA;
+    border: 1px solid #e5e5e5;
 }
-/*.breadcrumbs {
-    background-color: #E5E5E5
-}*/
+
+.btn.btn-link:focus,
+a:focus {
+    outline: none;
+}
 
 .nav.nav-list a {
     cursor: pointer;
 }
+
+
 /*nav-brand里的logo把padding-top, bottom从10px改成了0px*/
-#logo{
-    padding:0px;
+
+#logo {
+    padding: 0px;
 }
 
 .profile-user-info-striped {
     border: 0px;
 }
+
 .profile-user-info {
     margin: 0px;
 }
+
 .mcs-user-profile .profile-info-name {
     width: 30%;
 }
-.page-header.info {
-    margin:0px;
+
+.mcs-user-profile .profile-info-value {
+    line-height: 30px;
 }
 
+.mcs-user-profile.follow-list .profile-info-name {
+    width: 15%;
+}
+
+.page-header.info {
+    margin: 0px;
+}
+
+
 /*修改底部版权信息的行距从36px到20px*/
-.footer-content{
-    line-height:20px!important;
+
+.footer-content {
+    line-height: 20px!important;
 }
 
 .accordion-style1.panel-group {
     margin-bottom: 0px;
 }
 
-span.required, div.warning {
+.accordion-style1.panel-group .panel-body {
+    padding: 0 15px;
+}
+
+span.required,
+div.warning {
     color: #cc3918;
 }
 
 .form-actions {
     margin-top: 0px;
 }
+
 .page-header {
     border-bottom: 2px solid #6fb3e0;
     padding: 5px 10px;
     font-size: 14px;
     font-weight: normal;
-    color:#8089a0;
+    color: #8089a0;
 }
+
 .form-horizontal .control-label {
     padding-top: 4px;
 }
+
 .ui-select-container {
     padding: 0px;
 }
-.ui-select-toggle,.ui-select-toggle:focus {
+
+.ui-select-toggle,
+.ui-select-toggle:focus {
     background-color: #e7e7e7 !important;
 }
 
-/*--------------------以下是以mcs-打头的自定义样式-----------------------*/
-.mcs-padding-right-15{
-    padding-right: 15px;
-}
-.mcs-margin-right-20{
-    margin-right: 20px;
-}
-.mcs-width-100 {
-    width:100px;
-}
-.mcs-width-120 {
-    width:120px;
-}
-/*表格选中的单元格高亮色*/
-.mcs-tr-selected{
-    /*background-color: #ffd800!important;*/
-}
-.mcs-tr-selected>td{
-    background-color: LemonChiffon!important;
+.ppts-select-users {
+    width: 200px;
+    margin-left: 20px;
 }
 
-/*左边框表示成功（未使用）*/
-.mcs-border-left-success{
-    border-left: 3px solid #87b87f!important;
-}
-/*左边框表示危险（未使用）*/
-.mcs-border-left-warning{
-    border-left: 3px solid #d15b47!important;
-}
-.mcs-status-success{
-    color: #82af6f;
-}
-.mcs-status-danger{
-    color: #d15b47;
+.modal-header .close {
+    font-size: 20px;
 }
 
-/*搜索区域的样式*/
-.mcs-panel-search {
-    /*padding-bottom: 10px;*/
-    margin-bottom: 10px!important;
+.input-width-100 {
+    width: 100px !important;
+    margin-right: 10px !important;
 }
 
-.mcs-panel-search .quick-search {
-    color: #4c8fbd;
-    font-weight: 700;
-    font-size: 13px;
-    line-height:1;  
-    padding:0 6px;
+.input-width-120 {
+    width: 120px !important;
+    margin-right: 10px !important;
 }
 
-/*工具条区域的样式*/
-.mcs-panel-toolbar{
-    padding-bottom: 10px;
-}
-.mcs-panel-toolbar button{
-    margin-bottom:2px;
-    margin-right: 10px;
-}
-.mcs-panel-pager .pagination{
-    float: right;
-    margin-top:-5px;
+.input-width-160 {
+    width: 160px !important;
+    margin-right: 10px !important;
 }
 
-/*表单*/
-.mcs-form-td-left{
-    text-align: right;
-    width: 120px;
-    background-color: rgb(245, 245, 245);
+.input-width-180 {
+    width: 180px !important;
+    margin-right: 10px !important;
 }
 
-ppts-select {
-    padding:0px;
+.label-150 {
+    width: 100px !important;
+}
+
+.search-panel-body {
+    height: 120px;
+    padding-top: 10px;
 }

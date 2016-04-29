@@ -2,7 +2,7 @@
 
 angular.module('app.common', []);
 angular.module('app.main', []);
-angular.module('app.component', ['ui.router']);
+angular.module('app.component', ['ui.router', 'ngTagsInput', 'ngFileUpload']);
 
 angular.module('app.lib', ['ngSanitize', 'ui.select', 'app.common']);
 angular.module('app.page', []);
@@ -56,12 +56,17 @@ angular.module('app', [
         })
 
         .state('dropdownButton', {
-            url: '/dropdownButton',
-            templateUrl: 'app/component/mcs-dropdown-button/main.html',
-            controller: 'MCSDropdownButtonController',
-            controllerAs: 'vm'
-        })
-
+                url: '/dropdownButton',
+                templateUrl: 'app/component/mcs-dropdown-button/main.html',
+                controller: 'MCSDropdownButtonController',
+                controllerAs: 'vm'
+            })
+            .state('autoComplete', {
+                url: '/autoComplete',
+                templateUrl: 'app/component/mcs-autocomplete/main.html',
+                controller: 'MCSAutoCompleteController',
+                controllerAs: 'vm'
+            })
 
         .state('cascadingSelect', {
             url: '/cascadingSelect',
@@ -94,17 +99,39 @@ angular.module('app', [
             controllerAs: 'vm'
         })
 
-        .state('router', {
-            url: '/router',
-            templateUrl: 'app/component/mcs-route/main.html',
-            controller: 'routeController',
+        .state('layout', {
+            url: '/layout',
+            templateUrl: 'app/component/mcs-layout/main.html',
+            controller: 'MCSLayoutController',
             controllerAs: 'vm'
         })
+
+
+
+        .state('validation', {
+                url: '/validation',
+                templateUrl: 'app/component/mcs-validation/main.html',
+                controller: 'MCSValidationController',
+                controllerAs: 'vm'
+            })
+            .state('router', {
+                url: '/router',
+                templateUrl: 'app/component/mcs-route/main.html',
+                controller: 'routeController',
+                controllerAs: 'vm'
+            })
 
         .state('tree', {
             url: '/tree',
             templateUrl: 'app/component/mcs-tree/main.html',
             controller: 'MCSTreeController',
+            controllerAs: 'vm'
+        })
+
+        .state('upload', {
+            url: '/upload',
+            templateUrl: 'app/component/mcs-upload/main.html',
+            controller: 'MCSUploadController',
             controllerAs: 'vm'
         })
 

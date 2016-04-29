@@ -40,6 +40,9 @@
     <AssemblyOriginatorKeyFile>MCS.Library.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper">
+      <HintPath>..\..\ThirdPartComponent\Bin\AutoMapper.4.2.1\lib\net45\AutoMapper.dll</HintPath>
+    </Reference>
     <Reference Include="MCS.Library">
       <HintPath>..\..\Bin\MCS.Library.dll</HintPath>
     </Reference>
@@ -58,6 +61,14 @@
     <Reference Include="PPTS.Data.Common">
       <HintPath>..\..\PPTSBin\PPTS.Data.Common.dll</HintPath>
     </Reference>
+    <Reference Include="PPTS.Data.Common.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=62ea08f894871798, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\PPTSBin\PPTS.Data.Common.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="PPTS.Data.Orders.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=62ea08f894871798, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\PPTSBin\PPTS.Data.Orders.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
@@ -69,38 +80,43 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Adapters\AssetViewAdapter.cs" />
     <Compile Include="Adapters\AssetAdapter.cs" />
+    <Compile Include="Adapters\AssignConditionAdapter.cs" />
+    <Compile Include="Adapters\AssignsAdapter.cs" />
+    <Compile Include="Adapters\AssignAdapterBase.cs" />
+    <Compile Include="Adapters\AssignsOperationLogAdapter.cs" />
+    <Compile Include="Adapters\ClassesAdapter.cs" />
+    <Compile Include="Adapters\ClassGroupAdapterBase.cs" />
+    <Compile Include="Adapters\ClassLessonItemsAdapter.cs" />
+    <Compile Include="Adapters\ClassLessonsAdapter.cs" />
     <Compile Include="Adapters\CustomerSearchAdapter.cs" />
     <Compile Include="Adapters\CustomerSearchBase.cs" />
     <Compile Include="Adapters\OrderAdapter.cs" />
     <Compile Include="Adapters\OrderAdapterBase.cs" />
     <Compile Include="Adapters\OrderItemAdapter.cs" />
+    <Compile Include="Adapters\OrderItemViewAdapter.cs" />
+    <Compile Include="Adapters\OrderUserOperationLogAdapter.cs" />
+    <Compile Include="Adapters\ShoppingCartAdapter.cs" />
     <Compile Include="Common\ConnectionDefine.cs" />
+    <Compile Include="Common\Helper.cs" />
     <Compile Include="DataSources\GenericOrderDataSource.cs" />
+    <Compile Include="DataSources\GenericPurchaseSource.cs" />
     <Compile Include="DataSources\GenericSearchDataSource.cs" />
-    <Compile Include="Entities\AccompanyAssign.cs" />
-    <Compile Include="Entities\Asset.cs" />
-    <Compile Include="Entities\AssetConfirm.cs" />
-    <Compile Include="Entities\Assign.cs" />
-    <Compile Include="Entities\AssignCondition.cs" />
-    <Compile Include="Entities\Classes.cs" />
-    <Compile Include="Entities\ClassLesson.cs" />
-    <Compile Include="Entities\ClassLessonItem.cs" />
-    <Compile Include="Entities\CustomerSearch.cs" />
-    <Compile Include="Entities\DebookOrder.cs" />
-    <Compile Include="Entities\DebookOrderItem.cs" />
-    <Compile Include="Entities\Order.cs" />
-    <Compile Include="Entities\OrderItem.cs" />
-    <Compile Include="Entities\Room.cs" />
-    <Compile Include="Entities\ShoppingCart.cs" />
+    <Compile Include="Executors\PPTSEditAssignExecutor.cs" />
+    <Compile Include="Executors\PPTSClassGroupExecutor.cs" />
+    <Compile Include="Executors\PPTSClassGroupExecutorBase.cs" />
+    <Compile Include="Executors\PPTSEditClassGroupExecutorBase.cs" />
+    <Compile Include="Executors\PPTSEditAssignExecutorBase.cs" />
+    <Compile Include="Executors\PPTSEditOrderExecutorBase.cs" />
+    <Compile Include="Executors\PPTSEditShoppingCartExecutorBase.cs" />
+    <Compile Include="Executors\PPTSShoppingCartExecutor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MCS.Library.snk" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Executors\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>IF NOT EXIST "$(ProjectDir)..\..\PPTSBin" MD "$(ProjectDir)..\..\PPTSBin"

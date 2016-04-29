@@ -1,4 +1,4 @@
-define(['angular', 'mcsComponent',
+define(['angular', 'mcsComponent', 'autocomplete',
         ppts.config.modules.dashboard,
         ppts.config.modules.auditing,
         ppts.config.modules.customer,
@@ -12,43 +12,10 @@ define(['angular', 'mcsComponent',
             'use strict';
 
             ppts.ng = ppts.ng || ng.module('ppts', [
-                'ui.router', 'ngResource', 'ngSanitize', 'blockUI', 'ui.bootstrap', 'ui.select', 'mcs.ng',
-                'ppts.dashboard', 'ppts.auditing', 'ppts.customer', 'ppts.account', 'ppts.product',
+                'ui.router', 'ngResource', 'ngSanitize', 'ncy-angular-breadcrumb', 
+                'blockUI', 'ui.bootstrap', 'ui.select', 'mcs.ng', 'ngTagsInput',
+                'ppts.dashboard', 'ppts.auditing', 'ppts.customer', 'ppts.account', 'ppts.product', 
                 'ppts.schedule', 'ppts.order', 'ppts.infra', 'ppts.custcenter', 'ppts.contract']);
-
-            ppts.ng.controller('appController', ['$rootScope', '$scope', 'userService', function ($rootScope, $scope, user) {
-                var vm = this;
-
-                vm.currentUser = vm.currentUser || user.initRole();
-                vm.switch = function(role) {
-                    user.switchRole(vm.currentUser, role);
-                };
-
-                //展开当前菜单
-                vm.currentMenu = {
-                    show: false,
-                    name: ''
-                };
-                vm.toggle = function (name) {
-                    if (vm.currentMenu.name !== 'menu_' + name) {
-                        vm.reset();
-                    }
-                    vm.currentMenu.name = 'menu_' + name;
-                    vm.currentMenu.show = !vm.currentMenu.show;
-                };
-                vm.showSubMenu = function (name) {
-                    return vm.currentMenu.name === 'menu_' + name && vm.currentMenu.show;
-                };
-                vm.reset = function () {
-                    vm.currentMenu.name = '';
-                    vm.currentMenu.show = false;
-                };
-                //最小化Sidebar
-                vm.isMinimized = false;
-                vm.minimizedSidebar = function () {
-                    vm.isMinimized = !vm.isMinimized;
-                };
-            }]);
 
             // 配置provider
             ppts.ng.config(function ($controllerProvider, $compileProvider, $filterProvider, $provide) {
@@ -56,248 +23,43 @@ define(['angular', 'mcsComponent',
             });
             // 配置拦截器
             ppts.ng.config(function ($httpProvider, $sceDelegateProvider) {
-                mcs.util.configInterceptor($httpProvider, $sceDelegateProvider, ['timestampMarker']);
+                mcs.util.configInterceptor($httpProvider, $sceDelegateProvider, ['viewLoading']);
             });
-// 年级过滤器
-ppts.ng.filter('grade', function () {
-    return function (current) {
-        return mcs.util.getDictionaryItemValue(ppts.dict[ppts.config.dictMappingConfig.grade], current);
+            // 配置面包屑
+            ppts.ng.config(function ($breadcrumbProvider) {
+                mcs.util.configBreadcrumb($breadcrumbProvider, 'app/common/tpl/breadcrumb.tpl.html');
+            });
+ppts.ng.controller('appController', ['$rootScope', '$scope', 'userService', 'utilService', function ($rootScope, $scope, user, util) {
+    var vm = this;
+
+    vm.currentUser = vm.currentUser || user.initJob();
+    vm.switch = function (job) {
+        user.switchJob(vm.currentUser, job);
     };
-});
-// 性别过滤器
-ppts.ng.filter('gender', function () {
-    return function (current) {
-        return mcs.util.getDictionaryItemValue(ppts.dict[ppts.config.dictMappingConfig.gender], current);
+
+    util.fixSidebar(vm);
+}]);
+
+ppts.ng.controller('treeController', ['$uibModalInstance', 'dataSyncService', 'data', function ($uibModalInstance, dataSyncService, data) {
+    var vm = this;
+
+    vm.title = data.title || '选择数据';
+
+    vm.treeSetting = dataSyncService.loadTreeSetting(vm, data);
+    // 加载树数据
+    vm.loadData = function (callback) {
+        dataSyncService.loadTreeData(vm, data, callback);
     };
-});
-// 证件类别过滤器
-ppts.ng.filter('idtype', function () {
-    return function (current) {
-        return mcs.util.getDictionaryItemValue(ppts.dict[ppts.config.dictMappingConfig.idtype], current);
+
+    vm.close = function () {
+        $uibModalInstance.dismiss('Canceled');
     };
-});
-// 家庭总收入过滤器
-ppts.ng.filter('income', function () {
-    return function (current) {
-        return mcs.util.getDictionaryItemValue(ppts.dict[ppts.config.dictMappingConfig.income], current);
+
+    vm.select = function () {
+        $uibModalInstance.close(vm.treeSetting);        
     };
-});
-// 孩子(男)亲属关系过滤器
-ppts.ng.filter('childMale', function () {
-    return function (current) {
-        return mcs.util.getDictionaryItemValue(ppts.dict[ppts.config.dictMappingConfig.childMale], current);
-    };
-});
-// 孩子(女)亲属关系过滤器
-ppts.ng.filter('childFemale', function () {
-    return function (current) {
-        return mcs.util.getDictionaryItemValue(ppts.dict[ppts.config.dictMappingConfig.childFemale], current);
-    };
-});
-// 家长(男)亲属关系过滤器
-ppts.ng.filter('parentMale', function () {
-    return function (current) {
-        return mcs.util.getDictionaryItemValue(ppts.dict[ppts.config.dictMappingConfig.parentMale], current);
-    };
-});
-// 家长(女)亲属关系过滤器
-ppts.ng.filter('parentFemale', function () {
-    return function (current) {
-        return mcs.util.getDictionaryItemValue(ppts.dict[ppts.config.dictMappingConfig.parentFemale], current);
-    };
-});
-// 学年过滤器
-ppts.ng.filter('academicYear', function () {
-    return function (current) {
-        return mcs.util.getDictionaryItemValue(ppts.dict[ppts.config.dictMappingConfig.academicYear], current);
-    };
-});
-// vip客户类型过滤器
-ppts.ng.filter('vipType', function () {
-    return function (current) {
-        return mcs.util.getDictionaryItemValue(ppts.dict[ppts.config.dictMappingConfig.vipType], current);
-    };
-});
-// 客户级别过滤器
-ppts.ng.filter('vipLevel', function () {
-    return function (current) {
-        return mcs.util.getDictionaryItemValue(ppts.dict[ppts.config.dictMappingConfig.vipLevel], current);
-    };
-});
-// 是否复读过滤器
-ppts.ng.filter('studyAgain', function () {
-    return function (current) {
-        return mcs.util.getDictionaryItemValue(ppts.dict[ppts.config.dictMappingConfig.studyAgain], current);
-    };
-});
-// 信息来源过滤器
-ppts.ng.filter('source', function () {
-    return function (current) {
-        return mcs.util.getDictionaryItemValue(ppts.dict[ppts.config.dictMappingConfig.source], current);
-    };
-});
-// 是否分配咨询师/坐席/市场专员过滤器
-ppts.ng.filter('assignment', function () {
-    return function (current) {
-        return mcs.util.getDictionaryItemValue(ppts.dict[ppts.config.dictMappingConfig.assignment], current);
-    };
-});
-// 是否有效客户过滤器
-ppts.ng.filter('valid', function () {
-    return function (current) {
-        return mcs.util.getDictionaryItemValue(ppts.dict[ppts.config.dictMappingConfig.valid], current);
-    };
-});
-// 跟进类型过滤器
-ppts.ng.filter('followType', function () {
-    return function (current) {
-        return mcs.util.getDictionaryItemValue(ppts.dict[ppts.config.dictMappingConfig.followType], current);
-    };
-});
-// 跟进阶段过滤器
-ppts.ng.filter('followStage', function () {
-    return function (current) {
-        return mcs.util.getDictionaryItemValue(ppts.dict[ppts.config.dictMappingConfig.followStage], current);
-    };
-});
-// 沟通一级结果过滤器
-ppts.ng.filter('mainTask', function () {
-    return function (current) {
-        return mcs.util.getDictionaryItemValue(ppts.dict[ppts.config.dictMappingConfig.mainTask], current);
-    };
-});
-// 沟通二级结果过滤器
-ppts.ng.filter('subTalk', function () {
-    return function (current) {
-        return mcs.util.getDictionaryItemValue(ppts.dict[ppts.config.dictMappingConfig.subTalk], current);
-    };
-});
-// 客户级别过滤器
-ppts.ng.filter('customerLevel', function () {
-    return function (current) {
-        return mcs.util.getDictionaryItemValue(ppts.dict[ppts.config.dictMappingConfig.customerLevel], current);
-    };
-});
-// 无效原因过滤器
-ppts.ng.filter('invalidReason', function () {
-    return function (current) {
-        return mcs.util.getDictionaryItemValue(ppts.dict[ppts.config.dictMappingConfig.invalidReason], current);
-    };
-});
-// 购买意图过滤器
-ppts.ng.filter('purchaseIntension', function () {
-    return function (current) {
-        return mcs.util.getDictionaryItemValue(ppts.dict[ppts.config.dictMappingConfig.purchaseIntension], current);
-    };
-});
-// 实际上门人数过滤器
-ppts.ng.filter('verifyPeople', function () {
-    return function (current) {
-        return mcs.util.getDictionaryItemValue(ppts.dict[ppts.config.dictMappingConfig.verifyPeople], current);
-    };
-});
-// 课时时长过滤器
-ppts.ng.filter('period', function () {
-    return function (current) {
-        return mcs.util.getDictionaryItemValue(ppts.dict[ppts.config.dictMappingConfig.period], current);
-    };
-});
-// 接触方式过滤器
-ppts.ng.filter('contactType', function () {
-    return function (current) {
-        return mcs.util.getDictionaryItemValue(ppts.dict[ppts.config.dictMappingConfig.contactType], current);
-    };
-});
-// 产品大类过滤器
-ppts.ng.filter('categoryType', function () {
-    return function (current) {
-        return mcs.util.getDictionaryItemValue(ppts.dict[ppts.config.dictMappingConfig.categoryType], current);
-    };
-});
-// 服务费类型过滤器
-ppts.ng.filter('expenseType', function () {
-    return function (current) {
-        return mcs.util.getDictionaryItemValue(ppts.dict[ppts.config.dictMappingConfig.expenseType], current);
-    };
-});
-// 年级类型过滤器
-ppts.ng.filter('gradeType', function () {
-    return function (current) {
-        return mcs.util.getDictionaryItemValue(ppts.dict[ppts.config.dictMappingConfig.gradeType], current);
-    };
-});
-// 科目类型过滤器
-ppts.ng.filter('subjectType', function () {
-    return function (current) {
-        return mcs.util.getDictionaryItemValue(ppts.dict[ppts.config.dictMappingConfig.subjectType], current);
-    };
-});
-// 科目过滤器
-ppts.ng.filter('subject', function () {
-    return function (current) {
-        return mcs.util.getDictionaryItemValue(ppts.dict[ppts.config.dictMappingConfig.subject], current);
-    };
-});
-// 季节过滤器
-ppts.ng.filter('season', function () {
-    return function (current) {
-        return mcs.util.getDictionaryItemValue(ppts.dict[ppts.config.dictMappingConfig.season], current);
-    };
-});
-// 课次/课时时长过滤器
-ppts.ng.filter('duration', function () {
-    return function (current) {
-        return mcs.util.getDictionaryItemValue(ppts.dict[ppts.config.dictMappingConfig.duration], current);
-    };
-});
-// 课程级别过滤器
-ppts.ng.filter('courseLevel', function () {
-    return function (current) {
-        return mcs.util.getDictionaryItemValue(ppts.dict[ppts.config.dictMappingConfig.courseLevel], current);
-    };
-});
-// 辅导类型过滤器
-ppts.ng.filter('coachType', function () {
-    return function (current) {
-        return mcs.util.getDictionaryItemValue(ppts.dict[ppts.config.dictMappingConfig.coachType], current);
-    };
-});
-// 班组类型过滤器
-ppts.ng.filter('groupType', function () {
-    return function (current) {
-        return mcs.util.getDictionaryItemValue(ppts.dict[ppts.config.dictMappingConfig.groupType], current);
-    };
-});
-// 班级类型过滤器
-ppts.ng.filter('classType', function () {
-    return function (current) {
-        return mcs.util.getDictionaryItemValue(ppts.dict[ppts.config.dictMappingConfig.classType], current);
-    };
-});
-// 跨校区产品收入归属过滤器
-ppts.ng.filter('belonging', function () {
-    return function (current) {
-        return mcs.util.getDictionaryItemValue(ppts.dict[ppts.config.dictMappingConfig.belonging], current);
-    };
-});
-// 薪酬规则对象过滤器
-ppts.ng.filter('rule', function () {
-    return function (current) {
-        return mcs.util.getDictionaryItemValue(ppts.dict[ppts.config.dictMappingConfig.rule], current);
-    };
-});
-// 颗粒度过滤器
-ppts.ng.filter('unit', function () {
-    return function (current) {
-        return mcs.util.getDictionaryItemValue(ppts.dict[ppts.config.dictMappingConfig.unit], current);
-    };
-});
-// 合作类型过滤器
-ppts.ng.filter('hasPartner', function () {
-    return function (current) {
-        return mcs.util.getDictionaryItemValue(ppts.dict[ppts.config.dictMappingConfig.hasPartner], current);
-    };
-});
+
+}]);
 // 配置路由
 ppts.ng.run(['$rootScope', '$state', '$stateParams',
     function ($rootScope, $state, $stateParams) {
@@ -316,15 +78,68 @@ ppts.ng.config(function ($stateProvider, $urlRouterProvider) {
         url: '/dashboard',
         templateUrl: 'app/dashboard/dashboard.html',
         controller: 'dashboardController',
+        breadcrumb: {
+            label: '工作台',
+            parent: 'ppts'
+        },
         dependencies: ['app/dashboard/dashboard.controller']
     });
 });
-ppts.ng.service('dataSyncService', function () {
-    var service = this;
+//注册过滤器
+for (var mappingCongfig in ppts.config.dictMappingConfig) {
+    (function () {
+        var filterName = mappingCongfig;
+        ppts.ng.filter(filterName, function () {
+            var config = ppts.config.dictMappingConfig[filterName];
+            return function (current, separator) {
+                current += '';
+                if (!mcs.util.bool(current, true)) return '';
+                separator = separator || ',';
+                if ((current).indexOf(separator) == -1) {
+                    return mcs.util.getDictionaryItemValue(ppts.dict[config], current);
+                } else {
+                    var array = mcs.util.toArray(current, separator);
+                    if (!array.length) return '';
+                    var result = mcs.util.getDictionaryItemValue(ppts.dict[config], array[0]);
+                    return result ? result + '...' : '';
+                }
+            };
+        });
 
-    service.initCriteria = function (vm) {
+        ppts.ng.filter(filterName + '_full', function () {
+            var config = ppts.config.dictMappingConfig[filterName];
+            return function (current, separator) {
+                if (!mcs.util.bool(current)) return '';
+                separator = separator || ',';
+                var array = mcs.util.toArray(current, separator);
+                if (!array.length) return '';
+                var result = [];
+                for (var item in array) {
+                    if (!mcs.util.bool(array[item], true)) continue;
+                    result.push(mcs.util.getDictionaryItemValue(ppts.dict[config], array[item]));
+                }
+                return result.join('，');
+            };
+        });
+    })();
+}
+ppts.ng.service('dataSyncService', ['$resource', 'mcsDialogService', function ($resource, mcsDialogService) {
+    var service = this;
+    var resource = $resource(ppts.config.mcsApiBaseUrl + 'api/usergraph/:operation/:id',
+            { operation: '@operation', id: '@id' },
+            {
+                'post': { method: 'POST' },
+                'query': { method: 'GET', isArray: false }
+            });
+
+    /**isClear, 是否清空选中项，默认为true*/
+    service.initCriteria = function (vm, isClear) {
         if (!vm || !vm.data) return;
+        isClear = isClear || true;
         vm.criteria = vm.criteria || {};
+        if (isClear) {
+            vm.data.rowsSelected = [];
+        }
         vm.criteria.pageParams = vm.data.pager;
         vm.criteria.orderBy = vm.data.orderBy;
     };
@@ -345,13 +160,51 @@ ppts.ng.service('dataSyncService', function () {
                 case 'dateRange':
                     mcs.util.merge({
                         'dateRange': [{
+                            key: '0', value: '全部'
+                        }, {
                             key: '1', value: '今天'
                         }, {
                             key: '2', value: '本周'
                         }, {
                             key: '3', value: '本月'
                         }, {
-                            key: '4', value: '其他'
+                            key: '4', value: '本季度'
+                        }, {
+                            key: '5', value: '其他'
+                        }]
+                    });
+                    break;
+                case 'period':
+                    mcs.util.merge({
+                        'period': [{
+                            key: '0', value: '全部'
+                        }, {
+                            key: '1', value: '7天未跟进'
+                        }, {
+                            key: '2', value: '15天未跟进'
+                        }, {
+                            key: '3', value: '30天未跟进'
+                        }, {
+                            key: '4', value: '60天未跟进'
+                        }, {
+                            key: '5', value: '其他'
+                        }]
+                    });
+                    break;
+                case 'people':
+                    mcs.util.merge({
+                        'people': [{
+                            key: '0', value: '自己'
+                        }, {
+                            key: '1', value: '总呼叫中心'
+                        }, {
+                            key: '2', value: '分呼叫中心'
+                        }, {
+                            key: '3', value: '分/校市场专员'
+                        }, {
+                            key: '4', value: '校教育咨询部'
+                        }, {
+                            key: '5', value: '学管部'
                         }]
                     });
                     break;
@@ -360,7 +213,7 @@ ppts.ng.service('dataSyncService', function () {
                         'ifElse': [{
                             key: '1', value: '是'
                         }, {
-                            key: '0', value: '否'
+                            key: '2', value: '否'
                         }]
                     });
                     break;
@@ -369,37 +222,66 @@ ppts.ng.service('dataSyncService', function () {
     };
 
     service.selectPageDict = function (dictType, selectedValue) {
-        if (!dictType || !selectedValue) return;
+        if (!dictType || !mcs.util.bool(selectedValue, true)) return;
         switch (dictType) {
             case 'dateRange':
                 switch (selectedValue) {
                     // 今天
                     case '1':
                         return {
-                            start: new Date(),
-                            end: new Date()
+                            start: mcs.date.today(),
+                            end: mcs.date.today()
                         };
                         // 本周
                     case '2':
                         return {
-                            start: new Date(),
-                            end: new Date()
+                            start: mcs.date.getWeekStartDate(),
+                            end: mcs.date.getWeekEndDate()
                         };
                         // 本月
                     case '3':
                         return {
-                            start: new Date(),
-                            end: new Date()
+                            start: mcs.date.getMonthStartDate(),
+                            end: mcs.date.getMonthEndDate()
                         };
-                        // 自定义日期
+                        // 本季度
                     case '4':
+                        return {
+                            start: mcs.date.getQuarterStartDate(),
+                            end: mcs.date.getQuarterEndDate()
+                        };
+                        // 全部
+                        // 自定义日期
+                    case '0':
+                    case '5':
                         return {
                             start: null,
                             end: null
                         };
                 }
                 break;
-                //...
+            case 'studentRange':
+                switch (selectedValue) {
+                    // 截止到当前
+                    case '0':
+                        return {
+                            start: null,
+                            end: mcs.date.today()
+                        };
+                        // 本月
+                    case '1':
+                        return {
+                            start: mcs.date.getMonthStartDate(),
+                            end: mcs.date.getMonthEndDate()
+                        };
+                        // 最近一个月
+                    case '2':
+                        return {
+                            start: mcs.date.getLastMonthToday(),
+                            end: mcs.date.today()
+                        };
+                }
+                break;
         }
     };
 
@@ -418,24 +300,125 @@ ppts.ng.service('dataSyncService', function () {
         }
     };
 
+    /*
+    * 弹出树控件
+    */
+    service.popupTree = function (vm, params) {
+        mcsDialogService.create('app/common/tpl/ctrls/tree.tpl.html', {
+            controller: 'treeController',
+            params: params
+        }).result.then(function (treeSettings) {
+            vm.nodes1 = treeSettings.getNodesChecked();
+            vm.nodes = treeSettings.getRawNodesChecked();
+            vm.ids = treeSettings.getIdsOfNodesChecked();
+            vm.names = treeSettings.getNamesOfNodesChecked();
+        });
+    };
+
+    /*
+    * 加载树的基本设置项
+    */
+    service.loadTreeSetting = function (vm, options) {
+        options = angular.extend({
+            data: {
+                key: {
+                    children: options.children || 'children',
+                    name: options.name || 'name',
+                    title: options.name || 'name',
+                }
+            },
+            view: {
+                selectedMulti: true,
+                showIcon: true,
+                showLine: true,
+                nameIsHTML: false,
+                fontCss: {}
+            },
+            check: {
+                enable: true,
+                chkStyle: 'checkbox'
+            },
+            async: {
+                enable: true,
+                autoParam: ["id"],
+                contentType: "application/json",
+                type: 'post',
+                otherParam: { listMark: options.type || '0', showDeletedObjects: options.hidden || false },
+                url: ppts.config.mcsApiBaseUrl + 'api/usergraph/getChildren'
+            }
+        }, options);
+
+        return options;
+    };
+
+    /*
+    * 调用方式: 
+    service.loadTreeData(vm, {
+        root: '', // 根节点名称, 默认为空, 如: '机构人员', '机构人员\总公司'
+        type: 0, // 仅限于以下值，默认为0（0-None,1-Organization,2-User,4-Group,8-Sideline,15-All)
+        hidden: true, // 隐藏删除的节点, 默认为true
+    }, callback);
+    */
+    service.loadTreeData = function (vm, options, callback) {
+        options = angular.extend({
+            root: '',
+            type: 0,
+            hidden: true,
+        }, options);
+        if (!options.root) {
+            resource.query({ operation: 'getRoot' }, function (result) {
+                callback(result);
+            });
+        } else {
+            resource.post({ operation: 'getRoot?fullPath=' + encodeURIComponent(options.root.replace('\\', '\\\\')) }, { listMark: options.type, showDeletedObjects: options.hidden }, function (result) {
+                callback(result);
+            });
+        }
+    };
+
+    /*
+    * 调用方式: 
+    service.loadChildData(panretId, {
+        type: 0, // 仅限于以下值，默认为0（0-None,1-Organization,2-User,4-Group,8-Sideline,15-All)
+        hidden: true, // 隐藏删除的节点, 默认为true
+        success: function (result) { }, // 数据加载成功回调
+        error: function (error) { } // 数据加载失败回调
+    });
+    */
+    service.loadChildData = function (parentId, options) {
+        options = angular.extend({
+            type: 0,
+            hidden: true,
+            success: null,
+            error: null
+        }, options);
+        if (!parentId) return;
+        resource.post({ operation: 'getChildren?parentId=' + encodeURIComponent(parentId.replace('\\', '\\\\')) }, { listMark: options.type, showDeletedObjects: options.hidden }, options.success, options.error);
+    };
+
     return service;
-});
+}]);
 
 ppts.ng.service('userService', function () {
     var service = this;
 
-    service.initRole = function () {
+    service.initJob = function () {
         var parameters = jQuery('#portalParameters');
         if (!parameters.val()) return;
         var ssoUser = ng.fromJson(parameters.val());
-        parameters.val('');
+        //parameters.val('');
         if (ssoUser && ssoUser.jobs.length) {
-            ssoUser.currentRole = ssoUser.jobs[0];
-            ppts.user.currentRoleId = ssoUser.currentRole.ID;
+            ssoUser.currentJob = ssoUser.jobs[0];
+            ppts.user.currentJobId = ssoUser.currentJob.ID;
         }
+        ppts.user.roles = ssoUser.roles;
+        ppts.user.token = ssoUser.token;
         ppts.user.functions = [];
+        ppts.user.jobFunctions = [];
         for (var i in ssoUser.jobs) {
+            var jobId = ssoUser.jobs[i].ID;
             var functions = ssoUser.jobs[i].Functions;
+            ppts.user.jobFunctions[jobId] = functions;
             for (var j in functions) {
                 ppts.user.functions.push(functions[j]);
             }
@@ -443,72 +426,186 @@ ppts.ng.service('userService', function () {
         return ssoUser;
     };
 
-    service.switchRole = function (ssoUser, role) {
-        ssoUser.currentRole = role;
-        ppts.user.currentRoleId = role.ID;
+    service.switchJob = function (ssoUser, job) {
+        ssoUser.currentJob = job;
+        ppts.user.currentJobId = job.ID;
+    };
+
+    return service;
+});
+
+ppts.ng.service('utilService', function () {
+    var service = this;
+
+    service.contains = function (data, elems, separator) {
+        if (!data || !elems) return false;
+        var array = mcs.util.toArray(elems, separator);
+        for (var i in array) {
+            if (jQuery.inArray(array[i], data) > -1) {
+                return true;
+            }
+        }
+
+        return false;
+    };
+
+    service.fixSidebar = function (vm) {
+        if (!mcs.browser.get().msie) {
+            //展开当前菜单
+            vm.currentMenu = {
+                show: false,
+                name: ''
+            };
+            vm.toggle = function (name) {
+                if (vm.currentMenu.name !== 'menu_' + name) {
+                    vm.reset();
+                }
+                vm.currentMenu.name = 'menu_' + name;
+                vm.currentMenu.show = !vm.currentMenu.show;
+            };
+            vm.showSubMenu = function (name) {
+                return vm.currentMenu.name === 'menu_' + name && vm.currentMenu.show;
+            };
+            vm.reset = function () {
+                vm.currentMenu.name = '';
+                vm.currentMenu.show = false;
+            };
+            //最小化Sidebar
+            vm.isMinimized = false;
+            vm.minimizedSidebar = function () {
+                vm.isMinimized = !vm.isMinimized;
+            };
+        }
+    };
+
+    service.selectOneRow = function (vm, message) {
+        if (!vm.data.pager.totalCount) return;
+        var selectedRows = vm.data.rowsSelected.length;
+        var result = true;
+        if (selectedRows == 0) {
+            vm.errorMessage = message && message.NoSelect || '请选择一条记录进行操作！';
+            result = false;
+        }
+        else if (selectedRows > 1) {
+            vm.errorMessage = message && message.OneSelect || '只能选择一条记录进行操作！';
+            result = false;
+        }
+        if (result) {
+            vm.errorMessage = '';
+        };
+        return result;
+    };
+
+    service.selectMultiRows = function (vm, message) {
+        if (!vm.data.pager.totalCount) return;
+        var selectedRows = vm.data.rowsSelected.length;
+        var result = true;
+        if (selectedRows == 0) {
+            vm.errorMessage = message && message.NoSelect || '请选择一条记录进行操作！';
+            result = false;
+        }
+        if (result) {
+            vm.errorMessage = '';
+        };
+        return result;
     };
 
     return service;
 });
 // 功能权限
-ppts.ng.directive('pptsRoles', function () {
+/*
+ppts.ng.directive('pptsRoles', ['utilService', function (util) {
     return {
         restrict: 'A',
         link: function ($scope, $elem, $attrs, $ctrl) {
             if (!$attrs.pptsRoles) return;
+            var hasPermisson = false;
             if (!mcs.util.hasAttr($elem, 'permission')) {
-                $elem.addClass('hide');
-                if (mcs.util.contains(ppts.user.functions, $attrs.pptsRoles)) {
-                    $elem.removeClass('hide').attr('permission', true);
+                if (util.contains(ppts.user.roles, $attrs.pptsRoles)) {
+                    $elem.attr('permission', true);
+                    hasPermisson = true;
+                }
+                // hide or disable the feature when no permisson
+                if (!hasPermisson) {
+                    if (mcs.util.hasAttr($elem, 'support-disabled')) {
+                        $elem.attr('disabled', 'disabled');
+                    } else {
+                        $elem.addClass('hide');
+                    }
                 }
             }
         }
     };
-});
+}]);
 
-ppts.ng.directive('pptsJobFunctions', function () {
+ppts.ng.directive('pptsJobFunctions', ['utilService', function (util) {
     return {
         restrict: 'A',
         link: function ($scope, $elem, $attrs, $ctrl) {
             if (!$attrs.pptsJobFunctions) return;
+            var hasPermisson = false;
             if (!mcs.util.hasAttr($elem, 'permission')) {
-                $elem.addClass('hide');
-                if (mcs.util.contains(ppts.user.functions, $attrs.pptsJobFunctions)) {
-                    $elem.removeClass('hide').attr('permission', true);
+                if (util.contains(ppts.user.jobFunctions[ppts.user.currentJobId], $attrs.pptsJobFunctions)) {
+                    $elem.attr('permission', true);
+                    hasPermisson = true;
+                }
+                // hide or disable the feature when no permisson
+                if (!hasPermisson) {
+                    if (mcs.util.hasAttr($elem, 'support-disabled')) {
+                        $elem.attr('disabled', 'disabled');
+                    } else {
+                        $elem.addClass('hide');
+                    }
                 }
             }
         }
     };
-});
+}]);
 
-ppts.ng.directive('pptsFunctions', function () {
+ppts.ng.directive('pptsFunctions', ['utilService', function (util) {
     return {
         restrict: 'A',
         link: function ($scope, $elem, $attrs, $ctrl) {
             if (!$attrs.pptsFunctions) return;
+            var hasPermisson = false;
             if (!mcs.util.hasAttr($elem, 'permission')) {
-                $elem.addClass('hide');
-                if (mcs.util.contains(ppts.user.functions, $attrs.pptsFunctions)) {
-                    $elem.removeClass('hide').attr('permission', true);
+                if (util.contains(ppts.user.functions, $attrs.pptsFunctions)) {
+                    $elem.attr('permission', true);
+                    hasPermisson = true;
+                }
+                // hide or disable the feature when no permisson
+                if (!hasPermisson) {
+                    if (mcs.util.hasAttr($elem, 'support-disabled')) {
+                        $elem.attr('disabled', 'disabled');
+                    } else {
+                        $elem.addClass('hide');
+                    }
                 }
             }
         }
     };
-});
-
+}]);
+*/
 ppts.ng.directive('pptsCheckboxGroup', ['$compile', function ($compile) {
     return {
         restrict: 'E',
         scope: {
             category: '@',
             model: '=',
+            async: '@', 
             clear: '&?'
         },
         template: '<span><mcs-checkbox-group data="data" model="model"></mcs-checkbox-group></span>',
         link: function ($scope, $elem) {
-            $scope.$on('dictionaryReady', function () {
+            $scope.async = mcs.util.bool($scope.async || true);
+            if ($scope.async) {
+                $scope.$on('dictionaryReady', function () {
+                    $scope.data = ppts.dict[ppts.config.dictMappingConfig[$scope.category]];
+                });
+            } else {
                 $scope.data = ppts.dict[ppts.config.dictMappingConfig[$scope.category]];
-            });
+            }
+          
             $scope.model = $scope.model || [];
             if (angular.isFunction($scope.clear)) {
                 $elem.prepend($compile(angular.element('<button class="btn btn-link" ng-click="clear()">清空</button>'))($scope));
@@ -517,22 +614,34 @@ ppts.ng.directive('pptsCheckboxGroup', ['$compile', function ($compile) {
     }
 }]);
 
-ppts.ng.directive('pptsRadiobuttonGroup', function () {
+ppts.ng.directive('pptsRadiobuttonGroup', ['$compile', function ($compile) {
     return {
         restrict: 'E',
         scope: {
             category: '@',
-            model: '='
+            showAll: '@',
+            model: '=',
+            async: '@'
         },
         template: '<mcs-radiobutton-group data="data" model="model"/>',
-        link: function ($scope, $elem) {
-            $scope.$on('dictionaryReady', function () {
+        link: function ($scope, $elem, $attrs, $ctrl) {
+            $scope.showAll = mcs.util.bool($scope.showAll || false);
+            $scope.async = mcs.util.bool($scope.async || true);
+            if ($scope.async) {
+                $scope.$on('dictionaryReady', function () {
+                    $scope.data = ppts.dict[ppts.config.dictMappingConfig[$scope.category]];
+                });
+            } else {
                 $scope.data = ppts.dict[ppts.config.dictMappingConfig[$scope.category]];
-            });
+            }
             $scope.model = $scope.model || '';
+            if ($scope.showAll) {
+                var groupName = $elem.children().attr('groupname');
+                $elem.prepend($compile(angular.element('<label class="radio-inline"><input name="' + groupName + '" type="radio" class="ace" ng-checked="true" ng-click="model=0" checked="checked"><span class="lbl"></span> 全部</label>'))($scope));
+            }
         }
     }
-});
+}]);
 
 ppts.ng.directive('pptsSelect', function () {
     return {
@@ -543,27 +652,187 @@ ppts.ng.directive('pptsSelect', function () {
             style: '@',
             caption: '@',
             model: '=',
+            async: '@',
+            callback: '&?',
             disabled: '@'
         },
-        templateUrl: ppts.config.webportalBaseUrl + 'app/common/tpl/ctrls/select.tpl.html',
+        templateUrl: 'app/common/tpl/ctrls/select.tpl.html',
         link: function ($scope, $elem) {
             $scope.caption = $scope.caption || '请选择';
-            $scope.$on('dictionaryReady', function () {
+            $scope.async = mcs.util.bool($scope.async || true);
+            if ($scope.async) {
+                $scope.$on('dictionaryReady', function () {
+                    $scope.data = ppts.dict[ppts.config.dictMappingConfig[$scope.category]];
+                });
+            } else {
                 $scope.data = ppts.dict[ppts.config.dictMappingConfig[$scope.category]];
-            });
+            }
             $scope.onSelectCallback = function (item, model) {
                 $scope.model = model;
+                if (angular.isFunction($scope.callback)) {
+                    $scope.callback({ item: item, model: model });
+                }
             };
         }
     }
 });
+
+ppts.ng.directive('pptsDatepicker', function () {
+    return {
+        restrict: 'E',
+        scope: {
+            css: '@',
+            model: '='
+        },
+        templateUrl: 'app/common/tpl/ctrls/datepicker.tpl.html',
+        link: function ($scope, $elem) {
+            var $this = $elem.find('.date-picker');
+
+            $this.datepicker({
+                autoclose: true,
+                todayHighlight: true,
+                format: ppts.config.datePickerFormat,
+                language: ppts.config.datePickerLang
+            }) //show datepicker when clicking on the icon
+			.next().on('click', function () {
+			    $(this).prev().focus();
+			});
+        }
+    }
+});
+
+ppts.ng.directive('pptsDaterangepicker', function () {
+    return {
+        restrict: 'E',
+        scope: {
+            css: '@',
+            size: '@',
+            startDate: '=',
+            endDate: '='
+        },
+        templateUrl: 'app/common/tpl/ctrls/daterangepicker.tpl.html',
+        link: function ($scope, $elem) {
+            var $this = $elem.find('.input-daterange');
+
+            $scope.size = $scope.size || 'lg';
+
+            $this.datepicker({
+                autoclose: true,
+                todayHighlight: true,
+                format: ppts.config.datePickerFormat,
+                language: ppts.config.datePickerLang
+            }).find('.date-picker').next().on('click', function () {
+                $(this).prev().focus();
+            });
+        }
+    }
+});
+
+ppts.ng.directive('pptsTimepicker', function () {
+    return {
+        restrict: 'E',
+        scope: {
+            css: '@',
+            step: '@',
+            model: '='
+        },
+        templateUrl: 'app/common/tpl/ctrls/timepicker.tpl.html',
+        link: function ($scope, $elem) {
+            var $this = $elem.find('.time-picker');
+
+            $this.timepicker({
+                minuteStep: $scope.step || 30,
+                showSeconds: true,
+                showMeridian: false
+            }).next().on('click', function () {
+                $(this).prev().focus();
+            });
+        }
+    }
+});
+
+ppts.ng.directive('pptsDatetimepicker', function () {
+    return {
+        restrict: 'E',
+        scope: {
+            css: '@',
+            model: '='
+        },
+        templateUrl: 'app/common/tpl/ctrls/datetimepicker.tpl.html',
+        link: function ($scope, $elem) {
+            var $this = $elem.find('.date-timepicker');
+
+            $this.datetimepicker({
+                format: ppts.config.datetimePickerFormat,
+                showSeconds: true,
+                language: ppts.config.datePickerLang
+            }).next().on('click', function () {
+                $(this).prev().focus();
+            });
+        }
+    }
+});
+
+ppts.ng.directive('pptsDatarange', function () {
+    return {
+        restrict: 'E',
+        scope: {
+            css: '@',
+            min: '=',
+            minText: '@',
+            max: '=',
+            maxText: '@'
+        },
+        templateUrl: 'app/common/tpl/ctrls/datarange.tpl.html',
+        link: function ($scope, $elem) {
+            var $this = $elem.find('.data-range');
+
+            //$this.datetimepicker({
+            //    format: ppts.config.datetimePickerFormat,
+            //    showSeconds: true,
+            //    language: ppts.config.datePickerLang
+            //}).next().on('click', function () {
+            //    $(this).prev().focus();
+            //});
+        }
+    }
+});
+
+ppts.ng.directive('pptsSearch', function () {
+    return {
+        restrict: 'E',
+        scope: {
+            css: '@',
+            model: '=',
+            placeholder: '@',
+            click: '&'
+        },
+        templateUrl: 'app/common/tpl/ctrls/search.tpl.html'
+    }
+});
+
+ppts.ng.directive("pptsCompileHtml", ['$parse', '$sce', '$compile', function ($parse, $sce, $compile) {
+    return {
+        restrict: "A",
+        link: function ($scope, $elem, $attrs) {
+            var expression = $sce.parseAsHtml($attrs.pptsCompileHtml);
+            var getResult = function () {
+                return expression($scope);
+            };
+            $scope.$watch(getResult, function (newValue) {
+                var linker = $compile(newValue);
+                $elem.append(linker($scope));
+            });
+        }
+    }
+}]);
 //loading
-ppts.ng.factory('timestampMarker', ["$rootScope", 'blockUI', function ($rootScope, blockUI) {
-    var timestampMarker = {
+ppts.ng.factory('viewLoading', ["$rootScope", 'blockUI', '$q', function ($rootScope, blockUI, $q) {
+    var viewLoading = {
         request: function (config) {
             blockUI.start();
-            $rootScope.loading = true;
-            config.requestTimestamp = new Date().getTime();
+            config.headers['pptsCurrentJobID'] = ppts.user.currentJobId;
+            config.headers['requestToken'] = ppts.user.token;
             return config;
         },
         response: function (response) {
@@ -571,12 +840,14 @@ ppts.ng.factory('timestampMarker', ["$rootScope", 'blockUI', function ($rootScop
             if (response.data && response.data.dictionaries) {
                 mcs.util.merge(response.data.dictionaries);
             }
-            $rootScope.loading = false;
-            response.config.responseTimestamp = new Date().getTime();
-            return response;
+            return response || $q.when(response);
+        },
+        responseError: function (error) {
+            blockUI.stop();
+            return $q.reject(error);
         }
     };
-    return timestampMarker;
+    return viewLoading;
 }]);
     return ppts.ng;
 });

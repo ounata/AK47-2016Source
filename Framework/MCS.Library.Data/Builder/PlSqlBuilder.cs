@@ -27,6 +27,7 @@ namespace MCS.Library.Data.Builder
         private PlSqlBuilder()
         {
         }
+
         /// <summary>
         ///  数据库端返回当前时间的函数名称
         /// </summary>
@@ -37,6 +38,18 @@ namespace MCS.Library.Data.Builder
                 return "SYSDATE";
             }
         }
+
+        /// <summary>
+        /// 数据库端返回当前Utc时间的函数名称
+        /// </summary>
+        public override string DBCurrentUtcTimeFunction
+        {
+            get
+            {
+                return this.DBCurrentTimeFunction;
+            }
+        }
+
         /// <summary>
         /// 重写将空数据转化成字符串格式
         /// </summary>
@@ -48,6 +61,7 @@ namespace MCS.Library.Data.Builder
         {
             return string.Format("NVL({0}, {1})", AddQuotation(data, addQuotation), nullStr);
         }
+
         /// <summary>
         /// 批量SQL的开始标识，SQL Server中没有，Oracle中是BEGIN
         /// </summary>
@@ -58,6 +72,7 @@ namespace MCS.Library.Data.Builder
                 return "BEGIN\n";
             }
         }
+
         /// <summary>
         /// 批量SQL的结束标识，SQL Server中没有，Oracle中是END
         /// </summary>
@@ -78,6 +93,7 @@ namespace MCS.Library.Data.Builder
                 return ";\n";
             }
         }
+
         /// <summary>
         /// SQL语句中，字符串之间的连接符
         /// </summary>
@@ -88,6 +104,7 @@ namespace MCS.Library.Data.Builder
                 return "||";
             }
         }
+
         /// <summary>
         /// 将DateTime格式化为数据库所识别的日期格式
         /// </summary>
@@ -95,7 +112,7 @@ namespace MCS.Library.Data.Builder
         /// <returns>数据库所识别的日期格式</returns>
         public override string FormatDateTime(DateTime dt)
         {
-			return string.Format("TO_DATE({0}, 'YYYY-MM-DD HH24:MI:SS')", AddQuotation(dt.ToString("yyyy-MM-dd HH:mm:ss"), true));
+            return string.Format("TO_DATE({0}, 'YYYY-MM-DD HH24:MI:SS')", AddQuotation(dt.ToString("yyyy-MM-dd HH:mm:ss"), true));
         }
 
         /// <summary>
@@ -118,6 +135,7 @@ namespace MCS.Library.Data.Builder
         {
             return string.Format("LENGTH({0})", AddQuotation(data, addQuotation));
         }
+
         /// <summary>
         /// 返回数据库中SubString函数的字符串
         /// </summary>

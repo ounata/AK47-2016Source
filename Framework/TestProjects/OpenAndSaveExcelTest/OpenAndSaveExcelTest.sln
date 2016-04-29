@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenAndSaveExcelTest", "OpenAndSaveExcelTest.csproj", "{24563479-8481-440C-AC82-A7C3560FC5FA}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -11,17 +11,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCS.Library.Office.OpenXml.Excel", "..\..\MCS.Library.Office.OpenXml.Excel\MCS.Library.Office.OpenXml.Excel.csproj", "{69A1E346-A9A4-49A3-B9B0-CAA03BCE8A62}"
 EndProject
 Global
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 3
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://code.cfldcn.com:8080/tfs/base
-		SccProjectUniqueName0 = ..\\..\\MCS.Library.Office.OpenXml.Excel\\MCS.Library.Office.OpenXml.Excel.csproj
-		SccProjectName0 = ../../MCS.Library.Office.OpenXml.Excel
-		SccLocalPath0 = ..\\..\\MCS.Library.Office.OpenXml.Excel
-		SccLocalPath1 = .
-		SccProjectUniqueName2 = OpenAndSaveExcelTest.csproj
-		SccLocalPath2 = .
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -38,5 +27,16 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 3
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://10.1.56.70:8080/tfs/pptsv2.0
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = ..\\..\\MCS.Library.Office.OpenXml.Excel\\MCS.Library.Office.OpenXml.Excel.csproj
+		SccProjectName1 = ../../MCS.Library.Office.OpenXml.Excel
+		SccLocalPath1 = ..\\..\\MCS.Library.Office.OpenXml.Excel
+		SccProjectUniqueName2 = OpenAndSaveExcelTest.csproj
+		SccLocalPath2 = .
 	EndGlobalSection
 EndGlobal

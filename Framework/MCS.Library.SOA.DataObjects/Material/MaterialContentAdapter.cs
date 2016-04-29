@@ -35,8 +35,8 @@ namespace MCS.Library.SOA.DataObjects
 
 			using (TransactionScope scope = TransactionScopeFactory.Create())
 			{
-				if (this.InnerUpdate(data, context) == 0)
-					this.InnerInsert(data, context);
+				if (this.InnerUpdate(data, context, StringExtension.EmptyStringArray) == 0)
+					this.InnerInsert(data, context, StringExtension.EmptyStringArray);
 
 				AfterInnerUpdate(data, context);
 
@@ -44,7 +44,7 @@ namespace MCS.Library.SOA.DataObjects
 			}
 		}
 
-		protected override int InnerUpdate(MaterialContent data, Dictionary<string, object> context)
+		protected override int InnerUpdate(MaterialContent data, Dictionary<string, object> context, string[] ignoreProperties)
 		{
 			int result = 0;
 
@@ -64,7 +64,7 @@ namespace MCS.Library.SOA.DataObjects
 					stream = (Stream)context["Stream"];
 
 				if (stream == null)
-					result = base.InnerUpdate(data, context);
+					result = base.InnerUpdate(data, context, ignoreProperties);
 				else
 					result = InnerUpdateWithStream(data, stream, context);
 			}
@@ -72,7 +72,7 @@ namespace MCS.Library.SOA.DataObjects
 			return result;
 		}
 
-		protected override void InnerInsert(MaterialContent data, Dictionary<string, object> context)
+		protected override void InnerInsert(MaterialContent data, Dictionary<string, object> context, string[] ignoreProperties)
 		{
 			Stream stream = null;
 
@@ -80,7 +80,7 @@ namespace MCS.Library.SOA.DataObjects
 				stream = (Stream)context["Stream"];
 
 			if (stream == null)
-				base.InnerInsert(data, context);
+				base.InnerInsert(data, context, ignoreProperties);
 			else
 				InnerInsertWithStream(data, stream, context);
 		}

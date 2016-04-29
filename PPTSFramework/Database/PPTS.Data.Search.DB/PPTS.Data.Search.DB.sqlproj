@@ -79,5 +79,6 @@
     <None Include="PPTS.Data.Search.Local.Test.DB.publish.xml" />
     <None Include="PPTS.Data.Search.Local.Dev.DB.publish.xml" />
     <None Include="PPTS.Data.Search.XueDa.Dev.DB.publish.xml" />
+    <None Include="PPTS.Data.Search.XueDa.Dev.Test.DB.publish.xml" />
   </ItemGroup>
 </Project>

@@ -1,0 +1,20 @@
+﻿<form class="form-horizontal" role="form">
+    <div class="tabbable">
+        <ul class="nav nav-tabs" id="student-view-tabs">
+            <li ng-repeat="tab in vm.tabs" ng-class="{'active':tab.active}" class="dropdown">
+                <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                    {{ tab.title }} &nbsp;
+                    <i class="ace-icon fa fa-caret-down bigger-110 width-auto"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-info" >
+                    <li ng-repeat="menu in tab.menus">
+                        <a ui-sref="{{ menu.url }}">{{menu.title}}</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div ui-view></div>
+        </div>
+    </div>
+</form>

@@ -22,7 +22,26 @@
                 <div class="col-sm-12">
                     <h3 class="header smaller lighter green">应用范例</h3>
                     <div ng-controller="MCSDatatableController">
+                        <div>
+                            <button class="btn btn-primary" type="button" ng-click="vm.addRow()">添加一行</button>
+                            <button class="btn btn-primary" type="button" ng-click="vm.removeRow()">删除一行</button>
+                            <button class="btn btn-primary" type="button" ng-click="vm.clearSelections()">清除已选行的状态记录</button>
+                            <button class="btn btn-primary" type="button" ng-click="vm.removeRows()">删除已选行</button>
+                        </div>
                         <mcs-datatable on-order="vm.reorder(field,direction)" data="vm.data" />
+                    </div>
+                    <div>
+                        年龄合计(绑定到函数)：<span>{{vm.totalAge()}}</span>
+                        <br/>
+                        <code>
+绑定数据项: {&nbsp{totalAgeProp}&nbsp}
+绑定到表达: {&nbsp{a+b}&nbsp}
+
+</code>
+                    </div>
+                    <div id="noPaging">
+                        <h4>无分页</h4>
+                        <mcs-datatable data="vm.dataNoPaging" />
                     </div>
                 </div>
                 <div class=" laycode col-sm-12 ">
@@ -168,6 +187,7 @@ description: 'customer name'
                                 <td>
                                     <code>
                     pager: {
+                    pagable:true,
                     pageIndex: 1,
                     pageSize: 10,
                     totalCount: 2,

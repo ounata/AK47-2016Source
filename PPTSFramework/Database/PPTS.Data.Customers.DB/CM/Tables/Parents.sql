@@ -8,7 +8,7 @@
     [Industry] NVARCHAR(32) NULL, 
     [Career] NVARCHAR(32) NULL, 
     [Income] NVARCHAR(32) NULL, 
-    [Birthday] DATETIME NULL, 
+    [Birthday] DATETIME NULL DEFAULT GETUTCDATE(), 
 	[IDType] NVARCHAR(32) NULL,
 	[IDNumber] NVARCHAR(64) NULL,
 	[Country] NVARCHAR(32) NULL,
@@ -19,13 +19,14 @@
 	[AddressDetail] NVARCHAR(MAX) NULL,
 	[CreatorID] NVARCHAR(36) NULL,
 	[CreatorName] NVARCHAR(64) NULL,
-	[CreateTime] DATETIME NULL DEFAULT getdate(),
+	[CreateTime] DATETIME NULL DEFAULT GETUTCDATE(),
 	[ModifierID] NVARCHAR(36) NULL,
 	[ModifierName] NVARCHAR(64) NULL,
-	[ModifyTime] DATETIME NULL DEFAULT getdate(),
+	[ModifyTime] DATETIME NULL DEFAULT GETUTCDATE(),
     [TenantCode] NVARCHAR(36) NULL, 
-    CONSTRAINT [PK_Parents] PRIMARY KEY NONCLUSTERED ([ParentID]), 
-    CONSTRAINT [IX_Parents] UNIQUE ([ParentCode]) 
+    [VersionStartTime] DATETIME NOT NULL DEFAULT GETUTCDATE(), 
+    [VersionEndTime] DATETIME NULL DEFAULT '99990909 00:00:00', 
+    CONSTRAINT [PK_Parents] PRIMARY KEY NONCLUSTERED ([ParentID], [VersionStartTime])
 )
 
 GO
@@ -247,3 +248,21 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level2type = N'COLUMN',
     @level2name = N'ModifyTime'
 GO
+
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'版本开始时间',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'Parents',
+    @level2type = N'COLUMN',
+    @level2name = N'VersionStartTime'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'版本结束时间',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'Parents',
+    @level2type = N'COLUMN',
+    @level2name = N'VersionEndTime'

@@ -1,22 +1,21 @@
 ﻿<!-- #开始：位置条 -->
 <style>
-    input.hightlight {
-        background-color: #11a9cc;
-    }
+input.hightlight {
+    background-color: #11a9cc;
+}
 </style>
 <div class="breadcrumbs" id="breadcrumbs">
     <script type="text/javascript">
-        try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }
+    try {
+        ace.settings.check('breadcrumbs', 'fixed')
+    } catch (e) {}
     </script>
-
     <ul class="breadcrumb">
         <li class="active">
-            <i class="ace-icon fa fa-home home-icon"></i>
-            首页
+            <i class="ace-icon fa fa-home home-icon"></i> 首页
         </li>
         <li class="active">
-            <i class="ace-icon fa fa-buttons"></i>
-            文本框
+            <i class="ace-icon fa fa-buttons"></i> 文本框
         </li>
     </ul>
 </div>
@@ -34,6 +33,12 @@
                         <mcs-input placeholder="家长姓名" model="vm.parentName" />
                         <span>家长姓名：{{vm.parentName}}</span>
                         <mcs-input placeholder="家长姓名" css="hightlight" model="vm.parentName" />
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="control-label col-sm-5">带浮动提示的文本框</label>
+                            <input class="form-control col-sm-11" uib-popover="这里添加你的内容" popover-trigger="mouseenter" placeholder="鼠标滑过有提示"></input>
+                        </div>
                     </div>
                 </div>
                 <div class="laycode col-sm-12">
@@ -100,10 +105,8 @@
                                 <td>无</td>
                                 <td>无</td>
                                 <td>
-                                    input.hightlight {
-                                    background-color: #11a9cc;
-                                    }<br />
-                                    &lt;mcs-input placeholder="家长姓名" css="hightlight" model="vm.parentName" /&gt;
+                                    input.hightlight { background-color: #11a9cc; }
+                                    <br /> &lt;mcs-input placeholder="家长姓名" css="hightlight" model="vm.parentName" /&gt;
                                 </td>
                             </tr>
                         </tbody>

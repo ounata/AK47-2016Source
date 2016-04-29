@@ -30,6 +30,10 @@ namespace MCS.Library.Data.Test
             User user = new User() { UserID = UuidHelper.NewUuidString(), UserName = "沈峥", Gender = GenderType.Male };
 
             Console.WriteLine(ORMapping.GetInsertSql(user, TSqlBuilder.Instance));
+
+            user.ModifyTime = DateTime.Now;
+
+            Console.WriteLine(ORMapping.GetUpdateSql(user, TSqlBuilder.Instance));
         }
 
         [TestMethod]
@@ -96,6 +100,14 @@ namespace MCS.Library.Data.Test
             Console.Write("Local Time: {0}, Utc Time: {1}", data.LocalTime, data.UtcTime);
 
             Assert.AreEqual(data.LocalTime, data.UtcTime);
+        }
+
+        [TestMethod]
+        public void SelectMappingTestlTest()
+        {
+            ObjectForSelect obj = new ObjectForSelect() {  Name = "Shen Zheng", Age = 50 };
+
+            Console.WriteLine(ORMapping.GetSelectSql(obj));
         }
 
         private DataTable PrepareTestTable()

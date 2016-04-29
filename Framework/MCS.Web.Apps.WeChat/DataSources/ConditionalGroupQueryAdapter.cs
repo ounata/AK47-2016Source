@@ -1,4 +1,6 @@
-﻿using MCS.Library.Data.Mapping;
+﻿using MCS.Library.Data.Adapters;
+using MCS.Library.Data.DataObjects;
+using MCS.Library.Data.Mapping;
 using MCS.Library.SOA.DataObjects;
 using MCS.Web.Apps.WeChat.DataObjects;
 

@@ -1,12 +1,15 @@
 ﻿using MCS.Library.Validation;
+using PPTS.Data.Common.Adapters;
 using PPTS.Data.Common.Entities;
 using PPTS.Data.Products;
+using PPTS.Data.Products.Adapters;
+using PPTS.Data.Products.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace PPTS.WebAPI.Product.ViewModels.Products
+namespace PPTS.WebAPI.Products.ViewModels.Products
 {
     [Serializable]
     public class ProductModel
@@ -32,22 +35,26 @@ namespace PPTS.WebAPI.Product.ViewModels.Products
         {
             var model = new ProductModel()
             {
-                CategoryType = categoryType
-                ,
-                Product = new Data.Products.Entities.Product()
-                {
-                    Catalog = "1",
-                    CreateTime = DateTime.Now,
-                    SubmitTime = DateTime.Now,
-                    StartDate = DateTime.Now,
-                    EndDate = DateTime.Now,
-                    ModifyTime = DateTime.Now
-                }
-                ,
-                ExOfCourse = new Data.Products.Entities.ProductExOfCourse()
-                ,
-                SalaryRules = new Data.Products.Entities.ProductSalaryRuleCollection()
+                CategoryType = categoryType,
+                Product = new Product(),
+                ExOfCourse = new ProductExOfCourse() { IncomeBelonging = "0", IsCrossCampus = 0 },
+                SalaryRules = new ProductSalaryRuleCollection()
             };
+
+            switch (categoryType)
+            {
+                case CategoryType.OneToOne: model.Product.ProductUnit = ProductUnit.Period; break;
+            }
+
+            model.Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(
+                    typeof(Product),
+                    typeof(ProductExOfCourse),
+                    typeof(ProductSalaryRule)
+                );
+            model.Catalogs = CategoryCatalogAdapter.Instance.LoadByCategoryType(categoryType);
+            model.Product.Catalog = model.Catalogs.First().Catalog;
+
+
             return model;
         }
 

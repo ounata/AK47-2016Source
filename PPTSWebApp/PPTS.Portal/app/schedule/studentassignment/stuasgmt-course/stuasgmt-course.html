@@ -1,0 +1,42 @@
+﻿<div class="page-content">
+    <!-- #开始：排课计划 -->
+    <div class="page-content-area">
+        <div class="row">
+            <div class="col-xs-12">
+                <h5 class="well">
+                    学生：张三, 本月 已上课时：12, 已排课时：10
+                </h5>
+                <!-- #开始：排课计划.查询条件 -->
+                <div class="mcs-panel-search well well-sm">
+                    <form class="form-inline">
+                        <mcs-input placeholder="课时状态" model="vm.criteria.status" />
+                        <ppts-select caption="上课年级" category="grade" model="vm.criteria.grade" class="col-sm-3" />
+                        <mcs-input placeholder="课时类型" model="" />
+                        <mcs-input placeholder="学生姓名" model="vm.criteria.educatorName" />
+                        <button class="btn btn-sm btn-success" ng-click="vm.simpleSearch()">
+                            <i class="ace-icon fa fa-search"></i>
+                            查询
+                        </button>
+                    </form>
+                </div>
+                <!-- /结束：排课计划.查询条件 -->
+                <!-- #开始：排课计划.工具条 -->
+                <div class="mcs-panel-toolbar">
+                    <button class="btn btn-sm mcs-width-100 btn-white btn-bold btn-round" ng-click="vm.createSchedule()">新增课表</button>
+                    <button class="btn btn-sm mcs-width-100 btn-white btn-bold btn-round" ng-click="vm.cancelCourseClick()" ng-disabled="!vm.selectedEvents.length">取消课表</button>
+                    <button class="btn btn-sm mcs-width-100 btn-white btn-bold btn-round" ng-click="vm.copyCourseClick()">复制课表</button>
+                    <button class="btn btn-sm mcs-width-100 btn-white btn-bold btn-round" ng-disabled="!vm.selectedEvents.length">调整课表</button>     
+                    <button class="btn btn-sm mcs-width-100 btn-white btn-bold btn-round">视图</button>
+                    <button class="btn btn-sm mcs-width-100 btn-white btn-bold btn-round">打印课表</button>
+                </div>
+                <!-- /结束：排课计划.工具条 -->              
+                <!-- #开始：排课计划.日程表 -->
+                <div>
+                    <div ui-calendar="vm.uiConfig.calendar" ng-model="vm.eventSources"></div>
+                </div>
+                <!-- /结束：排课计划.日程表 -->
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div>
+    <!-- /结束：排课计划 -->
+</div>

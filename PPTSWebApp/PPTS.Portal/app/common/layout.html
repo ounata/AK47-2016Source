@@ -1,12 +1,5 @@
-﻿<!-- #开始：Ajax请求Loading Modal -->
-<!--<div class="loading-modal mcs-loading-modal" ng-if="loading">
-    <div class="mcs-loading">
-        <img src="assets/images/loading.gif" alt="" /><span>数据加载中...</span>
-    </div>
-</div>-->
-<!-- /结束：Ajax请求Loading Modal -->
-<!-- #开始：网站头部区域，包括logo，消息提醒，用户名，以及用户相关的关联菜单项（注销等） -->
-<div id="navbar" class="navbar navbar-default" data-ng-include="'app/common/tpl/header.tpl.html'"></div>
+﻿<!-- #开始：网站头部区域，包括logo，消息提醒，用户名，以及用户相关的关联菜单项（注销等） -->
+<div id="navbar" class="navbar navbar-default navbar-fixed-top" data-ng-include="'app/common/tpl/header.tpl.html'" role="navigation"></div>
 <!-- /结束：网站头部区域，包括logo，消息提醒，用户名，以及用户相关的关联菜单项（注销等） -->
 <!-- #开始：网站主体内容区域 -->
 <div id="main-container" class="main-container">
@@ -17,7 +10,20 @@
     <div id="sidebar" class="sidebar responsive" ng-class="{'menu-min':vm.isMinimized}" data-ng-include="'app/common/tpl/sidebar.tpl.html'"></div>
     <!-- /结束：网站主体内容区域.左侧区域 -->
     <!-- #开始：网站主体内容区域.中间区域 -->
-    <div class="main-content" ui-view></div>
+    <div class="main-content">
+        <!-- #开始：导航面包屑 -->
+        <div ncy-breadcrumb></div>
+        <!-- /结束：导航面包屑 -->
+        <!-- /结束：页面内容区域 -->
+        <div class="page-content">
+            <div class="page-content-area">
+                <div class="row">
+                    <div class="col-sm-12" ui-view></div>
+                </div>
+            </div>
+        </div>
+        <!-- /结束：页面内容区域 -->
+    </div>
     <!-- /结束：网站主体内容区域.中间区域 -->
     <!-- #开始：网站主体内容区域.底部区域 -->
     <div class="footer" data-ng-include="'app/common/tpl/footer.tpl.html'"></div>

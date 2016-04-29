@@ -238,11 +238,7 @@ namespace MCS.Library.Data.Builder
         public string DataField
         {
             get { return this.dataField; }
-            set
-            {
-                ExceptionHelper.TrueThrow<ArgumentException>(string.IsNullOrEmpty(value), "DataField属性不能为空或空字符串");
-                this.dataField = value;
-            }
+            set { this.dataField = value; }
         }
 
         /// <summary>
@@ -282,11 +278,22 @@ namespace MCS.Library.Data.Builder
         /// </summary>
         /// <param name="strB"></param>
         /// <param name="builder"></param>
-        internal void ToSqlString(StringBuilder strB, ISqlBuilder builder)
+        internal virtual void ToSqlString(StringBuilder strB, ISqlBuilder builder)
+        {
+            this.ToSqlString(strB, DefaultTemplate, builder);
+        }
+
+        /// <summary>
+        /// 根据模板生成SQL子句
+        /// </summary>
+        /// <param name="strB"></param>
+        /// <param name="defaultTemplate"></param>
+        /// <param name="builder"></param>
+        internal void ToSqlString(StringBuilder strB, string defaultTemplate, ISqlBuilder builder)
         {
             Regex reg = new Regex(@"\$\{[0-9 a-z A-Z]*?\}\$");
 
-            string t = DefaultTemplate;
+            string t = defaultTemplate;
 
             if (this.template.IsNotEmpty())
                 t = this.template;
@@ -399,7 +406,7 @@ namespace MCS.Library.Data.Builder
                 this.SortDirection = source.SortDirection;
             }
         }
- 
+
         /// <summary>
         /// 得到Data的Sql字符串描述
         /// </summary>

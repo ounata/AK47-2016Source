@@ -44,7 +44,8 @@
     <Reference Include="MCS.Library">
       <HintPath>..\..\Bin\MCS.Library.dll</HintPath>
     </Reference>
-    <Reference Include="MCS.Library.Data">
+    <Reference Include="MCS.Library.Data, Version=1.3.0.0, Culture=neutral, PublicKeyToken=62ea08f894871798, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Bin\MCS.Library.Data.dll</HintPath>
     </Reference>
     <Reference Include="MCS.Library.OGUPermission">
@@ -59,6 +60,12 @@
     <Reference Include="PPTS.Data.Common">
       <HintPath>..\..\PPTSBin\PPTS.Data.Common.dll</HintPath>
     </Reference>
+    <Reference Include="PPTS.Data.Common.Entities">
+      <HintPath>..\..\PPTSBin\PPTS.Data.Common.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="PPTS.Data.Customers.Entities">
+      <HintPath>..\..\PPTSBin\PPTS.Data.Customers.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
@@ -71,6 +78,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Adapters\CustomerInfoQueryAdapter.cs" />
+    <Compile Include="Adapters\CustomerTeacherRelationAdapter.cs" />
+    <Compile Include="Adapters\GenericAccountAdapter.cs" />
+    <Compile Include="Adapters\GenericCustomerAdapter.cs" />
+    <Compile Include="Adapters\SchoolAdapter.cs" />
     <Compile Include="Adapters\CustomerAdapter.cs" />
     <Compile Include="Adapters\AccountRefundPaymentAdapter.cs" />
     <Compile Include="Adapters\AccountRefundApplyAdapter.cs" />
@@ -81,9 +93,9 @@
     <Compile Include="Adapters\AccountChargePaymentAdapter.cs" />
     <Compile Include="Adapters\AccountChargeApplyAdapter.cs" />
     <Compile Include="Adapters\AccountChargeAllotAdapter.cs" />
-    <Compile Include="Adapters\AccountExAdapter.cs" />
     <Compile Include="Adapters\AccountAdapterBase.cs" />
     <Compile Include="Adapters\AccountAdapter.cs" />
+    <Compile Include="Adapters\CustomerFulltextInfoAdapter.cs" />
     <Compile Include="Adapters\SearchAdapterBase.cs" />
     <Compile Include="Adapters\CustomerAdapterBase.cs" />
     <Compile Include="Adapters\CustomerFollowAdapter.cs" />
@@ -96,52 +108,14 @@
     <Compile Include="Adapters\PhoneAdapter.cs" />
     <Compile Include="Adapters\CustomerStaffRelationAdapter.cs" />
     <Compile Include="Adapters\PotentialCustomerAdapter.cs" />
+    <Compile Include="Adapters\VersionedCustomerAdapterBase.cs" />
     <Compile Include="Common\ConnectionDefine.cs" />
     <Compile Include="Common\Helper.cs" />
     <Compile Include="DataSources\GenericCustomerDataSource.cs" />
-    <Compile Include="Entities\Account.cs" />
-    <Compile Include="Entities\AccountChargeAllot.cs" />
-    <Compile Include="Entities\AccountChargeApply.cs" />
-    <Compile Include="Entities\AccountChargeInvoice.cs" />
-    <Compile Include="Entities\AccountChargePayment.cs" />
-    <Compile Include="Entities\AccountChargePaymentPrint.cs" />
-    <Compile Include="Entities\AccountDeductApply.cs" />
-    <Compile Include="Entities\AccountEx.cs" />
-    <Compile Include="Entities\AccountRecord.cs" />
-    <Compile Include="Entities\AccountRefundAllot.cs" />
-    <Compile Include="Entities\AccountRefundApply.cs" />
-    <Compile Include="Entities\AccountRefundPayment.cs" />
-    <Compile Include="Entities\AccountReturnApply.cs" />
-    <Compile Include="Entities\AccountTransferApply.cs" />
-    <Compile Include="Entities\Customer.cs" />
-    <Compile Include="Entities\CustomerExpenseRelation.cs" />
-    <Compile Include="Entities\CustomerFeedback.cs" />
-    <Compile Include="Entities\CustomerFollow.cs" />
-    <Compile Include="Entities\CustomerFollowItem.cs" />
-    <Compile Include="Entities\CustomerMeeting.cs" />
-    <Compile Include="Entities\CustomerMeetingItem.cs" />
-    <Compile Include="Entities\CustomerParentRelation.cs" />
-    <Compile Include="Entities\CustomerReply.cs" />
-    <Compile Include="Entities\CustomerSchoolRelation.cs" />
-    <Compile Include="Entities\CustomerScore.cs" />
-    <Compile Include="Entities\CustomerScoreItem.cs" />
-    <Compile Include="Entities\CustomerService.cs" />
-    <Compile Include="Entities\CustomerServiceItem.cs" />
-    <Compile Include="Entities\CustomerStaffRelation.cs" />
-    <Compile Include="Entities\CustomerTeacherRelation.cs" />
-    <Compile Include="Entities\CustomerTransferApply.cs" />
-    <Compile Include="Entities\CustomerTransferResource.cs" />
-    <Compile Include="Entities\CustomerVerify.cs" />
-    <Compile Include="Entities\CustomerVisit.cs" />
-    <Compile Include="Entities\Enumerations.cs" />
-    <Compile Include="Entities\Extensions.cs" />
-    <Compile Include="Entities\IContactPhoneNumbers.cs" />
-    <Compile Include="Entities\Parent.cs" />
-    <Compile Include="Entities\Phone.cs" />
-    <Compile Include="Entities\PotentialCustomer.cs" />
     <Compile Include="Executors\PPTSAccountExecutorBase.cs" />
     <Compile Include="Executors\PPTSCustomerExecutorBase.cs" />
     <Compile Include="Executors\PPTSEditAccountExecutorBase.cs" />
+    <Compile Include="Executors\PPTSEditParentExecutorBase.cs" />
     <Compile Include="Executors\PPTSEditCustomerExecutorBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

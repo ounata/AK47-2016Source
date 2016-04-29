@@ -10,6 +10,7 @@
     <DropObjectsNotInSource>False</DropObjectsNotInSource>
     <ProfileVersionNumber>1</ProfileVersionNumber>
     <CreateNewDatabase>False</CreateNewDatabase>
+    <AllowIncompatiblePlatform>True</AllowIncompatiblePlatform>
   </PropertyGroup>
   <ItemGroup>
     <SqlCmdVariable Include="TaskJobName">

@@ -1,10 +1,10 @@
 ﻿//loading
-ppts.ng.factory('timestampMarker', ["$rootScope", 'blockUI', function ($rootScope, blockUI) {
-    var timestampMarker = {
+ppts.ng.factory('viewLoading', ["$rootScope", 'blockUI', '$q', function ($rootScope, blockUI, $q) {
+    var viewLoading = {
         request: function (config) {
             blockUI.start();
-            $rootScope.loading = true;
-            config.requestTimestamp = new Date().getTime();
+            config.headers['pptsCurrentJobID'] = ppts.user.currentJobId;
+            config.headers['requestToken'] = ppts.user.token;
             return config;
         },
         response: function (response) {
@@ -12,10 +12,12 @@ ppts.ng.factory('timestampMarker', ["$rootScope", 'blockUI', function ($rootScop
             if (response.data && response.data.dictionaries) {
                 mcs.util.merge(response.data.dictionaries);
             }
-            $rootScope.loading = false;
-            response.config.responseTimestamp = new Date().getTime();
-            return response;
+            return response || $q.when(response);
+        },
+        responseError: function (error) {
+            blockUI.stop();
+            return $q.reject(error);
         }
     };
-    return timestampMarker;
+    return viewLoading;
 }]);

@@ -15,4 +15,9 @@ namespace PPTS.Data.Customers.Test
     public class InheritedParent : Parent
     {
     }
+
+    public class InheritedCustomer : Customer
+    {
+
+    }
 }

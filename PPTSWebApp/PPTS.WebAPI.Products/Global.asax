@@ -1,1 +1,1 @@
-﻿<%@ Application Codebehind="Global.asax.cs" Inherits="PPTS.WebAPI.Product.WebApiApplication" Language="C#" %>
+﻿<%@ Application Codebehind="Global.asax.cs" Inherits="PPTS.WebAPI.Products.WebApiApplication" Language="C#" %>

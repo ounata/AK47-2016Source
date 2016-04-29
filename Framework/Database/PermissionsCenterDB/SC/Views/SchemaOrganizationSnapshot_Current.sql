@@ -3,7 +3,7 @@
 CREATE VIEW [SC].[SchemaOrganizationSnapshot_Current]
 WITH SCHEMABINDING 
 AS
-SELECT [ID], [VersionStartTime], [VersionEndTime], [Status], [CreateDate], [Name], [DisplayName], [CodeName], [AllowAclInheritance], [SearchContent], [RowUniqueID], [SchemaType], [CreatorID], [CreatorName], [Comment]
+SELECT [ID], [VersionStartTime], [VersionEndTime], [Status], [CreateDate], [Name], [DisplayName], [CodeName], [AllowAclInheritance], [SearchContent], [RowUniqueID], [SchemaType], [ShortName], [WP], [Address], [CreatorID], [CreatorName], [Comment]
 FROM [SC].[SchemaOrganizationSnapshot]
 WHERE [VersionEndTime] = CONVERT(DATETIME, '99990909 00:00:00', 112) AND [Status] = 1
 

@@ -19,7 +19,10 @@ build/
 !packages/*/build/
 
 # Visual Studio files
-.vs
+.vs/
+
+# TFS 2012 Local Workspace
+$tf/
 
 # MSTest test Results
 [Tt]est[Rr]esult*/

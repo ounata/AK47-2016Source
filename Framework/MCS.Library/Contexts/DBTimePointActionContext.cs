@@ -19,6 +19,11 @@ namespace MCS.Library.Core
         public static readonly DateTime MaxVersionEndTime = new DateTime(9999, 9, 9);
 
         /// <summary>
+        /// 在TSql中使用的表示当前时间的变量
+        /// </summary>
+        public static readonly string CurrentTimeTSqlVarName = "@currentTime";
+
+        /// <summary>
         /// 构造方法
         /// </summary>
 		public DBTimePointActionContext()

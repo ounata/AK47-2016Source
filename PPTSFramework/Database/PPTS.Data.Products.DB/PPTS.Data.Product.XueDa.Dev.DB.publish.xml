@@ -4,7 +4,9 @@
     <IncludeCompositeObjects>True</IncludeCompositeObjects>
     <TargetDatabaseName>PPTS_Product_Dev</TargetDatabaseName>
     <DeployScriptFileName>PPTS.Data.Products.DB.sql</DeployScriptFileName>
-    <TargetConnectionString>Data Source=10.1.56.213;Persist Security Info=True;User ID=zhshen;Pooling=False</TargetConnectionString>
+    <TargetConnectionString>Data Source=10.1.56.213;Persist Security Info=True;User ID=msuser;Pooling=False;MultipleActiveResultSets=False;Connect Timeout=60;Encrypt=False;TrustServerCertificate=True</TargetConnectionString>
     <ProfileVersionNumber>1</ProfileVersionNumber>
+    <BlockOnPossibleDataLoss>True</BlockOnPossibleDataLoss>
+    <AllowIncompatiblePlatform>True</AllowIncompatiblePlatform>
   </PropertyGroup>
 </Project>

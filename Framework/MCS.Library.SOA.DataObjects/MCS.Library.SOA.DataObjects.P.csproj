@@ -1,5 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>../../../CIIC.HSR.TSP.Files/TSPLib.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -10,30 +17,34 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MCS.Library.SOA.DataObjects</RootNamespace>
     <AssemblyName>MCS.Library.SOA.DataObjects</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <SccProjectName>
-    </SccProjectName>
-    <SccLocalPath>
-    </SccLocalPath>
-    <SccAuxPath>
-    </SccAuxPath>
-    <SccProvider>
-    </SccProvider>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugP|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\DebugPerformance\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;GTNet40</DefineConstants>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;GTNet40</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>
     </DocumentationFile>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;GTNet40</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>false</SignAssembly>
+    <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>MCS.Library.snk</AssemblyOriginatorKeyFile>
@@ -48,11 +59,13 @@
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Acl\AclSettings.cs" />
@@ -63,44 +76,74 @@
     <Compile Include="AppCommonInfo\AppCommonInfoSettings.cs" />
     <Compile Include="AppCommonInfo\DefaultAppCommonInfoUpdater.cs" />
     <Compile Include="AppCommonInfo\IAppCommonInfoUpdater.cs" />
+    <Compile Include="Archive\AclArchiveOperation.cs" />
+    <Compile Include="Archive\AppCommonInfoArchiveOperation.cs" />
+    <Compile Include="Archive\ArchiveAppPathMappingContextCollection.cs" />
+    <Compile Include="Archive\ArchiveBasicInfo.cs" />
+    <Compile Include="Archive\ArchiveConnectionMappingContextCollection.cs" />
+    <Compile Include="Archive\ArchiveExecutorBase.cs" />
+    <Compile Include="Archive\ArchiveSettings.cs" />
+    <Compile Include="Archive\BasicFormDataArchiveExecutor.cs" />
+    <Compile Include="Archive\FormDataArchiveDataOperation.cs" />
+    <Compile Include="Archive\GenericDataArchiveExecutorBase.cs" />
+    <Compile Include="Archive\GenericDataArchiveExecutorFactory.cs" />
+    <Compile Include="Archive\GenericOpinionArchiveOperation.cs" />
+    <Compile Include="Archive\IArchiveExecutor.cs" />
+    <Compile Include="Archive\IArchiveExecutorFactory.cs" />
+    <Compile Include="Archive\IArchiveOperation.cs" />
+    <Compile Include="Archive\MaterialArchiveOperation.cs" />
+    <Compile Include="Archive\UserAccomplishedTaskArchiveOperation.cs" />
+    <Compile Include="Archive\UserOpLogArchiveOperation.cs" />
+    <Compile Include="Archive\UserTaskArchiveOperation.cs" />
+    <Compile Include="Archive\WorkflowArchiveOperation.cs" />
     <Compile Include="ClientValidator\ClientVdtAttribute.cs" />
     <Compile Include="CommonInfoMapping\CommonInfoMappingSettings.cs" />
     <Compile Include="CommonInfoMapping\DefaultCommonInfoMappingUpdater.cs" />
-    <Compile Include="Common\Common.cs" />
-    <Compile Include="Common\CommonAdapter.cs" />
-    <Compile Include="Common\DataViewDataSourceQueryAdapterBase.cs" />
     <Compile Include="Common\Define.cs" />
     <Compile Include="Common\DeltaDataCollectionBase.cs" />
     <Compile Include="Common\Enumerations.cs" />
     <Compile Include="Common\IBusinessObject.cs" />
     <Compile Include="Common\IClonableBusinessObject.cs" />
-    <Compile Include="Common\ILoadableDataEntity.cs" />
-    <Compile Include="Common\IVersionDataObject.cs" />
     <Compile Include="Common\TicketDESEncryptor.cs" />
-    <Compile Include="Common\ObjectDataSourceQueryAdapterBase.cs" />
-    <Compile Include="Common\QueryCondition.cs" />
     <Compile Include="Common\RelativeTicket.cs" />
     <Compile Include="Common\RelativeTicketSettings.cs" />
-    <Compile Include="Common\DBTimePointActionContext.cs" />
-    <Compile Include="Common\UpdatableAdapterBase.cs" />
-    <Compile Include="Common\UpdatableAndLoadableAdapterBase..cs" />
-    <Compile Include="Common\VersionStrategyQuerySqlBuilder.cs" />
-    <Compile Include="Common\VersionStrategyUpdateSqlBuilder.cs" />
-    <Compile Include="Common\VersionStrategyUpdateSqlHelper.cs" />
     <Compile Include="Common\WorkflowObjectBase.cs" />
     <Compile Include="Configuration\ConnectionNameMappingSettings.cs" />
     <Compile Include="Configuration\EnumSettings.cs" />
+    <Compile Include="Configuration\ObjectToPropertySettings.cs" />
+    <Compile Include="Configuration\ObjectValueToPropertyValueConfigurationElement.cs" />
     <Compile Include="Configuration\PropertyDefineSettings.cs" />
     <Compile Include="Configuration\PropertyPersisterSettings.cs" />
     <Compile Include="Configuration\ResourceUriSettings.cs" />
     <Compile Include="Configuration\UserRecentDataConfiguration.cs" />
+    <Compile Include="Configuration\PropertyEditorParamsSettings.cs" />
+    <Compile Include="Extended\ExtendedProperties.cs" />
+    <Compile Include="Extended\ExtendedPropertiesAdapter.cs" />
+    <Compile Include="Generic\GenericFormDataAdapter.cs" />
     <Compile Include="InvalidAssignees\InvalidAssignee.cs" />
     <Compile Include="InvalidAssignees\InvalidAssigneeAdapter.cs" />
-    <Compile Include="InvalidAssignees\InvalidAssigneesUrlAdapter.cs" />
     <Compile Include="InvalidAssignees\InvalidAssigneeUrl.cs" />
+    <Compile Include="InvalidAssignees\InvalidAssigneesUrlAdapter.cs" />
     <Compile Include="InvalidAssignees\SendInvalidNotificationSettingsSection.cs" />
+    <Compile Include="Job\TimeScope.cs" />
     <Compile Include="Log\UserOperationTasksLog.cs" />
     <Compile Include="Log\UserOperationTasksLogAdapter.cs" />
+    <Compile Include="Material\CommonDeltaMaterialsContainer.cs" />
+    <Compile Include="Material\DefaultMaterialFileOperation.cs" />
+    <Compile Include="Material\IMaterialFileOperation.cs" />
+    <Compile Include="Material\MaterialFileOeprrationInfo.cs" />
+    <Compile Include="Material\MaterialFileOperationSettings.cs" />
+    <Compile Include="Material\SyncMaterialFileToDocCenterOperation.cs" />
+    <Compile Include="OguObjects\OguApplication.cs" />
+    <Compile Include="OguObjects\OguApplicationConverter.cs" />
+    <Compile Include="OguObjects\OguPermissionObjectCollectionBase.cs" />
+    <Compile Include="OguObjects\OguPermissionObjectConverter.cs" />
+    <Compile Include="OguObjects\OguRoleConverter.cs" />
+    <Compile Include="OguObjects\OguPermissionObjectBase.cs" />
+    <Compile Include="OguObjects\SOARolePropertyRowCollection.cs" />
+    <Compile Include="OguObjects\UserIMAddress.cs" />
+    <Compile Include="OguObjects\SOARoleExtension.cs" />
+    <Compile Include="OguObjects\SOARolePropertyRowRoles.cs" />
     <Compile Include="PhoneNumber\PhoneNumber.cs" />
     <Compile Include="PhoneNumber\Countrycode.cs" />
     <Compile Include="Counter\Counter.cs" />
@@ -111,15 +154,47 @@
     <Compile Include="OguObjects\UserCustomSearchCondition.cs" />
     <Compile Include="OguObjects\UserCustomSearchConditionAdapter.cs" />
     <Compile Include="PhoneNumber\VersionPhoneNumberUpdateSqlBuilder.cs" />
+    <Compile Include="PropertyDefine\DateTimeObjectValueToPropertyValue.cs" />
+    <Compile Include="PropertyDefine\DefaultObjectValueToPropertyValueConverters.cs" />
     <Compile Include="PropertyDefine\EditorParamsDefine.cs" />
     <Compile Include="PropertyDefine\Interfaces.cs" />
     <Compile Include="InvalidAssignees\InvalidAssigneesNotification.cs" />
+    <Compile Include="PropertyDefine\IObjectValueToPropertyValue.cs" />
+    <Compile Include="PropertyDefine\ObjectToPropertiesHelper.cs" />
+    <Compile Include="PropertyDefine\ObjectValueTypeAndConverter.cs" />
+    <Compile Include="PropertyDefine\OguObjectValueToPropertyValue.cs" />
     <Compile Include="PropertyDefine\Persiter\ImagePropertyPersister.cs" />
     <Compile Include="PropertyDefine\Persiter\IPropertyPersister.cs" />
     <Compile Include="PropertyDefine\Persiter\PropertiesPersisterHelper.cs" />
     <Compile Include="PropertyDefine\Persiter\UserPasswordPersister.cs" />
     <Compile Include="PropertyDefine\PropertyValidatorDescriptorConverter.cs" />
     <Compile Include="PropertyDefine\PropertyValidatorParameterDescriptorConverter.cs" />
+    <Compile Include="SysTasks\ExecuteSysTaskActivityTask.cs" />
+    <Compile Include="SysTasks\ExecuteSysTaskActivityTaskExecutor.cs" />
+    <Compile Include="SysTasks\InvokeServiceSyncTask.cs" />
+    <Compile Include="SysTasks\InvokeServiceTask.cs" />
+    <Compile Include="SysTasks\InvokeServiceTaskAdapter.cs" />
+    <Compile Include="SysTasks\InvokeServiceTaskExecutor.cs" />
+    <Compile Include="SysTasks\StartWorkflowSyncTask.cs" />
+    <Compile Include="SysTasks\SysAccomplishedTaskAdapter.cs" />
+    <Compile Include="SysTasks\SysAccomplishedTask.cs" />
+    <Compile Include="SysTasks\SysTask.cs" />
+    <Compile Include="SysTasks\ISysTaskExecutor.cs" />
+    <Compile Include="SysTasks\JobRelatedSyncSysTaskBase.cs" />
+    <Compile Include="SysTasks\SyncSysTaskExecutorBase.cs" />
+    <Compile Include="SysTasks\SysTaskActivity.cs" />
+    <Compile Include="SysTasks\SysTaskActivityAdapter.cs" />
+    <Compile Include="SysTasks\SysTaskActivityStatus.cs" />
+    <Compile Include="SysTasks\SysTaskAdapterBase.cs" />
+    <Compile Include="SysTasks\SysTaskBase.cs" />
+    <Compile Include="SysTasks\SysTaskAdapter.cs" />
+    <Compile Include="SysTasks\SysTaskProcess.cs" />
+    <Compile Include="SysTasks\SysTaskProcessAdapter.cs" />
+    <Compile Include="SysTasks\SysTaskProcessBlockingType.cs" />
+    <Compile Include="SysTasks\SysTaskProcessRuntime.cs" />
+    <Compile Include="SysTasks\SysTaskProcessRuntimeContext.cs" />
+    <Compile Include="SysTasks\SysTaskProcessStatus.cs" />
+    <Compile Include="SysTasks\SysTaskSettings.cs" />
     <Compile Include="TaskAssignees\TaskAssignedObject.cs" />
     <Compile Include="TaskAssignees\TaskAssignedObjectAdapter.cs" />
     <Compile Include="TaskAssignees\TaskAssigneeAdapterBase.cs" />
@@ -218,8 +293,8 @@
     <Compile Include="OguObjects\UserInfoExtendDataObjectAdapter.cs" />
     <Compile Include="OguObjects\UserReportInfoAdapter.cs" />
     <Compile Include="OguObjects\UserReportLine.cs" />
-    <Compile Include="OguObjects\Opinion\GenericOpinion.cs" />
-    <Compile Include="OguObjects\Opinion\GenericOpinionAdapter.cs" />
+    <Compile Include="Opinion\GenericOpinion.cs" />
+    <Compile Include="Opinion\GenericOpinionAdapter.cs" />
     <Compile Include="PopupTip\Tip.cs" />
     <Compile Include="PopupTip\TipAdapter.cs" />
     <Compile Include="Post\WfPost.cs" />
@@ -272,6 +347,7 @@
     <Compile Include="UserSettings\UserSettingsCache.cs" />
     <Compile Include="UserSettings\UserSettingsCategory.cs" />
     <Compile Include="UserSettings\UserSettingsConfig.cs" />
+    <Compile Include="UserSettings\UserSettingsCultureInfoAccessor.cs" />
     <Compile Include="UserTask\DefaultUserTaskOperationImpl.cs" />
     <Compile Include="UserTask\Enumerations.cs" />
     <Compile Include="UserTask\INotify.cs" />
@@ -287,6 +363,9 @@
     <Compile Include="UserTask\UserTaskCollection.cs" />
     <Compile Include="UserTask\UserTaskCount.cs" />
     <Compile Include="UserTask\UserTaskOperationSettings.cs" />
+    <Compile Include="UserTask\UserTaskServicePlugin.cs" />
+    <Compile Include="UserTask\UserTaskServicePluginBroker.cs" />
+    <Compile Include="UserTask\WriteToLoggerUserTaskOperationImpl.cs" />
     <Compile Include="Validators\DecimalRangeValidator.cs" />
     <Compile Include="Validators\DecimalRangeValidatorAttribute.cs" />
     <Compile Include="Validators\DoubleRangeValidator.cs" />
@@ -298,21 +377,51 @@
     <Compile Include="Validators\StringByteLengthValidator.cs" />
     <Compile Include="Validators\StringByteLengthValidatorAttribute.cs" />
     <Compile Include="Group\WfGroupAdapter.cs" />
+    <Compile Include="Workflow\Actions\ActivityInvokeServiceActionBase.cs" />
+    <Compile Include="Workflow\Actions\BeWithdrawnInvokeServiceAction.cs" />
     <Compile Include="Workflow\Actions\CancelExecuteInvokeServiceAction.cs" />
+    <Compile Include="Workflow\Actions\CompleteProcessUserTaskAction.cs" />
     <Compile Include="Workflow\Actions\EnterActivityInvokeServiceAction.cs" />
+    <Compile Include="Workflow\Actions\InvokeServiceActionBase.cs" />
     <Compile Include="Workflow\Actions\LeaveActivityInvokeServiceAction.cs" />
+    <Compile Include="Workflow\Actions\ProcessStatusChangeSyncAction.cs" />
+    <Compile Include="Workflow\Actions\RestoreProcessUserTaskAction.cs" />
+    <Compile Include="Workflow\Actions\WithdrawInvokeServiceAction.cs" />
     <Compile Include="Workflow\Builders\WfApprovalProcessBuilder.cs" />
     <Compile Include="Workflow\Builders\WfCirculationProcessBuilder.cs" />
-    <Compile Include="Workflow\Builders\WfCreateActivityParams.cs" />
+    <Compile Include="Workflow\Builders\WfCreateActivityBuiltInFunctions.cs" />
+    <Compile Include="Workflow\Builders\WfCreateActivityFunctionContext.cs" />
+    <Compile Include="Workflow\Builders\WfCreateActivityParam.cs" />
+    <Compile Include="Workflow\Builders\WfCreateProcessParam.cs" />
+    <Compile Include="Workflow\Builders\WfCreateTransitionParam.cs" />
     <Compile Include="Workflow\Builders\WfTemplateBuilder.cs" />
+    <Compile Include="Workflow\Conditions\Enumerations.cs" />
+    <Compile Include="Workflow\Conditions\WfProcessQueryCondition.cs" />
+    <Compile Include="Workflow\Configuration\WfDecoratorSettings.cs" />
+    <Compile Include="Workflow\Configuration\WfExtraPersistenceSettings.cs" />
+    <Compile Include="Workflow\Configuration\WfPersistenceSettingsBase.cs" />
+    <Compile Include="Workflow\Configuration\WfQueuePersistenceSettings.cs" />
+    <Compile Include="Workflow\Configuration\WfServiceAddressDefinitionConfigurationElement.cs" />
+    <Compile Include="Workflow\Configuration\WfServiceDefinitionSettings.cs" />
+    <Compile Include="Workflow\Configuration\WfServiceOperationDefinitionConfigurationElement.cs" />
+    <Compile Include="Workflow\Configuration\WfServiceOperationParameterConfigurationElement.cs" />
+    <Compile Include="Workflow\Configuration\WfSimulationSettings.cs" />
+    <Compile Include="Workflow\Contracts\IWfProcessService.cs" />
     <Compile Include="Workflow\Controls\WfControlNextStepCollection.cs" />
+    <Compile Include="Workflow\Controls\WfDesignerOperationType.cs" />
     <Compile Include="Workflow\Converters\EasyWfAvtivityDescriptorConverter.cs" />
     <Compile Include="Workflow\Converters\EasyWfBackwardTransitionDescriptorConverter.cs" />
     <Compile Include="Workflow\Converters\EasyWfDescriptorConverterBase.cs" />
     <Compile Include="Workflow\Converters\EasyWfForwardTransitionDescriptorConverter.cs" />
     <Compile Include="Workflow\Converters\EasyWfTransitionDescriptorBaseConverter.cs" />
+    <Compile Include="Workflow\Converters\EasyWfVariableDescriptorConverter.cs" />
+    <Compile Include="Workflow\Converters\SOARolePropertyValueConverter.cs" />
     <Compile Include="Workflow\Converters\UserSettingsCategoryConverter.cs" />
+    <Compile Include="Workflow\Converters\WfActivityMatrixResourceDescriptorConverter.cs" />
     <Compile Include="Workflow\Converters\WfAssigneeConverter.cs" />
+    <Compile Include="Workflow\Converters\WfAURoleResourceDescriptorConverter.cs" />
+    <Compile Include="Workflow\Converters\WfBranchProcessStartupParamsConverter.cs" />
+    <Compile Include="Workflow\Converters\WfBranchProcessTransferParamsConverter.cs" />
     <Compile Include="Workflow\Converters\WfControlNextStepConverter.cs" />
     <Compile Include="Workflow\Converters\WfDynamicResourceDescriptorConverter.cs" />
     <Compile Include="Workflow\Converters\WfExternalUserConverter.cs" />
@@ -322,8 +431,55 @@
     <Compile Include="Workflow\Converters\WfServiceAddressDefinitionConverter.cs" />
     <Compile Include="Workflow\Converters\WfServiceOperationDefinitionConverter.cs" />
     <Compile Include="CommonInfoMapping\ICommonInfoMappingUpdater.cs" />
-    <Compile Include="Workflow\DataObjects\IWfDelegationReader.cs" />
-    <Compile Include="Workflow\DataObjects\IWfProcessAdminRole.cs" />
+    <Compile Include="Workflow\Converters\WfSimulationParametersConverter.cs" />
+    <Compile Include="Workflow\Converters\WrappedAUSchemaRoleConverter.cs" />
+    <Compile Include="Workflow\DataObjects\WfServiceOperationParameter.cs" />
+    <Compile Include="Workflow\Decorators\WfSecretaryDecorator.cs" />
+    <Compile Include="Workflow\Decorators\WfSecretaryOperation.cs" />
+    <Compile Include="Workflow\Converters\SOARolePropertyDefinitionConverter.cs" />
+    <Compile Include="Workflow\Converters\SOARolePropertyRowConverter.cs" />
+    <Compile Include="Workflow\Descriptors\ResourceDescriptors\WfActivityMatrixResource.cs" />
+    <Compile Include="Workflow\Descriptors\ResourceDescriptors\WrappedAUSchemaRole.cs" />
+    <Compile Include="Workflow\Descriptors\ResourceDescriptors\WfAURoleResourceDescriptor.cs" />
+    <Compile Include="Workflow\Descriptors\ResourceDescriptors\WrappedAURoleMembers.cs" />
+    <Compile Include="Workflow\Descriptors\WfActivityDeleteInfo.cs" />
+    <Compile Include="Workflow\Descriptors\WfActivityDescriptor_Dynamic.cs" />
+    <Compile Include="Workflow\Descriptors\WfProbeActivityArgs.cs" />
+    <Compile Include="Workflow\Executors\Admin\WfAdminAddActivityExecutor.cs" />
+    <Compile Include="Workflow\Executors\Admin\WfAdminAddTransitionExecutor.cs" />
+    <Compile Include="Workflow\Executors\Admin\WfAdminDeleteActivityExecutor.cs" />
+    <Compile Include="Workflow\Executors\Admin\WfAdminDeleteTransitionExecutor.cs" />
+    <Compile Include="Workflow\Executors\Admin\WfEditActivityPropertiesExecutor.cs" />
+    <Compile Include="Workflow\Executors\Admin\WfEditProcessPropertiesExecutor.cs" />
+    <Compile Include="Workflow\Executors\Admin\WfEditPropertiesExecutorBase.cs" />
+    <Compile Include="Workflow\Executors\Admin\WfEditTransitionPropertiesExecutor.cs" />
+    <Compile Include="Workflow\Executors\Designer\WfClearAllTemplatesExecutor.cs" />
+    <Compile Include="Workflow\Executors\Designer\WfDeleteTemplateExecutor.cs" />
+    <Compile Include="Workflow\Executors\Designer\WfDesignerExecutorDataContext.cs" />
+    <Compile Include="Workflow\Executors\Designer\WfDesignerExecutorDelegations.cs" />
+    <Compile Include="Workflow\Executors\Designer\WfImportApprovalMatrixExecutor.cs" />
+    <Compile Include="Workflow\Executors\Designer\WfImportTemplateExecutor.cs" />
+    <Compile Include="Workflow\Executors\Designer\WfSaveTemplateExecutor.cs" />
+    <Compile Include="Workflow\Executors\WfAsyncCancelProcessExecutor.cs" />
+    <Compile Include="Workflow\Executors\WfAsyncWithdrawExecutor.cs" />
+    <Compile Include="Workflow\Executors\WfDeleteApprovalMatrixExecutor.cs" />
+    <Compile Include="Workflow\Executors\WfExecutorAction.cs" />
+    <Compile Include="Workflow\Executors\WfExitMaintainingStatusExecutor.cs" />
+    <Compile Include="Workflow\Executors\Designer\WfDesignerExecutorBase.cs" />
+    <Compile Include="Workflow\Executors\WfRestoreProcessExecutor.cs" />
+    <Compile Include="Workflow\Executors\WfStartBranchProcessExecutor.cs" />
+    <Compile Include="Workflow\Exporters\WfExportProcessDescriptorContext.cs" />
+    <Compile Include="Workflow\Exporters\WfExportProcessDescriptorParams.cs" />
+    <Compile Include="Workflow\Exporters\WfPackageRelationMapping.cs" />
+    <Compile Include="Workflow\Exporters\WfProcessDescriptorExporter.cs" />
+    <Compile Include="Workflow\Exporters\WfProcessDescriptorPackagePartType.cs" />
+    <Compile Include="Workflow\Extensions\ProcessExtensions.cs" />
+    <Compile Include="Workflow\Importers\WfPackageRelationMapping.cs" />
+    <Compile Include="Workflow\Importers\WfProcessImporter.cs" />
+    <Compile Include="Workflow\Importers\WfProcessImporterContext.cs" />
+    <Compile Include="Workflow\Interfaces\IWfDelegationReader.cs" />
+    <Compile Include="Workflow\Interfaces\IWfMatrixContainer.cs" />
+    <Compile Include="Workflow\Interfaces\IWfProcessAdminRole.cs" />
     <Compile Include="Workflow\Converters\WfNetworkCredentialConverter.cs" />
     <Compile Include="Workflow\DataObjects\WfAcl.cs" />
     <Compile Include="Workflow\DataObjects\WfAclAdapter.cs" />
@@ -331,12 +487,27 @@
     <Compile Include="Workflow\DataObjects\WfActivityTemplateAdpter.cs" />
     <Compile Include="CommonInfoMapping\CommonInfoMapping.cs" />
     <Compile Include="CommonInfoMapping\CommonInfoMappingAdapter.cs" />
+    <Compile Include="Workflow\DataObjects\WfApplication.cs" />
+    <Compile Include="Workflow\DataObjects\WfApplicationAdapter.cs" />
+    <Compile Include="Workflow\DataObjects\WfApplicationAuth.cs" />
+    <Compile Include="Workflow\DataObjects\WfApplicationAuthAdapter.cs" />
+    <Compile Include="Workflow\DataObjects\WfApplicationAuthCache.cs" />
+    <Compile Include="Workflow\DataObjects\WfApplicationProgramCodeName.cs" />
     <Compile Include="Workflow\DataObjects\WfDelegationSettings.cs" />
     <Compile Include="Workflow\DataObjects\WfGlobalParameters.cs" />
+    <Compile Include="Workflow\DataObjects\WfPersistQueueAdapter.cs" />
     <Compile Include="Workflow\DataObjects\WfProcessCurrentActivityAdapter.cs" />
+    <Compile Include="Workflow\DataObjects\WfProcessCurrentAssignee.cs" />
+    <Compile Include="Workflow\DataObjects\WfProcessCurrentAssigneeAdapter.cs" />
     <Compile Include="Workflow\DataObjects\WfProcessDescriptionCategory.cs" />
     <Compile Include="Workflow\DataObjects\WfProcessDescriptionCategoryAdapter.cs" />
+    <Compile Include="Workflow\DataObjects\WfProcessDescriptorDimension.cs" />
+    <Compile Include="Workflow\DataObjects\WfProcessDescriptorDimensionAdapter.cs" />
+    <Compile Include="Workflow\DataObjects\WfProcessDimension.cs" />
+    <Compile Include="Workflow\DataObjects\WfProcessDimensionAdapter.cs" />
+    <Compile Include="Workflow\DataObjects\WfProcessRelativeParam.cs" />
     <Compile Include="Workflow\DataObjects\WfProcessRelativeParamsAdapter.cs" />
+    <Compile Include="Workflow\DataObjects\WfProgram.cs" />
     <Compile Include="Workflow\DataObjects\WfRelativeProcess.cs" />
     <Compile Include="Workflow\DataObjects\WfRelativeProcessAdapter.cs" />
     <Compile Include="Workflow\DataObjects\WfServiceAddressDefinition.cs" />
@@ -344,9 +515,10 @@
     <Compile Include="Workflow\DataObjects\WfServiceInvoker.cs" />
     <Compile Include="Workflow\DataObjects\WfServiceOperationDefinition.cs" />
     <Compile Include="Workflow\DataObjects\WfNetworkCredential.cs" />
-    <Compile Include="Workflow\Descriptors\IWfCalculateUserFunction.cs" />
-    <Compile Include="Workflow\Descriptors\IWfCreateActivityParamsGenerator.cs" />
-    <Compile Include="Workflow\Descriptors\WfDynamicResource.cs" />
+    <Compile Include="Workflow\Descriptors\DataTypeDescriptionAttribute.cs" />
+    <Compile Include="Workflow\Interfaces\IWfCalculateUserFunction.cs" />
+    <Compile Include="Workflow\Interfaces\IWfCreateActivityParamsGenerator.cs" />
+    <Compile Include="Workflow\Descriptors\ResourceDescriptors\WfDynamicResourceDescriptor.cs" />
     <Compile Include="Workflow\Descriptors\WfEvaluationExceptionBase.cs" />
     <Compile Include="Workflow\Descriptors\WfMainStreamActivityDescriptor.cs" />
     <Compile Include="Workflow\Descriptors\WfProcessBuilderInfo.cs" />
@@ -354,6 +526,7 @@
     <Compile Include="Workflow\DTO\TransitionInfo.cs" />
     <Compile Include="Workflow\DTO\WorkflowInfo.cs" />
     <Compile Include="Workflow\Executors\WfMoveToExecutorBase.cs" />
+    <Compile Include="Workflow\Executors\WfPauseProcessExecutor.cs" />
     <Compile Include="Workflow\Executors\WfReplaceAssigneesExecutor.cs" />
     <Compile Include="Workflow\Executors\WfCancelProcessExecutor.cs" />
     <Compile Include="Workflow\Executors\WfCirculateExecutor.cs" />
@@ -380,7 +553,7 @@
     <Compile Include="Workflow\Executors\WfReturnExecutor.cs" />
     <Compile Include="Workflow\Executors\WfSaveDataExecutor.cs" />
     <Compile Include="Workflow\Executors\WfStartWorkflowExecutor.cs" />
-    <Compile Include="Workflow\Executors\WfUpdateActivityExecutor.cs" />
+    <Compile Include="Workflow\Executors\WfEditActivityExecutor.cs" />
     <Compile Include="Workflow\Executors\WfWithdrawExecutor.cs" />
     <Compile Include="Workflow\ExternalUser\WfExternalUser.cs" />
     <Compile Include="Workflow\Controls\WfControlNextStep.cs" />
@@ -390,7 +563,7 @@
     <Compile Include="Workflow\Converters\WfActivityOperatorResourceDescriptorConverter.cs" />
     <Compile Include="Workflow\Converters\WfRelativeLinkDescriptorConverter.cs" />
     <Compile Include="Workflow\Converters\WfResourceDescriptorConverterBase.cs" />
-    <Compile Include="Workflow\Actions\CancelProcessUserTaskActions.cs" />
+    <Compile Include="Workflow\Actions\CancelProcessUserTaskAction.cs" />
     <Compile Include="Workflow\Actions\WithdrawUserTaskAction.cs" />
     <Compile Include="Workflow\Builders\WfConsignPrcoessBuilder.cs" />
     <Compile Include="Workflow\Builders\WfFreeStepsProcessBuilder.cs" />
@@ -418,18 +591,19 @@
     <Compile Include="Workflow\DataObjects\WfDelegation.cs" />
     <Compile Include="Workflow\DataObjects\WfDelegationCache.cs" />
     <Compile Include="Workflow\DataObjects\WfDelegationsAdapter.cs" />
-    <Compile Include="Workflow\Descriptors\IWfBranchProcessTemplate.cs" />
-    <Compile Include="Workflow\Descriptors\IWfProcessDescriptor.cs" />
-    <Compile Include="Workflow\Descriptors\IWfProcessDescriptorManager.cs" />
-    <Compile Include="Workflow\Descriptors\IWfRelativeLinkDescriptor.cs" />
-    <Compile Include="Workflow\Descriptors\WfActivityAssigneesResourceDescriptor.cs" />
+    <Compile Include="Workflow\Interfaces\IWfBranchProcessTemplate.cs" />
+    <Compile Include="Workflow\Interfaces\IWfProcessDecorator.cs" />
+    <Compile Include="Workflow\Interfaces\IWfProcessDescriptor.cs" />
+    <Compile Include="Workflow\Interfaces\IWfProcessDescriptorManager.cs" />
+    <Compile Include="Workflow\Interfaces\IWfRelativeLinkDescriptor.cs" />
+    <Compile Include="Workflow\Descriptors\ResourceDescriptors\WfActivityAssigneesResourceDescriptor.cs" />
     <Compile Include="Workflow\Descriptors\WfActivityDescriptor.cs" />
-    <Compile Include="Workflow\Descriptors\WfActivityOperatorResourceDescriptor.cs" />
-    <Compile Include="Workflow\Descriptors\WfActivityResourceDescriptorBase.cs" />
+    <Compile Include="Workflow\Descriptors\ResourceDescriptors\WfActivityOperatorResourceDescriptor.cs" />
+    <Compile Include="Workflow\Descriptors\ResourceDescriptors\WfActivityResourceDescriptorBase.cs" />
     <Compile Include="Workflow\Descriptors\WfBranchProcessTemplate.cs" />
-    <Compile Include="Workflow\Descriptors\WfDepartmentResourceDescriptor.cs" />
+    <Compile Include="Workflow\Descriptors\ResourceDescriptors\WfDepartmentResourceDescriptor.cs" />
     <Compile Include="Workflow\Descriptors\WfFileProcessDescriptorManager.cs" />
-    <Compile Include="Workflow\Descriptors\WfGroupResourceDescriptor.cs" />
+    <Compile Include="Workflow\Descriptors\ResourceDescriptors\WfGroupResourceDescriptor.cs" />
     <Compile Include="Workflow\Descriptors\WfProcessDescriptor.cs" />
     <Compile Include="Workflow\Descriptors\WfProcessDescriptorCache.cs" />
     <Compile Include="Workflow\Descriptors\WfProcessDescriptorInfo.cs" />
@@ -437,16 +611,21 @@
     <Compile Include="Workflow\Descriptors\WfProcessDescriptorManager.cs" />
     <Compile Include="Workflow\Descriptors\WfProcessDescriptorManagerBase.cs" />
     <Compile Include="Workflow\Descriptors\WfRelativeLinkDescriptor.cs" />
-    <Compile Include="Workflow\Descriptors\WfResourceDescriptor.cs" />
-    <Compile Include="Workflow\Descriptors\WfRoleResourceDescriptor.cs" />
+    <Compile Include="Workflow\Descriptors\ResourceDescriptors\WfResourceDescriptor.cs" />
+    <Compile Include="Workflow\Descriptors\ResourceDescriptors\WfRoleResourceDescriptor.cs" />
     <Compile Include="Workflow\Descriptors\WfSqlProcessDescriptorManager.cs" />
     <Compile Include="Workflow\Descriptors\WfTransitionDescriptor.cs" />
     <Compile Include="Workflow\Common\Enumrations.cs" />
-    <Compile Include="Workflow\Descriptors\WfUserResourceDescriptor.cs" />
-    <Compile Include="Workflow\Matrix\IWfMatrixQuery.cs" />
+    <Compile Include="Workflow\Descriptors\ResourceDescriptors\WfUserResourceDescriptor.cs" />
+    <Compile Include="Workflow\Interfaces\IWfMatrixQuery.cs" />
+    <Compile Include="Workflow\Matrix\ExcelExtensions.cs" />
+    <Compile Include="Workflow\Matrix\WfApprovalMatrix.cs" />
+    <Compile Include="Workflow\Matrix\WfApprovalMatrixAdapter.cs" />
+    <Compile Include="Workflow\Matrix\WfMatrixContainerBase.cs" />
     <Compile Include="Workflow\Matrix\WfMatrixDefinitionCache.cs" />
     <Compile Include="Workflow\Matrix\WfMatrixDefinitionExportOptions.cs" />
     <Compile Include="Workflow\Matrix\WfMatrixDimensionDefinitionAdapter.cs" />
+    <Compile Include="Workflow\Matrix\WfMatrixExtensions.cs" />
     <Compile Include="Workflow\Matrix\WfMatrixQueryParam.cs" />
     <Compile Include="Workflow\Matrix\WfMatrix.cs" />
     <Compile Include="Workflow\Matrix\WfMatrixAdapter.cs" />
@@ -458,24 +637,39 @@
     <Compile Include="Workflow\Matrix\WfMatrixRowUsers.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Workflow\Runtime\IWfAction.cs" />
-    <Compile Include="Workflow\Runtime\IWfActivity.cs" />
-    <Compile Include="Workflow\Descriptors\IWfActivityDescriptor.cs" />
-    <Compile Include="Workflow\Descriptors\IWfDescriptor.cs" />
-    <Compile Include="Workflow\Runtime\IWfBranchProcessGroup.cs" />
-    <Compile Include="Workflow\Runtime\IWfBranchProcessInfo.cs" />
-    <Compile Include="Workflow\Runtime\IWfProcess.cs" />
-    <Compile Include="Workflow\Descriptors\IWfTransitionDescriptor.cs" />
+    <Compile Include="Workflow\Interfaces\IWfAction.cs" />
+    <Compile Include="Workflow\Interfaces\IWfActivity.cs" />
+    <Compile Include="Workflow\Interfaces\IWfActivityDescriptor.cs" />
+    <Compile Include="Workflow\Interfaces\IWfDescriptor.cs" />
+    <Compile Include="Workflow\Interfaces\IWfBranchProcessGroup.cs" />
+    <Compile Include="Workflow\Interfaces\IWfBranchProcessInfo.cs" />
+    <Compile Include="Workflow\Interfaces\IWfExtraProcessPersistManager.cs" />
+    <Compile Include="Workflow\Interfaces\IWfProcess.cs" />
+    <Compile Include="Workflow\Interfaces\IWfTransitionDescriptor.cs" />
     <Compile Include="Workflow\Descriptors\WfConditionDescriptor.cs" />
     <Compile Include="Workflow\Descriptors\WfDescriptorBase.cs" />
     <Compile Include="Workflow\Descriptors\WfDescriptorException.cs" />
-    <Compile Include="Workflow\Runtime\IWfProcessPersist.cs" />
+    <Compile Include="Workflow\Interfaces\IWfProcessPersist.cs" />
+    <Compile Include="Workflow\Runtime\WfActivityBase_Dynamic.cs" />
+    <Compile Include="Workflow\Runtime\WfActivityBase_Return.cs" />
+    <Compile Include="Workflow\Runtime\WfBranchProcessStatistics.cs" />
+    <Compile Include="Workflow\Runtime\WfCopyMainStreamActivityNode.cs" />
+    <Compile Include="Workflow\Runtime\WfCopyMainStreamContext.cs" />
+    <Compile Include="Workflow\Runtime\WfCopyMainStreamSubActivityNode.cs" />
+    <Compile Include="Workflow\Runtime\WfCurrentAssigneesPersistManager.cs" />
+    <Compile Include="Workflow\DataObjects\WfPersistQueue.cs" />
+    <Compile Include="Workflow\Runtime\WfPersistQueuePersistManager.cs" />
+    <Compile Include="Workflow\Runtime\WfProcessDimensionPersistManager.cs" />
+    <Compile Include="Workflow\Runtime\WfProcessInstanceDataAdapter.cs" />
+    <Compile Include="Workflow\Runtime\WfProcessRelativeParamsPersistManager.cs" />
+    <Compile Include="Workflow\Runtime\WfResumeProcessExecutor.cs" />
+    <Compile Include="Workflow\Interfaces\IWfSimulationWriter.cs" />
     <Compile Include="Workflow\Runtime\WfActivityBase.cs" />
     <Compile Include="Workflow\Runtime\WfActivityBuilder.cs" />
     <Compile Include="Workflow\Runtime\WfActivityChangingContext.cs" />
     <Compile Include="Workflow\Runtime\WfActivityCollection.cs" />
     <Compile Include="Workflow\Runtime\WfApplicationParametersContext.cs" />
-    <Compile Include="Workflow\Runtime\WfApplicationRumtimeParameters.cs" />
+    <Compile Include="Workflow\Runtime\WfApplicationRuntimeParameters.cs" />
     <Compile Include="Workflow\Runtime\WfAssigneeCollection.cs" />
     <Compile Include="Workflow\Runtime\ContextDictionaryBase.cs" />
     <Compile Include="Workflow\Runtime\WfBranchProcessGroup.cs" />
@@ -484,6 +678,8 @@
     <Compile Include="Workflow\Common\WfHelper.cs" />
     <Compile Include="Workflow\Descriptors\WfVariableDescriptor.cs" />
     <Compile Include="Workflow\Runtime\WfDefaultUserFunctionImpl.cs" />
+    <Compile Include="Workflow\Runtime\WfEventArgs.cs" />
+    <Compile Include="Workflow\Simulation\WfHtmlSimulationWriter.cs" />
     <Compile Include="Workflow\Runtime\WfInitialActivity.cs" />
     <Compile Include="Workflow\Runtime\WfNormalActivity.cs" />
     <Compile Include="Workflow\Descriptors\WfParameterDescriptor.cs" />
@@ -497,6 +693,8 @@
     <Compile Include="Workflow\DataObjects\WfProcessCurrentInfoAdapter.cs" />
     <Compile Include="Workflow\DataObjects\WfProcessCurrentInfo.cs" />
     <Compile Include="Workflow\Runtime\WfProcessInstanceData.cs" />
+    <Compile Include="Workflow\Simulation\WfSimulationContext.cs" />
+    <Compile Include="Workflow\Simulation\WfSimulationParameters.cs" />
     <Compile Include="Workflow\Runtime\WfSqlProcessPersistManager.cs" />
     <Compile Include="Workflow\Runtime\WfProcessStartupParams.cs" />
     <Compile Include="Workflow\Runtime\WfRuntime.cs" />
@@ -505,6 +703,22 @@
     <Compile Include="Workflow\Runtime\WfTransferParamsBase.cs" />
     <Compile Include="Workflow\Builders\WfProcessBuilderBase.cs" />
     <Compile Include="Workflow\DataObjects\WfProcessCurrentActivity.cs" />
+    <Compile Include="Workflow\Simulation\WfSimulator.cs" />
+    <Compile Include="Workflow\Simulation\WfSimulationResult.cs" />
+    <Compile Include="Workflow\Tasks\DispatchCancelBranchProcessesTask.cs" />
+    <Compile Include="Workflow\Tasks\DispatchCancelProcessSysTaskProcessBuilder.cs" />
+    <Compile Include="Workflow\Tasks\CancelProcessTask.cs" />
+    <Compile Include="Workflow\Tasks\DispatchCancelProcessTask.cs" />
+    <Compile Include="Workflow\Tasks\DispatchStartBranchProcessTask.cs" />
+    <Compile Include="Workflow\Tasks\DispatchWithdrawProcessSysTask.cs" />
+    <Compile Include="Workflow\Tasks\ExitMaintainingStatusTask.cs" />
+    <Compile Include="Workflow\Tasks\InvokeProcessServiceTaskBase.cs" />
+    <Compile Include="Workflow\Tasks\StartBranchProcessSysTaskProcessBuilder.cs" />
+    <Compile Include="Workflow\Tasks\StartBranchProcessTask.cs" />
+    <Compile Include="Workflow\Tasks\WfSysTaskActivityHelper.cs" />
+    <Compile Include="Workflow\Tasks\WfSysTaskProcessBuilderBase.cs" />
+    <Compile Include="Workflow\Tasks\DispatchWithdrawProcessSysTaskProcessBuilder.cs" />
+    <Compile Include="Workflow\Tasks\WithdrawProcessTask.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\PropertyFormLayoutSettings.cs" />
@@ -518,7 +732,6 @@
     <EmbeddedResource Include="Workflow\Matrix\MatrixTemplate.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Common\SplitPage.sql" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -531,56 +744,73 @@
     <Content Include="Validators\IOguObjectNullValidator.js" />
     <Content Include="Validators\RangeValidator.js" />
     <Content Include="Validators\StringByteLengthValidator.js" />
+    <EmbeddedResource Include="Workflow\DataObjects\UserRelativeProcessMatrices.sql" />
+    <EmbeddedResource Include="Workflow\DataObjects\UserRelativeProcessDescriptors.sql" />
+    <EmbeddedResource Include="Workflow\DataObjects\UserRelativeRunningProcesses.sql" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="WorkPlan\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MCS.Library.Compression\MCS.Library.Compression.P.csproj">
-      <Project>{5F8A23A8-7E37-4724-86EE-F512B0D3C322}</Project>
+      <Project>{51f28e9a-9a90-44c2-91d0-9cbb291ea93f}</Project>
       <Name>MCS.Library.Compression.P</Name>
     </ProjectReference>
     <ProjectReference Include="..\MCS.Library.Data\MCS.Library.Data.P.csproj">
-      <Project>{4313DE1E-738F-477D-B7FD-B237E9116670}</Project>
+      <Project>{4313de1e-738f-477d-b7fd-b237e9116670}</Project>
       <Name>MCS.Library.Data.P</Name>
     </ProjectReference>
     <ProjectReference Include="..\MCS.Library.Office.OpenXml.Excel\MCS.Library.Office.OpenXml.Excel.P.csproj">
-      <Project>{69A1E346-A9A4-49A3-B9B0-CAA03BCE8A62}</Project>
+      <Project>{69a1e346-a9a4-49a3-b9b0-caa03bce8a62}</Project>
       <Name>MCS.Library.Office.OpenXml.Excel.P</Name>
     </ProjectReference>
     <ProjectReference Include="..\MCS.Library.Office\MCS.Library.Office.P.csproj">
-      <Project>{EA421112-C6BF-40B6-9222-5E6F4989B4A9}</Project>
+      <Project>{ea421112-c6bf-40b6-9222-5e6f4989b4a9}</Project>
       <Name>MCS.Library.Office.P</Name>
     </ProjectReference>
     <ProjectReference Include="..\MCS.Library.OGUPermission\MCS.Library.OGUPermission.P.csproj">
-      <Project>{6EA98729-9A07-4D1F-B389-07C6B9D43B1D}</Project>
+      <Project>{6ea98729-9a07-4d1f-b389-07c6b9d43b1d}</Project>
       <Name>MCS.Library.OGUPermission.P</Name>
     </ProjectReference>
     <ProjectReference Include="..\MCS.Library.Passport\MCS.Library.Passport.P.csproj">
-      <Project>{2B974479-EB50-46D1-A812-58BB45447D65}</Project>
+      <Project>{2b974479-eb50-46d1-a812-58bb45447d65}</Project>
       <Name>MCS.Library.Passport.P</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MCS.Library.SOA.DataObjects.Schemas.Client\MCS.Library.SOA.DataObjects.Schemas.Client.P.csproj">
+      <Project>{e06bfb86-31b4-44cd-8976-901eb7dd1aa9}</Project>
+      <Name>MCS.Library.SOA.DataObjects.Schemas.Client.P</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MCS.Library.SOA.DataObjects.Security.AUClient\MCS.Library.SOA.DataObjects.Security.AUClient.P.csproj">
+      <Project>{46c6fa8c-3e0f-4bc8-8b4d-68ab9a7c69af}</Project>
+      <Name>MCS.Library.SOA.DataObjects.Security.AUClient.P</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MCS.Library.WcfExtensions\MCS.Library.WcfExtensions.P.csproj">
-      <Project>{F4819ABF-3CD4-4158-BF86-8FE4D3F6A7A6}</Project>
+      <Project>{f4819abf-3cd4-4158-bf86-8fe4d3f6a7a6}</Project>
       <Name>MCS.Library.WcfExtensions.P</Name>
     </ProjectReference>
     <ProjectReference Include="..\MCS.Library\MCS.Library.P.csproj">
-      <Project>{4077B0B7-062A-4F6D-8A45-A180A2ED3215}</Project>
+      <Project>{4077b0b7-062a-4f6d-8a45-a180a2ed3215}</Project>
       <Name>MCS.Library.P</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MCS.Web.Library\MCS.Web.Library.P.csproj">
-      <Project>{13C52DE4-BAFD-41E7-8D12-1C27221BACDD}</Project>
-      <Name>MCS.Web.Library.P</Name>
+    <ProjectReference Include="..\MCS.Web.Library.Script.Json\MCS.Web.Library.Script.Json.P.csproj">
+      <Project>{78cd90d6-129a-401c-8396-e7ad8996219e}</Project>
+      <Name>MCS.Web.Library.Script.Json.P</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
+    <PreBuildEvent>IF NOT EXIST "$(ProjectDir)..\..\Bin" MD "$(ProjectDir)..\..\Bin"
+IF EXIST "$(ProjectDir)..\..\Bin\$(TargetFileName)" DEL "$(ProjectDir)..\..\Bin\$(TargetFileName)"
+IF EXIST "$(ProjectDir)..\..\Bin\$(TargetName).pdb" DEL "$(ProjectDir)..\..\Bin\$(TargetName).pdb"
+IF EXIST "$(ProjectDir)..\..\Bin\$(TargetName).xml" DEL "$(ProjectDir)..\..\Bin\$(TargetName).xml"</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>set path=%25path%25;C:\Windows\System32
+ 
+
+ XCOPY "$(TargetPath)"  "$(ProjectDir)..\..\Bin" /Y /D /R
+IF EXIST "$(TargetDir)$(TargetName).pdb" XCOPY "$(TargetDir)$(TargetName).pdb" "$(ProjectDir)..\..\Bin" /Y /D /R
+IF EXIST "$(TargetDir)$(TargetName).xml"  XCOPY "$(TargetDir)$(TargetName).xml" "$(ProjectDir)..\..\Bin" /Y /D /R</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

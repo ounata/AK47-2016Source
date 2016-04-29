@@ -11,13 +11,36 @@
 
 
             vm.dateOptions = {
-                // dateDisabled: disabled,
-                formatYear: 'yy',
-                // maxDate: new Date(2020, 5, 22),
-                // minDate: new Date(),
-                startingDay: 1
+                datepickerMode: 'day',
+                formatDay: 'dd',
+                formatMonth: 'MMMM',
+                formatYear: 'yyyy',
+                formatDayHeader: 'EEE',
+                formatDayTitle: 'MMMM yyyy',
+                formatMonthTitle: 'yyyy',
+                maxDate: null,
+                maxMode: 'year',
+                minDate: null,
+                minMode: 'day',
+                shortcutPropagation: false,
+                showWeeks: true,
+                yearColumns: 5,
+                yearRows: 4
             };
 
+            vm.timeOptions = {
+                hourStep: 1,
+                minuteStep: 1,
+                secondStep: 1,
+                showMeridian: true,
+                showSeconds: false,
+                meridians: null,
+                readonlyInput: false,
+                mousewheel: true,
+                arrowkeys: true,
+                showSpinners: true,
+                templateUrl: 'uib/template/timepicker/timepicker.html'
+            };
 
 
             vm.open1 = function() {

@@ -11,6 +11,10 @@
     <ProjectItem Include="PPTS.WebAPI.Customers\PPTS.WebAPI.Customers.csproj" />
     <ProjectItem Include="PPTS.WebAPI.Products\PPTS.WebAPI.Products.csproj" />
     <ProjectItem Include="PPTS.WebAPI.Orders\PPTS.WebAPI.Orders.csproj" />
+
+    <ProjectItem Include="PPTS.Services.Customers\PPTS.Services.Customers.csproj" />
+    <ProjectItem Include="PPTS.Services.Products\PPTS.Services.Products.csproj" />
+
     <ProjectItem Include="PPTS.Portal\PPTS.Portal.csproj" />	
   </ItemGroup>
   <Target Name="BuildOtherProjects">

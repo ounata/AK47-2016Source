@@ -43,6 +43,14 @@ namespace MCS.Library.Data.Builder
         }
 
         /// <summary>
+        /// 数据库端返回当前Utc时间的函数名称
+        /// </summary>
+        string DBCurrentUtcTimeFunction
+        {
+            get;
+        }
+
+        /// <summary>
         /// 返回数据库中获得字符串长度的函数名称
         /// </summary>
         /// <param name="data">字段、变量或常量的名称</param>

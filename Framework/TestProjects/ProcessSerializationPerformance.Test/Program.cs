@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MCS.Library.Net.SNTP;
 
 namespace ProcessSerializationPerformance.Test
 {
@@ -17,18 +18,26 @@ namespace ProcessSerializationPerformance.Test
     {
         static void Main(string[] args)
         {
-            IWfProcessDescriptor processDesp = LoadProcessDescriptor();
+            IWfProcess process = null;
 
-            IWfProcess process = StartProcess(processDesp);
+            TimeSpan elapsedTime = ExecuteAction((sw) => process = WfRuntime.GetProcessByProcessID("ef952248-cb62-bbf7-4ceb-18d852f63a77"));
 
-            const int count = 20;
+            //IWfProcessDescriptor processDesp = LoadProcessDescriptor();
 
-            TimeSpan elapsedTime = ExecuteAction((sw) => MultiSerializeTest(process, count, sw));
+            //IWfProcess process = StartProcess(processDesp);
 
-            Console.WriteLine("Execute count: {0}, Elapsed time: {1:#,##0.00}, Average time: {2:#,##0.00}",
-                count,
-                elapsedTime.TotalMilliseconds,
-                elapsedTime.TotalMilliseconds / count);
+            //const int count = 20;
+
+            //TimeSpan elapsedTime = ExecuteAction((sw) => MultiSerializeTest(process, count, sw));
+
+            //Console.WriteLine("Execute count: {0}, Elapsed time: {1:#,##0.00}, Average time: {2:#,##0.00}",
+            //    count,
+            //    elapsedTime.TotalMilliseconds,
+            //    elapsedTime.TotalMilliseconds / count);
+
+            //process.Descriptor.Name
+            Console.WriteLine("Process: {0}, Activity Count: {1}, Loading time: {2:#,##0.00}",
+                "", process.Activities.Count, elapsedTime.TotalMilliseconds);
 
             Console.ReadLine();
         }
@@ -63,6 +72,18 @@ namespace ProcessSerializationPerformance.Test
 
         private static TimeSpan ExecuteAction(Action<Stopwatch> action)
         {
+            PerformanceMonitorHelper.DefaultMonitorName = "Test";
+            MonitorData md = PerformanceMonitorHelper.StartMonitor("Test");
+
+            md.MonitorName = "Test";
+            md.EnableLogging = true;
+            md.EnablePFCounter = false;
+
+            md.InstanceName = md.MonitorName;
+
+            if (md.EnableLogging)
+                md.LogWriter.WriteLine("请求{0}的开始时间: {1:yyyy-MM-dd HH:mm:ss.fff}", md.MonitorName, SNTPClient.AdjustedTime);
+
             Stopwatch sw = new Stopwatch();
 
             sw.Start();
@@ -75,6 +96,13 @@ namespace ProcessSerializationPerformance.Test
             finally
             {
                 sw.Stop();
+
+                StringBuilder strB = ((StringWriter)md.LogWriter).GetStringBuilder();
+
+                if (strB.Length > 0)
+                {
+                    Console.WriteLine(strB.ToString());
+                }
             }
 
             return sw.Elapsed;

@@ -82,6 +82,7 @@
     <Build Include="MT\Tables\TeacherTeachings.sql" />
     <Build Include="MT\Tables\Teachers.sql" />
     <Build Include="MT\Tables\TeacherJobs.sql" />
+    <Build Include="MT\Tables\Configs.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PPTS.Data.Common.DB.refactorlog" />
@@ -90,6 +91,8 @@
     <None Include="PPTS.Data.Common.Local.Test.DB.publish.xml" />
     <None Include="PPTS.Data.Common.Local.Dev.DB.publish.xml" />
     <None Include="PPTS.Data.Common.XueDa.Dev.DB.publish.xml" />
+    <None Include="PPTS.Data.Common.XueDa.Dev.Test.DB.publish.xml" />
+    <None Include="PPTS.Data.Common.Cloud.Test.DB.publish.xml" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\Script.PostDeployment.sql" />

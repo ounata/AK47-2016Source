@@ -1002,7 +1002,7 @@
                 cache: false,
 				type: setting.async.type,
 				url: tools.apply(setting.async.url, [setting.treeId, node], setting.async.url),
-				data: tmpParam,
+				data: JSON.stringify(tmpParam),
 				dataType: setting.async.dataType,
 				success: function(msg) {
 					if (_tmpV != data.getRoot(setting)._ver) {

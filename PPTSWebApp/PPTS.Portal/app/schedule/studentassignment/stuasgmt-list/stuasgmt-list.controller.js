@@ -1,12 +1,14 @@
 ﻿define([ppts.config.modules.schedule,
         ppts.config.dataServiceConfig.studentAssignmentDataService],
-        function (customer) {
-            customer.registerController('stuAsgmtListController', [
+        function (schedule) {
+            schedule.registerController('stuAsgmtListController', [
                 '$scope', '$state', 'dataSyncService', 'studentassignmentDataService',
                 function ($scope, $state, dataSyncService, studentassignmentDataService) {
                     var vm = this;
                     vm.data = {
-                        selection: 'checkbox',
+                        selection: 'radio',
+                        rowsSelected: [],
+                        keyFields: ['customerID'],
                         headers: [{
                             field: "customerName",
                             name: "学员姓名",
@@ -83,5 +85,14 @@
                             item.checked = false;
                         });
                     };**/
+
+                    vm.stuAssignClick = function () {
+                        if (vm.data.rowsSelected[0] == undefined) {
+                            alert("请选择一个学员");
+                            return;
+                        }
+                        //$state.go('ppts.schedule-add', { cID: vm.data.rowsSelected[0].customerID });
+                        $state.go('ppts.stuasgmt-course', { cID: vm.data.rowsSelected[0].customerID });
+                    };
                 }]);
         });

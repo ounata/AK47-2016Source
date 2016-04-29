@@ -66,6 +66,9 @@
     <Reference Include="PPTS.Data.Common">
       <HintPath>..\..\PPTSBin\PPTS.Data.Common.dll</HintPath>
     </Reference>
+    <Reference Include="PPTS.Data.Common.Entities">
+      <HintPath>..\..\PPTSBin\PPTS.Data.Common.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -80,12 +83,25 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="app\account\display\display-view\account-view.controller.js" />
-    <Content Include="app\account\display\display-view\account-view.html" />
+    <Content Include="app\account\charge\charge-edit\charge-edit.controller.js" />
+    <Content Include="app\account\charge\charge-edit\charge-edit.html" />
+    <Content Include="app\account\charge\charge-view\charge-view.controller.js" />
+    <Content Include="app\account\charge\charge-view\charge-view.html" />
+    <Content Include="app\account\charge\charge-view\charge-print.controller.js" />
+    <Content Include="app\account\charge\charge-view\charge-print.html" />
+    <Content Include="app\account\charge\payment-edit\payment-edit.controller.js" />
+    <Content Include="app\account\charge\payment-edit\payment-edit.html" />
+    <Content Include="app\account\charge\payment-list\payment-list.controller.js" />
+    <Content Include="app\account\charge\payment-list\payment-list.html" />
+    <Content Include="app\account\charge\payment-list\payment-print.controller.js" />
+    <Content Include="app\account\charge\payment-list\payment-print.html" />
+    <Content Include="app\account\display\account-view\account-view.controller.js" />
+    <Content Include="app\account\display\account-view\account-view.html" />
     <Content Include="app\account\display\display.dataService.js" />
     <Content Include="app\account\ppts.account.readme.txt" />
     <Content Include="app\auditing\auditinglist\auditing.dataService.js" />
     <Content Include="app\auditing\ppts.auditing.js" />
+    <Content Include="app\common\global\ppts.controller.js" />
     <Content Include="app\common\global\ppts.directive.js" />
     <Content Include="app\common\global\ppts.interceptor.js" />
     <Content Include="app\common\global\ppts.head.js" />
@@ -97,20 +113,90 @@
     <Content Include="app\common\startup\mcs.min.js" />
     <Content Include="app\common\layout.html" />
     <Content Include="app\common\config\ppts.config.js" />
+    <Content Include="app\common\tpl\breadcrumb.tpl.html" />
+    <Content Include="app\common\tpl\ctrls\datarange.tpl.html" />
+    <Content Include="app\common\tpl\ctrls\datepicker.tpl.html" />
+    <Content Include="app\common\tpl\ctrls\daterangepicker.tpl.html" />
+    <Content Include="app\common\tpl\ctrls\datetimepicker.tpl.html" />
+    <Content Include="app\common\tpl\ctrls\search.tpl.html" />
     <Content Include="app\common\tpl\ctrls\select.tpl.html" />
+    <Content Include="app\common\tpl\ctrls\timepicker.tpl.html" />
+    <Content Include="app\common\tpl\ctrls\tree.tpl.html" />
     <Content Include="app\common\tpl\footer.tpl.html" />
     <Content Include="app\common\tpl\header.tpl.html" />
+    <Content Include="app\custcenter\custservice\custservice-add\custservice-add.controller.js" />
+    <Content Include="app\custcenter\custservice\custservice-add\custservice-add.html" />
+    <Content Include="app\custcenter\custservice\custservice-list\custservice-list.controller.js" />
+    <Content Include="app\custcenter\custservice\custservice-list\custservice-list.html" />
+    <Content Include="app\customer\follow\follow-add\follow-add.controller.js" />
+    <Content Include="app\customer\follow\follow-add\follow-add.html" />
     <Content Include="app\customer\follow\follow-list\follow-list.controller.js" />
     <Content Include="app\customer\follow\follow-list\follow-list.html" />
-    <Content Include="app\customer\potentialcustomer\customer-staffrelation\customer-staffrelation.controller.js" />
-    <Content Include="app\customer\potentialcustomer\customer-staffrelation\customer-staffrelation.html" />
+    <Content Include="app\customer\customermeeting\customermeeting-edit\customermeeting-edit.controller.js" />
+    <Content Include="app\customer\customermeeting\customermeeting-edit\customermeeting-edit.html" />
+    <Content Include="app\customer\customermeeting\customermeeting-add\customermeeting-add.controller.js" />
+    <Content Include="app\customer\customermeeting\customermeeting-add\customermeeting-add.html" />
+    <Content Include="app\customer\customermeeting\customermeeting-list\customermeeting-list.html" />
+    <Content Include="app\customer\market\market-list\market-list.controller.js" />
+    <Content Include="app\customer\market\market-list\market-list.html" />
+    <Content Include="app\customer\potentialcustomer\customer-add\ppts.customer.relation.js" />
+    <Content Include="app\customer\potentialcustomer\customer-parent-add\parent-add.tpl.html" />
+    <Content Include="app\customer\potentialcustomer\customer-parent-add\parent-add.controller.js" />
+    <Content Include="app\customer\potentialcustomer\customer-parents\parent-edit.controller.js" />
+    <Content Include="app\customer\potentialcustomer\customer-parents\parents-view.controller.js" />
+    <Content Include="app\customer\potentialcustomer\customer-parents\parent-edit.tpl.html" />
+    <Content Include="app\customer\potentialcustomer\customer-parents\parents-view.tpl.html" />
+    <Content Include="app\customer\potentialcustomer\customer-staff-relations\assign-staff-relation.tpl.html" />
+    <Content Include="app\customer\potentialcustomer\customer-staff-relations\customer-staff-relations.controller.js" />
+    <Content Include="app\customer\potentialcustomer\customer-staff-relations\customer-staff-relations.tpl.html" />
+    <Content Include="app\customer\potentialcustomer\customer-edit\customer-edit.controller.js" />
+    <Content Include="app\customer\potentialcustomer\customer-info\customer-info.controller.js" />
+    <Content Include="app\customer\ppts.customer.service.js" />
+    <Content Include="app\order\purchase\list\order-list.controller.js" />
+    <Content Include="app\order\purchase\list\order-list.html" />
+    <Content Include="app\order\purchase\product\product-list.controller.js" />
+    <Content Include="app\order\purchase\product\product-list.html" />
+    <Content Include="app\order\purchase\product\product-order.html" />
+    <Content Include="app\customer\student\student-view\student-view.controller.js" />
+    <Content Include="app\customer\student\student-view\student-view.html" />
+    <Content Include="app\order\purchase\product\product-orderclassgroup.controller.js" />
+    <Content Include="app\order\purchase\product\product-orderclassgroup.html" />
+    <Content Include="app\order\purchase\product\product-orderclassgrouplist.html" />
+    <Content Include="app\order\unsubscribe\list\list.html" />
+    <Content Include="app\product\productlist\product-list\product-list.controller.js" />
+    <Content Include="app\product\productlist\product-list\product-list.html" />
+    <Content Include="app\product\productlist\product-list\product-delay.html" />
+    <Content Include="app\schedule\classgroup\class-add\class-add.controller.js" />
+    <Content Include="app\schedule\classgroup\class-add\class-add.html" />
+    <Content Include="app\product\productlist\product-list\product-selectcategory.html" />
+    <Content Include="app\schedule\classgroup\class-add\dayofweek.controller.js" />
+    <Content Include="app\schedule\classgroup\class-add\dayofweek.html" />
+    <Content Include="app\schedule\classgroup\class-list\class-list.controller.js" />
+    <Content Include="app\schedule\classgroup\class-list\class-list.html" />
+    <Content Include="app\schedule\classgroup\customer-add\customer-add.controller.js" />
+    <Content Include="app\schedule\classgroup\customer-add\customer-add.html" />
+    <Content Include="app\schedule\classgroup\teacher-add\teacher-add.controller.js" />
+    <Content Include="app\schedule\classgroup\teacher-add\teacher-add.html" />
+    <Content Include="app\schedule\studentassignment\stuasgmt-add\stuasgmt-add.controller.js" />
+    <Content Include="app\schedule\studentassignment\stuasgmt-add\stuasgmt-add.html" />
+    <Content Include="app\schedule\studentassignment\stuasgmt-course\stuasgmt-course-copy.html" />
+    <Content Include="app\schedule\studentassignment\stuasgmt-course\stuasgmt-course-copy.controller.js" />
+    <Content Include="app\schedule\studentassignment\stuasgmt-course\stuasgmt-course.controller.js" />
+    <Content Include="app\schedule\studentassignment\stuasgmt-course\stuasgmt-course.html" />
     <Content Include="app\schedule\studentassignment\stuasgmt-list\stuasgmt-list.controller.js" />
     <Content Include="app\schedule\studentassignment\stuasgmt-list\stuasgmt-list.html" />
+    <Content Include="assets\images\department.png" />
+    <Content Include="assets\images\metro.gif" />
+    <Content Include="assets\images\person.png" />
     <Content Include="build\ppts.global.min.js" />
     <Content Include="build\ppts.startup.js" />
     <Content Include="build\ppts.startup.min.js" />
     <Content Include="index.aspx" />
     <Content Include="package.json" />
+    <Content Include="app\order\purchase\product\product-order.controller.js" />
+    <Content Include="app\order\purchase\product\product-orderclassgrouplist.controller.js" />
+    <Content Include="app\order\unsubscribe\list\list.controller.js" />
+    <Content Include="app\customer\customermeeting\customermeeting-list\customermeeting-list.controller.js" />
     <None Include="Properties\PublishProfiles\PPTS.Portal.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -131,13 +217,13 @@
     <Content Include="app\customer\confirmdoor\confirmdoor.dataService.js" />
     <Content Include="app\customer\feedback\feedback.dataService.js" />
     <Content Include="app\customer\market\market.dataService.js" />
-    <Content Include="app\customer\parentsmeeting\parentsmeeting.dataService.js" />
+    <Content Include="app\customer\customermeeting\customermeeting.dataService.js" />
     <Content Include="app\customer\potentialcustomer\customer-add\customer-add.controller.js" />
     <Content Include="app\customer\potentialcustomer\customer-add\customer-add.html" />
     <Content Include="app\customer\potentialcustomer\customer-view\customer-view.controller.js" />
     <Content Include="app\customer\potentialcustomer\customer-view\customer-view.html" />
-    <Content Include="app\customer\potentialcustomer\customer-view\customer-info.tpl.html" />
-    <Content Include="app\customer\potentialcustomer\customer-view\customer-edit.tpl.html" />
+    <Content Include="app\customer\potentialcustomer\customer-info\customer-info.tpl.html" />
+    <Content Include="app\customer\potentialcustomer\customer-edit\customer-edit.tpl.html" />
     <Content Include="app\customer\potentialcustomer\customer-list\customer-list.controller.js" />
     <Content Include="app\customer\potentialcustomer\customer-list\customer-list.html" />
     <Content Include="app\customer\potentialcustomer\potentialcustomer.dataService.js" />
@@ -179,10 +265,6 @@
     <Content Include="app\product\productlist\product-add\product-add.html" />
     <Content Include="app\product\productlist\product-copy\product-copy.controller.js" />
     <Content Include="app\product\productlist\product-copy\product-copy.html" />
-    <Content Include="app\product\productlist\product-edit\product-edit.controller.js" />
-    <Content Include="app\product\productlist\product-edit\product-edit.html" />
-    <Content Include="app\product\productlist\product-list\product-list.controller.js" />
-    <Content Include="app\product\productlist\product-list\product-list.html" />
     <Content Include="app\product\productlist\product-view\product-view-classgroup.html" />
     <Content Include="app\product\productlist\product-view\product-view-onetoone.html" />
     <Content Include="app\product\productlist\product-view\product-view-other.html" />
@@ -225,34 +307,39 @@
     <Analyzer Include="..\..\Bin\MCS.Library.Passport.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="app\account\charge\charge-add\" />
-    <Folder Include="app\account\charge\charge-list\" />
-    <Folder Include="app\account\charge\charge-view\" />
-    <Folder Include="app\account\charge\payment-add\" />
-    <Folder Include="app\account\charge\payment-list\" />
-    <Folder Include="app\account\charge\payment-view\" />
+    <Folder Include="app\account\charge\query-list\" />
     <Folder Include="app\account\display\record-list\" />
     <Folder Include="app\account\refund\payment-list\" />
     <Folder Include="app\account\refund\refund-add\" />
     <Folder Include="app\account\refund\refund-view\" />
     <Folder Include="app\account\return\return-add\" />
     <Folder Include="app\account\transfer\transfer-add\" />
-    <Folder Include="app\customer\market\market-list\" />
     <Folder Include="app\product\productcategory\" />
+    <Folder Include="app\schedule\classgroup\class-detial\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="'$(Solutions.VSVersion)' == '8.0'" />
-  <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v9.0\WebApplications\Microsoft.WebApplication.targets" Condition="'$(Solutions.VSVersion)' == '9.0'" />
+  <!--<Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="'$(Solutions.VSVersion)' == '8.0'" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v9.0\WebApplications\Microsoft.WebApplication.targets" Condition="'$(Solutions.VSVersion)' == '9.0'" />-->
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
   <ProjectExtensions>
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>11316</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost/PPTSWebApp/PPTS.Portal</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
     </VisualStudio>

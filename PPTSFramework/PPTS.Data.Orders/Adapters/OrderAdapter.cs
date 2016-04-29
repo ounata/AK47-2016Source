@@ -11,6 +11,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 using PPTS.Data.Orders.Entities;
+using PPTS.Data.Products;
+using MCS.Library.Data;
 
 namespace PPTS.Data.Orders.Adapters
 {
@@ -43,9 +45,23 @@ namespace PPTS.Data.Orders.Adapters
             return this.Load(builder => builder.AppendItem("OrderID", orderid)).SingleOrDefault();
         }
 
-        protected override string GetConnectionName()
+        public OrderCollection LoadCollection(IList<string> orderID)
         {
-            throw new NotImplementedException();
+            return this.LoadByInBuilder(new InLoadingCondition(builder => builder.AppendItem(orderID.ToArray<string>()), dataField: "OrderID"));
+
         }
+
+        protected override void BeforeInnerUpdate(Order data, Dictionary<string, object> context)
+        {
+            if (data.OrderNo.IsNullOrWhiteSpace()) { data.OrderNo = Helper.GetOrderCode("NOD"); }
+            if (data.CreateTime == DateTime.MinValue) { data.CreateTime = DateTime.Now; }
+        }
+
+        protected override void BeforeInnerUpdateInContext(Order data, SqlContextItem sqlContext, Dictionary<string, object> context)
+        {
+            if (data.OrderNo.IsNullOrWhiteSpace()) { data.OrderNo = Helper.GetOrderCode("NOD"); }
+            if (data.CreateTime == DateTime.MinValue) { data.CreateTime = DateTime.Now; }
+        }
+
     }
 }

@@ -5,12 +5,6 @@ VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPTS.Data.Common", "PPTS.Data.Common.csproj", "{0414177E-283E-4E91-8032-37228B715F16}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPTS.Data.Customers", "..\PPTS.Data.Customers\PPTS.Data.Customers.csproj", "{96802A24-2E16-4B0E-83BE-AC8A54E19155}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCS.Web.Component", "..\..\MCSWebApp\MCS.Web.Component\MCS.Web.Component.csproj", "{FBEDBD75-FCF5-4FD7-AEA7-1F814D2E68DD}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCS.Library.Data", "..\..\Framework\MCS.Library.Data\MCS.Library.Data.csproj", "{4313DE1E-738F-477D-B7FD-B237E9116670}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,43 +18,16 @@ Global
 		{0414177E-283E-4E91-8032-37228B715F16}.DELUXEWORKSTEST|Any CPU.Build.0 = Debug|Any CPU
 		{0414177E-283E-4E91-8032-37228B715F16}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0414177E-283E-4E91-8032-37228B715F16}.Release|Any CPU.Build.0 = Release|Any CPU
-		{96802A24-2E16-4B0E-83BE-AC8A54E19155}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{96802A24-2E16-4B0E-83BE-AC8A54E19155}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{96802A24-2E16-4B0E-83BE-AC8A54E19155}.DELUXEWORKSTEST|Any CPU.ActiveCfg = Debug|Any CPU
-		{96802A24-2E16-4B0E-83BE-AC8A54E19155}.DELUXEWORKSTEST|Any CPU.Build.0 = Debug|Any CPU
-		{96802A24-2E16-4B0E-83BE-AC8A54E19155}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{96802A24-2E16-4B0E-83BE-AC8A54E19155}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FBEDBD75-FCF5-4FD7-AEA7-1F814D2E68DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FBEDBD75-FCF5-4FD7-AEA7-1F814D2E68DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FBEDBD75-FCF5-4FD7-AEA7-1F814D2E68DD}.DELUXEWORKSTEST|Any CPU.ActiveCfg = Debug|Any CPU
-		{FBEDBD75-FCF5-4FD7-AEA7-1F814D2E68DD}.DELUXEWORKSTEST|Any CPU.Build.0 = Debug|Any CPU
-		{FBEDBD75-FCF5-4FD7-AEA7-1F814D2E68DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FBEDBD75-FCF5-4FD7-AEA7-1F814D2E68DD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4313DE1E-738F-477D-B7FD-B237E9116670}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4313DE1E-738F-477D-B7FD-B237E9116670}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4313DE1E-738F-477D-B7FD-B237E9116670}.DELUXEWORKSTEST|Any CPU.ActiveCfg = DELUXEWORKSTEST|Any CPU
-		{4313DE1E-738F-477D-B7FD-B237E9116670}.DELUXEWORKSTEST|Any CPU.Build.0 = DELUXEWORKSTEST|Any CPU
-		{4313DE1E-738F-477D-B7FD-B237E9116670}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4313DE1E-738F-477D-B7FD-B237E9116670}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 5
+		SccNumberOfProjects = 2
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://10.1.56.70:8080/tfs/pptsv2.0
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = PPTS.Data.Common.csproj
 		SccLocalPath1 = .
-		SccProjectUniqueName2 = ..\\PPTS.Data.Customers\\PPTS.Data.Customers.csproj
-		SccProjectName2 = ../PPTS.Data.Customers
-		SccLocalPath2 = ..\\PPTS.Data.Customers
-		SccProjectUniqueName3 = ..\\..\\MCSWebApp\\MCS.Web.Component\\MCS.Web.Component.csproj
-		SccProjectName3 = ../../MCSWebApp/MCS.Web.Component
-		SccLocalPath3 = ..\\..\\MCSWebApp\\MCS.Web.Component
-		SccProjectUniqueName4 = ..\\..\\Framework\\MCS.Library.Data\\MCS.Library.Data.csproj
-		SccProjectName4 = ../../Framework/MCS.Library.Data
-		SccLocalPath4 = ..\\..\\Framework\\MCS.Library.Data
 	EndGlobalSection
 EndGlobal

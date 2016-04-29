@@ -1,10 +1,11 @@
-﻿using System.Linq;
-using MCS.Library.Core;
+﻿using MCS.Library.Core;
 using PPTS.Data.Customers.Entities;
+using System;
+using System.Linq;
 
 namespace PPTS.Data.Customers.Adapters
 {
-    public class CustomerParentRelationAdapter : CustomerAdapterBase<CustomerParentRelation, CustomerParentRelationCollection>
+    public class CustomerParentRelationAdapter : VersionedCustomerAdapterBase<CustomerParentRelation, CustomerParentRelationCollection>
     {
         public static readonly CustomerParentRelationAdapter Instance = new CustomerParentRelationAdapter();
 
@@ -17,7 +18,20 @@ namespace PPTS.Data.Customers.Adapters
             customerID.CheckStringIsNullOrEmpty("customerID");
             parentID.CheckStringIsNullOrEmpty("parentID");
 
-            return this.Load(builder => builder.AppendItem("CustomerID", customerID).AppendItem("ParentID", parentID)).SingleOrDefault();
+            return this.Load(builder => builder.AppendItem("CustomerID", customerID).AppendItem("ParentID", parentID), DateTime.MinValue).SingleOrDefault();
+        }
+        public CustomerParentRelation LoadPrimary(string customerID, string parentID)
+        {
+            customerID.CheckStringIsNullOrEmpty("customerID");
+            parentID.CheckStringIsNullOrEmpty("parentID");
+
+            return this.Load(builder => builder.AppendItem("CustomerID", customerID).AppendItem("ParentID", parentID).AppendItem("IsPrimary", 1), DateTime.MinValue).SingleOrDefault();
+        }
+        public CustomerParentRelationCollection Load(string customerID)
+        {
+            customerID.CheckStringIsNullOrEmpty("customerID");
+
+            return this.Load(builder => builder.AppendItem("CustomerID", customerID), DateTime.MinValue);
         }
     }
 }

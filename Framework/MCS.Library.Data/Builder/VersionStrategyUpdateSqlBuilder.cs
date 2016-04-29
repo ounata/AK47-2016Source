@@ -1,9 +1,10 @@
-﻿using System;
+﻿using MCS.Library.Core;
+using MCS.Library.Data.DataObjects;
+using MCS.Library.Data.Mapping;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using MCS.Library.Core;
-using MCS.Library.Data.Mapping;
 
 namespace MCS.Library.Data.Builder
 {
@@ -12,7 +13,10 @@ namespace MCS.Library.Data.Builder
     /// </summary>
     public class VersionStrategyUpdateSqlBuilder<T> where T : IVersionDataObjectWithoutID
     {
-        //public static readonly VersionStrategyUpdateSqlBuilder<T> LocalTimeInstance = new VersionStrategyUpdateSqlBuilder<T>();
+        /// <summary>
+        /// 
+        /// </summary>
+        public static readonly VersionStrategyUpdateSqlBuilder<T> DefaultInstance = new VersionStrategyUpdateSqlBuilder<T>();
 
         /// <summary>
         /// 生成Update和Insert混合的子句。先Update，然后通过RowCount判断是需要Insert
@@ -20,12 +24,13 @@ namespace MCS.Library.Data.Builder
         /// <param name="obj"></param>
         /// <param name="mapping"></param>
         /// <param name="addCurrentTimeVar">是否添加@currentTime变量</param>
+        /// <param name="ignoreProperties">需要忽略的属性</param>
         /// <returns></returns>
-		public string ToUpdateSql(T obj, ORMappingItemCollection mapping, bool addCurrentTimeVar = true)
+		public string ToUpdateSql(T obj, ORMappingItemCollection mapping, bool addCurrentTimeVar = true, params string[] ignoreProperties)
         {
             return this.ToUpdateSql(obj, mapping,
-                () => this.PrepareUpdateSql(obj, mapping),
-                () => this.PrepareInsertSql(obj, mapping),
+                () => this.PrepareUpdateSql(obj, mapping, ignoreProperties),
+                () => this.PrepareInsertSql(obj, mapping, ignoreProperties),
                 addCurrentTimeVar);
         }
 
@@ -37,8 +42,9 @@ namespace MCS.Library.Data.Builder
         /// <param name="getUpdateSql"></param>
         /// <param name="getInsertSql"></param>
         /// <param name="addCurrentTimeVar">是否添加@currentTime变量</param>
+        /// <param name="ignoreProperties">需要忽略的属性</param>
         /// <returns></returns>
-        public string ToUpdateSql(T obj, ORMappingItemCollection mapping, Func<string> getUpdateSql, Func<string> getInsertSql, bool addCurrentTimeVar = true)
+        public string ToUpdateSql(T obj, ORMappingItemCollection mapping, Func<string> getUpdateSql, Func<string> getInsertSql, bool addCurrentTimeVar = true, params string[] ignoreProperties)
         {
             obj.NullCheck("obj");
             mapping.NullCheck("mapping");
@@ -47,7 +53,7 @@ namespace MCS.Library.Data.Builder
 
             return VersionStrategyUpdateSqlHelper.ConstructUpdateSql(null, (strB, context) =>
             {
-                this.PrepareSingleObjectSql(strB, obj, mapping, true, getUpdateSql, getInsertSql);
+                this.PrepareSingleObjectSql(strB, obj, mapping, true, getUpdateSql, getInsertSql, ignoreProperties);
             },
             addCurrentTimeVar);
         }
@@ -59,8 +65,9 @@ namespace MCS.Library.Data.Builder
         /// <param name="mapping"></param>
         /// <param name="newObjs"></param>
         /// <param name="addCurrentTimeVar">是否添加@currentTime变量</param>
+        /// <param name="ignoreProperties">需要忽略的属性</param>
         /// <returns></returns>
-        public string ToUpdateCollectionSql(IConnectiveSqlClause ownerKeyBuilder, ORMappingItemCollection mapping, IEnumerable<T> newObjs, bool addCurrentTimeVar = true)
+        public string ToUpdateCollectionSql(IConnectiveSqlClause ownerKeyBuilder, ORMappingItemCollection mapping, IEnumerable<T> newObjs, bool addCurrentTimeVar = true, params string[] ignoreProperties)
         {
             return VersionStrategyUpdateSqlHelper.ConstructUpdateSql(null, (strB, context) =>
             {
@@ -74,8 +81,9 @@ namespace MCS.Library.Data.Builder
                             strB.Append(TSqlBuilder.Instance.DBStatementSeperator);
 
                         this.PrepareSingleObjectSql(strB, obj, mapping, false,
-                            () => this.PrepareUpdateCollectionItemSql(obj, mapping),
-                            () => this.PrepareInsertSql(obj, mapping));
+                            () => this.PrepareUpdateCollectionItemSql(obj, mapping, ignoreProperties),
+                            () => this.PrepareInsertSql(obj, mapping, ignoreProperties),
+                            ignoreProperties);
 
                         WhereSqlClauseBuilder keyBuilder = GetExistedKeysBuilder(ownerKeyBuilder, obj, mapping);
 
@@ -106,12 +114,12 @@ namespace MCS.Library.Data.Builder
 
             UpdateSqlClauseBuilder updateBuilder = new UpdateSqlClauseBuilder();
 
-            updateBuilder.AppendItem(endTimeFieldName, "@currentTime", SqlClauseBuilderBase.EqualTo, true);
+            updateBuilder.AppendItem(endTimeFieldName, DBTimePointActionContext.CurrentTimeTSqlVarName, SqlClauseBuilderBase.EqualTo, true);
 
             WhereSqlClauseBuilder veBuilder = new WhereSqlClauseBuilder();
 
             veBuilder.AppendItem(endTimeFieldName, DBTimePointActionContext.MaxVersionEndTime);
-            veBuilder.AppendItem(GetPropertyFieldName("VersionStartTime", mapping), "@currentTime", SqlClauseBuilderBase.NotEqualTo, true);
+            veBuilder.AppendItem(GetPropertyFieldName("VersionStartTime", mapping), DBTimePointActionContext.CurrentTimeTSqlVarName, SqlClauseBuilderBase.NotEqualTo, true);
 
             ConnectiveSqlClauseCollection connective = new ConnectiveSqlClauseCollection(LogicOperatorDefine.And, ownerKeyBuilder, veBuilder);
 
@@ -174,7 +182,7 @@ namespace MCS.Library.Data.Builder
                     item =>
                     {
                         item.IsExpression = true;
-                        item.Data = "@currentTime";
+                        item.Data = DBTimePointActionContext.CurrentTimeTSqlVarName;
                     });
             }
 
@@ -189,8 +197,9 @@ namespace MCS.Library.Data.Builder
         /// </summary>
         /// <param name="obj"></param>
         /// <param name="mapping"></param>
+        /// <param name="ignoreProperties">需要忽略的属性</param>
         /// <returns></returns>
-        protected virtual string PrepareUpdateCollectionItemSql(T obj, ORMappingItemCollection mapping)
+        protected virtual string PrepareUpdateCollectionItemSql(T obj, ORMappingItemCollection mapping, string[] ignoreProperties)
         {
             IConnectiveSqlClause primaryKeyBuilder = ModifyTimeFieldsInWhereBuilder(obj, mapping, ORMapping.GetWhereSqlClauseBuilderByPrimaryKey(obj, mapping));
 
@@ -198,7 +207,7 @@ namespace MCS.Library.Data.Builder
 
             ConnectiveSqlClauseCollection connective = new ConnectiveSqlClauseCollection(LogicOperatorDefine.And, primaryKeyBuilder, changedFieldsBuilder);
 
-            UpdateSqlClauseBuilder updateBuilder = this.PrepareUpdateSqlBuilder(obj, mapping);
+            UpdateSqlClauseBuilder updateBuilder = this.PrepareUpdateSqlBuilder(obj, mapping, ignoreProperties);
 
             return string.Format("UPDATE {0} SET {1} WHERE {2}",
                     GetTableName(obj, mapping),
@@ -222,10 +231,11 @@ namespace MCS.Library.Data.Builder
         /// </summary>
         /// <param name="obj"></param>
         /// <param name="mapping"></param>
+        /// <param name="ignoreProperties">需要忽略的属性</param>
         /// <returns></returns>
-		protected virtual InsertSqlClauseBuilder PrepareInsertSqlBuilder(T obj, ORMappingItemCollection mapping)
+		public virtual InsertSqlClauseBuilder PrepareInsertSqlBuilder(T obj, ORMappingItemCollection mapping, string[] ignoreProperties)
         {
-            InsertSqlClauseBuilder builder = ORMapping.GetInsertSqlClauseBuilder(obj, mapping);
+            InsertSqlClauseBuilder builder = ORMapping.GetInsertSqlClauseBuilder(obj, mapping, ignoreProperties);
 
             string startTimeFieldName = GetPropertyFieldName("VersionStartTime", mapping);
             string endTimeFieldName = GetPropertyFieldName("VersionEndTime", mapping);
@@ -233,7 +243,7 @@ namespace MCS.Library.Data.Builder
             builder.Remove(b => ((SqlClauseBuilderItemIUW)b).DataField == startTimeFieldName);
             builder.Remove(b => ((SqlClauseBuilderItemIUW)b).DataField == endTimeFieldName);
 
-            builder.AppendItem(startTimeFieldName, "@currentTime", "=", true);
+            builder.AppendItem(startTimeFieldName, DBTimePointActionContext.CurrentTimeTSqlVarName, "=", true);
             builder.AppendItem(endTimeFieldName, DBTimePointActionContext.MaxVersionEndTime);
 
             return builder;
@@ -244,12 +254,13 @@ namespace MCS.Library.Data.Builder
         /// </summary>
         /// <param name="obj"></param>
         /// <param name="mapping"></param>
+        /// <param name="ignoreProperties">需要忽略的属性</param>
         /// <returns></returns>
-		protected virtual UpdateSqlClauseBuilder PrepareUpdateSqlBuilder(T obj, ORMappingItemCollection mapping)
+		public virtual UpdateSqlClauseBuilder PrepareUpdateSqlBuilder(T obj, ORMappingItemCollection mapping, string[] ignoreProperties)
         {
             UpdateSqlClauseBuilder updateBuilder = new UpdateSqlClauseBuilder();
 
-            updateBuilder.AppendItem(GetPropertyFieldName("VersionEndTime", mapping), "@currentTime", "=", true);
+            updateBuilder.AppendItem(GetPropertyFieldName("VersionEndTime", mapping), DBTimePointActionContext.CurrentTimeTSqlVarName, "=", true);
 
             return updateBuilder;
         }
@@ -259,8 +270,9 @@ namespace MCS.Library.Data.Builder
         /// </summary>
         /// <param name="obj"></param>
         /// <param name="mapping"></param>
+        /// <param name="ignoreProperties">忽略的属性</param>
         /// <returns></returns>
-		protected virtual WhereSqlClauseBuilder PrepareWhereSqlBuilder(T obj, ORMappingItemCollection mapping)
+		public virtual WhereSqlClauseBuilder PrepareWhereSqlBuilder(T obj, ORMappingItemCollection mapping, string[] ignoreProperties)
         {
             obj.NullCheck("obj");
             mapping.NullCheck("mapping");
@@ -298,10 +310,11 @@ namespace MCS.Library.Data.Builder
         /// </summary>
         /// <param name="obj"></param>
         /// <param name="mapping"></param>
+        /// <param name="ignoreProperties">需要忽略的参数</param>
         /// <returns></returns>
-		protected virtual string PrepareInsertSql(T obj, ORMappingItemCollection mapping)
+		public virtual string PrepareInsertSql(T obj, ORMappingItemCollection mapping, string[] ignoreProperties)
         {
-            InsertSqlClauseBuilder builder = this.PrepareInsertSqlBuilder(obj, mapping);
+            InsertSqlClauseBuilder builder = this.PrepareInsertSqlBuilder(obj, mapping, ignoreProperties);
 
             return string.Format("INSERT INTO {0}{1}", this.GetTableName(obj, mapping), builder.ToSqlString(TSqlBuilder.Instance));
         }
@@ -311,11 +324,12 @@ namespace MCS.Library.Data.Builder
         /// </summary>
         /// <param name="obj"></param>
         /// <param name="mapping"></param>
+        /// <param name="ignoreProperties">需要忽略的参数</param>
         /// <returns></returns>
-		protected virtual string PrepareUpdateSql(T obj, ORMappingItemCollection mapping)
+		public virtual string PrepareUpdateSql(T obj, ORMappingItemCollection mapping, string[] ignoreProperties)
         {
-            IConnectiveSqlClause primaryKeyBuilder = this.PrepareWhereSqlBuilder(obj, mapping);
-            UpdateSqlClauseBuilder updateBuilder = this.PrepareUpdateSqlBuilder(obj, mapping);
+            IConnectiveSqlClause primaryKeyBuilder = this.PrepareWhereSqlBuilder(obj, mapping, ignoreProperties);
+            UpdateSqlClauseBuilder updateBuilder = this.PrepareUpdateSqlBuilder(obj, mapping, ignoreProperties);
 
             return string.Format("UPDATE {0} SET {1} WHERE {2}",
                     GetTableName(obj, mapping),
@@ -323,7 +337,7 @@ namespace MCS.Library.Data.Builder
                     primaryKeyBuilder.ToSqlString(TSqlBuilder.Instance));
         }
 
-        private void PrepareSingleObjectSql(StringBuilder strB, T obj, ORMappingItemCollection mapping, bool raiseUnmatchedError, Func<string> getUpdateSql, Func<string> getInsertSql)
+        private void PrepareSingleObjectSql(StringBuilder strB, T obj, ORMappingItemCollection mapping, bool raiseUnmatchedError, Func<string> getUpdateSql, Func<string> getInsertSql, string[] ignoreProperties)
         {
             if (obj.VersionStartTime != DateTime.MinValue)
             {
@@ -332,7 +346,7 @@ namespace MCS.Library.Data.Builder
                 strB.Append(TSqlBuilder.Instance.DBStatementSeperator);
 
                 strB.AppendFormat("IF @@ROWCOUNT > 0\n");
-                strB.AppendFormat("\t{0}\n", this.PrepareInsertSql(obj, mapping));
+                strB.AppendFormat("\t{0}\n", getInsertSql());
 
                 if (raiseUnmatchedError)
                 {
@@ -343,7 +357,7 @@ namespace MCS.Library.Data.Builder
             }
             else
             {
-                strB.Append(this.PrepareInsertSql(obj, mapping));
+                strB.Append(getInsertSql());
             }
         }
 

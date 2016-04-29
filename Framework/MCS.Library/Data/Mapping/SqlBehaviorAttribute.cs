@@ -23,6 +23,7 @@ namespace MCS.Library.Data.Mapping
         private ClauseBindingFlags bindingFlags = ClauseBindingFlags.All;
         private string defaultExpression = string.Empty;
         private EnumUsageTypes enumUsage = EnumUsageTypes.UseEnumValue;
+        private bool forceUseDefaultExpression = false;
 
         /// <summary>
         /// 如果对应的属性是枚举类型，生成Sql时，是否使用枚举类型的值（整型），否则使用字符串
@@ -40,6 +41,15 @@ namespace MCS.Library.Data.Mapping
         {
             get { return this.defaultExpression; }
             set { this.defaultExpression = value; }
+        }
+
+        /// <summary>
+        /// 无论对象的属性值如何，在DefaultExpression不为空的情况下，强制使用默认表达式。
+        /// </summary>
+        public bool ForceUseDefaultExpression
+        {
+            get { return this.forceUseDefaultExpression; }
+            set { this.forceUseDefaultExpression = value; }
         }
 
         /// <summary>

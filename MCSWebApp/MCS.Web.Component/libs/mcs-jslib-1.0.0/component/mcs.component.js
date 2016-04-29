@@ -3,26 +3,23 @@
     'use strict';
 
     mcs.ng = mcs.ng || angular.module('mcs.ng', ['mcs.ng.datatable', 'mcs.ng.treeControl', 'mcs.ng.paging', 'dialogs.main']);
-    mcs.ng.constant('mcsComponentConfig', {
-        rootUrl: mcs.app.config.componentBaseUrl
-    })
-
-
-    .constant('httpErrorHandleMessage', {
+    mcs.ng.constant('httpErrorHandleMessage', {
         '404': 'no file!',
         '401': 'unauthenticated access!',
         'other': ''
-    })
-
-    .service('httpErrorHandleService', function (httpErrorHandleMessage, dialogs) {
+    }).service('httpErrorHandleService', function (httpErrorHandleMessage, dialogs) {
 
         var httpErrorHandleService = this;
         httpErrorHandleService.process = function (response) {
-            dialogs.error('error', httpErrorHandleMessage[response.StatusCode]);
+            //dialogs.error('error', httpErrorHandleMessage[response.StatusCode]);
+            var title = response.status + ' ' + response.statusText;
+            var message = response.data.message || response.data.description;
+            var detail = response.data.messageDetail || response.data.stackTrace;
+
+            dialogs.error(title, message + '<\n>' + detail);
         }
 
         return this;
-
     });
 })();
 (function () {
@@ -54,39 +51,45 @@
             return out;
         };
     });
+
+    mcs.ng.filter('trusted', ['$sce', function ($sce) {
+        return function (text) {
+            return $sce.trustAsHtml(text);
+        };
+    }]);
 })();
 (function () {
     'use strict';
 
     mcs.ng.constant('buttonConfig', {
-        types: ['add', 'edit', 'delete', 'search', 'save', 'cancel'],
-        defaultTexts: ['新 增', '编 辑', '删 除', '查 询', '保 存', '取 消'],
+        categories: ['add', 'edit', 'delete', 'search', 'save', 'cancel', 'ok', 'close', 'print', 'export', 'refresh', 'submit', 'approve', 'reject'],
+        defaultTexts: ['新 增', '编 辑', '删 除', '查 询', '保 存', '取 消', '确 定', '关 闭', '打 印', '导 出', '刷 新', '提交审批', '同 意', '驳 回'],
         sizes: ['mini', 'medium', 'large'],
         sizeCss: ['btn-xs', 'btn-sm', 'btn-lg'],
-        //buttonClass: ['btn-primary', 'btn-success', 'btn-danger', 'btn-info'],
-        iconClass: ['fa-plus', 'fa-pencil', 'fa-trash-o', 'fa-search', 'fa-save', 'fa-undo']
+        iconClass: ['fa-plus', 'fa-pencil', 'fa-trash-o', 'fa-search', 'fa-save', 'fa-undo', 'fa-check', 'fa-times', 'fa-print', 'fa-share', 'fa-refresh', 'fa-arrow-right', 'fa-check-square', 'fa-undo']
     })
     .directive('mcsButton', function (buttonConfig) {
 
         return {
             restrict: 'E',
             scope: {
+                category: '@',
                 type: '@',
-                disable: '=',
                 text: '@',
                 icon: '@',
                 size: '@',
                 css: '@',
+                title: '&',
                 click: '&'
             },
 
-            template: '<button class="btn mcs-width-130" ng-click="click()" ng-disabled="disable"><i class="ace-icon fa"></i><span></span></button>',
+            template: '<button class="btn mcs-width-130" ng-click="click()"><i class="ace-icon fa bigger-110"></i><span></span></button>',
             replace: true,
-            transclude: true,
             link: function ($scope, $elem, $attrs, $ctrl) {
-                var index = buttonConfig.types.indexOf($scope.type);
+                $elem.attr('type', $scope.type || 'button');
+                var index = buttonConfig.categories.indexOf($scope.category);
                 var buttonCss = 'btn-info';
-                switch ($scope.type) {
+                switch ($scope.category) {
                     case 'search':
                         buttonCss = 'btn-primary';
                         break;
@@ -94,9 +97,21 @@
                         buttonCss = 'btn-danger';
                         break;
                     case 'save':
+                    case 'ok':
+                    case 'approve':
                         buttonCss = 'btn-success';
                         break;
+                    case 'print':
+                    case 'export':
+                    case 'refresh':
+                    case 'reject':
+                        buttonCss = 'btn-yellow';
+                        break;
+                    case 'submit':
+                        buttonCss = 'btn-purple';
+                        break;
                     case 'cancel':
+                    case 'close':
                         buttonCss = 'btn-light';
                         break;
                 }
@@ -196,15 +211,15 @@
             restrict: 'EA',
             template: '<div class="page-list">' +
                 '<ul class="pagination" ng-show="conf.totalCount > 0">' +
-                '<li ng-class="{disabled: conf.pageIndex == 1}" ng-click="prevPage()"><span>&laquo;</span></li>' +
+                '<li ng-class="{disabled: conf.pageIndex == 1}" ng-click="prevPage()" style="cursor:pointer;"><span>&laquo;</span></li>' +
                 '<li ng-repeat="item in pageList track by $index" ng-class="{active: item == conf.pageIndex, separate: item == \'...\'}" ' +
-                'ng-click="changepageIndex(item)">' +
+                'ng-click="changepageIndex(item)" style="cursor:pointer;">' +
                 '<span>{{ item }}</span>' +
                 '</li>' +
-                '<li ng-class="{disabled: conf.pageIndex == conf.numberOfPages}" ng-click="nextPage()"><span>&raquo;</span></li>' +
+                '<li ng-class="{disabled: conf.pageIndex == conf.numberOfPages}" ng-click="nextPage()" style="cursor:pointer;"><span>&raquo;</span></li>' +
                 '</ul>' +
                 '<div class="page-total" ng-show="conf.totalCount > 0">' +
-                '第<input type="text" ng-model="jumpPageNum"  ng-keypress="jumpToPage($event)"/>页 ' +
+                '第 <input type="text" ng-model="jumpPageNum" class="mcs-input-small" ng-blur="jumpToPage($event)" onkeyup="mcs.util.limit(this)" onafterpaste="mcs.util.limit(this)"/>页 ' +
 
                 '共<strong>{{ conf.totalCount }}</strong>条记录' +
                 '</div>' +
@@ -362,11 +377,10 @@
 
                 // 跳转页
                 scope.jumpToPage = function() {
-                    scope.jumpPageNum = scope.jumpPageNum.replace(/[^0-9]/g, '');
-                    if (scope.jumpPageNum !== '') {
-                        scope.conf.pageIndex = scope.jumpPageNum;
-                        scope.pageChange();
-                    }
+                    //scope.jumpPageNum = scope.jumpPageNum.replace(/[^0-9]/g, '');
+                    if (!scope.jumpPageNum) return;
+                    scope.conf.pageIndex = scope.jumpPageNum;
+                    scope.pageChange();
                 };
 
 
@@ -418,20 +432,44 @@
             scope: {
 
                 data: '=',
-                onOrder: '&?',
-                pageChanged: '&'
+                retrieveData: '&?',
+                pageChanged: '&?',
+
 
             },
             link: function($scope, iElm, iAttrs, controller) {
 
+                if (!$scope.data) {
+                    return;
+                }
+
+                if ($scope.retrieveData) {
+                    $scope.retrieveData().then(function() {
+                        $scope.reMatchRowsSelected();
+                    })
+                }
+
+
                 $scope.selectAll = function() {
                     if ($scope.data.selectAll) {
-                        $scope.data.rows.forEach(function(row) {
-                            row.selected = true;
+                        $scope.data.rows.forEach(function(rowSelected) {
+                            rowSelected.selected = true;
+                            var rowDataSelected = {};
+                            $scope.data.keyFields.forEach(function(key) {
+                                rowDataSelected[key] = rowSelected[key];
+                            });
+                            mcs.util.removeByObject($scope.data.rowsSelected, rowDataSelected);
+                            $scope.data.rowsSelected.push(rowDataSelected);
+
                         })
                     } else {
-                        $scope.data.rows.forEach(function(row) {
-                            row.selected = false;
+                        $scope.data.rows.forEach(function(rowSelected) {
+                            rowSelected.selected = false;
+                            var rowDataSelected = {};
+                            $scope.data.keyFields.forEach(function(key) {
+                                rowDataSelected[key] = rowSelected[key];
+                            });
+                            mcs.util.removeByObject($scope.data.rowsSelected, rowDataSelected);
                         })
                     }
                 }
@@ -479,28 +517,38 @@
                 }
 
                 $scope.pageChange = function(callback) {
-                    callback();
-                    $scope.reMatchRowsSelected();
+                    callback().then(function() {
+                        $scope.reMatchRowsSelected();
+                    })
+
                 }
 
                 $scope.reMatchRowsSelected = function() {
 
-                    if ($scope.data.rowsSelected.length == 0) {
+                    var selecteds = $scope.data.rowsSelected;
+                    var rows = $scope.data.rows;
+                    var keys = $scope.data.keyFields;
+
+                    if (selecteds.length == 0 || keys.length == 0 || rows.length == 0) {
                         return;
                     }
 
-                    for (var rowDataSelected in $scope.data.rowsSelected) {
-                        for (var row in $scope.data.rows) {
-                            for (var key in $scope.data.keyFields) {
-                                if (row[key] !== rowDataSelected[key]) {
-                                    row.selected = false;
-                                    break;
+
+
+                    for (var indexSelected in selecteds) {
+                        for (var rowIndex in rows) {
+
+                            var counter = 0;
+                            for (var keyIndex in keys) {
+                                if (rows[rowIndex][keys[keyIndex]] == selecteds[indexSelected][keys[keyIndex]]) {
+                                    counter = counter + 1;
                                 }
 
-                                if (row.selected == undefined) {
-                                    row.selected = true;
-                                    break;
-                                }
+
+                            }
+
+                            if (counter == keys.length) {
+                                rows[rowIndex].selected = true;
                             }
                         }
                     }
@@ -534,12 +582,11 @@
                 $scope.data.headers.forEach(function(header, index) {
 
                     if (!header.field) {
-                        var results = header.template.match(reg);
+                        var results = header.template && header.template.match(reg);
                         if (results) {
                             results.forEach(function(r) {
                                 var fnName = r.replace('"', '\'').split('\'')[1];
                                 $scope[fnName] = $scope.$parent[fnName];
-
                             })
                         }
 
@@ -556,7 +603,7 @@
             link: function(scope, iElement, iAttrs) {
                 var dataHeaders = scope.$parent.data.headers;
                 var rowData = scope.row;
-
+                scope.vm = scope.$parent.$parent.vm;
 
                 dataHeaders.forEach(function(header, index) {
                     var td = $compile('<td class="' + header.headerCss +
@@ -569,55 +616,87 @@
     });
 })();
 
-(function () {
-        'use strict';
+(function() {
+    'use strict';
 
-        mcs.ng.service('mcsDialogService', ['dialogs', function (dialogs) {
-            var mcsDialogService = this;
-            mcsDialogService.messageConfig = {
-                wait: {
-                    title: '操作中',
-                    message: '操作进行中，请稍后！',
+    mcs.ng.service('mcsDialogService', ['dialogs', function(dialogs) {
+        var mcsDialogService = this;
+        mcsDialogService.messageConfig = {
+            wait: {
+                title: '操作中',
+                message: '操作进行中，请稍后！',
+            },
+            info: {
+                title: '消息',
+                message: '操作发生错误'
+            },
+            error: {
+                title: '错误',
+                message: '操作发生错误，请重试或联系系统管理员！'
+            },
+            confirm: {
+                title: '请确认',
+                message: '确认进行此操作吗？'
+            }
+
+        };
+
+        this.info = function(options) {
+            options = jQuery.extend({
+                title: mcsDialogService.messageConfig.info.title,
+                message: mcsDialogService.messageConfig.info.message
+            }, options);
+
+            return dialogs.notify(options.title, options.message);
+        };
+
+        this.confirm = function(options) {
+            options = jQuery.extend({
+                title: mcsDialogService.messageConfig.confirm.title,
+                message: mcsDialogService.messageConfig.confirm.message
+            }, options);
+
+            return dialogs.confirm(options.title, options.message);
+        };
+
+        this.error = function(options) {
+            options = jQuery.extend({
+                title: mcsDialogService.messageConfig.error.title,
+                message: mcsDialogService.messageConfig.error.message
+            }, options);
+
+            return dialogs.error(options.title, options.message);
+        };
+
+        this.wait = function(options) {
+            options = jQuery.extend({
+                title: mcsDialogService.messageConfig.wait.title,
+                message: mcsDialogService.messageConfig.wait.message
+            }, options);
+
+            return dialogs.wait(options.title, options.message);
+        };
+
+        this.create = function(url, options) {
+            if (!url) return;
+            options = jQuery.extend({
+                controller: '',
+                params: {},
+                settings: {
+                    backdrop: 'static',
+                    size: 'md'
                 },
-                error: {
-                    title: '错误',
-                    message: '操作发生错误，请重试或联系系统管理员！',
-                },
-                confirm: {
-                    title: '请确认',
-                    message: '确认进行此操作吗？'
-                }
+                controllerAs: 'vm'
+            }, options);
 
-            };
-            this.wait = function (title, msg, opts) {
-                return dialogs.wait(title || mcsDialogService.messageConfig.wait.title, msg || mcsDialogService.messageConfig.wait.message);
-            }
-
-            this.error = function (title, msg, opts) {
-                return dialogs.error(title || mcsDialogService.messageConfig.error.title, msg || mcsDialogService.messageConfig.error.message);
-            }
-
-
-            this.confirm = function (title, msg, opts) {
-                return dialogs.confirm(title || mcsDialogService.messageConfig.confirm.title, msg || mcsDialogService.messageConfig.confirm.message);
-
-            }
-
-            this.create = function (url, ctrlr, data, opts) {
-                return dialogs.create(url, ctrlr, data, opts);
-            }
-
-
-        }]);
-    }
-
-)();
+            return dialogs.create(url, options.controller, options.params, options.settings, options.controllerAs);
+        };
+    }]);
+})();
 (function () {
     'use strict';
 
-    mcs.ng.constant('inputConfig', {
-        types: ['text']
-    }).directive('mcsInput', ['inputConfig', 'mcsComponentConfig', function (config, mcsComponentConfig) {
+    mcs.ng.directive('mcsInput', function () {
         return {
             restrict: 'E',
             replace: true,
@@ -625,26 +704,33 @@
                 id: '@',
                 type: '@',
                 placeholder: '@',
-                fixed: '@',
                 readonly: '@',
                 css: '@',
+                integer: '@',
                 model: '=',
             },
             template: '<input placeholder="{{placeholder}}" class="mcs-default-size-input mcs-margin-right-20 {{css}}" ng-model="model" />',
             link: function ($scope, $elem, $attrs) {
+                var integer = mcs.util.bool($scope.integer);
                 if ($scope.id) {
                     $elem.attr('id', $scope.id);
                 }
-                $elem.attr('type', $scope.type || 'text');
-                if ($scope.fixed) {
-                    $elem.addClass('fixed');
+                if (integer) {
+                    $elem.keyup(function () {
+                        mcs.util.limit($elem);
+                    }).afterpaste(function () {
+                        mcs.util.limit($elem);
+                    });
                 }
-                if ($scope.readonly) {
-                    $elem.attr('readonly', 'readonly');
+                $elem.attr('type', $scope.type || 'text');
+                var readonly = mcs.util.bool($scope.readonly);
+                if (readonly) {
+                    //$elem.attr('readonly', 'readonly');
+                    $elem.attr('disabled', 'disabled');
                 }
             }
         };
-    }]);
+    });
 })();
 (function () {
     'use strict';
@@ -683,12 +769,15 @@
                 model: '='
             },
 
-            template: '<label class="radio-inline" ng-repeat="item in data"><input name="{{groupName}}" type="radio" class="ace" ng-checked="model && item.key==model" ng-click="change(item)"><span class="lbl"></span> {{item.value}}</label>',
+            template: '<label class="radio-inline" ng-repeat="item in data"><input name="{{groupName}}" type="radio" class="ace" ng-checked="item.key==model" ng-click="change(item)"><span class="lbl"></span> {{item.value}}</label>',
             controller: function ($scope) {
                 $scope.groupName = mcs.util.newGuid();
                 $scope.change = function (item) {
                     $scope.model = item.key;
                 };
+            },
+            link: function ($scope, $elem) {
+                $elem.attr('groupName', $scope.groupName);
             }
         }
     });
@@ -733,7 +822,7 @@
         }
     });
 })();
-(function () {
+(function() {
     'use strict';
 
     angular.module('mcs.ng.treeControl', [])
@@ -766,38 +855,101 @@
                 enable: true,
                 autoParam: ["id"],
                 contentType: "application/json",
-                type: 'post',
-                dataType: "json",
-                url: ''
+                type: 'post'
+
+
             }
 
+
         })
-        .directive('mcsTree', function (treeSetting, $http) {
+        .directive('mcsTree', function(treeSetting, $http) {
 
-
+            var zTreeObj;
 
             return {
                 restrict: 'A',
                 scope: {
                     setting: '=mcsTree',
-                    nodes: '='
+                    setNodes: '&'
                 },
 
-                link: function ($scope, iElm, iAttrs, controller) {
-                    angular.extend($scope.setting, treeSetting);
-                    if ($scope.nodes) {
-                        $.fn.zTree.init(iElm, $scope.setting, $scope.nodes);
-                    } else {
-                        if (setting.async.url) {
-                            $http.post(setting.async.url, {
-                                id: null
-                            }).success(function (data) {
-                                $.fn.zTree.init(iElm, setting, data.Data.List);
-                            })
+                link: function($scope, iElm, iAttrs, controller) {
+
+
+                    $scope.setting.getRawNodesChecked = function() {
+                        return zTreeObj.getCheckedNodes(true);
+                    };
+
+                    $scope.setting.getNodesChecked = function(includingParent) {
+                        var nodes = [];
+
+                        zTreeObj.getCheckedNodes(true).forEach(function(node, index) {
+                            if (includingParent == undefined || includingParent == false) {
+                                if (!node.isParent) {
+                                    nodes.push({
+                                        id: node.id,
+                                        name: node.name
+                                    });
+                                }
+
+                            } else {
+                                nodes.push({
+                                    id: node.id,
+                                    name: node.name
+                                });
+                            }
+
+                        });
+
+                        return nodes;
+                    };
+
+
+                    $scope.setting.getNamesOfNodesChecked = function(includingParent) {
+                        var names = [];
+                        zTreeObj.getCheckedNodes(true).forEach(function(node, index) {
+                            if (includingParent == undefined || includingParent == false) {
+                                if (!node.isParent) {
+                                    names.push(node.name);
+                                }
+
+                            } else {
+                                names.push(node.name);
+                            }
+
+                        });
+
+                        return names;
+                    };
+
+                    $scope.setting.getIdsOfNodesChecked = function(includingParent) {
+                        var ids = [];
+                        zTreeObj.getCheckedNodes(true).forEach(function(node, index) {
+                            if (includingParent == undefined || includingParent == false) {
+                                if (!node.isParent) {
+                                    ids.push(node.id);
+                                }
+
+                            } else {
+                                ids.push(node.id);
+                            }
+
+                        });
+
+                        return ids;
+                    }
+
+
+                    angular.extend(treeSetting, $scope.setting);
+
+                    $scope.setNodes()(function(nodes) {
+                        if (nodes) {
+                            zTreeObj = $.fn.zTree.init(iElm, treeSetting, nodes);
 
                         }
+                    });
 
-                    }
+
 
                 }
             };
@@ -805,41 +957,179 @@
 
 
 })();
+
 (
-function () {
-  'use strict';
-  mcs.ng
-.directive('phone', function () {
-  return {
-    restrict: 'A',
-    link: function (scope, iElement, iAttrs) {
+    function() {
+        'use strict';
+        mcs.ng.directive('number', function() {
+
+            return {
+                restrict: 'A',
+                require: 'ngModel',
+
+                link: function($scope, iElm, iAttrs, ngCtrl) {
+
+                    var precision = parseInt(iAttrs.precision);
+                    var float = iAttrs.float;
+                    var numberLength = parseInt(iAttrs.numberLength);
+                    var positiveInteger = iAttrs.positiveInteger;
+                    var max = parseFloat(iAttrs.maxnum);
+                    var min = parseFloat(iAttrs.minnum);
+
+                    var p = /^[1-9]+[0-9]*$/;
+                    var f = /^[0-9]+.?[0-9]*$/;
+                    var l = eval('/^[0-9]+.[0-9]{' + precision + '}$/');
+
+
+
+                    function checkVal(val) {
+                        if (!val || val.length === 0) {
+                            return;
+                        }
+                    }
+
+                    iElm.bind('blur', function(event) {
+                        var val = parseFloat(iElm.val());
+                        checkVal(val);
+                        if (!angular.isNumber(val)) {
+                            $scope.$apply(ngCtrl.$setValidity('number', false));
+
+
+                        } else {
+                            $scope.$apply(ngCtrl.$setValidity('number', true));
+                        }
+
+                        if (positiveInteger) {
+                            if (p.test(val)) {
+                                $scope.$apply(ngCtrl.$setValidity('positiveInteger', true));
+
+                            } else {
+                                $scope.$apply(ngCtrl.$setValidity('positiveInteger', false));
+
+                            }
+                        }
+
+                        if (numberLength != NaN) {
+                            if (val.toString().length > numberLength) {
+                                $scope.$apply(ngCtrl.$setValidity('numberLength', false));
+
+                            } else {
+                                $scope.$apply(ngCtrl.$setValidity('numberLength', true));
+
+                            }
+                        }
+
+                        if (float) {
+                            if (f.test(val)) {
+                                $scope.$apply(ngCtrl.$setValidity('float', true));
+
+
+                            } else {
+                                $scope.$apply(ngCtrl.$setValidity('float', false));
+
+                            }
+
+                        }
+
+                        if (precision != NaN) {
+                            if (l.test(val)) {
+                                $scope.$apply(ngCtrl.$setValidity('precision', true));
+
+                            } else {
+                                $scope.$apply(ngCtrl.$setValidity('precision', false));
+
+                            }
+                        }
+                        if (max != NaN) {
+                            if (parseFloat(val) > max) {
+                                $scope.$apply(ngCtrl.$setValidity('max', false));
+
+                            } else {
+                                $scope.$apply(ngCtrl.$setValidity('max', true));
+
+                            }
+                        }
+
+                        if (min != NaN) {
+
+                            if (parseFloat(val) < min) {
+                                $scope.$apply(ngCtrl.$setValidity('min', false));
+
+                            } else {
+                                $scope.$apply(ngCtrl.$setValidity('min', true));
+
+                            }
+                        }
+
+
+                    });
+
+
+
+                }
+            };
+        })
+
+        .directive('phone', function() {
+
+            return {
+                require: 'ngModel',
+                restrict: 'A',
+                link: function($scope, iElm, iAttrs, ngCtrl) {
+                    var reg = /(^1[34578]\d{9}$)|(^\d{3,4}-\d{7,8}-\d{1,5}$)|(^\d{3,4}-\d{7,8}$)/;
+
+
+
+                    iElm.bind('blur', function(event) {
+                        var val = iElm.val().trim();
+                        if (val == undefined || val.length == 0) {
+                            return;
+                        }
+
+                        if (val.length < 19 && reg.test(val)) {
+                            $scope.$apply(ngCtrl.$setValidity('phone', true));
+
+                        } else {
+
+                            $scope.$apply(ngCtrl.$setValidity('phone', false));
+
+                        }
+
+                    });
+
+
+
+                }
+            };
+        })
+
+        .directive('identityCard', function() {
+
+            return {
+                require: 'ngModel',
+                restrict: 'A',
+                link: function($scope, iElm, iAttrs, ngCtrl) {
+                    var reg = /^(\d{18,18}|\d{15,15}|\d{17,17}x|\d{17,17}X)$/;
+
+                    iElm.bind('blur', function(event) {
+                        var val = iElm.val().trim();
+
+                        if (val.length == 18 && reg.test(val)) {
+                            $scope.$apply(ngCtrl.$setValidity('identityCard', true));
+
+                        } else {
+                            $scope.$apply(ngCtrl.$setValidity('identityCard', false));
+                        }
+                    });
+
+                }
+            };
+        });
 
     }
-  };
-})
-
-.directive('email', function () {
-
-  return {
-    restrict: 'A',
-    link: function ($scope, iElm, iAttrs, controller) {
-
-    }
-  };
-})
-
-.directive('personCode', function () {
-  return {
-    restrict: 'A',
-    link: function (scope, iElement, iAttrs) {
-
-    }
-  };
-});
-
-}
 
 )();
+
 (
   
 function () {

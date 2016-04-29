@@ -26,6 +26,9 @@ var ppts = ppts || mcs.app;
     }
 
     ppts.config = {
+        datePickerFormat: 'yyyy-mm-dd',
+        datetimePickerFormat: 'yyyy-mm-dd hh:ii:ss',
+        datePickerLang: 'zh-CN',
         modules: {
             dashboard: 'app/dashboard/ppts.dashboard',
             auditing: 'app/auditing/ppts.auditing',
@@ -41,8 +44,13 @@ var ppts = ppts || mcs.app;
         dictMappingConfig: {
             // 公共相关
             dateRange: 'c_codE_ABBR_dateRange',
-            ifElse: 'c_codE_ABBR_ifelse',
-
+            people: 'c_codE_ABBR_people',
+            period: 'c_codE_ABBR_period',
+            ifElse: 'c_codE_ABBR_ifElse',
+            messageType: 'c_codE_ABBR_MessageType',
+            orgType: 'Common_OrgType',
+            teacherType: 'Common_TeacherType',
+            applyStatus: 'Common_ApplyStatus',
             grade: 'c_codE_ABBR_CUSTOMER_GRADE',
             gender: 'c_codE_ABBR_GENDER',
             idtype: 'c_codE_ABBR_BO_Customer_CertificateType',
@@ -51,20 +59,57 @@ var ppts = ppts || mcs.app;
             childFemale: 'c_codE_ABBR_CHILDFEMALEDICTIONARY',
             parentMale: 'c_codE_ABBR_PARENTMALEDICTIONARY',
             parentFemale: 'c_codE_ABBR_PARENTFEMALEDICTIONARY',
-           
+            parent: 'c_codE_ABBR_PARENTDICTIONARY',
+            child: 'c_codE_ABBR_CHILDDICTIONARY',
             source: 'c_Code_Abbr_BO_Customer_Source',
             assignment: 'c_codE_ABBR_Customer_Assign',
             valid: 'c_codE_ABBR_Customer_Valid',
-            period: 'c_codE_ABBR_Period',
             contactType: 'c_codE_ABBR_Customer_CRM_NewContactType',
             // 学年
             academicYear: 'c_codE_ABBR_ACDEMICYEAR',
-            // 是否复读
-            studyAgain: 'c_codE_ABBR_StudyAgain',
             // vip客户类型
             vipType: 'c_codE_ABBR_CUSTOMER_VipType',
             // vip客户等级
             vipLevel: 'c_codE_ABBR_CUSTOMER_VipLevel',
+
+            /*
+            * 学员相关
+            */
+            studentType: 'c_codE_ABBR_Student_Type',
+            studentValid: 'c_codE_ABBR_Student_Valid',
+            studentAttend: 'c_codE_ABBR_Student_Attend',
+            studentCancel: 'c_codE_ABBR_Student_Cancel',
+            studentSuspend: 'c_codE_ABBR_Student_Suspend',
+            studentCompleted: 'c_codE_ABBR_Student_Completed',
+            studentAttendRange: 'c_codE_ABBR_Student_Attend_Range',
+            studentRange: 'c_codE_ABBR_Student_Range',
+
+            /*
+            * 教学服务会相关
+            */
+            meetingType: 'c_codE_ABBR_Customer_CRM_MainServiceMeeting',
+            satisfaction: 'c_codE_Abbr_BO_Customer_Satisfaction',
+
+            /*
+            * 账户相关
+            */
+            recordType: 'c_codE_ABBR_account_RecordType',
+            accountType: 'c_codE_ABBR_account_AccountType',
+            accountStatus: 'c_codE_ABBR_account_AccountStatus',
+            chargeType: 'c_codE_ABBR_account_ChargeType',
+            refundType: 'c_codE_ABBR_account_RefundType',
+            payStatus: 'c_codE_ABBR_account_PayStatus',
+            payType: 'c_codE_ABBR_account_PayType',
+
+            /*
+            * 通用
+            */
+            applyStatus: 'c_codE_ABBR_common_ApplyStatus',
+            teacherType: 'c_codE_ABBR_common_TeacherType',
+            printStatus: 'c_codE_ABBR_common_PrintStatus',
+            jobStatus: 'c_codE_ABBR_common_JobStatus',
+            jobType: 'c_codE_ABBR_common_JobType',
+            orgType: 'c_codE_ABBR_common_OrgType',
 
             /*
             * 跟进记录相关
@@ -74,7 +119,7 @@ var ppts = ppts || mcs.app;
             // 跟进阶段
             followStage: 'c_codE_ABBR_Customer_CRM_SalePhase',
             // 沟通一级结果
-            mainTask: 'c_codE_ABBR_Customer_CRM_CommunicateResultFirstEx',
+            mainTalk: 'c_codE_ABBR_Customer_CRM_CommunicateResultFirstEx',
             // 沟通二级结果
             subTalk: 'c_codE_ABBR_Customer_CRM_CommunicateResultSecondEx',
             // 客户级别
@@ -85,6 +130,8 @@ var ppts = ppts || mcs.app;
             purchaseIntension: 'c_codE_ABBR_Customer_CRM_PurchaseIntent',
             // 实际上门人数
             verifyPeople: 'c_codE_ABBR_Customer_CRM_RealCallPersonNum',
+            // 跟进对象
+            followObject: 'c_codE_ABBR_Customer_CRM_SaleContactTarget',
 
             /*
             * 产品相关
@@ -118,17 +165,51 @@ var ppts = ppts || mcs.app;
             // 颗粒度
             unit: 'c_codE_ABBR_Product_ProductUnit',
             // 合作类型
-            hasPartner: 'c_codE_ABBR_Product_HasPartner'
+            hasPartner: 'c_codE_ABBR_Product_HasPartner',
+            // 产品状态/销售状态
+            productStatus: 'c_codE_ABBR_Product_ProductStatus',
+
+
+            /*
+            * 排课相关
+            */
+            assignCondition: 'c_codE_ABBR_AssignCondition',
+            asset: 'c_codE_ABBR_Asset',
+            teacher: 'c_codE_ABBR_Teacher',
+            hour: 'c_codE_ABBR_Hour',
+            minute: 'c_codE_ABBR_Minute',
+            copyCourseType: 'c_codE_ABBR_copyCourseType',
+
+            /*
+            * 订单相关
+            */
+            //订单状态
+            orderStatus: 'c_codE_ABBR_Order_OrderStatus',
+            //操作人岗位
+            post: 'c_codE_ABBR_Order_Post',
+            //特殊折扣原因
+            orderSpecialType: 'c_codE_ABBR_Order_SpecialType',
+            /*
+            * 客服相关
+            */
+            serviceType: 'c_codE_ABBR_customer_ServiceType',
+            serviceStatus: 'c_codE_ABBR_customer_ServiceStatus',
+            acceptLimit: 'c_codE_ABBR_customer_AcceptLimit',
+            consultType: 'c_codE_ABBR_customer_ConsultType',
+            complaintTimes: 'c_codE_ABBR_customer_ComplaintTimes',
+            complaintLevel: 'c_codE_ABBR_customer_ComplaintLevel',
+            complaintUpgrade: 'c_codE_ABBR_customer_ComplaintUpgrade'
         },
         dataServiceConfig: {
             // Auditing Services
             auditingDataService: 'app/auditing/auditinglist/auditing.dataService',
 
             // Customer Services
+            customerService: 'app/customer/ppts.customer.service',
             confirmdoorDataService: 'app/customer/confirmdoor/confirmdoor.dataService',
             feedbackDataService: 'app/customer/feedback/feedback.dataService',
             marketDataService: 'app/customer/market/market.dataService',
-            parentsmeetingDataService: 'app/customer/parentsmeeting/parentsmeeting.dataService',
+            customerMeetingDataService: 'app/customer/customermeeting/customermeeting.dataService',
             customerDataService: 'app/customer/potentialcustomer/potentialcustomer.dataService',
             returnvisitDataService: 'app/customer/returnvisit/returnvisit.dataService',
             scoreDataService: 'app/customer/score/score.dataService',
@@ -184,8 +265,13 @@ var ppts = ppts || mcs.app;
             payListDataService: 'app/contract/paylist/paylist.dataService',
             refundListDataService: 'app/contract/refundlist/refundlist.dataService',
         },
+        plugins: {
+            rangeSlider: 'libs/jquery-2.2.1/plugins/rangeSlider/css/',
+            fullCalendar: 'libs/fullcalendar-2.6.1/fullcalendar',
+        },
         webportalBaseUrl: ppts.rootUrl + '/PPTSWebApp/PPTS.Portal/',
         componentBaseUrl: ppts.rootUrl + '/MCSWebApp/MCS.Web.Component/',
+        mcsApiBaseUrl: ppts.rootUrl + '/MCSWebApp/MCS.Web.API/',
         customerApiBaseUrl: ppts.rootUrl + '/PPTSWebApp/PPTS.WebAPI.Customers/',
         orderApiBaseUrl: ppts.rootUrl + '/PPTSWebApp/PPTS.WebAPI.Orders/',
         productApiBaseUrl: ppts.rootUrl + '/PPTSWebApp/PPTS.WebAPI.Products/'

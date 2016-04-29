@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>学大教育PPTS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <script src="build/ppts.startup.min.js"></script>
+    <script>
+        mcs.g.loadCss([
+            //<!--#bootstrap基础样式-->
+            'libs/bootstrap-3.3.5/css/bootstrap.min',
+            //<!--#boostrap组件样式-->
+            //'libs/bootstrap-3.3.5/css/style',
+            //'libs/bootstrap-3.3.5/css/style-responsive',
+            //<!--#font awesome字体样式-->
+            'libs/font-awesome-3.2.1/css/font-awesome.min',
+            //<!--#ace admin基础样式-->
+            'libs/ace-1.2.0/ace.min',
+            //<!--#blockUI样式-->
+            'libs/angular-block-ui-0.2.2/dist/angular-block-ui',
+            //<!--#全局组件样式-->
+            'libs/mcs-jslib-1.0.0/component/mcs.component',
+            //<!--下拉框样式-->
+            'libs/angular-ui-select-0.13.2/dist/select.min',
+            'libs/angular-ui-select-0.13.2/dist/themes/selectize.default',
+            //'libs/angular-dialog-service/dist/dialogs.min'
+        ], [
+            //<!--#网站主样式-->
+            'assets/styles/site.bk'
+        ]);
+        // 使用reuquirejs加
+        mcs.g.loadRequireJs('libs/requirejs-2.1.22/require', './app/common/config/require.config');
+    </script>
+</head>
+<body class="navbar-fixed" ng-controller="appController as vm">
+    <div ui-view></div>
+</body>
+</html>

@@ -56,7 +56,7 @@ namespace MCS.Library.SOA.DataObjects.Schemas.Adapters
 			}
 		}
 
-		protected override InsertSqlClauseBuilder PrepareInsertSqlBuilder(VersionedSchemaObjectBase obj, ORMappingItemCollection mapping)
+		public override InsertSqlClauseBuilder PrepareInsertSqlBuilder(VersionedSchemaObjectBase obj, ORMappingItemCollection mapping, string[] ignoreProperties)
 		{
 			InsertSqlClauseBuilder builder = new InsertSqlClauseBuilder();
 

@@ -1,46 +1,24 @@
-﻿define([ppts.config.modules.customer], function (customer) {
+﻿define([ppts.config.modules.order], function (customer) {
 
-    customer.registerFactory('customerDataService', ['$resource', 'dataService', function ($resource, dataService) {
+    customer.registerFactory('unsubscribeCourseDataService', ['$resource', function ($resource, dataService) {
 
-        var resource = $resource(ppts.config.customerApiServerPath + 'api/potentialcustomers/:operation/:id', { operation: '@operation', id: '@id' }, { 'post': { method: 'POST' } });
-
-        resource.getAllCustomers = function (criteria, success, error) {
-            dataService.process(resource.post({ operation: 'getAllCustomers' }, criteria).then(success, error, notify));
+        var resource = $resource(ppts.config.orderApiBaseUrl + 'api/unsubscribe/:operation/:id',
+            { operation: '@operation' },
+            {
+                'post': { method: 'POST' },
+                'query': { method: 'GET', isArray: false }
+            });
+        //--------------------------分页--------------------------------------------
+        resource.getAllDebookOrders = function (criteria, callback) {
+            resource.post({ operation: 'GetAllDebookOrders' }, criteria, function (entity) { if (callback) { callback(entity); } });
         }
 
-        resource.getPagedCustomers = function (criteria, success, error, notify) {
-            dataService.process(resource.post({ operation: 'getPagedCustomers' }, criteria).then(success, error, notify));
+        resource.getPagedDebookOrders = function (criteria, callback) {
+            resource.post({ operation: 'GetPagedDebookOrders' }, criteria, function (entity) { if (callback) { callback(entity); } });
         }
+        //--------------------------分页--------------------------------------------
 
-        resource.getCustomer = function (customerId) {
-            dataService.process(resource.query({ operation: 'getCustomerBaseinfo', id: customerId }).then(function (customer) {
 
-            }));
-        };
-
-        resource.addCustomer = function () {
-            dataService.process(resource.query({ operation: 'createCustomer' }).then(function (customer) {
-
-            }));
-        }
-
-        resource.editCustomer = function (customerId) {
-            dataService.process(resource.query({ operation: 'updateCustomer', id: customerId }).then(function (customer) {
-
-            }));
-        }
-
-        resource.saveCustomer = function (customer, customerId) {
-            if (!customerId) {
-                dataService.process(resource.save({ operation: 'createCustomer' }, customer).then(function (result) {
-
-                }));
-            } else {
-                dataService.process(resource.save({ operation: 'updateCustomer', id: customerId }, customer).then(function (result) {
-
-                }));
-            }
-        };
 
         return resource;
     }]);

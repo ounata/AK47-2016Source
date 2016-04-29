@@ -1,0 +1,85 @@
+﻿ <!-- #开始：教学服务会.高级查询条件 -->
+<div id="accordion" class="accordion-style1 panel-group">
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#advance-search">
+                    <i class="ace-icon fa fa-angle-right bigger-110" data-icon-hide="fa-angle-down" data-icon-show="fa-angle-right"></i>
+                    &nbsp;高级查询
+                </a>
+            </h4>
+        </div>
+        <div class="panel-collapse collapse mcs-advance-search" id="advance-search">
+            <div class="panel-body">
+                <div class="profile-user-info mcs-user-profile follow-list">
+                    <div class="profile-info-row">
+                        <div class="profile-info-name">当前年级：</div>
+                        <div class="profile-info-value">
+                            <ppts-checkbox-group category="grade" model="vm.criteria.grades" clear="vm.criteria.grades=[]" />
+                        </div>
+                    </div>
+                    <div class="profile-info-row">
+                        <div class="profile-info-name">家长满意度：</div>
+                        <div class="profile-info-value">
+                            <ppts-checkbox-group category="satisfaction" model="vm.criteria.satisfactions" clear="vm.criteria.satisfactions=[]" />
+                        </div>
+                    </div>
+                    <div class="profile-info-row">
+                        <div class="profile-info-name">开会时间：</div>
+                        <div class="profile-info-value">
+                            <ppts-daterangepicker start-date="vm.criteria.meetingTimeStart" end-date="vm.criteria.meetingTimeEnd" />
+                        </div>
+                    </div>
+                    <div class="profile-info-row">
+                        <div class="profile-info-name">下次开会时间：</div>
+                        <div class="profile-info-value">
+                            <ppts-daterangepicker start-date="vm.criteria.nextMeetingTimeStart" end-date="vm.criteria.nextMeetingTimeEnd" />
+                        </div>
+                    </div>
+                    <div class="profile-info-row">
+                        <div class="profile-info-name">会议类型：</div>
+                        <div class="profile-info-value">
+                            <ppts-checkbox-group category="meetingType" model="vm.criteria.meetingTypes" clear="vm.criteria.meetingTypes=[]" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- /结束：教学服务会.高级查询条件 -->
+<!-- #开始：教学服务会.快速查询条件 -->
+<div class="mcs-panel-search well well-sm">
+    <div class="portlet">
+        <div class="portlet-title line">
+            <div class="caption">
+                <label class="quick-search"><i class="ace-icon fa fa-search bigger-125"></i> 快速查询</label>
+            </div>
+        </div>
+        <div class="portlet-body">
+            <mcs-input placeholder="大区/分公司/校区" model="vm.criteria.area" />
+            <!--<div class="input-group input-xlarge mcs-input-group pull-left">
+                <mcs-input placeholder="选择大区/分公司/校区" model="" readonly="true" css="form-control mcs-input-search" />
+                <span class="input-group-btn">
+                    <button class="btn btn-sm btn-info" type="button" ng-click="vm.select()">
+                        <i class="ace-icon fa fa-check bigger-110"></i>
+                        选择
+                    </button>
+                </span>
+            </div>-->
+            {{vm.selectNodes}}
+            <mcs-input placeholder="学员姓名" model="vm.criteria.customerName" />
+            <mcs-input placeholder="学员编号" model="vm.criteria.customerCode" />
+            <mcs-input placeholder="咨询师姓名" model="vm.criteria.consultantName" />
+            <mcs-input placeholder="学管师姓名" model="vm.criteria.leaveManageName" />
+            <mcs-input placeholder="会议组织人" model="vm.criteria.organizerName" />
+            <mcs-button category="search" click="vm.search()" size="medium" />
+        </div>
+    </div>
+</div>
+<!-- /结束：教学服务会.快速查询条件 -->
+
+<!-- #开始：教学服务会.数据表格 -->
+<mcs-datatable data="vm.data" />
+<!-- /结束：教学服务会.数据表格 -->

@@ -1,12 +1,5 @@
-﻿using MCS.Library.Core;
-using MCS.Library.Data.Adapters;
+﻿using MCS.Library.Data.Adapters;
 using MCS.Library.Data.DataObjects;
-using PPTS.Data.Customers.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PPTS.Data.Customers.DataSources
 {
@@ -21,7 +14,7 @@ namespace PPTS.Data.Customers.DataSources
     {
         public static readonly GenericCustomerDataSource<T, TCollection> Instance = new GenericCustomerDataSource<T, TCollection>();
 
-        private GenericCustomerDataSource()
+        protected GenericCustomerDataSource()
         {
         }
 
