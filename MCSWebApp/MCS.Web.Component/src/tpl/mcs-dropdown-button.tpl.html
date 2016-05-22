@@ -1,0 +1,11 @@
+﻿<div class="btn-group">
+    <button class="btn btn-{{category}} {{css}} mcs-width-130 dropdown-toggle" data-toggle="dropdown">
+        <i class="ace-icon fa"></i> {{title}}
+        <span class="ace-icon fa fa-caret-down icon-on-right"></span>
+    </button>
+    <ul class="dropdown-menu dropdown-{{category}}">
+        <li ng-repeat="item in items" style="cursor:pointer;" ng-click="item.click(item)">
+            <a>{{item.text}}</a>
+        </li>
+    </ul>
+</div>

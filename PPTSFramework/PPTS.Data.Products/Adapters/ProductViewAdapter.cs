@@ -9,6 +9,8 @@ namespace PPTS.Data.Products.Adapters
     {
         public static ProductViewAdapter Instance = new ProductViewAdapter();
 
+        public string TableName { get { return GetTableName(); } }
+
         public void LoadByProductIDInContext(string productId, Action<ProductViewCollection> action)
         {
             this.LoadInContext(new WhereLoadingCondition(builder => builder.AppendItem("ProductID", productId)), action);

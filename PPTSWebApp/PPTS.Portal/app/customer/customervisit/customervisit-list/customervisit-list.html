@@ -1,0 +1,56 @@
+﻿<!-- #开始：客户回访列表.快速查询条件 -->
+<div class="mcs-panel-search well well-sm">
+    <div class="portlet">
+        <div class="portlet-title line">
+            <div class="caption">
+                <label class="quick-search"><i class="ace-icon fa fa-search bigger-125"></i> 快速查询</label>
+            </div>
+        </div>
+        <div class="portlet-body">
+            <div class="ppts-oneline-block">
+                <div class="search-inline">
+                    <ppts-select-branch model="vm.criteria.orgIds" />
+                </div>
+                <div class="search-inline">
+
+                    <mcs-input placeholder="学生姓名" model="vm.criteria.customerName" css="mcs-input-search" />
+                    <mcs-input placeholder="学生编号" model="vm.criteria.customerCode" css="mcs-input-search" />
+                    <mcs-input placeholder="回访人" model="vm.criteria.visitorName" css="mcs-input-search" />
+                </div>
+            </div>
+            
+           
+
+            <div class="ppts-oneline-block">
+                <ppts-select category="timeType" model="vm.timeType" caption="时间类型" class="ppts-select-search"/>
+                <ppts-select category="satisficing" model="vm.criteria.satisficing" caption="家长满意度" class="ppts-select-search"/>
+                <ppts-select category="visitWay" model="vm.criteria.visitWay" caption="回访方式" class="ppts-select-search"/>
+                <ppts-select category="visitType" model="vm.criteria.visitType" caption="回访类型" class="ppts-select-search"/>
+            </div>
+            <div class="ppts-oneline-block">
+                <ppts-daterangepicker class="search" start-date="vm.timeStart" end-date="vm.timeEnd"/>
+
+
+                <mcs-button category="search" click="vm.search()" size="medium"/>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<!-- /结束：客户回访列表.快速查询条件 -->
+<!-- #开始：客户服务列表.工具栏 -->
+<div class="mcs-panel-toolbar">
+    <mcs-button category="export" text="导出升级" click="vm.export()"></mcs-button>
+</div>
+<div class="alert alert-block alert-danger" ng-show="vm.errorMessage">
+    <button type="button" class="close" data-dismiss="alert">
+        <i class="ace-icon fa fa-times"></i>
+    </button>
+    <i class="ace-icon fa fa-warning"></i>
+    {{vm.errorMessage}}
+</div>
+<!-- /结束：客户服务列表.工具栏 -->
+<!-- #开始：客户服务列表.数据表格 -->
+<mcs-datatable data="vm.data" />
+<!-- /结束：客户服务列表.数据表格 -->

@@ -2,6 +2,7 @@
     <div class="col-md-offset-3 col-md-9">
         <mcs-button category="edit" click="vm.edit()"></mcs-button>
         <mcs-button category="add" click="vm.parentAdd()" text="添加孩子家长"></mcs-button>
+        <mcs-button category="thaw" click="vm.thaw()" text="解冻"></mcs-button>
     </div>
 </div>
 <div class="profile-user-info profile-user-info-striped mcs-user-profile">
@@ -9,13 +10,13 @@
         <div class="profile-info-name"> 接触方式 </div>
         <div class="profile-info-value">
             
-            <span>{{ vm.customer.versionStartTime | date:'yyyy-MM-dd HH:mm:ss'}}</span>
+            <span>{{ vm.customer.contactType | contactType }}</span>
         </div>
     </div>
     <div class="profile-info-row">
         <div class="profile-info-name"> 信息来源 </div>
         <div class="profile-info-value">
-            <span>{{ vm.customer.versionStartTime}}</span>
+            <span>{{ vm.customer.sourceMainType | source }}</span>
         </div>
     </div>
     <div class="profile-info-row">

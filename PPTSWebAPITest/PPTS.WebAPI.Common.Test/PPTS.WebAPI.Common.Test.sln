@@ -1,0 +1,39 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPTS.WebAPI.Common.Test", "PPTS.WebAPI.Common.Test.csproj", "{BA4E9715-378E-41EC-833C-FD9870A3D5E4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPTS.WebAPI.Common", "..\..\PPTSWebApp\PPTS.WebAPI.Common\PPTS.WebAPI.Common.csproj", "{EC005DE8-1DCB-4936-B6B3-E4DC70C319F2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BA4E9715-378E-41EC-833C-FD9870A3D5E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA4E9715-378E-41EC-833C-FD9870A3D5E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA4E9715-378E-41EC-833C-FD9870A3D5E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA4E9715-378E-41EC-833C-FD9870A3D5E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC005DE8-1DCB-4936-B6B3-E4DC70C319F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC005DE8-1DCB-4936-B6B3-E4DC70C319F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC005DE8-1DCB-4936-B6B3-E4DC70C319F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC005DE8-1DCB-4936-B6B3-E4DC70C319F2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 3
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://10.1.56.70:8080/tfs/pptsv2.0
+		SccProjectUniqueName0 = ..\\..\\PPTSWebApp\\PPTS.WebAPI.Common\\PPTS.WebAPI.Common.csproj
+		SccProjectName0 = ../../PPTSWebApp/PPTS.WebAPI.Common
+		SccLocalPath0 = ..\\..\\PPTSWebApp\\PPTS.WebAPI.Common
+		SccLocalPath1 = .
+		SccProjectUniqueName2 = PPTS.WebAPI.Common.Test.csproj
+		SccLocalPath2 = .
+	EndGlobalSection
+EndGlobal

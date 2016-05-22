@@ -53,6 +53,32 @@ namespace MCS.Library.Data.Adapters
         }
 
         /// <summary>
+        /// 删除数据（实际上是时间封口）
+        /// </summary>
+        /// <param name="data"></param>
+        public void Delete(T data)
+        {
+            data.NullCheck("obj");
+
+            Dictionary<string, object> context = new Dictionary<string, object>();
+
+            this.BeforeInnerDelete(data, context);
+
+            string sql = VersionStrategyUpdateSqlBuilder<T>.DefaultInstance.ToDeleteSql(data, this.GetMappingInfo());
+
+            using (TransactionScope scope = TransactionScopeFactory.Create())
+            {
+                DateTime dt = (DateTime)DbHelper.RunSqlReturnScalar(sql, this.GetConnectionName());
+
+                this.AfterInnerDelete(data, context);
+
+                DBTimePointActionContext.Current.TimePoint.IsMinValue(() => DBTimePointActionContext.Current.TimePoint = dt);
+
+                scope.Complete();
+            }
+        }
+
+        /// <summary>
         /// 
         /// </summary>
         /// <param name="ownerKeyBuilder"></param>
@@ -132,6 +158,24 @@ namespace MCS.Library.Data.Adapters
         /// <param name="data"></param>
         /// <param name="context"></param>
         protected virtual void AfterInnerUpdate(T data, Dictionary<string, object> context)
+        {
+        }
+
+        /// <summary>
+        /// 更新单一对象前
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="context"></param>
+        protected virtual void BeforeInnerDelete(T data, Dictionary<string, object> context)
+        {
+        }
+
+        /// <summary>
+        /// 更新单一对象后
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="context"></param>
+        protected virtual void AfterInnerDelete(T data, Dictionary<string, object> context)
         {
         }
 

@@ -4,6 +4,7 @@ using MCS.Library.SOA.DataObjects;
 using PPTS.Data.Common.Executors;
 using PPTS.Data.Customers.Adapters;
 using PPTS.Data.Customers.Entities;
+using PPTS.Data.Customers.Executors;
 using PPTS.WebAPI.Customers.ViewModels.CustomerFollows;
 
 namespace PPTS.WebAPI.Customers.Executors

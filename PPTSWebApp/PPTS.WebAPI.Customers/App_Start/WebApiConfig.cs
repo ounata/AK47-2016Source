@@ -1,9 +1,11 @@
-﻿using System.Web.Http;
-using Newtonsoft.Json.Serialization;
-using MCS.Web.MVC.Library.Filters;
-using System.Net.Http.Formatting;
+﻿using MCS.Library.Core;
+using MCS.Web.MVC.Library.Configuration;
 using MCS.Web.MVC.Library.Converters;
+using MCS.Web.MVC.Library.Filters;
 using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
+using System.Net.Http.Formatting;
+using System.Web.Http;
 
 namespace PPTS.WebAPI.Customers
 {
@@ -23,7 +25,9 @@ namespace PPTS.WebAPI.Customers
             config.Formatters.Clear();
             config.Formatters.Add(new JsonMediaTypeFormatter());
             config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-            config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new JavascriptUpwardDatetimeConverter());
+
+            JsonDotNetConvertersSettings.GetConfig().GetConverters().ForEach(converter => config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(converter));
+
             config.Filters.Add(new ApiExceptionFilterAttribute());
         }
     }

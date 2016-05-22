@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html moznomarginboxes mozdisallowselectionprint>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <link href="../../libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../../libs/bootstrap-3.3.5/css/style-responsive.css" rel="stylesheet" />
+    <link href="../../libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="../../libs/ace-1.2.3/ace.min.css" rel="stylesheet" />
+    <link href="../css/mcs.css" rel="stylesheet" />
+    <script src="../../libs/ace-1.3.1/ace.min.js"></script>
+    <!--#ace配置项-->
+    <script src="../../libs/ace-1.3.1/ace-extra.min.js"></script>
+    <script src="../../libs/angular-1.5.0/angular.min.js"></script>
+    <style type="text/css" media="print">
+    @page {
+        size: auto;
+        margin: 0;
+    }
+    
+    .noprint {
+        display: none;
+    }
+    
+    body {
+        margin: 1.6cm;
+    }
+    </style>
+</head>
+
+<body>
+    <object id=factory style="display:none" classid="clsid:1663ed61-23eb-11d2-b92f-008048fdd814" codebase="./smsx.cab#Version=7,7,0,20">
+    </object>
+    <div class="container">
+        <div id="tools" class="center noprint">
+            <input type="button" value="打印" onclick="printWindow()" class="btn btn-primary btn-sm">
+            <input type="button" value="页面设置" onclick="printSetup()" class="btn btn-primary btn-sm">
+        </div>
+        <div id="printContainer">
+        </div>
+    </div>
+    <script>
+    function isIE() {
+        if (!!window.ActiveXObject || "ActiveXObject" in window)
+            return true;
+        else
+            return false;
+    }
+
+    function printWindow() {
+
+        if (isIE()) {
+            factory.printing.header = "";
+            factory.printing.footer = "";
+            factory.printing.paperSize = "A4";
+            factory.printing.SetPrintScale(-1);
+            factory.printing.portrait = false;
+            factory.printing.leftMargin = 1.0;
+            factory.printing.topMargin = 1.0;
+            factory.printing.rightMargin = 1.0;
+            factory.printing.bottomMargin = 1.0;
+            factory.printing.Print(false);
+        } else {
+            if (tata = document.execCommand("print")) {
+                window.close();
+            }
+        }
+
+
+
+
+    }
+
+    function preview() {
+        factory.printing.Preview();
+    }
+
+
+
+    function printSetup() {
+        factory.printing.PageSetup();
+    }
+    </script>
+</body>
+
+</html>

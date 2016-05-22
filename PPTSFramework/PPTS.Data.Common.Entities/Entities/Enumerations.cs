@@ -82,35 +82,44 @@ namespace PPTS.Data.Common
     /// </summary>
     public enum JobTypeDefine
     {
-        /// <summary>
-        /// 市场专员
-        /// </summary>
-        [EnumItemDescription("市场专员")]
-        Market,
-
-        /// <summary>
-        /// 坐席专员
-        /// </summary>
-        [EnumItemDescription("坐席专员")]
-        Callcenter,
+        [EnumItemDescription("未知", Filter = "")]
+        Unknown = 0,
 
         /// <summary>
         /// 咨询师
         /// </summary>
-        [EnumItemDescription("咨询师")]
-        Consultant,
+        [EnumItemDescription("咨询师", Filter = "校教育咨询师", Category = "SC.ConsultantJobSnapshot_Current")]
+        Consultant = 1,
 
         /// <summary>
         /// 学管师
         /// </summary>
-        [EnumItemDescription("学管师")]
-        Educator,
+        [EnumItemDescription("学管师", Filter = "校学习管理师", Category = "SC.EducatorJobSnapshot_Current")]
+        Educator = 2,
 
         /// <summary>
         /// 教师
         /// </summary>
-        [EnumItemDescription("教师")]
-        Teacher
+        [EnumItemDescription("教师", Filter = "教师", Category = "TeacherJobSnapshot_Current")]
+        Teacher = 3,
+
+        /// <summary>
+        /// 坐席专员
+        /// </summary>
+        [EnumItemDescription("坐席专员", Filter = "呼叫中心专员", Category = "SC.CallcenterJobSnapshot_Current")]
+        Callcenter = 4,
+
+        /// <summary>
+        /// 市场专员
+        /// </summary>
+        [EnumItemDescription("市场专员", Filter = "市场专员", Category = "SC.MarketingJobSnapshot_Current")]
+        Marketing = 5,
+
+        /// <summary>
+        /// 校区总监
+        /// </summary>
+        [EnumItemDescription("校区总监", Filter = "校区总监")]
+        CampusDirector = 10
     }
 
     /// <summary>
@@ -131,6 +140,11 @@ namespace PPTS.Data.Common
         /// <summary>
         /// 校区
         /// </summary>
-        Campus = DepartmentType.Campus
+        Campus = DepartmentType.Campus,
+
+        /// <summary>
+        /// 学科组
+        /// </summary>
+        XueKeZu = DepartmentType.XueKeZu
     }
 }

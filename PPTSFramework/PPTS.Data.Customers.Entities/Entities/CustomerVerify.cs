@@ -121,17 +121,6 @@ namespace PPTS.Data.Customers.Entities
         }
 
         /// <summary>
-        /// 上门确认次第
-        /// </summary>
-        [ORFieldMapping("VerifyNumber")]
-        [DataMember]
-        public int VerifyNumber
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
         /// 实际上门人数代码
         /// </summary>
         [ORFieldMapping("VerifyPeoples")]
@@ -148,17 +137,6 @@ namespace PPTS.Data.Customers.Entities
         [ORFieldMapping("VerifyRelations")]
         [DataMember]
         public string VerifyRelations
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 是否潜客阶段
-        /// </summary>
-        [ORFieldMapping("IsPotential")]
-        [DataMember]
-        public int IsPotential
         {
             get;
             set;
@@ -198,33 +176,11 @@ namespace PPTS.Data.Customers.Entities
         }
 
         /// <summary>
-        /// 最后修改人ID
+        /// 是否邀约
         /// </summary>
-        [ORFieldMapping("ModifierID")]
+        [ORFieldMapping("IsInvited")]
         [DataMember]
-        public string ModifierID
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 最后修改人姓名
-        /// </summary>
-        [ORFieldMapping("ModifierName")]
-        [DataMember]
-        public string ModifierName
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 最后修改时间
-        /// </summary>
-        [ORFieldMapping("ModifyTime")]
-        [DataMember]
-        public DateTime ModifyTime
+        public int IsInvited
         {
             get;
             set;

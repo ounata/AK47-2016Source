@@ -10,7 +10,10 @@
 	[CodeName]         NVARCHAR (64) NULL,
     [SearchContent]    NVARCHAR (MAX) NULL,
     [RowUniqueID]      NVARCHAR (36)  CONSTRAINT [DF_SchemaGroup_RowUniqueID] DEFAULT (CONVERT([nvarchar](36),newid())) NOT NULL,
-    [SchemaType] NVARCHAR(36) NULL, 
+    [SchemaType] NVARCHAR(36) NULL,
+	[GroupType] NVARCHAR(32) NULL,
+	[ParentJobID] NVARCHAR(36) NULL,
+	[IsPrimary] INT NULL DEFAULT 1,
 	[CreatorID] NVARCHAR(36) NULL, 
     [CreatorName] NVARCHAR(255) NULL,
     [Comment] NVARCHAR(255) NULL, 
@@ -27,4 +30,3 @@ GO
 CREATE INDEX [IX_SchemaGroupSnapshot_CodeName] ON [SC].[SchemaGroupSnapshot] ([CodeName])
 
 GO
-

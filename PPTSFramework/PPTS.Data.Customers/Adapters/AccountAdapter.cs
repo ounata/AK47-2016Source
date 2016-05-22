@@ -26,5 +26,16 @@ namespace PPTS.Data.Customers.Adapters
                 accounts[0].IsLatest = true;
             return accounts;
         }
+
+        /// <summary>
+        /// 根据学员ID获取当前账号。
+        /// </summary>
+        /// <param name="customerID"></param>
+        /// <returns></returns>
+        public Account LoadCurrentByCustomerID(string customerID)
+        {
+            AccountCollection c = this.LoadCollectionByCustomerID(customerID);
+            return c.Where(x => x.IsLatest == true).SingleOrDefault();
+        }
     }
 }

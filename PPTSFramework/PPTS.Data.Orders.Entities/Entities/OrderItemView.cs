@@ -140,7 +140,7 @@ namespace PPTS.Data.Orders.Entities
         /// </summary>		
         [ORFieldMapping("Subject")]
         [DataMember]
-        [ConstantCategory("c_codE_ABBR_BO_Product_TeacherSubject")]
+        [ConstantCategory("C_CODE_ABBR_BO_Product_TeacherSubject")]
         public string Subject
         {
             get;

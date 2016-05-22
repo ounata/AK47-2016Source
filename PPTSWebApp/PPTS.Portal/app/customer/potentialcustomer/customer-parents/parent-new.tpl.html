@@ -1,0 +1,76 @@
+﻿<div class="clearfix form-actions mcs-form-actions">
+    <div class="col-md-offset-3 col-md-9">
+        <mcs-button category="save" click="vm.save()"></mcs-button>
+    </div>
+</div>
+
+<div class="profile-user-info profile-user-info-striped mcs-user-profile">
+    <div class="profile-info-row">
+        <div class="profile-info-name"> 家长姓名 </div>
+        <div class="profile-info-value">
+            <mcs-input model="vm.parent.parentName" css="col-xs-5 col-sm-5" />
+        </div>
+    </div>
+    <div class="profile-info-row">
+        <div class="profile-info-name"> 家长性别 </div>
+        <div class="profile-info-value">
+            <ppts-radiobutton-group category="gender" model="vm.parent.gender" />
+        </div>
+    </div>
+    <div class="profile-info-row">
+        <div class="profile-info-name"> 亲属关系 </div>
+        <div class="profile-info-value">
+            <div class="customer-relation-container">
+                <div class="col-sm-12 mcs-padding-0 mcs-margin-bottom-2">
+                    <div class="col-sm-4 mcs-padding-0"><input class="mcs-readonly-input" ng-model="vm.customer.customerName" onkeydown="return false;" style="width:88%;background:none;" />是</div>
+                    <div class="col-sm-4 mcs-padding-0"><input class="mcs-readonly-input" ng-model="vm.parent.parentName" onkeydown="return false;" style="width:88%;background:none;" />的</div>
+                    <div class="col-sm-4 mcs-padding-0"><ppts-select data="vm.customerRoles" model="vm.customerRole" callback="selectCustomerRole(item, model)" css="mcs-padding-0" caption="子女关系" /></div>
+                </div>
+                <div class="col-sm-12 mcs-padding-0">
+                    <div class="col-sm-4 mcs-padding-0"><input class="mcs-readonly-input" ng-model="vm.parent.parentName" onkeydown="return false;" style="width:88%;background:none;" />是</div>
+                    <div class="col-sm-4 mcs-padding-0"><input class="mcs-readonly-input" ng-model="vm.customer.customerName" onkeydown="return false;" style="width:88%;background:none;" />的</div>
+                    <div class="col-sm-4 mcs-padding-0"><ppts-select data="vm.parentRoles" model="vm.parentRole" disabled="!(vm.parent.gender && vm.customer.gender && vm.customerRole && vm.parentRoles.length > 1)" css="mcs-padding-0" caption="家属关系" /></div>
+                </div>
+                <p class="help-block"></p>
+            </div>
+        </div>
+    </div>
+    <div class="profile-info-row">
+        <div class="profile-info-name"> 是否是主监护人 </div>
+        <div class="profile-info-value">
+            <ppts-radiobutton-group category="ifElse" model="vm.isPrimary" />
+        </div>
+    </div>
+    <div class="profile-info-row">
+        <div class="profile-info-name"> 联系方式1 </div>
+        <div class="profile-info-value">
+            <mcs-input model="vm.parent.primaryPhone.phoneNumber" css="col-xs-5 col-sm-5" />
+        </div>
+    </div>
+    <div class="profile-info-row">
+        <div class="profile-info-name"> 联系方式2 </div>
+        <div class="profile-info-value">
+            <mcs-input model="vm.parent.secondaryPhone.phoneNumber" css="col-xs-5 col-sm-5" />
+        </div>
+    </div>
+    <div class="profile-info-row">
+        <div class="profile-info-name"> 家长Email </div>
+        <div class="profile-info-value">
+            <mcs-input model="vm.parent.email" css="col-xs-5 col-sm-5" />
+        </div>
+    </div>
+    <div class="profile-info-row">
+        <div >
+            <ppts-select category="idtype" model="vm.parent.idType" class="ppts-select-label"/>
+        </div>
+        <div class="profile-info-value">
+            <mcs-input model="vm.parent.idNumber" css="col-xs-5 col-sm-5" />
+        </div>
+    </div>
+    <div class="profile-info-row">
+        <div class="profile-info-name"> 家庭年总收入 </div>
+        <div class="profile-info-value">
+            <ppts-select category="income" model="vm.parent.income" css="col-xs-5 col-sm-5" />
+        </div>
+    </div>
+</div>

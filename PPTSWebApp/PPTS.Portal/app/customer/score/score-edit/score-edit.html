@@ -1,0 +1,96 @@
+﻿<!-- #开始：添加潜客Form -->
+<form class="form-horizontal" role="form">
+    <div class="widget-box">
+        <div class="widget-header">
+            <h4>编辑成绩<small><i class="icon-double-angle-right"></i>(<span class="required"> * </span>表示必填字段)</small></h4>
+        </div>
+        <div class="widget-body">
+            <div class="widget-main no-padding" disabled="disabled">
+                <div class="clearfix form-actions mcs-form-actions">
+                    <div class="col-md-offset-4 col-md-9">
+                        <mcs-button type="submit" category="save" click="vm.save()"></mcs-button>
+                    </div>
+                </div>
+                <div class="page-header">
+                    <span>学员姓名：{{ vm.customer.customerName }}</span>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-3">
+                        <mcs-label required="true" text="学年度：" css="col-sm-6" />
+                        <div class="col-sm-6 mcs-padding-0">
+                            <mcs-label text="{{vm.score.studyYear | studyYear}}" model="vm.score.studyYear" />
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <mcs-label required="true" text="学期：" css="col-sm-6" />
+                        <div class="col-sm-6 mcs-padding-0">
+                            <mcs-label text="{{vm.score.studyTerm | studyTerm}}" model="vm.score.studyTerm" />
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <mcs-label required="true" text="考试年级：" css="col-sm-6" />
+                        <div class="col-sm-6 mcs-padding-0">
+                            <mcs-label text="{{vm.score.scoreGrade | grade}}" model="vm.score.scoreGrade" />
+                        </div>
+                    </div>
+                    <div class="col-sm-3" ng-show="vm.score.studyStage">
+                        <mcs-label text="考试学段：" css="col-sm-6" />
+                        <div class="col-sm-6 mcs-padding-0">
+                            <mcs-label text="{{vm.score.studyStage | studyStage}}" model="vm.score.studyStage" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-3">
+                        <mcs-label required="true" text="考试类型：" css="col-sm-6" />
+                        <div class="col-sm-6 mcs-padding-0">
+                            <mcs-label text="{{vm.score.scoreType | scoreType}}" model="vm.score.scoreType" />
+                            <span ng-if="vm.score.otherScoreTypeName">-</span> {{vm.score.otherScoreTypeName}}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-3">
+                        <mcs-label required="true" text="录入成绩：" css="col-sm-6" />
+                    </div>
+                </div>
+            </div>
+            
+            <mcs-datatable data="vm.data" style="padding:0 20px"/>
+
+            <div class="widget-main no-padding">
+                <div class="form-group" ng-show="vm.score.scoreType == '6' || vm.score.scoreType == '10' || vm.score.scoreType == '14'">
+                    <div class="">
+                        <mcs-label required="true" text="录取院校类别：" css="col-sm-4" />
+                        <div class="col-sm-6">
+                            <!--<ppts-select category="admissionType" model="vm.score.admissionType" caption="录取院校类别" />-->
+                            <ppts-radiobutton-group category="admissionType" model="vm.score.admissionType" parent="vm.score.scoreType" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" ng-show="vm.score.scoreType == '10' || vm.score.scoreType == '14'">
+                    <div class="col-sm-3">
+                        <mcs-label text="录取院校：" css="col-sm-4" />
+                        <div class="col-sm-6">
+                            <input type="text" ng-model="vm.score.admissionSchool" class="mcs-input-search" style="width:150px" />
+                        </div>
+                    </div>
+                    <div class="col-sm-3" ng-show="vm.score.scoreType == '14'">
+                        <input type="checkbox" ng-model="vm.score.isKeyCollege" />
+                        <span>属985或211院校</span>
+                    </div>
+                </div>
+                <div class="form-group" ng-show="vm.score.scoreType == '15'">
+                    <div class="col-sm-3">
+                        <mcs-label required="true" text="考试月份：" css="col-sm-4" />
+                        <div class="col-sm-6">
+                            <ppts-select category="examMonth" model="vm.score.examineMonth" caption="考试月份" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</form>
+<!-- /结束：添加潜客Form -->

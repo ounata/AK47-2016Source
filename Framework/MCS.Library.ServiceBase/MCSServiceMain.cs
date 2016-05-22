@@ -12,182 +12,181 @@ using System.Windows.Forms;
 
 namespace MCS.Library.Services
 {
-	public partial class MCSServiceMain : ServiceBase
-	{
-		private ServiceThreadCollection threads = new ServiceThreadCollection();
-		private ManualResetEvent exitEvent = new ManualResetEvent(false);
-		private ServiceEntryType entryType = ServiceEntryType.Service;
-		private ServiceStatusType serviceStatus = ServiceStatusType.Stopped;
-		private ServiceLog log = null;
-		private static MCSServiceMain instance = new MCSServiceMain();
+    public partial class MCSServiceMain : ServiceBase
+    {
+        //private ServiceThreadCollection threads = new ServiceThreadCollection();
+        //private ManualResetEvent exitEvent = new ManualResetEvent(false);
+        //private ServiceEntryType entryType = ServiceEntryType.Service;
+        //private ServiceStatusType serviceStatus = ServiceStatusType.Stopped;
+        //private ServiceLog log = null;
+        private static MCSServiceMain instance = new MCSServiceMain();
+        private ServiceContainer container = null;
 
-		public string[] args;
+        public string[] args;
 
-		private MCSServiceMain()
-		{
-			InitializeComponent();
+        private MCSServiceMain()
+        {
+            InitializeComponent();
 
-			this.ServiceName = ServiceArguments.Current.ServiceName;
+            this.ServiceName = ServiceArguments.Current.ServiceName;
+            this.container = new ServiceContainer(this.ServiceName);
+        }
 
-			this.AutoLog = false;
-		}
+        //public ServiceStatusType ServiceStatus
+        //{
+        //    get
+        //    {
+        //        return this.serviceStatus;
+        //    }
+        //}
 
-		//public ServiceEntryType EntryType
-		//{
-		//    get
-		//    {
-		//        return this.entryType;
-		//    }
-		//    internal set
-		//    {
-		//        this.entryType = value;
-		//    }
-		//}
+        //public event CreateThreadDelegete CreateThreadEvent;
 
-		public ServiceStatusType ServiceStatus
-		{
-			get
-			{
-				return this.serviceStatus;
-			}
-		}
+        public static MCSServiceMain Instance
+        {
+            get
+            {
+                return instance;
+            }
+        }
 
-		public event CreateThreadDelegete CreateThreadEvent;
+        //public ServiceLog Log
+        //{
+        //    get
+        //    {
+        //        if (this.log == null)
+        //            this.log = new ServiceLog(this.ServiceName);
 
-		public static MCSServiceMain Instance
-		{
-			get
-			{
-				return instance;
-			}
-		}
+        //        return this.log;
+        //    }
+        //}
 
-		public ServiceLog Log
-		{
-			get
-			{
-				if (this.log == null)
-					this.log = new ServiceLog(this.ServiceName);
+        //public ServiceThreadCollection Threads
+        //{
+        //    get
+        //    {
+        //        return this.threads;
+        //    }
+        //}
 
-				return this.log;
-			}
-		}
+        public ServiceContainer ServiceContainer
+        {
+            get
+            {
+                return this.container;
+            }
 
-		public ServiceThreadCollection Threads
-		{
-			get
-			{
-				return this.threads;
-			}
-		}
+        }
+  
+        //public void StarService()
+        //{
+        //    this.container.StarService();
+        //    //this.exitEvent.Reset();
 
-		public void StarService()
-		{
-			this.exitEvent.Reset();
+        //    //OnStart(args);
 
-			OnStart(args);
+        //    //this.serviceStatus = ServiceStatusType.Running;
+        //}
 
-			this.serviceStatus = ServiceStatusType.Running;
-		}
+        //public void StopService()
+        //{
+        //    this.container.StopService();
+        //    //OnStop();
 
-		public void StopService()
-		{
-			OnStop();
+        //    //this.serviceStatus = ServiceStatusType.Stopped;
+        //}
 
-			this.serviceStatus = ServiceStatusType.Stopped;
-		}
+        protected override void OnStart(string[] args)
+        {
+            this.container.OnStart(args);
+            //try
+            //{
+            //    CreateAllThreads();
 
-		protected override void OnStart(string[] args)
-		{
-			try
-			{
-				//RemotingConfiguration.Configure(AppDomain.CurrentDomain.SetupInformation.ApplicationBase + "RemoteSettings.config", false);
+            //    this.Log.Write("服务启动", GetStartupInfo(), ServiceLogEventID.SERVICEMAIN_STARTUPINFO);
 
-				CreateAllThreads();
+            //    this.threads.StartAllThreads();
+            //}
+            //catch (Exception ex)
+            //{
+            //    this.Log.Write(ex, ServiceLogEventID.SERVICEMAIN_ONSTART);
 
-				this.Log.Write("服务启动", GetStartupInfo(), ServiceLogEventID.SERVICEMAIN_STARTUPINFO);
+            //    throw;
+            //}
+        }
 
-				this.threads.StartAllThreads();
-			}
-			catch (Exception ex)
-			{
-				this.Log.Write(ex, ServiceLogEventID.SERVICEMAIN_ONSTART);
+        protected override void OnStop()
+        {
+            this.container.OnStop();
+            //this.exitEvent.Set();
 
-				throw;
-			}
-		}
+            //this.threads.AbortAllThreads();
+            //this.threads.Clear();
 
-		protected override void OnStop()
-		{
-			this.exitEvent.Set();
+            //if (ServiceArguments.Current.EntryType == ServiceEntryType.Service)
+            //    this.Log.Write("服务停止", "服务停止", ServiceLogEventID.SERVICEMAIN_ONSTOP);
+        }
 
-			this.threads.AbortAllThreads();
-			this.threads.Clear();
+        //private void CreateAllThreads()
+        //{
+        //    ThreadParamCollection threadParams = GetAllThreadParams();
 
-			if (ServiceArguments.Current.EntryType == ServiceEntryType.Service)
-				this.Log.Write("服务停止", "服务停止", ServiceLogEventID.SERVICEMAIN_ONSTOP);
-		}
+        //    for (int i = 0; i < threadParams.Count; i++)
+        //    {
+        //        ThreadParam tp = threadParams[i];
 
-		private void CreateAllThreads()
-		{
-			ThreadParamCollection threadParams = GetAllThreadParams();
+        //        if (string.Compare(tp.OwnerServiceName, this.ServiceName, true) == 0)
+        //            AddThread(tp);
+        //    }
+        //}
 
-			for (int i = 0; i < threadParams.Count; i++)
-			{
-				ThreadParam tp = threadParams[i];
+        //private void AddThread(ThreadParam tp)
+        //{
+        //    try
+        //    {
+        //        tp.ExitEvent = this.exitEvent;
+        //        tp.EntryType = this.entryType;
 
-				if (string.Compare(tp.OwnerServiceName, this.ServiceName, true) == 0)
-					AddThread(tp);
-			}
-		}
+        //        if (tp.ThreadTask != null)
+        //        {
+        //            tp.ThreadTask.Params = tp;
 
-		private void AddThread(ThreadParam tp)
-		{
-			try
-			{
-				tp.ExitEvent = this.exitEvent;
-				tp.EntryType = this.entryType;
+        //            this.threads.Add(ServiceThread.CreateThread(tp, CreateThreadEvent));
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        this.Log.Write(string.Format("载入线程\"{0}\"出错", tp.Name), ex, ServiceLogEventID.SERVICEMAIN_ADDTHREAD);
 
-				if (tp.ThreadTask != null)
-				{
-					tp.ThreadTask.Params = tp;
+        //        throw;
+        //    }
+        //}
 
-					this.threads.Add(ServiceThread.CreateThread(tp, CreateThreadEvent));
-				}
-			}
-			catch (Exception ex)
-			{
-				this.Log.Write(string.Format("载入线程\"{0}\"出错", tp.Name), ex, ServiceLogEventID.SERVICEMAIN_ADDTHREAD);
+        //private ThreadParamCollection GetAllThreadParams()
+        //{
+        //    return ServiceMainSettings.GetConfig().ThreadParams;
+        //}
 
-				throw;
-			}
-		}
+        //private string GetStartupInfo()
+        //{
+        //    StringBuilder strB = new StringBuilder(1024);
 
-		private ThreadParamCollection GetAllThreadParams()
-		{
-			return ServiceMainSettings.GetConfig().ThreadParams;
-		}
+        //    StringWriter sw = new StringWriter(strB);
 
-		private string GetStartupInfo()
-		{
-			StringBuilder strB = new StringBuilder(1024);
+        //    try
+        //    {
+        //        sw.WriteLine("服务启动");
+        //        sw.WriteLine("应用程序的根目录：{0}", AppDomain.CurrentDomain.SetupInformation.ApplicationBase);
 
-			StringWriter sw = new StringWriter(strB);
+        //        foreach (ServiceThread thread in this.threads)
+        //            sw.WriteLine("\t Thread： {0}, Status： {1} ", thread.Params.Name, thread.Status);
+        //    }
+        //    finally
+        //    {
+        //        sw.Close();
+        //    }
 
-			try
-			{
-				sw.WriteLine("服务启动");
-				sw.WriteLine("应用程序的根目录：{0}", AppDomain.CurrentDomain.SetupInformation.ApplicationBase);
-
-				foreach (ServiceThread thread in this.threads)
-					sw.WriteLine("\t Thread： {0}, Status： {1} ", thread.Params.Name, thread.Status);
-			}
-			finally
-			{
-				sw.Close();
-			}
-
-			return strB.ToString();
-		}
-	}
+        //    return strB.ToString();
+        //}
+    }
 }

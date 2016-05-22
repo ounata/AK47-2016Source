@@ -14,6 +14,7 @@ using System.Collections;
 using System.Text;
 using MCS.Library.Core;
 using MCS.Library.Data.DataObjects;
+using System.Data;
 
 namespace MCS.Library.Data.Builder
 {
@@ -273,7 +274,7 @@ namespace MCS.Library.Data.Builder
     /// Insert、Update、Where语句构造器的基类
     /// </summary>
     [Serializable]
-    public abstract class SqlClauseBuilderIUW : SqlClauseBuilderBase
+    public abstract class SqlClauseBuilderIUW<TBuilder> : SqlClauseBuilderBase where TBuilder : SqlClauseBuilderIUW<TBuilder>
     {
         /// <summary>
         /// 添加一个构造项
@@ -282,7 +283,7 @@ namespace MCS.Library.Data.Builder
         /// <returns>返回这个Builder自己，便于编写连续AppendItem语句，例如b.AppendItem(...).AppendItem(...)</returns>
         /// <param name="dataField">Sql语句中的字段名</param>
         /// <param name="data">操作的数据</param>
-        public virtual SqlClauseBuilderIUW AppendItem<T>(string dataField, T data)
+        public virtual TBuilder AppendItem<T>(string dataField, T data)
         {
             return AppendItem<T>(dataField, data, SqlClauseBuilderBase.EqualTo);
         }
@@ -295,7 +296,7 @@ namespace MCS.Library.Data.Builder
         /// <param name="dataField">Sql语句中的字段名</param>
         /// <param name="data">操作的数据</param>
         /// <param name="op">操作运算符</param>
-        public virtual SqlClauseBuilderIUW AppendItem<T>(string dataField, T data, string op)
+        public virtual TBuilder AppendItem<T>(string dataField, T data, string op)
         {
             return AppendItem<T>(dataField, data, op, false);
         }
@@ -309,7 +310,7 @@ namespace MCS.Library.Data.Builder
         /// <param name="data">操作的数据</param>
         /// <param name="op">操作运算符</param>
         /// <param name="isExpression">操作的数据是否是表达式</param>
-        public virtual SqlClauseBuilderIUW AppendItem<T>(string dataField, T data, string op, bool isExpression)
+        public virtual TBuilder AppendItem<T>(string dataField, T data, string op, bool isExpression)
         {
             SqlClauseBuilderItemIUW item = (SqlClauseBuilderItemIUW)CreateBuilderItem();
 
@@ -320,22 +321,24 @@ namespace MCS.Library.Data.Builder
 
             List.Add(item);
 
-            return this;
+            return (TBuilder)this;
         }
 
-        ///// <summary>
-        ///// 得到所有的数据字段名
-        ///// </summary>
-        ///// <returns></returns>
-        //public string[] GetAllDataFields()
-        //{
-        //    List<string> result = new List<string>();
+        /// <summary>
+        /// 从DataRow生成一组Items
+        /// </summary>
+        /// <param name="row"></param>
+        /// <returns></returns>
+        public TBuilder AppendItems(DataRow row)
+        {
+            if (row != null)
+            {
+                foreach (DataColumn column in row.Table.Columns)
+                    this.AppendItem(column.ColumnName, row[column.ColumnName]);
+            }
 
-        //    foreach (SqlClauseBuilderItemIUW item in this)
-        //        result.Add(item.DataField);
-
-        //    return result.ToArray();
-        //}
+            return (TBuilder)this;
+        }
 
         /// <summary>
         /// 判断是否已经包含了某个数据字段（大小写相关）
@@ -380,7 +383,7 @@ namespace MCS.Library.Data.Builder
     /// UPDATE和WHERE语句构造器的基类
     /// </summary>
     [Serializable]
-    public abstract class SqlClauseBuilderUW : SqlClauseBuilderIUW
+    public abstract class SqlClauseBuilderUW<TBuilder> : SqlClauseBuilderIUW<TBuilder> where TBuilder : SqlClauseBuilderUW<TBuilder>
     {
         /// <summary>
         /// 创建SqlClauseBuilderItemUW
@@ -400,7 +403,7 @@ namespace MCS.Library.Data.Builder
         /// <param name="data">操作的数据</param>
         /// <param name="op">操作运算符</param>
         /// <param name="template">模板的样式</param>
-        public virtual SqlClauseBuilderUW AppendItem<T>(string dataField, T data, string op, string template)
+        public virtual TBuilder AppendItem<T>(string dataField, T data, string op, string template)
         {
             return AppendItem<T>(dataField, data, op, template, false);
         }
@@ -415,7 +418,7 @@ namespace MCS.Library.Data.Builder
         /// <param name="op">操作运算符</param>
         /// <param name="template">模板的样式</param>
         /// <param name="isExpression">操作的数据是否是表达式</param>
-        public virtual SqlClauseBuilderUW AppendItem<T>(string dataField, T data, string op, string template, bool isExpression)
+        public virtual TBuilder AppendItem<T>(string dataField, T data, string op, string template, bool isExpression)
         {
             SqlClauseBuilderItemUW item = (SqlClauseBuilderItemUW)CreateBuilderItem();
 
@@ -427,7 +430,7 @@ namespace MCS.Library.Data.Builder
 
             List.Add(item);
 
-            return this;
+            return (TBuilder)this;
         }
     }
 
@@ -435,7 +438,7 @@ namespace MCS.Library.Data.Builder
     /// 提供一组字段和值的集合，帮助生成UPDATE语句的SET部分
     /// </summary>
     [Serializable]
-    public class UpdateSqlClauseBuilder : SqlClauseBuilderUW
+    public class UpdateSqlClauseBuilder : SqlClauseBuilderUW<UpdateSqlClauseBuilder>
     {
         /// <summary>
         /// 生成Update语句的SET部分（不包括SET）
@@ -464,7 +467,7 @@ namespace MCS.Library.Data.Builder
     /// 提供一组字段和值的集合，帮助生成INSERT语句的字段名称和VALUES部分
     /// </summary>
     [Serializable]
-    public class InsertSqlClauseBuilder : SqlClauseBuilderIUW
+    public class InsertSqlClauseBuilder : SqlClauseBuilderIUW<InsertSqlClauseBuilder>
     {
         /// <summary>
         /// 生成INSERT语句的字段名称和VALUES部分
@@ -541,7 +544,7 @@ namespace MCS.Library.Data.Builder
     /// 提供一组字段和值的集合，帮助生成WHERE语句
     /// </summary>
     [Serializable]
-    public class WhereSqlClauseBuilder : SqlClauseBuilderUW, IConnectiveSqlClause
+    public class WhereSqlClauseBuilder : SqlClauseBuilderUW<WhereSqlClauseBuilder>, IConnectiveSqlClause
     {
         private LogicOperatorDefine logicOperator = LogicOperatorDefine.And;
 
@@ -618,7 +621,7 @@ namespace MCS.Library.Data.Builder
         {
             return SqlClauseBuilderBase.StaticClauses;
         }
- 
+
         /// <summary>
         /// 
         /// </summary>
@@ -925,7 +928,7 @@ namespace MCS.Library.Data.Builder
         /// <returns></returns>
         public IEnumerable<IConnectiveSqlClause> GetSubConnectiveSqlClause()
         {
-            foreach(IConnectiveSqlClause connective in this)
+            foreach (IConnectiveSqlClause connective in this)
                 yield return connective;
         }
         #endregion

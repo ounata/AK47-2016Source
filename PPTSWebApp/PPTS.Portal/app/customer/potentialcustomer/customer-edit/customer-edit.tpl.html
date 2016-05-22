@@ -26,9 +26,7 @@
     <div class="profile-info-row">
         <div class="profile-info-name"> 学员姓名 </div>
         <div class="profile-info-value">
-            <span>
-                <mcs-input model="vm.customer.customerName" css="col-xs-5 col-sm-5"/>
-            </span>
+            <span><mcs-input model="vm.customer.customerName" css="col-xs-5 col-sm-5"/></span>
         </div>
     </div>
     <div class="profile-info-row">
@@ -46,13 +44,13 @@
     <div class="profile-info-row">
         <div class="profile-info-name"> 学员的主监护人 </div>
         <div class="profile-info-value">
-            <span>{{  }}</span>
+            <span>{{ vm.parent.parentName }}</span>
         </div>
     </div>
     <div class="profile-info-row">
         <div class="profile-info-name"> 客户资源所属地 </div>
         <div class="profile-info-value">
-            <span>{{  }}</span>
+            <span>{{ vm.customer.orgName }}</span>
         </div>
     </div>
     <div class="profile-info-row">
@@ -73,7 +71,7 @@
         <div class="profile-info-name"> 学员出生日期 </div>
         <div class="profile-info-value">
             <span>
-                <mcs-input model="vm.customer.birthday | date:'yyyy-MM-dd'" css="col-xs-5 col-sm-5"/>
+                <ppts-datepicker model="vm.customer.birthday" css="col-xs-5 col-sm-5" z-index="0"/>
             </span>
         </div>
     </div>
@@ -86,7 +84,7 @@
         </div>
     </div>
     <div class="profile-info-row">
-        <div class="profile-info-name"> 入学大年级{{vm.customer.entranceGrade}} </div>
+        <div class="profile-info-name"> 入学大年级 </div>
         <div class="profile-info-value">
             <span>
                 <ppts-select category="grade" model="vm.customer.entranceGrade" css="col-xs-5 col-sm-5"/>
@@ -133,7 +131,7 @@
         <div class="profile-info-name"> 联系方式 </div>
         <div class="profile-info-value">
             <span>
-                <mcs-input model="vm.customer.primaryPhone" css="col-xs-5 col-sm-5"/>
+                <mcs-input model="vm.customer.primaryPhone.phoneNumber" css="col-xs-5 col-sm-5"/>
             </span>
         </div>
     </div>
@@ -146,25 +144,29 @@
     <div class="profile-info-row">
         <div class="profile-info-name"> 归属坐席 </div>
         <div class="profile-info-value">
-            <span>{{  }}</span>
+            <span class="editable editable-click" ng-repeat="relation in (vm.customerStaffRelation | filter:{'relationType':vm.relationType.callcenter})">{{ relation.staffName }}</span>
+            <mcs-button text="查看历史" click="vm.viewHistory(vm.relationType.callcenter)" css="btn-link" />
         </div>
     </div>
     <div class="profile-info-row">
         <div class="profile-info-name"> 归属咨询师 </div>
         <div class="profile-info-value">
-            <span>{{  }}</span>
+            <span class="editable editable-click" ng-repeat="relation in (vm.customerStaffRelation | filter:{'relationType':vm.relationType.consultant})">{{ relation.staffName }}</span>
+            <mcs-button text="查看历史" click="vm.viewHistory(vm.relationType.consultant)" css="btn-link" />
         </div>
     </div>
     <div class="profile-info-row">
         <div class="profile-info-name"> 归属学管师 </div>
         <div class="profile-info-value">
-            <span>{{ }}</span>
+            <span class="editable editable-click" ng-repeat="relation in (vm.customerStaffRelation | filter:{'relationType':vm.relationType.educator})">{{ relation.staffName }}</span>
+            <mcs-button text="查看历史" click="vm.viewHistory(vm.relationType.educator)" css="btn-link" />
         </div>
     </div>
     <div class="profile-info-row">
         <div class="profile-info-name"> 归属市场专员 </div>
         <div class="profile-info-value">
-            <span>{{ }}</span>
+            <span class="editable editable-click" ng-repeat="relation in (vm.customerStaffRelation | filter:{'relationType':vm.relationType.market})">{{ relation.staffName }}</span>
+            <mcs-button text="查看历史" click="vm.viewHistory(vm.relationType.market)" css="btn-link" />
         </div>
     </div>
     <div class="profile-info-row">

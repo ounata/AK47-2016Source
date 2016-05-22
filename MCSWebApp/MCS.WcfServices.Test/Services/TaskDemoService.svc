@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="MCS.Services.Test.Services.TaskDemoService" CodeBehind="TaskDemoService.svc.cs"  Factory="MCS.Library.WcfExtensions.WfServiceHostFactory" %>

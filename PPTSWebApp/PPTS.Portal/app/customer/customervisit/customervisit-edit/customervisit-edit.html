@@ -1,0 +1,79 @@
+﻿<!-- #开始：编辑客户回访页面Form -->
+<div class="widget-box">
+    <div class="widget-header">
+        <h4>
+            <span ng-show="!vm.customerService.serviceType">编辑客户回访</span>
+        </h4>
+    </div>
+    <div class="widget-main no-padding1">
+        <form class="form-horizontal" role="form">
+            <div class="clearfix form-actions mcs-form-actions">
+                <!-- #开始：保存客服.工具栏 -->
+                <div class="mcs-panel-toolbar col-sm-offset-3">
+                    <mcs-button category="save" text="保存" ppts-job-functions="编辑回访信息" click="vm.edit()"></mcs-button>
+                    <mcs-button category="cancel" click="vm.cancel()"></mcs-button>
+                </div>
+            </div>
+            <div class="space-10">
+            </div>
+            <div class="form-group">
+                <label required class="control-label col-sm-3">回访人:</label>
+                <div class="input-group col-sm-9">
+                    <span>{{vm.customer.customerName}}</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label required class="control-label col-sm-3">回访人:</label>
+                <div class="input-group col-sm-9">
+                    <span>{{vm.customerVisit.visitorName}}</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <mcs-label required="true" text="回访方式" css="col-sm-3" />
+                <div class="input-group col-sm-9">
+                    <ppts-radiobutton-group category="visitWay" model="vm.customerVisit.visitWay" />
+                </div>
+            </div>
+            <div class="form-group">
+                <mcs-label required="true" text="回访类型" css="col-sm-3" />
+                <div class="input-group col-sm-9">
+                    <ppts-radiobutton-group category="visitType" model="vm.customerVisit.visitType" />
+                </div>
+            </div>
+            <div class="form-group">
+                <mcs-label required="true" text="回访时间" css="col-sm-3" />
+                <div class="input-group col-sm-3">
+                    <ppts-datetimepicker model="vm.customerVisit.visitTime" css="mcs-padding-0" width="100%" />
+                    <span class="label-260">
+                        回访时间只能选择当前时间及前三天的任意一天。
+                    </span>
+                </div>
+            </div>
+            <div class="form-group">
+                <mcs-label required="true" text="回访内容" css="col-sm-3" />
+                <div class="input-group col-sm-9">
+                    <textarea class="col-sm-8" rows="5" id="textArea" ng-model="vm.customerVisit.visitContent" maxlength="1000"></textarea>
+                    <span class="help-block col-sm-6">不允许输入1000个字符，已经输入{{ vm.customerVisit.visitContent.length || 0 }}个</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <mcs-label required="true" text="家长满意度" css="col-sm-3" />
+                <div class="input-group col-sm-9">
+                    <ppts-radiobutton-group category="satisficing" model="vm.customerVisit.satisficing" />
+                </div>
+            </div>
+            <div class="form-group">
+                <mcs-label required="true" text="预计下次回访时间" css="col-sm-3" />
+                <div class="input-group col-sm-3">
+                    <ppts-datetimepicker model="vm.customerVisit.nextVisitTime" css="mcs-padding-0" width="100%" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-3">通知处理人:</label>
+                <div class="input-group col-sm-9">
+                    <ppts-checkbox-group category="messageType" model="vm.selectTypes" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

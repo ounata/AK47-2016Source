@@ -32,10 +32,17 @@ namespace PPTS.Data.Orders.Entities
             set;
 		}
 
-		/// <summary>
-		/// 学员ID
-		/// </summary>
-		[ORFieldMapping("CustomerID")]
+        /// <summary>
+        /// 订购类型（参考订购表）
+        /// </summary>
+        [ORFieldMapping("OrderType")]
+        [DataMember]
+        public int OrderType { set; get; }
+
+        /// <summary>
+        /// 学员ID
+        /// </summary>
+        [ORFieldMapping("CustomerID")]
         [DataMember]
 		public string CustomerID
 		{
@@ -46,10 +53,10 @@ namespace PPTS.Data.Orders.Entities
 		/// <summary>
 		/// 开课校区ID
 		/// </summary>
-		[ORFieldMapping("OpenCampusID")]
+		[ORFieldMapping("ProductCampusID")]
         [DataMember]
-		public string OpenCampusID
-		{
+		public string ProductCampusID
+        {
 			get;
             set;
 		}

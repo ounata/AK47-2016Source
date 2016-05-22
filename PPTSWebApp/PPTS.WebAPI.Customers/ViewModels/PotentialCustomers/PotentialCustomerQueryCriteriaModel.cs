@@ -6,12 +6,17 @@ namespace PPTS.WebAPI.Customers.ViewModels.PotentialCustomers
 {
     public class PotentialCustomerQueryCriteriaModel
     {
+        [InConditionMapping("OrgID")]
+        public string[] OrgIds { get; set; }
+
         [ConditionMapping("", Template = "CONTAINS(pcf.*, ${Data}$)")]
-        //[ConditionMapping("ParentSearchContent", Template = "CONTAINS(${DataField}$, ${Data}$)")]
         public string Keyword { get; set; }
 
         [InConditionMapping("EntranceGrade")]
         public int[] EntranceGrades { get; set; }
+
+        [InConditionMapping("Grade")]
+        public int Grade { get; set; }
 
         [ConditionMapping("CreateTime", Operation = ">=")]
         public DateTime CreateTimeStart { get; set; }
@@ -27,6 +32,9 @@ namespace PPTS.WebAPI.Customers.ViewModels.PotentialCustomers
 
         [InConditionMapping("SourceMainType")]
         public int[] SourceMainTypes { get; set; }
+
+        [InConditionMapping("SubMainType")]
+        public int[] SubMainTypes { get; set; }
 
         [ConditionMapping("CreatorName", EscapeLikeString = true, Prefix = "%", Postfix = "%", Operation = "LIKE")]
         public string CreatorName { get; set; }

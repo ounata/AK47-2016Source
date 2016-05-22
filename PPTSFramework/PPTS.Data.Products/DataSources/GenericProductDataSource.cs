@@ -16,7 +16,7 @@ namespace PPTS.Data.Products.DataSources
     {
         public static readonly GenericProductDataSource<T, TCollection> Instance = new GenericProductDataSource<T, TCollection>();
 
-        private GenericProductDataSource()
+        public GenericProductDataSource()
         {
         }
 

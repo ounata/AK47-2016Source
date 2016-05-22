@@ -59,6 +59,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\DebookOrderView.cs" />
     <Compile Include="Entities\AccompanyAssign.cs" />
     <Compile Include="Entities\AssetView.cs" />
     <Compile Include="Entities\Asset.cs" />
@@ -66,7 +67,6 @@
     <Compile Include="Entities\Assign.cs" />
     <Compile Include="Entities\AssignBase.cs" />
     <Compile Include="Entities\AssignCondition.cs" />
-    <Compile Include="Entities\AssignSuper.cs" />
     <Compile Include="Entities\Class.cs" />
     <Compile Include="Entities\ClassLesson.cs" />
     <Compile Include="Entities\ClassLessonItem.cs" />

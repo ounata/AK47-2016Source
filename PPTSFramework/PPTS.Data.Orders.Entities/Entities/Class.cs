@@ -114,6 +114,7 @@ namespace PPTS.Data.Orders.Entities
         /// 班级状态（0-新建，1-上部分，2-已上完，9-已删除）
         /// </summary>
         [ORFieldMapping("ClassStatus")]
+        [ConstantCategory(Category = "C_CODE_ABBR_Order_ClassStatus")]
         [DataMember]
 		public ClassStatusDefine ClassStatus
 		{
@@ -222,22 +223,38 @@ namespace PPTS.Data.Orders.Entities
 			get;
             set;
 		}
+        
 
-		/// <summary>
-		/// 课次时长
-		/// </summary>
-		[ORFieldMapping("DurationValue")]
+
+        /// <summary>
+        /// 课次时长
+        /// </summary>
+        [ORFieldMapping("LessonDurationValue")]
         [DataMember]
-		public decimal DurationValue
-		{
+		public decimal LessonDurationValue
+        {
 			get;
             set;
 		}
 
-		/// <summary>
-		/// 课次总数
-		/// </summary>
-		[ORFieldMapping("LessonCount")]
+        /// <summary>
+        /// 课时时长
+        /// </summary>
+        [ORFieldMapping("PeriodDurationValue")]
+        [DataMember]
+        public decimal PeriodDurationValue { get; set; }
+
+        /// <summary>
+        /// 每课次课时数
+        /// </summary>
+        [ORFieldMapping("PeriodsOfLesson")]
+        [DataMember]
+        public decimal PeriodsOfLesson { get; set; }
+
+        /// <summary>
+        /// 课次总数
+        /// </summary>
+        [ORFieldMapping("LessonCount")]
         [DataMember]
 		public int LessonCount
 		{
@@ -245,10 +262,21 @@ namespace PPTS.Data.Orders.Entities
             set;
 		}
 
-		/// <summary>
-		/// 已上课次
-		/// </summary>
-		[ORFieldMapping("FinishedLessons")]
+        /// <summary>
+        /// 无效课次（过了结账日）
+        /// </summary>
+        [ORFieldMapping("InvalidLessons")]
+        [DataMember]
+        public int InvalidLessons
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 已上课次
+        /// </summary>
+        [ORFieldMapping("FinishedLessons")]
         [DataMember]
 		public int FinishedLessons
 		{

@@ -11,7 +11,7 @@
                 forInput: '@',
                 css: '@'
             },
-            template: '<label class="control-label no-padding-right {{css}}" for="{{forInput}}"> {{text}}</label>',
+            template: '<label class="control-label {{css}}" for="{{forInput}}"> {{text}}</label>',
             link: function ($scope, $elem, $attrs) {
                 if ($scope.required) {
                     $elem.prepend('<span class="required">*</span>');

@@ -1,7 +1,7 @@
 ﻿(function () {
     'use strict';
 
-    mcs.ng.directive('mcsInput', function () {
+    mcs.ng.directive('mcsInput', ['mcsValidationService', function (validationService) {
         return {
             restrict: 'E',
             replace: true,
@@ -12,7 +12,7 @@
                 readonly: '@',
                 css: '@',
                 integer: '@',
-                model: '=',
+                model: '='
             },
             template: '<input placeholder="{{placeholder}}" class="mcs-default-size-input mcs-margin-right-20 {{css}}" ng-model="model" />',
             link: function ($scope, $elem, $attrs) {
@@ -33,7 +33,11 @@
                     //$elem.attr('readonly', 'readonly');
                     $elem.attr('disabled', 'disabled');
                 }
+                // 执行验证
+                $elem.blur(function () {
+                    validationService.validate($elem);
+                });
             }
         };
-    });
+    }]);
 })();

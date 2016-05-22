@@ -1,0 +1,257 @@
+﻿<div class="portlet light ">
+    <div class="portlet-body" id="chats">
+        <div class="slimScrollDiv div-scroller" style="position: relative;">
+            <div class="scroller div-scroller" data-always-visible="1" data-rail-visible1="1" data-initialized="1">
+                <ul class="chats">
+                    <li class="in" ng-repeat="item in vm.data.rows">
+                        <div class="message float-left">
+                            <!--<span class="arrow">
+                            </span>-->
+                            <span class="name padding-left-12">
+                                发件人:{{item.replyObject}}
+                            </span>
+                            <span class="name padding-left-12">
+                                反馈对象:{{item.replyObject|replyObject}}
+                            </span>
+                            <span class="name padding-left-12">
+                                {{item.replyTime|date:"yyyy-MM-dd HH:mm"}}
+                            </span>
+                            <span class="inbody">
+                                {{item.replyContent}}
+                            </span>
+                        </div>
+                    </li>
+
+                    <li class="out" ng-repeat="item in vm.data.rows">
+                        <div class="message float-right">
+                            <div>
+                                <!--<span class="arrow">
+                                </span>-->
+                                <span class="name float-right padding-left-12">
+                                    {{item.replyObject}}
+                                </span>
+                                <span class="name float-right padding-left-12">
+                                    
+                                    :{{item.replyType|replyType}}
+                                </span>
+                                <span class="name float-right padding-left-12">
+                                    {{item.replyTime|date:"yyyy-MM-dd HH:mm"}}
+                                </span>
+                            </div>
+                            <span class="outbody">
+                                {{item.replyContent}}
+                            </span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div ng-show="vm.data.pager.totalCount>0" class="mcs-panel-pager well well-sm">
+        <span class="bigger-110">{{vm.PagedList.PagedParam.Message}}</span>
+        <uib-pagination boundary-links="true" ng-change="vm.data.pager.pageChange()"
+                        total-items="vm.data.pager.totalCount" ng-model="vm.data.pager.pageIndex" class="pagination" items-per-page="vm.data.pager.pageSize" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></uib-pagination>
+
+    </div>
+
+</div>
+
+<style>
+    .margin-left-120 {
+        margin-left: 220px;
+    }
+    /***
+    Chats
+    ***/
+    .chats {
+        margin: 0;
+        padding: 0;
+        margin-top: -15px;
+    }
+
+        .chats li {
+            list-style: none;
+            padding: 5px 0;
+            margin: 10px auto;
+            font-size: 12px;
+        }
+
+            .chats li .body {
+                display: block;
+            }
+
+            .chats li .avatar {
+                height: 45px;
+                width: 45px;
+                -webkit-border-radius: 50% !important;
+                -moz-border-radius: 50% !important;
+                border-radius: 50% !important;
+            }
+
+            .chats li.in .avatar {
+                float: left;
+                margin-right: 10px;
+            }
+
+            .chats li.out .avatar {
+                float: right;
+                margin-left: 10px;
+            }
+
+            .chats li .name {
+                color: #3590c1;
+                font-size: 13px;
+                font-weight: 400;
+            }
+
+            .chats li .datetime {
+                color: #333;
+                font-size: 13px;
+                font-weight: 400;
+            }
+
+            .chats li .message {
+                display: block;
+                padding: 5px;
+                position: relative;
+            }
+
+            .chats li.in .message {
+                text-align: left;
+                border-left: 2px solid #1BBC9B;
+                margin-left: 65px;
+                background: #fafafa;
+            }
+
+                .chats li.in .message .arrow {
+                    display: block;
+                    position: absolute;
+                    top: 5px;
+                    left: -8px;
+                    width: 0;
+                    height: 0;
+                    border-top: 8px solid transparent;
+                    border-bottom: 8px solid transparent;
+                    border-right: 8px solid #1BBC9B;
+                }
+
+            .chats li.out .message {
+                border-right: 2px solid #F3565D;
+                margin-right: 65px;
+                background: #fafafa;
+                text-align: right;
+            }
+
+                .chats li.out .message .arrow {
+                    display: block;
+                    position: absolute;
+                    top: 5px;
+                    right: -8px;
+                    border-top: 8px solid transparent;
+                    border-bottom: 8px solid transparent;
+                    border-left: 8px solid #F3565D;
+                }
+
+            .chats li.out .name,
+            .chats li.out .datetime {
+                text-align: right;
+            }
+
+    .chat-form {
+        margin-top: 15px;
+        padding: 10px;
+        background-color: #e9eff3;
+        overflow: hidden;
+        clear: both;
+    }
+
+        .chat-form .input-cont {
+            margin-right: 40px;
+        }
+
+            .chat-form .input-cont .form-control {
+                border: 1px solid #ddd;
+                width: 100% !important;
+                margin-top: 0;
+                background-color: #fff !important;
+            }
+
+                .chat-form .input-cont .form-control:focus {
+                    border: 1px solid #4b8df9 !important;
+                }
+
+        .chat-form .btn-cont {
+            margin-top: -42px;
+            position: relative;
+            float: right;
+            width: 44px;
+        }
+
+            .chat-form .btn-cont .arrow {
+                position: absolute;
+                top: 17px;
+                right: 43px;
+                border-top: 8px solid transparent;
+                border-bottom: 8px solid transparent;
+                border-right: 8px solid #4d90fe;
+                -webkit-box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                box-sizing: border-box;
+            }
+
+            .chat-form .btn-cont .btn {
+                margin-top: 8px;
+            }
+
+            .chat-form .btn-cont:hover .arrow {
+                border-right-color: #0362fd;
+            }
+
+            .chat-form .btn-cont:hover .btn {
+                background-color: #0362fd;
+            }
+
+    .inbody {
+        color: #333333;
+        font-family: "Open Sans", sans-serif;
+        padding: 0px !important;
+        margin: 20px !important;
+        font-size: 13px;
+        direction: ltr;
+        border: 1px solid #FF0074;
+        background-color: rgb(243, 255, 236);
+        width: 500px;
+        display: block;
+    }
+
+    .outbody {
+        color: #333333;
+        font-family: "Open Sans", sans-serif;
+        margin-top: 20px;
+        font-size: 13px;
+        direction: ltr;
+        border: 1px solid #FF0074;
+        background-color: rgb(243, 255, 236);
+        width: 500px;
+        display: block;
+        float: right;
+    }
+
+    .float-left {
+        float: left;
+    }
+
+    .float-right {
+        float: right;
+    }
+
+    .div-scroller {
+        width: auto;
+        height: 500px;
+        overflow: hidden;
+    }
+
+    .padding-left-12 {
+        padding-left: 12px;
+    }
+</style>

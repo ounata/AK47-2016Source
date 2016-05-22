@@ -1,0 +1,75 @@
+<!-- #开始：位置条 -->
+<div class="breadcrumbs" id="breadcrumbs">
+    <script type="text/javascript">
+    try {
+        ace.settings.check('breadcrumbs', 'fixed')
+    } catch (e) {}
+    </script>
+    <ul class="breadcrumb">
+        <li class="active">
+            <i class="ace-icon fa fa-home home-icon"></i> 首页
+        </li>
+        <li class="active">
+            <i class="ace-icon fa fa-buttons"></i> 大区/分公司/校区树
+        </li>
+    </ul>
+</div>
+<!-- /结束：位置条 -->
+<div class="page-content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h3 class="header smaller lighter green">应用范例</h3>
+                    <div>
+                        由于涉及到后台API数据访问及组件的复杂内部结合，因此不列出应用范例，只给出截图。<br />
+                        选择之前：<img src="app/widget/ppts-select-branch/select-1.png"/><br />
+                        选择之后：<img src="app/widget/ppts-select-branch/select-2.png" /><br />
+                        选择完成：<img src="app/widget/ppts-select-branch/select-3.png" />
+                    </div>
+                </div>
+                <div class="laycode col-sm-12">
+                    <h3 class="header smaller lighter green">示例代码</h3>
+                    <div class="code_box code_skin0">
+                        <span class="code_title">使用说明</span>
+                        <pre class="codes">
+                        <code><b>代码</b></code><br />
+                        1. 首先在页面添加标签：
+                        &lt;ppts-select-branch model="vm.criteria.orgIds" /&gt;
+                        2. 在你的查询实体类中添加字段：
+                        public class XXXQueryCriteriaModel
+                        {
+                            [InConditionMapping("OrgID")]
+                            public string[] OrgIds { get; set; }
+                        }
+                        3. (非必须)，在IIS中将（WEBAPI项目）PPTSWebApp/PPTS.WebAPI.Common设置为应用程序
+                        </pre>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <h3 class="header smaller lighter green">参数说明</h3>
+                    <table class="table table-striped table-bordered table-hover" id="sample-table-1">
+                        <thead>
+                            <tr>
+                                <th>属性</th>
+                                <th style="width:400px;">用途</th>
+                                <th>范围</th>
+                                <th>默认值</th>
+                                <th>示例</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>model</code></td>
+                                <td>绑定选中的节点（数组）</td>
+                                <td>是</td>
+                                <td>无</td>
+                                <td> &lt;ppts-select-branch model="vm.criteria.orgIds" /&gt;</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

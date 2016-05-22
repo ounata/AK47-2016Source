@@ -33,6 +33,7 @@
                         <div class="row">
                             <!-- FORM ============ -->
                             <form name="userForm" class="col-sm-6" ng-submit="vm.submitForm(userForm)" novalidate>
+                                <input type="text" name="test" ng-model="user.test" placeholder="test" validate required>
                                 <!-- NAME -->
                                 <div class="form-group has-feedback" ng-class="{ 'has-error' : userForm.name.$invalid && !userForm.name.$pristine }">
                                     <label>Name</label>

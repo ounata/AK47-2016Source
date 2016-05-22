@@ -27,7 +27,6 @@ namespace PPTS.WebAPI.Customers.ViewModels.PotentialCustomers
         /// <summary>
         /// 辅助联系方式
         /// </summary>
-        [NoMapping]
         [DataMember]
         public Phone SecondaryPhone
         {

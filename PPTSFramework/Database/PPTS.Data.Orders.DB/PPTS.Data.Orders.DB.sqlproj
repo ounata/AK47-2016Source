@@ -94,6 +94,7 @@
     <Build Include="WF\Tables\ProcessQueues.sql" />
     <Build Include="WF\Tables\ProcessQueueLogs.sql" />
     <Build Include="OM\Views\Assets_Current.sql" />
+    <Build Include="OM\Stored Procedures\CheckConflictAssign.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PPTS.Data.Order.Local.Dev.DB.publish.xml" />

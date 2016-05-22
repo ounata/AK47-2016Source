@@ -1,29 +1,17 @@
-(function() {
+﻿(function() {
     angular.module('app.component')
         .controller('MCSDropdownButtonController', ['$scope', function($scope) {
-            var vm = {};
-            $scope.vm = vm;
-
-            $scope.items = [
-                'The first choice!',
-                'And another choice for you.',
-                'but wait! A third!'
-            ];
-
-            $scope.status = {
-                isopen: false
+            var vm = this;
+            vm.purchase = function (item) {
+                alert(item.text + ',' + item.route);
             };
 
-            $scope.toggled = function(open) {
-                $log.log('Dropdown is now: ', open);
-            };
-
-            $scope.toggleDropdown = function($event) {
-                $event.preventDefault();
-                $event.stopPropagation();
-                $scope.status.isopen = !$scope.status.isopen;
-            };
-
-            $scope.appendToEl = angular.element(document.querySelector('#dropdown-long-content'));
+            vm.products = [{
+                text: '常规订购', route: 'ppts.products({type:"cgdg"})', click: vm.purchase 
+            }, {
+                text: '插班订购', route: 'ppts.products({type:"cbdg"})', click: vm.purchase
+            }, {
+                text: '买赠订购', route: 'ppts.products({type:"mzdg"})', click: vm.purchase
+            }];
         }]);
 })();

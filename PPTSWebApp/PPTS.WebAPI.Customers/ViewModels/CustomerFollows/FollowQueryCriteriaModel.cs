@@ -11,53 +11,71 @@ namespace PPTS.WebAPI.Customers.ViewModels.CustomerFollows
     public class FollowQueryCriteriaModel
     {
         /// <summary>
+        /// 跟进ID
+        /// </summary>
+        [ConditionMapping("a.FollowID")]
+        public string FollowId { get; set; }
+
+        /// <summary>
+        /// 当前潜客或学员
+        /// </summary>
+        [ConditionMapping("a.CustomerID")]
+        public string CustomerID { get; set; }
+
+        /// <summary>
         /// 记录人
         /// </summary>
-        [InConditionMapping("FollowerName")]
+        [InConditionMapping("a.FollowerName")]
         public int FollowerName { get; set; }
 
         /// <summary>
         /// 建档人
         /// </summary>
-        [InConditionMapping("CreatorName")]
+        [InConditionMapping("a.CreatorName")]
         public int CreatorName { get; set; }
 
         /// <summary>
         /// 跟进阶段
         /// </summary>
-        [InConditionMapping("FollowStage")]
+        [InConditionMapping("a.FollowStage")]
         public int[] FollowStages { get; set; }
 
         /// <summary>
         /// 购买意愿
         /// </summary>
-        [InConditionMapping("PurchaseIntension")]
-        public int[] PurchaseIntensions { get; set; }
+        [InConditionMapping("a.PurchaseIntention")]
+        public int[] PurchaseIntentions { get; set; }
 
         /// <summary>
         /// 客户级别
         /// </summary>
-        [InConditionMapping("CustomerLevel")]
+        [InConditionMapping("a.CustomerLevel")]
         public int[] CustomerLevels { get; set; }
 
         /// <summary>
         /// 跟进方式
         /// </summary>
-        [InConditionMapping("FollowType")]
+        [InConditionMapping("a.FollowType")]
         public int[] FollowTypes { get; set; }
+
+        /// <summary>
+        /// 归属组织机构ID
+        /// </summary>
+        [InConditionMapping("a.OrgID")]
+        public string[] OrgIds { get; set; }
 
         #region 跟进时间
 
         /// <summary>
         /// 跟进开始时间
         /// </summary>
-        [ConditionMapping("FollowTime", Operation = ">=")]
+        [ConditionMapping("a.FollowTime", Operation = ">=")]
         public DateTime FollowStartTime { get; set; }
 
         /// <summary>
         /// 跟进结束时间
         /// </summary>
-        [ConditionMapping("FollowTime", Operation = "<", AdjustDays = 1)]
+        [ConditionMapping("a.FollowTime", Operation = "<", AdjustDays = 1)]
         public DateTime FollowEndTime { get; set; }
 
         #endregion
@@ -67,13 +85,13 @@ namespace PPTS.WebAPI.Customers.ViewModels.CustomerFollows
         /// <summary>
         /// 下次沟通开始时间
         /// </summary>
-        [ConditionMapping("NextTalkTime", Operation = ">=")]
+        [ConditionMapping("a.NextFollowTime", Operation = ">=")]
         public DateTime NextTalkStartTime { get; set; }
 
         /// <summary>
         /// 下次沟通结束时间
         /// </summary>
-        [ConditionMapping("NextTalkTime", Operation = "<", AdjustDays = 1)]
+        [ConditionMapping("a.NextFollowTime", Operation = "<", AdjustDays = 1)]
         public DateTime NextTalkEndTime { get; set; }
 
         #endregion
@@ -81,21 +99,37 @@ namespace PPTS.WebAPI.Customers.ViewModels.CustomerFollows
         /// <summary>
         /// 是否在本机构进行辅导
         /// </summary>
-        [InConditionMapping("IsStudyThere")]
+        [InConditionMapping("a.IsStudyThere")]
         public int IsStudyThere { get; set; }
+
+        #region 预计上门时间
+
+        /// <summary>
+        /// 预计上门开始时间
+        /// </summary>
+        [ConditionMapping("a.PlanVerifyTime", Operation = ">=")]
+        public DateTime PlanVerifyStartTime { get; set; }
+
+        /// <summary>
+        /// 预计上门结束时间
+        /// </summary>
+        [ConditionMapping("a.PlanVerifyTime", Operation = "<", AdjustDays = 1)]
+        public DateTime PlanVerifyEndTime { get; set; }
+
+        #endregion
 
         #region 预计签约时间
 
         /// <summary>
         /// 预计签约开始时间
         /// </summary>
-        [ConditionMapping("PlanSignDate", Operation = ">=")]
+        [ConditionMapping("a.PlanSignDate", Operation = ">=")]
         public DateTime PlanSignStartTime { get; set; }
 
         /// <summary>
         /// 预计签约结束时间
         /// </summary>
-        [ConditionMapping("PlanSignDate", Operation = "<", AdjustDays = 1)]
+        [ConditionMapping("a.PlanSignDate", Operation = "<", AdjustDays = 1)]
         public DateTime PlanSignEndTime { get; set; }
 
         #endregion
@@ -103,62 +137,17 @@ namespace PPTS.WebAPI.Customers.ViewModels.CustomerFollows
         /// <summary>
         /// 校区名称
         /// </summary>
-        [ConditionMapping("campusName", EscapeLikeString = true, Prefix = "%", Postfix = "%", Operation = "LIKE")]
+        [ConditionMapping("b.campusName", EscapeLikeString = true, Prefix = "%", Postfix = "%", Operation = "LIKE")]
         public string CampusName { get; set; }
 
-        /// <summary>
-        /// 学员或家长姓名
-        /// </summary>
-        [ConditionMapping("CustomerSearchContent", Template = "CONTAINS(c.*, ${Data}$)")]
-        public string CustomerOrParentName { get; set; }
-
-        /// <summary>
-        /// 学员编号
-        /// </summary>
-        [ConditionMapping("CustomerCode", EscapeLikeString = true, Prefix = "%", Postfix = "%", Operation = "LIKE")]
-        public string CustomerCode { get; set; }
-
-        /// <summary>
-        /// 家长联系方式
-        /// </summary>
-        [ConditionMapping("ParentSearchContent", Template = "CONTAINS(${DataField}$, ${Data}$)")]
-        public string ParentPhones { get; set; }
+        [ConditionMapping("", Template = "CONTAINS(c.*, ${Data}$)")]
+        public string Keyword { get; set; }
 
         /// <summary>
         /// 咨询师姓名
         /// </summary>
-        [ConditionMapping("CustomerSearchContent", Template = "CONTAINS(${DataField}$, ${Data}$)")]
+        [ConditionMapping("StaffName")]
         public string StaffName { get; set; }
-
-        #region 对应Table
-
-
-
-        ///// <summary>
-        ///// 学员姓名
-        ///// </summary>
-        //[NoMapping]
-        //public string ParentName { get; set; }
-
-        ///// <summary>
-        ///// 跟进时间
-        ///// </summary>
-        //[NoMapping]
-        //public string FollowTime { get; set; }
-
-        ///// <summary>
-        ///// 跟进方式
-        ///// </summary>
-        //[NoMapping]
-        //public string FollowType { get; set; }
-
-        ///// <summary>
-        ///// 跟进对象
-        ///// </summary>
-        //[NoMapping]
-        //public string FollowObject { get; set; }
-
-        #endregion
 
 
         [NoMapping]
@@ -174,30 +163,5 @@ namespace PPTS.WebAPI.Customers.ViewModels.CustomerFollows
             get;
             set;
         }
-
-        #region 旧版本注释的代码
-        //[ConditionMapping("CustomerName", EscapeLikeString = true, Prefix = "%", Postfix = "%", Operation = "LIKE")]
-        //public string Name { get; set; }
-
-        //[ConditionMapping("CustomerCode")]
-        //public string CustomerCode { get; set; }
-
-        //[InConditionMapping("EntranceGrade")]
-        //public int[] EntranceGrades { get; set; }
-
-        //[ConditionMapping("CreateTime", Operation = ">=")]
-        //public DateTime CreateTimeStart { get; set; }
-
-        //[ConditionMapping("CreateTime", Operation = "<", AdjustDays = 1)]
-        //public DateTime CreateTimeEnd { get; set; }
-        #endregion
-
-        #region 旧版本注释的代码
-        //[InConditionMapping("SourceMainType")]
-        //public int[] SourceMainTypes { get; set; }
-
-        //[ConditionMapping("CreatorName", EscapeLikeString = true, Prefix = "%", Postfix = "%", Operation = "LIKE")]
-        //public string CreatorName { get; set; }
-        #endregion
     }
 }

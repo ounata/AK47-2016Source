@@ -145,7 +145,7 @@ namespace MCS.Library.SOA.DataObjects
             JobBaseAdapter.Instance.Update(data);
         }
 
-        private static void FillSqlBuilder(SqlClauseBuilderIUW builder, InvokeWebServiceJob data)
+        private static void FillSqlBuilder<TBuilder>(TBuilder builder, InvokeWebServiceJob data) where TBuilder : SqlClauseBuilderIUW<TBuilder>
         {
             builder.AppendItem("JOB_ID", data.JobID).AppendItem("SERVICE_DEF_DATA", data.XmlData).AppendTenantCode(typeof(InvokeWebServiceJob));
         }

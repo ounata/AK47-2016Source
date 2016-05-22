@@ -470,7 +470,7 @@ namespace MCS.Library.Office.OpenXml.Excel
                         cell.DataType = tcDesp.DataType.ToCellDataType();
 
                     creatingDataCellAction(cell,
-                        new CreatingDataCellParameters<T>(objItem, TypePropertiesCacheQueue.Instance.GetObjectPropertyValue(objItem, tcDesp.PropertyName), tcDesp.ColumnName, row));
+                        new CreatingDataCellParameters<T>(objItem, TypePropertiesCacheQueue.Instance.GetObjectPropertyValue(objItem, tcDesp.PropertyName), tcDesp.ColumnName, row, tcDesp));
 
                     col++;
                 }
@@ -479,7 +479,10 @@ namespace MCS.Library.Office.OpenXml.Excel
 
         internal static void DefaultCreatingDataCellAction<T>(CellBase cell, CreatingDataCellParameters<T> result)
         {
-            cell.Value = result.PropertyValue;
+            if (result.ColumnDescription != null)
+                cell.Value = result.ColumnDescription.FormatValue(result.PropertyValue);
+            else
+                cell.Value = result.PropertyValue;
         }
         #endregion
 
@@ -610,7 +613,7 @@ namespace MCS.Library.Office.OpenXml.Excel
                     upCount++;
                 else
                     if (param.ValidationOperator == ValidationErrorStopMode.Stop)
-                        break;
+                    break;
             }
 
             return customLog.ToString();
@@ -854,11 +857,13 @@ namespace MCS.Library.Office.OpenXml.Excel
                     if (creatingDataCellAction == null)
                     {
                         Cell cell = this.Cells[rowIndex, colIndex];
-                        cell.Value = drv[col.PropertyName];
+
+                        cell.Value = col.FormatValue(drv[col.PropertyName]);
+
                         cell.DataType = dv.Table.Columns[col.PropertyName].DataType.ToCellDataType();
                     }
                     else
-                        creatingDataCellAction(this.Cells[rowIndex, colIndex], new CreatingDataCellParameters<DataRowView>(drv, drv[col.PropertyName], col.ColumnName, rowIndex));
+                        creatingDataCellAction(this.Cells[rowIndex, colIndex], new CreatingDataCellParameters<DataRowView>(drv, drv[col.PropertyName], col.ColumnName, rowIndex, col));
 
                     colIndex++;
                 }
@@ -867,115 +872,6 @@ namespace MCS.Library.Office.OpenXml.Excel
             }
         }
         #endregion
-
-        #region 作废的方法
-        /*
-        /// <summary>
-        /// 将DataTable数据输出到当前工作表
-        /// </summary>
-        /// <param name="beginAddress">开始单元格位置 "A1"</param>
-        /// <param name="dv">DataTabel数据源</param>
-        /// <param name="printHeaders">是否输出DataTable表头</param>
-        [Obsolete("本方法已经作废了，请使用LoadFromDataView(DataView dv)或 LoadFromDataView(CellAddress beginAddress, ExcelTableStyles tableStyle, DataView dv, CreatingDataCellAction<DataRowView> creatingDataCellAction)方法来替换")]
-        public void LoadFromDataTable(string beginAddress, DataView dv, bool printHeaders = true)
-        {
-            dv.NullCheck<ArgumentNullException>("数据源不能为空！");
-
-            CellAddress cell = CellAddress.Parse(beginAddress);
-
-            int col = cell.ColumnIndex, row = cell.RowIndex;
-
-            if (printHeaders)
-            {
-                foreach (DataColumn dc in dv.Table.Columns)
-                {
-                    Cell currentCell = this.Cells[row, col];
-
-                    currentCell.Value = dc.Caption.IsNullOrEmpty() ? dc.ColumnName : dc.ColumnName;
-
-                    col++;
-                }
-
-                row++;
-            }
-
-            foreach (DataRowView dr in dv)
-            {
-                col = cell.ColumnIndex;
-
-                foreach (DataColumn dc in dv.Table.Columns)
-                {
-                    this.Cells[row, col].Value = dr[dc.ColumnName];
-                    col++;
-                }
-                row++;
-            }
-        }
-
-        /// <summary>
-        /// 将数据直接直充到Excel表格中
-        /// </summary>
-        /// <param name="beginAddress">起始位置</param>
-        /// <param name="table">DataTable数据源</param>
-        /// <param name="tableName">ExcelTable名称</param>
-        /// <param name="tableStyle">工作表样式</param>
-        /// <param name="printHeaders">是否显示表头</param>
-        [Obsolete("本方法已经作废了，请使用LoadFromDataView(DataView dv)或 LoadFromDataView(CellAddress beginAddress, ExcelTableStyles tableStyle, DataView dv, CreatingDataCellAction<DataRowView> creatingDataCellAction)方法来替换")]
-        public void LoadFromDataView(string beginAddress, DataView dv, string tableName, ExcelTableStyles tableStyle, bool printHeaders = true)
-        {
-            CellAddress cell = CellAddress.Parse(beginAddress);
-            int rows = dv.Table.Rows.Count + (printHeaders ? 1 : 0) - 1, cols = dv.Table.Columns.Count;
-
-            if (rows > 0 && cols > 0)
-            {
-                if (tableName.IsNullOrEmpty())
-                    tableName = string.Format("Table{0}", this.Tables.Count + 1);
-
-                Table tb = new Table(this, tableName, Range.Parse(this, cell.ColumnIndex, cell.RowIndex, cell.ColumnIndex + cols - 1, cell.RowIndex + rows));
-                tb.TableStyle = tableStyle;
-
-                int columnIndex = 0;
-
-                foreach (DataColumn dc in dv.Table.Columns)
-                {
-                    string columnName = string.IsNullOrEmpty(dc.Caption) ? dc.ColumnName : dc.Caption;
-                    TableColumn tc = new TableColumn(tb, columnName, columnIndex);
-                    tb.Columns.Add(tc);
-
-                    columnIndex++;
-                }
-
-                LoadFromDataTable_CreateRows(tb, dv);
-            }
-        }
-
-        [Obsolete("本方法已经作废了，请使用LoadFromDataView(DataView dv)或 LoadFromDataView(CellAddress beginAddress, ExcelTableStyles tableStyle, DataView dv, CreatingDataCellAction<DataRowView> creatingDataCellAction)方法来替换")]
-        public void LoadFromDataView(CellAddress beginAddress, DataView dv, string tableName, ExcelTableStyles tableStyle)
-        {
-            if (tableName.IsNullOrEmpty())
-                tableName = string.Format("Table{0}", this.Tables.Count + 1);
-
-            Table tb;
-            if (this.Tables.TryGetTable(tableName, out tb) == false)
-            {
-                tb = new Table(this, tableName, beginAddress);
-                int columnIndex = 0;
-
-                foreach (DataColumn dc in dv.Table.Columns)
-                {
-                    string columnName = string.IsNullOrEmpty(dc.Caption) ? dc.ColumnName : dc.Caption;
-                    TableColumn tc = new TableColumn(tb, columnName, columnIndex);
-                    tb.Columns.Add(tc);
-                    columnIndex++;
-                }
-
-                this.Tables.Add(tb);
-            }
-
-            tb.FillData(dv);
-        }
-        */
-        #endregion 作废的方法
 
         private void LoadFromDataTable_CreateRows(Table tb, DataView dv)
         {
@@ -1310,17 +1206,17 @@ namespace MCS.Library.Office.OpenXml.Excel
             for (int rowindex = row; rowindex <= tb.Address.EndRow; rowindex++)
             {
                 try
-                { 
-                TableRow trow = tb.Rows.NewTableRow();
-                foreach (TableColumn tc in tb.Columns)
                 {
-                    cell = this.Cells[rowindex, col + tc.Position];
-                    tcell = trow[tc];
-                    tcell.Value = cell.Value;
-                    tcell._Style = cell._Style;
-                }
+                    TableRow trow = tb.Rows.NewTableRow();
+                    foreach (TableColumn tc in tb.Columns)
+                    {
+                        cell = this.Cells[rowindex, col + tc.Position];
+                        tcell = trow[tc];
+                        tcell.Value = cell.Value;
+                        tcell._Style = cell._Style;
                     }
-                catch(System.Exception)
+                }
+                catch (System.Exception)
                 {
                     Console.WriteLine(rowindex);
                     throw;

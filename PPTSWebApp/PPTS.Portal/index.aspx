@@ -9,12 +9,12 @@
     <title>学大教育PPTS</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
     <link href="./favicon.ico" rel="shortcut icon" />
-    <script src="build/ppts.startup.js"></script>
+    <script src="http://localhost/pptswebapp/ppts.web.component/build/ppts.startup.min.js"></script>
     <script>
         mcs.g.loadCss({
             cssFiles: [
                 //<!--#bootstrap基础样式-->
-                'libs/bootstrap-3.3.5/css/bootstrap.min',
+                'libs/bootstrap-3.3.5/css/bootstrap',
                 //<!--#datetime组件样式-->
                 'libs/date-time-3.0.0/css/datepicker',
                 'libs/date-time-3.0.0/css/bootstrap-timepicker',
@@ -27,16 +27,16 @@
                 //<!--#font awesome字体样式-->
                 'libs/font-awesome-4.5.0/css/font-awesome.min',
                 //<!--#ace admin基础样式-->
-                'libs/ace-1.2.3/ace.min',
+                'libs/ace-1.3.1/css/ace.min',
+                'libs/ace-1.3.1/css/ace-fonts',
                 //<!--#blockUI样式-->
                 'libs/angular-block-ui-0.2.2/dist/angular-block-ui',
                  //<!--#日程插件的样式-->
-                'libs/fullcalendar-2.6.1/fullcalendar.css',
+                'libs/fullcalendar-2.6.1/fullcalendar',
                 //<!--#全局组件样式-->
                 'libs/mcs-jslib-1.0.0/component/mcs.component',
                 //<!--下拉框样式-->
-                'libs/angular-ui-select-0.13.2/dist/select.min',
-                'libs/angular-ui-select-0.13.2/dist/themes/selectize.default',
+                'libs/angular-ui-select-0.13.2/dist/select2',
                 'libs/angular-dialog-service-5.3.0/dist/dialogs.min'
             ], localCssFiles: [
                 //<!--#网站主样式-->

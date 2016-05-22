@@ -78,10 +78,9 @@
                         产品名称：
                     </label>
                     <div class="col-sm-10 row">
-
                         <ppts-select class="col-sm-2" category="grade" model="vm.m[loadtype].product.grade" caption="年级" />
                         <ppts-select class="col-sm-2" category="subject" model="vm.m[loadtype].product.subject" caption="产品科目" />
-                        <ppts-select class="col-sm-2" category="duration" model="vm.m[loadtype].exOfCourse.periodDuration" caption="单个时长" />
+                        <ppts-select class="col-sm-2" category="duration" model="vm.m[loadtype].exOfCourse.periodDuration" caption="单个时长" parse-type="int"/>
                         <ppts-select class="col-sm-2" category="courseLevel" model="vm.m[loadtype].exOfCourse.courseLevel" caption="课程级别" />
                         <ppts-select class="col-sm-2" category="coachType" model="vm.m[loadtype].exOfCourse.coachType" caption="辅导类型" />
                         <ppts-select class="col-sm-2" category="season" model="vm.m[loadtype].product.season" caption="课程季节" />
@@ -230,9 +229,7 @@
                         销售范围：
                     </label>
                     <div class="col-sm-10">
-                        <select class="span2" name="productCatagory">
-                            <option value="1">一对一教学</option>
-                        </select>
+                        <ppts-select-branch model="vm.m.onetoone.campusIDs" />
                         <span>（未选择校区则默认适用于所选分公司所有校区）</span>
                     </div>
                 </div>
@@ -243,7 +240,7 @@
                             产品启/止售时间：
                         </label>
                         <div class="col-sm-4">
-                            <ppts-daterangepicker startDate="vm.m[loadtype].product.startDate" endDate="vm.m[loadtype].product.endDate" />
+                            <ppts-daterangepicker start-date="vm.m[loadtype].product.startDate" end-date="vm.m[loadtype].product.endDate" />
                         </div>
                     </div>
                 </div>
@@ -251,7 +248,7 @@
                 <div class="from-group row">
                     <label class="control-label col-sm-2">创建人：</label>
                     <div class="col-sm-4">
-                        <label class="control-label">xxx</label>
+                        <label class="control-label">{{vm.creator()}}</label>
                     </div>
                 </div>
 

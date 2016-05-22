@@ -1,9 +1,10 @@
 ﻿// 提供跨模块的service
 define(['angular', ppts.config.modules.customer,
         ppts.config.dataServiceConfig.customerDataService,
-        ppts.config.dataServiceConfig.studentDataService], function (ng, customer) {
-            customer.registerFactory('customerService', ['$state', '$stateParams', 'customerDataService', 'studentDataService',
-                function ($state, $stateParams, customerDataService, studentDataService) {
+        ppts.config.dataServiceConfig.studentDataService,
+        ppts.config.dataServiceConfig.followDataService], function (ng, customer) {
+            customer.registerFactory('customerService', ['$rootScope', '$state', '$stateParams', 'customerDataService', 'studentDataService', 'followDataService',
+                function ($rootScope, $state, $stateParams, customerDataService, studentDataService, followDataService) {
                     var service = this;
 
                     service.handle = function (operation, data, callback) {
@@ -54,17 +55,40 @@ define(['angular', ppts.config.modules.customer,
                                     case 'update-parent':
                                         result.route = 'ppts.customer-view.parents';
                                         customerDataService.updateParent(data, function () {
-                                            $state.go(result.route);
+                                            $state.go(result.route, { prev: result.prev });
                                         });
                                         break;
                                     case 'update-parent-cancel':
                                         result.route = 'ppts.customer-view.parents';
                                         $state.go(result.route, { prev: result.prev });
                                         break;
+                                    case 'trans-new-parent':
+                                        result.route = 'ppts.customer-view.parent-new';
+                                        if (ng.isFunction(data || callback)) {
+                                            data();
+                                        }
+                                        $state.go(result.route, { id: $stateParams.id, prev: $stateParams.prev });
+                                        break;
+                                    case 'init-new-parent':
+                                        customerDataService.initParentForCreate($stateParams.id, data || callback);
+                                        break;
+                                    case 'new-parent':
+                                        result.route = 'ppts.customer-view.parents';
+                                        customerDataService.createParent(data, function () {
+                                            $state.go(result.route, { prev: result.prev });
+                                        });
+                                        break;
+                                    case 'addFollow':
+                                        followDataService.getFollowForCreate($stateParams.customerId, true, data || callback);
+                                        break;
+                                    case 'addFollow-cancel':
+                                        $state.go(result.prev);
+                                        break;
                                 }
                                 break;
                             case 'ppts.student':
                             case 'ppts.customermeeting':
+                            case 'ppts.score':
                                 switch (operation) {
                                     // 初始化学员信息
                                     case 'init':
@@ -106,12 +130,34 @@ define(['angular', ppts.config.modules.customer,
                                     case 'update-parent':
                                         result.route = 'ppts.student-view.parents';
                                         studentDataService.updateParent(data, function () {
-                                            $state.go(result.route);
+                                            $state.go(result.route, { prev: result.prev });
                                         });
                                         break;
                                     case 'update-parent-cancel':
                                         result.route = 'ppts.student-view.parents';
                                         $state.go(result.route, { prev: result.prev });
+                                        break;
+                                    case 'trans-new-parent':
+                                        result.route = 'ppts.student-view.parent-new';
+                                        if (ng.isFunction(data || callback)) {
+                                            data();
+                                        }
+                                        $state.go(result.route, { id: $stateParams.id, prev: $stateParams.prev });
+                                        break;
+                                    case 'init-new-parent':
+                                        studentDataService.initParentForCreate($stateParams.id, data || callback);
+                                        break;
+                                    case 'new-parent':
+                                        result.route = 'ppts.student-view.parents';
+                                        studentDataService.createParent(data, function () {
+                                            $state.go(result.route, { prev: result.prev });
+                                        });
+                                        break;
+                                    case 'addFollow':
+                                        followDataService.getFollowForCreate($stateParams.customerId, false, data || callback);
+                                        break;
+                                    case 'addFollow-cancel':
+                                        $state.go(result.prev);
                                         break;
                                 }
                                 break;

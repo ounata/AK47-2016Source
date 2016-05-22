@@ -19,5 +19,16 @@ namespace PPTS.Data.Orders.Adapters
         {
             return this.Load(builder => builder.AppendItem("ClassID", classID)).SingleOrDefault();
         }
+        
+        public ClassCollection Load(params string[] classIds)
+        {
+            return this.LoadByInBuilder(new MCS.Library.Data.Adapters.InLoadingCondition(i => i.AppendItem(classIds), "ClassID"));
+        }
+
+        //public void LoadInContext(Action<ClassCollection> action, params string[] classIds)
+        //{
+        //    LoadByInBuilderInContext(new MCS.Library.Data.Adapters.InLoadingCondition(w => w.AppendItem(classIds), "ClassID"), action);
+        //}
+
     }
 }

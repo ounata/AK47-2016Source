@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>IFRAME</title>
+    <link rel="stylesheet" href="">
+    <style>
+       
+         .container {
+            
+             text-align: center;
+             width:100%;
+         }
+    </style>
+</head>
+
+<body>
+   
+    <div class="container">
+        <iframe id="ppts" onload="hideSidebar()" width="100%"  frameborder="0" src="http://localhost/PPTSWebApp/PPTS.Portal/index.aspx#/ppts/dashboard"></iframe>
+    </div>
+<script>
+    var ppts = document.getElementById('ppts');
+
+    ppts.height = window.screen.availHeight +200;
+
+    window.addEventListener('message', function(event) {
+        if (event.data == 'ready') {
+            hideSidebar();
+        }
+    });
+
+
+    function hideSidebar() {
+        
+
+        ppts.contentWindow.postMessage('hide sidebar', '*');
+
+
+
+    };
+
+
+</script>
+</body>
+
+</html>

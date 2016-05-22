@@ -22,7 +22,13 @@ namespace MCS.Web.MVC.Library.Models
         /// <summary>
         /// 当期的节点ID
         /// </summary>
-        public string Id
+        public string ID
+        {
+            get;
+            set;
+        }
+
+        public string FullPath
         {
             get;
             set;

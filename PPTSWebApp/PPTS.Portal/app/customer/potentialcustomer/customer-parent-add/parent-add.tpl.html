@@ -8,7 +8,6 @@
 <div class="mcs-panel-search well well-sm">
     <div class="portlet-body mcs-padding-5">
         <ppts-search placeholder="输入家长姓名，联系方式进行查询" click="vm.search()" model="vm.criteria.keyword" />
-        <mcs-button category="search" click="vm.search()" size="medium" />
     </div>
 </div>
 
@@ -17,36 +16,19 @@
     <div class="profile-info-row" ng-show="vm.type=='confirm'">
         <div class="profile-info-name"> 亲属关系 </div>
         <div class="profile-info-value">
-            <table>
-                <tr>
-                    <td>
-                        <div style="margin-right:5px;"><input class="mcs-readonly-input" readonly="readonly" ng-model="vm.customer.customerName" />是<input class="mcs-readonly-input" readonly="readonly" ng-model="vm.parent.parentName" />的</div>
-                    </td>
-                    <td>
-                        <ui-select ng-model="vm.customerRole" theme="selectize" on-select="selectCustomerRole($item, $model)" ng-disabled="!vm.customer.gender">
-                            <ui-select-match placeholder="请选择">
-                                {{$select.selected.value}}
-                            </ui-select-match>
-                            <ui-select-choices repeat="item.key as item in vm.customerRoles ">
-                                <span ng-bind-html="item.value | highlight: $select.search"></span>
-                            </ui-select-choices>
-                        </ui-select>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div style="margin-right:5px;"><input class="mcs-readonly-input" readonly="readonly" ng-model="vm.parent.parentName" />是<input class="mcs-readonly-input" readonly="readonly" ng-model="vm.customer.customerName" />的</div>
-                    </td>
-                    <td>
-                        <ui-select ng-model="vm.parentRole" theme="selectize" ng-disabled="!(vm.parent.gender && vm.customer.gender && vm.customerRole && vm.parentRoles.length > 1)">
-                            <ui-select-match placeholder="请选择">{{$select.selected.value}}</ui-select-match>
-                            <ui-select-choices repeat="item.key as item in vm.parentRoles | props: {value: $select.search}">
-                                <span ng-bind-html="item.value | highlight: $select.search"></span>
-                            </ui-select-choices>
-                        </ui-select>
-                    </td>
-                </tr>
-            </table>
+            <div class="customer-relation-container">
+                <div class="col-sm-12 mcs-padding-0 mcs-margin-bottom-2">
+                    <div class="col-sm-4 mcs-padding-0"><input class="mcs-readonly-input" ng-model="vm.customer.customerName" onkeydown="return false;" style="width:88%;background:none;" />是</div>
+                    <div class="col-sm-4 mcs-padding-0"><input class="mcs-readonly-input" ng-model="vm.parent.parentName" onkeydown="return false;" style="width:88%;background:none;" />的</div>
+                    <div class="col-sm-4 mcs-padding-0"><ppts-select data="vm.customerRoles" model="vm.customerRole" callback="selectCustomerRole(item, model)" css="mcs-padding-0" caption="子女关系" /></div>
+                </div>
+                <div class="col-sm-12 mcs-padding-0">
+                    <div class="col-sm-4 mcs-padding-0"><input class="mcs-readonly-input" ng-model="vm.parent.parentName" onkeydown="return false;" style="width:88%;background:none;" />是</div>
+                    <div class="col-sm-4 mcs-padding-0"><input class="mcs-readonly-input" ng-model="vm.customer.customerName" onkeydown="return false;" style="width:88%;background:none;" />的</div>
+                    <div class="col-sm-4 mcs-padding-0"><ppts-select data="vm.parentRoles" model="vm.parentRole" disabled="!(vm.parent.gender && vm.customer.gender && vm.customerRole && vm.parentRoles.length > 1)" css="mcs-padding-0" caption="家属关系" /></div>
+                </div>
+                <p class="help-block"></p>
+            </div>
         </div>
     </div>
 
@@ -60,6 +42,6 @@
 </div>
 <div class="modal-footer">
     <mcs-button category="ok" click="vm.add()"/>
-    <mcs-button category="add" text="新建家长" click="vm.new()" />
+    <mcs-button category="add" text="新建家长" click="vm.new()" ng-hide="$state.includes('ppts.customer-add')"/>
     <mcs-button category="close" click="vm.close()" />
 </div>

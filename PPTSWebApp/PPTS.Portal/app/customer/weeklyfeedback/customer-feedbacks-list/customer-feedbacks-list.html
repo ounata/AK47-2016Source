@@ -1,0 +1,55 @@
+﻿<!-- #开始：学大反馈.快速查询条件 -->
+<style>
+    .pad-left0 {
+        padding-left: 0px;
+    }
+
+    .margin-left2 {
+        padding-left: 12px;
+        margin-left: 10px;
+    }
+</style>
+
+<div class="mcs-panel-search well well-lg container-fluid">
+    <div class="portlet">
+        <div class="portlet-title line row-fluid">
+            <div class="caption">
+                <label class="quick-search"><i class="ace-icon fa fa-search bigger-125"></i> 快速查询</label>
+            </div>
+        </div>
+        <div class="portlet-body">
+            <div class="ppts-oneline-block">
+                <div class="search-inline">
+                    <ppts-select-branch model="vm.criteria.orgIds"/>
+                </div>
+                <div class="search-inline">
+                    <ppts-select class="ppts-select-search" category="grade" model="vm.criteria.grades" caption="学生年级" />
+                    <ppts-select class="ppts-select-search" category="replyObject" model="vm.criteria.replyObject" caption="反馈对象"/>
+                    </div>
+                </div>
+            <div class="ppts-oneline-block">
+                <ppts-daterangepicker class="search" start-date="vm.criteria.meetingTimeStart" end-date="vm.criteria.meetingTimeEnd"/>
+
+                <mcs-input class="search-input-middle-align" placeholder="员工姓名" model="vm.criteria.replierName"/>
+                <mcs-input class="search-input-middle-align" placeholder="学生姓名" model="vm.criteria.customerName"/>
+                <mcs-input class="search-input-middle-align" placeholder="学员编号" model="vm.criteria.customerCode"/>
+                <mcs-button category="search" click="vm.search()" size="medium" class="search-btn" />
+
+            </div>
+           
+           
+            
+            
+           
+        </div>
+    </div>
+</div>
+
+<!-- /结束：学大反馈.快速查询条件 -->
+<!-- #开始：学大反馈.工具栏 -->
+<div class="mcs-panel-toolbar">
+    <mcs-button category="export" click=""></mcs-button>
+</div>
+<!-- #开始：学大反馈.数据表格 -->
+<mcs-datatable data="vm.data" />
+<!-- /结束：学大反馈.数据表格 -->

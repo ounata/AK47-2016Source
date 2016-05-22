@@ -133,3 +133,31 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level1name = N'SchemaGroupSnapshot',
     @level2type = N'COLUMN',
     @level2name = N'Comment'
+GO
+
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'群组类型',
+    @level0type = N'SCHEMA',
+    @level0name = N'SC',
+    @level1type = N'TABLE',
+    @level1name = N'SchemaGroupSnapshot',
+    @level2type = N'COLUMN',
+    @level2name = N'GroupType'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'父岗位ID',
+    @level0type = N'SCHEMA',
+    @level0name = N'SC',
+    @level1type = N'TABLE',
+    @level1name = N'SchemaGroupSnapshot',
+    @level2type = N'COLUMN',
+    @level2name = N'ParentJobID'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'是否是主岗',
+    @level0type = N'SCHEMA',
+    @level0name = N'SC',
+    @level1type = N'TABLE',
+    @level1name = N'SchemaGroupSnapshot',
+    @level2type = N'COLUMN',
+    @level2name = N'IsPrimary'

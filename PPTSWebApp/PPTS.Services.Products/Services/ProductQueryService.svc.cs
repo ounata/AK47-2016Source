@@ -20,16 +20,16 @@ namespace PPTS.Services.Products.Services
         /// <summary>
         /// 根据产品id集合返回对应的产品视图信息
         /// </summary>
-        /// <param name="ProductIDs"></param>
+        /// <param name="productIDs"></param>
         /// <returns></returns>
         [WfJsonFormatter]
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
-        ProductViewQueryResult IProductQueryService.QueryProductViewsByIDs(string[] ProductIDs)
+        ProductViewQueryResult IProductQueryService.QueryProductViewsByIDs(string[] productIDs)
         {
-            MCS.Library.Data.Adapters.InLoadingCondition _inloadingcondition = new MCS.Library.Data.Adapters.InLoadingCondition(builder => { builder.AppendItem<string>(ProductIDs).DataField = "ProductID"; });
+            MCS.Library.Data.Adapters.InLoadingCondition inLoadingCondition = new MCS.Library.Data.Adapters.InLoadingCondition(builder => { builder.AppendItem<string>(productIDs).DataField = "ProductID"; });
             return new ProductViewQueryResult()
             {
-                ProductViews = PPTS.Data.Products.Adapters.ProductViewAdapter.Instance.LoadByInBuilder(_inloadingcondition).ToList<ProductView>()
+                ProductViews = PPTS.Data.Products.Adapters.ProductViewAdapter.Instance.LoadByInBuilder(inLoadingCondition).ToList<ProductView>()
             };
         }
     }

@@ -48,7 +48,7 @@ namespace PPTS.Data.Customers.Entities
         /// </summary>
         [ORFieldMapping("CustomerRole")]
         [DataMember]
-        public int CustomerRole
+        public string CustomerRole
         {
             get;
             set;
@@ -59,7 +59,7 @@ namespace PPTS.Data.Customers.Entities
         /// </summary>
         [ORFieldMapping("ParentRole")]
         [DataMember]
-        public int ParentRole
+        public string ParentRole
         {
             get;
             set;

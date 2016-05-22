@@ -1,7 +1,7 @@
 using MCS.Library.Core;
 using MCS.Library.Data.DataObjects;
 using MCS.Library.Data.Mapping;
-using PPTS.Data.Common;
+using PPTS.Data.Common.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,201 +9,202 @@ using System.Runtime.Serialization;
 
 namespace PPTS.Data.Customers.Entities
 {
-	/// <summary>
-	/// This object represents the properties and methods of a AccountRefundApply.
-	/// 账户退费申请表
-	/// </summary>
-	[Serializable]
+    /// <summary>
+    /// This object represents the properties and methods of a AccountRefundApply.
+    /// 账户退费申请表
+    /// </summary>
+    [Serializable]
     [ORTableMapping("CM.AccountRefundApplies")]
     [DataContract]
-	public class AccountRefundApply
-	{		
-		public AccountRefundApply()
-		{
-		}		
+    public class AccountRefundApply : IEntityWithCreator, IEntityWithModifier
+    {
+        public AccountRefundApply()
+        {
+        }
 
-		/// <summary>
-		/// 校区ID
-		/// </summary>
-		[ORFieldMapping("CampusID")]
+        /// <summary>
+        /// 校区ID
+        /// </summary>
+        [ORFieldMapping("CampusID")]
         [DataMember]
-		public string CampusID
-		{
-			get;
+        public string CampusID
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 校区名称
-		/// </summary>
-		[ORFieldMapping("CampusName")]
+        /// <summary>
+        /// 校区名称
+        /// </summary>
+        [ORFieldMapping("CampusName")]
         [DataMember]
-		public string CampusName
-		{
-			get;
+        public string CampusName
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 学员ID
-		/// </summary>
-		[ORFieldMapping("CustomerID")]
+        /// <summary>
+        /// 学员ID
+        /// </summary>
+        [ORFieldMapping("CustomerID")]
         [DataMember]
-		public string CustomerID
-		{
-			get;
+        public string CustomerID
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 学员编码
-		/// </summary>
-		[ORFieldMapping("CustomerCode")]
+        /// <summary>
+        /// 学员编码
+        /// </summary>
+        [ORFieldMapping("CustomerCode")]
         [DataMember]
-		public string CustomerCode
-		{
-			get;
+        public string CustomerCode
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 学员姓名
-		/// </summary>
-		[ORFieldMapping("CustomerName")]
+        /// <summary>
+        /// 学员姓名
+        /// </summary>
+        [ORFieldMapping("CustomerName")]
         [DataMember]
-		public string CustomerName
-		{
-			get;
+        public string CustomerName
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 账户ID
-		/// </summary>
-		[ORFieldMapping("AccountID")]
+        /// <summary>
+        /// 账户ID
+        /// </summary>
+        [ORFieldMapping("AccountID")]
         [DataMember]
-		public string AccountID
-		{
-			get;
+        public string AccountID
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 账户编码
-		/// </summary>
-		[ORFieldMapping("AccountCode")]
+        /// <summary>
+        /// 账户编码
+        /// </summary>
+        [ORFieldMapping("AccountCode")]
         [DataMember]
-		public string AccountCode
-		{
-			get;
+        public string AccountCode
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 申请单ID
-		/// </summary>
-		[ORFieldMapping("ApplyID", PrimaryKey=true)]
+        /// <summary>
+        /// 申请单ID
+        /// </summary>
+        [ORFieldMapping("ApplyID", PrimaryKey = true)]
         [DataMember]
-		public string ApplyID
-		{
-			get;
+        public string ApplyID
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 申请单号
-		/// </summary>
-		[ORFieldMapping("ApplyNo")]
+        /// <summary>
+        /// 申请单号
+        /// </summary>
+        [ORFieldMapping("ApplyNo")]
         [DataMember]
-		public string ApplyNo
-		{
-			get;
+        public string ApplyNo
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 申请状态（参考缴费单）
-		/// </summary>
-		[ORFieldMapping("ApplyStatus")]
+        /// <summary>
+        /// 申请状态（参考缴费单）
+        /// </summary>
+        [ORFieldMapping("ApplyStatus")]
+        [ConstantCategory("Common_ApplyStatus")]
         [DataMember]
-		public ApplyStatusDefine ApplyStatus
-		{
-			get;
+        public ApplyStatusDefine ApplyStatus
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 退费原因
-		/// </summary>
-		[ORFieldMapping("ApplyMemo")]
+        /// <summary>
+        /// 退费原因
+        /// </summary>
+        [ORFieldMapping("ApplyMemo")]
         [DataMember]
-		public string ApplyMemo
-		{
-			get;
+        public string ApplyMemo
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 申请时间
-		/// </summary>
-		[ORFieldMapping("ApplyTime", UtcTimeToLocal = true)]
+        /// <summary>
+        /// 申请时间
+        /// </summary>
+        [ORFieldMapping("ApplyTime")]
         [DataMember]
-		public DateTime ApplyTime
-		{
-			get;
+        public DateTime ApplyTime
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 申请人ID
-		/// </summary>
-		[ORFieldMapping("ApplierID")]
+        /// <summary>
+        /// 申请人ID
+        /// </summary>
+        [ORFieldMapping("ApplierID")]
         [DataMember]
-		public string ApplierID
-		{
-			get;
+        public string ApplierID
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 申请人姓名
-		/// </summary>
-		[ORFieldMapping("ApplierName")]
+        /// <summary>
+        /// 申请人姓名
+        /// </summary>
+        [ORFieldMapping("ApplierName")]
         [DataMember]
-		public string ApplierName
-		{
-			get;
+        public string ApplierName
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 申请人岗位ID
-		/// </summary>
-		[ORFieldMapping("ApplierJobID")]
+        /// <summary>
+        /// 申请人岗位ID
+        /// </summary>
+        [ORFieldMapping("ApplierJobID")]
         [DataMember]
-		public string ApplierJobID
-		{
-			get;
+        public string ApplierJobID
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 申请人岗位名称
-		/// </summary>
-		[ORFieldMapping("ApplierJobName")]
+        /// <summary>
+        /// 申请人岗位名称
+        /// </summary>
+        [ORFieldMapping("ApplierJobName")]
         [DataMember]
-		public string ApplierJobName
-		{
-			get;
+        public string ApplierJobName
+        {
+            get;
             set;
-		}
+        }
 
         /// <summary>
         /// 申请人岗位类型
         /// </summary>
         [ORFieldMapping("ApplierJobType")]
         [DataMember]
-        public JobTypeDefine ApplierJobType
+        public string ApplierJobType
         {
             get;
             set;
@@ -213,140 +214,153 @@ namespace PPTS.Data.Customers.Entities
         /// 异步处理状态
         /// </summary>
         [ORFieldMapping("ProcessStatus")]
+        [ConstantCategory("Common_ProcessStatus")]
         [DataMember]
-		public ProcessStatusDefine ProcessStatus
-		{
-			get;
+        public string ProcessStatus
+        {
+            get;
             set;
-		}
-
-		/// <summary>
-		/// 异步处理时间
-		/// </summary>
-		[ORFieldMapping("ProcessTime", UtcTimeToLocal = true)]
-        [DataMember]
-		public DateTime ProcessTime
-		{
-			get;
-            set;
-		}
-
-		/// <summary>
-		/// 异步处理说明
-		/// </summary>
-		[ORFieldMapping("ProcessMemo")]
-        [DataMember]
-		public string ProcessMemo
-		{
-			get;
-            set;
-		}
-
-		/// <summary>
-		/// 退费类型（正常退费，坏账退费）
-		/// </summary>
-		[ORFieldMapping("RefundType")]
-        [DataMember]
-		public string RefundType
-		{
-			get;
-            set;
-		}
-
-		/// <summary>
-		/// 申退金额
-		/// </summary>
-		[ORFieldMapping("RefundMoney")]
-        [DataMember]
-		public decimal RefundMoney
-		{
-			get;
-            set;
-		}
-
-		/// <summary>
-		/// 应退金额
-		/// </summary>
-		[ORFieldMapping("RealRefundMoney")]
-        [DataMember]
-		public decimal RealRefundMoney
-		{
-			get;
-            set;
-		}
-
-		/// <summary>
-		/// 折扣返还金额
-		/// </summary>
-		[ORFieldMapping("ReallowanceMoney")]
-        [DataMember]
-		public decimal ReallowanceMoney
-		{
-			get;
-            set;
-		}
-
-		/// <summary>
-		/// 制度外退费类型（综合服务费赔偿，争议性课时差价赔偿，服务不满意协商赔偿，已上课全额退款，大额赔偿）
-		/// </summary>
-		[ORFieldMapping("ExtraRefundType")]
-        [DataMember]
-		public string ExtraRefundType
-		{
-			get;
-            set;
-		}
-
-		/// <summary>
-		/// 制度外退款金额
-		/// </summary>
-		[ORFieldMapping("ExtraRefundMoney")]
-        [DataMember]
-		public decimal ExtraRefundMoney
-		{
-			get;
-            set;
-		}
-
-		/// <summary>
-		/// 差价补偿金额
-		/// </summary>
-		[ORFieldMapping("CompensateMoney")]
-        [DataMember]
-		public decimal CompensateMoney
-		{
-			get;
-            set;
-		}
-
-		/// <summary>
-		/// 实退金额
-		/// </summary>
-		[ORFieldMapping("PaidMoney")]
-        [DataMember]
-		public decimal PaidMoney
-		{
-			get;
-            set;
-		}
-
-		/// <summary>
-		/// 支付状态（参考收款）
-		/// </summary>
-		[ORFieldMapping("PayStatus")]
-        [DataMember]
-		public string PayStatus
-		{
-			get;
-            set;
-		}
+        }
 
         /// <summary>
-        /// 支付时间
+        /// 异步处理时间
         /// </summary>
-        [ORFieldMapping("PayTime", UtcTimeToLocal = true)]
+        [ORFieldMapping("ProcessTime")]
         [DataMember]
-        public DateTime PayTime
+        public DateTime ProcessTime
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 异步处理说明
+        /// </summary>
+        [ORFieldMapping("ProcessMemo")]
+        [DataMember]
+        public string ProcessMemo
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 退费类型（0-正常退费，1-坏账退费）
+        /// </summary>
+        [ORFieldMapping("RefundType")]
+        [ConstantCategory("Account_RefundType")]
+        [DataMember]
+        public RefundTypeDefine RefundType
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 是否上课退费
+        /// </summary>
+        [ORFieldMapping("IsPeriodRefund")]
+        [DataMember]
+        public bool IsPeriodRefund
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 是否制度外退费
+        /// </summary>
+        [ORFieldMapping("IsExtraRefund")]
+        [DataMember]
+        public bool IsExtraRefund
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 申退金额
+        /// </summary>
+        [ORFieldMapping("ApplyRefundMoney")]
+        [DataMember]
+        public decimal ApplyRefundMoney
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 应退金额
+        /// </summary>
+        [ORFieldMapping("OughtRefundMoney")]
+        [DataMember]
+        public decimal OughtRefundMoney
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 实退金额
+        /// </summary>
+        [ORFieldMapping("RealRefundMoney")]
+        [DataMember]
+        public decimal RealRefundMoney
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 已消耗课时价值
+        /// </summary>
+        [ORFieldMapping("ConsumptionValue")]
+        [DataMember]
+        public decimal ConsumptionValue
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 折扣返还金额
+        /// </summary>
+        [ORFieldMapping("ReallowanceMoney")]
+        [DataMember]
+        public decimal ReallowanceMoney
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 制度外退费类型（综合服务费赔偿，争议性课时差价赔偿，服务不满意协商赔偿，已上课全额退款，大额赔偿）
+        /// </summary>
+        [ORFieldMapping("ExtraRefundType")]
+        [DataMember]
+        public string ExtraRefundType
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 制度外退款金额
+        /// </summary>
+        [ORFieldMapping("ExtraRefundMoney")]
+        [DataMember]
+        public decimal ExtraRefundMoney
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 差价补偿金额
+        /// </summary>
+        [ORFieldMapping("CompensateMoney")]
+        [DataMember]
+        public decimal CompensateMoney
         {
             get;
             set;
@@ -357,292 +371,469 @@ namespace PPTS.Data.Customers.Entities
         /// </summary>
         [ORFieldMapping("ThatDiscountID")]
         [DataMember]
-		public string ThatDiscountID
-		{
-			get;
+        public string ThatDiscountID
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 退费前折扣基数
-		/// </summary>
-		[ORFieldMapping("ThatDiscountBase")]
+        /// <summary>
+        /// 退费前折扣编码
+        /// </summary>
+        [ORFieldMapping("ThatDiscountCode")]
         [DataMember]
-		public decimal ThatDiscountBase
-		{
-			get;
+        public string ThatDiscountCode
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 退费前折扣率
-		/// </summary>
-		[ORFieldMapping("ThatDiscountRate")]
+        /// <summary>
+        /// 退费前折扣基数
+        /// </summary>
+        [ORFieldMapping("ThatDiscountBase")]
         [DataMember]
-		public decimal ThatDiscountRate
-		{
-			get;
+        public decimal ThatDiscountBase
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 退费前账户价值
-		/// </summary>
-		[ORFieldMapping("ThatAccountValue")]
+        /// <summary>
+        /// 退费前折扣率
+        /// </summary>
+        [ORFieldMapping("ThatDiscountRate")]
         [DataMember]
-		public decimal ThatAccountValue
-		{
-			get;
+        public decimal ThatDiscountRate
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 退费后折扣ID
-		/// </summary>
-		[ORFieldMapping("ThisDiscountID")]
+        /// <summary>
+        /// 退费前账户价值
+        /// </summary>
+        [ORFieldMapping("ThatAccountValue")]
         [DataMember]
-		public string ThisDiscountID
-		{
-			get;
+        public decimal ThatAccountValue
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 退费后折扣基数
-		/// </summary>
-		[ORFieldMapping("ThisDiscountBase")]
+        /// <summary>
+        /// 退费前账户余额
+        /// </summary>
+        [ORFieldMapping("ThatAccountMoney")]
         [DataMember]
-		public decimal ThisDiscountBase
-		{
-			get;
+        public decimal ThatAccountMoney
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 退费后折扣率
-		/// </summary>
-		[ORFieldMapping("ThisDiscountRate")]
+        /// <summary>
+        /// 退费后折扣ID
+        /// </summary>
+        [ORFieldMapping("ThisDiscountID")]
         [DataMember]
-		public decimal ThisDiscountRate
-		{
-			get;
+        public string ThisDiscountID
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 退费后账户价值
-		/// </summary>
-		[ORFieldMapping("ThisAccountValue")]
+        /// <summary>
+        /// 退费后折扣编码
+        /// </summary>
+        [ORFieldMapping("ThisDiscountCode")]
         [DataMember]
-		public decimal ThisAccountValue
-		{
-			get;
+        public string ThisDiscountCode
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 领款人（默认是学员姓名）
-		/// </summary>
-		[ORFieldMapping("Drawer")]
+        /// <summary>
+        /// 退费后折扣基数
+        /// </summary>
+        [ORFieldMapping("ThisDiscountBase")]
         [DataMember]
-		public string Drawer
-		{
-			get;
+        public decimal ThisDiscountBase
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 咨询师ID
-		/// </summary>
-		[ORFieldMapping("ConsultantID")]
+        /// <summary>
+        /// 退费后折扣率
+        /// </summary>
+        [ORFieldMapping("ThisDiscountRate")]
         [DataMember]
-		public string ConsultantID
-		{
-			get;
+        public decimal ThisDiscountRate
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 咨询师姓名
-		/// </summary>
-		[ORFieldMapping("ConsultantName")]
+        /// <summary>
+        /// 退费后账户价值
+        /// </summary>
+        [ORFieldMapping("ThisAccountValue")]
         [DataMember]
-		public string ConsultantName
-		{
-			get;
+        public decimal ThisAccountValue
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 咨询师岗位ID
-		/// </summary>
-		[ORFieldMapping("ConsultantJobID")]
+        /// <summary>
+        /// 退费后账户余额
+        /// </summary>
+        [ORFieldMapping("ThisAccountMoney")]
         [DataMember]
-		public string ConsultantJobID
-		{
-			get;
+        public decimal ThisAccountMoney
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 学管师ID
-		/// </summary>
-		[ORFieldMapping("EducatorID")]
+        /// <summary>
+        /// 领款人（默认是学员姓名）
+        /// </summary>
+        [ORFieldMapping("Drawer")]
         [DataMember]
-		public string EducatorID
-		{
-			get;
+        public string Drawer
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 学管师姓名
-		/// </summary>
-		[ORFieldMapping("EducatorName")]
+        /// <summary>
+        /// 咨询师ID
+        /// </summary>
+        [ORFieldMapping("ConsultantID")]
         [DataMember]
-		public string EducatorName
-		{
-			get;
+        public string ConsultantID
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 学管师岗位ID
-		/// </summary>
-		[ORFieldMapping("EducatorJobID")]
+        /// <summary>
+        /// 咨询师姓名
+        /// </summary>
+        [ORFieldMapping("ConsultantName")]
         [DataMember]
-		public string EducatorJobID
-		{
-			get;
+        public string ConsultantName
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 提交人ID
-		/// </summary>
-		[ORFieldMapping("SubmitterID")]
+        /// <summary>
+        /// 咨询师岗位ID
+        /// </summary>
+        [ORFieldMapping("ConsultantJobID")]
         [DataMember]
-		public string SubmitterID
-		{
-			get;
+        public string ConsultantJobID
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 提交人姓名
-		/// </summary>
-		[ORFieldMapping("SubmitterName")]
+        /// <summary>
+        /// 学管师ID
+        /// </summary>
+        [ORFieldMapping("EducatorID")]
         [DataMember]
-		public string SubmitterName
-		{
-			get;
+        public string EducatorID
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 提交人岗位ID
-		/// </summary>
-		[ORFieldMapping("SubmitterJobID")]
+        /// <summary>
+        /// 学管师姓名
+        /// </summary>
+        [ORFieldMapping("EducatorName")]
         [DataMember]
-		public string SubmitterJobID
-		{
-			get;
+        public string EducatorName
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 提交人岗位名称
-		/// </summary>
-		[ORFieldMapping("SubmitterJobName")]
+        /// <summary>
+        /// 学管师岗位ID
+        /// </summary>
+        [ORFieldMapping("EducatorJobID")]
         [DataMember]
-		public string SubmitterJobName
-		{
-			get;
+        public string EducatorJobID
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 提交人岗位类型
-		/// </summary>
-		[ORFieldMapping("SubmitterJobType")]
+        /// <summary>
+        /// 提交人ID
+        /// </summary>
+        [ORFieldMapping("SubmitterID")]
         [DataMember]
-		public JobTypeDefine SubmitterJobType
-		{
-			get;
+        public string SubmitterID
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 提交时间
-		/// </summary>
-		[ORFieldMapping("SubmitTime")]
+        /// <summary>
+        /// 提交人姓名
+        /// </summary>
+        [ORFieldMapping("SubmitterName")]
         [DataMember]
-		public DateTime SubmitTime
-		{
-			get;
+        public string SubmitterName
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 最后审批人ID
-		/// </summary>
-		[ORFieldMapping("ApproverID")]
+        /// <summary>
+        /// 提交人岗位ID
+        /// </summary>
+        [ORFieldMapping("SubmitterJobID")]
         [DataMember]
-		public string ApproverID
-		{
-			get;
+        public string SubmitterJobID
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 最后审批人姓名
-		/// </summary>
-		[ORFieldMapping("ApproverName")]
+        /// <summary>
+        /// 提交人岗位名称
+        /// </summary>
+        [ORFieldMapping("SubmitterJobName")]
         [DataMember]
-		public string ApproverName
-		{
-			get;
+        public string SubmitterJobName
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 最后审批人岗位ID
-		/// </summary>
-		[ORFieldMapping("ApproverJobID")]
+        /// <summary>
+        /// 提交人岗位类型
+        /// </summary>
+        [ORFieldMapping("SubmitterJobType")]
         [DataMember]
-		public string ApproverJobID
-		{
-			get;
+        public string SubmitterJobType
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 最后审批人岗位名称
-		/// </summary>
-		[ORFieldMapping("ApproverJobName")]
+        /// <summary>
+        /// 提交时间
+        /// </summary>
+        [ORFieldMapping("SubmitTime")]
         [DataMember]
-		public string ApproverJobName
-		{
-			get;
+        public DateTime SubmitTime
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 最后审批时间
-		/// </summary>
-		[ORFieldMapping("ApproveTime", UtcTimeToLocal = true)]
+        /// <summary>
+        /// 最后审批人ID
+        /// </summary>
+        [ORFieldMapping("ApproverID")]
         [DataMember]
-		public DateTime ApproveTime
-		{
-			get;
+        public string ApproverID
+        {
+            get;
             set;
-		}
+        }
+
+        /// <summary>
+        /// 最后审批人姓名
+        /// </summary>
+        [ORFieldMapping("ApproverName")]
+        [DataMember]
+        public string ApproverName
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 最后审批人岗位ID
+        /// </summary>
+        [ORFieldMapping("ApproverJobID")]
+        [DataMember]
+        public string ApproverJobID
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 最后审批人岗位名称
+        /// </summary>
+        [ORFieldMapping("ApproverJobName")]
+        [DataMember]
+        public string ApproverJobName
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 最后审批时间
+        /// </summary>
+        [ORFieldMapping("ApproveTime")]
+        [DataMember]
+        public DateTime ApproveTime
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 财务最后确认人ID
+        /// </summary>
+        [ORFieldMapping("VerifierID")]
+        [DataMember]
+        public string VerifierID
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 财务最后确认人姓名
+        /// </summary>
+        [ORFieldMapping("VerifierName")]
+        [DataMember]
+        public string VerifierName
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 财务最后确认人岗位ID
+        /// </summary>
+        [ORFieldMapping("VerifierJobID")]
+        [DataMember]
+        public string VerifierJobID
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 财务最后确认人岗位名称
+        /// </summary>
+        [ORFieldMapping("VerifierJobName")]
+        [DataMember]
+        public string VerifierJobName
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 财务最后确认状态
+        /// </summary>
+        [ORFieldMapping("VerifyStatus")]
+        [ConstantCategory("Account_RefundVerifyStatus")]
+        [DataMember]
+        public RefundVerifyStatus VerifyStatus
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 财务最后确认时间
+        /// </summary>
+        [ORFieldMapping("VerifyTime")]
+        [DataMember]
+        public DateTime VerifyTime
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 对账人ID
+        /// </summary>
+        [ORFieldMapping("CheckerID")]
+        [DataMember]
+        public string CheckerID
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 对账人姓名
+        /// </summary>
+        [ORFieldMapping("CheckerName")]
+        [DataMember]
+        public string CheckerName
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 对账人岗位ID
+        /// </summary>
+        [ORFieldMapping("CheckerJobID")]
+        [DataMember]
+        public string CheckerJobID
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 对账人岗位名称
+        /// </summary>
+        [ORFieldMapping("CheckerJobName")]
+        [DataMember]
+        public string CheckerJobName
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 对账状态
+        /// </summary>
+        [ORFieldMapping("CheckStatus")]
+        [ConstantCategory("Common_CheckStatus")]
+        [DataMember]
+        public CheckStatusDefine CheckStatus
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 队长时间
+        /// </summary>
+        [ORFieldMapping("CheckTime")]
+        [DataMember]
+        public DateTime CheckTime
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// 创建人ID
         /// </summary>
         [ORFieldMapping("CreatorID")]
-        [SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update)]
         [DataMember]
         public string CreatorID
         {
@@ -654,7 +845,6 @@ namespace PPTS.Data.Customers.Entities
         /// 创建人姓名
         /// </summary>
         [ORFieldMapping("CreatorName")]
-        [SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update)]
         [DataMember]
         public string CreatorName
         {
@@ -665,8 +855,7 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 创建时间
         /// </summary>
-        [ORFieldMapping("CreateTime", UtcTimeToLocal = true)]
-        [SqlBehavior(BindingFlags = ClauseBindingFlags.Select | ClauseBindingFlags.Where)]
+        [ORFieldMapping("CreateTime")]
         [DataMember]
         public DateTime CreateTime
         {
@@ -688,9 +877,9 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 最后修改人姓名
         /// </summary>
-        [ORFieldMapping("ModiferName")]
+        [ORFieldMapping("ModifierName")]
         [DataMember]
-        public string ModiferName
+        public string ModifierName
         {
             get;
             set;
@@ -699,13 +888,92 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 最后修改时间
         /// </summary>
-        [ORFieldMapping("ModifyTime", UtcTimeToLocal = true)]
-        [SqlBehavior(DefaultExpression = "GETUTCDATE()", ForceUseDefaultExpression = true)]
+        [ORFieldMapping("ModifyTime")]
         [DataMember]
         public DateTime ModifyTime
         {
             get;
             set;
+        }
+
+        //是否能审批
+        [NoMapping]
+        [DataMember]
+        public bool CanApprove
+        {
+            get
+            {
+                return this.ApplyStatus == ApplyStatusDefine.Approving;
+            }
+        }
+
+        /// <summary>
+        /// 是否已对账
+        /// </summary>
+        [NoMapping]
+        [DataMember]
+        public bool CanCheck
+        {
+            get
+            {
+                return this.VerifyStatus == RefundVerifyStatus.Refunded
+                    && this.CheckStatus == CheckStatusDefine.UnCheck;
+            }
+        }
+
+        /// <summary>
+        /// 能否打印
+        /// </summary>
+        [NoMapping]
+        [DataMember]
+        public bool CanPrint
+        {
+            get
+            {
+                return this.VerifyStatus == RefundVerifyStatus.Refunded;
+            }
+        }
+
+        /// <summary>
+        /// 分出纳能否确认
+        /// </summary>
+        [NoMapping]
+        [DataMember]
+        public bool CashierCanVerify
+        {
+            get
+            {
+                return this.ApplyStatus == ApplyStatusDefine.Approved
+                    && this.VerifyStatus == RefundVerifyStatus.WaitCashierVerify;
+            }
+        }
+
+        /// <summary>
+        /// 分财务能否确认
+        /// </summary>
+        [NoMapping]
+        [DataMember]
+        public bool FinanceCanVerify
+        {
+            get
+            {
+                return this.ApplyStatus == ApplyStatusDefine.Approved
+                    && this.VerifyStatus == RefundVerifyStatus.WaitFinanceVerify;
+            }
+        }
+
+        /// <summary>
+        /// 分区域能否确认
+        /// </summary>
+        [NoMapping]
+        [DataMember]
+        public bool RegionCanVerify
+        {
+            get
+            {
+                return this.ApplyStatus == ApplyStatusDefine.Approved
+                    && this.VerifyStatus == RefundVerifyStatus.WaitRegionVerify;
+            }
         }
     }
 

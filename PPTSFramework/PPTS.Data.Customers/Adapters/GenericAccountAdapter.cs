@@ -28,33 +28,14 @@ namespace PPTS.Data.Customers.Adapters
         /// <returns></returns>
         public T LoadByAccountID(string accountID)
         {
-            T obj = null;
-            this.LoadInContextByAccountID(accountID, account => obj = account);
-            return obj;
+            return this.Load(builder => builder.AppendItem("AccountID", accountID), DateTime.MinValue).SingleOrDefault();
         }
         public void LoadInContextByAccountID(string accountID, Action<T> action)
         {
             this.LoadByInBuilderInContext(new InLoadingCondition(builder => builder.AppendItem(accountID), "AccountID"),
                 collection => action(collection.SingleOrDefault()), DateTime.MinValue);
         }
-
-        /// <summary>
-        /// 根据学员ID获取当前账号。
-        /// </summary>
-        /// <param name="customerID"></param>
-        /// <returns></returns>
-        public T LoadCurrentByCustomerID(string customerID)
-        {
-            T obj = null;
-            this.LoadCurrentInContextByCustomerID(customerID, account => obj = account);
-            return obj;
-        }
-        public void LoadCurrentInContextByCustomerID(string customerID, Action<T> action)
-        {
-            this.LoadByInBuilderInContext(new InLoadingCondition(builder => builder.AppendItem(customerID), "CustomerID"),
-              collection => action(collection.Count == 0 ? null : collection[collection.Count - 1]), DateTime.MinValue);
-        }
-
+        
         protected override void BeforeInnerUpdateInContext(T data, SqlContextItem sqlContext, Dictionary<string, object> context)
         {
         }

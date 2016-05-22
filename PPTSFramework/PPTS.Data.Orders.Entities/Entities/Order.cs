@@ -47,10 +47,26 @@ namespace PPTS.Data.Orders.Entities
             set;
 		}
 
-		/// <summary>
-		/// 学员ID
-		/// </summary>
-		[ORFieldMapping("CustomerID")]
+        [ORFieldMapping("ParentID")]
+        [DataMember]
+        public string ParentID
+        {
+            get;
+            set;
+        }
+
+        [ORFieldMapping("ParentName")]
+        [DataMember]
+        public string ParentName
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 学员ID
+        /// </summary>
+        [ORFieldMapping("CustomerID")]
         [DataMember]
 		public string CustomerID
 		{
@@ -149,7 +165,8 @@ namespace PPTS.Data.Orders.Entities
 		/// <summary>
 		/// 订购时间
 		/// </summary>
-		[ORFieldMapping("OrderTime")]
+		[ORFieldMapping("OrderTime", UtcTimeToLocal = true)]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.Select | ClauseBindingFlags.Where, DefaultExpression = "GETUTCDATE()")]
         [DataMember]
 		public DateTime OrderTime
 		{
@@ -173,7 +190,7 @@ namespace PPTS.Data.Orders.Entities
 		/// </summary>
 		[ORFieldMapping("OrderType")]
         [DataMember]
-		public string OrderType
+		public OrderType OrderType
 		{
 			get;
             set;
@@ -348,10 +365,20 @@ namespace PPTS.Data.Orders.Entities
             set;
 		}
 
-		/// <summary>
-		/// 提交时间
-		/// </summary>
-		[ORFieldMapping("SubmitTime")]
+        [ORFieldMapping("SubmitterJobType")]
+        [DataMember]
+        public string SubmitterJobType
+        {
+            get;
+            set;
+        }
+        
+
+        /// <summary>
+        /// 提交时间
+        /// </summary>
+        [ORFieldMapping("SubmitTime", UtcTimeToLocal = true)]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.Select | ClauseBindingFlags.Where, DefaultExpression = "GETUTCDATE()")]
         [DataMember]
 		public DateTime SubmitTime
 		{

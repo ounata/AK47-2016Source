@@ -13,13 +13,6 @@
 
                     // 获取学员与员工关系
                     vm.relationType = relationType;
-                    
-                    // 选择大区/公司/校区
-                    vm.select = function () {
-                        dataSyncService.popupTree(vm, {
-                            title: '选择大区/分公司/校区'
-                        });
-                    };
 
                     // 页面初始化加载或重新搜索时查询
                     vm.search = function () {
@@ -33,6 +26,13 @@
                     vm.assign = function (relationType) {
                         if (util.selectMultiRows(vm)) {
                             customerDataViewService.assignStaffRelation(vm.data.rowsSelected, relationType);
+                        }
+                    };
+
+                    // 划转资源
+                    vm.transfer = function () {
+                        if (util.selectMultiRows(vm)) {
+                            customerDataViewService.transferCustomer(vm.data.rowsSelected);
                         }
                     };
                 }]);

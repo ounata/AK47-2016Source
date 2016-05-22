@@ -27,6 +27,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCS.Library", "..\..\Framew
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCS.Library.Data", "..\..\Framework\MCS.Library.Data\MCS.Library.Data.csproj", "{4313DE1E-738F-477D-B7FD-B237E9116670}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPTS.Data.Common", "..\..\PPTSFramework\PPTS.Data.Common\PPTS.Data.Common.csproj", "{0414177E-283E-4E91-8032-37228B715F16}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPTS.Data.Common.Entities", "..\..\PPTSFramework\PPTS.Data.Common.Entities\PPTS.Data.Common.Entities.csproj", "{FAE1D0A1-6BF2-47A1-8C62-109F00A15E86}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -184,6 +188,42 @@ Global
 		{4313DE1E-738F-477D-B7FD-B237E9116670}.Release|x64.Build.0 = Release|Any CPU
 		{4313DE1E-738F-477D-B7FD-B237E9116670}.Release|x86.ActiveCfg = Release|Any CPU
 		{4313DE1E-738F-477D-B7FD-B237E9116670}.Release|x86.Build.0 = Release|Any CPU
+		{0414177E-283E-4E91-8032-37228B715F16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0414177E-283E-4E91-8032-37228B715F16}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0414177E-283E-4E91-8032-37228B715F16}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0414177E-283E-4E91-8032-37228B715F16}.Debug|x64.Build.0 = Debug|Any CPU
+		{0414177E-283E-4E91-8032-37228B715F16}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0414177E-283E-4E91-8032-37228B715F16}.Debug|x86.Build.0 = Debug|Any CPU
+		{0414177E-283E-4E91-8032-37228B715F16}.DELUXEWORKSTEST|Any CPU.ActiveCfg = Debug|Any CPU
+		{0414177E-283E-4E91-8032-37228B715F16}.DELUXEWORKSTEST|Any CPU.Build.0 = Debug|Any CPU
+		{0414177E-283E-4E91-8032-37228B715F16}.DELUXEWORKSTEST|x64.ActiveCfg = Debug|Any CPU
+		{0414177E-283E-4E91-8032-37228B715F16}.DELUXEWORKSTEST|x64.Build.0 = Debug|Any CPU
+		{0414177E-283E-4E91-8032-37228B715F16}.DELUXEWORKSTEST|x86.ActiveCfg = Debug|Any CPU
+		{0414177E-283E-4E91-8032-37228B715F16}.DELUXEWORKSTEST|x86.Build.0 = Debug|Any CPU
+		{0414177E-283E-4E91-8032-37228B715F16}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0414177E-283E-4E91-8032-37228B715F16}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0414177E-283E-4E91-8032-37228B715F16}.Release|x64.ActiveCfg = Release|Any CPU
+		{0414177E-283E-4E91-8032-37228B715F16}.Release|x64.Build.0 = Release|Any CPU
+		{0414177E-283E-4E91-8032-37228B715F16}.Release|x86.ActiveCfg = Release|Any CPU
+		{0414177E-283E-4E91-8032-37228B715F16}.Release|x86.Build.0 = Release|Any CPU
+		{FAE1D0A1-6BF2-47A1-8C62-109F00A15E86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FAE1D0A1-6BF2-47A1-8C62-109F00A15E86}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FAE1D0A1-6BF2-47A1-8C62-109F00A15E86}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{FAE1D0A1-6BF2-47A1-8C62-109F00A15E86}.Debug|x64.Build.0 = Debug|Any CPU
+		{FAE1D0A1-6BF2-47A1-8C62-109F00A15E86}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FAE1D0A1-6BF2-47A1-8C62-109F00A15E86}.Debug|x86.Build.0 = Debug|Any CPU
+		{FAE1D0A1-6BF2-47A1-8C62-109F00A15E86}.DELUXEWORKSTEST|Any CPU.ActiveCfg = Debug|Any CPU
+		{FAE1D0A1-6BF2-47A1-8C62-109F00A15E86}.DELUXEWORKSTEST|Any CPU.Build.0 = Debug|Any CPU
+		{FAE1D0A1-6BF2-47A1-8C62-109F00A15E86}.DELUXEWORKSTEST|x64.ActiveCfg = Debug|Any CPU
+		{FAE1D0A1-6BF2-47A1-8C62-109F00A15E86}.DELUXEWORKSTEST|x64.Build.0 = Debug|Any CPU
+		{FAE1D0A1-6BF2-47A1-8C62-109F00A15E86}.DELUXEWORKSTEST|x86.ActiveCfg = Debug|Any CPU
+		{FAE1D0A1-6BF2-47A1-8C62-109F00A15E86}.DELUXEWORKSTEST|x86.Build.0 = Debug|Any CPU
+		{FAE1D0A1-6BF2-47A1-8C62-109F00A15E86}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FAE1D0A1-6BF2-47A1-8C62-109F00A15E86}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FAE1D0A1-6BF2-47A1-8C62-109F00A15E86}.Release|x64.ActiveCfg = Release|Any CPU
+		{FAE1D0A1-6BF2-47A1-8C62-109F00A15E86}.Release|x64.Build.0 = Release|Any CPU
+		{FAE1D0A1-6BF2-47A1-8C62-109F00A15E86}.Release|x86.ActiveCfg = Release|Any CPU
+		{FAE1D0A1-6BF2-47A1-8C62-109F00A15E86}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -196,9 +236,11 @@ Global
 		{33E530F9-6028-4884-BF6A-4F01CCAF4A84} = {C437F07A-FD6F-4C16-B5EF-4CA1DBCF27C1}
 		{4077B0B7-062A-4F6D-8A45-A180A2ED3215} = {60D9F0A0-A8B0-48A7-89F5-7C2DD2389706}
 		{4313DE1E-738F-477D-B7FD-B237E9116670} = {60D9F0A0-A8B0-48A7-89F5-7C2DD2389706}
+		{0414177E-283E-4E91-8032-37228B715F16} = {C437F07A-FD6F-4C16-B5EF-4CA1DBCF27C1}
+		{FAE1D0A1-6BF2-47A1-8C62-109F00A15E86} = {C437F07A-FD6F-4C16-B5EF-4CA1DBCF27C1}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 9
+		SccNumberOfProjects = 11
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://10.1.56.70:8080/tfs/pptsv2.0
 		SccLocalPath0 = .
@@ -232,5 +274,13 @@ Global
 		SccProjectTopLevelParentUniqueName8 = PPTS.Services.Customers.sln
 		SccProjectName8 = ../../Framework/MCS.Library.Data
 		SccLocalPath8 = ..\\..\\Framework\\MCS.Library.Data
+		SccProjectUniqueName9 = ..\\..\\PPTSFramework\\PPTS.Data.Common\\PPTS.Data.Common.csproj
+		SccProjectTopLevelParentUniqueName9 = PPTS.Services.Customers.sln
+		SccProjectName9 = ../../PPTSFramework/PPTS.Data.Common
+		SccLocalPath9 = ..\\..\\PPTSFramework\\PPTS.Data.Common
+		SccProjectUniqueName10 = ..\\..\\PPTSFramework\\PPTS.Data.Common.Entities\\PPTS.Data.Common.Entities.csproj
+		SccProjectTopLevelParentUniqueName10 = PPTS.Services.Customers.sln
+		SccProjectName10 = ../../PPTSFramework/PPTS.Data.Common.Entities
+		SccLocalPath10 = ..\\..\\PPTSFramework\\PPTS.Data.Common.Entities
 	EndGlobalSection
 EndGlobal

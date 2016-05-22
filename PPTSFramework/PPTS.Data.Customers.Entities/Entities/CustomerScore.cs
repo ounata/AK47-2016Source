@@ -1,9 +1,7 @@
-using MCS.Library.Core;
 using MCS.Library.Data.DataObjects;
 using MCS.Library.Data.Mapping;
+using PPTS.Data.Common.Entities;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
 
 namespace PPTS.Data.Customers.Entities
@@ -15,7 +13,7 @@ namespace PPTS.Data.Customers.Entities
     [Serializable]
     [ORTableMapping("CustomerScores")]
     [DataContract]
-    public class CustomerScore
+    public class CustomerScore : IEntityWithCreator, IEntityWithModifier
     {
         public CustomerScore()
         {
@@ -70,7 +68,31 @@ namespace PPTS.Data.Customers.Entities
         /// </summary>
         [ORFieldMapping("ScoreType")]
         [DataMember]
+        [ConstantCategory("C_Code_Abbr_BO_Customer_GradeTypeExt")]
         public string ScoreType
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 其它考试类型名称
+        /// </summary>
+        [ORFieldMapping("OtherScoreTypeName")]
+        [DataMember]
+        public string OtherScoreTypeName
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 考试年级
+        /// </summary>
+        [ORFieldMapping("ScoreGrade")]
+        [DataMember]
+        [ConstantCategory("C_CODE_ABBR_CUSTOMER_GRADE")]
+        public string ScoreGrade
         {
             get;
             set;
@@ -81,6 +103,7 @@ namespace PPTS.Data.Customers.Entities
         /// </summary>
         [ORFieldMapping("StudyYear")]
         [DataMember]
+        [ConstantCategory("C_CODE_ABBR_Customer_StudyYear")]
         public string StudyYear
         {
             get;
@@ -92,6 +115,7 @@ namespace PPTS.Data.Customers.Entities
         /// </summary>
         [ORFieldMapping("StudyTerm")]
         [DataMember]
+        [ConstantCategory("C_CODE_ABBR_Customer_StudyTerm")]
         public string StudyTerm
         {
             get;
@@ -103,6 +127,7 @@ namespace PPTS.Data.Customers.Entities
         /// </summary>
         [ORFieldMapping("StudyStage")]
         [DataMember]
+        [ConstantCategory("C_CODE_ABBR_Customer_StudyStage")]
         public string StudyStage
         {
             get;
@@ -110,44 +135,11 @@ namespace PPTS.Data.Customers.Entities
         }
 
         /// <summary>
-        /// 卷面总分
+        /// 班级人数
         /// </summary>
-        [ORFieldMapping("PaperScore")]
+        [ORFieldMapping("ClassPeoples")]
         [DataMember]
-        public decimal PaperScore
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 实际总得分
-        /// </summary>
-        [ORFieldMapping("RealScore")]
-        [DataMember]
-        public decimal RealScore
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 总分年级名次
-        /// </summary>
-        [ORFieldMapping("GradeRank")]
-        [DataMember]
-        public int GradeRank
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 总分班级名次
-        /// </summary>
-        [ORFieldMapping("ClassRank")]
-        [DataMember]
-        public int ClassRank
+        public int ClassPeoples
         {
             get;
             set;
@@ -169,6 +161,7 @@ namespace PPTS.Data.Customers.Entities
         /// </summary>
         [ORFieldMapping("StudentType")]
         [DataMember]
+        [ConstantCategory("C_CODE_ABBR_Exam_Customer_Type")]
         public string StudentType
         {
             get;
@@ -180,6 +173,7 @@ namespace PPTS.Data.Customers.Entities
         /// </summary>
         [ORFieldMapping("AdmissionType")]
         [DataMember]
+        [ConstantCategory("C_CODE_ABBR_Customer_AdmissionType")]
         public string AdmissionType
         {
             get;
@@ -213,7 +207,19 @@ namespace PPTS.Data.Customers.Entities
         /// </summary>
         [ORFieldMapping("ExamineMonth")]
         [DataMember]
+        [ConstantCategory("C_CODE_ABBR_Exam_Month")]
         public int ExamineMonth
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 科目成绩是否已全部添加
+        /// </summary>
+        [ORFieldMapping("IsAllAdded")]
+        [DataMember]
+        public int IsAllAdded
         {
             get;
             set;
@@ -244,8 +250,9 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 创建时间
         /// </summary>
-        [ORFieldMapping("CreateTime")]
+        [ORFieldMapping("CreateTime", UtcTimeToLocal = true)]
         [DataMember]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.Select | ClauseBindingFlags.Where)]
         public DateTime CreateTime
         {
             get;
@@ -277,7 +284,8 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 最后修改时间
         /// </summary>
-        [ORFieldMapping("ModifyTime")]
+        [ORFieldMapping("ModifyTime", UtcTimeToLocal = true)]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update, DefaultExpression = "GETUTCDATE()", ForceUseDefaultExpression = true)]
         [DataMember]
         public DateTime ModifyTime
         {

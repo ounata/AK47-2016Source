@@ -12,6 +12,9 @@ namespace PPTS.WebAPI.Orders.ViewModels.Purchase
     public class OrderItemViewCriteriaModel
     {
 
+        [InConditionMapping("CampusID")]
+        public string[] OrgIds { get; set; }
+
         [ConditionMapping("CustomerName")]
         public string StuName { set; get; }
 

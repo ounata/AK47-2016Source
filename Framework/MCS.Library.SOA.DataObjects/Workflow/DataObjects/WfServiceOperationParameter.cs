@@ -1,5 +1,6 @@
 ﻿using MCS.Library.Core;
 using MCS.Library.Data.DataObjects;
+using MCS.Web.Library.Script;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,11 @@ namespace MCS.Library.SOA.DataObjects.Workflow
     [XElementSerializable]
     public class WfServiceOperationParameter : ISimpleXmlSerializer
     {
+        private string _ParamJsonValue = null;
+        private string _Name = null;
+        private object _Value = null;
+        private WfSvcOperationParameterType _Type = WfSvcOperationParameterType.String;
+
         /// <summary>
         /// 构造方法
         /// </summary>
@@ -37,11 +43,11 @@ namespace MCS.Library.SOA.DataObjects.Workflow
         /// </summary>
         /// <param name="name">参数名称</param>
         /// <param name="value"></param>
-        public WfServiceOperationParameter(string name, string value)
+        public WfServiceOperationParameter(string name, object value)
         {
             name.CheckStringIsNullOrEmpty("name");
 
-            this.Name = name;
+            this._Name = name;
             this.Type = WfSvcOperationParameterType.String;
             this.Value = value;
         }
@@ -56,8 +62,9 @@ namespace MCS.Library.SOA.DataObjects.Workflow
         {
             name.CheckStringIsNullOrEmpty("name");
 
-            this.Name = name;
+            this._Name = name;
             this.Type = type;
+
             this.Value = value;
         }
 
@@ -69,7 +76,7 @@ namespace MCS.Library.SOA.DataObjects.Workflow
         {
             element.NullCheck("element");
 
-            this.Name = element.Name;
+            this._Name = element.Name;
             this.Type = element.Type;
             this.Value = element.Value;
         }
@@ -79,8 +86,14 @@ namespace MCS.Library.SOA.DataObjects.Workflow
         /// </summary>
         public string Name
         {
-            get;
-            set;
+            get
+            {
+                return this._Name;
+            }
+            set
+            {
+                this._Name = value;
+            }
         }
 
         /// <summary>
@@ -88,8 +101,14 @@ namespace MCS.Library.SOA.DataObjects.Workflow
         /// </summary>
         public WfSvcOperationParameterType Type
         {
-            get;
-            set;
+            get
+            {
+                return this._Type;
+            }
+            set
+            {
+                this._Type = value;
+            }
         }
 
         /// <summary>
@@ -97,8 +116,40 @@ namespace MCS.Library.SOA.DataObjects.Workflow
         /// </summary>
         public object Value
         {
-            get;
-            set;
+            get
+            {
+                return DeserializeJson(this._Value, this._ParamJsonValue);
+            }
+            set
+            {
+                this._Value = value;
+                this._ParamJsonValue = JSONSerializerExecute.Serialize(value);
+            }
+        }
+
+        /// <summary>
+        /// Json形式的值
+        /// </summary>
+        public string ParamJsonValue
+        {
+            get
+            {
+                return this._ParamJsonValue;
+            }
+        }
+
+        /// <summary>
+        /// 如果内部保存了Json，则返回反序列化的字典。否则直接返回Value
+        /// </summary>
+        /// <returns></returns>
+        public object GetDeserializedValue()
+        {
+            object result = this._Value;
+
+            if (this._ParamJsonValue.IsNotEmpty())
+                ExceptionHelper.DoSilentAction(() => result = JSONSerializerExecute.DeserializeObject(this._ParamJsonValue));
+
+            return result;
         }
 
         #region ISimpleXmlSerializer Members
@@ -120,6 +171,16 @@ namespace MCS.Library.SOA.DataObjects.Workflow
         }
 
         #endregion
+
+        private static object DeserializeJson(object originalValue, string json)
+        {
+            object result = originalValue;
+
+            if (originalValue is UnknownSerializationType && json.IsNotEmpty())
+                ExceptionHelper.DoSilentAction(() => result = JSONSerializerExecute.DeserializeObject(json));
+
+            return result;
+        }
 
         private static void SetXElementStringValue(XElement element, string key, object data)
         {

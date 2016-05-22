@@ -6,12 +6,13 @@ using PPTS.Data.Common.Executors;
 using PPTS.Data.Common.Security;
 using PPTS.Data.Customers.Adapters;
 using PPTS.Data.Customers.Entities;
+using PPTS.Data.Customers.Executors;
 using PPTS.WebAPI.Customers.ViewModels.PotentialCustomers;
 
 namespace PPTS.WebAPI.Customers.Executors
 {
     [DataExecutorDescription("编辑潜客家长")]
-    public class EditableParentExecutor : PPTSEditParentExecutorBase<EditableParentModel>
+    public class EditableParentExecutor : PPTSEditCustomerExecutorBase<EditableParentModel>
     {
         /// <summary>
         /// 
@@ -35,6 +36,8 @@ namespace PPTS.WebAPI.Customers.Executors
             ParentAdapter.Instance.UpdateInContext(this.Model.Parent);
 
             CustomerParentRelationAdapter.Instance.UpdateInContext(this.Model.CustomerParentRelation);
+            
+            PhoneAdapter.Instance.UpdateByOwnerIDInContext(this.Model.Parent.ParentID, this.Model.Parent.ToPhones(this.Model.Parent.ParentID));
 
             CustomerFulltextInfo parentFullText = CustomerFulltextInfo.Create(this.Model.Parent.ParentID, CustomerFulltextInfo.ParentsType);
 

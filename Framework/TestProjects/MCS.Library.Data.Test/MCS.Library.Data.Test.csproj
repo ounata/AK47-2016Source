@@ -48,6 +48,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Bin\MCS.Library.Data.dll</HintPath>
     </Reference>
+    <Reference Include="MCS.Library.Test.Data">
+      <HintPath>..\..\..\Bin\MCS.Library.Test.Data.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <Private>False</Private>
     </Reference>
@@ -66,8 +69,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdapterTest.cs" />
-    <Compile Include="Adapters\OrderAdapter.cs" />
-    <Compile Include="Adapters\OrderItemAdapter.cs" />
+    <Compile Include="Adapters\VersionedOrderAdapter.cs" />
+    <Compile Include="Adapters\VersionedOrderItemAdapter.cs" />
     <Compile Include="Adapters\TestObjectAdapter.cs" />
     <Compile Include="Adapters\UserAdapter.cs" />
     <Compile Include="Common.cs" />
@@ -90,6 +93,7 @@
     <Compile Include="ConditionMappingTest.cs" />
     <Compile Include="DataSourceTest.cs" />
     <Compile Include="SqlBuilderTest.cs" />
+    <Compile Include="OrderAndRepertoryTest.cs" />
     <Compile Include="VersionedAdapterTest.cs" />
   </ItemGroup>
   <ItemGroup>

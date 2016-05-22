@@ -14,7 +14,7 @@ namespace MCS.Library.Services
 
         public ServiceThreadCollection GetThreadStatus()
         {
-            return MCSServiceMain.Instance.Threads;
+            return MCSServiceMain.Instance.ServiceContainer.Threads;
         }
 
         #endregion

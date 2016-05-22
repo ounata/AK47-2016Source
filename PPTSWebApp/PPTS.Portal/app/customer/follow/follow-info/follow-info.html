@@ -1,0 +1,125 @@
+﻿<div class="widget-box">
+    <div class="widget-header">
+        <h4>
+            查看跟进记录
+        </h4>
+    </div>
+    <div class="widget-body">
+        <div class="widget-main no-padding">
+            <div class="clearfix form-actions mcs-form-actions">
+                <div class="col-md-offset-3 col-md-9">
+                    <mcs-button category="cancel" text="返回跟进列表" click="$state.go('ppts.follow')"></mcs-button>
+                </div>
+            </div>
+            <div class="page-header">
+                <span>跟进信息</span>
+            </div>
+            <div class="profile-user-info profile-user-info-striped mcs-user-profile">
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> 跟进方式 </div>
+                    <div class="profile-info-value">
+                        <span>{{ vm.follow.followType | followType }}</span>
+                    </div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> 跟进对象 </div>
+                    <div class="profile-info-value">
+
+                        <span>{{ vm.follow.followObject | followObject }}</span>
+                    </div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> 想要补习的科目 </div>
+                    <div class="profile-info-value">
+
+                        <span>{{ vm.follow.intensionSubjects | subject }}</span>
+                    </div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> 购买意愿 </div>
+                    <div class="profile-info-value">
+
+                        <span>{{ vm.follow.purchaseIntention | purchaseIntention }}</span>
+                    </div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> 客户级别 </div>
+                    <div class="profile-info-value">
+
+                        <span>{{ vm.follow.customerLevel | customerLevel }}</span>
+                    </div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> 无效理由 </div>
+                    <div class="profile-info-value">
+
+                        <span>{{ vm.follow.invalidReason }}</span>
+                    </div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> 沟通结果 </div>
+                    <div class="profile-info-value">
+
+                        <span>{{ vm.follow.talkMainResult | mainTalk }}  {{ vm.follow.TalkSubResult | subTalk }}</span>
+                    </div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> 跟进前阶段 </div>
+                    <div class="profile-info-value">
+
+                        <span>{{ vm.previousFollowStage | followStage }}</span>
+                    </div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> 本次跟进阶段 </div>
+                    <div class="profile-info-value">
+
+                        <span>{{ vm.follow.followStage | followStage }}</span>
+                    </div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> 预计上门时间 </div>
+                    <div class="profile-info-value">
+
+                        <span>{{ vm.follow.planVerifyTime | date:'yyyy-MM-dd HH:mm:ss' }}</span>
+                    </div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> 预计下次沟通时间 </div>
+                    <div class="profile-info-value">
+
+                        <span>{{ vm.follow.nextFollowTime | date:'yyyy-MM-dd HH:mm:ss' }}</span>
+                    </div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> 预计签约时间 </div>
+                    <div class="profile-info-value">
+
+                        <span>{{ vm.follow.planSignDate | date:'yyyy-MM-dd HH:mm:ss' }}</span>
+                    </div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> 此次通电号码 </div>
+                    <div class="profile-info-value">
+
+                        <span>{{ vm.follow.followPhone }}</span>
+                    </div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> 是否在其他机构辅导 </div>
+                    <div class="profile-info-value">
+
+                        <span>{{ vm.follow.isStudyThere }}</span>
+                    </div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> 跟进情况备注 </div>
+                    <div class="profile-info-value">
+
+                        <span>{{ vm.follow.followMemo }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

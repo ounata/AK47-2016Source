@@ -1,13 +1,19 @@
 ﻿using MCS.Library.Data;
 using MCS.Library.Data.Adapters;
+using MCS.Library.OGUPermission;
+using MCS.Library.Principal;
 using MCS.Web.MVC.Library.Filters;
+using PPTS.Data.Common;
 using PPTS.Data.Common.Adapters;
+using PPTS.Data.Common.Security;
+using PPTS.Data.Customers;
 using PPTS.Data.Customers.Adapters;
 using PPTS.Data.Customers.DataSources;
 using PPTS.Data.Customers.Entities;
 using PPTS.Web.MVC.Library.Filters;
 using PPTS.WebAPI.Customers.DataSources;
 using PPTS.WebAPI.Customers.Executors;
+using PPTS.WebAPI.Customers.ViewModels.Accounts;
 using PPTS.WebAPI.Customers.ViewModels.Parents;
 using PPTS.WebAPI.Customers.ViewModels.PotentialCustomers;
 using System;
@@ -17,6 +23,7 @@ using System.Web.Http;
 
 namespace PPTS.WebAPI.Customers.Controllers
 {
+    [ApiPassportAuthentication]
     public class PotentialCustomersController : ApiController
     {
         #region api/potentialcustomers/getallcustomers
@@ -141,21 +148,22 @@ namespace PPTS.WebAPI.Customers.Controllers
         {
             CustomerParentsQueryResult result = new CustomerParentsQueryResult();
 
-            result.CustomerParentRelations = CustomerParentRelationAdapter.Instance.Load(action =>
-            {
-                action.AppendItem("CustomerID", id);
-            }, DateTime.MinValue);
+            result.Relations = CustomerParentRelationAdapter.Instance.Load(id);
 
-            if (result.CustomerParentRelations != null && result.CustomerParentRelations.Count > 0)
+            if (result.Relations != null && result.Relations.Count > 0)
             {
-                var builder = new InLoadingCondition((p) =>
+                var builder = new InLoadingCondition((condition) =>
                 {
-                    result.CustomerParentRelations.ForEach((relation) =>
-                    {
-                        p.AppendItem(relation.ParentID);
-                    });
+                    result.Relations.ForEach((relation) => { condition.AppendItem(relation.ParentID); });
                 }, "ParentID");
-                result.Parents = ParentAdapter.Instance.LoadByInBuilder(builder, DateTime.MinValue);
+
+                result.Parents = GenericParentAdapter<ParentModel, ParentModelCollection>.Instance.LoadByInBuilder(builder, DateTime.MinValue);
+
+                result.Parents.ForEach(parent =>
+                {
+                    PhoneAdapter.Instance.LoadByOwnerIDInContext(parent.ParentID, phone => parent.FillFromPhones(phone));
+                    PhoneAdapter.Instance.GetDbContext().DoAction(context => context.ExecuteDataSetSqlInContext());
+                });
             }
 
             result.Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(CreatablePortentialCustomerModel), typeof(Parent));
@@ -164,7 +172,7 @@ namespace PPTS.WebAPI.Customers.Controllers
         }
         #endregion
 
-        #region api/potentialcustomers/GetCustomerParent
+        #region api/potentialcustomers/getcustomerparent
         [HttpGet]
         public EditableParentModel GetCustomerParent(string id, string customerId)
         {
@@ -252,20 +260,51 @@ namespace PPTS.WebAPI.Customers.Controllers
 
         #endregion
 
-        #region 判断当前潜客是否可以充值缴费
+        #region api/potentialcustomers/createparent
+
+        [HttpGet]
+        public CreatablePotentialCustomerParentModel CreateParent(string id)
+        {
+            CreatablePotentialCustomerParentModel result = new CreatablePotentialCustomerParentModel();
+            result.Customer = GenericPotentialCustomerAdapter<PotentialCustomerModel, List<PotentialCustomerModel>>.Instance.Load(id);
+            result.Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(CreatablePotentialCustomerParentModel), typeof(Parent));
+            return result;
+        }
+
+        [HttpPost]
+        public void CreateParent(CreatablePotentialCustomerParentModel model)
+        {
+            CreatePotentialCustomerParentExecutor executor = new CreatePotentialCustomerParentExecutor(model);
+            executor.Execute();
+        }
+
+        #endregion
+
+        #region api/potentialcustomers/assertaccountcharge
 
         [HttpGet]
         public AssertResult AssertAccountCharge(string customerID)
         {
-            //CustomerStaffRelationCollection collection = CustomerStaffRelationAdapter.Instance.LoadByCustomerID(id);
-            //CustomerStaffRelation relation = collection.Find(x => x.RelationType == Data.Customers.CustomerRelationType.Consultant);
-            //if (relation != null)
-            //{
-
-            //}
-            //return new AssertResult(false, "当前用户不清楚岗位类型，无法进行充值");
-            return new AssertResult();
+            return ChargeApplyResult.Validate(customerID, DeluxeIdentity.CurrentUser);
         }
+        #endregion
+
+        #region api/potentialcustomers/transfercustomers
+
+        [HttpPost]
+        public CreatableCustomerTransferResourceModel GetTransferResources(string[] customerIds)
+        {
+            return new CreatableCustomerTransferResourceModel(customerIds);
+        }
+
+        [HttpPost]
+        public void TransferCustomers(CreatableCustomerTransferResourceModel model)
+        {
+            AddCustomerTranferResourceExecutor executor = new AddCustomerTranferResourceExecutor(model);
+
+            executor.Execute();
+        }
+
         #endregion
     }
 }

@@ -19,12 +19,22 @@ namespace PPTS.Services.Customers.Services
     {
         [WfJsonFormatter]
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
-        public AccountCollectionQueryResult QueryAccountCollectionByCustomerID(string CustomerID)
+        public AccountCollectionQueryResult QueryAccountCollectionByCustomerID(string customerID)
         {
-            AccountCollectionQueryResult queryresult = new AccountCollectionQueryResult();
-            WhereLoadingCondition where_condition = new WhereLoadingCondition(builder => builder.AppendItem("CustomerID", CustomerID));
-            queryresult.AccountCollection=AccountAdapter.Instance.Load(where_condition, DateTime.MinValue).ToList();
-            return queryresult;
+            AccountCollectionQueryResult queryResult = new AccountCollectionQueryResult();
+            WhereLoadingCondition whereCondition = new WhereLoadingCondition(builder => builder.AppendItem("CustomerID", customerID).AppendItem("AccountMoney", 0, ">"));
+            queryResult.AccountCollection = AccountAdapter.Instance.Load(whereCondition, DateTime.MinValue).ToList();
+            return queryResult;
+        }
+
+        [WfJsonFormatter]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+
+        public AccountChargeCollectionQueryResult QueryAccountChargeCollectionByCustomerID(string customerID, DateTime startTime)
+        {
+            AccountChargeCollectionQueryResult queryResult = new AccountChargeCollectionQueryResult();
+            queryResult.AccountChargeCollection = AccountChargeApplyAdapter.Instance.LoadValidChargeByCustomerID(customerID, startTime).ToList();
+            return queryResult;
         }
     }
 }

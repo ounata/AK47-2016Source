@@ -1,0 +1,35 @@
+﻿<!-- #开始：潜客列表.快速查询条件 -->
+<div class="mcs-panel-search well well-sm">
+    <div class="portlet">
+        <div class="portlet-title line">
+            <div class="caption">
+                <label class="quick-search"><i class="ace-icon fa fa-search bigger-125"></i> 快速查询</label>
+            </div>
+        </div>
+        <div class="portlet-body">
+            <div>
+               
+                    <ppts-select-branch  model="vm.criteria.orgIds" />
+              
+             
+                    <ppts-daterangepicker  class="search"></ppts-daterangepicker>
+                    <ppts-select category="refundAlertStatus" class="ppts-select-search" model="vm.criteria.alertStatus" async="false" />
+
+
+                    <mcs-button category="search" click="vm.search()" class="search-btn" size="medium" />
+              
+            </div>
+
+           
+
+
+
+        </div>
+    </div>
+</div>
+<div class="mcs-panel-toolbar">
+    <mcs-button category="add" text="新增折扣表" ppts-job-functions="新增折扣表" click="$state.go('ppts.confirmdoor-add')"></mcs-button>
+    <mcs-button category="add" text="删除折扣表" ppts-job-functions="删除折扣表" click="$state.go('ppts.confirmdoor-add')"></mcs-button>
+    <mcs-button category="add" text="导出买赠表" ppts-job-functions="导出买赠表" click="$state.go('ppts.confirmdoor-add')"></mcs-button>
+</div>
+<!-- /结束：潜客列表.快速查询条件 -->

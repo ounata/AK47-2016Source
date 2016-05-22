@@ -11,7 +11,6 @@ namespace MCS.Library.Data
     /// <summary>
     /// 抽象数据库实体类
     /// </summary>
-    [System.Diagnostics.DebuggerNonUserCode]
     public abstract partial class Database
     {
         #region Protected Fields

@@ -20,6 +20,53 @@ namespace PPTS.Data.Orders.Adapters
 
 		private AssetViewAdapter()
 		{
-		}        
-	}
+		}
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="OperaterCampusID"></param>
+        /// <param name="CustomerID"></param>
+        /// <returns></returns>
+        public AssetViewCollection LoadCollection(string operaterCampusID, string customerID)
+        {
+            WhereLoadingCondition wLC = new WhereLoadingCondition(builder => builder
+            .AppendItem("Amount", 0, ">")
+            .AppendItem("CategoryType",1)
+            .AppendItem("CustomerID", customerID)
+            .AppendItem("CustomerCampusID", operaterCampusID));
+
+            return this.Load(wLC);
+        }
+
+        public AssetViewCollection LoadCollection(string operaterCampusID, string customerID,string subject,string grade)
+        {
+            WhereSqlClauseBuilder wSCB = new WhereSqlClauseBuilder();
+            wSCB.AppendItem("Amount", 0, ">")
+            .AppendItem("CategoryType", 1)
+            .AppendItem("CustomerID", customerID)
+            .AppendItem("CustomerCampusID", operaterCampusID);
+            string cc = string.Format("((subject='{0}' and grade='{1}') or (subject='0' and grade='{1}') or (subject='{0}' and grade='0') or (subject='0' and grade='0'))", subject,grade);
+            wSCB.AppendItem(cc, "","",true);
+            WhereLoadingCondition wLC = new WhereLoadingCondition( s=> { foreach (var v in wSCB) s.Add(v); });
+            return this.Load(wLC);
+        }
+
+        public AssetView Load(string operaterCampusID, string customerID, string assetID)
+        {
+            WhereLoadingCondition wLC = new WhereLoadingCondition(builder => builder
+           .AppendItem("Amount", 0, ">").AppendItem("AssetID", assetID)
+           .AppendItem("CategoryType", 1)
+           .AppendItem("CustomerID", customerID)
+           .AppendItem("CustomerCampusID", operaterCampusID));
+
+            return this.Load(wLC).FirstOrDefault();
+        }
+
+        public AssetView Load(string itemId)
+        {
+            return Load(new WhereLoadingCondition(builder => builder.AppendItem("AssetRefID", itemId))).SingleOrDefault();
+        }
+
+    }
 }

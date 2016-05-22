@@ -54,14 +54,14 @@
                     <label>产品单价：</label>
                 </td>
                 <td class="col-sm-4">
-                    <label>{{vm.product.productPrice  }}</label>
+                    <label>{{vm.product.productPrice | currency }}</label>
                 </td>
                 <td class="col-sm-2 text-right">
                     <label>
                         目标单价：
                     </label>
                 <td class="col-sm-4">
-                    <label>{{ vm.product.targetPrice }}</label>
+                    <label>{{ vm.product.targetPrice | currency }}</label>
                 </td>
             </tr>
 
@@ -148,15 +148,7 @@
                     <label>销售大区分公司：</label>
                 </td>
                 <td>
-                    <label>xx</label>
-                </td>
-            </tr>
-            <tr class="row">
-                <td class="col-sm-2 text-right">
-                    <label>销售大区分公司：</label>
-                </td>
-                <td>
-                    <label>xxx</label>
+                    {{ vm.showCampus() }}
                 </td>
             </tr>
             <tr class="row">

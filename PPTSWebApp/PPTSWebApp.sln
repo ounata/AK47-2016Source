@@ -29,6 +29,20 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCS.Web.API", "..\MCSWebApp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCS.Web.Component", "..\MCSWebApp\MCS.Web.Component\MCS.Web.Component.csproj", "{FBEDBD75-FCF5-4FD7-AEA7-1F814D2E68DD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCS.Web.MVC.Library", "..\Framework\MCS.Web.MVC.Library\MCS.Web.MVC.Library.csproj", "{A9962EDB-8271-4D6B-8513-BEF4000DC7B1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPTS.WebAPI.Common", "PPTS.WebAPI.Common\PPTS.WebAPI.Common.csproj", "{EC005DE8-1DCB-4936-B6B3-E4DC70C319F2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPTS.WebAPI.CustomersTests", "PPTS.WebAPI.CustomersTests\PPTS.WebAPI.CustomersTests.csproj", "{566CED63-56D8-42E4-8A69-198F0F4B90F0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PermissionCenterServices", "..\MCSWebApp\PermissionCenterServices\PermissionCenterServices.csproj", "{1B601749-C27A-40E6-8F5C-00E2E1E92AA2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResponsivePassportService", "..\MCSWebApp\ResponsivePassportService\ResponsivePassportService.csproj", "{05E02101-5FF3-4D69-9EBF-D80D0B4B9326}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPTS.WebAPI.Common.Test", "..\PPTSWebAPITest\PPTS.WebAPI.Common.Test\PPTS.WebAPI.Common.Test.csproj", "{BA4E9715-378E-41EC-833C-FD9870A3D5E4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPTS.Web.Component", "PPTS.Web.Component\PPTS.Web.Component.csproj", "{D40DC48B-6186-4DCF-8693-3CDB8F7F8245}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -114,12 +128,54 @@ Global
 		{FBEDBD75-FCF5-4FD7-AEA7-1F814D2E68DD}.DELUXEWORKSTEST|Any CPU.Build.0 = Debug|Any CPU
 		{FBEDBD75-FCF5-4FD7-AEA7-1F814D2E68DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FBEDBD75-FCF5-4FD7-AEA7-1F814D2E68DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9962EDB-8271-4D6B-8513-BEF4000DC7B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9962EDB-8271-4D6B-8513-BEF4000DC7B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9962EDB-8271-4D6B-8513-BEF4000DC7B1}.DELUXEWORKSTEST|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9962EDB-8271-4D6B-8513-BEF4000DC7B1}.DELUXEWORKSTEST|Any CPU.Build.0 = Debug|Any CPU
+		{A9962EDB-8271-4D6B-8513-BEF4000DC7B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9962EDB-8271-4D6B-8513-BEF4000DC7B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC005DE8-1DCB-4936-B6B3-E4DC70C319F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC005DE8-1DCB-4936-B6B3-E4DC70C319F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC005DE8-1DCB-4936-B6B3-E4DC70C319F2}.DELUXEWORKSTEST|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC005DE8-1DCB-4936-B6B3-E4DC70C319F2}.DELUXEWORKSTEST|Any CPU.Build.0 = Debug|Any CPU
+		{EC005DE8-1DCB-4936-B6B3-E4DC70C319F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC005DE8-1DCB-4936-B6B3-E4DC70C319F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{566CED63-56D8-42E4-8A69-198F0F4B90F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{566CED63-56D8-42E4-8A69-198F0F4B90F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{566CED63-56D8-42E4-8A69-198F0F4B90F0}.DELUXEWORKSTEST|Any CPU.ActiveCfg = Debug|Any CPU
+		{566CED63-56D8-42E4-8A69-198F0F4B90F0}.DELUXEWORKSTEST|Any CPU.Build.0 = Debug|Any CPU
+		{566CED63-56D8-42E4-8A69-198F0F4B90F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{566CED63-56D8-42E4-8A69-198F0F4B90F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B601749-C27A-40E6-8F5C-00E2E1E92AA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B601749-C27A-40E6-8F5C-00E2E1E92AA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B601749-C27A-40E6-8F5C-00E2E1E92AA2}.DELUXEWORKSTEST|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B601749-C27A-40E6-8F5C-00E2E1E92AA2}.DELUXEWORKSTEST|Any CPU.Build.0 = Debug|Any CPU
+		{1B601749-C27A-40E6-8F5C-00E2E1E92AA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B601749-C27A-40E6-8F5C-00E2E1E92AA2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05E02101-5FF3-4D69-9EBF-D80D0B4B9326}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05E02101-5FF3-4D69-9EBF-D80D0B4B9326}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05E02101-5FF3-4D69-9EBF-D80D0B4B9326}.DELUXEWORKSTEST|Any CPU.ActiveCfg = Debug|Any CPU
+		{05E02101-5FF3-4D69-9EBF-D80D0B4B9326}.DELUXEWORKSTEST|Any CPU.Build.0 = Debug|Any CPU
+		{05E02101-5FF3-4D69-9EBF-D80D0B4B9326}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05E02101-5FF3-4D69-9EBF-D80D0B4B9326}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA4E9715-378E-41EC-833C-FD9870A3D5E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA4E9715-378E-41EC-833C-FD9870A3D5E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA4E9715-378E-41EC-833C-FD9870A3D5E4}.DELUXEWORKSTEST|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA4E9715-378E-41EC-833C-FD9870A3D5E4}.DELUXEWORKSTEST|Any CPU.Build.0 = Debug|Any CPU
+		{BA4E9715-378E-41EC-833C-FD9870A3D5E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA4E9715-378E-41EC-833C-FD9870A3D5E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D40DC48B-6186-4DCF-8693-3CDB8F7F8245}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D40DC48B-6186-4DCF-8693-3CDB8F7F8245}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D40DC48B-6186-4DCF-8693-3CDB8F7F8245}.DELUXEWORKSTEST|Any CPU.ActiveCfg = Debug|Any CPU
+		{D40DC48B-6186-4DCF-8693-3CDB8F7F8245}.DELUXEWORKSTEST|Any CPU.Build.0 = Debug|Any CPU
+		{D40DC48B-6186-4DCF-8693-3CDB8F7F8245}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D40DC48B-6186-4DCF-8693-3CDB8F7F8245}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 14
+		SccNumberOfProjects = 21
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://10.1.56.70:8080/tfs/pptsv2.0
 		SccLocalPath0 = .
@@ -162,5 +218,26 @@ Global
 		SccProjectUniqueName13 = ..\\MCSWebApp\\MCS.Web.Component\\MCS.Web.Component.csproj
 		SccProjectName13 = ../MCSWebApp/MCS.Web.Component
 		SccLocalPath13 = ..\\MCSWebApp\\MCS.Web.Component
+		SccProjectUniqueName14 = PPTS.WebAPI.CustomersTests\\PPTS.WebAPI.CustomersTests.csproj
+		SccProjectName14 = PPTS.WebAPI.CustomersTests
+		SccLocalPath14 = PPTS.WebAPI.CustomersTests
+		SccProjectUniqueName15 = ..\\Framework\\MCS.Web.MVC.Library\\MCS.Web.MVC.Library.csproj
+		SccProjectName15 = ../Framework/MCS.Web.MVC.Library
+		SccLocalPath15 = ..\\Framework\\MCS.Web.MVC.Library
+		SccProjectUniqueName16 = ..\\MCSWebApp\\PermissionCenterServices\\PermissionCenterServices.csproj
+		SccProjectName16 = ../MCSWebApp/PermissionCenterServices
+		SccLocalPath16 = ..\\MCSWebApp\\PermissionCenterServices
+		SccProjectUniqueName17 = ..\\MCSWebApp\\ResponsivePassportService\\ResponsivePassportService.csproj
+		SccProjectName17 = ../MCSWebApp/ResponsivePassportService
+		SccLocalPath17 = ..\\MCSWebApp\\ResponsivePassportService
+		SccProjectUniqueName18 = PPTS.WebAPI.Common\\PPTS.WebAPI.Common.csproj
+		SccProjectName18 = PPTS.WebAPI.Common
+		SccLocalPath18 = PPTS.WebAPI.Common
+		SccProjectUniqueName19 = ..\\PPTSWebAPITest\\PPTS.WebAPI.Common.Test\\PPTS.WebAPI.Common.Test.csproj
+		SccProjectName19 = ../PPTSWebAPITest/PPTS.WebAPI.Common.Test
+		SccLocalPath19 = ..\\PPTSWebAPITest\\PPTS.WebAPI.Common.Test
+		SccProjectUniqueName20 = PPTS.Web.Component\\PPTS.Web.Component.csproj
+		SccProjectName20 = PPTS.Web.Component
+		SccLocalPath20 = PPTS.Web.Component
 	EndGlobalSection
 EndGlobal

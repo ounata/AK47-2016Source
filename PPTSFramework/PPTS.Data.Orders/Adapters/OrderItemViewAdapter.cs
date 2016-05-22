@@ -17,6 +17,10 @@ namespace PPTS.Data.Orders.Adapters
         {
         }
 
+        public OrderItemView Load(string itemId)
+        {
+            return Load(new WhereLoadingCondition(builder => builder.AppendItem("ItemID", itemId))).SingleOrDefault();
+        }
 
         public OrderItemViewCollection LoadCollection(string OperaterCampusID, string CustomerID)
         {

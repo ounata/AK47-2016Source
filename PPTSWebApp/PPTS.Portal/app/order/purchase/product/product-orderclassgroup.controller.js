@@ -3,18 +3,15 @@
         ppts.config.dataServiceConfig.productDataService],
         function (product) {
             product.registerController('orderClassGroupController', [
-                '$scope', '$state','$stateParams', 'dataSyncService', 'purchaseCourseDataService',
+                '$scope', '$state', '$stateParams', 'dataSyncService', 'purchaseCourseDataService',
                 function ($scope, $state, $stateParams, dataSyncService, purchaseCourseDataService) {
                     var vm = this;
                     var productId = $stateParams.productId;
-                    var customerId = $stateParams.customerId || '657323';
+                    var customerId = $stateParams.customerId;
+                    var productCampusId = $stateParams.productCampusId || 8;
 
                     //查询条件
-                    vm.criteria = {
-                        productID: productId,
-                        className: '',
-                        pagedParam: { "pageIndex": 1, "pageSize": 10, "totalCount": -1 }
-                    };
+                    vm.criteria = { productID: productId, className: '', };
 
                     vm.data = {
                         selection: 'checkbox',
@@ -28,7 +25,7 @@
                             template: '{{row.lessonCount - row.finishedLessons}}'
                         }, {
                             name: "可订购数量",
-                            template: '{{ row.orderAmount + row.lessonCount - row.finishedLessons }}'
+                            template: '{{ row.lessonCount - row.invalidLessons }}'
                         }],
                         pager: {
                             pageIndex: 1,
@@ -63,10 +60,10 @@
                     };
 
 
-                    vm.goBack = function () { $state.go('ppts.purchaseClassGroupList'); };
+                    vm.goBack = function () { $state.go('ppts.purchaseClassGroupList', { customerId: customerId }); };
 
                     vm.buy = function () {
-                        var data = $(vm.data.rowsSelected).map(function (i, v) { return { productID: productId, customerID: customerId, classId: v.classID }; }).toArray();
+                        var data = $(vm.data.rowsSelected).map(function (i, v) { return { productID: productId, customerID: customerId, classId: v.classID, orderType: 3, productCampusID: productCampusId }; }).toArray();
                         purchaseCourseDataService.addShoppingCart(data, function (entity) { console.log(entity); });
                     };
 
@@ -75,7 +72,7 @@
                     };
                     vm.init();
 
-                    
+
 
 
                 }]);

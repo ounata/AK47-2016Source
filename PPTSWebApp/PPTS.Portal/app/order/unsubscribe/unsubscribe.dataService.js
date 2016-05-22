@@ -8,6 +8,7 @@
                 'post': { method: 'POST' },
                 'query': { method: 'GET', isArray: false }
             });
+
         //--------------------------分页--------------------------------------------
         resource.getAllDebookOrders = function (criteria, callback) {
             resource.post({ operation: 'GetAllDebookOrders' }, criteria, function (entity) { if (callback) { callback(entity); } });
@@ -18,7 +19,9 @@
         }
         //--------------------------分页--------------------------------------------
 
-
+        resource.unsubscribe = function(data,callback){
+            resource.post({ operation: 'Unsubscribe' }, data, function (entity) { if (callback) { callback(entity); } });
+        }
 
         return resource;
     }]);

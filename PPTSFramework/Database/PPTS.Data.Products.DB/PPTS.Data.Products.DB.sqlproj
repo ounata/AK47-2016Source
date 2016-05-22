@@ -97,6 +97,10 @@
     <Build Include="PM\Views\v_CategoryCatalogs.sql" />
     <Build Include="PM\Views\v_Products.sql" />
     <Build Include="PM\Tables\ProductClassStats.sql" />
+    <Build Include="PM\Tables\PresentPermissionApplies.sql" />
+    <Build Include="PM\Views\v_PresentPermissions_Current.sql" />
+    <Build Include="PM\Tables\DiscountPermissionsApplies.sql" />
+    <Build Include="PM\Views\v_DiscountPermissions_Current.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PPTS.Data.Product.Local.Dev.DB.publish.xml" />

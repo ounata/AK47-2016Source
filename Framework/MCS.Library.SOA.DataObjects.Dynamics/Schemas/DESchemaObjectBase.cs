@@ -258,7 +258,7 @@ namespace MCS.Library.SOA.DataObjects.Dynamics.Schemas
         public virtual void Merge(DESchemaObjectCollection source)
         {
             if (source != null)
-                source.ForEach(this.AddNotExistsItem);
+                source.ForEach((s) => this.AddNotExistsItem(s));
         }
 
         /// <summary>

@@ -31,8 +31,8 @@ namespace PPTS.Data.Products.Executors
         public string[] ProductIds { set; get; }
 
 
-        public Action<ProductView, ProductExOfCourse, ProductSalaryRuleCollection> FillProductView { set; get; }
-        public Action<Product, ProductExOfCourse, ProductSalaryRuleCollection> FillProduct { set; get; }
+        public Action<ProductView, ProductExOfCourse, ProductSalaryRuleCollection, ProductPermissionCollection> FillProductView { set; get; }
+        public Action<Product, ProductExOfCourse, ProductSalaryRuleCollection, ProductPermissionCollection> FillProduct { set; get; }
 
         protected override object DoOperation(DataExecutionContext<UserOperationLogCollection> context)
         {
@@ -41,8 +41,9 @@ namespace PPTS.Data.Products.Executors
             if (OperationType == "DelaySell") { return ProductAdapter.Instance.DelaySellProduct(ProductId, Date); }
             //if (OperationType == "StartSell") { return ProductAdapter.Instance.StartSellProduct(ProductId, Date); }
 
-            if (OperationType == "GetProducts") {
-                return ProductViewAdapter.Instance.LoadByInBuilder(new MCS.Library.Data.Adapters.InLoadingCondition() { DataField= "ProductId", BuilderAction = (builder)=> { builder.AppendItem(ProductIds); } });
+            if (OperationType == "GetProducts")
+            {
+                return ProductViewAdapter.Instance.LoadByInBuilder(new MCS.Library.Data.Adapters.InLoadingCondition() { DataField = "ProductId", BuilderAction = (builder) => { builder.AppendItem(ProductIds); } });
             }
 
             if (OperationType == "GetProductView")
@@ -51,6 +52,8 @@ namespace PPTS.Data.Products.Executors
                 ProductView productView = null;
                 ProductExOfCourse exOfCourse = null;
                 ProductSalaryRuleCollection salaryRules = null;
+                ProductPermissionCollection permissions = null;
+
                 ProductViewAdapter.Instance.LoadByProductIDInContext(ProductId, collection =>
                 {
                     productView = collection.FirstOrNull();
@@ -59,15 +62,15 @@ namespace PPTS.Data.Products.Executors
                 {
                     exOfCourse = collection.FirstOrNull();
                 });
-                ProductSalaryRuleAdapter.Instance.LoadByProductIDInContext(ProductId, collection =>
-                {
-                    salaryRules = collection;
-                });
+                ProductSalaryRuleAdapter.Instance.LoadByProductIDInContext(ProductId, collection => { salaryRules = collection; });
+
+                ProductPermissionAdapter.Instance.LoadByProductIDInContext(ProductId, collection => { permissions = collection; });
+
                 using (var currentContext = ProductExOfCourseAdapter.Instance.GetDbContext())
                 {
                     currentContext.ExecuteDataSetSqlInContext();
                 }
-                FillProductView(productView, exOfCourse, salaryRules);
+                FillProductView(productView, exOfCourse, salaryRules, permissions);
 
                 return true;
             }
@@ -92,6 +95,8 @@ namespace PPTS.Data.Products.Executors
                 Product product = null;
                 ProductExOfCourse exOfCourse = null;
                 ProductSalaryRuleCollection salaryRules = null;
+                ProductPermissionCollection permissions = null;
+
                 ProductAdapter.Instance.LoadInContext(ProductId, entity =>
                 {
                     product = entity;
@@ -104,11 +109,14 @@ namespace PPTS.Data.Products.Executors
                 {
                     salaryRules = collection;
                 });
+
+                ProductPermissionAdapter.Instance.LoadByProductIDInContext(ProductId, collection => { permissions = collection; });
+
                 using (var currentContext = ProductAdapter.Instance.GetDbContext())
                 {
                     currentContext.ExecuteDataSetSqlInContext();
                 }
-                FillProduct(product, exOfCourse, salaryRules);
+                FillProduct(product, exOfCourse, salaryRules, permissions);
 
                 return true;
             }

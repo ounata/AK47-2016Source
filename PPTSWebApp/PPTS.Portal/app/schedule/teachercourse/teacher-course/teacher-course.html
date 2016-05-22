@@ -1,0 +1,44 @@
+﻿<!-- #开始：教师课表.快速查询条件 -->
+<div class="mcs-panel-search well well-sm">
+    <div class="portlet">
+        <div class="portlet-title line">
+            <div class="caption">
+                <label class="quick-search"><i class="ace-icon fa fa-search bigger-125"></i> 快速查询</label>
+            </div>
+        </div>
+        <div class="portlet-body">
+            <div class="line-height-40">
+                <div class="input-group input-xlarge mcs-input-group pull-left">
+                    <ppts-daterangepicker start-date="vm.criteria.startTime" end-date="vm.criteria.endTime" class="search" />
+                    <ppts-select-branch model="vm.criteria.campusID" />
+                </div>
+            </div>
+        
+            <div class="ppts-oneline-block">
+                <ppts-select caption="上课科目" category="subject" model="vm.criteria.subject" class="ppts-select-search" />
+                <ppts-select caption="上课年级" category="grade" model="vm.criteria.grade" class="ppts-select-search" />
+                <mcs-input placeholder="教师姓名" class="search-input" model="vm.criteria.teacherName" />
+                <button class="btn btn-sm btn-success search-input" ng-click="vm.queryList()">
+                    <i class="ace-icon fa fa-search"></i>
+                    查询
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /结束：教师课表.快速查询条件 -->
+<!-- #开始：教师课表.工具栏 -->
+<div class="mcs-panel-toolbar">
+    <mcs-button category="print" text="打印" click=""></mcs-button>
+</div>
+<div class="alert alert-block alert-danger" ng-show="vm.errorMessage">
+    <button type="button" class="close" data-dismiss="alert">
+        <i class="ace-icon fa fa-times"></i>
+    </button>
+    <i class="ace-icon fa fa-warning"></i>
+    {{vm.errorMessage}}
+</div>
+<!-- /结束：教师课表.工具栏 -->
+<!-- #开始：教师课表.数据表格 -->
+<mcs-datatable data="vm.data" />
+<!-- /结束：教师课表.数据表格 -->

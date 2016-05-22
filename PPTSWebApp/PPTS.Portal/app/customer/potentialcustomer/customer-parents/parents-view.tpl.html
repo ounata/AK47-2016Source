@@ -13,7 +13,7 @@
 </div>
 <mcs-datatable data="vm.data" />
 
-<div class="profile-user-info profile-user-info-striped mcs-user-profile">
+<div class="profile-user-info profile-user-info-striped mcs-user-profile" ng-hide="!vm.data.rows">
     <div class="profile-info-row">
         <div class="profile-info-name"> 家长姓名 </div>
         <div class="profile-info-value">

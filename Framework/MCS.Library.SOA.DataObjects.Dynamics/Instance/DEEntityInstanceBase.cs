@@ -361,7 +361,7 @@ namespace MCS.Library.SOA.DataObjects.Dynamics.Instance
         public virtual void Merge(DEEntityInstanceBaseCollection source)
         {
             if (source != null)
-                source.ForEach(this.AddNotExistsItem);
+                source.ForEach((s) => this.AddNotExistsItem(s));
         }
 
         protected override string GetKeyForItem(DEEntityInstanceBase item)

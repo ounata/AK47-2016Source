@@ -73,28 +73,29 @@
                 <label class="quick-search"><i class="ace-icon fa fa-search bigger-125"></i> 快速查询条件</label>
             </div>
         </div>
-        <div class="search-panel-body">
+        <div class="portlet-body">
             <form name="orderListForm">
-                <div class="col-sm-12">
-                    <select>
-                        <option>选择分公司</option>
-                    </select>
-                    <select>
-                        <option>选择校区</option>
-                    </select>
-                    <ppts-select category="subject" model="vm.criteria.subject" caption="科目" class="col-sm-3" />
-                    <ppts-select category="courseLevel" model="vm.criteria.courseLevel" caption="课程级别" class="col-sm-3" />
-                    <ppts-select category="duration" model="vm.criteria.duration" caption="课时时长" class="col-sm-3" />
+                <div class="ppts-oneline-block">
+                    <div class="search-inline">
+                        <ppts-select-branch model="vm.criteria.campusIDs" />
+                    </div>
+
+                    <div class="search-inline">
+
+                        <ppts-select category="subject" class="ppts-select-search" model="vm.criteria.subject" caption="科目" />
+                        <ppts-select category="courseLevel" class="ppts-select-search" model="vm.criteria.courseLevel" caption="课程级别" />
+                        <ppts-select category="duration" class="ppts-select-search" model="vm.criteria.duration" caption="课时时长" />
+                    </div>
                 </div>
-                <div class="col-sm-12  mcs-margin-top-5">
-                    <mcs-input placeholder="学生姓名" model="vm.criteria.stuName" class="mcs-margin-left-15" />
-                    <mcs-input placeholder="家长姓名" model="vm.criteria.parentName" />
-                    <mcs-input placeholder="学生编号" model="vm.criteria.stuCode" />
-                    <mcs-input placeholder="订单编号" model="vm.criteria.orderCode" />
+               
+                <div class="ppts-oneline-block">
+                    <mcs-input placeholder="学生姓名" model="vm.criteria.stuName" class="mcs-input-search"/>
+                    <mcs-input placeholder="家长姓名" model="vm.criteria.parentName" class="mcs-input-search"/>
+                    <mcs-input placeholder="学生编号" model="vm.criteria.stuCode" class="mcs-input-search"/>
+                    <mcs-input placeholder="订单编号" model="vm.criteria.orderCode" class="mcs-input-search"/>
+                    <mcs-button category="search" click="vm.search()" size="medium"/>
                 </div>
-                <div class="col-sm-12 mcs-margin-top-15">
-                    <mcs-button category="search" click="vm.search()" size="medium" class="mcs-margin-left-15" />
-                </div>
+
             </form>
         </div>
     </div>
@@ -103,9 +104,9 @@
 <!-- #开始：订购列表.工具条 -->
 <div class="mcs-panel-toolbar">
     <mcs-button category="edit" text="退订" ng-disabled="vm.data.rowsSelected.length!=1" click="vm.unsubscribe()"></mcs-button>
-    <mcs-button category="edit" text="编辑关联缴费单" ng-disabled="vm.data.rowsSelected.length!=1" click="vm.editChargePayment()"></mcs-button>
-    <mcs-button category="edit" text="打印订单"></mcs-button>
-    <mcs-button category="add" text="导出"></mcs-button>
+    <mcs-button category="edit" text="编辑关联缴费单" ng-disabled="vm.data.rowsSelected.length!=1" click="vm.editchargepay()"></mcs-button>
+    <mcs-button category="print" text="打印订单" ng-disabled="vm.data.rowsSelected.length!=1 && vm.data.rowsSelected[0].categoryType!=1 && vm.data.rowsSelected[0].categoryType!=2" click="vm.print()" ></mcs-button>
+    <mcs-button category="export" text="导出"></mcs-button>
 </div>
 <!-- /结束：订购列表.工具条 -->
 <!-- #开始：订购列表.数据表格 -->

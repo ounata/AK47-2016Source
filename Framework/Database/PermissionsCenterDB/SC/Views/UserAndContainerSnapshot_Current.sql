@@ -19,6 +19,6 @@ CREATE UNIQUE CLUSTERED INDEX [UserAndContainerSnapshot_Current_ClusteredIndex] 
 )WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF)
 GO
 
-CREATE INDEX [IX_UserAndContainerSnapshot_Current_ContainerID] ON [SC].[UserAndContainerSnapshot_Current] ([ContainerID])
+CREATE INDEX [IX_UserAndContainerSnapshot_Current_ContainerID] ON [SC].[UserAndContainerSnapshot_Current] ([ContainerID]) INCLUDE ([UserID])
 
 GO

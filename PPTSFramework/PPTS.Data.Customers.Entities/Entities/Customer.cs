@@ -67,6 +67,15 @@ namespace PPTS.Data.Customers.Entities
         }
 
         /// <summary>
+        /// 学员状态
+        /// </summary>
+        public StudentStatusDefine StudentStatus
+        {
+            set;
+            get;
+        }
+
+        /// <summary>
         /// 是否高三毕业(学员属性)
         /// </summary>
         [ORFieldMapping("Graduated")]

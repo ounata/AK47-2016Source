@@ -2,7 +2,7 @@
 CREATE VIEW [SC].[SchemaGroupSnapshot_Current]
 WITH SCHEMABINDING 
 AS
-SELECT [ID], [VersionStartTime], [VersionEndTime], [Status], [CreateDate], [Name], [DisplayName], [CodeName], [SearchContent], [RowUniqueID], [SchemaType], [CreatorID], [CreatorName], [Comment]
+SELECT [ID], [VersionStartTime], [VersionEndTime], [Status], [CreateDate], [Name], [DisplayName], [CodeName], [SearchContent], [RowUniqueID], [SchemaType], [GroupType], [ParentJobID], [IsPrimary], [CreatorID], [CreatorName], [Comment]
 FROM [SC].[SchemaGroupSnapshot]
 WHERE [VersionEndTime] = CONVERT(DATETIME, '99990909 00:00:00', 112) AND [Status] = 1
 
@@ -21,5 +21,9 @@ CREATE UNIQUE INDEX [IX_SchemaGroupSnapshot_Current_RowID] ON [SC].[SchemaGroupS
 GO
 
 CREATE INDEX [IX_SchemaGroupSnapshot_Current_CodeName] ON [SC].[SchemaGroupSnapshot_Current] ([CodeName])
+
+GO
+
+CREATE INDEX [IX_SchemaGroupSnapshot_Current_ParentJobID] ON [SC].[SchemaGroupSnapshot_Current] ([ParentJobID])
 
 GO

@@ -12,8 +12,16 @@
             <h1>Udp通知测试</h1>
         </div>
         <div>
+            <p>
+                该测试是为了验证依赖于UDP通知的缓存项的有效性（一般和网络配置和防火墙有关）。
+            </p>
+            <p>
+                每次点击“发送通知”按钮后，再点击“接收通知”，应该看到接收的时间值和发送的应该一致。
+            </p>
+        </div>
+        <div>
             <asp:Button runat="server" ID="sendNotify" OnClick="sendNotify_Click" Text="发送通知" />
-            <asp:Button runat="server" ID="receiveNotify" OnClick="receiveNotify_Click" Text="接收送通知" />
+            <asp:Button runat="server" ID="receiveNotify" OnClick="receiveNotify_Click" Text="接收通知" />
         </div>
         <div>
             <div runat="server" id="sentMessage" />

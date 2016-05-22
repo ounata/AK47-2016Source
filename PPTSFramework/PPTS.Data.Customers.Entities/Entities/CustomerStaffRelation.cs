@@ -46,9 +46,9 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 员工所属组织机构ID
         /// </summary>
-        [ORFieldMapping("OrgID")]
+        [ORFieldMapping("StaffJobOrgID")]
         [DataMember]
-        public string OrgID
+        public string StaffJobOrgID
         {
             get;
             set;
@@ -57,9 +57,9 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 员工所属组织机构名称
         /// </summary>
-        [ORFieldMapping("OrgName")]
+        [ORFieldMapping("StaffJobOrgName")]
         [DataMember]
-        public string OrgName
+        public string StaffJobOrgName
         {
             get;
             set;
@@ -112,8 +112,8 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 创建者ID
         /// </summary>
-        [ORFieldMapping("ModifierID")]
-        [SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update)]
+        [NoMapping]
+        //[SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update)]
         [DataMember]
         public string ModifierID
         {
@@ -124,8 +124,8 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 创建者名称
         /// </summary>
-        [ORFieldMapping("ModifierName")]
-        [SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update)]
+        [NoMapping]
+        //[SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update)]
         [DataMember]
         public string ModifierName
         {
@@ -133,8 +133,8 @@ namespace PPTS.Data.Customers.Entities
             set;
         }
 
-        [ORFieldMapping("ModifyTime", UtcTimeToLocal = true)]
-        [SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update, DefaultExpression = "GETUTCDATE()", ForceUseDefaultExpression = true)]
+        [NoMapping]
+        //[SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update, DefaultExpression = "GETUTCDATE()", ForceUseDefaultExpression = true)]
         [DataMember]
         public DateTime ModifyTime
         {

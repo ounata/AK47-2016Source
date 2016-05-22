@@ -137,11 +137,39 @@ namespace MCS.Library.Office.OpenXml.Excel
         /// </summary>
         public int SortOrder { get; set; }
 
+        /// <summary>
+        /// 格式化串
+        /// </summary>
+        public string Format { get; set; }
+
+        /// <summary>
+        /// 格式化字符串
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public object FormatValue(object value)
+        {
+            object result = value;
+
+            if (this.Format.IsNotEmpty())
+            {
+                string formatString = this.Format;
+
+                if (this.Format.IndexOf("{0") == -1)
+                    formatString = "{0:" + this.Format + "}";
+
+                result = string.Format(formatString, value);
+            }
+
+            return result;
+        }
+
         public void InitDescription(TableColumnDescriptionAttribute tableAttribute, string propertyName)
         {
             this.SortOrder = tableAttribute.Index;
             this.ColumnName = tableAttribute.ColumnName;
             this.ColumnFormula = tableAttribute.ColumnFormula;
+            this.Format = tableAttribute.Format;
             this.PropertyName = propertyName;
         }
     }

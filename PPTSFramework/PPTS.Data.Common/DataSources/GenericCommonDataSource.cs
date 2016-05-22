@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 namespace PPTS.Data.Common.DataSources
 {
     public class GenericCommonDataSource<T, TCollection> : ObjectDataSourceQueryAdapterBase<T, TCollection>
-     where T : new()
-     where TCollection : EditableDataObjectCollectionBase<T>, new()
+        where T : new()
+        where TCollection : EditableDataObjectCollectionBase<T>, new()
     {
         public static readonly GenericCommonDataSource<T, TCollection> Instance = new GenericCommonDataSource<T, TCollection>();
 

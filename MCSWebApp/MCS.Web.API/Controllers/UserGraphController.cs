@@ -13,21 +13,40 @@ namespace MCS.Web.API.Controllers
 {
     public class UserGraphController : ApiController
     {
+        [HttpGet]
         public UserGraphTreeNode GetRoot()
         {
-            return this.GetRoot(string.Empty, new UserGraphTreeParams());
+            return this.GetRoot(new UserGraphTreeParams() { FullPath = String.Empty });
         }
 
         [HttpPost]
-        public UserGraphTreeNode GetRoot(string fullPath, UserGraphTreeParams requestParams)
+        public UserGraphTreeNode GetRoot(UserGraphTreeParams requestParams)
         {
-            return UserGraphCore.GetRoot(fullPath, requestParams);
+            return UserGraphCore.GetRoot(requestParams);
         }
 
         [HttpPost]
         public List<UserGraphTreeNode> GetChildren(UserGraphTreeParams requestParams)
         {
             return UserGraphCore.GetChildren(requestParams);
+        }
+
+        [HttpGet]
+        public List<IOguObject> Query(string searchTerm)
+        {
+            UserGraphSearchParams requestParams = new UserGraphSearchParams();
+
+            requestParams.ListMask = UserGraphControlObjectMask.All;
+            requestParams.MaxCount = 15;
+            requestParams.SearchTerm = searchTerm;
+
+            return UserGraphCore.Query(requestParams);
+        }
+
+        [HttpPost]
+        public List<IOguObject> Query(UserGraphSearchParams requestParams)
+        {
+            return UserGraphCore.Query(requestParams);
         }
     }
 }

@@ -7,13 +7,13 @@ namespace PPTS.WebAPI.Customers.ViewModels.PotentialCustomers
 {
     public class CustomerParentsQueryResult
     {
-        public ParentCollection Parents
+        public ParentModelCollection Parents
         {
             get;
             set;
         }
 
-        public CustomerParentRelationCollection CustomerParentRelations
+        public CustomerParentRelationCollection Relations
         {
             get;
             set;

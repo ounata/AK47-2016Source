@@ -1,6 +1,7 @@
 using MCS.Library.Core;
 using MCS.Library.Data.DataObjects;
 using MCS.Library.Data.Mapping;
+using PPTS.Data.Common.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace PPTS.Data.Customers.Entities
     [Serializable]
     [ORTableMapping("CustomerVisits")]
     [DataContract]
-    public class CustomerVisit
+    public class CustomerVisit : IEntityWithCreator, IEntityWithModifier
     {
         public CustomerVisit()
         {
@@ -70,6 +71,7 @@ namespace PPTS.Data.Customers.Entities
         /// </summary>
         [ORFieldMapping("VisitType")]
         [DataMember]
+        [ConstantCategory("C_CODE_ABBR_BO_Customer_ReturnInfoType")]
         public string VisitType
         {
             get;
@@ -80,6 +82,7 @@ namespace PPTS.Data.Customers.Entities
         /// 回访方式代码
         /// </summary>
         [ORFieldMapping("VisitWay")]
+        [ConstantCategory("C_CODE_ABBR_Customer_CRM_ReturnWay")]
         [DataMember]
         public string VisitWay
         {
@@ -101,7 +104,7 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 回访时间
         /// </summary>
-        [ORFieldMapping("VisitTime")]
+        [ORFieldMapping("VisitTime", UtcTimeToLocal = true)]
         [DataMember]
         public DateTime VisitTime
         {
@@ -156,7 +159,7 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 预计下次回访时间
         /// </summary>
-        [ORFieldMapping("NextVisitTime")]
+        [ORFieldMapping("NextVisitTime", UtcTimeToLocal = true)]
         [DataMember]
         public DateTime NextVisitTime
         {
@@ -167,7 +170,20 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 创建人ID
         /// </summary>
+        [ORFieldMapping("Satisficing")]
+        [ConstantCategory("C_CODE_ABBR_BO_Customer_Satisfaction")]
+        [DataMember]
+        public string Satisficing
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 创建人ID
+        /// </summary>
         [ORFieldMapping("CreatorID")]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update)]
         [DataMember]
         public string CreatorID
         {
@@ -179,6 +195,7 @@ namespace PPTS.Data.Customers.Entities
         /// 创建人姓名
         /// </summary>
         [ORFieldMapping("CreatorName")]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update)]
         [DataMember]
         public string CreatorName
         {
@@ -189,7 +206,8 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 创建时间
         /// </summary>
-        [ORFieldMapping("CreateTime")]
+        [ORFieldMapping("CreateTime", UtcTimeToLocal = true)]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.Select | ClauseBindingFlags.Where)]
         [DataMember]
         public DateTime CreateTime
         {
@@ -201,6 +219,7 @@ namespace PPTS.Data.Customers.Entities
         /// 最后修改人ID
         /// </summary>
         [ORFieldMapping("ModifierID")]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update)]
         [DataMember]
         public string ModifierID
         {
@@ -212,6 +231,7 @@ namespace PPTS.Data.Customers.Entities
         /// 最后修改人姓名
         /// </summary>
         [ORFieldMapping("ModifierName")]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update)]
         [DataMember]
         public string ModifierName
         {
@@ -222,7 +242,8 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 最后修改时间
         /// </summary>
-        [ORFieldMapping("ModifyTime")]
+        [ORFieldMapping("ModifyTime", UtcTimeToLocal = true)]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update, DefaultExpression = "GETUTCDATE()", ForceUseDefaultExpression = true)]
         [DataMember]
         public DateTime ModifyTime
         {

@@ -31,15 +31,7 @@
             </div>
         </div>
         <div class="portlet-body">
-            <div class="input-group input-xlarge mcs-input-group pull-left">
-                <mcs-input placeholder="选择大区/分公司/校区" model="" readonly="true" css="form-control mcs-input-search" />
-                <span class="input-group-btn">
-                    <button class="btn btn-sm btn-info" type="button" ng-click="vm.select()">
-                        <i class="ace-icon fa fa-check bigger-110"></i>
-                        选择
-                    </button>
-                </span>
-            </div>
+            <ppts-select-branch model="vm.criteria.orgIds" />
             <ppts-search placeholder="输入学员、家长姓名，学员编号，联系方式进行查询" click="vm.search()" model="vm.criteria.keyword"/>
         </div>
     </div>
@@ -55,6 +47,7 @@
     <mcs-button category="add" text="新增跟进记录" ppts-job-functions="新增跟进记录" click="vm.addFollow()"></mcs-button>
     <mcs-button icon="user-plus" css="btn-success" text="分配咨询师" ppts-job-functions="分配咨询师" click="vm.assign(vm.relationType.consultant)"></mcs-button>
     <mcs-button icon="female" css="btn-success" text="分配坐席" ppts-job-functions="分配坐席" click="vm.assign(vm.relationType.callcenter)"></mcs-button>
+    <mcs-button icon="mail-forward" css="btn-yellow" text="划转资源" ppts-job-functions="划转资源" click="vm.transfer()"></mcs-button>
     <mcs-button icon="cny" css="btn-purple" text="充 值" ppts-job-functions="充值" click="vm.pay()"></mcs-button>
 </div>
 <div class="alert alert-block alert-danger" ng-show="vm.errorMessage">

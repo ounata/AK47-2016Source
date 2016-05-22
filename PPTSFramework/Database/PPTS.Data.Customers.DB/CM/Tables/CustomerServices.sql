@@ -7,7 +7,7 @@
     [ServiceType] NVARCHAR(32) NOT NULL , 
     [ServiceStatus] NVARCHAR(32) NULL , 
     [ServiceMemo] NVARCHAR(MAX) NULL, 
-    [AcceptTime] DATETIME NOT NULL DEFAULT getdate(), 
+    [AcceptTime] DATETIME NOT NULL DEFAULT GETUTCDATE(), 
     [AcceptLimit] NVARCHAR(32) NULL, 
     [AcceptLimitValue] DECIMAL(18, 4) NULL, 
     [AcceptMemo] NVARCHAR(MAX) NULL, 
@@ -38,14 +38,14 @@
     [HandlerEmail] NVARCHAR(255) NULL, 
     [IsSendMessage] INT NULL DEFAULT 0, 
     [HandlerPhone] NVARCHAR(255) NULL, 
-    [CallTime] DATETIME NULL DEFAULT getdate(), 
+    [CallTime] DATETIME NULL DEFAULT GETUTCDATE(), 
     [VoiceID] NVARCHAR(36) NULL, 
     [CreatorID] NVARCHAR(36) NULL, 
     [CreatorName] NVARCHAR(64) NULL, 
-    [CreateTime] DATETIME NULL DEFAULT getdate(), 
+    [CreateTime] DATETIME NULL DEFAULT GETUTCDATE(), 
     [ModifierID] NVARCHAR(36) NULL, 
     [ModifierName] NVARCHAR(64) NULL, 
-    [ModifyTime] DATETIME NULL DEFAULT getdate(), 
+    [ModifyTime] DATETIME NULL DEFAULT GETUTCDATE(), 
     CONSTRAINT [PK_CustomerServices] PRIMARY KEY NONCLUSTERED ([ServiceID]) 
 )
 

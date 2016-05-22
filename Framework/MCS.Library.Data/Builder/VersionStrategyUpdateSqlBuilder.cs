@@ -31,7 +31,8 @@ namespace MCS.Library.Data.Builder
             return this.ToUpdateSql(obj, mapping,
                 () => this.PrepareUpdateSql(obj, mapping, ignoreProperties),
                 () => this.PrepareInsertSql(obj, mapping, ignoreProperties),
-                addCurrentTimeVar);
+                addCurrentTimeVar,
+                ignoreProperties);
         }
 
         /// <summary>
@@ -53,7 +54,45 @@ namespace MCS.Library.Data.Builder
 
             return VersionStrategyUpdateSqlHelper.ConstructUpdateSql(null, (strB, context) =>
             {
-                this.PrepareSingleObjectSql(strB, obj, mapping, true, getUpdateSql, getInsertSql, ignoreProperties);
+                this.PrepareSingleObjectUpdateSql(strB, obj, mapping, true, getUpdateSql, getInsertSql, ignoreProperties);
+            },
+            addCurrentTimeVar);
+        }
+
+        /// <summary>
+        /// 生成删除数据的SQL（时间封口）
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="mapping"></param>
+        /// <param name="addCurrentTimeVar"></param>
+        /// <param name="ignoreProperties"></param>
+        /// <returns></returns>
+        public string ToDeleteSql(T obj, ORMappingItemCollection mapping, bool addCurrentTimeVar = true, params string[] ignoreProperties)
+        {
+            return this.ToDeleteSql(obj, mapping,
+                () => this.PrepareDeleteSql(obj, mapping, ignoreProperties),
+                addCurrentTimeVar,
+                ignoreProperties);
+        }
+
+        /// <summary>
+        /// 生成删除数据的SQL（时间封口）
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="mapping"></param>
+        /// <param name="getDeleteSql"></param>
+        /// <param name="addCurrentTimeVar"></param>
+        /// <param name="ignoreProperties"></param>
+        /// <returns></returns>
+        public string ToDeleteSql(T obj, ORMappingItemCollection mapping, Func<string> getDeleteSql, bool addCurrentTimeVar = true, params string[] ignoreProperties)
+        {
+            obj.NullCheck("obj");
+            mapping.NullCheck("mapping");
+            getDeleteSql.NullCheck("getDeleteSql");
+
+            return VersionStrategyUpdateSqlHelper.ConstructUpdateSql(null, (strB, context) =>
+            {
+                strB.Append(getDeleteSql());
             },
             addCurrentTimeVar);
         }
@@ -80,7 +119,7 @@ namespace MCS.Library.Data.Builder
                         if (strB.Length > 0)
                             strB.Append(TSqlBuilder.Instance.DBStatementSeperator);
 
-                        this.PrepareSingleObjectSql(strB, obj, mapping, false,
+                        this.PrepareSingleObjectUpdateSql(strB, obj, mapping, false,
                             () => this.PrepareUpdateCollectionItemSql(obj, mapping, ignoreProperties),
                             () => this.PrepareInsertSql(obj, mapping, ignoreProperties),
                             ignoreProperties);
@@ -326,7 +365,7 @@ namespace MCS.Library.Data.Builder
         /// <param name="mapping"></param>
         /// <param name="ignoreProperties">需要忽略的参数</param>
         /// <returns></returns>
-		public virtual string PrepareUpdateSql(T obj, ORMappingItemCollection mapping, string[] ignoreProperties)
+		public virtual string PrepareUpdateSql(T obj, ORMappingItemCollection mapping, params string[] ignoreProperties)
         {
             IConnectiveSqlClause primaryKeyBuilder = this.PrepareWhereSqlBuilder(obj, mapping, ignoreProperties);
             UpdateSqlClauseBuilder updateBuilder = this.PrepareUpdateSqlBuilder(obj, mapping, ignoreProperties);
@@ -337,7 +376,19 @@ namespace MCS.Library.Data.Builder
                     primaryKeyBuilder.ToSqlString(TSqlBuilder.Instance));
         }
 
-        private void PrepareSingleObjectSql(StringBuilder strB, T obj, ORMappingItemCollection mapping, bool raiseUnmatchedError, Func<string> getUpdateSql, Func<string> getInsertSql, string[] ignoreProperties)
+        /// <summary>
+        /// 生成删除的Sql语句。默认等同于PrepareUpdateSql
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="mapping"></param>
+        /// <param name="ignoreProperties"></param>
+        /// <returns></returns>
+        public virtual string PrepareDeleteSql(T obj, ORMappingItemCollection mapping, params string[] ignoreProperties)
+        {
+            return this.PrepareUpdateSql(obj, mapping, ignoreProperties);
+        }
+
+        private void PrepareSingleObjectUpdateSql(StringBuilder strB, T obj, ORMappingItemCollection mapping, bool raiseUnmatchedError, Func<string> getUpdateSql, Func<string> getInsertSql, string[] ignoreProperties)
         {
             if (obj.VersionStartTime != DateTime.MinValue)
             {

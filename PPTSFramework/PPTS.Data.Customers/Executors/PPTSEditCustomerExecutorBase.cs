@@ -3,6 +3,7 @@ using MCS.Library.Data;
 using MCS.Library.Data.Executors;
 using MCS.Library.SOA.DataObjects;
 using MCS.Library.Validation;
+using PPTS.Data.Common.Executors;
 using PPTS.Data.Customers.Adapters;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
 
-namespace PPTS.Data.Common.Executors
+namespace PPTS.Data.Customers.Executors
 {
     /// <summary>
     /// 编辑实体用到的Executor的基类

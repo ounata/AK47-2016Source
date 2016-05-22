@@ -3,15 +3,11 @@
         ppts.config.dataServiceConfig.productDataService],
         function (product) {
         	product.registerController('orderClassGroupListController', [
-                '$scope', '$state', 'dataSyncService', 'purchaseCourseDataService', 'productDataService',
-                function ($scope, $state, dataSyncService, purchaseCourseDataService, productDataService) {
-                	var vm = this;
-
-                	//查询条件
-                	vm.criteria = {
-                		name: '',
-                		pagedParam: { "pageIndex": 1, "pageSize": 10, "totalCount": -1 }
-                	};
+                '$scope', '$state', '$stateParams', 'dataSyncService', 'purchaseCourseDataService', 'productDataService',
+                function ($scope, $state, $stateParams, dataSyncService, purchaseCourseDataService, productDataService) {
+                    var vm = this;
+                    var campusId = $stateParams.campusId;
+                    var customerId = $stateParams.customerId;
 
                 	vm.data = {
                 		//selection: 'checkbox',
@@ -30,10 +26,10 @@
                 			//field: "productName",
                 			name: "可插班班级数量",
                 		    //template: '<span>{{row.classCount }}</span>'
-                			template: '<a ui-sref="ppts.purchaseClassGroup({productId:row.productID})">{{row.classCount}}</a>'
+                			template: '<a ui-sref="ppts.purchaseClassGroup({customerId:'+customerId+' ,productId:row.productID ,listType:3})">{{row.classCount}}</a>'
                 		}, {
-                			field: "catalogName",
-                			name: "产品类型"
+                		    field: "catalogName",
+                		    name: "产品类型",
                 		}, {
                 			field: "subject",
                 			name: "科目",
@@ -96,7 +92,7 @@
                 	};
 
                 	vm.showShoppingCart = function () {
-                	    $state.go('ppts.purchaseOrderList', { listType:2});
+                	    $state.go('ppts.purchaseOrderList', { listType: 3, customerId: customerId, campusId: campusId });
                 	};
 
                 	vm.init = function () {

@@ -1,4 +1,5 @@
-﻿using MCS.Library.Data.Mapping;
+﻿using MCS.Library.Data.DataObjects;
+using MCS.Library.Data.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,11 @@ namespace MCS.Library.Data.Test.DataObjects
 {
     public class ConditionObject
     {
+        public ConditionObject()
+        {
+            this.ThreeStateWithDefault = BooleanState.Unknown;
+        }
+
         [ConditionMapping("SUBJECT", EscapeLikeString = true, Prefix = "%", Postfix = "%", Operation = "LIKE")]
         public string Subject
         {
@@ -53,6 +59,27 @@ namespace MCS.Library.Data.Test.DataObjects
 
         [ConditionMapping("AGE_2", Operation = ">")]
         public int AgeIgnoreDefaultValue
+        {
+            get;
+            set;
+        }
+
+        [ConditionMapping("ThreeState")]
+        public BooleanState ThreeState
+        {
+            get;
+            set;
+        }
+
+        [ConditionMapping("ThreeStateWithDefault")]
+        public BooleanState ThreeStateWithDefault
+        {
+            get;
+            set;
+        }
+
+        [ConditionMapping("IgnoreProperty")]
+        public string IgnoreProperty
         {
             get;
             set;

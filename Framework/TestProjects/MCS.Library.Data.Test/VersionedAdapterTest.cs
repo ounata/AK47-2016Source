@@ -17,14 +17,14 @@ namespace MCS.Library.Data.Test
         [TestMethod]
         public void UpdateOrderTest()
         {
-            OrderAdapter.Instance.ClearAll();
+            VersionedOrderAdapter.Instance.ClearAll();
             DBTimePointActionContext.Current.TimePoint = DateTime.MinValue;
 
             VersionedOrder order = PrepareOrderData();
 
-            OrderAdapter.Instance.Update(order);
+            VersionedOrderAdapter.Instance.Update(order);
 
-            VersionedOrder loaded = OrderAdapter.Instance.LoadByID(order.OrderID);
+            VersionedOrder loaded = VersionedOrderAdapter.Instance.LoadByID(order.OrderID);
 
             Assert.IsNotNull(loaded);
 
@@ -32,27 +32,71 @@ namespace MCS.Library.Data.Test
         }
 
         [TestMethod]
-        public void UpdateOrderTwiceTest()
+        public void DeleteOrderTest()
         {
-            OrderAdapter.Instance.ClearAll();
+            VersionedOrderAdapter.Instance.ClearAll();
             DBTimePointActionContext.Current.TimePoint = DateTime.MinValue;
 
             VersionedOrder order = PrepareOrderData();
 
-            OrderAdapter.Instance.Update(order);
+            VersionedOrderAdapter.Instance.Update(order);
+
+            VersionedOrder loaded = VersionedOrderAdapter.Instance.LoadByID(order.OrderID);
+
+            Assert.IsNotNull(loaded);
+
+            VersionedOrderAdapter.Instance.Delete(loaded);
+
+            VersionedOrder loadedAgain = VersionedOrderAdapter.Instance.LoadByID(order.OrderID);
+
+            Assert.IsNull(loadedAgain);
+        }
+
+        [TestMethod]
+        public void DeleteOrderInContextTest()
+        {
+            VersionedOrderAdapter.Instance.ClearAll();
+            DBTimePointActionContext.Current.TimePoint = DateTime.MinValue;
+
+            VersionedOrder order = PrepareOrderData();
+
+            VersionedOrderAdapter.Instance.Update(order);
+
+            VersionedOrder loaded = VersionedOrderAdapter.Instance.LoadByID(order.OrderID);
+
+            Assert.IsNotNull(loaded);
+
+            VersionedOrderAdapter.Instance.DeleteInContext(loaded);
+
+            VersionedOrderAdapter.Instance.GetDbContext().DoAction(context => context.ExecuteTimePointSqlInContext());
+
+            VersionedOrder loadedAgain = VersionedOrderAdapter.Instance.LoadByID(order.OrderID);
+
+            Assert.IsNull(loadedAgain);
+        }
+
+        [TestMethod]
+        public void UpdateOrderTwiceTest()
+        {
+            VersionedOrderAdapter.Instance.ClearAll();
+            DBTimePointActionContext.Current.TimePoint = DateTime.MinValue;
+
+            VersionedOrder order = PrepareOrderData();
+
+            VersionedOrderAdapter.Instance.Update(order);
 
             DBTimePointActionContext.Current.TimePoint = DateTime.MinValue;
 
-            VersionedOrder loaded = OrderAdapter.Instance.LoadByID(order.OrderID);
+            VersionedOrder loaded = VersionedOrderAdapter.Instance.LoadByID(order.OrderID);
 
             Assert.IsNotNull(loaded);
 
             loaded.OrderName = "Surface Pro 4";
             loaded.Amount = 7360;
 
-            OrderAdapter.Instance.Update(loaded);
+            VersionedOrderAdapter.Instance.Update(loaded);
 
-            VersionedOrderCollection orders = OrderAdapter.Instance.LoadByInBuilder(new Data.Adapters.InLoadingCondition(builder => builder.AppendItem("OrderID", order.OrderID), "OrderID"), DateTime.MinValue);
+            VersionedOrderCollection orders = VersionedOrderAdapter.Instance.LoadByInBuilder(new Data.Adapters.InLoadingCondition(builder => builder.AppendItem("OrderID", order.OrderID), "OrderID"), DateTime.MinValue);
 
             Assert.AreEqual(1, orders.Count);
 
@@ -63,18 +107,18 @@ namespace MCS.Library.Data.Test
         [ExpectedException(typeof(SqlException))]
         public void UpdateExpiredOrderTest()
         {
-            OrderAdapter.Instance.ClearAll();
+            VersionedOrderAdapter.Instance.ClearAll();
             DBTimePointActionContext.Current.TimePoint = DateTime.MinValue;
 
             VersionedOrder order = PrepareOrderData();
 
-            OrderAdapter.Instance.Update(order);
+            VersionedOrderAdapter.Instance.Update(order);
 
-            VersionedOrder loaded = OrderAdapter.Instance.LoadByID(order.OrderID);
+            VersionedOrder loaded = VersionedOrderAdapter.Instance.LoadByID(order.OrderID);
 
             Assert.IsNotNull(loaded);
 
-            VersionedOrder loadedExpired = OrderAdapter.Instance.LoadByID(order.OrderID);
+            VersionedOrder loadedExpired = VersionedOrderAdapter.Instance.LoadByID(order.OrderID);
 
             Assert.IsNotNull(loadedExpired);
 
@@ -82,19 +126,19 @@ namespace MCS.Library.Data.Test
             loaded.Amount = 7360;
 
             DBTimePointActionContext.Current.TimePoint = DateTime.MinValue;
-            OrderAdapter.Instance.Update(loaded);
+            VersionedOrderAdapter.Instance.Update(loaded);
 
             loadedExpired.OrderName = "Surface Pro 2";
             loadedExpired.Amount = 4100;
 
             DBTimePointActionContext.Current.TimePoint = DateTime.MinValue;
-            OrderAdapter.Instance.Update(loadedExpired);
+            VersionedOrderAdapter.Instance.Update(loadedExpired);
         }
 
         [TestMethod]
         public void UpdateOrderItemsTest()
         {
-            OrderItemAdapter.Instance.ClearAll();
+            VersionedOrderItemAdapter.Instance.ClearAll();
 
             string orderID = UuidHelper.NewUuidString();
 
@@ -108,7 +152,7 @@ namespace MCS.Library.Data.Test
         [TestMethod]
         public void UpdateOrderItemsThenAddTest()
         {
-            OrderItemAdapter.Instance.ClearAll();
+            VersionedOrderItemAdapter.Instance.ClearAll();
 
             string orderID = UuidHelper.NewUuidString();
 
@@ -133,7 +177,7 @@ namespace MCS.Library.Data.Test
         [TestMethod]
         public void UpdateOrderItemsThenUpdateTest()
         {
-            OrderItemAdapter.Instance.ClearAll();
+            VersionedOrderItemAdapter.Instance.ClearAll();
 
             string orderID = UuidHelper.NewUuidString();
 
@@ -141,7 +185,7 @@ namespace MCS.Library.Data.Test
 
             VersionedOrderItemCollection loaded = UpdateOrderItems(orderID, items);
 
-            VersionedOrderItemCollection originalLoaded = OrderItemAdapter.Instance.LoadByOrderID(orderID, DateTime.MinValue);
+            VersionedOrderItemCollection originalLoaded = VersionedOrderItemAdapter.Instance.LoadByOrderID(orderID, DateTime.MinValue);
 
             DateTime firstTimePoint = DBTimePointActionContext.Current.TimePoint;
 
@@ -155,7 +199,7 @@ namespace MCS.Library.Data.Test
             Assert.AreEqual(loaded[1].ModifierID, loadedAgain[1].ModifierID);
             AreEqual(loaded, loadedAgain);
 
-            VersionedOrderItemCollection oldItems = OrderItemAdapter.Instance.LoadByOrderID(orderID, firstTimePoint);
+            VersionedOrderItemCollection oldItems = VersionedOrderItemAdapter.Instance.LoadByOrderID(orderID, firstTimePoint);
 
             AreEqual(originalLoaded, oldItems);
         }
@@ -163,7 +207,7 @@ namespace MCS.Library.Data.Test
         [TestMethod]
         public void UpdateOrderItemsThenNullUpdateTest()
         {
-            OrderItemAdapter.Instance.ClearAll();
+            VersionedOrderItemAdapter.Instance.ClearAll();
 
             string orderID = UuidHelper.NewUuidString();
 
@@ -171,7 +215,7 @@ namespace MCS.Library.Data.Test
 
             VersionedOrderItemCollection loaded = UpdateOrderItems(orderID, items);
 
-            VersionedOrderItemCollection originalLoaded = OrderItemAdapter.Instance.LoadByOrderID(orderID, DateTime.MinValue);
+            VersionedOrderItemCollection originalLoaded = VersionedOrderItemAdapter.Instance.LoadByOrderID(orderID, DateTime.MinValue);
 
             DateTime firstTimePoint = DBTimePointActionContext.Current.TimePoint;
 
@@ -189,7 +233,7 @@ namespace MCS.Library.Data.Test
         [TestMethod]
         public void UpdateOrderItemsThenDeleteTest()
         {
-            OrderItemAdapter.Instance.ClearAll();
+            VersionedOrderItemAdapter.Instance.ClearAll();
 
             string orderID = UuidHelper.NewUuidString();
 
@@ -209,7 +253,7 @@ namespace MCS.Library.Data.Test
         [TestMethod]
         public void UpdateTwoOrderWithItemsThenDeleteTest()
         {
-            OrderItemAdapter.Instance.ClearAll();
+            VersionedOrderItemAdapter.Instance.ClearAll();
 
             string orderID1 = UuidHelper.NewUuidString();
 
@@ -239,29 +283,29 @@ namespace MCS.Library.Data.Test
         [TestMethod]
         public void UpdateOrderAndItemsInContext()
         {
-            OrderAdapter.Instance.ClearAll();
-            OrderItemAdapter.Instance.ClearAll();
+            VersionedOrderAdapter.Instance.ClearAll();
+            VersionedOrderItemAdapter.Instance.ClearAll();
 
             VersionedOrder order = PrepareOrderData();
             VersionedOrderItemCollection items = PrepareOrderItems(order.OrderID);
 
-            OrderAdapter.Instance.UpdateInContext(order);
-            OrderItemAdapter.Instance.UpdateCollectionInContext(order.OrderID, items);
+            VersionedOrderAdapter.Instance.UpdateInContext(order);
+            VersionedOrderItemAdapter.Instance.UpdateCollectionInContext(order.OrderID, items);
 
-            Console.WriteLine(OrderAdapter.Instance.GetSqlContext().GetSqlInContext());
+            Console.WriteLine(VersionedOrderAdapter.Instance.GetSqlContext().GetSqlInContext());
 
-            using (DbContext context = OrderAdapter.Instance.GetDbContext())
+            using (DbContext context = VersionedOrderAdapter.Instance.GetDbContext())
             {
                 context.ExecuteTimePointSqlInContext();
             }
 
-            OrderAdapter.Instance.LoadByIDInContext(order.OrderID, DateTime.MinValue,
+            VersionedOrderAdapter.Instance.LoadByIDInContext(order.OrderID, DateTime.MinValue,
                 orderLoaded => AreEqual(order, orderLoaded));
 
-            OrderItemAdapter.Instance.LoadByOrderIDInContext(order.OrderID, DateTime.MinValue,
+            VersionedOrderItemAdapter.Instance.LoadByOrderIDInContext(order.OrderID, DateTime.MinValue,
                 itemsLoaded => AreEqual(items, itemsLoaded));
 
-            using (DbContext context = OrderAdapter.Instance.GetDbContext())
+            using (DbContext context = VersionedOrderAdapter.Instance.GetDbContext())
             {
                 context.ExecuteDataSetSqlInContext();
             }
@@ -270,18 +314,18 @@ namespace MCS.Library.Data.Test
         [TestMethod]
         public void UpdateOrderAndItemsThenUpdateInContext()
         {
-            OrderAdapter.Instance.ClearAll();
-            OrderItemAdapter.Instance.ClearAll();
+            VersionedOrderAdapter.Instance.ClearAll();
+            VersionedOrderItemAdapter.Instance.ClearAll();
 
             VersionedOrder order = PrepareOrderData();
             VersionedOrderItemCollection items = PrepareOrderItems(order.OrderID);
 
-            OrderAdapter.Instance.UpdateInContext(order);
-            OrderItemAdapter.Instance.UpdateCollectionInContext(order.OrderID, items);
+            VersionedOrderAdapter.Instance.UpdateInContext(order);
+            VersionedOrderItemAdapter.Instance.UpdateCollectionInContext(order.OrderID, items);
 
-            Console.WriteLine(OrderAdapter.Instance.GetSqlContext().GetSqlInContext());
+            Console.WriteLine(VersionedOrderAdapter.Instance.GetSqlContext().GetSqlInContext());
 
-            using (DbContext context = OrderAdapter.Instance.GetDbContext())
+            using (DbContext context = VersionedOrderAdapter.Instance.GetDbContext())
             {
                 context.ExecuteTimePointSqlInContext();
             }
@@ -290,33 +334,33 @@ namespace MCS.Library.Data.Test
 
             Console.WriteLine("{0:yyyy-MM-dd HH:mm:ss.fff}", firstTimePoint);
 
-            OrderAdapter.Instance.LoadByIDInContext(order.OrderID, DateTime.MinValue,
+            VersionedOrderAdapter.Instance.LoadByIDInContext(order.OrderID, DateTime.MinValue,
                 orderLoaded => AreEqual(order, orderLoaded));
 
-            OrderItemAdapter.Instance.LoadByOrderIDInContext(order.OrderID, DateTime.MinValue,
+            VersionedOrderItemAdapter.Instance.LoadByOrderIDInContext(order.OrderID, DateTime.MinValue,
                 itemsLoaded =>
                 {
                     AreEqual(items, itemsLoaded);
 
-                    VersionedOrderItemCollection itemsLoaded1 = OrderItemAdapter.Instance.LoadByOrderID(order.OrderID, DateTime.MinValue);
+                    VersionedOrderItemCollection itemsLoaded1 = VersionedOrderItemAdapter.Instance.LoadByOrderID(order.OrderID, DateTime.MinValue);
 
                     DBTimePointActionContext.Current.TimePoint = DateTime.MinValue;
 
                     string originalItemName = itemsLoaded[1].ItemName;
                     itemsLoaded[1].ItemName = "三星Galaxy";
 
-                    OrderItemAdapter.Instance.UpdateCollection(order.OrderID, itemsLoaded);
+                    VersionedOrderItemAdapter.Instance.UpdateCollection(order.OrderID, itemsLoaded);
 
-                    VersionedOrderItemCollection itemsLoaded2 = OrderItemAdapter.Instance.LoadByOrderID(order.OrderID, DateTime.MinValue);
+                    VersionedOrderItemCollection itemsLoaded2 = VersionedOrderItemAdapter.Instance.LoadByOrderID(order.OrderID, DateTime.MinValue);
 
                     AreEqual(itemsLoaded, itemsLoaded2);
 
-                    VersionedOrderItemCollection itemsLoaded3 = OrderItemAdapter.Instance.LoadByOrderID(order.OrderID, firstTimePoint);
+                    VersionedOrderItemCollection itemsLoaded3 = VersionedOrderItemAdapter.Instance.LoadByOrderID(order.OrderID, firstTimePoint);
 
                     AreEqual(itemsLoaded1, itemsLoaded3);
                 });
 
-            using (DbContext context = OrderAdapter.Instance.GetDbContext())
+            using (DbContext context = VersionedOrderAdapter.Instance.GetDbContext())
             {
                 context.ExecuteDataSetSqlInContext();
             }
@@ -337,9 +381,9 @@ namespace MCS.Library.Data.Test
         {
             DBTimePointActionContext.Current.TimePoint = DateTime.MinValue;
 
-            OrderItemAdapter.Instance.UpdateCollection(orderID, items);
+            VersionedOrderItemAdapter.Instance.UpdateCollection(orderID, items);
 
-            return OrderItemAdapter.Instance.LoadByOrderID(orderID, DateTime.MinValue);
+            return VersionedOrderItemAdapter.Instance.LoadByOrderID(orderID, DateTime.MinValue);
         }
 
         private static void AreEqual(VersionedOrder expected, VersionedOrder actual)

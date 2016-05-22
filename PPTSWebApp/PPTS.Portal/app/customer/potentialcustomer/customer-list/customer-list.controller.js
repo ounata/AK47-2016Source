@@ -11,13 +11,6 @@
 
                     // 获取学员与员工关系
                     vm.relationType = relationType;
-                    
-                    // 选择大区/公司/校区
-                    vm.select = function () {
-                        dataSyncService.popupTree(vm, {
-                            title: '选择大区/分公司/校区'
-                        });
-                    };
 
                     // 页面初始化加载或重新搜索时查询
                     vm.search = function () {
@@ -44,16 +37,23 @@
                         }
                     };
 
+                    // 划转资源
+                    vm.transfer = function () {
+                        if (util.selectMultiRows(vm)) {
+                            customerDataViewService.transferCustomers(vm, vm.data.rowsSelected);
+                        }
+                    };
+
                     // 充值
                     vm.pay = function () {
                         //当前操作人是潜客的咨询师才可以充值
                         if (util.selectOneRow(vm)) {
 
-                            var id = vm.data.rowsSelected[0].customerID;
+                            var customerID = vm.data.rowsSelected[0].customerID;
 
-                            customerDataService.assertAccountCharge(id, function (result) {
+                            customerDataService.assertAccountCharge(customerID, function (result) {
                                 if (result.ok) {
-                                    $state.go('ppts.accountCharge-edit', { customerID: id, prev: 'ppts.customer' });
+                                    $state.go('ppts.accountChargeEdit', { id: customerID, prev: 'ppts.customer' });
                                 }
                                 else {
                                     vm.errorMessage = result.message;

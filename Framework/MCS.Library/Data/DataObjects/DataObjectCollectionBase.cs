@@ -539,6 +539,18 @@ namespace MCS.Library.Data.DataObjects
         }
 
         /// <summary>
+        /// 添加一个对象。与Add不同的是，返回添加的对象
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public T Append(T data)
+        {
+            this.Add(data);
+
+            return data;
+        }
+
+        /// <summary>
         /// 增加不存在的数据（已经存在的将被忽略）
         /// </summary>
         /// <param name="data"></param>
@@ -809,12 +821,14 @@ namespace MCS.Library.Data.DataObjects
         /// 增加不存在的数据（已经存在的将被忽略）
         /// </summary>
         /// <param name="data"></param>
-        public void AddNotExistsItem(TItem data)
+        public TItem AddNotExistsItem(TItem data)
         {
             data.NullCheck("data");
 
             if (ContainsKey(GetKeyForItem(data)) == false)
                 this.Add(data);
+
+            return data;
         }
 
         /// <summary>

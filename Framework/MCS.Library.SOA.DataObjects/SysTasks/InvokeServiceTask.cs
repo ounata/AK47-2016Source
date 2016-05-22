@@ -43,7 +43,7 @@ namespace MCS.Library.SOA.DataObjects
 			}
 		}
 
-		public override void FillData(Dictionary<string, string> extraData)
+		public override void FillData(Dictionary<string, string> extraData = null)
 		{
 			if (extraData == null)
 				extraData = new Dictionary<string, string>();

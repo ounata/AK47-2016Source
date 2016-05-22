@@ -71,6 +71,8 @@ namespace MCS.Library.Data.Adapters
             if (ds.Tables.Count > 1)
                 totalCount = (int)ds.Tables[1].Rows[0][0];
 
+            totalCount = qc.GetRealCount(totalCount);
+
             //当页码超出索引的，返回最大页
             if (result.Count == 0 && totalCount > 0)
             {
@@ -111,6 +113,8 @@ namespace MCS.Library.Data.Adapters
 
             if (ds.Tables.Count > 1)
                 totalCount = (int)ds.Tables[1].Rows[0][0];
+
+            totalCount = qc.GetRealCount(totalCount);
 
             //当页码超出索引的，返回最大页
             if (result.Count == 0 && totalCount > 0)
@@ -190,6 +194,7 @@ namespace MCS.Library.Data.Adapters
 
             sql = string.Format(
                 sql,
+                qc.GetTopClause(),
                 qc.SelectFields,
                 qc.FromClause,
                 string.IsNullOrEmpty(qc.WhereClause) ? string.Empty : " AND " + qc.WhereClause,
@@ -260,7 +265,8 @@ namespace MCS.Library.Data.Adapters
 
         private static string GetNoSplitPageSql(QueryCondition qc)
         {
-            string sql = string.Format("SELECT {0} FROM {1} WHERE 1 = 1 {2} {3} ORDER BY {4}",
+            string sql = string.Format("SELECT {0}{1} FROM {2} WHERE 1 = 1 {3} {4} ORDER BY {5}",
+                        qc.GetTopClause(),
                         qc.SelectFields,
                         qc.FromClause,
                         qc.WhereClause.IsNotEmpty() ? " AND " + qc.WhereClause : string.Empty,
@@ -272,7 +278,8 @@ namespace MCS.Library.Data.Adapters
 
         private static string GetNoSplitPageSqlWithoutOrderBy(QueryCondition qc)
         {
-            string sql = string.Format("SELECT {0} FROM {1} WHERE 1 = 1 {2} {3}",
+            string sql = string.Format("SELECT {0}{1} FROM {2} WHERE 1 = 1 {3} {4}",
+                        qc.GetTopClause(),
                         qc.SelectFields,
                         qc.FromClause,
                         qc.WhereClause.IsNotEmpty() ? " AND " + qc.WhereClause : string.Empty,

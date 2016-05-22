@@ -25,7 +25,13 @@ namespace PPTS.Data.Common.Adapters
         /// <returns></returns>
         public ConfigArgs Load(string orgID)
         {
-            return new ConfigArgs() { ClosingAccountDay = 2, AccountFirstChargeMinMoney = 500, AccountChargeEarlyMinDays = 15, AccountChargeEarlyMinDaysX = 30, EndingClassMinAccountValue = 200 };
+            return new ConfigArgs() {
+                ClosingAccountDay = 2,
+                AccountFirstChargeMinMoney = 500,
+                AccountChargeEarlyMinDays = 15,
+                AccountChargeEarlyMinDaysX = 30,
+                EndingClassMinAccountValue = 200,
+                AccountRefundTypeJudgeDays = 7};
         }
     }
 }

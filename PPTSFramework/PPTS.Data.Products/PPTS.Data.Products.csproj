@@ -86,6 +86,8 @@
     <Compile Include="Adapters\DiscountAdapter.cs" />
     <Compile Include="Adapters\ExpenseAdapter.cs" />
     <Compile Include="Adapters\ExpensePermissionAdapter.cs" />
+    <Compile Include="Adapters\PresentPermissionAdapter.cs" />
+    <Compile Include="Adapters\ProductPermissionAdapter.cs" />
     <Compile Include="Adapters\ProductViewAdapter.cs" />
     <Compile Include="Adapters\ProductAdapter.cs" />
     <Compile Include="Adapters\CategoryCatalogAdapter.cs" />
@@ -97,6 +99,7 @@
     <Compile Include="Common\ConnectionDefine.cs" />
     <Compile Include="Common\Helper.cs" />
     <Compile Include="DataSources\GenericProductDataSource.cs" />
+    <Compile Include="DataSources\ProductViewDataSource.cs" />
     <Compile Include="Executors\PPTSProductExecutor.cs" />
     <Compile Include="Executors\PPTSEditProductExecutorBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

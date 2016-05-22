@@ -19,6 +19,7 @@ namespace MCS.Library.Data
             this.PageIndex = 1;
             this.PageSize = 10;
             this.TotalCount = -1;
+            this.Top = -1;
         }
 
         /// <summary>
@@ -68,6 +69,15 @@ namespace MCS.Library.Data
         /// 总行数。默认为-1，表示没有总行数
         /// </summary>
         public int TotalCount
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 最多返回多少行（-1是默认值，表示没有限制）
+        /// </summary>
+        public int Top
         {
             get;
             set;

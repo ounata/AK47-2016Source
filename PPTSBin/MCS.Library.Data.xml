@@ -764,6 +764,12 @@
             </summary>
             <param name="data">对其进行更新的<typeparamref name="T"/>对象。</param>
         </member>
+        <member name="M:MCS.Library.Data.Adapters.VersionedObjectAdapterBase`2.Delete(`0)">
+            <summary>
+            删除数据（实际上是时间封口）
+            </summary>
+            <param name="data"></param>
+        </member>
         <member name="M:MCS.Library.Data.Adapters.VersionedObjectAdapterBase`2.UpdateCollection(MCS.Library.Data.Builder.IConnectiveSqlClause,System.Collections.Generic.IEnumerable{`0})">
             <summary>
             
@@ -808,6 +814,20 @@
             <param name="data"></param>
             <param name="context"></param>
         </member>
+        <member name="M:MCS.Library.Data.Adapters.VersionedObjectAdapterBase`2.BeforeInnerDelete(`0,System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            更新单一对象前
+            </summary>
+            <param name="data"></param>
+            <param name="context"></param>
+        </member>
+        <member name="M:MCS.Library.Data.Adapters.VersionedObjectAdapterBase`2.AfterInnerDelete(`0,System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            更新单一对象后
+            </summary>
+            <param name="data"></param>
+            <param name="context"></param>
+        </member>
         <member name="M:MCS.Library.Data.Adapters.VersionedObjectAdapterBase`2.BeforeInnerUpdateCollection(System.Collections.Generic.IEnumerable{`0},System.Collections.Generic.Dictionary{System.String,System.Object})">
             <summary>
             更新集合对象前
@@ -835,6 +855,13 @@
             <param name="data"></param>
             <param name="ignoreProperties">需要忽略的属性</param>
         </member>
+        <member name="M:MCS.Library.Data.Adapters.VersionedObjectAdapterBase`2.DeleteInContext(`0,System.String[])">
+            <summary>
+            在上下文中生成删除数据的SQL（时间封口）
+            </summary>
+            <param name="data"></param>
+            <param name="ignoreProperties"></param>
+        </member>
         <member name="M:MCS.Library.Data.Adapters.VersionedObjectAdapterBase`2.UpdateCollectionInContext(MCS.Library.Data.Builder.IConnectiveSqlClause,System.Collections.Generic.IEnumerable{`0},System.String[])">
             <summary>
             
@@ -854,6 +881,14 @@
         <member name="M:MCS.Library.Data.Adapters.VersionedObjectAdapterBase`2.BeforeInnerUpdateCollectionInContext(System.Collections.Generic.IEnumerable{`0},MCS.Library.Data.SqlContextItem,System.Collections.Generic.Dictionary{System.String,System.Object})">
             <summary>
             在上下文中更新集合对象前
+            </summary>
+            <param name="data"></param>
+            <param name="sqlContext"></param>
+            <param name="context"></param>
+        </member>
+        <member name="M:MCS.Library.Data.Adapters.VersionedObjectAdapterBase`2.BeforeInnerDeleteInContext(`0,MCS.Library.Data.SqlContextItem,System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            在上下文中删除单一对象前
             </summary>
             <param name="data"></param>
             <param name="sqlContext"></param>
@@ -1497,6 +1532,13 @@
             <param name="data"></param>
             <returns></returns>
         </member>
+        <member name="M:MCS.Library.Data.Builder.SelectSqlClauseBuilder.AppendFields(System.String[])">
+            <summary>
+            
+            </summary>
+            <param name="fields"></param>
+            <returns></returns>
+        </member>
         <member name="M:MCS.Library.Data.Builder.SelectSqlClauseBuilder.ToFieldsSqlString(MCS.Library.Data.Builder.ISqlBuilder)">
             <summary>
             返回字段名的SQL语句
@@ -1855,6 +1897,27 @@
             <param name="ignoreProperties">需要忽略的属性</param>
             <returns></returns>
         </member>
+        <member name="M:MCS.Library.Data.Builder.VersionStrategyUpdateSqlBuilder`1.ToDeleteSql(`0,MCS.Library.Data.Mapping.ORMappingItemCollection,System.Boolean,System.String[])">
+            <summary>
+            生成删除数据的SQL（时间封口）
+            </summary>
+            <param name="obj"></param>
+            <param name="mapping"></param>
+            <param name="addCurrentTimeVar"></param>
+            <param name="ignoreProperties"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MCS.Library.Data.Builder.VersionStrategyUpdateSqlBuilder`1.ToDeleteSql(`0,MCS.Library.Data.Mapping.ORMappingItemCollection,System.Func{System.String},System.Boolean,System.String[])">
+            <summary>
+            生成删除数据的SQL（时间封口）
+            </summary>
+            <param name="obj"></param>
+            <param name="mapping"></param>
+            <param name="getDeleteSql"></param>
+            <param name="addCurrentTimeVar"></param>
+            <param name="ignoreProperties"></param>
+            <returns></returns>
+        </member>
         <member name="M:MCS.Library.Data.Builder.VersionStrategyUpdateSqlBuilder`1.ToUpdateCollectionSql(MCS.Library.Data.Builder.IConnectiveSqlClause,MCS.Library.Data.Mapping.ORMappingItemCollection,System.Collections.Generic.IEnumerable{`0},System.Boolean,System.String[])">
             <summary>
             
@@ -1953,6 +2016,15 @@
             <param name="obj"></param>
             <param name="mapping"></param>
             <param name="ignoreProperties">需要忽略的参数</param>
+            <returns></returns>
+        </member>
+        <member name="M:MCS.Library.Data.Builder.VersionStrategyUpdateSqlBuilder`1.PrepareDeleteSql(`0,MCS.Library.Data.Mapping.ORMappingItemCollection,System.String[])">
+            <summary>
+            生成删除的Sql语句。默认等同于PrepareUpdateSql
+            </summary>
+            <param name="obj"></param>
+            <param name="mapping"></param>
+            <param name="ignoreProperties"></param>
             <returns></returns>
         </member>
         <member name="M:MCS.Library.Data.Builder.VersionStrategyUpdateSqlBuilder`1.GetPropertyFieldName(System.String,MCS.Library.Data.Mapping.ORMappingItemCollection)">
@@ -2421,12 +2493,12 @@
             是否为空
             </summary>
         </member>
-        <member name="T:MCS.Library.Data.Builder.SqlClauseBuilderIUW">
+        <member name="T:MCS.Library.Data.Builder.SqlClauseBuilderIUW`1">
             <summary>
             Insert、Update、Where语句构造器的基类
             </summary>
         </member>
-        <member name="M:MCS.Library.Data.Builder.SqlClauseBuilderIUW.AppendItem``1(System.String,``0)">
+        <member name="M:MCS.Library.Data.Builder.SqlClauseBuilderIUW`1.AppendItem``1(System.String,``0)">
             <summary>
             添加一个构造项
             </summary>SqlCaluseBuilderBase
@@ -2435,7 +2507,7 @@
             <param name="dataField">Sql语句中的字段名</param>
             <param name="data">操作的数据</param>
         </member>
-        <member name="M:MCS.Library.Data.Builder.SqlClauseBuilderIUW.AppendItem``1(System.String,``0,System.String)">
+        <member name="M:MCS.Library.Data.Builder.SqlClauseBuilderIUW`1.AppendItem``1(System.String,``0,System.String)">
             <summary>
             添加一个构造项
             </summary>
@@ -2445,7 +2517,7 @@
             <param name="data">操作的数据</param>
             <param name="op">操作运算符</param>
         </member>
-        <member name="M:MCS.Library.Data.Builder.SqlClauseBuilderIUW.AppendItem``1(System.String,``0,System.String,System.Boolean)">
+        <member name="M:MCS.Library.Data.Builder.SqlClauseBuilderIUW`1.AppendItem``1(System.String,``0,System.String,System.Boolean)">
             <summary>
             添加一个构造项
             </summary>
@@ -2456,37 +2528,44 @@
             <param name="op">操作运算符</param>
             <param name="isExpression">操作的数据是否是表达式</param>
         </member>
-        <member name="M:MCS.Library.Data.Builder.SqlClauseBuilderIUW.ContainsDataField(System.String)">
+        <member name="M:MCS.Library.Data.Builder.SqlClauseBuilderIUW`1.AppendItems(System.Data.DataRow)">
+            <summary>
+            从DataRow生成一组Items
+            </summary>
+            <param name="row"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MCS.Library.Data.Builder.SqlClauseBuilderIUW`1.ContainsDataField(System.String)">
             <summary>
             判断是否已经包含了某个数据字段（大小写相关）
             </summary>
             <param name="fieldName"></param>
             <returns></returns>
         </member>
-        <member name="M:MCS.Library.Data.Builder.SqlClauseBuilderIUW.CreateBuilderItem">
+        <member name="M:MCS.Library.Data.Builder.SqlClauseBuilderIUW`1.CreateBuilderItem">
             <summary>
             创建一个BuilderItem。派生类可以重载，创建自己的BuilderItem。
             </summary>
             <returns></returns>
         </member>
-        <member name="M:MCS.Library.Data.Builder.SqlClauseBuilderIUW.GetFields">
+        <member name="M:MCS.Library.Data.Builder.SqlClauseBuilderIUW`1.GetFields">
             <summary>
             得到相关的字段
             </summary>
             <returns></returns>
         </member>
-        <member name="T:MCS.Library.Data.Builder.SqlClauseBuilderUW">
+        <member name="T:MCS.Library.Data.Builder.SqlClauseBuilderUW`1">
             <summary>
             UPDATE和WHERE语句构造器的基类
             </summary>
         </member>
-        <member name="M:MCS.Library.Data.Builder.SqlClauseBuilderUW.CreateBuilderItem">
+        <member name="M:MCS.Library.Data.Builder.SqlClauseBuilderUW`1.CreateBuilderItem">
             <summary>
             创建SqlClauseBuilderItemUW
             </summary>
             <returns></returns>
         </member>
-        <member name="M:MCS.Library.Data.Builder.SqlClauseBuilderUW.AppendItem``1(System.String,``0,System.String,System.String)">
+        <member name="M:MCS.Library.Data.Builder.SqlClauseBuilderUW`1.AppendItem``1(System.String,``0,System.String,System.String)">
             <summary>
             添加一个构造项
             </summary>
@@ -2497,7 +2576,7 @@
             <param name="op">操作运算符</param>
             <param name="template">模板的样式</param>
         </member>
-        <member name="M:MCS.Library.Data.Builder.SqlClauseBuilderUW.AppendItem``1(System.String,``0,System.String,System.String,System.Boolean)">
+        <member name="M:MCS.Library.Data.Builder.SqlClauseBuilderUW`1.AppendItem``1(System.String,``0,System.String,System.String,System.Boolean)">
             <summary>
             添加一个构造项
             </summary>
@@ -4551,71 +4630,79 @@
             <param name="type">类型信息</param>
             <returns>映射方式</returns>
         </member>
-        <member name="M:MCS.Library.Data.Mapping.ConditionMapping.GetWhereSqlClauseBuilder(System.Object)">
+        <member name="M:MCS.Library.Data.Mapping.ConditionMapping.GetWhereSqlClauseBuilder(System.Object,System.String[])">
             <summary>
             根据条件对象生成WhereSqlClauseBuilder
             </summary>
             <param name="condition"></param>
+            <param name="ignoreProperties">需要忽略的属性</param>
             <returns></returns>
         </member>
-        <member name="M:MCS.Library.Data.Mapping.ConditionMapping.GetWhereSqlClauseBuilder(System.Object,MCS.Library.Data.Mapping.AdjustConditionValueDelegate)">
+        <member name="M:MCS.Library.Data.Mapping.ConditionMapping.GetWhereSqlClauseBuilder(System.Object,MCS.Library.Data.Mapping.AdjustConditionValueDelegate,System.String[])">
             <summary>
             根据条件对象生成WhereSqlClauseBuilder
             </summary>
             <param name="condition"></param>
             <param name="acv"></param>
+            <param name="ignoreProperties">需要忽略的属性</param>
             <returns></returns>
         </member>
-        <member name="M:MCS.Library.Data.Mapping.ConditionMapping.GetWhereSqlClauseBuilder(System.Object,System.Boolean)">
+        <member name="M:MCS.Library.Data.Mapping.ConditionMapping.GetWhereSqlClauseBuilder(System.Object,System.Boolean,System.String[])">
             <summary>
             根据条件对象生成WhereSqlClauseBuilder
             </summary>
             <param name="condition"></param>
             <param name="ignoreDefaultValue">如果对象的属性值为缺省值时，不进入到WhereSqlClauseBuilder</param>
+            <param name="ignoreProperties">需要忽略的属性</param>
             <returns></returns>
         </member>
-        <member name="M:MCS.Library.Data.Mapping.ConditionMapping.GetWhereSqlClauseBuilder(System.Object,System.Boolean,MCS.Library.Data.Mapping.AdjustConditionValueDelegate)">
+        <member name="M:MCS.Library.Data.Mapping.ConditionMapping.GetWhereSqlClauseBuilder(System.Object,System.Boolean,MCS.Library.Data.Mapping.AdjustConditionValueDelegate,System.String[])">
             <summary>
             根据条件对象生成WhereSqlClauseBuilder
             </summary>
             <param name="condition"></param>
             <param name="ignoreDefaultValue"></param>
             <param name="acv"></param>
+            <param name="ignoreProperties">需要忽略的属性</param>
             <returns></returns>
         </member>
-        <member name="M:MCS.Library.Data.Mapping.ConditionMapping.GetConnectiveClauseBuilder(System.Object)">
+        <member name="M:MCS.Library.Data.Mapping.ConditionMapping.GetConnectiveClauseBuilder(System.Object,System.String[])">
             <summary>
             得到组合的语句构造器。里面可能组合了Where和IN两种Builder
             </summary>
             <param name="condition"></param>
+            <param name="ignoreProperties">需要忽略的属性</param>
             <returns></returns>
         </member>
-        <member name="M:MCS.Library.Data.Mapping.ConditionMapping.GetConnectiveClauseBuilder(System.Object,MCS.Library.Data.Mapping.AdjustConditionValueDelegate)">
+        <member name="M:MCS.Library.Data.Mapping.ConditionMapping.GetConnectiveClauseBuilder(System.Object,MCS.Library.Data.Mapping.AdjustConditionValueDelegate,System.String[])">
             <summary>
             得到组合的语句构造器。里面可能组合了Where和IN两种Builder
             </summary>
             <param name="condition"></param>
             <param name="acv"></param>
+            <param name="ignoreProperties">需要忽略的属性</param>
             <returns></returns>
         </member>
-        <member name="M:MCS.Library.Data.Mapping.ConditionMapping.GetConnectiveClauseBuilder(System.Object,System.Boolean)">
+        <member name="M:MCS.Library.Data.Mapping.ConditionMapping.GetConnectiveClauseBuilder(System.Object,System.Boolean,System.String[])">
             <summary>
             得到组合的语句构造器。里面可能组合了Where和IN两种Builder
             </summary>
             <param name="condition"></param>
             <param name="ignoreDefaultValue"></param>
+            <param name="ignoreProperties">需要忽略的属性</param>
             <returns></returns>
         </member>
-        <member name="M:MCS.Library.Data.Mapping.ConditionMapping.GetConnectiveClauseBuilder(System.Object,System.Boolean,MCS.Library.Data.Mapping.AdjustConditionValueDelegate)">
+        <member name="M:MCS.Library.Data.Mapping.ConditionMapping.GetConnectiveClauseBuilder(System.Object,System.Boolean,MCS.Library.Data.Mapping.AdjustConditionValueDelegate,System.String[])">
             <summary>
             得到组合的语句构造器。里面可能组合了Where和IN两种Builder
             </summary>
             <param name="condition"></param>
             <param name="ignoreDefaultValue"></param>
             <param name="acv"></param>
+            <param name="ignoreProperties">需要忽略的属性</param>
             <returns></returns>
         </member>
-        <member name="M:MCS.Library.Data.Mapping.ConditionMapping.FillInSqlClauseBuilderFromMapping(MCS.Library.Data.Builder.ConnectiveSqlClauseCollection,System.Object,System.Collections.Generic.IEnumerable{MCS.Library.Data.Mapping.InConditionMappingItem},System.Boolean,MCS.Library.Data.Mapping.AdjustConditionValueDelegate)">
+        <member name="M:MCS.Library.Data.Mapping.ConditionMapping.FillInSqlClauseBuilderFromMapping(MCS.Library.Data.Builder.ConnectiveSqlClauseCollection,System.Object,System.Collections.Generic.IEnumerable{MCS.Library.Data.Mapping.InConditionMappingItem},System.Boolean,MCS.Library.Data.Mapping.AdjustConditionValueDelegate,System.String[])">
             <summary>
             填充IN子句
             </summary>
@@ -4624,6 +4711,7 @@
             <param name="mapping"></param>
             <param name="ignoreDefaultValue"></param>
             <param name="acv"></param>
+            <param name="ignoreProperties">需要忽略的属性</param>
         </member>
         <member name="M:MCS.Library.Data.Mapping.ConditionMapping.DoAdjustValueAndAppendItem(System.Object,MCS.Library.Data.Mapping.ConditionMappingItemBase,System.Boolean,MCS.Library.Data.Mapping.AdjustConditionValueDelegate,System.Action{System.Object})">
             <summary>
@@ -5087,7 +5175,7 @@
             <summary>
             从Tenant上下文中获取TenantCode并且添加到Builder中
             </summary>
-            <typeparam name="T"></typeparam>
+            <typeparam name="TBuilder"></typeparam>
             <param name="builder"></param>
             <param name="tenantCodeFieldName"></param>
             <returns></returns>
@@ -5096,7 +5184,7 @@
             <summary>
             根据类型上的TenantRelativeObjectAttribute以及TenantContext.Current.Enabled决定是否在builder上添加租户编码字段
             </summary>
-            <typeparam name="T"></typeparam>
+            <typeparam name="TBuilder"></typeparam>
             <param name="builder"></param>
             <param name="type"></param>
             <returns></returns>
@@ -5124,10 +5212,40 @@
             <typeparam name="T">对象类型</typeparam>
             <param name="row">DataRow对象</param>
             <param name="graph">对象</param>
+            <returns>所填充的graph</returns>
             <remarks>
             将传入的DataRow中的数值写入到对象graph中
             <code source="..\Framework\TestProjects\DeluxeWorks.Library.Data.SqlBuilder.Test\ORMappingTest.cs" region="DataRowToObject" lang="cs" title="将DataRow的值写入到对象中"/>
             </remarks>
+        </member>
+        <member name="M:MCS.Library.Data.Mapping.ORMapping.DataRowToObject``1(System.Data.DataRow,``0,MCS.Library.Data.Mapping.DataToObjectDeligations)">
+            <summary>
+            
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="row"></param>
+            <param name="graph"></param>
+            <param name="dod"></param>
+            <returns>所填充的graph</returns>
+        </member>
+        <member name="M:MCS.Library.Data.Mapping.ORMapping.DataRowToObject(System.Data.DataRow,MCS.Library.Data.Mapping.ORMappingItemCollection,System.Object)">
+            <summary>
+            将DataRow的值写入到对象中
+            </summary>
+            <param name="row">DataRow对象</param>
+            <param name="items">映射关系</param>
+            <param name="graph">对象</param>
+            <returns>所填充的graph</returns>
+        </member>
+        <member name="M:MCS.Library.Data.Mapping.ORMapping.DataRowToObject(System.Data.DataRow,MCS.Library.Data.Mapping.ORMappingItemCollection,System.Object,MCS.Library.Data.Mapping.DataToObjectDeligations)">
+            <summary>
+            
+            </summary>
+            <param name="row">DataRow对象</param>
+            <param name="items">映射关系</param>
+            <param name="graph">对象</param>
+            <param name="dod"></param>
+            <returns>所填充的graph</returns>
         </member>
         <member name="M:MCS.Library.Data.Mapping.ORMapping.DataViewToCollection``1(MCS.Library.Data.DataObjects.EditableDataObjectCollectionBase{``0},System.Data.DataView)">
             <summary>
@@ -5136,6 +5254,7 @@
             <typeparam name="T"></typeparam>
             <param name="collection"></param>
             <param name="view"></param>
+            <returns>返回原有的集合</returns>
         </member>
         <member name="M:MCS.Library.Data.Mapping.ORMapping.DataViewToCollection``1(MCS.Library.Data.DataObjects.EditableDataObjectCollectionBase{``0},MCS.Library.Data.Mapping.ORMappingItemCollection,System.Data.DataView,MCS.Library.Data.Mapping.DataToObjectDeligations)">
             <summary>
@@ -5146,6 +5265,7 @@
             <param name="items"></param>
             <param name="view"></param>
             <param name="dod"></param>
+            <returns>返回原有的集合</returns>
         </member>
         <member name="M:MCS.Library.Data.Mapping.ORMapping.DataViewToCollection``1(MCS.Library.Data.DataObjects.EditableDataObjectCollectionBase{``0},MCS.Library.Data.Mapping.ORMappingItemCollection,System.Data.DataView)">
             <summary>
@@ -5155,6 +5275,7 @@
             <param name="collection"></param>
             <param name="items"></param>
             <param name="view"></param>
+            <returns>返回原有的集合</returns>
         </member>
         <member name="M:MCS.Library.Data.Mapping.ORMapping.DataViewToCollection``1(MCS.Library.Data.DataObjects.EditableDataObjectCollectionBase{``0},System.Data.DataView,MCS.Library.Data.Mapping.DataToObjectDeligations)">
             <summary>
@@ -5164,32 +5285,7 @@
             <param name="collection"></param>
             <param name="view"></param>
             <param name="dod"></param>
-        </member>
-        <member name="M:MCS.Library.Data.Mapping.ORMapping.DataRowToObject``1(System.Data.DataRow,``0,MCS.Library.Data.Mapping.DataToObjectDeligations)">
-            <summary>
-            
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="row"></param>
-            <param name="graph"></param>
-            <param name="dod"></param>
-        </member>
-        <member name="M:MCS.Library.Data.Mapping.ORMapping.DataRowToObject(System.Data.DataRow,MCS.Library.Data.Mapping.ORMappingItemCollection,System.Object)">
-            <summary>
-            将DataRow的值写入到对象中
-            </summary>
-            <param name="row">DataRow对象</param>
-            <param name="items">映射关系</param>
-            <param name="graph">对象</param>
-        </member>
-        <member name="M:MCS.Library.Data.Mapping.ORMapping.DataRowToObject(System.Data.DataRow,MCS.Library.Data.Mapping.ORMappingItemCollection,System.Object,MCS.Library.Data.Mapping.DataToObjectDeligations)">
-            <summary>
-            
-            </summary>
-            <param name="row">DataRow对象</param>
-            <param name="items">映射关系</param>
-            <param name="graph">对象</param>
-            <param name="dod"></param>
+            <returns>返回原有的集合</returns>
         </member>
         <member name="M:MCS.Library.Data.Mapping.ORMapping.DataReaderToObject``1(System.Data.IDataReader,``0)">
             <summary>
@@ -5198,6 +5294,7 @@
             <typeparam name="T">对象类型</typeparam>
             <param name="dr">IDataReader对象</param>
             <param name="graph">对象</param>
+            <returns>返回graph对象</returns>
             <remarks>
             将传入的DataReader中的数值写入到对象graph中
             <code source="..\Framework\TestProjects\DeluxeWorks.Library.Data.SqlBuilder.Test\ORMappingTest.cs" region="DataReaderToObject" lang="cs" title="将DataRow的值写入到对象中"/>
@@ -5211,6 +5308,7 @@
             <param name="dr"></param>
             <param name="graph"></param>
             <param name="dod"></param>
+            <returns>返回graph对象</returns>
         </member>
         <member name="M:MCS.Library.Data.Mapping.ORMapping.DataReaderToObject``1(System.Data.IDataReader,MCS.Library.Data.Mapping.ORMappingItemCollection,``0)">
             <summary>
@@ -5220,6 +5318,7 @@
             <param name="dr">IDataReader对象</param>
             <param name="items">映射关系</param>
             <param name="graph">对象</param>
+            <returns>返回graph对象</returns>
         </member>
         <member name="M:MCS.Library.Data.Mapping.ORMapping.DataReaderToObject``1(System.Data.IDataReader,MCS.Library.Data.Mapping.ORMappingItemCollection,``0,MCS.Library.Data.Mapping.DataToObjectDeligations)">
             <summary>
@@ -5230,6 +5329,7 @@
             <param name="items">映射关系</param>
             <param name="graph">对象</param>
             <param name="dod"></param>
+            <returns>返回graph对象</returns>
         </member>
         <member name="M:MCS.Library.Data.Mapping.ORMapping.DataReaderToCollection``1(MCS.Library.Data.DataObjects.EditableDataObjectCollectionBase{``0},System.Data.IDataReader)">
             <summary>
@@ -5238,6 +5338,7 @@
             <typeparam name="T"></typeparam>
             <param name="collection"></param>
             <param name="dr"></param>
+            <returns>返回原有的集合</returns>
         </member>
         <member name="M:MCS.Library.Data.Mapping.ORMapping.DataReaderToCollection``1(MCS.Library.Data.DataObjects.EditableDataObjectCollectionBase{``0},System.Data.IDataReader,MCS.Library.Data.Mapping.DataToObjectDeligations)">
             <summary>
@@ -5247,6 +5348,7 @@
             <param name="collection"></param>
             <param name="dr"></param>
             <param name="dod"></param>
+            <returns>返回原有的集合</returns>
         </member>
         <member name="M:MCS.Library.Data.Mapping.ORMapping.DataReaderToCollection``1(MCS.Library.Data.DataObjects.EditableDataObjectCollectionBase{``0},System.Data.IDataReader,MCS.Library.Data.Mapping.ORMappingItemCollection)">
             <summary>
@@ -5256,6 +5358,7 @@
             <param name="collection"></param>
             <param name="dr"></param>
             <param name="items"></param>
+            <returns>返回原有的集合</returns>
         </member>
         <member name="M:MCS.Library.Data.Mapping.ORMapping.DataReaderToCollection``1(MCS.Library.Data.DataObjects.EditableDataObjectCollectionBase{``0},System.Data.IDataReader,MCS.Library.Data.Mapping.ORMappingItemCollection,MCS.Library.Data.Mapping.DataToObjectDeligations)">
             <summary>
@@ -5266,6 +5369,7 @@
             <param name="dr"></param>
             <param name="items"></param>
             <param name="dod"></param>
+            <returns>返回原有的集合</returns>
         </member>
         <member name="M:MCS.Library.Data.Mapping.ORMapping.DecorateDate(MCS.Library.Data.Mapping.ORMappingItem,System.Object)">
             <summary>

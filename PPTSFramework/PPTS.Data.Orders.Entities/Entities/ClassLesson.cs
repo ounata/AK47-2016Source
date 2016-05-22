@@ -66,10 +66,11 @@ namespace PPTS.Data.Orders.Entities
             set;
 		}
 
-		/// <summary>
-		/// 课次状态（1-排定，3-已上，9-已删除）
-		/// </summary>
-		[ORFieldMapping("LessonStatus")]
+        /// <summary>
+        /// 课次状态（1-排定，3-已上，9-已删除）
+        /// </summary>
+        [ConstantCategory("C_CODE_ABBR_Order_LessonStatus")]
+        [ORFieldMapping("LessonStatus")]
         [DataMember]
 		public LessonStatus LessonStatus
 		{
@@ -132,10 +133,17 @@ namespace PPTS.Data.Orders.Entities
             set;
 		}
 
-		/// <summary>
-		/// 本次课包含人数
-		/// </summary>
-		[ORFieldMapping("LessonPeoples")]
+        /// <summary>
+        /// 课时费
+        /// </summary>
+        [ORFieldMapping("ConfirmedMoney")]
+        [DataMember]
+        public decimal ConfirmedMoney { get; set; }
+
+        /// <summary>
+        /// 本次课包含人数
+        /// </summary>
+        [ORFieldMapping("LessonPeoples")]
         [DataMember]
 		public int LessonPeoples
 		{

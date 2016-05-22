@@ -6,6 +6,7 @@ using PPTS.Data.Common.Executors;
 using PPTS.Data.Common.Security;
 using PPTS.Data.Customers.Adapters;
 using PPTS.Data.Customers.Entities;
+using PPTS.Data.Customers.Executors;
 using PPTS.WebAPI.Customers.ViewModels.Students;
 using System.Linq;
 
@@ -34,12 +35,12 @@ namespace PPTS.WebAPI.Customers.Executors
 
             CustomerParentRelationCollection relations = CustomerParentRelationAdapter.Instance.Load(this.Model.Customer.CustomerID);
 
-            bool isPrimary = false;
+            var isPrimary = true;
             if (relations.Count > 0)
             {
                 if (relations.Where(r => r.ParentID == this.Model.PrimaryParent.ParentID).Count() > 0)
                     return;
-                if (relations.Where(r => r.IsPrimary == true).Count() > 0)
+                if (relations.Where(r => r.IsPrimary).Count() > 0)
                     isPrimary = false;
             }
 

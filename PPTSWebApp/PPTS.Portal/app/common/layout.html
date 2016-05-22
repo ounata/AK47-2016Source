@@ -10,12 +10,12 @@
     <div id="sidebar" class="sidebar responsive" ng-class="{'menu-min':vm.isMinimized}" data-ng-include="'app/common/tpl/sidebar.tpl.html'"></div>
     <!-- /结束：网站主体内容区域.左侧区域 -->
     <!-- #开始：网站主体内容区域.中间区域 -->
-    <div class="main-content">
+    <div id="mainContent" class="main-content">
         <!-- #开始：导航面包屑 -->
         <div ncy-breadcrumb></div>
         <!-- /结束：导航面包屑 -->
         <!-- /结束：页面内容区域 -->
-        <div class="page-content">
+        <div id="pageContent" class="page-content">
             <div class="page-content-area">
                 <div class="row">
                     <div class="col-sm-12" ui-view></div>

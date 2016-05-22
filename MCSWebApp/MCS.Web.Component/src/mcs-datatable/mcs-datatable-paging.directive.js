@@ -21,9 +21,10 @@
                 '<li ng-class="{disabled: conf.pageIndex == conf.numberOfPages}" ng-click="nextPage()" style="cursor:pointer;"><span>&raquo;</span></li>' +
                 '</ul>' +
                 '<div class="page-total" ng-show="conf.totalCount > 0">' +
-                '第 <input type="text" ng-model="jumpPageNum" class="mcs-input-small" ng-blur="jumpToPage($event)" onkeyup="mcs.util.limit(this)" onafterpaste="mcs.util.limit(this)"/>页 ' +
+                '第 <input type="text" ng-model="jumpPageNum" class="mcs-input-small" ng-keypress="$event.keyCode == 13?jumpToPage($event):null" onkeyup="mcs.util.limit(this)" onafterpaste="mcs.util.limit(this)"/>页 ' +
 
-                '共<strong>{{ conf.totalCount }}</strong>条记录' +
+                '共<strong> {{ conf.totalCount }} </strong>条记录 ' +
+                '<button class="btn btn-minier btn-primary" ng-click="jumpToPage($event)"><i class="ace-icon fa bigger-110 fa-mail-forward"></i> 跳 转</button>' +
                 '</div>' +
                 '<div class="no-items" ng-show="conf.totalCount <= 0">暂无数据</div>' +
                 '</div>',

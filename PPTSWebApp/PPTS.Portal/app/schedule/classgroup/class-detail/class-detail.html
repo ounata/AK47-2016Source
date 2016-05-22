@@ -1,0 +1,31 @@
+﻿<div class="well">
+    <div class="row">
+        <div class="col-md-3">产品编号:{{vm.class.productCode}}</div>
+        <div class="col-md-3">产品名称:{{vm.class.productName}}</div>
+        <div class="col-md-3">班级名称:{{vm.class.className}}</div>
+        <div class="col-md-3">上课校区:{{vm.class.campusName}}</div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">课次时长:{{vm.class.lessonDurationValue}}</div>
+        <div class="col-md-3">总课次:{{vm.class.lessonCount}}</div>
+        <div class="col-md-3">课次总课时数:{{vm.class.periodsOfLesson}}</div>
+        <div class="col-md-3">课时时长:{{vm.class.periodDurationValue}}</div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">科目:{{vm.class.subjectName}}</div>
+        <div class="col-md-3">年级:{{vm.class.gradeName}}</div>
+        <div class="col-md-3">创建人:{{vm.class.creatorName}}</div>
+        <div class="col-md-3">创建时间:{{vm.class.createTime | date:'yyyy-MM-dd'}}</div>
+    </div>
+</div>
+<!-- #开始：班级详情.工具栏 -->
+<div class="mcs-panel-toolbar">
+    <mcs-button category="edit" text="编辑课表" click="vm.editClassLesson()"></mcs-button>
+    <mcs-button category="edit" text="更换教师" click="vm.editLessonTeacher()"></mcs-button>
+    <mcs-button category="add" text="增加学生" click="vm.addCustomers()"></mcs-button>
+    <mcs-button category="view" text="查看学生" click="vm.searchCustomers()"></mcs-button>
+</div>
+<!-- /结束：班级详情.工具栏 -->
+<!-- #开始：班级详情.数据表格 -->
+<mcs-datatable data="vm.data"  />
+<!-- /结束：班级详情.数据表格 -->

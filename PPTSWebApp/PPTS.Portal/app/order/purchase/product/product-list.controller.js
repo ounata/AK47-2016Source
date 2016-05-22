@@ -6,7 +6,8 @@
                 function ($scope, $state, $stateParams, $window, mcsDialogService, dataSyncService, purchaseCourseDataService) {
                     var vm = this;
 
-                    var customerId = $stateParams.customerId || '657323';
+                    var campusId = $stateParams.campusId;
+                    var customerId = $stateParams.customerId;
                     var listType = $stateParams.listType || 1; // 1:常规清单  2:买赠清单
 
                     var headers = [{
@@ -38,24 +39,114 @@
                         field: "periodDuration",
                         name: "时长（分钟）",
                         template: '<span>{{row.periodDuration | period }}</span>'
-                    }, {
-                        field: "lessonCount",
-                        name: "总课次",
-                        template: '<span>{{ row.categoryType==2 ? row.lessonCount : "--" }}</span>'
-                    }, {
-                        field: "productUnit",
-                        name: "产品颗粒度",
-                        template: '<span>{{ row.productUnit | unit }}</span>'
-                    }, {
-                        field: "productPrice",
-                        name: "产品单价（元）",
-                        template: '<span>{{row.productPrice | currency }}</span>',
-                    }];
+                    }, ];
 
-                    //查看买赠清单
-                    if (listType == 2) {
+
+
+                    if (listType == 1) {
+                        //常规清单
+
+                        //实际单价
+                        vm.actualPrice = function (row) {
+                            if (row.tunlandAllowed == 0) { return row.productPrice; }
+                            if (row.tunlandAllowed == 1) {
+                                if (row.item.specialRate == 1) { return row.discount() * row.productPrice; }
+                                if (row.item.specialRate < 1) { return row.item.specialRate * row.productPrice; }
+                            }
+                        };
+                        //订购金额
+                        vm.calcOrderPrice = function (row) {
+                            if (row.tunlandAllowed == 0) {
+                                row.orderPrice = vm.actualPrice(row) * row.item.orderAmount - (row.presetMoney || 0);
+                            } else {
+                                row.orderPrice = vm.actualPrice(row) * row.item.orderAmount;
+                            }
+                            return row.orderPrice;
+                        };
+                        //特殊折扣
+                        vm.reCalcSpecialRate = function (row) {
+                            row.item.specialRate = 1 - row.presetMoney / (row.item.orderAmount * row.productPrice);
+                        };
+                        //优惠金额
+                        vm.reCalcPresetMoney = function (row) {
+                            row.presetMoney = row.productPrice * row.item.orderAmount - vm.calcOrderPrice(row);
+                        };
+                        headers = headers.concat([{
+                            field: "lessonCount",
+                            name: "总课次",
+                            template: '<span>{{ row.categoryType==2 ? row.lessonCount : "--" }}</span>'
+                        }, {
+                            field: "productUnit",
+                            name: "产品颗粒度",
+                            template: '<span>{{ row.productUnit | unit }}</span>'
+                        }, {
+                            field: "productPrice",
+                            name: "产品单价（元）",
+                            template: '<span>{{row.productPrice | currency }}</span>',
+                        }, {
+                            name: "实际单价",
+                            template: '{{ vm.actualPrice(row) | currency }}'
+
+                        }, {
+                            name: "订购数量",
+                            template: '<span ng-if="row.canInput==1"><input type="text" ng-model="row.item.orderAmount" /></span>'
+                                    + '<span ng-if="row.canInput==0">'
+                                    + '<span ng-if="row.categoryType==2">{{ row.item.orderAmount }}</span>'
+                                    + '<span ng-if="row.categoryType!=2">1</span>'
+                                    + '</span>',
+
+                        }, {
+                            field: "ProductPrice",
+                            name: "产品原价",
+                            template: '{{ row.item.orderAmount * row.productPrice | currency}}'
+                        }, {
+                            name: "客户折扣",
+                            template: '{{ row.discount() }}',
+                        }, {
+                            field: "item.specialRate",
+                            name: "特殊折扣",
+                            template: '<span ng-if="row.specialAllowed==1">'
+                                    + '<span ng-if="row.categoryType==3" >'
+                                    + '<span ng-if="row.tunlandAllowed == 1">--</span>'
+                                    + '<span ng-if="row.tunlandAllowed == 0">{{ row.item.specialRate }}</span>'
+                                    + '</span>'
+                                    + '<span ng-if="row.categoryType!=3" >'
+                                    + '<input type="number" ng-model="row.item.specialRate" ng-keyup="vm.reCalcPresetMoney(row)" />'
+                                    + '</span>'
+                                    + '</span>'
+                                    + '<span ng-if="row.specialAllowed==0">--</span>'
+                        }, {
+                            name: "优惠金额",
+                            template: '<span ng-if="row.categoryType==2 || row.categoryType ==3 ">'
+                                    + '<span ng-show="row.lessonCount>1 || row.categoryType ==3"><input type="number" ng-model="row.presetMoney" ng-keyup="vm.reCalcSpecialRate(row)"/></span>'
+                                    + '</span>'
+                                    + '<span ng-if="row.categoryType!=2 && row.categoryType !=3 ">--</span>',
+                        }, {
+                            name: "订购金额",
+                            template: '{{ vm.calcOrderPrice(row) | currency }}',
+                        }]);
+
+                    } else if (listType == 2) {
+                        //买赠清单
+
+                        
+
+                        //订购金额
+                        vm.calcOrderPrice = function (row) {
+                            row.orderPrice = row.item.orderAmount * row.productPrice;
+                            return row.orderPrice;
+                        };
+
 
                         headers = headers.concat([{
+                            field: "productUnit",
+                            name: "产品颗粒度",
+                            template: '<span>{{ row.productUnit | unit }}</span>'
+                        }, {
+                            field: "productPrice",
+                            name: "产品单价（元）",
+                            template: '<span>{{row.productPrice | currency }}</span>',
+                        },{
                             name: "订购数量",
                             template: '<input type="number" ng-model="row.item.orderAmount" ng-keyup="vm.reCalcPreset(row);" />',
                         }, {
@@ -66,48 +157,82 @@
                             template: '{{ row.item.orderAmount + row.item.presentAmount }}',
                         }, {
                             name: "订购金额",
-                            template: '{{ row.item.orderAmount * row.productPrice | currency}}',
+                            template: '{{ vm.calcOrderPrice(row) | currency}}',
                         }]);
 
-                    } else {
+                    } else if (listType == 3) {
+                        //插班清单
+
+                        //实际单价
+                        vm.actualPrice = function (row) {
+                            if (row.tunlandAllowed == 0) { return row.productPrice; }
+                            if (row.tunlandAllowed == 1) {
+                                if (row.item.specialRate == 1) { return row.discount() * row.productPrice; }
+                                if (row.item.specialRate < 1) { return row.item.specialRate * row.productPrice; }
+                            }
+                        };
+
+                        //订购金额
+                        vm.calcOrderPrice = function (row) {
+                            row.orderPrice = row.item.orderAmount * row.productPrice;
+                            return row.orderPrice;
+                        };
+
                         headers = headers.concat([{
+                            field: "lessonCount",
+                            name: "总课次",
+                            template: '<span>{{ row.categoryType==2 ? row.lessonCount : "--" }}</span>'
+                        }, {
+                            field: "noOpenClassCount",
+                            name: "未上课次",
+                        }, {
+                            field: "remainLessonCount",
+                            name: "可订购数量",
+                        }, {
+                            field: "productUnit",
+                            name: "产品颗粒度",
+                            template: '<span>{{ row.productUnit | unit }}</span>'
+                        }, {
                             field: "productPrice",
+                            name: "产品单价（元）",
+                            template: '<span>{{row.productPrice | currency }}</span>',
+                        }, {
                             name: "实际单价",
-                            template: '<span>{{row.productPrice | currency}}</span>',
+                            template: '{{ vm.actualPrice(row) | currency }}'
+
                         }, {
                             name: "订购数量",
-                            template: '<span ng-if="row.canInput==1"><input type="text" ng-model="row.item.orderAmount" /></span><span ng-if="row.canInput==0">1</span>',
+                            template: '<input type="number" ng-model="row.item.orderAmount" ng-keyup="vm.reCalcPreset(row);" />',
                         }, {
                             field: "ProductPrice",
                             name: "产品原价",
-                            template: '<span>{{ row.item.orderAmount * row.productPrice | currency}}</span>',
+                            template: '{{ row.item.orderAmount * row.productPrice | currency}}'
                         }, {
-                            //field: "row.item.tunlandRate",
                             name: "客户折扣",
-                            template: '<span ng-if="row.tunlandAllowed==1">{{ row.discount() }}</span><span ng-if="row.tunlandAllowed==0">--</span>',
+                            template: '{{ row.discount() }}',
                         }, {
-                            field: "item.specialRate",
-                            name: "特殊折扣",
-                            template: '<span ng-if="row.categoryType==3" ><span ng-if="row.tunlandAllowed == 1">--</span><span ng-if="row.tunlandAllowed == 0">{{ row.item.realPrice/row.productPrice | number:2 }}</span></span><span ng-if="row.categoryType!=3" ><input type="text" ng-model="row.item.specialRate" /></span>',
-                        }, {
-                            field: "productPrice",
                             name: "订购金额",
-                            template: '<span ng-if="row.categoryType==3" ><input type="text" ng-model="row.item.realPrice" /></span><span ng-if="row.categoryType!=3">{{ vm.calcRealPrice(row) }}</span>',
+                            template: '{{ vm.calcOrderPrice(row) | currency}}',
                         }]);
+
                     }
 
 
                     vm.account = {};
-                    vm.calcRealPrice = function (row) {
-                        var discount = row.tunlandAllowed == 0 ? 1 : row.discount();
-                        row.item.realPrice = (row.item.specialRate < discount ? row.item.specialRate : discount) * row.productPrice * row.item.orderAmount;
-                        return row.item.realPrice;
-                    }
-                    vm.totalMoney = function () {
+
+                    vm.totalOriginalMoney = function () {
                         var total = 0;
-                        $(vm.data.rowsSelected).each(function (i, v) { total += v.item.realPrice; });
+                        $(vm.data.rows).each(function (i, v) {
+                            if (v.selected) { total += v.item.orderAmount * v.productPrice; }
+                        });
                         return total;
                     }
+
+                    vm.totalMoney = function () {
+                        var total = 0;
+                        $(vm.data.rows).each(function (i, v) { if (v.selected) { total += v.orderPrice; } });
+                        return total;
+                    };
 
                     vm.account.data = {
                         selection: 'radio',
@@ -139,58 +264,81 @@
                         orderBy: [{ dataField: 'CreateTime', sortDirection: 1 }],
                     }
 
+
+                    vm.showPursueReason = function () {
+                        return $(vm.data.rowsSelected).map(function (i, v) { if (v.item.specialRate == 0) return v.cartID; }).length > 0;
+                    };
+
+
                     vm.goBuy = function () {
                         $window.history.back();
+                        //1 - 常规订购
+                        //2 - 买赠订购
+                        //3 - 插班订购
+                        //4 - 补差兑换
+                        //5 - 不补差兑换
+                        //if (listType == 1 || listType == 2) {
+                        //    $state.go('ppts.purchaseProduct', { type: listType, customerId: customerId });
+                        //}  else if (listType == 3) {
+                        //    $state.go('ppts.purchaseClassGroupList', { customerId: customerId });
+                        //}
+
                     };
 
                     vm.delete = function () {
                         var cartIDs = $(vm.data.rowsSelected).map(function (i, v) { return v.cartID }).toArray();
-                        purchaseCourseDataService.deleteShoppingCart(cartIDs, function (state) {
-                            if (state) {
-                                var indexs = $(vm.data.rows).map(function (i, v) { if ($.inArray(v.cartID, cartIDs) > -1) { return i; } }).toArray().reverse();
-                                $(indexs).each(function (i, v) { vm.data.rows.shift(v, 1); });
-                            }
-                        });
+                        purchaseCourseDataService.deleteShoppingCart(cartIDs, function (state) { mcs.util.removeByObjectsWithKeys(vm.data.rows, vm.data.rowsSelected); });
                     };
 
                     vm.submit = function () {
 
                         var selectedRow = vm.account.data.rowsSelected[0];
-                        //if (selectedRow.accountMoney < vm.totalMoney()) {
-                        //    mcsDialogService.error({ title: 'Error', message: '该学员可用金额不足！' });
-                        //    return;
-                        //}
-
-                        //
 
 
-                        if (false) {
-                            mcsDialogService.error({ title: 'Error', message: '没有创建综合服务费，请先创建综合服务费。' });
-                            return;
-                        }
+                        purchaseCourseDataService.getServiceCharge({ customerId: customerId, campusId: campusId }, function (entity) {
+                            var messageServiceMoney = '';
+                            var totalMoney = vm.totalMoney();
+                            if (!entity.serviceCharge) {
+                                mcsDialogService.error({ title: 'Error', message: '没有创建综合服务费，请先创建综合服务费。' });
+                                return;
+                            } else {
+                                if (!entity.isDeduct) {
+                                    totalMoney += entity.serviceCharge.expenseValue;
+                                    messageServiceMoney = '+¥' + entity.serviceCharge.expenseValue + '(综合服务费)';
+                                }
+                            }
 
-                        //获取要扣取的服务费
-                        //purchaseCourseDataService.getServiceMoney(customerId, function (entity) {
+                            var message = '¥' + vm.totalMoney() + '(产品费用)' + messageServiceMoney + '=¥' + (totalMoney) + '(总金额)，您确认要提交审批吗？';
+                            mcsDialogService.confirm({ title: 'Confirm', message: message }).result.then(function () {
 
-                        var messageServiceMoney = '';
-                        if (true) {
-                            messageServiceMoney = '+¥(综合服务费)';
-                        }
+                                if (selectedRow.accountMoney < vm.totalMoney()) {
+                                    mcsDialogService.error({ title: 'Error', message: '该学员可用金额不足！' });
+                                    return;
+                                }
 
-                        var message = '¥' + vm.totalMoney() + '(产品费用)' + messageServiceMoney + '=¥(总金额)，您确认要提交审批吗？';
-                        mcsDialogService.confirm({ title: 'Confirm', message: message }).result.then(function () {
+                                var items = $(vm.data.rowsSelected).map(function (i, v) { return v.item; }).toArray();
+                                var param = {
+                                    listType: listType,
+                                    customerId: customerId,
+                                    accountId: selectedRow.accountID,
+                                    item: items,
+                                    customerCampusID: campusId,
+                                    chargeApplyId: vm.chargeApplyId,
+                                    specialType: vm.specialType,
+                                    specialMemo: vm.specialMemo,
+                                    //productCampusID: '',
+                                    //productCampusName:'',
+                                };
 
-                            var items = $(vm.data.rowsSelected).map(function (i, v) { return v.item; }).toArray();
-                            var param = { listType: listType, customerId: customerId, accountId: selectedRow.accountID, item: items, chargeApplyId: 1 };
+                                console.debug(param)
+                                //return;;
+                                purchaseCourseDataService.submitShoppingCart(param, function (entity) { console.log(entity); });
 
-                            console.debug(param)
-                            //return;;
+                            });
 
-                            purchaseCourseDataService.submitShoppingCart(param, function (entity) { console.log(entity); });
 
-                        }, function () { });
+                        });
 
-                        //});
                     };
 
 
@@ -198,18 +346,34 @@
 
 
 
-                    purchaseCourseDataService.getShoppingCart({ customerId: customerId, listType: listType }, function (result) {
+                    purchaseCourseDataService.getShoppingCart({ customerId: customerId, listType: listType, campusId: campusId }, function (result) {
                         console.debug(result)
 
                         var rows = $(result.cart).map(function (i, v) {
+
+                            if (v.noOpenClassCount) {
+                                v.product['noOpenClassCount'] = v.noOpenClassCount;
+                            }
+                            if (v.remainLessonCount) {
+                                v.product['remainLessonCount'] = v.remainLessonCount;
+                            }
+                            v.product['orderPrice'] = 0;
+                            v.product['highlight'] = v.product.tunlandAllowed == 0;
                             v.product['cartID'] = v.cartID;
                             v.product['item'] = v.item;
-                            v.product['discount'] = function () { return vm.account.data.rowsSelected[0].discountRate; };
+                            v.product['discount'] = function () {
+                                if (v.product.tunlandAllowed == 0) { return '--'; }
+                                if (vm.account.data.rowsSelected.length < 1) return 1;
+                                return vm.account.data.rowsSelected[0].discountRate;
+                            };
                             return v.product;
                         });
 
                         vm.account.data.rows = result.account;
-                        vm.account.data.rowsSelected[0] = result.account[0];
+                        if (result.account.length > 0) {
+                            vm.account.data.rowsSelected[0] = result.account[0];
+                        }
+
 
                         vm.data.rows = rows.toArray();
 
@@ -226,6 +390,16 @@
                             };
                         }
 
+                        //初始化缴费单下拉列表
+                        dataSyncService.injectDictData(mcs.util.mapping(result.chargePayments, { key: 'applyID', value: 'payMemo' }, 'ChargePayment'));
+                        ppts.config.dictMappingConfig["chargePayment"] = "c_codE_ABBR_ChargePayment";
+
+                        console.log(ppts.dict)
+
+
+                        //选中0折
+                        vm.specialType = "1";
+                        $scope.$broadcast('dictionaryReady');
                     });
 
 

@@ -6,7 +6,7 @@
     [ObjMemo] NVARCHAR(50) NULL, 
     [ObjPriority] INT NULL DEFAULT 99, 
     [ErrorMessage] NVARCHAR(255) NULL, 
-    [QueuedTime] DATETIME NULL DEFAULT getdate(), 
+    [QueuedTime] DATETIME NULL DEFAULT GETUTCDATE(), 
     CONSTRAINT [PK_ProcessQueues] PRIMARY KEY ([SID])
 )
 

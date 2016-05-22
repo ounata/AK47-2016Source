@@ -1,0 +1,78 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCS.Library.SOA.SysTasks.Test", "MCS.Library.SOA.SysTasks.Test.csproj", "{5EF4DE1B-64B6-4060-840D-952E5DA2B83B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E1AF2D04-05F7-4325-B0A1-9C95CEBE3191} = {E1AF2D04-05F7-4325-B0A1-9C95CEBE3191}
+		{7905642F-4630-4D16-AF40-CB1FB70D516F} = {7905642F-4630-4D16-AF40-CB1FB70D516F}
+		{90B002AA-161D-406E-A030-7FBE21D17A89} = {90B002AA-161D-406E-A030-7FBE21D17A89}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCS.Library.WcfExtensions", "..\..\MCS.Library.WcfExtensions\MCS.Library.WcfExtensions.csproj", "{F4819ABF-3CD4-4158-BF86-8FE4D3F6A7A6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCS.Library.SOA.DataObjects", "..\..\MCS.Library.SOA.DataObjects\MCS.Library.SOA.DataObjects.csproj", "{7905642F-4630-4D16-AF40-CB1FB70D516F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F4819ABF-3CD4-4158-BF86-8FE4D3F6A7A6} = {F4819ABF-3CD4-4158-BF86-8FE4D3F6A7A6}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCS.Library.ServiceBase", "..\..\MCS.Library.ServiceBase\MCS.Library.ServiceBase.csproj", "{90B002AA-161D-406E-A030-7FBE21D17A89}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ActivateWfProcessService", "..\..\..\Services\ActivateWfProcessService\ActivateWfProcessService.csproj", "{E1AF2D04-05F7-4325-B0A1-9C95CEBE3191}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7905642F-4630-4D16-AF40-CB1FB70D516F} = {7905642F-4630-4D16-AF40-CB1FB70D516F}
+		{90B002AA-161D-406E-A030-7FBE21D17A89} = {90B002AA-161D-406E-A030-7FBE21D17A89}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5EF4DE1B-64B6-4060-840D-952E5DA2B83B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5EF4DE1B-64B6-4060-840D-952E5DA2B83B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5EF4DE1B-64B6-4060-840D-952E5DA2B83B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5EF4DE1B-64B6-4060-840D-952E5DA2B83B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4819ABF-3CD4-4158-BF86-8FE4D3F6A7A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4819ABF-3CD4-4158-BF86-8FE4D3F6A7A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4819ABF-3CD4-4158-BF86-8FE4D3F6A7A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4819ABF-3CD4-4158-BF86-8FE4D3F6A7A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7905642F-4630-4D16-AF40-CB1FB70D516F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7905642F-4630-4D16-AF40-CB1FB70D516F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7905642F-4630-4D16-AF40-CB1FB70D516F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7905642F-4630-4D16-AF40-CB1FB70D516F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90B002AA-161D-406E-A030-7FBE21D17A89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90B002AA-161D-406E-A030-7FBE21D17A89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90B002AA-161D-406E-A030-7FBE21D17A89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90B002AA-161D-406E-A030-7FBE21D17A89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1AF2D04-05F7-4325-B0A1-9C95CEBE3191}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1AF2D04-05F7-4325-B0A1-9C95CEBE3191}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1AF2D04-05F7-4325-B0A1-9C95CEBE3191}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1AF2D04-05F7-4325-B0A1-9C95CEBE3191}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 6
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://10.1.56.70:8080/tfs/pptsv2.0
+		SccProjectUniqueName0 = MCS.Library.SOA.SysTasks.Test.csproj
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = ..\\..\\MCS.Library.WcfExtensions\\MCS.Library.WcfExtensions.csproj
+		SccProjectName1 = ../../MCS.Library.WcfExtensions
+		SccLocalPath1 = ..\\..\\MCS.Library.WcfExtensions
+		SccProjectUniqueName2 = ..\\..\\MCS.Library.SOA.DataObjects\\MCS.Library.SOA.DataObjects.csproj
+		SccProjectName2 = ../../MCS.Library.SOA.DataObjects
+		SccLocalPath2 = ..\\..\\MCS.Library.SOA.DataObjects
+		SccProjectUniqueName3 = ..\\..\\MCS.Library.ServiceBase\\MCS.Library.ServiceBase.csproj
+		SccProjectName3 = ../../MCS.Library.ServiceBase
+		SccLocalPath3 = ..\\..\\MCS.Library.ServiceBase
+		SccProjectUniqueName4 = ..\\..\\..\\Services\\ActivateWfProcessService\\ActivateWfProcessService.csproj
+		SccProjectName4 = ../../../Services/ActivateWfProcessService
+		SccLocalPath4 = ..\\..\\..\\Services\\ActivateWfProcessService
+		SccLocalPath5 = .
+	EndGlobalSection
+EndGlobal

@@ -1,20 +1,27 @@
 ﻿using MCS.Library.Data;
 using MCS.Library.Data.Adapters;
+using MCS.Library.OGUPermission;
+using MCS.Library.Principal;
+using MCS.Web.MVC.Library.Filters;
+using PPTS.Data.Common;
 using PPTS.Data.Common.Adapters;
+using PPTS.Data.Common.Entities;
 using PPTS.Data.Common.Security;
+using PPTS.Data.Customers;
 using PPTS.Data.Customers.Adapters;
 using PPTS.Data.Customers.DataSources;
 using PPTS.Data.Customers.Entities;
 using PPTS.WebAPI.Customers.Executors;
+using PPTS.WebAPI.Customers.ViewModels.Accounts;
 using PPTS.WebAPI.Customers.ViewModels.PotentialCustomers;
 using PPTS.WebAPI.Customers.ViewModels.Students;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web.Http;
 
 namespace PPTS.WebAPI.Customers.Controllers
 {
+    [ApiPassportAuthentication]
     public class StudentsController : ApiController
     {
         #region api/students/getallstudents
@@ -117,18 +124,23 @@ namespace PPTS.WebAPI.Customers.Controllers
         public CustomerParentsQueryResult GetStudentParents(string id)
         {
             CustomerParentsQueryResult result = new CustomerParentsQueryResult();
-            result.CustomerParentRelations = CustomerParentRelationAdapter.Instance.Load(id);
 
-            if (result.CustomerParentRelations != null && result.CustomerParentRelations.Count > 0)
+            result.Relations = CustomerParentRelationAdapter.Instance.Load(id);
+
+            if (result.Relations != null && result.Relations.Count > 0)
             {
-                var builder = new InLoadingCondition((p) =>
+                var builder = new InLoadingCondition((condition) =>
                 {
-                    result.CustomerParentRelations.ForEach((relation) =>
-                    {
-                        p.AppendItem(relation.ParentID);
-                    });
+                    result.Relations.ForEach((relation) => { condition.AppendItem(relation.ParentID); });
                 }, "ParentID");
-                result.Parents = ParentAdapter.Instance.LoadByInBuilder(builder, DateTime.MinValue);
+
+                result.Parents = GenericParentAdapter<ParentModel, ParentModelCollection>.Instance.LoadByInBuilder(builder, DateTime.MinValue);
+
+                result.Parents.ForEach(parent =>
+                {
+                    PhoneAdapter.Instance.LoadByOwnerIDInContext(parent.ParentID, phone => parent.FillFromPhones(phone));
+                    PhoneAdapter.Instance.GetDbContext().DoAction(context => context.ExecuteDataSetSqlInContext());
+                });
             }
 
             result.Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(CreatablePortentialCustomerModel), typeof(Parent));
@@ -162,5 +174,83 @@ namespace PPTS.WebAPI.Customers.Controllers
             return result;
         }
         #endregion
+
+        #region 判断当前学员是否可以充值缴费
+
+        [HttpGet]
+        public AssertResult AssertAccountCharge(string customerID)
+        {
+            return ChargeApplyResult.Validate(customerID, DeluxeIdentity.CurrentUser);
+        }
+        #endregion
+
+        #region api/students/createparent
+
+        [HttpGet]
+        public CreatableParentModel CreateParent(string id)
+        {
+            CreatableParentModel result = new CreatableParentModel();
+            result.Customer = GenericCustomerAdapter<StudentModel, List<StudentModel>>.Instance.Load(id);
+            result.Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(CreatableParentModel), typeof(Parent));
+            return result;
+        }
+
+        [HttpPost]
+        public void CreateParent(CreatableParentModel model)
+        {
+            CreateStudentParentExecutor executor = new CreateStudentParentExecutor(model);
+            executor.Execute();
+        }
+
+        #endregion
+
+        #region api/students/assignTeacher
+        [HttpPost]
+        public void assignTeacher(CustomerTeacherRelationCollection ctrc)
+        {
+            AssignTeacherExecutor executor = new AssignTeacherExecutor(ctrc);
+            executor.Execute();
+        }
+        #endregion
+
+        #region api/students/getTeachers
+        [HttpGet]
+        public TeacherJobViewCollection getTeachers()
+        {
+            TeachersQueryCriteriaModel criteria = new TeachersQueryCriteriaModel();
+            var result = TeacherJobViewAdapter.Instance.Load(builder => builder.AppendItem("CampusID", criteria.CampusID).AppendItem("JobOrgType", (int)criteria.JobOrgType));
+            return result;
+        }
+        #endregion
+
+        #region api/students/calloutTeacher
+        [HttpPost]
+        public void calloutTeacher(CustomerTeacherAssignApplie cta)
+        {
+            CalloutTeacherExecutor executor = new CalloutTeacherExecutor(cta);
+            executor.Execute();
+        }
+        #endregion
+
+        #region api/students/changeTeacher
+        [HttpPost]
+        public void changeTeacher(CustomerTeacherAssignApplie cta)
+        {
+            ChangeTeacherExecutor executor = new ChangeTeacherExecutor(cta);
+            executor.Execute();
+        }
+        #endregion
+
+        #region api/students/getAllCustomerTeacherRelations
+        [HttpPost]
+        public CustomerTeacherRelationQueryResultModel getAllCustomerTeacherRelations(CustomerTeacherRelationQueryCriteriaModel criteria)
+        {
+            return new CustomerTeacherRelationQueryResultModel
+            {
+                CustomerTeachers = CustomerTeacherRelationAdapter.Instance.Load(builder => builder.AppendItem("CustomerID", criteria.CustomerID), DateTime.MinValue),
+                Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(CustomerTeacherRelation))
+            }; 
+        }
+        #endregion 
     }
 }

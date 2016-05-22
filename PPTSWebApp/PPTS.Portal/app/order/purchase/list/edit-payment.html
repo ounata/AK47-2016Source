@@ -1,0 +1,23 @@
+﻿<div class="mcs-panel-toolbar">
+
+    
+    <mcs-button category="edit" text="确定" click="vm.save()" ></mcs-button>
+    <mcs-button category="cancel" click="vm.cancel()" ></mcs-button>
+
+</div>
+
+此订购单为{{vm.order.customerName}}（{{vm.order.orderNo}}）的订购单
+订购单状态：{{vm.order.orderStatus | orderStatus}}
+订购操作人：{{vm.order.submitterName}}
+操作人岗位：{{vm.order.submitterJobName}}
+<mcs-datatable data="vm.data" />
+
+<div class="form-group row">
+    <label class="control-label col-sm-3">
+        本次订购关联的缴费单：
+    </label>
+    <div class="col-sm-8">
+        <ppts-select category="chargePayment" model="vm.post.chargeApplyId" class="col-sm-3" />
+    </div>
+</div>
+

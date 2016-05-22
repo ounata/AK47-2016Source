@@ -1,0 +1,15 @@
+﻿
+<div class="mcs-panel-toolbar">
+    <mcs-button category="add" text="录入成绩" click="vm.add()"></mcs-button>
+    <mcs-button category="edit" text="编辑成绩" click="vm.edit()"></mcs-button>
+    <mcs-button category="add" text="导入成绩" click=""></mcs-button>
+</div>
+<div class="alert alert-block alert-danger" ng-show="vm.errorMessage">
+    <button type="button" class="close" data-dismiss="alert">
+        <i class="ace-icon fa fa-times"></i>
+    </button>
+    <i class="ace-icon fa fa-warning"></i>
+    {{vm.errorMessage}}
+</div>
+
+<mcs-datatable data="vm.data" />

@@ -53,7 +53,7 @@ namespace PPTS.Data.Customers.Adapters
         {
             string sql = this.PrepareLoadPrimaryParentSql(customerID);
 
-            return this.QueryData(this.GetQueryMappingInfo(), sql).SingleOrDefault();
+            return this.QueryData(this.GetQueryMappingInfo(), sql).FirstOrDefault();
         }
 
         protected override void BeforeInnerUpdateInContext(T data, SqlContextItem sqlContext, Dictionary<string, object> context)

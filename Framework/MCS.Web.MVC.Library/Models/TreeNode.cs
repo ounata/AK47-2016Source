@@ -48,25 +48,7 @@ namespace MCS.Web.MVC.Library.Models
         /// <summary>
         /// 节点图标
         /// </summary>
-        public string Icon
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 节点打开图标
-        /// </summary>
-        public string IconOpen
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 节点关闭图标
-        /// </summary>
-        public string IconClose
+        public string IconSkin
         {
             get;
             set;

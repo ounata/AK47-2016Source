@@ -1,20 +1,22 @@
 ﻿CREATE TABLE [CM].[CustomerTeacherRelations]
 (
+	[ID]  NVARCHAR(36) NOT NULL, 
     [CustomerID] NVARCHAR(36) NOT NULL, 
     [TeacherID] NVARCHAR(36) NULL, 
     [TeacherName] NVARCHAR(64) NULL, 
-    [TeacherJobID] NVARCHAR(32) NOT NULL, 
+	[TeacherJobID] NVARCHAR(32) NOT NULL, 
+    [TeacherOACode] NVARCHAR(128) NULL, 
     [TeacherJobOrgID] NVARCHAR(36) NULL, 
-    [TeacherJobOrgName] NVARCHAR(64) NULL, 
-    [Subject] NVARCHAR(32) NULL, 
-    [Grade] NVARCHAR(32) NULL, 
+    [TeacherJobOrgShortName] NVARCHAR(64) NULL, 
+	[TeacherJobOrgName] NVARCHAR(128) NULL, 
     [CreatorID] NVARCHAR(36) NULL, 
     [CreatorName] NVARCHAR(64) NULL, 
-    [CreateTime] DATETIME NULL, 
+    [CreateTime] DATETIME NULL DEFAULT GETUTCDATE(), 
     [VersionStartTime] DATETIME NOT NULL DEFAULT GETUTCDATE(), 
     [VersionEndTime] DATETIME NULL DEFAULT '99990909 00:00:00', 
     [TenantCode] NVARCHAR(36) NULL, 
-    CONSTRAINT [PK_CustomerTeacherRelations] PRIMARY KEY NONCLUSTERED ([CustomerID], [TeacherJobID], [VersionStartTime]) 
+    CONSTRAINT [PK_CustomerTeacherRelations] PRIMARY KEY NONCLUSTERED ([ID], [VersionStartTime]), 
+    CONSTRAINT [IK_CustomerTeacherRelations] UNIQUE ([CustomerID], [TeacherJobID], [VersionStartTime]) 
 )
 
 GO
@@ -80,23 +82,9 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level2type = N'COLUMN',
     @level2name = N'TeacherJobOrgID'
 GO
-EXEC sp_addextendedproperty @name = N'MS_Description',
-    @value = N'教师教授科目代码',
-    @level0type = N'SCHEMA',
-    @level0name = N'CM',
-    @level1type = N'TABLE',
-    @level1name = N'CustomerTeacherRelations',
-    @level2type = N'COLUMN',
-    @level2name = N'Subject'
+
 GO
-EXEC sp_addextendedproperty @name = N'MS_Description',
-    @value = N'教师教授年纪代码',
-    @level0type = N'SCHEMA',
-    @level0name = N'CM',
-    @level1type = N'TABLE',
-    @level1name = N'CustomerTeacherRelations',
-    @level2type = N'COLUMN',
-    @level2name = N'Grade'
+
 GO
 EXEC sp_addextendedproperty @name = N'MS_Description',
     @value = N'创建人ID',
@@ -142,3 +130,39 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level1name = N'CustomerTeacherRelations',
     @level2type = N'COLUMN',
     @level2name = N'VersionEndTime'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'教师学员关系主键',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'CustomerTeacherRelations',
+    @level2type = N'COLUMN',
+    @level2name = N'ID'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'教师OA账号',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'CustomerTeacherRelations',
+    @level2type = N'COLUMN',
+    @level2name = N'TeacherOACode'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'教师岗位归属组织机构简称',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'CustomerTeacherRelations',
+    @level2type = N'COLUMN',
+    @level2name = N'TeacherJobOrgShortName'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'学员教师分配关系表',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'CustomerTeacherRelations',
+    @level2type = NULL,
+    @level2name = NULL

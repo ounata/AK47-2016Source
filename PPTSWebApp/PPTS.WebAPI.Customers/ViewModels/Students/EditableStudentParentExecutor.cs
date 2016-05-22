@@ -35,6 +35,8 @@ namespace PPTS.WebAPI.Customers.ViewModels.Students
 
             CustomerParentRelationAdapter.Instance.UpdateInContext(this.Model.CustomerParentRelation);
 
+            PhoneAdapter.Instance.UpdateByOwnerIDInContext(this.Model.Parent.ParentID, this.Model.Parent.ToPhones(this.Model.Parent.ParentID));
+
             CustomerFulltextInfo parentFullText = CustomerFulltextInfo.Create(this.Model.Parent.ParentID, CustomerFulltextInfo.ParentsType);
 
             parentFullText.ParentSearchContent = this.Model.Parent.ToSearchContent();

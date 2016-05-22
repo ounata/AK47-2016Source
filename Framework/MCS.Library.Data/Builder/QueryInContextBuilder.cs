@@ -35,7 +35,12 @@ namespace MCS.Library.Data.Builder
         /// <param name="createNewAction"></param>
         /// <param name="tableName"></param>
         /// <param name="mappings"></param>
-        public void RegisterLoadByBuilderInContext(SqlContextItem sqlContext, string condition, OrderBySqlClauseBuilder orderByBuilder, Action<TCollection> afterLoadAction, Action<TCollection> action, Func<DataRow, T> createNewAction, string tableName, ORMappingItemCollection mappings)
+        public void RegisterLoadByBuilderInContext(SqlContextItem sqlContext, string condition, 
+            OrderBySqlClauseBuilder orderByBuilder, 
+            Action<TCollection> afterLoadAction, 
+            Action<TCollection> action, 
+            Func<DataRow, T> createNewAction, string tableName, 
+            ORMappingItemCollection mappings)
         {
             if (mappings == null)
                 mappings = this.GetQueryMappingInfo();

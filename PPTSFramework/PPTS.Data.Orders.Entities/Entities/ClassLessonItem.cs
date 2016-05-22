@@ -178,10 +178,19 @@ namespace PPTS.Data.Orders.Entities
             set;
 		}
 
-		/// <summary>
-		/// 是否插班
-		/// </summary>
-		[ORFieldMapping("IsJoinClass")]
+        [ORFieldMapping("CustomerGrade")]
+        [DataMember]
+        public string CustomerGrade { get; set; }
+
+        [ORFieldMapping("CustomerGradeName")]
+        [DataMember]
+        public string CustomerGradeName { get; set; }
+
+        /// <summary>
+        /// 是否插班
+        /// </summary>
+        [ORFieldMapping("IsJoinClass")]
+
         [DataMember]
 		public int IsJoinClass
 		{

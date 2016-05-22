@@ -4,9 +4,15 @@ using PPTS.Data.Common;
 using PPTS.Data.Common.Entities;
 using PPTS.Data.Customers.Entities;
 using PPTS.Data.Customers.Adapters;
+using PPTS.Data.Customers;
 
 namespace PPTS.WebAPI.Customers.ViewModels.Accounts
 {
+    /// <summary>
+    /// 学员信息模型
+    /// </summary>
+    [Serializable]
+    [DataContract]
     public class CustomerModel : IBasicCustomerInfo
     {
         /// <summary>
@@ -57,6 +63,15 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
         {
             get;
             set;
+        }
+
+        /// <summary>
+        /// 客户状态
+        /// </summary>
+        public CustomerStatus Status
+        {
+            set;
+            get;
         }
 
         /// <summary>
@@ -144,7 +159,7 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
             get;
         }
 
-        public static CustomerModel Load(string customerID)
+        public static CustomerModel Load(string customerID, bool? isPotential)
         {
             CustomerModel model = new CustomerModel();
             Customer customer = CustomerAdapter.Instance.Load(customerID);
@@ -155,6 +170,7 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
                 model.CustomerID = customer.CustomerID;
                 model.CustomerCode = customer.CustomerCode;
                 model.CustomerName = customer.CustomerName;
+                model.Status = customer.Status;
                 model.Birthday = customer.Birthday;
                 model.Gender = customer.Gender;
                 model.Grade = customer.Grade;
@@ -170,7 +186,8 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
                     model.CustomerID = potential.CustomerID;
                     model.CustomerCode = potential.CustomerCode;
                     model.CustomerName = potential.CustomerName;
-                    model.Birthday = customer.Birthday;
+                    model.Status = potential.Status;
+                    model.Birthday = potential.Birthday;
                     model.Gender = potential.Gender;
                     model.Grade = potential.Grade;
                     model.SchoolID = potential.SchoolID;
@@ -195,5 +212,30 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
             }
             return model;
         }    
+
+        public static CustomerModel Load(string customerID)
+        {
+            return Load(customerID, null);
+        }
+
+        public static CustomerModel LoadBy(string customerCode)
+        {
+            CustomerModel model = new CustomerModel();
+            Customer customer = CustomerAdapter.Instance.LoadByCustomerCode(customerCode);
+            if (customer != null)
+            {
+                model.CampusID = customer.CampusID;
+                model.CampusName = customer.CampusName;
+                model.CustomerID = customer.CustomerID;
+                model.CustomerCode = customer.CustomerCode;
+                model.CustomerName = customer.CustomerName;
+                model.Status = customer.Status;
+                model.Birthday = customer.Birthday;
+                model.Gender = customer.Gender;
+                model.Grade = customer.Grade;
+                model.SchoolID = customer.SchoolID;
+            }
+            return model;
+        }
     }
 }

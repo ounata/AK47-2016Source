@@ -1,2 +1,2 @@
-"%windir%"\microsoft.net\framework\v4.0.30319\msbuild.exe Services.csproj
+"%windir%"\microsoft.net\framework\v4.0.30319\msbuild.exe Services.csproj /p:VisualStudioVersion=14.0 
 pause

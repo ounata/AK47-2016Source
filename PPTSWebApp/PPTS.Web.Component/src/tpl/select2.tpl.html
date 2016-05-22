@@ -1,0 +1,4 @@
+﻿<select class="chosen-select" data-placeholder="{{caption}}">
+    <option value="" ng-if="showEmptyItem">  </option>
+    <option ng-repeat="item in data" value="{{item.key}}">{{item.value}}</option>
+</select>

@@ -3,6 +3,7 @@ using MCS.Library.SOA.DataObjects;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PPTS.Data.Common.Security;
 using System;
+using System.Collections.Generic;
 
 namespace PPTS.Data.Common.Test
 {
@@ -18,6 +19,7 @@ namespace PPTS.Data.Common.Test
 
             Assert.IsTrue(user.Jobs().Count > 0);
         }
+
         [TestMethod]
         public void JobAbbrTest()
         {
@@ -58,7 +60,7 @@ namespace PPTS.Data.Common.Test
 
                 DepartmentType deptType = group.Parent.PPTSDepartmentType();
 
-                IOrganization org =  job.GetParentOrganizationByType(deptType);
+                IOrganization org = job.GetParentOrganizationByType(deptType);
 
                 Assert.AreEqual(group.Parent.ID, org.ID);
             }
@@ -70,6 +72,26 @@ namespace PPTS.Data.Common.Test
             IUser user = OguObjectSettings.GetConfig().Objects["hq"].User;
 
             user.PPTSRoles().Output();
+        }
+
+        [TestMethod]
+        public void GetChildOrganizationsByPPTSTypeTest()
+        {
+            IUser user = OguObjectSettings.GetConfig().Objects["hq"].User;
+
+            PPTSJob educatorJob = user.Jobs().Find(job => job.JobType == JobTypeDefine.Educator);
+
+            Assert.IsNotNull(educatorJob);
+
+            IOrganization root = educatorJob.Organization().GetUpperDataScope().Parent;
+
+            Assert.IsNotNull(root);
+
+            List<IOrganization> orgs = root.GetChildOrganizationsByPPTSType(DepartmentType.Campus);
+
+            Console.WriteLine(orgs.Count);
+
+            orgs.Output();
         }
     }
 }

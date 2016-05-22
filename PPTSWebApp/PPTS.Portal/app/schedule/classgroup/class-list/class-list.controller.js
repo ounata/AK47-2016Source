@@ -4,25 +4,28 @@
     function (schedule) {
         schedule.registerController('classListController', [
             '$scope',
+            '$state',
             '$q',
+            '$stateParams',
             'classgroupDataService',
             'dataSyncService',
-            function ($scope, $q, classgroupDataService, dataSyncService) {
-                var vm = this;
+            'mcsDialogService',
+            function ($scope, $state, $q, $stateParams, classgroupDataService, dataSyncService, mcsDialogService) {
+                var vm = this;               
 
                 //高级查询
                 vm.searchItems = [
-                    { name: "上课科目", template: '<ppts-checkbox-group category="subject" model="vm.criteria.selectedSubjects" clear="vm.criteria.selectedSubjects=[]" />' },
-                    { name: "上课年级", template: ' <ppts-checkbox-group category="grade" model="vm.criteria.selectedGrades" clear="vm.criteria.selectedGrades=[]" />' },
-                    { name: "班级上课日期", template: "" },
-                    { name: "班级状态", template: "" }
+                    { name: "上课科目", template: '<ppts-checkbox-group category="subject" model="vm.criteria.subjects" clear="vm.criteria.subjects=[]" />' },
+                    { name: "上课年级", template: ' <ppts-checkbox-group category="grade" model="vm.criteria.grades" clear="vm.criteria.grades=[]" />' },
+                    { name: '班级上课日期：', template: '<ppts-daterangepicker start-date="vm.criteria.startTime" end-date="vm.criteria.endTime"/>' },
+                    { name: "班级状态", template: '<ppts-checkbox-group category="classStatus" model="vm.criteria.classStatuses" clear="vm.criteria.classStatuses=[]" />' }
                 ];
 
                 //列表
                 vm.data = {
                     selection: 'radio',
                     rowsSelected: [],
-                    keyFields: ['classID'],
+                    keyFields: ['classID','classStatus'],
                     pager: {
                         pageIndex: 1,
                         pageSize: 10,
@@ -36,7 +39,7 @@
                             return deferred.promise;
                         }
                     },
-                    orderBy: [{ dataField: 'ClassID', sortDirection: 1 }],
+                    orderBy: [{ dataField: 'classID', sortDirection: 1 }],
                     headers: [ {
                                     field: "campusName",
                                     name: "校区",
@@ -47,10 +50,11 @@
                                     field: "className",
                                     name: "班级名称",
                                     headerCss: 'datatable-header-align-right',
+                                    template: '<a ui-sref="ppts.classgroup-detail({classID:row.classID})">{{row.className}}</a>',
                                     sortable: false,
                                     description: ''
                                 }, {
-                                    field: "createTime",
+                                    field: "createTime | date:'yyyy-MM-dd'",
                                     name: "创建时间",
                                     headerCss: 'datatable-header-align-right',
                                     sortable: false,
@@ -68,7 +72,7 @@
                                     sortable: false,
                                     description: ''
                                 }, {
-                                    field: "classStatus",
+                                    field: "classStatus | classStatus",
                                     name: "班级状态",
                                     headerCss: 'datatable-header-align-right',
                                     sortable: false,
@@ -92,13 +96,13 @@
                                     sortable: false,
                                     description: ''
                                 }, {
-                                    field: "startTime",
+                                    field: "startTime | date:'yyyy-MM-dd'",
                                     name: "班级开班时间",
                                     headerCss: 'datatable-header-align-right',
                                     sortable: false,
                                     description: ''
                                 }, {
-                                    field: "endTime",
+                                    field: "endTime | date:'yyyy-MM-dd'",
                                     name: "班级结束时间",
                                     headerCss: 'datatable-header-align-right',
                                     sortable: false,
@@ -108,11 +112,12 @@
                     ]
                 }
 
+                dataSyncService.initCriteria(vm);
+                vm.criteria.productCode = $stateParams.productCode;
+
                 //查询
                 vm.search = function () {
-                    var deferred = $q.defer();
-
-                    dataSyncService.initCriteria(vm);
+                    var deferred = $q.defer();                    
 
                     classgroupDataService.getAllClasses(vm.criteria,
                         function (result) {
@@ -126,5 +131,40 @@
 
                     return deferred.promise;
                 };
+
+                //删除班级
+                vm.deleteClass = function () {
+                    if (vm.data.rowsSelected.length == 1 && vm.data.rowsSelected[0].classStatus == 0) {
+                        classgroupDataService.deleteClass(
+                            vm.data.rowsSelected[0].classID, function () {
+                                //刷新页面
+                                vm.search();
+                            }, function () {
+
+                            })
+                    }
+                    else {
+                        mcsDialogService.error(
+                              { title: 'Error', message: "请选择一个状态为新建的班级！" }
+                          )
+                    }
+                }
+
+                //查看学生
+                vm.searchCustomers = function () {
+                    if (vm.data.rowsSelected.length == 1 ) {
+                        mcsDialogService.create('app/schedule/classgroup/customer-list/customer-list.html', {
+                            controller: 'customerListController',
+                            params: { classID: vm.data.rowsSelected[0].classID },
+                            settings: {
+                                size: 'lg'
+                            }
+                        }).result.then(function (data) {
+
+                        }, function () {
+
+                        });
+                    }
+                }
             }]);
     });

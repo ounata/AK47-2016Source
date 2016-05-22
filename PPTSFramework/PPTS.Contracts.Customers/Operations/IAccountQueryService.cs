@@ -15,6 +15,10 @@ namespace PPTS.Contracts.Customers.Operations
     public interface IAccountQueryService
     {
         [OperationContract]
-        AccountCollectionQueryResult QueryAccountCollectionByCustomerID(String CustomerID);
+        AccountCollectionQueryResult QueryAccountCollectionByCustomerID(String customerID);
+
+        [OperationContract]
+        AccountChargeCollectionQueryResult QueryAccountChargeCollectionByCustomerID(string customerID, DateTime startTime);
     }
+
 }

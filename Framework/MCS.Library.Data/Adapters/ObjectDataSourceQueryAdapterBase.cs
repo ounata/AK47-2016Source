@@ -57,7 +57,7 @@ namespace MCS.Library.Data.Adapters
         /// <returns></returns>
         public TCollection Query(int startRowIndex, int maximumRows, string where, string orderBy, ref int totalCount)
         {
-            PagedQueryResult<T, TCollection> result = this.InnerQuery(startRowIndex, maximumRows, string.Empty, string.Empty, where, orderBy, totalCount);
+            PagedQueryResult<T, TCollection> result = this.InnerQuery(startRowIndex, maximumRows, -1, string.Empty, string.Empty, where, orderBy, totalCount);
 
             this.OnAfterQuery(result.PagedData);
 
@@ -102,7 +102,7 @@ namespace MCS.Library.Data.Adapters
                 orderBy = wrappedBuilder.ToSqlString(TSqlBuilder.Instance);
             }
 
-            PagedQueryResult<T, TCollection> result = this.InnerQuery(prp.ToRowIndex(), prp.PageSize, select, from, where, orderBy, totalCount);
+            PagedQueryResult<T, TCollection> result = this.InnerQuery(prp.ToRowIndex(), prp.PageSize, prp.Top, select, from, where, orderBy, totalCount);
 
             this.OnAfterQuery(result.PagedData);
 
@@ -122,16 +122,14 @@ namespace MCS.Library.Data.Adapters
 
             int totalCount = 0;
 
-            //TCollection list = Query(prp.ToRowIndex(), prp.PageSize, where, orderBy, ref totalCount);
-
-            PagedQueryResult<T, TCollection> result = this.InnerQuery(prp.ToRowIndex(), prp.PageSize, string.Empty, string.Empty, where, orderBy, totalCount);
+            PagedQueryResult<T, TCollection> result = this.InnerQuery(prp.ToRowIndex(), prp.PageSize, prp.Top, string.Empty, string.Empty, where, orderBy, totalCount);
 
             this.OnAfterQuery(result.PagedData);
 
             return result;
         }
 
-        private PagedQueryResult<T, TCollection> InnerQuery(int startRowIndex, int maximumRows, string select, string from, string where, string orderBy, int totalCount)
+        private PagedQueryResult<T, TCollection> InnerQuery(int startRowIndex, int maximumRows, int top, string select, string from, string where, string orderBy, int totalCount)
         {
             if (select.IsNullOrEmpty())
                 select = "*";
@@ -141,6 +139,8 @@ namespace MCS.Library.Data.Adapters
 
             QueryCondition qc = new QueryCondition(startRowIndex,
                 maximumRows, select, from, orderBy, where);
+
+            qc.Top = top;
 
             OnBuildQueryCondition(qc);
 
@@ -152,7 +152,11 @@ namespace MCS.Library.Data.Adapters
 
             PagedQueryResult<T, TCollection> result = new PagedQueryResult<T, TCollection>();
 
-            result.PageIndex = (qc.RowIndex / maximumRows) + 1;
+            if (maximumRows > 0)
+                result.PageIndex = (qc.RowIndex / maximumRows) + 1;
+            else
+                result.PageIndex = 1;
+
             result.PageSize = maximumRows;
             result.TotalCount = totalCount;
             result.PagedData = list;
@@ -167,12 +171,7 @@ namespace MCS.Library.Data.Adapters
         /// <param name="row"></param>
         protected virtual void OnDataRowToObject(TCollection dataCollection, DataRow row)
         {
-            T data = new T();
-
-            ORMappingItemCollection mapping = GetMappingInfo();
-            ORMapping.DataRowToObject(row, mapping, data);
-
-            dataCollection.Add(data);
+            dataCollection.Add(ORMapping.DataRowToObject(row, this.GetMappingInfo(), new T()));
         }
 
         /// <summary>

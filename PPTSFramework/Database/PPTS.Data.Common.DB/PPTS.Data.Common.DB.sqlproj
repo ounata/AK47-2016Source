@@ -70,6 +70,7 @@
     <Folder Include="MT\Tables" />
     <Folder Include="MT\Stored Procedures" />
     <Folder Include="Scripts" />
+    <Folder Include="MT\Views" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Security\WF.sql" />
@@ -83,6 +84,7 @@
     <Build Include="MT\Tables\Teachers.sql" />
     <Build Include="MT\Tables\TeacherJobs.sql" />
     <Build Include="MT\Tables\Configs.sql" />
+    <Build Include="MT\Views\v_TeacherJobs.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PPTS.Data.Common.DB.refactorlog" />

@@ -120,29 +120,7 @@ namespace PPTS.Data.Customers.Entities
 			get;
             set;
 		}
-
-		/// <summary>
-		/// 账户是否锁定
-		/// </summary>
-		[ORFieldMapping("Locked")]
-        [DataMember]
-		public int Locked
-		{
-			get;
-            set;
-		}
-
-		/// <summary>
-		/// 账户锁定说明
-		/// </summary>
-		[ORFieldMapping("LockMemo")]
-        [DataMember]
-		public string LockMemo
-		{
-			get;
-            set;
-		}
-
+        
 		/// <summary>
 		/// 折扣ID
 		/// </summary>

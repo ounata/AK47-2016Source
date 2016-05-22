@@ -4,10 +4,10 @@
     [SchoolID] NVARCHAR(36) NOT NULL, 
     [CreatorID] NVARCHAR(36) NULL, 
     [CreatorName] NVARCHAR(64) NULL, 
-    [CreateTime] DATETIME NULL DEFAULT getdate(), 
+    [CreateTime] DATETIME NULL DEFAULT GETUTCDATE(), 
     [ModifierID] NVARCHAR(36) NULL, 
     [ModifierName] NVARCHAR(64) NULL, 
-    [ModifyTime] DATETIME NULL DEFAULT getdate(), 
+    [ModifyTime] DATETIME NULL DEFAULT GETUTCDATE(), 
     CONSTRAINT [PK_CustomerSchoolRelations] PRIMARY KEY NONCLUSTERED ([SchoolID], [CustomerID]) 
 )
 

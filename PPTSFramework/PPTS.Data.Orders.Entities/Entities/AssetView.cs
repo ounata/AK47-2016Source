@@ -374,6 +374,17 @@ namespace PPTS.Data.Orders.Entities
         }
 
         /// <summary>
+        /// 未排数量（课程资产用）
+        /// </summary>
+        [ORFieldMapping("UnAssignAmount")]
+        [DataMember]
+        public decimal UnAssignAmount
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// 已上数量（课程资产用）
         /// </summary>
         [ORFieldMapping("ConfirmedAmount")]
@@ -607,6 +618,20 @@ namespace PPTS.Data.Orders.Entities
         [SqlBehavior(DefaultExpression = "GETUTCDATE()")]
         [DataMember]
         public DateTime SubmitTime { get; set; }
+
+
+        [ORFieldMapping("OrderNo")]
+        [DataMember]
+        public string OrderNo { set; get; }
+
+        [ORFieldMapping("OrderPrice")]
+        [DataMember]
+        public decimal OrderPrice { set; get; }
+
+        [ORFieldMapping("RealPrice")]
+        [DataMember]
+        public decimal RealPrice { set; get; }
+
     }
 
     [Serializable]

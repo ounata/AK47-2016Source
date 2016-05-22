@@ -183,7 +183,7 @@ namespace MCS.Library.Data.Mapping
             InsertSqlClauseBuilder builder = new InsertSqlClauseBuilder();
 
             FillSqlClauseBuilder(builder, graph, mapping, ClauseBindingFlags.Insert,
-                new DoSqlClauseBuilder<T>(DoInsertUpdateSqlClauseBuilder<T>), ignoreProperties);
+                new DoSqlClauseBuilder<InsertSqlClauseBuilder, T>(DoInsertUpdateSqlClauseBuilder<InsertSqlClauseBuilder, T>), ignoreProperties);
 
             builder.AppendTenantCode(typeof(T));
 
@@ -270,7 +270,7 @@ namespace MCS.Library.Data.Mapping
             UpdateSqlClauseBuilder builder = new UpdateSqlClauseBuilder();
 
             FillSqlClauseBuilder(builder, graph, mapping, ClauseBindingFlags.Update,
-                new DoSqlClauseBuilder<T>(DoInsertUpdateSqlClauseBuilder<T>), ignoreProperties);
+                new DoSqlClauseBuilder<UpdateSqlClauseBuilder, T>(DoInsertUpdateSqlClauseBuilder<UpdateSqlClauseBuilder, T>), ignoreProperties);
 
             //builder.AppendTenantCode(typeof(T));
 
@@ -315,7 +315,7 @@ namespace MCS.Library.Data.Mapping
             WhereSqlClauseBuilder builder = new WhereSqlClauseBuilder();
 
             FillSqlClauseBuilder(builder, graph, mapping, ClauseBindingFlags.Where,
-                new DoSqlClauseBuilder<T>(DoWhereSqlClauseBuilder<T>), ignoreProperties);
+                new DoSqlClauseBuilder<WhereSqlClauseBuilder, T>(DoWhereSqlClauseBuilder<WhereSqlClauseBuilder, T>), ignoreProperties);
 
             return builder;
         }
@@ -358,7 +358,7 @@ namespace MCS.Library.Data.Mapping
             WhereSqlClauseBuilder builder = new WhereSqlClauseBuilder();
 
             FillSqlClauseBuilder(builder, graph, mapping, ClauseBindingFlags.Where,
-                new DoSqlClauseBuilder<T>(DoWhereSqlClauseBuilderByPrimaryKey<T>), ignoreProperties);
+                new DoSqlClauseBuilder<WhereSqlClauseBuilder, T>(DoWhereSqlClauseBuilderByPrimaryKey<WhereSqlClauseBuilder, T>), ignoreProperties);
 
             return builder;
         }
@@ -394,10 +394,10 @@ namespace MCS.Library.Data.Mapping
 
             if (includePK)
                 FillSqlClauseBuilder(builder, graph, mapping, ClauseBindingFlags.Where,
-                    new DoSqlClauseBuilder<T>(DoWhereSqlClauseBuilderByChangedFields<T>), ignoreProperties);
+                    new DoSqlClauseBuilder<WhereSqlClauseBuilder, T>(DoWhereSqlClauseBuilderByChangedFields<WhereSqlClauseBuilder, T>), ignoreProperties);
             else
                 FillSqlClauseBuilder(builder, graph, mapping, ClauseBindingFlags.Where,
-                    new DoSqlClauseBuilder<T>(DoWhereSqlClauseBuilderByChangedFieldsWithoutPrimaryKey<T>), ignoreProperties);
+                    new DoSqlClauseBuilder<WhereSqlClauseBuilder, T>(DoWhereSqlClauseBuilderByChangedFieldsWithoutPrimaryKey<WhereSqlClauseBuilder, T>), ignoreProperties);
 
             return builder;
         }
@@ -461,7 +461,7 @@ namespace MCS.Library.Data.Mapping
             SelectSqlClauseBuilder builder = new SelectSqlClauseBuilder();
 
             FillSqlClauseBuilder(builder, graph, mapping, ClauseBindingFlags.Select,
-                new DoSqlClauseBuilder<T>(DoSelectSqlClauseBuilder<T>), ignoreProperties);
+                new DoSqlClauseBuilder<SelectSqlClauseBuilder, T>(DoSelectSqlClauseBuilder<SelectSqlClauseBuilder, T>), ignoreProperties);
 
             return builder;
         }
@@ -531,11 +531,11 @@ namespace MCS.Library.Data.Mapping
         /// <summary>
         /// 从Tenant上下文中获取TenantCode并且添加到Builder中
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TBuilder"></typeparam>
         /// <param name="builder"></param>
         /// <param name="tenantCodeFieldName"></param>
         /// <returns></returns>
-        public static T AppendTenantCode<T>(this T builder, string tenantCodeFieldName = "TENANT_CODE") where T : SqlClauseBuilderIUW
+        public static TBuilder AppendTenantCode<TBuilder>(this TBuilder builder, string tenantCodeFieldName = "TENANT_CODE") where TBuilder : SqlClauseBuilderIUW<TBuilder>
         {
             if (builder != null)
             {
@@ -552,11 +552,11 @@ namespace MCS.Library.Data.Mapping
         /// <summary>
         /// 根据类型上的TenantRelativeObjectAttribute以及TenantContext.Current.Enabled决定是否在builder上添加租户编码字段
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TBuilder"></typeparam>
         /// <param name="builder"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        public static T AppendTenantCode<T>(this T builder, Type type) where T : SqlClauseBuilderIUW
+        public static TBuilder AppendTenantCode<TBuilder>(this TBuilder builder, Type type) where TBuilder : SqlClauseBuilderIUW<TBuilder>
         {
             if (builder != null)
             {
@@ -623,88 +623,14 @@ namespace MCS.Library.Data.Mapping
         /// <typeparam name="T">对象类型</typeparam>
         /// <param name="row">DataRow对象</param>
         /// <param name="graph">对象</param>
+        /// <returns>所填充的graph</returns>
         /// <remarks>
         /// 将传入的DataRow中的数值写入到对象graph中
         /// <code source="..\Framework\TestProjects\DeluxeWorks.Library.Data.SqlBuilder.Test\ORMappingTest.cs" region="DataRowToObject" lang="cs" title="将DataRow的值写入到对象中"/>
         /// </remarks>
-        public static void DataRowToObject<T>(DataRow row, T graph)
+        public static T DataRowToObject<T>(DataRow row, T graph)
         {
-            DataRowToObject(row, InnerGetMappingInfoByObject(graph), graph);
-        }
-
-        /// <summary>
-        /// DataView的数据转换到集合中
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="collection"></param>
-        /// <param name="view"></param>
-        public static void DataViewToCollection<T>(EditableDataObjectCollectionBase<T> collection, DataView view) where T : new()
-        {
-            DataViewToCollection(collection, view, null);
-        }
-
-        /// <summary>
-        /// DataView的数据转换到集合中
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="collection"></param>
-        /// <param name="items"></param>
-        /// <param name="view"></param>
-        /// <param name="dod"></param>
-        public static void DataViewToCollection<T>(EditableDataObjectCollectionBase<T> collection, ORMappingItemCollection items, DataView view, DataToObjectDeligations dod) where T : new()
-        {
-            collection.NullCheck("collection");
-            items.NullCheck("items");
-            view.NullCheck("view");
-
-            using (ORMappingContext context = ORMappingContext.GetContext())
-            {
-                foreach (DataRowView drv in view)
-                {
-                    T graph = new T();
-
-                    DataRowToObject(drv.Row, items, graph, dod);
-
-                    collection.Add(graph);
-                }
-            }
-        }
-
-        /// <summary>
-        /// DataView的数据转换到集合中
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="collection"></param>
-        /// <param name="items"></param>
-        /// <param name="view"></param>
-        public static void DataViewToCollection<T>(EditableDataObjectCollectionBase<T> collection, ORMappingItemCollection items, DataView view) where T : new()
-        {
-            DataViewToCollection(collection, items, view, null);
-        }
-
-        /// <summary>
-        /// DataView的数据转换到集合中
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="collection"></param>
-        /// <param name="view"></param>
-        /// <param name="dod"></param>
-        public static void DataViewToCollection<T>(EditableDataObjectCollectionBase<T> collection, DataView view, DataToObjectDeligations dod) where T : new()
-        {
-            collection.NullCheck("collection");
-            view.NullCheck("view");
-
-            using (ORMappingContext context = ORMappingContext.GetContext())
-            {
-                foreach (DataRowView drv in view)
-                {
-                    T graph = new T();
-
-                    DataRowToObject(drv.Row, graph, dod);
-
-                    collection.Add(graph);
-                }
-            }
+            return (T)DataRowToObject(row, InnerGetMappingInfoByObject(graph), graph);
         }
 
         /// <summary>
@@ -714,9 +640,10 @@ namespace MCS.Library.Data.Mapping
         /// <param name="row"></param>
         /// <param name="graph"></param>
         /// <param name="dod"></param>
-        public static void DataRowToObject<T>(DataRow row, T graph, DataToObjectDeligations dod)
+        /// <returns>所填充的graph</returns>
+        public static T DataRowToObject<T>(DataRow row, T graph, DataToObjectDeligations dod)
         {
-            DataRowToObject(row, InnerGetMappingInfoByObject<T>(graph), graph, dod);
+            return (T)DataRowToObject(row, InnerGetMappingInfoByObject<T>(graph), graph, dod);
         }
 
         /// <summary>
@@ -725,9 +652,10 @@ namespace MCS.Library.Data.Mapping
         /// <param name="row">DataRow对象</param>
         /// <param name="items">映射关系</param>
         /// <param name="graph">对象</param>
-        public static void DataRowToObject(DataRow row, ORMappingItemCollection items, object graph)
+        /// <returns>所填充的graph</returns>
+        public static object DataRowToObject(DataRow row, ORMappingItemCollection items, object graph)
         {
-            DataRowToObject(row, items, graph, null);
+            return DataRowToObject(row, items, graph, null);
         }
 
         /// <summary>
@@ -737,7 +665,8 @@ namespace MCS.Library.Data.Mapping
         /// <param name="items">映射关系</param>
         /// <param name="graph">对象</param>
         /// <param name="dod"></param>
-        public static void DataRowToObject(DataRow row, ORMappingItemCollection items, object graph, DataToObjectDeligations dod)
+        /// <returns>所填充的graph</returns>
+        public static object DataRowToObject(DataRow row, ORMappingItemCollection items, object graph, DataToObjectDeligations dod)
         {
             ExceptionHelper.FalseThrow<ArgumentNullException>(row != null, "row");
             ExceptionHelper.FalseThrow<ArgumentNullException>(items != null, "items");
@@ -764,20 +693,95 @@ namespace MCS.Library.Data.Mapping
                     }
                 }
             }
+
+            return graph;
         }
+
+        /// <summary>
+        /// DataView的数据转换到集合中
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="collection"></param>
+        /// <param name="view"></param>
+        /// <returns>返回原有的集合</returns>
+        public static EditableDataObjectCollectionBase<T> DataViewToCollection<T>(EditableDataObjectCollectionBase<T> collection, DataView view) where T : new()
+        {
+            return DataViewToCollection(collection, view, null);
+        }
+
+        /// <summary>
+        /// DataView的数据转换到集合中
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="collection"></param>
+        /// <param name="items"></param>
+        /// <param name="view"></param>
+        /// <param name="dod"></param>
+        /// <returns>返回原有的集合</returns>
+        public static EditableDataObjectCollectionBase<T> DataViewToCollection<T>(EditableDataObjectCollectionBase<T> collection, ORMappingItemCollection items, DataView view, DataToObjectDeligations dod) where T : new()
+        {
+            collection.NullCheck("collection");
+            items.NullCheck("items");
+            view.NullCheck("view");
+
+            using (ORMappingContext context = ORMappingContext.GetContext())
+            {
+                foreach (DataRowView drv in view)
+                    collection.Add(DataRowToObject(drv.Row, items, new T(), dod));
+            }
+
+            return collection;
+        }
+
+        /// <summary>
+        /// DataView的数据转换到集合中
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="collection"></param>
+        /// <param name="items"></param>
+        /// <param name="view"></param>
+        /// <returns>返回原有的集合</returns>
+        public static EditableDataObjectCollectionBase<T> DataViewToCollection<T>(EditableDataObjectCollectionBase<T> collection, ORMappingItemCollection items, DataView view) where T : new()
+        {
+            return DataViewToCollection(collection, items, view, null);
+        }
+
+        /// <summary>
+        /// DataView的数据转换到集合中
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="collection"></param>
+        /// <param name="view"></param>
+        /// <param name="dod"></param>
+        /// <returns>返回原有的集合</returns>
+        public static EditableDataObjectCollectionBase<T> DataViewToCollection<T>(EditableDataObjectCollectionBase<T> collection, DataView view, DataToObjectDeligations dod) where T : new()
+        {
+            collection.NullCheck("collection");
+            view.NullCheck("view");
+
+            using (ORMappingContext context = ORMappingContext.GetContext())
+            {
+                foreach (DataRowView drv in view)
+                    collection.Add(DataRowToObject(drv.Row, new T(), dod));
+            }
+
+            return collection;
+        }
+
         /// <summary>
         /// 将DataReader的值写入到对象中
         /// </summary>
         /// <typeparam name="T">对象类型</typeparam>
         /// <param name="dr">IDataReader对象</param>
         /// <param name="graph">对象</param>
+        /// <returns>返回graph对象</returns>
         /// <remarks>
         /// 将传入的DataReader中的数值写入到对象graph中
         /// <code source="..\Framework\TestProjects\DeluxeWorks.Library.Data.SqlBuilder.Test\ORMappingTest.cs" region="DataReaderToObject" lang="cs" title="将DataRow的值写入到对象中"/>
         /// </remarks>
-        public static void DataReaderToObject<T>(IDataReader dr, T graph)
+        public static T DataReaderToObject<T>(IDataReader dr, T graph)
         {
-            DataReaderToObject(dr, graph, null);
+            return DataReaderToObject(dr, graph, null);
         }
 
         /// <summary>
@@ -787,9 +791,10 @@ namespace MCS.Library.Data.Mapping
         /// <param name="dr"></param>
         /// <param name="graph"></param>
         /// <param name="dod"></param>
-        public static void DataReaderToObject<T>(IDataReader dr, T graph, DataToObjectDeligations dod)
+        /// <returns>返回graph对象</returns>
+        public static T DataReaderToObject<T>(IDataReader dr, T graph, DataToObjectDeligations dod)
         {
-            DataReaderToObject(dr, InnerGetMappingInfoByObject<T>(graph), graph, dod);
+            return DataReaderToObject(dr, InnerGetMappingInfoByObject<T>(graph), graph, dod);
         }
 
         /// <summary>
@@ -799,9 +804,10 @@ namespace MCS.Library.Data.Mapping
         /// <param name="dr">IDataReader对象</param>
         /// <param name="items">映射关系</param>
         /// <param name="graph">对象</param>
-        public static void DataReaderToObject<T>(IDataReader dr, ORMappingItemCollection items, T graph)
+        /// <returns>返回graph对象</returns>
+        public static T DataReaderToObject<T>(IDataReader dr, ORMappingItemCollection items, T graph)
         {
-            DataReaderToObject(dr, items, graph, null);
+            return DataReaderToObject(dr, items, graph, null);
         }
 
         /// <summary>
@@ -812,7 +818,8 @@ namespace MCS.Library.Data.Mapping
         /// <param name="items">映射关系</param>
         /// <param name="graph">对象</param>
         /// <param name="dod"></param>
-        public static void DataReaderToObject<T>(IDataReader dr, ORMappingItemCollection items, T graph, DataToObjectDeligations dod)
+        /// <returns>返回graph对象</returns>
+        public static T DataReaderToObject<T>(IDataReader dr, ORMappingItemCollection items, T graph, DataToObjectDeligations dod)
         {
             ExceptionHelper.FalseThrow<ArgumentNullException>(dr != null, "dr");
             ExceptionHelper.FalseThrow<ArgumentNullException>(items != null, "items");
@@ -840,6 +847,8 @@ namespace MCS.Library.Data.Mapping
                     }
                 }
             }
+
+            return graph;
         }
 
         /// <summary>
@@ -848,9 +857,10 @@ namespace MCS.Library.Data.Mapping
         /// <typeparam name="T"></typeparam>
         /// <param name="collection"></param>
         /// <param name="dr"></param>
-        public static void DataReaderToCollection<T>(EditableDataObjectCollectionBase<T> collection, IDataReader dr) where T : new()
+        /// <returns>返回原有的集合</returns>
+        public static EditableDataObjectCollectionBase<T> DataReaderToCollection<T>(EditableDataObjectCollectionBase<T> collection, IDataReader dr) where T : new()
         {
-            DataReaderToCollection<T>(collection, dr, (DataToObjectDeligations)null);
+            return DataReaderToCollection<T>(collection, dr, (DataToObjectDeligations)null);
         }
 
         /// <summary>
@@ -860,21 +870,18 @@ namespace MCS.Library.Data.Mapping
         /// <param name="collection"></param>
         /// <param name="dr"></param>
         /// <param name="dod"></param>
-        public static void DataReaderToCollection<T>(EditableDataObjectCollectionBase<T> collection, IDataReader dr, DataToObjectDeligations dod) where T : new()
+        /// <returns>返回原有的集合</returns>
+        public static EditableDataObjectCollectionBase<T> DataReaderToCollection<T>(EditableDataObjectCollectionBase<T> collection, IDataReader dr, DataToObjectDeligations dod) where T : new()
         {
             dr.NullCheck("dr");
 
             using (ORMappingContext context = ORMappingContext.GetContext())
             {
                 while (dr.Read())
-                {
-                    T graph = new T();
-
-                    DataReaderToObject(dr, graph, dod);
-
-                    collection.Add(graph);
-                }
+                    collection.Add(DataReaderToObject(dr, new T(), dod));
             }
+
+            return collection;
         }
 
         /// <summary>
@@ -884,9 +891,10 @@ namespace MCS.Library.Data.Mapping
         /// <param name="collection"></param>
         /// <param name="dr"></param>
         /// <param name="items"></param>
-        public static void DataReaderToCollection<T>(EditableDataObjectCollectionBase<T> collection, IDataReader dr, ORMappingItemCollection items) where T : new()
+        /// <returns>返回原有的集合</returns>
+        public static EditableDataObjectCollectionBase<T> DataReaderToCollection<T>(EditableDataObjectCollectionBase<T> collection, IDataReader dr, ORMappingItemCollection items) where T : new()
         {
-            DataReaderToCollection<T>(collection, dr, items, null);
+            return DataReaderToCollection<T>(collection, dr, items, null);
         }
 
         /// <summary>
@@ -897,7 +905,8 @@ namespace MCS.Library.Data.Mapping
         /// <param name="dr"></param>
         /// <param name="items"></param>
         /// <param name="dod"></param>
-        public static void DataReaderToCollection<T>(EditableDataObjectCollectionBase<T> collection, IDataReader dr, ORMappingItemCollection items, DataToObjectDeligations dod) where T : new()
+        /// <returns>返回原有的集合</returns>
+        public static EditableDataObjectCollectionBase<T> DataReaderToCollection<T>(EditableDataObjectCollectionBase<T> collection, IDataReader dr, ORMappingItemCollection items, DataToObjectDeligations dod) where T : new()
         {
             dr.NullCheck("dr");
             items.NullCheck("items");
@@ -906,14 +915,10 @@ namespace MCS.Library.Data.Mapping
             using (ORMappingContext context = ORMappingContext.GetContext())
             {
                 while (dr.Read())
-                {
-                    T graph = new T();
-
-                    DataReaderToObject(dr, items, graph, dod);
-
-                    collection.Add(graph);
-                }
+                    collection.Add(DataReaderToObject(dr, items, new T(), dod));
             }
+
+            return collection;
         }
         #endregion
     }

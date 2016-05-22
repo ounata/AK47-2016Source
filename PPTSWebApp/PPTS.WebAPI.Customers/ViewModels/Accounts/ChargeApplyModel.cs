@@ -7,6 +7,9 @@ using PPTS.Data.Common;
 using PPTS.Data.Customers.Entities;
 using PPTS.Data.Customers.Adapters;
 using PPTS.Data.Customers;
+using MCS.Library.OGUPermission;
+using PPTS.Data.Common.Security;
+using MCS.Library.Net.SNTP;
 
 namespace PPTS.WebAPI.Customers.ViewModels.Accounts
 {
@@ -17,6 +20,32 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
     [DataContract]
     public class ChargeApplyModel : AccountChargeApply
     {
+        /// <summary>
+        /// 能否编辑申请
+        /// </summary>
+        [DataMember]
+        public bool CanEditApply {
+            get
+            {
+                return this.PayStatus == PayStatusDefine.Unpay
+                    && !string.IsNullOrEmpty(this.ApplyNo);
+            }
+        }
+
+        /// <summary>
+        /// 能否编辑付款
+        /// </summary>
+        [DataMember]
+        public bool CanEditPayment
+        {
+            get
+            {
+                if (this.PayStatus == PayStatusDefine.Unpay)
+                    return true;
+                return false;
+            }
+        }
+        
         /// <summary>
         /// 首次充值的最小金额
         /// </summary>
@@ -47,50 +76,141 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
             get;
             set;
         }
-        
+
+        /// <summary>
+        /// 准备保存账户实体
+        /// </summary>
+        public Account PreparedAccount
+        {
+            set;
+            get;
+        }
+
+        /// <summary>
+        /// 准备保存的潜客实体
+        /// </summary>
+        public PotentialCustomer PreparedCustomer
+        {
+            set;
+            get;
+        }
+
         /// <summary>
         /// 初始化提交人信息
         /// </summary>
-        public void InitApplier()
+        public void InitApplier(IUser user)
         {
-            this.ApplyTime = DateTime.UtcNow;
-            this.ApplyStatus = ApplyStatusDefine.Approved;
+            this.ApplierID = user.ID;
+            this.ApplierName = user.Name;
+            this.ApplierJobID = user.GetCurrentJob().ID;
+            this.ApplierJobName = user.GetCurrentJob().Name;
+            this.ApplierJobType = user.GetCurrentJob().JobType;
+            this.ApplyTime = SNTPClient.AdjustedTime;
+            this.ApplyStatus = ApplyStatusDefine.New;
         }
 
         /// <summary>
         /// 根据申请人初始化提交人信息
         /// </summary>
-        public void InitSubmitterFromApplier()
+        public void InitSubmitter(IUser user)
         {
-            this.SubmitterID = this.ApplierID;
-            this.SubmitterName = this.ApplierName;
-            this.SubmitterJobID = this.ApplierJobID;
-            this.SubmitterJobName = this.ApplierJobName;
-            this.SubmitterJobType = this.ApplierJobType;
-            this.SubmitTime = this.ApplyTime;
+            this.SubmitterID = user.ID;
+            this.SubmitterName = user.Name;
+            this.SubmitterJobID = user.GetCurrentJob().ID;
+            this.SubmitterJobName = user.GetCurrentJob().Name;
+            this.SubmitterJobType = user.GetCurrentJob().JobType;
+            this.SubmitTime = SNTPClient.AdjustedTime;
+            this.ApplyStatus = ApplyStatusDefine.Approving;
         }
 
         /// <summary>
         /// 根据申请人初始化提交人信息
         /// </summary>
-        public void InitApproverFromApplier()
+        public void InitApprover(IUser user, ApplyStatusDefine status)
         {
-            this.ApproverID = this.ApplierID;
-            this.ApproverName = this.ApplierName;
-            this.ApproverJobID = this.ApplierJobID;
-            this.ApproverJobName = this.ApplierJobName;
-            this.ApproveTime = this.ApplyTime;
+            this.ApproverID = user.ID;
+            this.ApproverName = user.Name;
+            this.ApproverJobID = user.GetCurrentJob().ID;
+            this.ApproverJobName = user.GetCurrentJob().Name;
+            this.ApproveTime = SNTPClient.AdjustedTime;
+            this.ApplyStatus = status;
+        }
+
+        /// <summary>
+        /// 为缴费单保存准备数据
+        /// </summary>
+        /// <param name="jobType"></param>
+        public void Prepare4SaveApply(JobTypeDefine jobType)
+        {
+            CustomerModel customer = CustomerModel.Load(this.CustomerID);
+            DiscountModel discount = DiscountModel.LoadByCampusID(this.CampusID);
+            this.Init(customer, discount, jobType);
+        }
+
+        /// <summary>
+        /// 为缴费单收款准备数据
+        /// </summary>
+        /// <param name="jobType"></param>
+        public void Prepare4SavePayment(JobTypeDefine jobType)
+        {
+            bool isPotential = false;
+            PotentialCustomer potential = PotentialCustomerAdapter.Instance.Load(this.CustomerID);
+            if (potential != null && potential.Status != CustomerStatus.Formal)
+                isPotential = true;
+            AccountModel account;
+            DiscountModel discount = DiscountModel.LoadByCampusID(this.CampusID);
+            this.Caculate(isPotential, discount, jobType, out account);
+            this.PreparedAccount = account;
+            if (isPotential)
+                this.PreparedCustomer = potential;
+        }
+
+        public void Init(CustomerModel customer, DiscountModel discount, JobTypeDefine jobType)
+        {
+            AccountModel account;
+            this.Caculate(customer.IsPotential, discount, jobType, out account);
+        }
+        private void Caculate(bool isPotential, DiscountModel discount, JobTypeDefine jobType, out AccountModel account)
+        {
+            decimal totalAccountValue;
+            ConfigArgs args = ConfigsCache.GetArgs(this.CampusID);
+            account = AccountModel.LoadCurrentByCustomerID(this.CustomerID, out totalAccountValue);
+            //如果不存在账户或者不是拓路折扣1则新创建账户
+            if (account == null || args.DiscountSchema != DiscountSchemaDefine.Schema1)
+                account = new AccountModel();
+
+            this.AccountID = account.AccountID;
+            this.AccountCode = account.AccountCode;
+
+            this.ThatDiscountID = account.DiscountID;
+            this.ThatDiscountCode = account.DiscountCode;
+            this.ThatDiscountBase = account.DiscountBase;
+            this.ThatDiscountRate = account.DiscountRate;
+            this.ThatAccountValue = account.AccountValue;
+            this.ThatAccountMoney = account.AccountMoney;
+
+            DiscountResult result = DiscountResult.CalcDiscount(account, discount, this.ChargeMoney);
+
+            this.ThisDiscountID = result.DiscountID;
+            this.ThisDiscountCode = result.DiscountCode;
+            this.ThisDiscountBase = result.DiscountBase;
+            this.ThisDiscountRate = result.DiscountRate;
+            this.ThisAccountValue = result.AccountValue;
+            this.ThisAccountMoney = result.AccountMoney;
+
+            this.ChargeType = this.BuildChargeType(args, totalAccountValue, isPotential, jobType);
+            if (this.ChargeType == ChargeTypeDefine.New)
+                this.FirstChargeMinMoney = args.AccountFirstChargeMinMoney;
         }
         
-        public static ChargeTypeDefine BuildChargeType(CustomerModel customer, JobTypeDefine applierJobType, List<AccountModel> accounts, ConfigArgs args)
+        private ChargeTypeDefine BuildChargeType( ConfigArgs args, decimal accountValue, bool isPotential, JobTypeDefine jobType)
         {
             //新签
-            if (customer.IsPotential)
+            if (isPotential)
                 return ChargeTypeDefine.New;
-            decimal accountValue = accounts.Sum(x => x.AccountValue);
 
             //前期
-            if (applierJobType == JobTypeDefine.Consultant)
+            if (jobType == JobTypeDefine.Consultant)
             {
                 //结课
                 if (accountValue >= args.EndingClassMinAccountValue)
@@ -100,7 +220,7 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
                     return ChargeTypeDefine.EarlyStudyRenew;
             }
             //后期
-            else if (applierJobType == JobTypeDefine.Educator)
+            else if (jobType == JobTypeDefine.Educator)
             {
                 //结课
                 if (accountValue >= args.EndingClassMinAccountValue)
@@ -110,7 +230,9 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
                     return ChargeTypeDefine.LaterStudyRenew;
             }
             else
-                throw new Exception("不支持其它岗位充值");
+            {
+                return ChargeTypeDefine.NaN;
+            }
         }
 
         /// <summary>
@@ -120,34 +242,28 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
         /// <param name="customerID">学员ID</param>
         /// <param name="jobType">申请人岗位类型</param>
         /// <returns></returns>
-        public static ChargeApplyModel LoadByCustomerID(CustomerModel customer, JobTypeDefine jobType)
+        public static ChargeApplyModel LoadByCustomerID(CustomerModel customer)
         {
-            ChargeApplyModel model = new ChargeApplyModel();
-            model.ApplyID = Guid.NewGuid().ToString().ToUpper();
-            model.CampusID = customer.CampusID;
-            model.CampusName = customer.CampusName;
-            model.CustomerID = customer.CustomerID;
-            model.CustomerCode = customer.CustomerCode;
-            model.CustomerName = customer.CustomerName;
-
-            List<AccountModel> accountModels = new List<AccountModel>();
-            foreach (Account account in AccountAdapter.Instance.LoadCollectionByCustomerID(customer.CustomerID))
-                accountModels.Add(AccountModel.Load(account));
-            ConfigArgs args = ConfigsCache.GetArgs(customer.CampusID);
-            if (args.DiscountSchema == DiscountSchemaDefine.Schema1 && accountModels.Count != 0)
+            ChargeApplyModel model = null;
+            AccountChargeApply apply = AccountChargeApplyAdapter.Instance.LoadUnpayByCustomerID(customer.CustomerID);
+            if (apply != null)
             {
-                AccountModel accountModel = accountModels.Where(x => x.IsLatest == true).SingleOrDefault();
-                if (accountModel != null)
-                {
-                    model.ThatDiscountID = accountModel.DiscountID;
-                    model.ThatDiscountBase = accountModel.DiscountBase;
-                    model.ThatDiscountRate = accountModel.DiscountRate;
-                    model.ThatAccountValue = accountModel.AccountValue;
-                }
+                model = AutoMapper.Mapper.DynamicMap<ChargeApplyModel>(apply);
+                model.Allot = ChargeAllotModel.Load(apply.ApplyID);
             }
-            model.FirstChargeMinMoney = args.AccountFirstChargeMinMoney;
-            model.ChargeType = BuildChargeType(customer, jobType, accountModels, args);
-            model.Allot = new ChargeAllotModel();
+            else
+            {
+                #region 重新构建支付相关信息
+                model = new ChargeApplyModel();
+                model.ApplyID = Guid.NewGuid().ToString().ToUpper();
+                model.CampusID = customer.CampusID;
+                model.CampusName = customer.CampusName;
+                model.CustomerID = customer.CustomerID;
+                model.CustomerCode = customer.CustomerCode;
+                model.CustomerName = customer.CustomerName;                
+                model.Allot = new ChargeAllotModel();
+                #endregion
+            }
             return model;
         }
 

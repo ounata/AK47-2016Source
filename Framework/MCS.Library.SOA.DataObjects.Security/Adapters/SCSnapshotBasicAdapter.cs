@@ -281,14 +281,16 @@ namespace MCS.Library.SOA.DataObjects.Security.Adapters
 			return strB.ToString();
 		}
 
-		private static void DataRowToBuilder(DataRow row, SqlClauseBuilderIUW builder, params string[] ignorColumns)
-		{
+		private static void DataRowToBuilder<TBuilder>(DataRow row, TBuilder builder, params string[] ignorColumns) where TBuilder: SqlClauseBuilderIUW<TBuilder>
+
+        {
 			foreach (DataColumn column in row.Table.Columns)
 			{
 				if (Array.Exists(ignorColumns, (c => c == column.ColumnName)) == false)
 					builder.AppendItem(column.ColumnName, row[column.ColumnName]);
 			}
 		}
+
 		#region Load
 
 		/// <summary>

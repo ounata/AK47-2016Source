@@ -17,26 +17,43 @@ namespace PPTS.Data.Orders.Adapters
         {
         }
 
-        /// <summary>
-        /// 获取 未结账课时
-        /// </summary>
-        /// <param name="classIds"></param>
-        /// <param name="date"></param>
-        /// <returns></returns>
-        public Dictionary<string,string> GetNoOpenAccountLessonCount(string[] classIds,DateTime date)
-        {
-            var result = new Dictionary<string, string>();
+        ///// <summary>
+        ///// 获取 未结账课时
+        ///// </summary>
+        ///// <param name="classIds"></param>
+        ///// <param name="date"></param>
+        ///// <returns></returns>
+        //public Dictionary<string, decimal> GetNoOpenAccountLessonCount(DateTime date,params string[] classIds)
+        //{
+        //    var result = new Dictionary<string, decimal>();
+            
+        //    GetNoOpenAccountLessonCountInContext(d => { result = d; }, date, classIds);
+        //    GetDbContext().DoAction(dbContext => dbContext.ExecuteDataSetSqlInContext());
+            
+        //    return result;
+        //}
 
-            WhereSqlClauseBuilder builder = new WhereSqlClauseBuilder(LogicOperatorDefine.And);
-            builder.AppendItem("EndTime", date, ">");
-            var whereSql = builder.ToSqlString(TSqlBuilder.Instance);
-            var inSql = new InSqlClauseBuilder("ClassID").AppendItem(classIds).ToSqlString(TSqlBuilder.Instance);
+        //public void GetNoOpenAccountLessonCountInContext(Action<Dictionary<string, decimal>> action, DateTime date, params string[] classIds)
+        //{
+        //    var whereSql = new WhereSqlClauseBuilder();
+        //    whereSql.AppendItem("EndTime", date, ">");
+        //    var inSql = new InSqlClauseBuilder("ClassID").AppendItem(classIds);
+        //    var builder = new ConnectiveSqlClauseCollection(LogicOperatorDefine.And, whereSql, inSql);
+        //    string sql = string.Format("select ClassID,count(1) as lesscount from {0} where {1} group by ClassID", this.GetTableName(), builder.ToSqlString(TSqlBuilder.Instance));
+        //    var sqlContext = this.GetSqlContext();
+        //    sqlContext.AppendSqlWithSperatorInContext(TSqlBuilder.Instance, sql);
+        //    sqlContext.RegisterTableAction("NoOpenAccountLessonTable", table => {
+        //        var result = new Dictionary<string, decimal>();
+        //        table.Select().ToList().ForEach(row => { result.Add(row["ClassID"].ToString(), Convert.ToDecimal( row["lesscount"].ToString())); });
+        //        action(result);
+        //    });
 
-            string sql = string.Format("select ClassID,count(1) as lesscount from {0} where {1} and {2} group by ClassID", this.GetTableName(), inSql, whereSql);
-            var ds = DbHelper.RunSqlReturnDS(sql, this.GetConnectionName());
-            if(ds.Tables.Count>0 && ds.Tables[0].Rows.Count > 0) {
-                ds.Tables[0].Select().ToList().ForEach(row => { result.Add(row["ClassID"].ToString(), row["lesscount"].ToString()); });
-            }
+        //}
+
+        public ClassLessonCollection LoadCollectionByClassID(string ClassID) {
+            ClassLessonCollection result = new ClassLessonCollection();
+            
+            result = this.Load(builder=> builder.AppendItem("ClassID", ClassID));
             return result;
         }
 

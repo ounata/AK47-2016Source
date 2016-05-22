@@ -9,6 +9,9 @@ namespace PPTS.WebAPI.Customers.ViewModels.CustomerMeetings
     [Serializable]
     public class CustomerMeetingQueryModel : CustomerMeeting
     {
+        [DataMember]
+        public long CustomerId { set; get; }
+
         /// <summary>
         /// 学员姓名
         /// </summary>
@@ -38,6 +41,12 @@ namespace PPTS.WebAPI.Customers.ViewModels.CustomerMeetings
         /// </summary>
         [DataMember]
         public string Attachment { set; get; }
+
+        /// <summary>
+        /// 内容反馈或者解决方案
+        /// </summary>
+        [DataMember]
+        public string ContentData { set; get; }
     }
 
     [Serializable]

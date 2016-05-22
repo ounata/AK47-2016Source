@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using PPTS.Data.Orders.Entities;
-using PPTS.Data.Products;
+using PPTS.Data.Orders;
 using MCS.Library.Data;
 
 namespace PPTS.Data.Orders.Adapters
@@ -51,17 +51,52 @@ namespace PPTS.Data.Orders.Adapters
 
         }
 
+
         protected override void BeforeInnerUpdate(Order data, Dictionary<string, object> context)
         {
             if (data.OrderNo.IsNullOrWhiteSpace()) { data.OrderNo = Helper.GetOrderCode("NOD"); }
-            if (data.CreateTime == DateTime.MinValue) { data.CreateTime = DateTime.Now; }
         }
 
         protected override void BeforeInnerUpdateInContext(Order data, SqlContextItem sqlContext, Dictionary<string, object> context)
         {
             if (data.OrderNo.IsNullOrWhiteSpace()) { data.OrderNo = Helper.GetOrderCode("NOD"); }
-            if (data.CreateTime == DateTime.MinValue) { data.CreateTime = DateTime.Now; }
         }
 
+        public void ExistsPendingApprovalInContext(string customerId) {
+            
+            var whereCustomerId = new WhereSqlClauseBuilder().AppendItem("CustomerID", customerId).ToSqlString(TSqlBuilder.Instance);
+            var sql = string.Format(@"if exists (
+select * from {0} ROWLOCK where {1} and OrderStatus='1' 
+)
+begin 
+select -1;return;
+end", this.GetTableName(), whereCustomerId);
+            
+            var sqlContext = GetSqlContext();
+            sqlContext.AppendSqlInContext(TSqlBuilder.Instance, TSqlBuilder.Instance.DBStatementSeperator);
+            sqlContext.AppendSqlInContext(TSqlBuilder.Instance, sql);
+            sqlContext.AppendSqlInContext(TSqlBuilder.Instance, TSqlBuilder.Instance.DBStatementSeperator);
+        }
+
+        public void ExecSuccessInContext()
+        {
+            GetSqlContext().AppendSqlWithSperatorInContext(TSqlBuilder.Instance, "select 1");
+        }
+        
+        public void Update(string orderId,Dictionary<string,object> param)
+        {
+            var updateBuilder = new UpdateSqlClauseBuilder();
+            var whereBuilder = new WhereSqlClauseBuilder();
+
+            whereBuilder.AppendItem("orderId", orderId);
+            param.ForEach(kv => { updateBuilder.AppendItem(kv.Key, kv.Value); });
+            updateBuilder.AppendItem("ModifyTime", "GETUTCDATE()", "=", true);
+
+            string sql = string.Format("update {0} set {1} where {2}",
+                GetTableName(),
+                updateBuilder.ToSqlString(TSqlBuilder.Instance),
+                whereBuilder.ToSqlString(TSqlBuilder.Instance));
+            DbHelper.RunSql(sql, GetConnectionName());
+        }
     }
 }

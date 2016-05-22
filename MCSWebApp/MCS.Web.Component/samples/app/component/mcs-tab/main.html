@@ -1,50 +1,57 @@
 ﻿<!-- #开始：位置条 -->
 <style>
-    span.required {
-      color: #cc3918;
-    }
+span.required {
+    color: #cc3918;
+}
 
-    label.hightlight {
-      background-color: #11a9cc;
-    }
+label.hightlight {
+    background-color: #11a9cc;
+}
 </style>
 <div class="breadcrumbs" id="breadcrumbs">
-  <script type="text/javascript">
-        try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }
-  </script>
-
-  <ul class="breadcrumb">
-    <li class="active">
-      <i class="ace-icon fa fa-home home-icon"></i>
-      首页
-    </li>
-    <li class="active">
-      <i class="ace-icon fa fa-buttons"></i>
-      Tab多栏位视图
-    </li>
-  </ul>
+    <script type="text/javascript">
+    try {
+        ace.settings.check('breadcrumbs', 'fixed')
+    } catch (e) {}
+    </script>
+    <ul class="breadcrumb">
+        <li class="active">
+            <i class="ace-icon fa fa-home home-icon"></i> 首页
+        </li>
+        <li class="active">
+            <i class="ace-icon fa fa-buttons"></i> Tab多栏位视图
+        </li>
+    </ul>
 </div>
 <!-- /结束：位置条 -->
 <div class="page-content">
-  <div class="row">
-    <div class="col-xs-12">
-      <div class="row">
-        <div class="col-sm-12">
-          <h3 class="header smaller lighter green">应用范例</h3>
-          <div >
-            <uib-tabset>
-              <uib-tab ui-sref="tab.{{tab.title}}" ng-repeat="tab in vm.tabs" active="tab.active" heading="{{tab.title}}">
-                <div ui-view>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h3 class="header smaller lighter green">应用范例</h3>
+                    <div>
+                        <h4>基于路由的页面动态加载</h4>
+                        <uib-tabset>
+                            <uib-tab ui-sref="tab.{{tab.title}}" ng-repeat="tab in vm.tabs" active="tab.active" heading="{{tab.title}}">
+                                <div ui-view>
+                                </div>
+                            </uib-tab>
+                        </uib-tabset>
+                        <h4>ng-incude方式加载页面</h4>
+                        <uib-tabset>
+                            <uib-tab ng-repeat="tab in vm.tabs" active="tab.active" heading="{{tab.title}}">
+                                <div ng-include="'app/component/mcs-tab/tab.' + tab.title + '.html'">
+                                </div>
+                            </uib-tab>
+                        </uib-tabset>
+                    </div>
                 </div>
-              </uib-tab>
-            </uib-tabset>
-          </div>
-        </div>
-        <div class="laycode col-sm-12">
-          <h3 class="header smaller lighter green">示例代码</h3>
-          <h5>JS</h5>
-          <div class="codehilite">
-            <pre>angular.module(&#39;app&#39;, [&#39;ui.bootstrap&#39;, &#39;ui.router&#39;])
+                <div class="laycode col-sm-12">
+                    <h3 class="header smaller lighter green">示例代码</h3>
+                    <h5>JS</h5>
+                    <div class="codehilite">
+                        <pre>angular.module(&#39;app&#39;, [&#39;ui.bootstrap&#39;, &#39;ui.router&#39;])
 .config([&#39;$stateProvider&#39;, &#39;$urlRouterProvider&#39;, function($stateProvider, $urlRouterProvider) {
 $stateProvider
     .state(&#39;home&#39;, {
@@ -83,42 +90,42 @@ vm.changeTab = function(tab) {
 }
 }])
 </pre>
-          </div>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <h3 class="header smaller lighter green">参数说明</h3>
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead>
+                            <thead>
+                                <th>参数</th>
+                                <th>用途</th>
+                                <th>取值范围</th>
+                                <th>示例</th>
+                            </thead>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>heading</td>
+                                <td>设定每个tab项的标题</td>
+                                <td>string</td>
+                                <td>heading="{{tab.title}}"</td>
+                            </tr>
+                            <tr>
+                                <td>ui-sref</td>
+                                <td>设定每个tab项点击时动态加载页面视图的路由</td>
+                                <td>string</td>
+                                <td>ui-sref="{{tab.route}}"</td>
+                            </tr>
+                            <tr></tr>
+                            <td>active</td>
+                            <td>设定被打开的tab项</td>
+                            <td>string</td>
+                            <td>active="tab.active"</td>
+                            <tr></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-        <div class="col-sm-12">
-          <h3 class="header smaller lighter green">参数说明</h3>
-          <table class="table table-striped table-bordered table-hover">
-            <thead>
-            <thead>
-            <th>参数</th>
-            <th>用途</th>
-            <th>取值范围</th>
-            <th>示例</th>
-            </thead>
-            </thead>
-            <tbody>
-              <tr>
-                <td>heading</td>
-                <td>设定每个tab项的标题</td>
-                <td>string</td>
-                <td>heading="{{tab.title}}"</td>
-              </tr>
-              <tr>
-                <td>ui-sref</td>
-                <td>设定每个tab项点击时动态加载页面视图的路由</td>
-                <td>string</td>
-                <td>ui-sref="{{tab.route}}"</td>
-              </tr>
-              <tr></tr>
-            <td>active</td>
-            <td>设定被打开的tab项</td>
-            <td>string</td>
-            <td>active="tab.active"</td>
-            <tr></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
     </div>
-  </div>
 </div>

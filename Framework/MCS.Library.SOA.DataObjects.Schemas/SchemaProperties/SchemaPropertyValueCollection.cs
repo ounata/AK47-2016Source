@@ -75,8 +75,13 @@ namespace MCS.Library.SOA.DataObjects.Schemas.SchemaProperties
 				{
 					Type targetType = null;
 					if (v.Definition.DataType == PropertyDataType.Enum)
+                    { 
 						targetType = Type.GetType(v.Definition.EditorParams);
-					else
+
+                        if (targetType == null)
+                            targetType = typeof(int);
+                    }
+                    else
 						targetType = v.Definition.DataType.ToRealType();
 
 					object realValue = DataConverter.ChangeType(v.StringValue, targetType);

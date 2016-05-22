@@ -14,7 +14,7 @@ namespace MCS.Library.Data.Test
         {
             ConditionObject condition = PrepareData();
 
-            IConnectiveSqlClause builder = ConditionMapping.GetWhereSqlClauseBuilder(condition);
+            IConnectiveSqlClause builder = ConditionMapping.GetWhereSqlClauseBuilder(condition, "IgnoreProperty");
 
             Console.WriteLine(builder.ToSqlString(TSqlBuilder.Instance));
         }
@@ -38,6 +38,7 @@ namespace MCS.Library.Data.Test
             condition.Gender = GenderType.Female;
             condition.StartTime = DateTime.Now.AddDays(-1);
             condition.EndTime = DateTime.Now.AddDays(1);
+            condition.IgnoreProperty = "Shen Zheng";
 
             return condition;
         }

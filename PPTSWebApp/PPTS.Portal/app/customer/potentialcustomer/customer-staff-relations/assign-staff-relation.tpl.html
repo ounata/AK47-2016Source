@@ -7,13 +7,13 @@
     </div>
     <div class="modal-body">
         <div class="form-group">
-            <span class="col-sm-4 control-label no-padding-right">我申请将<span class="required" title="{{vm.customerNames}}">{{vm.displayNames}}</span>分配给：</span>
+            <span class="col-sm-4 control-label no-padding-right" style="padding-top:8px">我申请将<span class="required" uib-tooltip="{{vm.customerNames}}"> {{vm.displayNames}} </span>分配给：</span>
             <div class="col-sm-8">
-                <ppts-select category="" model="" caption="选择人员" css="ppts-select-users"/>
+                <ppts-organization branch="vm.transferResources.branch" campus="vm.transferResources.campus" selected="vm.transferResources.selected" />
             </div>
         </div>
         <div class="form-group">
-            <span class="col-sm-4 control-label no-padding-right">通知处理人：</span>
+            <span class="col-sm-4 control-label no-padding-right" style="padding-top:8px">通知处理人：</span>
             <div class="col-sm-8">
                 <ppts-checkbox-group category="messageType" model="vm.selectTypes" async="false"/>
             </div>

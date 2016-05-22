@@ -1,81 +1,16 @@
 ﻿/*全局字体修改*/
-
 body {
     font-family: "微软雅黑", Arial
 }
 
-
 /*顶部导航条背景色由ace.css里的浅蓝色#438eb9改成了白色*/
-
 #navbar {
     background-color: #EBF4FA;
     border: 1px solid #e5e5e5;
 }
-
-.btn.btn-link:focus,
-a:focus {
-    outline: none;
-}
-
 .nav.nav-list a {
     cursor: pointer;
 }
-
-
-/*nav-brand里的logo把padding-top, bottom从10px改成了0px*/
-
-#logo {
-    padding: 0px;
-}
-
-.profile-user-info-striped {
-    border: 0px;
-}
-
-.profile-user-info {
-    margin: 0px;
-}
-
-.mcs-user-profile .profile-info-name {
-    width: 30%;
-}
-
-.mcs-user-profile .profile-info-value {
-    line-height: 30px;
-}
-
-.mcs-user-profile.follow-list .profile-info-name {
-    width: 15%;
-}
-
-.page-header.info {
-    margin: 0px;
-}
-
-
-/*修改底部版权信息的行距从36px到20px*/
-
-.footer-content {
-    line-height: 20px!important;
-}
-
-.accordion-style1.panel-group {
-    margin-bottom: 0px;
-}
-
-.accordion-style1.panel-group .panel-body {
-    padding: 0 15px;
-}
-
-span.required,
-div.warning {
-    color: #cc3918;
-}
-
-.form-actions {
-    margin-top: 0px;
-}
-
 .page-header {
     border-bottom: 2px solid #6fb3e0;
     padding: 5px 10px;
@@ -84,53 +19,102 @@ div.warning {
     color: #8089a0;
 }
 
-.form-horizontal .control-label {
-    padding-top: 4px;
-}
-
-.ui-select-container {
+/*nav-brand里的logo把padding-top, bottom从10px改成了0px*/
+#logo {
     padding: 0px;
 }
 
-.ui-select-toggle,
-.ui-select-toggle:focus {
-    background-color: #e7e7e7 !important;
+/*跟进，成绩单独修正*/
+.mcs-user-profile.follow-list .profile-info-name {
+    width: 15%;
+}
+.mcs-user-profile.score-list .profile-info-name {
+    width: 12%;
 }
 
+/*页面布局*/
+.page-header.info {
+    margin: 0px;
+}
+/*修改底部版权信息的行距从36px到20px*/
+.footer-content {
+    line-height: 20px!important;
+}
+
+/*项目组件*/
+ppts-daterangepicker.search .datepicker {
+    padding-left: 0px !important;
+}
+.inline-ppts-datepicker {
+    display: inline-block;
+    width:180px;
+    vertical-align: middle;
+}
+ppts-select {
+    padding: 0px;
+}
+.ppts-select-label {
+    width:120px !important;
+    height: 32px !important;
+    float:right !important;
+}
+.ppts-select-search {
+    width:200px;
+    display: inline-flex;
+    padding-top: 5px;
+}
+.ppts-select-search div {
+    padding-left: 0px !important;
+}
+.ppts-select-search-nopadding {
+     width:200px;
+    display: inline-block;
+    padding-top: 0px;
+}
+.search-inline ppts-select {
+    padding-top: 0px !important;
+}
+ppts-select-branch.search{
+    display:inline-block !important;
+    vertical-align:middle;
+}
+
+ppts-daterangepicker.search div {
+    width: 380px !important;
+}
+ppts-select-branch.search div {
+    display: inline-grid !important;
+}
 .ppts-select-users {
     width: 200px;
     margin-left: 20px;
 }
-
-.modal-header .close {
-    font-size: 20px;
+.ppts-select div {
+    width: 200px !important;
 }
-
-.input-width-100 {
-    width: 100px !important;
-    margin-right: 10px !important;
+.ppts-select-md div {
+    width: 260px !important;
 }
-
-.input-width-120 {
-    width: 120px !important;
-    margin-right: 10px !important;
+.ppts-select-lg div {
+    width: 400px !important;
 }
-
-.input-width-160 {
-    width: 160px !important;
-    margin-right: 10px !important;
+ppts-select-branch .btn {
+    height: 33px !important;
 }
-
-.input-width-180 {
-    width: 180px !important;
-    margin-right: 10px !important;
+.ppts-select-middle-align {
+    margin-top: 10px;
 }
-
-.label-150 {
-    width: 100px !important;
+ppts-search .input-group {
+ width:500px;   
 }
-
-.search-panel-body {
-    height: 120px;
-    padding-top: 10px;
+ppts-search .input-group .form-control {
+    height:37px;
+   
+}
+.ppts-oneline-block {
+    display: inline-block;
+}
+/**已对帐显示红色*/
+.ppts-checked-color{
+    color:red;
 }

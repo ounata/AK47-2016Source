@@ -1,6 +1,7 @@
 using MCS.Library.Core;
 using MCS.Library.Data.DataObjects;
 using MCS.Library.Data.Mapping;
+using PPTS.Data.Common.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,12 +54,22 @@ namespace PPTS.Data.Customers.Entities
 			get;
             set;
 		}
-
-		/// <summary>
-		/// 会议内容类型
+        /// <summary>
+		/// 参会对象姓名
 		/// </summary>
-		[ORFieldMapping("ContentType")]
+		[ORFieldMapping("ObjectName")]
         [DataMember]
+        public string ObjectName
+        {
+            get;
+            set;
+        }
+        /// <summary>
+        /// 会议内容类型
+        /// </summary>
+        [ORFieldMapping("ContentType")]
+        [DataMember]
+        [ConstantCategory("c_codE_ABBR_ContentType")]
 		public string ContentType
 		{
 			get;

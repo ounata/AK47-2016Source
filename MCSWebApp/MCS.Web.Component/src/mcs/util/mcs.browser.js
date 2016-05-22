@@ -20,10 +20,17 @@
 
     var isChrome = sUserAgent.indexOf("Chrome") > -1;
     if (isChrome) {
-        var reChorme = new RegExp("Chrome/(\\d+\\.\\d+(?:\\.\\d+\\.\\d+))?");
-        reChorme.test(sUserAgent);
-        _browser.version = parseFloat(RegExp['$1']);
-        _browser.chrome = true;
+        if (sUserAgent.indexOf("Edge") > -1) {
+            var reEdge = new RegExp("Edge/(\\d+\\.\\d+)");
+            reEdge.test(sUserAgent);
+            _browser.version = parseFloat(RegExp['$1']);
+            _browser.edge = true;
+        } else {
+            var reChorme = new RegExp("Chrome/(\\d+\\.\\d+(?:\\.\\d+\\.\\d+))?");
+            reChorme.test(sUserAgent);
+            _browser.version = parseFloat(RegExp['$1']);
+            _browser.chrome = true;
+        }
     }
 
     //排除Chrome信息，因为在Chrome的user-agent字符串中会出现Konqueror/Safari的关键字
@@ -54,7 +61,7 @@
     // !isOpera 避免是由Opera伪装成的IE  
     var isIE = sUserAgent.indexOf("compatible") > -1
            && sUserAgent.indexOf("MSIE") > -1 && !isOpera;
-    if (isIE) {
+    if (isIE || _browser.edge) { //将edge当做ie作为处理，但也可以单独判断为edge
         var reIE = new RegExp("MSIE (\\d+\\.\\d+);");
         reIE.test(sUserAgent);
         _browser.version = parseFloat(RegExp['$1']);
@@ -74,18 +81,16 @@
     }
 
     return {
-        version: _browser.version,
-        get: function () {
-            return _browser;
-        }
+        s: _browser
     };
 }();
 
 
 // 调用
-//var browser = mcs.browser.get();
+//var browser = mcs.browser.s;
 //console.info("broswer.version: ", browser.version);
 //console.info("broswer.msie is ", browser.msie);
+//console.info("broswer.msie is ", browser.edge);
 //console.info("broswer.safari is ", browser.safari);
 //console.info("broswer.opera is ", browser.opera);
 //console.info("broswer.mozilla is ", browser.mozilla);

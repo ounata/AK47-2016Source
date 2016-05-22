@@ -3,7 +3,7 @@
     [CampusID] NVARCHAR(36) NOT NULL, 
     [CampusName] NVARCHAR(128) NULL, 
 	[AssignID] NVARCHAR(36) NOT NULL, 
-    [AssignTime] DATETIME NOT NULL DEFAULT getdate(), 
+    [AssignTime] DATETIME NOT NULL DEFAULT GETUTCDATE(), 
     [AssignStatus] NVARCHAR(32) NULL, 
     [Amount] DECIMAL(18, 2) NULL, 
     [TeacherID] NVARCHAR(36) NULL, 
@@ -11,7 +11,7 @@
     [TeacherJobID] NVARCHAR(36) NULL, 
     [CreatorID] NVARCHAR(36) NULL, 
     [CreatorName] NVARCHAR(64) NULL, 
-    [CreateTime] DATETIME NULL DEFAULT getdate(), 
+    [CreateTime] DATETIME NULL DEFAULT GETUTCDATE(), 
     CONSTRAINT [PK_AccompanyAssigns] PRIMARY KEY NONCLUSTERED ([AssignID]) 
 )
 

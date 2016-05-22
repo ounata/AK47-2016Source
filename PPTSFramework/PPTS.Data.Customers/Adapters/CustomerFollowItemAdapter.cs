@@ -1,9 +1,11 @@
-using System.Linq;
+using MCS.Library.Data.Builder;
 using PPTS.Data.Customers.Entities;
+using System;
+using System.Linq;
 
 namespace PPTS.Data.Customers.Adapters
 {
-    public class CustomerFollowItemAdapter : CustomerAdapterBase<CustomerFollow, CustomerFollowCollection>
+    public class CustomerFollowItemAdapter : CustomerAdapterBase<CustomerFollowItem, CustomerFollowItemCollection>
 	{
 		public static readonly CustomerFollowItemAdapter Instance = new CustomerFollowItemAdapter();
 
@@ -16,7 +18,7 @@ namespace PPTS.Data.Customers.Adapters
 		/// </summary>
         /// <param name="itemid"></param>
 		/// <returns></returns>
-		public CustomerFollow Load(string itemid)
+		public CustomerFollowItem Load(string itemid)
 		{
             return this.Load(builder => builder.AppendItem("ItemID", itemid)).SingleOrDefault();
 		}

@@ -27,7 +27,7 @@ namespace Diagnostics.AppPoolCheck
 
             notify.CacheData = message;
 
-            UdpCacheNotifier.Instance.SendNotify(notify);
+            UdpCacheNotifier.Instance.SendNotifyAsync(notify);
 
             sentMessage.InnerText = string.Format("发送内容: {0}", message);
         }

@@ -22,6 +22,9 @@ namespace PPTS.WebAPI.Orders.ViewModels.ClassGroup
             set;
         }
 
+        [ConditionMapping(fieldName: "UnAssignAmount", op: ">")]
+        public string UnAssignAmount { get { return "0"; } }
+
         [NoMapping]
         public PageRequestParams PageParams
         {

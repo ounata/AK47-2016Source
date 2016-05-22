@@ -19,24 +19,37 @@ namespace PPTS.Services.Products.Services
     {
         [WfJsonFormatter]
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
-        public DiscountQueryResult QueryDiscountByCampusID(string CampusID)
+        public DiscountQueryResult QueryDiscountByCampusID(string campusID)
         {
-            DiscountQueryResult dqr = new DiscountQueryResult();
-            dqr.Discount = DiscountAdapter.Instance.LoadByCampusID(CampusID);
-            if (dqr.Discount != null)
+            DiscountQueryResult discountQueryResult = new DiscountQueryResult();
+            discountQueryResult.Discount = DiscountAdapter.Instance.LoadByCampusID(campusID);
+            if (discountQueryResult.Discount != null)
             {
-                dqr.DiscountItemCollection = DiscountItemAdapter.Instance.Load(builder=> builder.AppendItem("DiscountID", dqr.Discount.DiscountID)).ToList();
+                discountQueryResult.DiscountItemCollection = DiscountItemAdapter.Instance.Load(builder=> builder.AppendItem("DiscountID", discountQueryResult.Discount.DiscountID)).ToList();
             }
-            return dqr;
+            return discountQueryResult;
         }
 
         [WfJsonFormatter]
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
-        public ExpenseQueryResult QueryExpenseByCampusID(string CampusID)
+        public ExpenseQueryResult QueryExpenseByCampusID(string campusID)
         {
-            ExpenseQueryResult queryresult = new ExpenseQueryResult();
-            queryresult.Expense = ExpenseAdapter.Instance.LoadByCampusID(CampusID);
-            return queryresult;
+            ExpenseQueryResult queryResult = new ExpenseQueryResult();
+            queryResult.Expense = ExpenseAdapter.Instance.LoadByCampusID(campusID);
+            return queryResult;
+        }
+
+        [WfJsonFormatter]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        public PresentQueryResult QueryPresentByCampusID(string campusID)
+        {
+            PresentQueryResult queryResult = new PresentQueryResult();
+            queryResult.Present = PresentAdapter.Instance.LoadByCampusID(campusID);
+            if (queryResult.Present != null)
+            {
+                queryResult.PresentItemCollection = PresentItemAdapter.Instance.Load(builder => builder.AppendItem("PresentID", queryResult.Present.PresentID)).ToList();
+            }
+            return queryResult;
         }
     }
 }

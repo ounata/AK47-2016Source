@@ -1,0 +1,81 @@
+﻿<!-- #开始：学员课表.高级查询条件 -->
+<div id="accordion" class="accordion-style1 panel-group">
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#advance-search">
+                    <i class="ace-icon fa fa-angle-right bigger-110" data-icon-hide="fa-angle-down" data-icon-show="fa-angle-right"></i>
+                    &nbsp;高级查询
+                </a>
+            </h4>
+        </div>
+        <div class="panel-collapse collapse mcs-advance-search" id="advance-search">
+            <div class="panel-body">
+                <div class="profile-user-info mcs-user-profile">
+                    <div class="profile-info-row" ng-repeat="item in vm.searchItems">
+                        <div class="profile-info-name">{{item.name}}</div>
+                        <div class="profile-info-value" ppts-compile-html="item.template | trusted"></div>
+                        <!--<ppts-daterangepicker start-date="vm.criteria.startTime" end-date="vm.criteria.endTime" class="search" />-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /结束：学员课表.高级查询条件 -->
+<!-- #开始：学员课表.快速查询条件 -->
+<div class="mcs-panel-search well well-sm">
+    <div class="portlet">
+        <div class="portlet-title line">
+            <div class="caption">
+                <label class="quick-search"><i class="ace-icon fa fa-search bigger-125"></i> 快速查询</label>
+            </div>
+        </div>
+        <div class="portlet-body">
+            <div class="line-height-40">
+                <div class="input-group input-xlarge mcs-input-group pull-left">
+                    <ppts-select-branch model="vm.criteria.campusID" />            
+                </div>          
+            </div>
+            <div class="search-inline">
+                <ppts-select caption="上课科目" category="subject" model="vm.criteria.subject" class="ppts-select-search" />
+                <ppts-select caption="上课年级" category="grade" model="vm.criteria.grade" class="ppts-select-search" />
+                <ppts-select caption="课时状态" category="assignStatus" model="vm.assignStatus" class="ppts-select-search" />
+                <ppts-select caption="课时类型" category="assignSource" model="vm.assignSource" class="ppts-select-search" />
+            </div>
+            <div class="ppts-oneline-block">            
+                <mcs-input placeholder="学员姓名" class="search-input" model="vm.criteria.customerName" />
+                <mcs-input placeholder="学员编号" class="search-input" model="vm.criteria.customerCode" />
+                <mcs-input placeholder="教师姓名" class="search-input" model="vm.criteria.teacherName" />
+                <mcs-input placeholder="学管师姓名" class="search-input" model="vm.criteria.educatorName" />
+                <mcs-input placeholder="咨询师姓名" class="search-input" model="vm.criteria.consultantName" />
+                <mcs-input placeholder="订单编号" class="search-input" model="" />
+                <button class="btn btn-sm btn-success search-input" ng-click="vm.queryList()">
+                    <i class="ace-icon fa fa-search"></i>
+                    查询
+                </button>
+            </div> 
+        </div>
+    </div>
+</div>
+<!-- /结束：学员课表.快速查询条件 -->
+<!-- #开始：学员课表.工具栏 -->
+<div class="mcs-panel-toolbar">
+    <mcs-button category="edit" text="调课" click="vm.resetCourseClick()"></mcs-button>
+    <mcs-button category="reject" text="取消课表" click="vm.cancelCourseClick()"></mcs-button>
+    <mcs-button category="delete" text="删除课表" click="vm.deleteCourseClick()"></mcs-button>
+    <mcs-button category="ok" text="课时确认" click="vm.confirmCourseClick()"></mcs-button>
+    <mcs-button category="print" text="打印本页课表" click=""></mcs-button>
+    <mcs-button category="export" text="导出" click=""></mcs-button>
+</div>
+<div class="alert alert-block alert-danger" ng-show="vm.errorMessage">
+    <button type="button" class="close" data-dismiss="alert">
+        <i class="ace-icon fa fa-times"></i>
+    </button>
+    <i class="ace-icon fa fa-warning"></i>
+    {{vm.errorMessage}}
+</div>
+<!-- /结束：学员课表.工具栏 -->
+<!-- #开始：学员课表.数据表格 -->
+<mcs-datatable data="vm.data" />
+<!-- /结束：学员课表.数据表格 -->

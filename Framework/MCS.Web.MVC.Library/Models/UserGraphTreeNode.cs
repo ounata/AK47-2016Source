@@ -11,31 +11,41 @@ namespace MCS.Web.MVC.Library.Models
     /// </summary>
     public class UserGraphTreeNode : TreeNode<UserGraphTreeNode>
     {
-        /// <summary>
-        /// 对象全路径
-        /// </summary>
-        public string FullPath
+        //public WrappedOguObject Data
+        //{
+        //    get;
+        //    set;
+        //}
+        public IOguObject Data
         {
             get;
             set;
         }
+        ///// <summary>
+        ///// 对象全路径
+        ///// </summary>
+        //public string FullPath
+        //{
+        //    get;
+        //    set;
+        //}
 
-        /// <summary>
-        /// 对象代码名称（对于用户是登录名）
-        /// </summary>
-        public string CodeName
-        {
-            get;
-            set;
-        }
+        ///// <summary>
+        ///// 对象代码名称（对于用户是登录名）
+        ///// </summary>
+        //public string CodeName
+        //{
+        //    get;
+        //    set;
+        //}
 
-        /// <summary>
-        /// 对象的类型
-        /// </summary>
-        public SchemaType ObjectType
-        {
-            get;
-            set;
-        }
+        ///// <summary>
+        ///// 对象的类型
+        ///// </summary>
+        //public SchemaType ObjectType
+        //{
+        //    get;
+        //    set;
+        //}
     }
 }

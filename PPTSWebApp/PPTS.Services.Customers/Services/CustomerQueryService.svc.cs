@@ -5,6 +5,8 @@ using MCS.Library.Data.Mapping;
 using MCS.Library.WcfExtensions;
 using PPTS.Contracts.Customers.Models;
 using PPTS.Contracts.Customers.Operations;
+using PPTS.Data.Common.Adapters;
+using PPTS.Data.Common.Entities;
 using PPTS.Data.Customers.Adapters;
 using PPTS.Data.Customers.Entities;
 using System;
@@ -32,74 +34,139 @@ namespace PPTS.Services.Customers.Services
 
         [WfJsonFormatter]
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
-        public CustomerTeacherRelationQueryResult QueryCustomerTeacherRelationByCustomerID(CustomerTearcherRelationQueryModel QueryModel)
+        public CustomerCollectionQueryResult QueryCustomerCollectionByCustomerIDs(params string[] customerIDs)
         {
-            QueryModel.NullCheck("QueryModel");
-            QueryModel.CustomerID.NullCheck("CustomerID");
-            CustomerTeacherRelationQueryResult queryresult = new CustomerTeacherRelationQueryResult();
-            #region 客户部分信息查询条件存在问题，屏蔽执行方法
-            /*
-            ConnectiveLoadingCondition condition = new ConnectiveLoadingCondition(ConditionMapping.GetConnectiveClauseBuilder(QueryModel));
-            CustomerTeacherRelationAdapter.Instance.LoadByBuilderInContext(condition
-                , action => queryresult.CustomerTeacherRelationCollection = action.ToList(), DateTime.MinValue);
-            if (QueryModel.IsContainCustomerInfo)
-            {
-                CustomerAdapter.Instance.LoadInContext(new WhereLoadingCondition(builder => builder.AppendItem("CustomerID", QueryModel.CustomerID)), action => queryresult.Customer = action.SingleOrDefault());
-            }*/
-            #endregion 客户部分信息查询条件存在问题，屏蔽执行方法
-
-            using (DbContext context = CustomerTeacherRelationAdapter.Instance.GetDbContext())
-            {
-                context.ExecuteDataSetSqlInContext();
-            }
-
-            return queryresult;
-        }
-
-        [WfJsonFormatter]
-        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
-        public CustomerCollectionQueryResult QueryCustomerCollectionByCustomerIDs(string[] CustomerIDs)
-        {
-            CustomerIDs.NullCheck("CustomerIDs");
-            (CustomerIDs.Length > 0).FalseThrow("CustomerIDs length is 0!");
-            CustomerCollectionQueryResult queryresult = new CustomerCollectionQueryResult();
-            queryresult.CustomerCollection = new List<CustomerQueryResult>();
+            customerIDs.NullCheck("CustomerIDs");
+            (customerIDs.Length > 0).FalseThrow("CustomerIDs length is 0!");
+            CustomerCollectionQueryResult queryResult = new CustomerCollectionQueryResult();
+            queryResult.CustomerCollection = new List<CustomerQueryResult>();
 
             #region 多次查询部分
-            //foreach (string customerid in CustomerIDs)
+            //foreach (string customerID in customerIDs)
             //{
-            //    WhereLoadingCondition where_condition = new WhereLoadingCondition(builder => builder.AppendItem("CustomerID", customerid));
-            //    CustomerQueryResult queryresult_child = new CustomerQueryResult();
-            //    CustomerAdapter.Instance.LoadInContext(where_condition, action => queryresult_child.Customer = action.SingleOrDefault(), tableName: "Customer" + customerid);
-            //    CustomerStaffRelationAdapter.Instance.LoadInContext(where_condition, action => queryresult_child.CustomerStaffRelationCollection = action.ToList(), DateTime.MinValue, tableName: "CustomerStaff" + customerid);
-            //    queryresult.CustomerCollection.Add(queryresult_child);
+            //    WhereLoadingCondition whereCondition = new WhereLoadingCondition(builder => builder.AppendItem("CustomerID", customerID));
+            //    CustomerQueryResult queryResultChild = new CustomerQueryResult();
+            //    CustomerAdapter.Instance.LoadInContext(whereCondition, action => queryresult_child.Customer = action.SingleOrDefault(), tableName: "Customer" + customerID);
+            //    CustomerStaffRelationAdapter.Instance.LoadInContext(whereCondition, action => queryresult_child.CustomerStaffRelationCollection = action.ToList(), DateTime.MinValue, tableName: "CustomerStaff" + customerID);
+            //    queryResult.CustomerCollection.Add(queryResultChild);
             //}
             #endregion 多次查询部分
 
-            CustomerCollection customercollection = null;
-            CustomerStaffRelationCollection customerstaffrelationcollection = null;
+            CustomerCollection customerCollection = null;
+            CustomerStaffRelationCollection customerStaffRelationCollection = null;
             #region 客户部分信息查询条件存在问题，屏蔽执行方法
-            
-            InLoadingCondition in_condition = new InLoadingCondition(builder => builder.AppendItem<string>(CustomerIDs).DataField = "CustomerID");
-            CustomerAdapter.Instance.LoadByInBuilderInContext(in_condition, action => customercollection = action,DateTime.MinValue);
-            CustomerStaffRelationAdapter.Instance.LoadByInBuilderInContext(in_condition, action => customerstaffrelationcollection= action, DateTime.MinValue);
-           
+
+            InLoadingCondition in_condition = new InLoadingCondition(builder => builder.AppendItem<string>(customerIDs).DataField = "CustomerID");
+            CustomerAdapter.Instance.LoadByInBuilderInContext(in_condition, action => customerCollection = action, DateTime.MinValue);
+            CustomerStaffRelationAdapter.Instance.LoadByInBuilderInContext(in_condition, action => customerStaffRelationCollection = action, DateTime.MinValue);
+
 
             using (DbContext context = CustomerAdapter.Instance.GetDbContext())
             {
                 context.ExecuteDataSetSqlInContext();
             }
 
-            foreach (string customerid in CustomerIDs)
+            foreach (string customerID in customerIDs)
             {
                 CustomerQueryResult queryresult_child = new CustomerQueryResult();
-                queryresult_child.Customer = customercollection.SingleOrDefault(result => result.CustomerID == customerid);
-                queryresult_child.CustomerStaffRelationCollection = customerstaffrelationcollection.Where(result => result.CustomerID == customerid).ToList();
-                queryresult.CustomerCollection.Add(queryresult_child);
+                queryresult_child.Customer = customerCollection.SingleOrDefault(result => result.CustomerID == customerID);
+                queryresult_child.CustomerStaffRelationCollection = customerStaffRelationCollection.Where(result => result.CustomerID == customerID).ToList();
+                queryResult.CustomerCollection.Add(queryresult_child);
             }
-            
+
             #endregion 客户部分信息查询条件存在问题，屏蔽执行方法
-            return queryresult;
+            return queryResult;
         }
+
+
+        [WfJsonFormatter]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        public TeacherRelationByCustomerQueryResult QueryCustomerTeacherRelationByCustomerID(string customerID)
+        {
+            customerID.NullCheck("customerID");
+            TeacherRelationByCustomerQueryResult result = new TeacherRelationByCustomerQueryResult();
+            CustomerTeacherRelationCollection relations = CustomerTeacherRelationAdapter.Instance.Load(builder => builder.AppendItem("CustomerID", customerID), DateTime.MinValue);
+            string[] customerIDs = new string[] { customerID };
+            string[] teacherJobIDs = relations.Select<CustomerTeacherRelation, string>(model => model.TeacherJobID).ToArray();
+            Dictionary<string, object> relationModels = QueryCustomerTeacherRelationModel(customerIDs, teacherJobIDs);
+            List<Customer> customerCollection = relationModels["CustomerCollection"] as List<Customer>;
+            customerCollection.IsNull(() => customerCollection = new List<Customer>());
+            List<TeacherJobModel> teacherJobCollection = relationModels["TeacherJobCollection"] as List<TeacherJobModel>;
+            teacherJobCollection.IsNull(() => teacherJobCollection = new List<TeacherJobModel>());
+            result.Customer = customerCollection.FirstOrDefault();
+            result.TeacherJobCollection = teacherJobCollection;
+            return result;
+        }
+
+        [WfJsonFormatter]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        public CustomerRelationByTeacherQueryResult QueryCustomerTeacherRelationByTeacherJobID(string teacherJobID)
+        {
+            teacherJobID.NullCheck("teacherJobID");
+            CustomerRelationByTeacherQueryResult result = new CustomerRelationByTeacherQueryResult();
+            CustomerTeacherRelationCollection relations = CustomerTeacherRelationAdapter.Instance.Load(builder => builder.AppendItem("TeacherJobID", teacherJobID), DateTime.MinValue);
+            string[] customerIDs = relations.Select<CustomerTeacherRelation, string>(model => model.CustomerID).ToArray();
+            string[] teacherJobIDs = new string[] { teacherJobID };
+            Dictionary<string, object> relationModels = QueryCustomerTeacherRelationModel(customerIDs, teacherJobIDs);
+            List<Customer> customerCollection = relationModels["CustomerCollection"] as List<Customer>;
+            customerCollection.IsNull(() => customerCollection = new List<Customer>());
+            List<TeacherJobModel> teacherJobCollection = relationModels["TeacherJobCollection"] as List<TeacherJobModel>;
+            teacherJobCollection.IsNull(() => teacherJobCollection = new List<TeacherJobModel>());
+            result.CustomerCollection = customerCollection;
+            result.TeacherJob = teacherJobCollection.FirstOrDefault();
+            return result;
+        }
+
+        [WfJsonFormatter]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+
+        public CustomerExpenseCollectionQueryResult QueryCustomerExpenseByCustomerID(string customerID)
+        {
+            customerID.NullCheck("customerID");
+            CustomerExpenseCollectionQueryResult result = new CustomerExpenseCollectionQueryResult();
+            result.CustomerExpenseRelationCollection = CustomerExpenseRelationAdapter.Instance.Load(builder => builder.AppendItem("CustomerID", customerID)).ToList();
+            return result;
+        }
+
+        [WfJsonFormatter]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+
+        public CustomerExpenseCollectionQueryResult QueryCustomerExpenseByCustomerIDs(params string[] customerIDs)
+        {
+            customerIDs.NullCheck("customerIDs");
+            CustomerExpenseCollectionQueryResult result = new CustomerExpenseCollectionQueryResult();
+            result.CustomerExpenseRelationCollection = CustomerExpenseRelationAdapter.Instance.LoadByInBuilder(new InLoadingCondition(builder => builder.AppendItem(customerIDs).DataField = "CustomerID")).ToList();
+            return result;
+        }
+
+        /// <summary>
+        /// 封装获取教师关系信息方法
+        /// </summary>
+        /// <param name="customerIDs">学员ID集合</param>
+        /// <param name="teacherJobIDs">教师岗位ID集合</param>
+        /// <param name="customerCollection">学员集合信息</param>
+        /// <param name="teacherJobCollection">教师岗位集合模型</param>
+        private Dictionary<string, object> QueryCustomerTeacherRelationModel(string[] customerIDs, string[] teacherJobIDs)
+        {
+            Dictionary<string, object> result = new Dictionary<string, object>();
+            List<Customer> customerCollection = new List<Customer>();
+            List<TeacherJobModel> teacherJobCollection = new List<TeacherJobModel>();
+            if (customerIDs != null && customerIDs.Length > 0)
+            {
+                customerCollection = CustomerAdapter.Instance.LoadByInBuilder(new InLoadingCondition(builder => builder.AppendItem(customerIDs), "CustomerID"), DateTime.MinValue).ToList();
+            }
+            if (teacherJobIDs != null && teacherJobIDs.Length > 0)
+            {
+                TeacherJobViewCollection jobCollection = TeacherJobViewAdapter.Instance.LoadByInBuilder(new InLoadingCondition(builder => builder.AppendItem(teacherJobIDs), "JobID"));
+                string[] teacherIDs = jobCollection.Select<TeacherJobView, string>(model => model.TeacherID).Distinct().ToArray();
+                TeacherTeachingCollection teacherTeachings = TeacherTeachingAdapter.Instance.LoadByInBuilder(new InLoadingCondition(builder => builder.AppendItem(teacherIDs), "TeacherID"));
+                jobCollection.ForEach((action) => { TeacherJobModel model = new TeacherJobModel() { TeacherJob = action, TeacherTeachingCollection = teacherTeachings.Where(where => where.TeacherID == action.TeacherID).ToList() }; teacherJobCollection.Add(model); });
+            }
+            result.Add("CustomerCollection", customerCollection);
+            result.Add("TeacherJobCollection", teacherJobCollection);
+            return result;
+        }
+
+
     }
 }

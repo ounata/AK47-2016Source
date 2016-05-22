@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using MCS.Library.Data.DataObjects;
+using PPTS.Data.Customers.Entities;
 
 namespace PPTS.WebAPI.Customers.ViewModels.PotentialCustomers
 {
@@ -20,6 +21,18 @@ namespace PPTS.WebAPI.Customers.ViewModels.PotentialCustomers
         /// </summary>
         [DataMember]
         public string MarketStaff { get; set; }
+
+        /// <summary>
+        /// 咨询师
+        /// </summary>
+        [DataMember]
+        public CustomerStaffRelation Consultant { get; set; }
+
+        /// <summary>
+        /// 学管师
+        /// </summary>
+        [DataMember]
+        public CustomerStaffRelation Market { get; set; }
     }
 
     [Serializable]

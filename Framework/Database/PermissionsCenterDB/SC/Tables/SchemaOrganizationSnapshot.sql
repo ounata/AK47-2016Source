@@ -15,9 +15,10 @@
 	[ShortName] NVARCHAR(64) NULL,
 	[WP] NVARCHAR(36) NULL, 
     [Address] NVARCHAR(MAX) NULL,
+	[DepartmentType] NVARCHAR(32) NULL,
 	[CreatorID] NVARCHAR(36) NULL, 
     [CreatorName] NVARCHAR(255) NULL,
-    [Comment] NVARCHAR(255) NULL, 
+    [Comment] NVARCHAR(255) NULL,
     CONSTRAINT [PK_SchemaOrganization] PRIMARY KEY CLUSTERED ([ID] ASC, [VersionStartTime] DESC)
 )
 
@@ -31,29 +32,3 @@ CREATE INDEX [IX_SchemaOrganizationSnapshot_CodeName] ON [SC].[SchemaOrganizatio
 
 GO
 
-EXEC sp_addextendedproperty @name = N'MS_Description',
-    @value = N'组织的短名',
-    @level0type = N'SCHEMA',
-    @level0name = N'SC',
-    @level1type = N'TABLE',
-    @level1name = N'SchemaOrganizationSnapshot',
-    @level2type = N'COLUMN',
-    @level2name = N'ShortName'
-GO
-EXEC sp_addextendedproperty @name = N'MS_Description',
-    @value = N'工作电话',
-    @level0type = N'SCHEMA',
-    @level0name = N'SC',
-    @level1type = N'TABLE',
-    @level1name = N'SchemaOrganizationSnapshot',
-    @level2type = N'COLUMN',
-    @level2name = N'WP'
-GO
-EXEC sp_addextendedproperty @name = N'MS_Description',
-    @value = N'地址',
-    @level0type = N'SCHEMA',
-    @level0name = N'SC',
-    @level1type = N'TABLE',
-    @level1name = N'SchemaOrganizationSnapshot',
-    @level2type = N'COLUMN',
-    @level2name = N'Address'

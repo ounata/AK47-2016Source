@@ -105,7 +105,7 @@ namespace MCS.Library.Data.Test
         [TestMethod]
         public void SelectMappingTestlTest()
         {
-            ObjectForSelect obj = new ObjectForSelect() {  Name = "Shen Zheng", Age = 50 };
+            ObjectForSelect obj = new ObjectForSelect() { Name = "Shen Zheng", Age = 50 };
 
             Console.WriteLine(ORMapping.GetSelectSql(obj));
         }

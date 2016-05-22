@@ -14,5 +14,17 @@ namespace PPTS.Data.Orders.Adapters
         private ClassLessonItemsAdapter()
         {
         }
+
+        public ClassLessonItemCollection LoadCollection(IList<ClassLesson> clc)
+        {           
+            string lessonIDs = string.Empty;
+            StringBuilder sb = new StringBuilder();
+            foreach (var v in clc)
+                sb.AppendFormat(",'{0}'", v.LessonID);
+            if (sb.Length == 0)
+                return null;
+            lessonIDs = string.Format("({0})", sb.ToString().Substring(1));
+            return this.Load(builder => builder.AppendItem("LessonID", lessonIDs, "in", true));            
+        }
     }
 }

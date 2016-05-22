@@ -10,7 +10,7 @@ namespace MCS.Library.Data.Builder
     /// <summary>
     /// 生成一组带值和常量的SELECT子句。其子句类型为'Hello', 10 AS AGE...
     /// </summary>
-    public class SelectSqlClauseBuilder : SqlClauseBuilderUW
+    public class SelectSqlClauseBuilder : SqlClauseBuilderUW<SelectSqlClauseBuilder>
     {
         /// <summary>
         /// 
@@ -19,7 +19,7 @@ namespace MCS.Library.Data.Builder
         /// <param name="dataField"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        public override SqlClauseBuilderIUW AppendItem<T>(string dataField, T data)
+        public override SelectSqlClauseBuilder AppendItem<T>(string dataField, T data)
         {
             return base.AppendItem<T>(dataField, data, string.Empty);
         }
@@ -30,9 +30,25 @@ namespace MCS.Library.Data.Builder
         /// <typeparam name="T"></typeparam>
         /// <param name="data"></param>
         /// <returns></returns>
-        public SqlClauseBuilderIUW AppendValue<T>(T data)
+        public SelectSqlClauseBuilder AppendValue<T>(T data)
         {
             return base.AppendItem<T>(string.Empty, data, string.Empty);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="fields"></param>
+        /// <returns></returns>
+        public SelectSqlClauseBuilder AppendFields(params string[] fields)
+        {
+            if (fields != null)
+            {
+                foreach(string field in fields)
+                    base.AppendItem(string.Empty, field, string.Empty, true);
+            }
+
+            return this;
         }
 
         /// <summary>

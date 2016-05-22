@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using MCS.Library.Data;
 using PPTS.Data.Common.Entities;
-using PPTS.Data.Customers.Entities;
 
 namespace PPTS.WebAPI.Customers.ViewModels.CustomerServices
 {

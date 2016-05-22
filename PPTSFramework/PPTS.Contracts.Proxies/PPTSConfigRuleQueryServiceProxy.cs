@@ -14,7 +14,7 @@ namespace PPTS.Contracts.Proxies
     /// <summary>
     /// 配置规则服务代理类
     /// </summary>
-    public class PPTSConfigRuleQueryServiceProxy : PPTSClientServiceProxyBase<IConfigRuleQueryService>
+    public class PPTSConfigRuleQueryServiceProxy : WfClientServiceProxyBase<IConfigRuleQueryService>
     {
         public static readonly PPTSConfigRuleQueryServiceProxy Instance = new PPTSConfigRuleQueryServiceProxy();
 
@@ -25,24 +25,36 @@ namespace PPTS.Contracts.Proxies
         /// <summary>
         /// 通过校区ID获得折扣表配置信息
         /// </summary>
-        /// <param name="CampusID">校区ID</param>
+        /// <param name="campusID">校区ID</param>
         /// <returns></returns>
-        public DiscountQueryResult QueryDiscountByCampusID(string CampusID)
+        public DiscountQueryResult QueryDiscountByCampusID(string campusID)
         {
-            DiscountQueryResult pqr= this.SingleCall(action => action.QueryDiscountByCampusID(CampusID));
-            return pqr;
+            DiscountQueryResult discountQueryResult = this.SingleCall(action => action.QueryDiscountByCampusID(campusID));
+            return discountQueryResult;
         }
 
         /// <summary>
         /// 通过校区ID获得服务费信息
         /// </summary>
-        /// <param name="CampusID">校区ID</param>
+        /// <param name="campusID">校区ID</param>
         /// <returns></returns>
-        public ExpenseQueryResult QueryExpenseByCampusID(string CampusID)
+        public ExpenseQueryResult QueryExpenseByCampusID(string campusID)
         {
-            ExpenseQueryResult queryresult= this.SingleCall(action => action.QueryExpenseByCampusID(CampusID));
-            return queryresult;
+            ExpenseQueryResult queryResult= this.SingleCall(action => action.QueryExpenseByCampusID(campusID));
+            return queryResult;
         }
+
+        /// <summary>
+        /// 通过校区ID获得买赠配置信息
+        /// </summary>
+        /// <param name="campusID">校区ID</param>
+        /// <returns></returns>
+        public PresentQueryResult QueryPresentByCampusID(string campusID)
+        {
+            PresentQueryResult queryResult = this.SingleCall(action => action.QueryPresentByCampusID(campusID));
+            return queryResult;
+        }
+
 
         protected override WfClientChannelFactory<IConfigRuleQueryService> GetService()
         {

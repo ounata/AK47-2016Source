@@ -1,6 +1,7 @@
 using MCS.Library.Core;
 using MCS.Library.Data.DataObjects;
 using MCS.Library.Data.Mapping;
+using PPTS.Data.Common.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,89 +16,12 @@ namespace PPTS.Data.Customers.Entities
 	[Serializable]
     [ORTableMapping("CM.AccountTransferApplies")]
     [DataContract]
-	public class AccountTransferApply
-	{		
+	public class AccountTransferApply : IEntityWithCreator, IEntityWithModifier
+    {		
 		public AccountTransferApply()
 		{
 		}		
-
-		/// <summary>
-		/// 校区ID
-		/// </summary>
-		[ORFieldMapping("CampusID")]
-        [DataMember]
-		public string CampusID
-		{
-			get;
-            set;
-		}
-
-		/// <summary>
-		/// 校区名称
-		/// </summary>
-		[ORFieldMapping("CampusName")]
-        [DataMember]
-		public string CampusName
-		{
-			get;
-            set;
-		}
-
-		/// <summary>
-		/// 学员ID
-		/// </summary>
-		[ORFieldMapping("CustomerID")]
-        [DataMember]
-		public string CustomerID
-		{
-			get;
-            set;
-		}
-
-		/// <summary>
-		/// 学员编码
-		/// </summary>
-		[ORFieldMapping("CustomerCode")]
-        [DataMember]
-		public string CustomerCode
-		{
-			get;
-            set;
-		}
-
-		/// <summary>
-		/// 学员姓名
-		/// </summary>
-		[ORFieldMapping("CustomerName")]
-        [DataMember]
-		public string CustomerName
-		{
-			get;
-            set;
-		}
-
-		/// <summary>
-		/// 账户ID
-		/// </summary>
-		[ORFieldMapping("AccountID")]
-        [DataMember]
-		public string AccountID
-		{
-			get;
-            set;
-		}
-
-		/// <summary>
-		/// 账户编码
-		/// </summary>
-		[ORFieldMapping("AccountCode")]
-        [DataMember]
-		public string AccountCode
-		{
-			get;
-            set;
-		}
-
+        
 		/// <summary>
 		/// 申请单ID
 		/// </summary>
@@ -124,6 +48,7 @@ namespace PPTS.Data.Customers.Entities
 		/// 申请状态（参考缴费单）
 		/// </summary>
 		[ORFieldMapping("ApplyStatus")]
+        [ConstantCategory("Common_ApplyStatus")]
         [DataMember]
 		public ApplyStatusDefine ApplyStatus
 		{
@@ -201,6 +126,7 @@ namespace PPTS.Data.Customers.Entities
 		/// 异步处理状态（参考订购）
 		/// </summary>
 		[ORFieldMapping("ProcessStatus")]
+        [ConstantCategory("Common_ProcessStatus")]
         [DataMember]
 		public ProcessStatusDefine ProcessStatus
 		{
@@ -230,10 +156,22 @@ namespace PPTS.Data.Customers.Entities
             set;
 		}
 
-		/// <summary>
-		/// 转让金额
-		/// </summary>
-		[ORFieldMapping("TransferMoney")]
+        /// <summary>
+        /// 转让类型
+        /// </summary>
+        [ORFieldMapping("TransferType")]
+        [ConstantCategory("Account_TransferType")]
+        [DataMember]
+        public AccountTransferType TransferType
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 转让金额
+        /// </summary>
+        [ORFieldMapping("TransferMoney")]
         [DataMember]
 		public decimal TransferMoney
 		{
@@ -241,98 +179,449 @@ namespace PPTS.Data.Customers.Entities
             set;
 		}
 
-		/// <summary>
-		/// 转让前折扣ID
-		/// </summary>
-		[ORFieldMapping("ThatDiscountID")]
+        /// <summary>
+        /// 校区ID
+        /// </summary>
+        [ORFieldMapping("CampusID")]
         [DataMember]
-		public string ThatDiscountID
-		{
-			get;
+        public string CampusID
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 转让前折扣基数
-		/// </summary>
-		[ORFieldMapping("ThatDiscountBase")]
+        /// <summary>
+        /// 校区名称
+        /// </summary>
+        [ORFieldMapping("CampusName")]
         [DataMember]
-		public decimal ThatDiscountBase
-		{
-			get;
+        public string CampusName
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 转让前折扣率
-		/// </summary>
-		[ORFieldMapping("ThatDiscountRate")]
+        /// <summary>
+        /// 学员ID
+        /// </summary>
+        [ORFieldMapping("CustomerID")]
         [DataMember]
-		public decimal ThatDiscountRate
-		{
-			get;
+        public string CustomerID
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 转让前账户价值
-		/// </summary>
-		[ORFieldMapping("ThatAccountValue")]
+        /// <summary>
+        /// 学员编码
+        /// </summary>
+        [ORFieldMapping("CustomerCode")]
         [DataMember]
-		public decimal ThatAccountValue
-		{
-			get;
+        public string CustomerCode
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 转让后折扣ID
-		/// </summary>
-		[ORFieldMapping("ThisDiscountID")]
+        /// <summary>
+        /// 学员姓名
+        /// </summary>
+        [ORFieldMapping("CustomerName")]
         [DataMember]
-		public string ThisDiscountID
-		{
-			get;
+        public string CustomerName
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 转让后折扣基数
-		/// </summary>
-		[ORFieldMapping("ThisDiscountBase")]
+        /// <summary>
+        /// 账户ID
+        /// </summary>
+        [ORFieldMapping("AccountID")]
         [DataMember]
-		public decimal ThisDiscountBase
-		{
-			get;
+        public string AccountID
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 转让后折扣率
-		/// </summary>
-		[ORFieldMapping("ThisDiscountRate")]
+        /// <summary>
+        /// 账户编码
+        /// </summary>
+        [ORFieldMapping("AccountCode")]
         [DataMember]
-		public decimal ThisDiscountRate
-		{
-			get;
+        public string AccountCode
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 转让后账户价值
-		/// </summary>
-		[ORFieldMapping("ThisAccountValue")]
+        /// <summary>
+        /// 账户类型
+        /// </summary>
+        [ORFieldMapping("AccountType")]
         [DataMember]
-		public decimal ThisAccountValue
-		{
-			get;
+        public AccountTypeDefine AccountType
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 提交人ID
-		/// </summary>
-		[ORFieldMapping("SubmitterID")]
+        /// <summary>
+        /// 转让前折扣ID
+        /// </summary>
+        [ORFieldMapping("ThatDiscountID")]
+        [DataMember]
+        public string ThatDiscountID
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 转让前折扣编码
+        /// </summary>
+        [ORFieldMapping("ThatDiscountCode")]
+        [DataMember]
+        public string ThatDiscountCode
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 转让前折扣基数
+        /// </summary>
+        [ORFieldMapping("ThatDiscountBase")]
+        [DataMember]
+        public decimal ThatDiscountBase
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 转让前折扣率
+        /// </summary>
+        [ORFieldMapping("ThatDiscountRate")]
+        [DataMember]
+        public decimal ThatDiscountRate
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 转让前账户价值
+        /// </summary>
+        [ORFieldMapping("ThatAccountValue")]
+        [DataMember]
+        public decimal ThatAccountValue
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 转让前账户余额
+        /// </summary>
+        [ORFieldMapping("ThatAccountMoney")]
+        [DataMember]
+        public decimal ThatAccountMoney
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 转让后折扣ID
+        /// </summary>
+        [ORFieldMapping("ThisDiscountID")]
+        [DataMember]
+        public string ThisDiscountID
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 转让后折扣编码
+        /// </summary>
+        [ORFieldMapping("ThisDiscountCode")]
+        [DataMember]
+        public string ThisDiscountCode
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 转让后折扣基数
+        /// </summary>
+        [ORFieldMapping("ThisDiscountBase")]
+        [DataMember]
+        public decimal ThisDiscountBase
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 转让后折扣率
+        /// </summary>
+        [ORFieldMapping("ThisDiscountRate")]
+        [DataMember]
+        public decimal ThisDiscountRate
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 转让后账户价值
+        /// </summary>
+        [ORFieldMapping("ThisAccountValue")]
+        [DataMember]
+        public decimal ThisAccountValue
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 转让后账户余额
+        /// </summary>
+        [ORFieldMapping("ThisAccountMoney")]
+        [DataMember]
+        public decimal ThisAccountMoney
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 转至校区ID
+        /// </summary>
+        [ORFieldMapping("BizCampusID")]
+        [DataMember]
+        public string BizCampusID
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 转至校区名称
+        /// </summary>
+        [ORFieldMapping("BizCampusName")]
+        [DataMember]
+        public string BizCampusName
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 转至学员ID
+        /// </summary>
+        [ORFieldMapping("BizCustomerID")]
+        [DataMember]
+        public string BizCustomerID
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 转至/转来学员编码
+        /// </summary>
+        [ORFieldMapping("BizCustomerCode")]
+        [DataMember]
+        public string BizCustomerCode
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 转至/转来学员姓名
+        /// </summary>
+        [ORFieldMapping("BizCustomerName")]
+        [DataMember]
+        public string BizCustomerName
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 转至/转来账户ID
+        /// </summary>
+        [ORFieldMapping("BizAccountID")]
+        [DataMember]
+        public string BizAccountID
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 转至/转来账户编码
+        /// </summary>
+        [ORFieldMapping("BizAccountCode")]
+        [DataMember]
+        public string BizAccountCode
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 转至/转来账户类型
+        /// </summary>
+        [ORFieldMapping("BizAccountType")]
+        [DataMember]
+        public AccountTypeDefine BizAccountType
+        {
+            get;
+            set;
+        }
+        /// <summary>
+        /// 转至/转来账户转让前的折扣ID
+        /// </summary>
+        [ORFieldMapping("BizThatDiscountID")]
+        [DataMember]
+        public string BizThatDiscountID
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 转至/转来账户转让前的折扣编码
+        /// </summary>
+        [ORFieldMapping("BizThatDiscountCode")]
+        [DataMember]
+        public string BizThatDiscountCode
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 转至/转来账户转让前的折扣基数
+        /// </summary>
+        [ORFieldMapping("BizThatDiscountBase")]
+        [DataMember]
+        public decimal BizThatDiscountBase
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 转至/转来账户转让前的折扣率
+        /// </summary>
+        [ORFieldMapping("BizThatDiscountRate")]
+        [DataMember]
+        public decimal BizThatDiscountRate
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 转至/转来账户转让前的账户价值
+        /// </summary>
+        [ORFieldMapping("BizThatAccountValue")]
+        [DataMember]
+        public decimal BizThatAccountValue
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 转至/转来账户转让前的账户余额
+        /// </summary>
+        [ORFieldMapping("BizThatAccountMoney")]
+        [DataMember]
+        public decimal BizThatAccountMoney
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 转至/转来账户转让后的折扣ID
+        /// </summary>
+        [ORFieldMapping("BizThisDiscountID")]
+        [DataMember]
+        public string BizThisDiscountID
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 转至/转来账户转让后的折扣编码
+        /// </summary>
+        [ORFieldMapping("BizThisDiscountCode")]
+        [DataMember]
+        public string BizThisDiscountCode
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 转至/转来账户转让后的折扣基数
+        /// </summary>
+        [ORFieldMapping("BizThisDiscountBase")]
+        [DataMember]
+        public decimal BizThisDiscountBase
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 转至/转来账户转让后的折扣率
+        /// </summary>
+        [ORFieldMapping("BizThisDiscountRate")]
+        [DataMember]
+        public decimal BizThisDiscountRate
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 转至/转来账户转让后的账户价值
+        /// </summary>
+        [ORFieldMapping("BizThisAccountValue")]
+        [DataMember]
+        public decimal BizThisAccountValue
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 转至/转来账户转让后的账户余额
+        /// </summary>
+        [ORFieldMapping("BizThisAccountMoney")]
+        [DataMember]
+        public decimal BizThisAccountMoney
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 提交人ID
+        /// </summary>
+        [ORFieldMapping("SubmitterID")]
         [DataMember]
 		public string SubmitterID
 		{
@@ -438,29 +727,7 @@ namespace PPTS.Data.Customers.Entities
 			get;
             set;
 		}
-
-		/// <summary>
-		/// 转至学员ID
-		/// </summary>
-		[ORFieldMapping("ToCustomerID")]
-        [DataMember]
-		public string ToCustomerID
-		{
-			get;
-            set;
-		}
-
-		/// <summary>
-		/// 转至户ID
-		/// </summary>
-		[ORFieldMapping("ToAccountID")]
-        [DataMember]
-		public string ToAccountID
-		{
-			get;
-            set;
-		}
-
+        
 		/// <summary>
 		/// 创建人ID
 		/// </summary>
@@ -511,9 +778,9 @@ namespace PPTS.Data.Customers.Entities
 		/// <summary>
 		/// 最后修改人姓名
 		/// </summary>
-		[ORFieldMapping("ModiferName")]
+		[ORFieldMapping("ModifierName")]
         [DataMember]
-		public string ModiferName
+		public string ModifierName
 		{
 			get;
             set;
@@ -530,11 +797,37 @@ namespace PPTS.Data.Customers.Entities
 			get;
             set;
 		}
-	}
+
+        //是否能审批
+        [NoMapping]
+        [DataMember]
+        public bool CanApprove
+        {
+            get
+            {
+                return this.ApplyStatus == ApplyStatusDefine.Approving;
+            }
+        }
+    }
 
     [Serializable]
     [DataContract]
     public class AccountTransferApplyCollection : EditableDataObjectCollectionBase<AccountTransferApply>
     {
     }
+
+    [Serializable]
+    [ORTableMapping("CM.v_AccountTransferApplies")]
+    [DataContract]
+    public class AccountTransferApplyView : AccountTransferApply
+    {
+
+    }
+
+    [Serializable]
+    [DataContract]
+    public class AccountTransferApplyViewCollection : EditableDataObjectCollectionBase<AccountTransferApplyView>
+    {
+    }
+
 }

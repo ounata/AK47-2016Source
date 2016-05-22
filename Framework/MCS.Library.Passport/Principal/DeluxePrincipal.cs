@@ -167,6 +167,9 @@ namespace MCS.Library.Principal
                         if (result)
                             break;
                     }
+
+                    if (result)
+                        break;
                 }
             }
 

@@ -23,17 +23,17 @@ namespace PPTS.WebAPI.Customers.DataSources
         /// <returns></returns>
         public PagedQueryResult<CustomerMeetingQueryModel, CustomerMeetingQueryCollection> GetCustomerMeetingsList(IPageRequestParams prp, object condition, IEnumerable<IOrderByRequestItem> orderByBuilder)
         {
-            string select = @"MeetingTime,cMeetings.CampusName,customer.CustomerName,customer.CustomerCode,customer.Grade,
+            string select = @"cMeetings.MeetingID,cMeetings.MeetingTime,cMeetings.CampusName,customer.CustomerId,customer.CustomerName,customer.CustomerCode,customer.Grade,cMeetings.CampusID,
                              Parent.ParentName,CMeetings.MeetingType,CMeetings.OrganizerName,
-                             CMeetings.Satisficing,CMItem.ContentData";
-            string from =@"CustomerMeetings cMeetings
-                           LEFT JOIN Customers customer on cMeetings.CustomerId=customer.CustomerId
-                           LEFT JOIN CustomerMeetingItems CMItem on CMItem.MeetingID=cMeetings.CampusID
+                             CMeetings.Satisficing";
+            string from = @"CustomerMeetings cMeetings
+                           LEFT JOIN Customers_Current customer on cMeetings.CustomerId=customer.CustomerId
                            LEFT JOIN (Select CustomerId,ParentId From CustomerParentRelations Where IsPrimary=1) CusParentRelation on CusParentRelation.CustomerId=customer.CustomerId
                            LEFT JOIN Parents parent on parent.parentId=CusParentRelation.parentId";
 
             PagedQueryResult<CustomerMeetingQueryModel, CustomerMeetingQueryCollection> result = Query(prp, select, from, condition, orderByBuilder);
             return result;
         }
+       
     }
 }

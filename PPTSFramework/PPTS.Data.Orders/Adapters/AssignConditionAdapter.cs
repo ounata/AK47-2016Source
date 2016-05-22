@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using MCS.Library.Data.Adapters;
 using PPTS.Data.Orders.Entities;
 using MCS.Library.Data.Builder;
+using MCS.Library.Core;
 
 namespace PPTS.Data.Orders.Adapters
 {
@@ -41,19 +42,34 @@ namespace PPTS.Data.Orders.Adapters
         /// 获取当前学员的排课条件
         /// --->条件：资产表中，未排课数量大于零
         /// </summary>
-        /// <param name="operaterCampusID">当前操作人所属校区</param>
-        /// <param name="customerID">学员ID</param>
+        /// <param name="AssignTypeDefine">指明ID的含义</param>
+        /// <param name="ID">学员ID或者教师ID</param>
+        /// <param name="tchJobID">教师岗位ID</param>
         /// <returns></returns>
-        public AssignConditionCollection LoadCollection(string operaterCampusID, string customerID)
+        public AssignConditionCollection LoadCollection(AssignTypeDefine atd, string ID, string tchJobID)
         {
-            WhereSqlClauseBuilder wSCB = new WhereSqlClauseBuilder();
-            //wSCB.AppendItem("CustomerCampusID", operaterCampusID);
-            wSCB.AppendItem("CustomerID", customerID);
-            wSCB.AppendItem("Amount", 0, ">");
-            string aIC = string.Format("(SELECT AssetID FROM Assets_Current WHERE {0})", wSCB.ToSqlString(TSqlBuilder.Instance));
+            ID.NullCheck("ID不能为空");
+            if (atd == AssignTypeDefine.ByTeacher)
+                tchJobID.NullCheck("tchJobID不能为空");
 
-            WhereLoadingCondition wlc = new WhereLoadingCondition(builder => builder.AppendItem("AssetID", aIC, "in", true));
-            return this.Load(wlc);
+            WhereSqlClauseBuilder wSCB = new WhereSqlClauseBuilder();
+            switch (atd)
+            {
+                case AssignTypeDefine.ByStudent:
+                    wSCB.AppendItem("CustomerID", ID);
+                    break;
+                case AssignTypeDefine.ByTeacher:
+                    wSCB.AppendItem("TeacherID", ID);
+                    wSCB.AppendItem("TeacherJobID", tchJobID);
+                    break;
+            }
+
+            string aIC = string.Format(" (select 1 from OM.Assets_Current b where b.AssetID = {0}.AssetID and b.Amount>0 )", this.GetTableName());
+            wSCB.AppendItem("exists",aIC,"",true);
+
+            WhereLoadingCondition wLC = new WhereLoadingCondition(p => { foreach (var v in wSCB) { p.Add(v); }});
+
+            return this.Load(wLC);  
         }
     }
 

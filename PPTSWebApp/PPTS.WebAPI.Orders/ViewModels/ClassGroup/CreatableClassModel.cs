@@ -50,6 +50,18 @@ namespace PPTS.WebAPI.Orders.ViewModels.ClassGroup
                 return _campusName;
             }
         }
+
+        private string _shortCampusName = null;
+
+        public string ShortCampusName {
+            get {
+                if (String.IsNullOrEmpty(_shortCampusName))
+                {
+                    _shortCampusName = CreateJob.GetDataScopeAbbr();
+                }
+                return _shortCampusName;
+            }
+        }
         #endregion
 
         #region 产品：仅提供ID其他信息通过查询获取
@@ -74,6 +86,27 @@ namespace PPTS.WebAPI.Orders.ViewModels.ClassGroup
                 }                
                 return _product;
             } }
+
+        public CheckResultModel CheckProduct() {
+            CheckResultModel result = new CheckResultModel() ;
+            if (Product == null)
+            {
+                result.SetErrorMsg("产品不存在！");
+                return result;
+            }
+
+            if (Product.CategoryType != Data.Products.CategoryType.CalssGroup) {
+                result.SetErrorMsg("只有班组产品才可以创建班级！");
+                return result;
+            }
+
+            if (Product.ProductStatus != Data.Products.ProductStatus.Enabled && Product.ProductStatus != Data.Products.ProductStatus.Disabled) {
+                result.SetErrorMsg("只有产品状态是使用中、已停售的才可以创建班级！");
+                return result;
+            }
+
+            return result;
+        }
         #endregion
 
         #region 上课时间：需要计算的基本信息（包含产品信息）
@@ -99,6 +132,11 @@ namespace PPTS.WebAPI.Orders.ViewModels.ClassGroup
         public List<DateTime> StartTimeList { get {
                 if (_startTimeList == null && Product.LessonCount > 0)
                 {
+                    for (int i = 0; i < DayOfWeeks.Count; i++)
+                    {
+                        if (DayOfWeeks[i] == 7)
+                            DayOfWeeks[i] = 0;
+                    }
                     _startTimeList = new List<DateTime>();
                     DateTime st = StartTime;
                     bool flag = true;
@@ -142,6 +180,18 @@ namespace PPTS.WebAPI.Orders.ViewModels.ClassGroup
                 return _customerCollection;
             } }
 
+
+        public CheckResultModel CheckCustomer() {
+            CheckResultModel result = new CheckResultModel();
+            //1.判断学员信息是否重复录入
+            foreach (var item in CustomerCollection.CustomerCollection)
+            {
+                if (CustomerCollection.CustomerCollection.Where(c => c.Customer.CustomerID == item.Customer.CustomerID).Count() > 1) {
+                    result.SetErrorMsg("学员不能重复！");
+                }
+            }
+            return result;
+        }
         #endregion
 
         #region 教师：全部提供
@@ -215,9 +265,31 @@ namespace PPTS.WebAPI.Orders.ViewModels.ClassGroup
         #endregion
 
         #region 创建人：通过当前用户信息获取
-        PPTSJob CreateJob = DeluxeIdentity.CurrentUser.GetCurrentJob();
+        private PPTSJob _createJob = null;
+        PPTSJob CreateJob
+        {
+            get
+            {
+                if (_createJob == null)
+                {
+                    _createJob = DeluxeIdentity.CurrentUser.GetCurrentJob();
+                }
+                return _createJob;
+            }
+        }
 
-        IUser CreateUser = DeluxeIdentity.CurrentUser;
+        private IUser _createUser;
+        IUser CreateUser
+        {
+            get
+            {
+                if (_createUser == null)
+                {
+                    _createUser = DeluxeIdentity.CurrentUser;
+                }
+                return _createUser;
+            }
+        }
         #endregion
 
         #region 资产学生 全部提供
@@ -230,132 +302,56 @@ namespace PPTS.WebAPI.Orders.ViewModels.ClassGroup
         /// 新增班级检查
         /// </summary>
         /// <returns></returns>
-        public bool CheckCreatClass() {
-            return true;
+        public CheckResultModel CheckCreatClass() {
+            CheckResultModel result = new CheckResultModel();
+
+            //1.必填项验证
+            if (Product == null)
+            {
+                result.SetErrorMsg("产品为空！");
+                return result;
+            }
+            if (DayOfWeeks == null || DayOfWeeks.Count() == 0)
+            {
+                result.SetErrorMsg("没有选择按周的上课时间！");
+                return result;
+            }
+            if (CustomerCollection == null || CustomerCollection.CustomerCollection == null || CustomerCollection.CustomerCollection.Count() == 0)
+            {
+                result.SetErrorMsg("没有选择学员！");
+                return result;
+            }
+            if (string.IsNullOrEmpty(TeacherID) || String.IsNullOrEmpty(TeacherCode) || String.IsNullOrEmpty(TeacherName))
+            {
+                result.SetErrorMsg("没有选择教师！");
+                return result;
+            }
+            if (String.IsNullOrEmpty(Subject) || string.IsNullOrEmpty(SubjectName))
+            {
+                result.SetErrorMsg("没有选择科目！");
+                return result;
+            }
+            if (string.IsNullOrEmpty(Grade) || string.IsNullOrEmpty(GradeName))
+            {
+                result.SetErrorMsg("没有选择年级！");
+                return result;
+            }
+
+            //2.产品验证
+            result = CheckProduct();
+            if (!result.Sucess)
+                return result;
+
+            //3.学员验证
+            result = CheckCustomer();
+            if (!result.Sucess)
+                return result;
+
+
+
+            return result;
         }
         #endregion
-    }
-
-    /// <summary>
-    /// 班组-学生 模型
-    /// </summary>
-    public class CustomerModel {
-        /// <summary>
-        /// 学员ID
-        /// </summary>
-        public string CustomerID
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 学员编号
-        /// </summary>
-        public string CustomerCode
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 学员姓名
-        /// </summary>
-        public string CustomerName
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 学员校区ID
-        /// </summary>
-        public string CustomerCampusID
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 学员校区名
-        /// </summary>
-        public string CustomerCampusName
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 咨询师ID
-        /// </summary>
-        public string ConsultantID
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 咨询师名
-        /// </summary>
-        public string ConsultantName
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 咨询师岗位ID
-        /// </summary>
-        public string ConsultantJobID
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 咨询师岗位名
-        /// </summary>
-        public string ConsultantJobName
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 学管师ID
-        /// </summary>
-        public string EducatorID
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 学管师名
-        /// </summary>
-        public string EducatorName
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 学管师岗位ID
-        /// </summary>
-        public string EducatorJobID
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 学管师岗位名
-        /// </summary>
-        public string EducatorJobName
-        {
-            get;
-            set;
-        }
     }
 
     public class Asset {

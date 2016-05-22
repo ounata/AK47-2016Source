@@ -13,7 +13,7 @@ namespace PPTS.Data.Common.Entities
 	/// 教师岗位表
 	/// </summary>
 	[Serializable]
-    [ORTableMapping("v_TeacherJobs")]
+    [ORTableMapping("MT.v_TeacherJobs")]
     [DataContract]
 	public class TeacherJobView
 	{		
@@ -54,16 +54,38 @@ namespace PPTS.Data.Common.Entities
             set;
 		}
 
-		/// <summary>
-		/// 学科组名称
-		/// </summary>
-		[ORFieldMapping("JobOrgName")]
+        /// <summary>
+        /// 岗位组织机构名称
+        /// </summary>
+        [ORFieldMapping("JobOrgName")]
         [DataMember]
 		public string JobOrgName
 		{
 			get;
             set;
 		}
+
+        /// <summary>
+        /// 岗位组织机构简称
+        /// </summary>
+        [ORFieldMapping("JobOrgShortName")]
+        [DataMember]
+        public string JobOrgShortName
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 岗位组织机构类型
+        /// </summary>
+        [ORFieldMapping("JobOrgType")]
+        [DataMember]
+        public OrgTypeDefine JobOrgType
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// 校区ID
@@ -134,6 +156,8 @@ namespace PPTS.Data.Common.Entities
         /// <summary>
         /// 性别
         /// </summary>
+        /// 
+        [ConstantCategory("C_CODE_ABBR_GENDER")]
         [ORFieldMapping("Gender")]
         [DataMember]
         public string Gender
@@ -168,7 +192,7 @@ namespace PPTS.Data.Common.Entities
         /// <summary>
         /// 教授科目（用逗号分割名称）
         /// </summary>
-        [ConstantCategory("C_CodE_ABBR_BO_Product_TeacherSubject")]
+        [ConstantCategory("C_CODE_ABBR_BO_Product_TeacherSubject")]
         [ORFieldMapping("SubjectMemo")]
         [DataMember]
         public string SubjectMemo
@@ -177,10 +201,12 @@ namespace PPTS.Data.Common.Entities
             set;
         }
 
-		/// <summary>
-		/// 是否全职
-		/// </summary>
-		[ORFieldMapping("IsFullTime")]
+        /// <summary>
+        /// 是否全职
+        /// </summary>
+        /// 
+        [ConstantCategory("Common_TeacherType")]
+        [ORFieldMapping("IsFullTime")]
         [DataMember]
 		public int IsFullTime
 		{

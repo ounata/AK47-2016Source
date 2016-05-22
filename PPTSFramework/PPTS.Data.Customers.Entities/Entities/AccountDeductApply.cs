@@ -2,6 +2,7 @@ using MCS.Library.Core;
 using MCS.Library.Data.DataObjects;
 using MCS.Library.Data.Mapping;
 using PPTS.Data.Common;
+using PPTS.Data.Common.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,8 +17,8 @@ namespace PPTS.Data.Customers.Entities
 	[Serializable]
     [ORTableMapping("CM.AccountDeductApplies")]
     [DataContract]
-	public class AccountDeductApply
-	{		
+	public class AccountDeductApply : IEntityWithCreator, IEntityWithModifier
+    {		
 		public AccountDeductApply()
 		{
 		}		
@@ -286,10 +287,21 @@ namespace PPTS.Data.Customers.Entities
             set;
 		}
 
-		/// <summary>
-		/// 扣减前折扣基数
-		/// </summary>
-		[ORFieldMapping("ThatDiscountBase")]
+        /// <summary>
+        /// 扣减前折扣编码
+        /// </summary>
+        [ORFieldMapping("ThatDiscountCode")]
+        [DataMember]
+        public string ThatDiscountCode
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 扣减前折扣基数
+        /// </summary>
+        [ORFieldMapping("ThatDiscountBase")]
         [DataMember]
 		public decimal ThatDiscountBase
 		{
@@ -319,10 +331,21 @@ namespace PPTS.Data.Customers.Entities
             set;
 		}
 
-		/// <summary>
-		/// 扣减后折扣ID
-		/// </summary>
-		[ORFieldMapping("ThisDiscountID")]
+        /// <summary>
+        /// 扣减前账户余额
+        /// </summary>
+        [ORFieldMapping("ThatAccountMoney")]
+        [DataMember]
+        public decimal ThatAccountMoney
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 扣减后折扣ID
+        /// </summary>
+        [ORFieldMapping("ThisDiscountID")]
         [DataMember]
 		public string ThisDiscountID
 		{
@@ -330,10 +353,21 @@ namespace PPTS.Data.Customers.Entities
             set;
 		}
 
-		/// <summary>
-		/// 扣减后折扣基数
-		/// </summary>
-		[ORFieldMapping("ThisDiscountBase")]
+        /// <summary>
+        /// 扣减后折扣编码
+        /// </summary>
+        [ORFieldMapping("ThisDiscountCode")]
+        [DataMember]
+        public string ThisDiscountCode
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 扣减后折扣基数
+        /// </summary>
+        [ORFieldMapping("ThisDiscountBase")]
         [DataMember]
 		public decimal ThisDiscountBase
 		{
@@ -363,10 +397,21 @@ namespace PPTS.Data.Customers.Entities
             set;
 		}
 
-		/// <summary>
-		/// 咨询师ID
-		/// </summary>
-		[ORFieldMapping("ConsultantID")]
+        /// <summary>
+        /// 扣减后账户余额
+        /// </summary>
+        [ORFieldMapping("ThisAccountMoney")]
+        [DataMember]
+        public decimal ThisAccountMoney
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 咨询师ID
+        /// </summary>
+        [ORFieldMapping("ConsultantID")]
         [DataMember]
 		public string ConsultantID
 		{
@@ -600,9 +645,9 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 最后修改人姓名
         /// </summary>
-        [ORFieldMapping("ModiferName")]
+        [ORFieldMapping("ModifierName")]
         [DataMember]
-        public string ModiferName
+        public string ModifierName
         {
             get;
             set;

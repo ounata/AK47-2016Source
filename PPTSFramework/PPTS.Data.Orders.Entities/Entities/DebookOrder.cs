@@ -101,9 +101,10 @@ namespace PPTS.Data.Orders.Entities
 		/// <summary>
 		/// 退订时间
 		/// </summary>
-		[ORFieldMapping("DebookTime")]
+		[ORFieldMapping("DebookTime", UtcTimeToLocal = true)]
         [DataMember]
-		public DateTime DebookTime
+        [SqlBehavior(DefaultExpression = "GETUTCDATE()", ForceUseDefaultExpression = true)]
+        public DateTime DebookTime
 		{
 			get;
             set;
@@ -233,9 +234,10 @@ namespace PPTS.Data.Orders.Entities
 		/// <summary>
 		/// 提交时间
 		/// </summary>
-		[ORFieldMapping("SubmitTime")]
+		[ORFieldMapping("SubmitTime", UtcTimeToLocal = true)]
         [DataMember]
-		public DateTime SubmitTime
+        [SqlBehavior(DefaultExpression = "GETUTCDATE()", ForceUseDefaultExpression = true)]
+        public DateTime SubmitTime
 		{
 			get;
             set;
@@ -266,9 +268,9 @@ namespace PPTS.Data.Orders.Entities
 		/// <summary>
 		/// 创建时间
 		/// </summary>
-		[ORFieldMapping("CreateTime")]
-        [DataMember]
-		public DateTime CreateTime
+		[ORFieldMapping("CreateTime", UtcTimeToLocal = true)]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.Select | ClauseBindingFlags.Where)]
+        public DateTime CreateTime
 		{
 			get;
             set;
@@ -299,9 +301,10 @@ namespace PPTS.Data.Orders.Entities
 		/// <summary>
 		/// 最后修改时间
 		/// </summary>
-		[ORFieldMapping("ModifyTime")]
+		[ORFieldMapping("ModifyTime", UtcTimeToLocal = true)]
         [DataMember]
-		public DateTime ModifyTime
+        [SqlBehavior(DefaultExpression = "GETUTCDATE()", ForceUseDefaultExpression = true)]
+        public DateTime ModifyTime
 		{
 			get;
             set;

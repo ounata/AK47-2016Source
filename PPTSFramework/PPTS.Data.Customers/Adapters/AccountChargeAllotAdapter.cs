@@ -1,11 +1,15 @@
-using System.Linq;
-using PPTS.Data.Customers.Entities;
 using System;
+using System.Linq;
+using System.Collections.Generic;
+using MCS.Library.Core;
+using MCS.Library.Data;
 using MCS.Library.Data.Adapters;
+using MCS.Library.Data.DataObjects;
+using PPTS.Data.Customers.Entities;
 
 namespace PPTS.Data.Customers.Adapters
 {
-    public class AccountChargeAllotAdapter : AccountAdapterBase<AccountChargeAllot, AccountChargeAllotCollection>
+    public class AccountChargeAllotAdapter : CustomerAdapterBase<AccountChargeAllot, AccountChargeAllotCollection>
     {
         public static readonly AccountChargeAllotAdapter Instance = new AccountChargeAllotAdapter();
 
@@ -25,6 +29,24 @@ namespace PPTS.Data.Customers.Adapters
         public void LoadCollectionByApplyIDInContext(string applyID, Action<AccountChargeAllotCollection> action)
         {
             this.LoadByInBuilderInContext(new InLoadingCondition(builder => builder.AppendItem(applyID), "ApplyID"), collection => action(collection));
+        }
+
+        protected override void BeforeInnerUpdateInContext(AccountChargeAllot data, SqlContextItem sqlContext, Dictionary<string, object> context)
+        {
+            base.BeforeInnerUpdateInContext(data, sqlContext, context);
+            this.InitData(data);
+        }
+
+        protected override void BeforeInnerUpdate(AccountChargeAllot data, Dictionary<string, object> context)
+        {
+            base.BeforeInnerUpdate(data, context);
+            this.InitData(data);
+        }
+
+        private void InitData(AccountChargeAllot data)
+        {
+            if (data.AllotID.IsNullOrEmpty())
+                data.AllotID = System.Guid.NewGuid().ToString();
         }
     }
 }

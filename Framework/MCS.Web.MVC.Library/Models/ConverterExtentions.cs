@@ -4,17 +4,60 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using MCS.Library.Core;
+using MCS.Library.SOA.DataObjects;
 
 namespace MCS.Web.MVC.Library.Models
 {
     public static class ConverterExtentions
     {
-        public static void FillChildNodes(this IEnumerable<IOguObject> children, List<UserGraphTreeNode> childNodes, UserGraphControlObjectMask listMask)
+        public static void FillChildNodes(this IEnumerable<IOguObject> children, List<UserGraphTreeNode> childNodes, UserGraphControlObjectMask listMask,
+            Func<IOguObject, bool> filter = null, Action<IOguObject, UserGraphTreeNode> addedAction = null)
         {
             children.ForEach(child =>
                 {
                     if (((int)child.ObjectType & (int)listMask) != 0)
-                        childNodes.Add(child.ToTreeNode());
+                    {
+                        bool canAdd = true;
+
+                        if (filter != null)
+                            canAdd = filter(child);
+
+                        if (canAdd)
+                        {
+                            UserGraphTreeNode treeNode = child.ToTreeNode();
+
+                            if (addedAction != null)
+                                addedAction(child, treeNode);
+
+                            childNodes.Add(treeNode);
+                        }
+                    }
+                }
+            );
+        }
+
+        public static void FillResult(this IEnumerable<IOguObject> objs, List<IOguObject> queryResult, UserGraphControlObjectMask listMask,
+            Func<IOguObject, bool> filter = null, Action<IOguObject, IOguObject> addedAction = null)
+        {
+            objs.ForEach(obj =>
+                {
+                    if (((int)obj.ObjectType & (int)listMask) != 0)
+                    {
+                        bool canAdd = true;
+
+                        if (filter != null)
+                            canAdd = filter(obj);
+
+                        if (canAdd)
+                        {
+                            IOguObject newObj = OguBase.CreateWrapperObject(obj);
+
+                            if (addedAction != null)
+                                addedAction(obj, newObj);
+
+                            queryResult.Add(newObj);
+                        }
+                    }
                 }
             );
         }
@@ -29,8 +72,9 @@ namespace MCS.Web.MVC.Library.Models
 
                 result.ID = obj.ID;
                 result.Name = obj.DisplayName.IsNotEmpty() ? obj.DisplayName : obj.Name;
-                result.FullPath = obj.FullPath;
-                result.ObjectType = obj.ObjectType;
+
+                //result.Data = obj.ToWrappedObject();
+                result.Data = obj;
 
                 (obj as IUser).FillUserInfo(result);
                 (obj as IOrganization).FillOrganizationInfo(result);
@@ -44,9 +88,8 @@ namespace MCS.Web.MVC.Library.Models
         {
             obj.IsNotNull(user =>
             {
-                treeNode.CodeName = user.LogOnName;
                 treeNode.Open = true;
-                treeNode.Icon = "user";
+                treeNode.IconSkin = "user";
             });
         }
 
@@ -54,12 +97,19 @@ namespace MCS.Web.MVC.Library.Models
         {
             obj.IsNotNull(org =>
             {
-                treeNode.CodeName = obj.Properties.GetValue("CodeName", string.Empty);
                 treeNode.Open = false;
                 treeNode.IsParent = true;
-                treeNode.Icon = "folder";
-                treeNode.IconOpen = "folder-open";
-                treeNode.IconClose = "folder";
+                treeNode.IconSkin = treeNode.IsParent ? "depart" : "person";
+            });
+        }
+
+        private static void FillGroupInfo(this IGroup obj, UserGraphTreeNode treeNode)
+        {
+            obj.IsNotNull(group =>
+            {
+                treeNode.Open = true;
+                treeNode.IsParent = false;
+                treeNode.IconSkin = "user";
             });
         }
 
@@ -103,17 +153,6 @@ namespace MCS.Web.MVC.Library.Models
             {
                 ServiceBrokerContext.Current.RestoreSavedStates();
             }
-        }
-
-        private static void FillGroupInfo(this IGroup obj, UserGraphTreeNode treeNode)
-        {
-            obj.IsNotNull(group =>
-            {
-                treeNode.CodeName = group.Properties.GetValue("CodeName", string.Empty);
-                treeNode.Open = true;
-                treeNode.IsParent = false;
-                treeNode.Icon = "users";
-            });
         }
     }
 }

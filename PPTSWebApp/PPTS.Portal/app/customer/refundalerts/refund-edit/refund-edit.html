@@ -1,0 +1,32 @@
+﻿<form class="form-horizontal" role="form">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="alert" ng-click="vm.cancel()">
+            <i class="ace-icon fa fa-times"></i>
+        </button>
+        <h4 class="modal-title">新增退费预警记录</h4>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <span class="col-sm-4 control-label no-padding-right">原因类型：</span>
+            <div class="col-sm-7">
+                {{vm.refundAlert.alertReason | refundAlertReason}}
+            </div>
+        </div>
+        <div class="form-group">
+            <span class="col-sm-4 control-label no-padding-right">当前状态：</span>
+            <div class="col-sm-7">
+                <ppts-select category="refundAlertStatus" model="vm.refundAlert.alertStatus" async="false" />
+            </div>
+        </div>
+        <div class="form-group" ng-show="vm.refundAlert.alertReason == 4">
+            <span class="col-sm-4 control-label no-padding-right">其他原因：</span>
+            <div class="col-sm-8">
+                <textarea class="autosize-transition form-control" ng-model="vm.refundAlert.alertReasonName" style="overflow: hidden; word-wrap: break-word; resize: horizontal; height: 100px;"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <mcs-button category="ok" click="vm.save()" />
+        <mcs-button category="close" click="vm.cancel()" />
+    </div>
+</form>

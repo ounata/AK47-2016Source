@@ -57,7 +57,7 @@ namespace UDPCacheChat
 
             data.CacheData = text;
 
-            UdpCacheNotifier.Instance.SendNotify(data);
+            UdpCacheNotifier.Instance.SendNotifyAsync(data);
         }
 
         private static void MonitorThread()

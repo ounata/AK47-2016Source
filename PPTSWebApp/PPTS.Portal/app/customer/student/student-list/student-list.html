@@ -31,21 +31,21 @@
             </div>
         </div>
         <div class="portlet-body">
-            <div class="input-group input-xlarge mcs-input-group pull-left">
-                <mcs-input placeholder="选择大区/分公司/校区" model="" readonly="true" css="form-control mcs-input-search" />
-                <span class="input-group-btn">
-                    <button class="btn btn-sm btn-info" type="button" ng-click="vm.select()">
-                        <i class="ace-icon fa fa-check bigger-110"></i>
-                        选择
-                    </button>
-                </span>
+            <div class="line-height-40">
+                <div class="input-group input-xlarge mcs-input-group pull-left">
+                    <ppts-select-branch model="vm.criteria.orgIds" />
+                </div>
+                <mcs-input placeholder="学员/家长姓名" model="vm.criteria.name" css="mcs-input-search" />
+                <mcs-input placeholder="学员编号" model="vm.criteria.customerCode" css="mcs-input-search" />
+                <mcs-input placeholder="咨询师" model="vm.criteria.consultant" css="mcs-input-search" />
             </div>
-            <mcs-input placeholder="学员/家长姓名" model="vm.criteria.name" css="mcs-input-search" />
-            <mcs-input placeholder="学员编号" model="vm.criteria.customerCode" css="mcs-input-search" />
-            <mcs-input placeholder="咨询师" model="vm.criteria.consultant" css="mcs-input-search" />
-            <mcs-input placeholder="学管师" model="vm.criteria.educator" css="mcs-input-search" />
-            <mcs-input placeholder="家长联系方式" model="vm.criteria.parentContact" css="mcs-input-search" />
-            <mcs-button category="search" click="vm.search()" size="medium" />
+           
+            <div class="line-height-40">
+                <mcs-input placeholder="学管师" model="vm.criteria.educator" css="mcs-input-search"/>
+                <mcs-input placeholder="家长联系方式" model="vm.criteria.parentContact" css="mcs-input-search"/>
+                <mcs-button category="search" click="vm.search()" class="search-btn"/>
+            </div>
+
         </div>
     </div>
     <!--<div class="tags mcs-search-tags hide">
@@ -56,13 +56,14 @@
 <!-- /结束：潜客列表.快速查询条件 -->
 <!-- #开始：潜客列表.工具栏 -->
 <div class="mcs-panel-toolbar">
-    <mcs-button category="add" text="订 购"></mcs-button>
+    <mcs-dropdown-button title="订 购" items="vm.products" icon="shopping-cart"></mcs-dropdown-button>   
     <mcs-button category="add" text="新增跟进记录" click="vm.addFollow()"></mcs-button>
+    <mcs-button category="add" text="录入回访" click="vm.batchVisit()"></mcs-button>
     <mcs-button icon="user-plus" css="btn-success" text="分配学管师" ppts-job-functions="分配学管师"></mcs-button>
     <mcs-button icon="user-plus" css="btn-success" text="分配咨询师" ppts-job-functions="分配咨询师"></mcs-button>
-    <mcs-button icon="user-plus" css="btn-success" text="分配教师" ppts-job-functions="分配教师"></mcs-button>
+    <mcs-button icon="user-plus" css="btn-success" click="vm.assignTeacher()" text="分配教师" ppts-job-functions="分配教师"></mcs-button>
     <mcs-button icon="cny" css="btn-purple" text="充 值" ppts-job-functions="充值" click="vm.pay()"></mcs-button>
-    <mcs-button icon="mail-forward" css="btn-yellow" text="转 学"></mcs-button>
+    <mcs-button icon="mail-forward" css="btn-yellow" text="申请转学" click="vm.transfer()"></mcs-button>
     <mcs-button category="export"></mcs-button>
 </div>
 <div class="alert alert-block alert-danger" ng-show="vm.errorMessage">

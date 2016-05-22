@@ -1,0 +1,139 @@
+<!-- #开始：位置条 -->
+<div class="breadcrumbs" id="breadcrumbs">
+    <script type="text/javascript">
+    try {
+        ace.settings.check('breadcrumbs', 'fixed')
+    } catch (e) {}
+    </script>
+    <ul class="breadcrumb">
+        <li class="active">
+            <i class="ace-icon fa fa-home home-icon"></i> 首页
+        </li>
+        <li class="active">
+            <i class="ace-icon fa fa-buttons"></i> 单选控件
+        </li>
+    </ul>
+</div>
+<!-- /结束：位置条 -->
+<div class="page-content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h3 class="header smaller lighter green">应用范例</h3>
+                    <div>
+                        异步数据源：<ppts-radiobutton-group category="grade_async" model="vm.selectGrade" /><br />
+                        同步数据源：<ppts-radiobutton-group category="grade" model="vm.selectGrade" async="false" /><br />
+                        指定全部选项：<ppts-radiobutton-group category="grade" model="vm.selectGrade" async="false" show-all="true" /><br />
+                        获取选中项文本：<ppts-radiobutton-group category="grade" model="vm.selectGrade" value="vm.selectGradeName" async="false" /><br />
+                        联动效果：<ppts-radiobutton-group category="stage" model="vm.selectStage" async="false" show-all="true" /><br />
+                                <ppts-radiobutton-group category="grade" model="vm.selectGrade" parent="vm.selectStage" async="false" /><br />
+                        已选中: {{vm.selectGrade}}, {{vm.selectGradeName}}
+                    </div>
+                </div>
+                <div class="laycode col-sm-12">
+                    <h3 class="header smaller lighter green">示例代码</h3>
+                    <div class="code_box code_skin0">
+                        <span class="code_title">Html及Javascript</span>
+                        <pre class="codes">
+                        <code><b>Html</b></code><br />
+                        异步数据源：&lt;ppts-radiobutton-group category="grade_async" model="vm.selectGrade" /&gt;&lt;br /&gt;
+                        同步数据源：&lt;ppts-radiobutton-group category="grade" model="vm.selectGrade" async="false" /&gt;&lt;br /&gt;
+                        指定全部选项：&lt;ppts-radiobutton-group category="grade" model="vm.selectGrade" async="false" show-all="true" /&gt;&lt;br /&gt;
+                        获取选中项文本：&lt;ppts-radiobutton-group category="grade" model="vm.selectGrade" value="vm.selectGradeName" async="false" /&gt;&lt;br /&gt;
+                        联动效果：&lt;ppts-radiobutton-group category="stage" model="vm.selectStage" async="false" show-all="true" /&gt;&lt;br /&gt;
+		                        &lt;ppts-radiobutton-group category="grade" model="vm.selectGrade" parent="vm.selectStage" async="false" /&gt;&lt;br /&gt;
+                        已选中: {{vm.selectGrade}}, {{vm.selectGradeName}}
+                        <code><b>Javascript</b></code><br />
+                        angular.module('app.widget')
+                        .controller('PPTSRadiobuttonGroupController', ['$scope', '$http', function ($scope, $http) {
+                            var vm = this;
+                            vm.dictionaries = {
+                                'c_codE_ABBR_CUSTOMER_STAGE': [
+                                    { key: 'S1', value: '小学', parentKey: '0' },
+                                    { key: 'S2', value: '初中', parentKey: '0' },
+                                    { key: 'S3', value: '高中', parentKey: '0' }
+                                ],
+                                'c_codE_ABBR_CUSTOMER_GRADE': [
+                                    { key: 'G1', value: '一年级', parentKey: 'S1,S2,S3' },
+                                    { key: 'G2', value: '二年级', parentKey: 'S1,S2,S3' },
+                                    { key: 'G3', value: '三年级', parentKey: 'S1,S2,S3' },
+                                    { key: 'G4', value: '四年级', parentKey: 'S1' },
+                                    { key: 'G5', value: '五年级', parentKey: 'S1' },
+                                    { key: 'G6', value: '六年级', parentKey: 'S1' }
+                                ]
+                            };
+                            mcs.util.merge(vm.dictionaries);
+                            $http.get('app/widget/sample.json').then(function (result) {
+                                mcs.util.merge(result.data.dictionaries);
+                                $scope.$broadcast('dictionaryReady');
+                            });
+                        }]);
+                        </pre>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <h3 class="header smaller lighter green">参数说明</h3>
+                    <table class="table table-striped table-bordered table-hover" id="sample-table-1">
+                        <thead>
+                            <tr>
+                                <th>属性</th>
+                                <th style="width:400px;">用途</th>
+                                <th style="width:100px;">是否必选</th>
+                                <th style="width:100px;">默认值</th>
+                                <th>示例</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>category</code></td>
+                                <td>字典数据源的类别Key(如:grade)</td>
+                                <td>是</td>
+                                <td>无</td>
+                                <td>
+                                    'grade': 'c_codE_ABBR_CUSTOMER_GRADE'
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>model</code></td>
+                                <td>绑定选中的数据值（单值）</td>
+                                <td>是</td>
+                                <td>无</td>
+                                <td>&lt;ppts-radiobutton-group category="grade_async" model="vm.selectGrade" /&gt;</td>
+                            </tr>
+                            <tr>
+                                <td><code>async</code></td>
+                                <td>是否异步获取数据源，不设置则为true,当异步获取数据源时需触发广播：$scope.$broadcast('dictionaryReady');</td>
+                                <td>否</td>
+                                <td>true</td>
+                                <td>&lt;ppts-radiobutton-group category="grade" model="vm.selectGrade" async="false"/&gt;</td>
+                            </tr>
+                            <tr>
+                                <td><code>showAll</code></td>
+                                <td>是否添加全部选项(可选，默认为-1)</td>
+                                <td>否</td>
+                                <td>无</td>
+                                <td>&lt;ppts-radiobutton-group category="grade" model="vm.selectGrade" async="false" show-all="true" /&gt;</td>
+                            </tr>
+                            <tr>
+                                <td><code>value</code></td>
+                                <td>获取选中项文本(可选)</td>
+                                <td>否</td>
+                                <td>无</td>
+                                <td>&lt;ppts-radiobutton-group category="grade" model="vm.selectGrade" value="vm.selectGradeName" async="false" /&gt;</td>
+                            </tr>
+                            <tr>
+                                <td><code>parent</code></td>
+                                <td>联动效果, 通常操作多组, 在子组中设置父组的选中Key(可选)</td>
+                                <td>否</td>
+                                <td>无</td>
+                                <td>&lt;ppts-radiobutton-group category="stage" model="vm.selectStage" async="false" show-all="true" /&gt;
+		                        &lt;ppts-radiobutton-group category="grade" model="vm.selectGrade" parent="vm.selectStage" async="false" /&gt;</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

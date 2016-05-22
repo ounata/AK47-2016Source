@@ -1,0 +1,50 @@
+﻿<!-- #开始：学员上课记录.快速查询条件 -->
+<div class="mcs-panel-search well well-sm">
+    <div class="portlet">
+        <div class="portlet-title line">
+            <div class="caption">
+                <label class="quick-search"><i class="ace-icon fa fa-search bigger-125"></i> 快速查询</label>
+            </div>
+        </div>
+        <div class="portlet-body">
+            <div class="line-height-40">
+                <div class="input-group input-xlarge mcs-input-group pull-left" >
+                    <ppts-select-branch model="vm.criteria.campusID" />
+                    <ppts-daterangepicker start-date="vm.criteria.startTime" end-date="vm.criteria.endTime" class="search" />
+                </div>
+            </div>
+            <div class="ppts-oneline-block">
+                <ppts-select caption="上课科目" category="subject" model="vm.criteria.subject" class="ppts-select-search" />
+                <ppts-select caption="上课年级" category="grade" model="vm.criteria.grade" class="ppts-select-search" />
+                <ppts-select caption="课时状态" category="assignStatus" model="vm.assignStatus" class="ppts-select-search" />
+                <ppts-select caption="课时类型" category="assignSource" model="vm.assignSource" class="ppts-select-search" />
+                <mcs-input placeholder="教师姓名" class="search-input" model="vm.criteria.teacherName" />
+                <mcs-input placeholder="订单编号" class="search-input" model="vm.criteria.orderNo" />
+                <button class="btn btn-sm btn-success search-input" ng-click="vm.queryList()">
+                    <i class="ace-icon fa fa-search"></i>
+                    查询
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /结束：学员上课记录.快速查询条件 -->
+<!-- #开始：学员上课记录.工具栏 -->
+<div class="mcs-panel-toolbar">
+    <mcs-button category="add" text="录入课时" click="vm.markupSchedule()"></mcs-button> 
+    <mcs-button category="delete" text="删除课时" click="vm.deleteCourseClick()"></mcs-button>
+    <mcs-button category="ok" text="课时确认" click="vm.confirmCourseClick()"></mcs-button>
+    <mcs-button category="reject" text="取消课表" click="vm.cancelCourseClick()"></mcs-button>
+    <mcs-button category="print" text="打印课表" click=""></mcs-button>
+</div>
+<div class="alert alert-block alert-danger" ng-show="vm.errorMessage">
+    <button type="button" class="close" data-dismiss="alert">
+        <i class="ace-icon fa fa-times"></i>
+    </button>
+    <i class="ace-icon fa fa-warning"></i>
+    {{vm.errorMessage}}
+</div>
+<!-- /结束：学员上课记录.工具栏 -->
+<!-- #开始：学员上课记录.数据表格 -->
+<mcs-datatable data="vm.data" />
+<!-- /结束：学员上课记录.数据表格 -->

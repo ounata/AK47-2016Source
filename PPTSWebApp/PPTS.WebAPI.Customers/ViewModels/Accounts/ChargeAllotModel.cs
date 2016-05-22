@@ -24,7 +24,7 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
         /// 业绩分配总金额
         /// </summary>
         [DataMember]
-        public decimal TotalAllotMoney
+        public decimal TotalMoney
         {
             set;
             get;
@@ -34,7 +34,7 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
         /// 业绩分配总课时
         /// </summary>
         [DataMember]
-        public decimal TotalAllotAmount
+        public decimal TotalAmount
         {
             set;
             get;
@@ -53,10 +53,10 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
             }
             set
             {
-                if (value != null)
-                {
+                if (value == null)
+                    _items.Clear();
+                else
                     _items = value;
-                }
             }
         }
 
@@ -66,8 +66,8 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
             AccountChargeAllotCollection allots = AccountChargeAllotAdapter.Instance.LoadCollectionByApplyID(applyID);
             foreach (AccountChargeAllot allot in allots)
             {
-                model.TotalAllotAmount += allot.AllotAmount;
-                model.TotalAllotMoney += allot.AllotMoney;
+                model.TotalAmount += allot.AllotAmount;
+                model.TotalMoney += allot.AllotMoney;
                 ChargeAllotItemModel item = AutoMapper.Mapper.DynamicMap<ChargeAllotItemModel>(allot);
                 model.Items.Add(item);
             }

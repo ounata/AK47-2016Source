@@ -1,0 +1,31 @@
+﻿{
+  "dictionaries":
+  {
+    "c_codE_ABBR_CUSTOMER_GRADE_Async": [
+      {
+        "key": "G1",
+        "value": "一年级"
+      },
+      {
+        "key": "G2",
+        "value": "二年级"
+      },
+      {
+        "key": "G3",
+        "value": "三年级"
+      },
+      {
+        "key": "G4",
+        "value": "四年级"
+      },
+      {
+        "key": "G5",
+        "value": "五年级"
+      },
+      {
+        "key": "G6",
+        "value": "六年级"
+      }
+    ]
+  }
+}

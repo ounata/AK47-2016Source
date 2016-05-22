@@ -18,10 +18,10 @@
     <ProjectItem Include="PPTS.Data.Products\PPTS.Data.Products.csproj" />
     <ProjectItem Include="PPTS.Contracts.Products\PPTS.Contracts.Products.csproj" />
 
-    <ProjectItem Include="PPTS.Contracts.Proxies\PPTS.Contracts.Proxies.csproj" />
 
     <ProjectItem Include="PPTS.Data.Orders.Entities\PPTS.Data.Orders.Entities.csproj" />
     <ProjectItem Include="PPTS.Data.Orders\PPTS.Data.Orders.csproj" />
+    <ProjectItem Include="PPTS.Contracts.Orders\PPTS.Contracts.Orders.csproj" />
 
     <ProjectItem Include="PPTS.Contracts.Proxies\PPTS.Contracts.Proxies.csproj" />
     <ProjectItem Include="PPTS.Web.MVC.Library\PPTS.Web.MVC.Library.csproj" />

@@ -12,7 +12,7 @@ CREATE TABLE [OM].[AssetConfirms](
 	[ConfirmMoney] [decimal](18, 4) NOT NULL DEFAULT 0,
 	[ConfirmMemo] [nvarchar](255) NULL,
 	[ConfirmStatus] [nvarchar](32) NOT NULL,
-	[ConfirmTime] [datetime] NOT NULL DEFAULT getdate(),
+	[ConfirmTime] [datetime] NOT NULL DEFAULT GETUTCDATE(),
 	[ConfirmerID] [nvarchar](36) NULL,
 	[ConfirmerName] [nvarchar](64) NULL,
 	[ConfirmerJobID] [nvarchar](36) NULL,
@@ -59,7 +59,7 @@ CREATE NONCLUSTERED INDEX [IX_AssetConfirms_3] ON [OM].[AssetConfirms]
 	[ConfirmTime] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
-ALTER TABLE [OM].[AssetConfirms] ADD  CONSTRAINT [DF_AssetConfirms_CreateTime]  DEFAULT getdate() FOR [CreateTime]
+ALTER TABLE [OM].[AssetConfirms] ADD  CONSTRAINT [DF_AssetConfirms_CreateTime]  DEFAULT GETUTCDATE() FOR [CreateTime]
 GO
 
 GO

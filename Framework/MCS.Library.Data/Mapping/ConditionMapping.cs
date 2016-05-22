@@ -1,5 +1,6 @@
 using MCS.Library.Core;
 using MCS.Library.Data.Builder;
+using MCS.Library.Data.DataObjects;
 using MCS.Library.Data.Mapping;
 using System;
 using System.Collections;
@@ -56,10 +57,11 @@ namespace MCS.Library.Data.Mapping
         /// 根据条件对象生成WhereSqlClauseBuilder
         /// </summary>
         /// <param name="condition"></param>
+        /// <param name="ignoreProperties">需要忽略的属性</param>
         /// <returns></returns>
-        public static WhereSqlClauseBuilder GetWhereSqlClauseBuilder(object condition)
+        public static WhereSqlClauseBuilder GetWhereSqlClauseBuilder(object condition, params string[] ignoreProperties)
         {
-            return GetWhereSqlClauseBuilder(condition, true);
+            return GetWhereSqlClauseBuilder(condition, true, ignoreProperties);
         }
 
         /// <summary>
@@ -67,10 +69,11 @@ namespace MCS.Library.Data.Mapping
         /// </summary>
         /// <param name="condition"></param>
         /// <param name="acv"></param>
+        /// <param name="ignoreProperties">需要忽略的属性</param>
         /// <returns></returns>
-        public static WhereSqlClauseBuilder GetWhereSqlClauseBuilder(object condition, AdjustConditionValueDelegate acv)
+        public static WhereSqlClauseBuilder GetWhereSqlClauseBuilder(object condition, AdjustConditionValueDelegate acv, params string[] ignoreProperties)
         {
-            return GetWhereSqlClauseBuilder(condition, true, acv);
+            return GetWhereSqlClauseBuilder(condition, true, acv, ignoreProperties);
         }
 
         /// <summary>
@@ -78,10 +81,11 @@ namespace MCS.Library.Data.Mapping
         /// </summary>
         /// <param name="condition"></param>
         /// <param name="ignoreDefaultValue">如果对象的属性值为缺省值时，不进入到WhereSqlClauseBuilder</param>
+        /// <param name="ignoreProperties">需要忽略的属性</param>
         /// <returns></returns>
-        public static WhereSqlClauseBuilder GetWhereSqlClauseBuilder(object condition, bool ignoreDefaultValue)
+        public static WhereSqlClauseBuilder GetWhereSqlClauseBuilder(object condition, bool ignoreDefaultValue, params string[] ignoreProperties)
         {
-            return GetWhereSqlClauseBuilder(condition, ignoreDefaultValue, null);
+            return GetWhereSqlClauseBuilder(condition, ignoreDefaultValue, null, ignoreProperties);
         }
 
         /// <summary>
@@ -90,27 +94,30 @@ namespace MCS.Library.Data.Mapping
         /// <param name="condition"></param>
         /// <param name="ignoreDefaultValue"></param>
         /// <param name="acv"></param>
+        /// <param name="ignoreProperties">需要忽略的属性</param>
         /// <returns></returns>
         public static WhereSqlClauseBuilder GetWhereSqlClauseBuilder(
                 object condition,
                 bool ignoreDefaultValue,
-                AdjustConditionValueDelegate acv)
+                AdjustConditionValueDelegate acv,
+                params string[] ignoreProperties)
         {
             ExceptionHelper.FalseThrow<ArgumentNullException>(condition != null, "condition");
 
             ConditionMappingItemCollection mapping = GetMappingInfo(condition.GetType());
 
-            return GetWhereSqlClauseBuilderFromMapping(condition, mapping.FilterByType<ConditionMappingItem>(), ignoreDefaultValue, acv);
+            return GetWhereSqlClauseBuilderFromMapping(condition, mapping.FilterByType<ConditionMappingItem>(), ignoreDefaultValue, acv, ignoreProperties);
         }
 
         /// <summary>
         /// 得到组合的语句构造器。里面可能组合了Where和IN两种Builder
         /// </summary>
         /// <param name="condition"></param>
+        /// <param name="ignoreProperties">需要忽略的属性</param>
         /// <returns></returns>
-        public static ConnectiveSqlClauseCollection GetConnectiveClauseBuilder(object condition)
+        public static ConnectiveSqlClauseCollection GetConnectiveClauseBuilder(object condition, params string[] ignoreProperties)
         {
-            return GetConnectiveClauseBuilder(condition, true, null);
+            return GetConnectiveClauseBuilder(condition, true, null, ignoreProperties);
         }
 
         /// <summary>
@@ -118,10 +125,11 @@ namespace MCS.Library.Data.Mapping
         /// </summary>
         /// <param name="condition"></param>
         /// <param name="acv"></param>
+        /// <param name="ignoreProperties">需要忽略的属性</param>
         /// <returns></returns>
-        public static ConnectiveSqlClauseCollection GetConnectiveClauseBuilder(object condition, AdjustConditionValueDelegate acv)
+        public static ConnectiveSqlClauseCollection GetConnectiveClauseBuilder(object condition, AdjustConditionValueDelegate acv, params string[] ignoreProperties)
         {
-            return GetConnectiveClauseBuilder(condition, true, acv);
+            return GetConnectiveClauseBuilder(condition, true, acv, ignoreProperties);
         }
 
         /// <summary>
@@ -129,10 +137,11 @@ namespace MCS.Library.Data.Mapping
         /// </summary>
         /// <param name="condition"></param>
         /// <param name="ignoreDefaultValue"></param>
+        /// <param name="ignoreProperties">需要忽略的属性</param>
         /// <returns></returns>
-        public static ConnectiveSqlClauseCollection GetConnectiveClauseBuilder(object condition, bool ignoreDefaultValue)
+        public static ConnectiveSqlClauseCollection GetConnectiveClauseBuilder(object condition, bool ignoreDefaultValue, params string[] ignoreProperties)
         {
-            return GetConnectiveClauseBuilder(condition, ignoreDefaultValue, null);
+            return GetConnectiveClauseBuilder(condition, ignoreDefaultValue, null, ignoreProperties);
         }
 
         /// <summary>
@@ -141,17 +150,19 @@ namespace MCS.Library.Data.Mapping
         /// <param name="condition"></param>
         /// <param name="ignoreDefaultValue"></param>
         /// <param name="acv"></param>
+        /// <param name="ignoreProperties">需要忽略的属性</param>
         /// <returns></returns>
         public static ConnectiveSqlClauseCollection GetConnectiveClauseBuilder(
                 object condition,
                 bool ignoreDefaultValue,
-                AdjustConditionValueDelegate acv)
+                AdjustConditionValueDelegate acv,
+                params string[] ignoreProperties)
         {
             ExceptionHelper.FalseThrow<ArgumentNullException>(condition != null, "condition");
 
             ConditionMappingItemCollection mapping = GetMappingInfo(condition.GetType());
 
-            return GetConnectiveSqlClauseBuilderFromMapping(condition, mapping, ignoreDefaultValue, acv);
+            return GetConnectiveSqlClauseBuilderFromMapping(condition, mapping, ignoreDefaultValue, acv, ignoreProperties);
         }
         #endregion
 
@@ -160,16 +171,20 @@ namespace MCS.Library.Data.Mapping
                 object condition,
                 IEnumerable<ConditionMappingItem> mapping,
                 bool ignoreDefaultValue,
-                AdjustConditionValueDelegate acv)
+                AdjustConditionValueDelegate acv,
+                string[] ignoreProperties)
         {
             WhereSqlClauseBuilder builder = new WhereSqlClauseBuilder();
 
             foreach (ConditionMappingItem item in mapping)
             {
-                object data = GetValueFromObject(item, condition);
+                if (Array.Exists<string>(ignoreProperties, target => (string.Compare(target, item.PropertyName, true) == 0)) == false)
+                {
+                    object data = GetValueFromObject(item, condition);
 
-                DoAdjustValueAndAppendItem(data, item, ignoreDefaultValue, acv,
-                    adjustedData => builder.AppendItem(item.DataFieldName, adjustedData, item.Operation, item.Template, item.IsExpression));
+                    DoAdjustValueAndAppendItem(data, item, ignoreDefaultValue, acv,
+                        adjustedData => builder.AppendItem(item.DataFieldName, adjustedData, item.Operation, item.Template, item.IsExpression));
+                }
             }
 
             return builder;
@@ -179,15 +194,16 @@ namespace MCS.Library.Data.Mapping
                 object condition,
                 ConditionMappingItemCollection mapping,
                 bool ignoreDefaultValue,
-                AdjustConditionValueDelegate acv)
+                AdjustConditionValueDelegate acv,
+                string[] ignoreProperties)
         {
             ConnectiveSqlClauseCollection connectiveBuilder = new ConnectiveSqlClauseCollection();
 
-            WhereSqlClauseBuilder whereBuilder = GetWhereSqlClauseBuilderFromMapping(condition, mapping.FilterByType<ConditionMappingItem>(), ignoreDefaultValue, acv);
+            WhereSqlClauseBuilder whereBuilder = GetWhereSqlClauseBuilderFromMapping(condition, mapping.FilterByType<ConditionMappingItem>(), ignoreDefaultValue, acv, ignoreProperties);
 
             connectiveBuilder.Add(whereBuilder);
 
-            FillInSqlClauseBuilderFromMapping(connectiveBuilder, condition, mapping.FilterByType<InConditionMappingItem>(), ignoreDefaultValue, acv);
+            FillInSqlClauseBuilderFromMapping(connectiveBuilder, condition, mapping.FilterByType<InConditionMappingItem>(), ignoreDefaultValue, acv, ignoreProperties);
 
             return connectiveBuilder;
         }
@@ -200,36 +216,41 @@ namespace MCS.Library.Data.Mapping
         /// <param name="mapping"></param>
         /// <param name="ignoreDefaultValue"></param>
         /// <param name="acv"></param>
+        /// <param name="ignoreProperties">需要忽略的属性</param>
         private static void FillInSqlClauseBuilderFromMapping(
                 ConnectiveSqlClauseCollection connectiveBuilder,
                 object condition,
                 IEnumerable<InConditionMappingItem> mapping,
                 bool ignoreDefaultValue,
-                AdjustConditionValueDelegate acv)
+                AdjustConditionValueDelegate acv,
+                string[] ignoreProperties)
         {
             foreach (InConditionMappingItem item in mapping)
             {
-                object data = GetValueFromObject(item, condition);
-
-                if (data != null)
+                if (Array.Exists<string>(ignoreProperties, target => (string.Compare(target, item.PropertyName, true) == 0)) == false)
                 {
-                    InSqlClauseBuilder builder = new InSqlClauseBuilder(item.DataFieldName);
+                    object data = GetValueFromObject(item, condition);
 
-                    if (data is IEnumerable && data.GetType().IsPrimitive == false)
+                    if (data != null)
                     {
-                        foreach (object dataItem in (IEnumerable)data)
+                        InSqlClauseBuilder builder = new InSqlClauseBuilder(item.DataFieldName);
+
+                        if (data is IEnumerable && data.GetType().IsPrimitive == false)
                         {
-                            DoAdjustValueAndAppendItem(dataItem, item, ignoreDefaultValue, acv,
-                                (adJustedData) => builder.AppendItem(item.IsExpression, adJustedData));
+                            foreach (object dataItem in (IEnumerable)data)
+                            {
+                                DoAdjustValueAndAppendItem(dataItem, item, ignoreDefaultValue, acv,
+                                    (adJustedData) => builder.AppendItem(item.IsExpression, adJustedData));
+                            }
                         }
-                    }
-                    else
-                    {
-                        DoAdjustValueAndAppendItem(data, item, ignoreDefaultValue, acv,
-                                (adJustedData) => builder.AppendItem(item.IsExpression, adJustedData));
-                    }
+                        else
+                        {
+                            DoAdjustValueAndAppendItem(data, item, ignoreDefaultValue, acv,
+                                    (adJustedData) => builder.AppendItem(item.IsExpression, adJustedData));
+                        }
 
-                    connectiveBuilder.Add(builder);
+                        connectiveBuilder.Add(builder);
+                    }
                 }
             }
         }
@@ -248,7 +269,7 @@ namespace MCS.Library.Data.Mapping
             {
                 bool needIgnoreDefaultValue = ignoreDefaultValue;
 
-                switch(item.DefaultValueUsage)
+                switch (item.DefaultValueUsage)
                 {
                     case DefaultValueUsageType.Ignore:
                         needIgnoreDefaultValue = true;
@@ -293,7 +314,12 @@ namespace MCS.Library.Data.Mapping
                     type = data.GetType();
 
                 if (type.IsEnum)
+                {
                     result = false;
+
+                    if (type == typeof(BooleanState))
+                        result = ((BooleanState)data) == BooleanState.Unknown;
+                }
                 else
                 {
                     if (type == typeof(string))

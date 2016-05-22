@@ -5,18 +5,11 @@
                 '$scope', '$state', 'dataSyncService', 'purchaseCourseDataService',
                 function ($scope, $state, dataSyncService, purchaseCourseDataService) {
                     var vm = this;
-
-
-                    //查询条件
-                    vm.criteria = {
-                        name: '',
-                        pagedParam: { "pageIndex": 1, "pageSize": 10, "totalCount": -1 }
-                    };
-
+                    
                     vm.data = {
                         selection: 'radio',
                         rowsSelected: [],
-                        keyFields: ['orderID'],
+                        keyFields: ['orderID', 'itemID', 'categoryType'],
                         headers: [{
                             field: "customerName",
                             name: "学生姓名",
@@ -25,13 +18,13 @@
                         }, {
                             field: "customerCode",
                             name: "学生编号",
-                            //template: '<a ui-sref="ppts.productView({id:row.productID})">{{row.productName}}</a>'
                         }, {
                             field: "parentName",
                             name: "家长姓名"
                         }, {
-                            field: "orderNo",
-                            name: "订单编号"
+                            //field: "orderNo",
+                            name: "订单编号",
+                            template: '<a ui-sref="ppts.purchaseOrderView({orderId:row.orderID})">{{row.orderNo}}</a>',
                         }, {
                             field: "orderTime",
                             name: "订购日期",
@@ -56,8 +49,9 @@
                             field: "orderAmount",
                             name: "订购数量",
                         }, {
-                            field: "realPrice",
+                            //field: "realPrice",
                             name: "订购金额",
+                            template: '<span>{{ row.realPrice * row.realAmount  | courseLevel}}</span>'
                         }, {
                             field: "presentAmount",
                             name: "赠送数量",
@@ -72,7 +66,7 @@
                             name: "已上数量",
                         }, {
                             name: "剩余数量",
-                            template: '{{ row.orderAmount + row.presentAmount - row.confirmedAmount - row.debookedAmount }}'
+                            template: '{{ row.realAmount - row.debookedAmount }}'
                         }, {
                             field: "orderStatus",
                             name: "订单状态",
@@ -99,7 +93,7 @@
                     }
 
 
-                    dataSyncService.initCriteria(vm);
+                    
                     vm.search = function () {
                        
                         if (vm.criteria.dateRange ) {
@@ -124,22 +118,29 @@
                         });
 
                     };
-
-
                     vm.unsubscribe = function () {
-                        console.log(vm.data.rowsSelected);
+                        $state.go('ppts.unsubscribeProduct', { id: vm.data.rowsSelected[0].itemID });
+                        //console.log(vm.data.rowsSelected);
+                    };
+                    vm.print = function () {
+                        var id = vm.data.rowsSelected[0].itemID;
+                        $state.go('ppts.purchasePrint', { id: id });
+                    };
+                    vm.editchargepay = function () {
+                        var orderId = vm.data.rowsSelected[0].orderID;
+                        $state.go('ppts.purchaseEditpayment', { orderid: orderId });
                     };
 
 
-
-                    vm.init = function () {
+                    var init = (function () {
+                        dataSyncService.initCriteria(vm);
 
                         vm.criteria.dateRange = 0;
-
                         dataSyncService.injectPageDict(['dateRange']);
+
                         vm.search();
-                    };
-                    vm.init();
+
+                    })();
 
 
                 }]);

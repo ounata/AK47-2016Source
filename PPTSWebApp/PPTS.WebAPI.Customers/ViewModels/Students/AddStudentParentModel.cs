@@ -27,7 +27,7 @@ namespace PPTS.WebAPI.Customers.ViewModels.Students
         /// </summary>
         [ConstantCategory("C_CODE_ABBR_CHILDMALEDICTIONARY")]
         [ConstantCategory("C_CODE_ABBR_CHILDFEMALEDICTIONARY")]
-        public int CustomerRole
+        public string CustomerRole
         {
             get;
             set;
@@ -38,7 +38,7 @@ namespace PPTS.WebAPI.Customers.ViewModels.Students
         /// </summary>
         [ConstantCategory("C_CODE_ABBR_PARENTMALEDICTIONARY")]
         [ConstantCategory("C_CODE_ABBR_PARENTFEMALEDICTIONARY")]
-        public int ParentRole
+        public string ParentRole
         {
             get;
             set;
@@ -62,7 +62,8 @@ namespace PPTS.WebAPI.Customers.ViewModels.Students
                 CustomerID = this.Customer.CustomerID,
                 ParentID = this.PrimaryParent.ParentID,
                 CustomerRole = this.CustomerRole,
-                ParentRole = this.ParentRole
+                ParentRole = this.ParentRole,
+                IsPrimary = isPrimary
             };
 
             return relation;

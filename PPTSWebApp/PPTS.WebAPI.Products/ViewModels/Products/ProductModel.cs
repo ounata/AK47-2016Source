@@ -14,15 +14,26 @@ namespace PPTS.WebAPI.Products.ViewModels.Products
     [Serializable]
     public class ProductModel
     {
-        public Data.Products.Entities.CategoryCatalogCollection Catalogs { set; get; }
+        public CategoryCatalogCollection Catalogs { set; get; }
         public CategoryType CategoryType { set; get; }
 
         [ObjectValidator]
-        public Data.Products.Entities.Product Product { set; get; }
+        public Product Product { set; get; }
+
         [ObjectValidator]
-        public Data.Products.Entities.ProductExOfCourse ExOfCourse { set; get; }
+        public ProductExOfCourse ExOfCourse { set; get; }
+
         [ObjectValidator]
-        public Data.Products.Entities.ProductSalaryRuleCollection SalaryRules { set; get; }
+        public ProductSalaryRuleCollection SalaryRules { set; get; }
+
+        [ObjectValidator]
+        public ProductPermissionCollection Permissions { set; get; }
+
+        public string [] CampusIDs { set; get; }
+
+        public string CreatorID { set; get; }
+        public string CreatorName { set; get; }
+
 
         public IDictionary<string, IEnumerable<BaseConstantEntity>> Dictionaries
         {
@@ -58,5 +69,50 @@ namespace PPTS.WebAPI.Products.ViewModels.Products
             return model;
         }
 
+
+
+
+        public ProductModel FillProduct() {
+            if (string.IsNullOrWhiteSpace(Product.ProductID))
+            {
+                Product.ProductID = Guid.NewGuid().ToString();
+            }
+            if (CategoryType == CategoryType.OneToOne)
+            {
+                Product.StartDate = Product.EndDate = DateTime.Parse("3000-12-31");
+            }
+            Product.ProductStatus = ProductStatus.PendingApproval;
+
+            Product.CreatorID = CreatorID;
+            Product.CreatorName = CreatorName;
+
+            return this;
+        }
+
+        public ProductModel FillExOfCourse() {
+            
+            return this;
+        }
+
+        public ProductModel FillSalaryRules() {
+            if(SalaryRules !=null && SalaryRules.Count > 0)
+            {
+                SalaryRules[0].RuleObject = Data.Products.RuleObject.Consultant;
+                SalaryRules[1].RuleObject = Data.Products.RuleObject.Educator;
+                SalaryRules[2].RuleObject = Data.Products.RuleObject.Teacher;
+            }
+            
+            return this;
+        }
+
+        public ProductModel FillPermissions()
+        {
+            Permissions = new ProductPermissionCollection();
+            CampusIDs.ToList().ForEach(s => {
+                Permissions.Add(new ProductPermission() { ProductID=this.Product.ProductID, UseOrgID=s, CreatorID= CreatorID, CreatorName=CreatorName, UseOrgType=4 });
+            });
+
+            return this;
+        }
     }
 }

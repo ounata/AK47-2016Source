@@ -27,7 +27,6 @@ using System.Web;
 
 namespace MCS.Library.Data
 {
-    [System.Diagnostics.DebuggerNonUserCode]
     internal class AutoEnlistDbContext : DeluxeDbContextBase
     {
         #region private classes

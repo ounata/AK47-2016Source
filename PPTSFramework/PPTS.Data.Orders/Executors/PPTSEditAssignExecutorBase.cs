@@ -8,9 +8,8 @@ using PPTS.Data.Orders.Adapters;
 using MCS.Library.Data;
 using MCS.Library.Data.Executors;
 using MCS.Library.SOA.DataObjects;
-
-
-
+using MCS.Library.Principal;
+using PPTS.Data.Common.Security;
 
 namespace PPTS.Data.Orders.Executors
 {
@@ -26,8 +25,15 @@ namespace PPTS.Data.Orders.Executors
         {
 
         }
+
+
+
+
+
         protected override void PersistOperationLogInContext(DataExecutionContext<UserOperationLogCollection> context)
         {
+            DeluxeIdentity.CurrentUser.GetCurrentJob().GetParentOrganizationByType(DepartmentType.Campus);
+
             context.Logs.ForEach(log => AssignsOperationLogAdapter.Instance.InsertDataInContext(log));
         }
 
@@ -35,12 +41,17 @@ namespace PPTS.Data.Orders.Executors
         {
             using (DbContext dbContext = PPTS.Data.Orders.ConnectionDefine.GetDbContext())
             {
-                dbContext.ExecuteNonQuerySqlInContext();
+                this.ExecuteNonQuerySqlInContext(dbContext);
 
                 if (this.DataAction != null)
                     this.DataAction(this.Model);
             }
             return this.Model;
+        }
+
+        protected virtual void ExecuteNonQuerySqlInContext(DbContext dbContext)
+        {
+            dbContext.ExecuteNonQuerySqlInContext();
         }
 
     }

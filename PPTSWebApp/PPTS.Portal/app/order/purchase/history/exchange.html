@@ -1,0 +1,35 @@
+﻿第一步：选择要兑换的产品
+<br />
+您正在为学员 {{vm.customer.customerName}} ({{vm.customer.customerCode}}) 选择产品
+<br />
+
+<div class="mcs-panel-search well well-sm">
+    <div class="portlet">
+        <div class="portlet-title line">
+            <div class="caption">
+                <label class="quick-search"><i class="ace-icon fa fa-search bigger-125"></i> 快速查询条件</label>
+            </div>
+        </div>
+        <div class="portlet-body">
+            <form name="orderListForm">
+                <div class="search-inline">
+                    <ppts-select category="grade" class="ppts-select-search" model="vm.criteria.grade" caption="年级" />
+                    <ppts-select category="subject" class="ppts-select-search" model="vm.criteria.subject" caption="科目" />
+                    <ppts-select category="courseLevel" class="ppts-select-search" model="vm.criteria.courseLevel" caption="课程级别" />
+                    <ppts-select category="duration" class="ppts-select-search" model="vm.criteria.periodDuration" caption="课时时长" />
+                </div>
+                <div>
+                    <mcs-button category="search" click="vm.search()" size="medium" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="mcs-panel-toolbar">
+    <mcs-button category="edit" text="下一步" click="vm.next()" ng-disabled="vm.data.rowsSelected.length!=1"></mcs-button>
+    <mcs-button category="cancel" click="vm.cancel()"></mcs-button>
+</div>
+
+<mcs-datatable data="vm.data" />
+

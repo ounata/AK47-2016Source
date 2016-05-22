@@ -1,0 +1,14 @@
+﻿
+第二步：确认兑换的数量
+<br />
+您正在为学员 {{vm.customer.customerName}} ({{vm.customer.customerCode}}) 兑换 {{vm.product.productName}}
+<br />
+
+<div class="mcs-panel-toolbar">
+    <mcs-button type="edit" text="修改兑换产品" click="vm.goBack()"></mcs-button>
+    <mcs-button type="edit" text="保存" click="vm.save()"></mcs-button>
+</div>
+
+<mcs-datatable data="vm.data" />
+
+

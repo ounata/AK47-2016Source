@@ -21,6 +21,17 @@ namespace PPTS.Data.Customers.Entities
         }
 
         /// <summary>
+        /// 归属组织机构类型
+        /// </summary>
+        [ORFieldMapping("OrgType")]
+        [DataMember]
+        public OrgTypeDefine OrgType
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// 无效客户理由代码（参考跟进）
         /// </summary>
         [ORFieldMapping("InvalidReason")]

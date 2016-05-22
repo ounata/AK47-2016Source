@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="MCS.Services.Test.Services.RepertoryTransactionService" CodeBehind="RepertoryTransactionService.svc.cs"  Factory="MCS.Library.WcfExtensions.WfServiceHostFactory" %>

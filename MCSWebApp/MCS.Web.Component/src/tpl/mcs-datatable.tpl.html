@@ -10,13 +10,13 @@
                 </th>
                 <th ng-repeat="header in data.headers" style="cursor: pointer" ng-click="reorder(header,data.pager.pageChange)">
                     {{header.name}}
-                    <i ng-if="header.sortable" ng-class="{undefined:'fa fa-sort','desc':'fa fa-chevron-down','asc':'fa fa-chevron-up'}[header.orderDirection]"></i>
+                    <i ng-if="header.sortable" ng-class="{undefined:'fa fa-sort','desc':'fa fa-sort-alpha-desc','asc':'fa fa-sort-alpha-asc'}[header.orderDirection]"></i>
                 </th>
             </tr>
         </thead>
         <tbody>
             <tr mcs-datatable-row ng-show="!data.pagable || data.pager.totalCount>0" ng-repeat="row
- in data.rows" ng-class="{'mcs-tr-selected': row.selected}">
+ in data.rows" ng-class="{'mcs-tr-selected': row.selected,'mcs-tr-highlight':row.highlight}">
                 <td ng-show="data.selection" class="center">
                     <label class="position-relative">
                         <input class="ace" type="{{data.selection}}" ng-click="rowSelect(row)" ng-checked="row.selected==true" ng-model="row.selected">
@@ -29,7 +29,7 @@
                     没有查询到任何记录，请重新设置条件查询。
                 </td>
             </tr>
-            <tr ng-if="data.pagable || data.pager.totalCount>0" >
+            <tr ng-if="data.pagable || data.pager.totalCount>0">
                 <td colspan="{{data.headers.length+1}}" class="mcs-padding-0">
                     <div class="well well-sm mcs-panel-pager">
                         <tm-pagination conf="data.pager" page-change="pageChange(data.pager.pageChange)"></tm-pagination>

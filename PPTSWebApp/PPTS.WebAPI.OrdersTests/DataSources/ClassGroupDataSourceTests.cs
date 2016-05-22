@@ -21,9 +21,10 @@ namespace PPTS.WebAPI.Orders.DataSources.Tests
                 OrderBy= new OrderByRequestItem[] { new OrderByRequestItem() { DataField = "ClassID", SortDirection= FieldSortDirection.Descending } }
             };
 
-            criteria.ClassName = "PT131228000091-6-北京分公司方庄校区6";//Classes 条件
-            criteria.TeacherName = "测试五";//ClassLessons 条件
-            criteria.CustomerCode = "S131229000129";//ClassLessonItems条件
+            //criteria.ClassName = "PT131228000091-6-北京分公司方庄校区6";//Classes 条件
+            //criteria.TeacherName = "测试五";//ClassLessons 条件
+            //criteria.CustomerCode = "S131229000129";//ClassLessonItems条件
+            criteria.CustomerID = "3886647";
 
             PagedQueryResult<ClassSearchModel, ClassSearchModelCollection> result = ClassGroupDataSource.Instance.LoadClasses(criteria.PageParams, criteria, criteria.OrderBy);
 

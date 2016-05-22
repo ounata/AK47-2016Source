@@ -1,0 +1,11 @@
+﻿
+<!-- #开始：订购列表.工具条 -->
+<div class="mcs-panel-toolbar">
+    <mcs-button category="edit" text="退订" ng-disabled="vm.data.rowsSelected.length!=1" click="vm.unsubscribe()"></mcs-button>
+    <mcs-dropdown-button title="资产兑换" items="vm.dropdowns" ng-disabled="vm.data.rowsSelected.length!=1"></mcs-dropdown-button>
+    <mcs-button category="edit" text="确认收" ng-disabled="vm.data.rowsSelected.length!=1" click="vm.recognizingIncome()"></mcs-button>
+</div>
+<!-- /结束：订购列表.工具条 -->
+<!-- #开始：订购列表.数据表格 -->
+<mcs-datatable data="vm.data" />
+<!-- /结束：订购列表.数据表格 -->

@@ -1,0 +1,8 @@
+﻿
+此订购单为{{vm.order.customerName}}（{{vm.order.orderNo}}）的订购单，该学员当前可用金额为{{vm.account.accountMoney | currency }}。 
+订购单状态：{{vm.order.orderStatus | orderStatus}}  
+订购操作人：{{vm.order.submitterName}}  
+操作人岗位：{{vm.order.submitterJobName}}  
+<mcs-datatable data="vm.data" />
+
+本次订购关联的缴费单：{{vm.chargePayment.payMemo}}

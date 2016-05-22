@@ -1,0 +1,157 @@
+﻿<div class="widget-box">
+    <div class="widget-header">
+        <h4>
+            查看客服客户信息{{vm.customerService.handlerJobType}}
+        </h4>
+    </div>
+    <div class="clearfix form-actions mcs-form-actions">
+        <!-- #开始：保存客服.工具栏 -->
+        <div class="mcs-panel-toolbar col-sm-offset-3">
+            <mcs-button category="edit" ppts-job-functions="编辑客服信息" ng-hide="vm.customerService.serviceStatus == 2 || vm.customerService.handlerJobType !=''" click="$state.go('ppts.custservice-edit',{id:vm.customerService.serviceID})"></mcs-button>
+            <mcs-button icon="female" css="btn-success" text="转下一受理人" ppts-job-functions="转下一受理人" ng-hide="vm.customerService.serviceStatus == 2 || vm.customerService.handlerJobType !=''" click="$state.go('ppts.custservice-nextProcess',{id:vm.customerService.serviceID})"></mcs-button>
+            <mcs-button category="submit" text="结束流程" click="vm.overProcess()"></mcs-button>
+        </div>
+    </div>
+    <div class="container">
+        <table class="table">
+            <tbody>
+                <tr></tr>
+                <tr class="row">
+                    <td class="col-sm-2 text-right">
+                        <label>
+                            学生姓名：
+                        </label>
+                    </td>
+                    <td class="col-sm-4">
+                        <label>{{vm.customer.customerName }}</label>
+                    </td>
+                    <td class="col-sm-2 text-right">
+                        <label class="control-label">归属校区：</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <label>{{ vm.customer.campusName }}</label>
+                    </td>
+                </tr>
+                <tr class="row">
+                    <td class="col-sm-2 text-right">
+                        <label class="control-label">来电时间：</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <label>{{vm.customerService.callTime | date:"yyyy-MM-dd"  }}</label>
+                    </td>
+                    <td class="col-sm-2 text-right">
+                        <label class="control-label">来电人：</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <label>{{ vm.customerService.productCode }}</label>
+                    </td>
+                </tr>
+                <tr class="row">
+                    <td class="col-sm-2 text-right">
+                        <label class="control-label">客服受理人：</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <label>{{vm.customerService.accepterName }}</label>
+                    </td>
+                    <td class="col-sm-2 text-right">
+                        <label class="control-label">服务类型：</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <label>{{ vm.customerService.serviceType | serviceType }}</label>
+                    </td>
+                </tr>
+                <tr class="row" ng-show="vm.customerService.serviceType != 3">
+                    <td class="col-sm-2 text-right">
+                        <label class="control-label">投诉次数：</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <label>{{vm.customerService.complaintTimes | complaintTimes }}</label>
+                    </td>
+                    <td class="col-sm-2 text-right">
+                        <label class="control-label">投诉升级：</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <label>{{ vm.customerService.complaintLevel | complaintLevel }}</label>
+                    </td>
+                </tr>
+                <tr class="row" ng-hide="vm.customerService.serviceType != 3">
+                    <td class="col-sm-2 text-right">
+                        <label class="control-label">咨询问题类型：</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <label>{{vm.customerService.consultType | consultType }}</label>
+                    </td>
+                    <td class="col-sm-2 text-right">
+                        <label class="control-label">和其他相关备注信息：</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <label>{{vm.customerService.consultMemo }}</label>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+        <table class="table">
+            <tbody>
+                <tr class="row">
+                    <td class="col-sm-2 text-right">
+                        <label>客服受理详细情况：</label>
+                    </td>
+                    <td>
+                        <label>{{vm.customerService.acceptMemo}}</label>
+                    </td>
+                </tr>
+                <tr class="row" ng-show="vm.customerService.serviceType != 3">
+                    <td class="col-sm-2 text-right">
+                        <label>诉求：</label>
+                    </td>
+                    <td>
+                        <label>{{vm.customerService.appealMemo}}</label>
+                    </td>
+                </tr>
+                <tr class="row" ng-show="vm.customerService.serviceType != 3">
+                    <td class="col-sm-2 text-right">
+                        <label>处理建议：</label>
+                    </td>
+                    <td>
+                        <label>{{vm.customerService.handleAdvice}}</label>
+                    </td>
+                </tr>
+                <tr class="row">
+                    <td class="col-sm-2 text-right">
+                        <label>备注：</label>
+                    </td>
+                    <td>
+                        <label>{{vm.customerService.serviceMemo}}</label>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="page-header">
+            <span>受理信息</span>
+        </div>
+        <div class="form-group" >
+            <label class="control-label col-sm-3">
+                受理详情描述:
+            </label>
+            <div class="input-group col-sm-9">
+                <textarea class="col-sm-9" rows="5" id="textArea" ng-model="vm.customerServiceItems.candleMemo" maxlength="5000"></textarea>
+                <span class="help-block col-sm-6">不允许输入5000个字符，已经输入{{ vm.customerServiceItems.candleMemo.length || 0 }}个</span>
+            </div>
+        </div>
+
+        <div class="page-header" ng-hide="vm.data.totalCount == 0">
+            <span>本次客服受理信息查看</span>
+        </div>
+        <!-- #开始：客户服务列表.数据表格 -->
+        <mcs-datatable data="vm.data1 " ng-hide="vm.data.totalCount == 0" />
+        <!-- /结束：客户服务列表.数据表格 -->
+
+        <div class="page-header">
+            <span>其他客服受理信息查看</span>
+        </div>
+        <!-- #开始：客户服务列表.数据表格 -->
+        <mcs-datatable data="vm.data2"/>
+        <!-- /结束：客户服务列表.数据表格 -->
+        </div>
+</div>

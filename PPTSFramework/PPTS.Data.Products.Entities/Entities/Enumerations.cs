@@ -29,41 +29,52 @@ namespace PPTS.Data.Products
     /// </summary>
     public enum ProductStatus
     {
-        /// <summary>
-        /// 草稿
-        /// </summary>
-        [EnumItemDescription("草稿")]
-        New = 5,
-
-        /// <summary>
-        /// 审批中
-        /// </summary>
-        [EnumItemDescription("审批中")]
-        Approving = 3,
-
-        /// <summary>
-        /// 已完成
-        /// </summary>
-        [EnumItemDescription("已完成")]
-        Approved = 6,
-
-        /// <summary>
-        /// 已驳回
-        /// </summary>
-        [EnumItemDescription("已驳回")]
-        Refused = 4,
-
-        /// <summary>
-        /// 销售中
-        /// </summary>
+        [EnumItemDescription("待审批")]
+        PendingApproval =1,
+        [EnumItemDescription("审批通过")]
+        Approved =2,
+        [EnumItemDescription("驳回")]
+        Refused =3,
         [EnumItemDescription("销售中")]
-        Enabled = 1,
+        Enabled =4,
+        [EnumItemDescription("已停售")]
+        Disabled =5
 
-        /// <summary>
-        /// 禁售
-        /// </summary>
-        [EnumItemDescription("禁售")]
-        Disabled = 2
+        ///// <summary>
+        ///// 草稿
+        ///// </summary>
+        //[EnumItemDescription("草稿")]
+        //New = 5,
+
+        ///// <summary>
+        ///// 审批中
+        ///// </summary>
+        //[EnumItemDescription("审批中")]
+        //Approving = 3,
+
+        ///// <summary>
+        ///// 已完成
+        ///// </summary>
+        //[EnumItemDescription("已完成")]
+        //Approved = 6,
+
+        ///// <summary>
+        ///// 已驳回
+        ///// </summary>
+        //[EnumItemDescription("已驳回")]
+        //Refused = 4,
+
+        ///// <summary>
+        ///// 销售中
+        ///// </summary>
+        //[EnumItemDescription("销售中")]
+        //Enabled = 1,
+
+        ///// <summary>
+        ///// 禁售
+        ///// </summary>
+        //[EnumItemDescription("禁售")]
+        //Disabled = 2
     }
 
     /// <summary>
@@ -204,12 +215,6 @@ namespace PPTS.Data.Products
     /// </summary>
     public enum PresentStatusDefine
     {
-        /// <summary>
-        /// 草稿
-        /// </summary>
-        [EnumItemDescription("草稿")]
-        New = 1,
-
         /// <summary>
         /// 审批中
         /// </summary>

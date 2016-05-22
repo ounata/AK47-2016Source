@@ -3,7 +3,7 @@
 
     var fileTypes = { css: 'css', javascript: 'js' };
     var getFileName = function (fileType, filePath, isLocal) {
-        var fileName = !isLocal ? mcs.app.config.componentBaseUrl.replace('http://', 'http:\\') : '';
+        var fileName = !isLocal ? mcs.app.config.mcsComponentBaseUrl.replace('http://', 'http:\\') : '';
         var extension = '';
         switch (fileType) {
             case fileTypes.css:

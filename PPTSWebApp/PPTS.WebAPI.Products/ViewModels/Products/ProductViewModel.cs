@@ -12,27 +12,17 @@ namespace PPTS.WebAPI.Products.ViewModels.Products
 
     public class ProductViewModel
     {
-        public Data.Products.Entities.CategoryCatalogCollection Catalogs { set; get; }
+        public CategoryCatalogCollection Catalogs { set; get; }
         public CategoryType CategoryType { set; get; }
-        public Data.Products.Entities.ProductView Product { set; get; }
+        public ProductView Product { set; get; }
 
-        public Data.Products.Entities.ProductSalaryRuleCollection SalaryRules
-        {
-            get;
-            set;
-        }
-        
-        public Data.Products.Entities.ProductExOfCourse ExOfCourse
-        {
-            get;
-            set;
-        }
+        public ProductSalaryRuleCollection SalaryRules { set; get; }
 
-        public IDictionary<string, IEnumerable<Data.Common.Entities.BaseConstantEntity>> Dictionaries
-        {
-            get;
-            set;
-        }
+        public ProductExOfCourse ExOfCourse { set; get; }
+
+        public ProductPermissionCollection Permissions { set; get; }
+
+        public IDictionary<string, IEnumerable<Data.Common.Entities.BaseConstantEntity>> Dictionaries { set; get; }
 
 
         public static ProductViewModel GetProducViewtById(string id)
@@ -47,17 +37,14 @@ namespace PPTS.WebAPI.Products.ViewModels.Products
             };
 
             var executor = new PPTSProductExecutor("GetProductView") { ProductId = id };
-            executor.FillProductView = new Action<ProductView,
-                ProductExOfCourse,
-                ProductSalaryRuleCollection>(
-                (productView, exOfCourse, salaryRules) =>
-                {
-                    result.CategoryType = (CategoryType)Convert.ToInt32(productView.CategoryType);
-                    result.Product = productView;
-                    result.ExOfCourse = exOfCourse;
-                    result.SalaryRules = salaryRules;
-                }
-                );
+            executor.FillProductView = (productView, exOfCourse, salaryRules,permissions) =>
+            {
+                result.CategoryType = (CategoryType)Convert.ToInt32(productView.CategoryType);
+                result.Product = productView;
+                result.ExOfCourse = exOfCourse;
+                result.SalaryRules = salaryRules;
+                result.Permissions = permissions;
+            };
             executor.Execute();
             return result;
         }
@@ -68,7 +55,7 @@ namespace PPTS.WebAPI.Products.ViewModels.Products
     public class ProductViewCollectionModel
     {
         
-        public Data.Products.Entities.ProductViewCollection Products { set; get; }
+        public ProductViewCollection Products { set; get; }
 
         public IDictionary<string, IEnumerable<Data.Common.Entities.BaseConstantEntity>> Dictionaries
         {

@@ -9,7 +9,8 @@ using PPTS.Data.Orders.Executors;
 using MCS.Library.Core;
 using MCS.Library.SOA.DataObjects;
 using PPTS.Data.Orders.Adapters;
-
+using PPTS.Data.Common.Security;
+using MCS.Library.Data;
 
 namespace PPTS.WebAPI.Orders.Executors
 {
@@ -25,11 +26,15 @@ namespace PPTS.WebAPI.Orders.Executors
         protected override void PrepareData(DataExecutionContext<UserOperationLogCollection> context)
         {
             ///需要执行的判断
-            ///1. 排定状态可以取消
+            ///1. 排定 异常   状态的排课 可以取消
             ///2. 取消后，需要将资产表中的已排课时数量减去取消掉的课时量
             base.PrepareData(context);
 
-            IList<string> assignID = this.Model.Select(p => p.AssetID).ToList();
+            if (this.Model.Count == 0)
+                return;
+            this.Model[0].FillModifier();
+
+            IList<string> assignID = this.Model.Select(p => p.AssignID).ToList();
             AssignCollection ac = AssignsAdapter.Instance.LoadCollection(assignID);
             if (ac == null)
                 return;
@@ -44,12 +49,23 @@ namespace PPTS.WebAPI.Orders.Executors
                     continue;
 
                 decimal assignedAmount = assigns.Sum(p => p.Amount);
+                Asset at = GenericAssetAdapter<Asset, AssetCollection>.Instance.Load(g.Key);
+                if (at == null)
+                    continue;
+
+                at.AssignedAmount -= assignedAmount;
                 assignID = assigns.Select(p => p.AssignID).ToList();
 
-                AssignsAdapter.Instance.CancelAssignInContext(assignID, string.Empty, string.Empty);
-                AssetAdapter.Instance.DecreaseAssignedAmountInContext(g.Key, assignedAmount, string.Empty, string.Empty);
+                AssignsAdapter.Instance.UpdateAssignStatusInContext(assignID, this.Model[0].ModifierID, this.Model[0].ModifierName, Data.Orders.AssignStatusDefine.Invalid);
+                GenericAssetAdapter<Asset, AssetCollection>.Instance.UpdateInContext(at);
             }
         }
+
+        protected override void ExecuteNonQuerySqlInContext(DbContext dbContext)
+        {
+            dbContext.ExecuteTimePointSqlInContext();
+        }
+
         protected override void PrepareOperationLog(DataExecutionContext<UserOperationLogCollection> context)
         {
             base.PrepareOperationLog(context);

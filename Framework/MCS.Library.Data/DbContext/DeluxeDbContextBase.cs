@@ -33,7 +33,6 @@ using System.Web;
 
 namespace MCS.Library.Data
 {
-    [System.Diagnostics.DebuggerNonUserCode]
     internal abstract class DeluxeDbContextBase : DbContext
     {
         protected static readonly object GraphWithTxSyncObject = new object();

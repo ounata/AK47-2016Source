@@ -117,7 +117,7 @@ namespace MCS.Library.SOA.DataObjects
             return result;
         }
 
-        private static void FillSqlBuilder(SqlClauseBuilderIUW builder, StartWorkflowJob data)
+        private static void FillSqlBuilder<TBuilder>(TBuilder builder, StartWorkflowJob data) where TBuilder: SqlClauseBuilderIUW<TBuilder>
         {
             builder.AppendItem("JOB_ID", data.JobID);
             builder.AppendItem("PROCESS_KEY", data.ProcessKey);

@@ -10,8 +10,8 @@ namespace PPTS.Contracts.Proxies.Test
         [TestMethod]
         public void QueryProductViewsByIDsTest()
         {
-            string[] productids = new string[] { "1104150", "1104152", "1104154" };
-            ProductViewCollection _pvc =PPTSProductQueryServiceProxy.Instance.QueryProductViewsByIDs(productids);
+            string[] productIDs = new string[] { "1104150", "1104152", "1104154" };
+            ProductViewCollection _pvc = PPTSProductQueryServiceProxy.Instance.QueryProductViewsByIDs(productIDs);
             Assert.IsTrue(_pvc.Count > 0);
         }
     }

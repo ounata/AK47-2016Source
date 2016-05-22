@@ -2,8 +2,8 @@
         ppts.config.dataServiceConfig.studentAssignmentDataService],
         function (schedule) {
             schedule.registerController('stuAsgmtListController', [
-                '$scope', '$state', 'dataSyncService', 'studentassignmentDataService',
-                function ($scope, $state, dataSyncService, studentassignmentDataService) {
+                '$scope', '$state', 'dataSyncService', 'studentassignmentDataService', 'blockUI',
+                function ($scope, $state, dataSyncService, studentassignmentDataService, blockUI) {
                     var vm = this;
                     vm.data = {
                         selection: 'radio',
@@ -59,12 +59,16 @@
 
                     // 页面初始化加载或重新搜索时查询
                     vm.init = function () {
+                        blockUI.start();
                         dataSyncService.initCriteria(vm);
                         studentassignmentDataService.getAllStuUnAsgmt(vm.criteria, function (result) {
                             vm.data.rows = result.queryResult.pagedData;
                             dataSyncService.injectDictData();
                             dataSyncService.updateTotalCount(vm, result.queryResult);
                             $scope.$broadcast('dictionaryReady');
+                            blockUI.stop();
+                        }, function (error) {
+                            blockUI.stop();
                         });
                     };
                     vm.init();
@@ -91,8 +95,15 @@
                             alert("请选择一个学员");
                             return;
                         }
-                        //$state.go('ppts.schedule-add', { cID: vm.data.rowsSelected[0].customerID });
-                        $state.go('ppts.stuasgmt-course', { cID: vm.data.rowsSelected[0].customerID });
+                        var stuName = '';
+                        for (var i in vm.data.rows) {
+                            if (vm.data.rows[i].customerID == vm.data.rowsSelected[0].customerID) {
+                                stuName = vm.data.rows[i].customerName;
+                                break;
+                            };
+
+                        };
+                        $state.go('ppts.stuasgmt-course', { cID: vm.data.rowsSelected[0].customerID, tn: stuName });
                     };
                 }]);
         });

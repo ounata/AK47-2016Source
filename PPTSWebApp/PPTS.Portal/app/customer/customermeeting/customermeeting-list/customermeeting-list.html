@@ -58,17 +58,7 @@
             </div>
         </div>
         <div class="portlet-body">
-            <mcs-input placeholder="大区/分公司/校区" model="vm.criteria.area" />
-            <!--<div class="input-group input-xlarge mcs-input-group pull-left">
-                <mcs-input placeholder="选择大区/分公司/校区" model="" readonly="true" css="form-control mcs-input-search" />
-                <span class="input-group-btn">
-                    <button class="btn btn-sm btn-info" type="button" ng-click="vm.select()">
-                        <i class="ace-icon fa fa-check bigger-110"></i>
-                        选择
-                    </button>
-                </span>
-            </div>-->
-            {{vm.selectNodes}}
+            <ppts-select-branch model="vm.criteria.orgIds" style="float:left;width: 280px;padding-right:320px" />
             <mcs-input placeholder="学员姓名" model="vm.criteria.customerName" />
             <mcs-input placeholder="学员编号" model="vm.criteria.customerCode" />
             <mcs-input placeholder="咨询师姓名" model="vm.criteria.consultantName" />

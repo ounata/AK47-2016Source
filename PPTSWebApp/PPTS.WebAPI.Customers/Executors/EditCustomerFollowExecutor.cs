@@ -2,14 +2,15 @@
 using MCS.Library.SOA.DataObjects;
 using PPTS.Data.Common.Executors;
 using PPTS.Data.Customers.Adapters;
+using PPTS.Data.Customers.Executors;
 using PPTS.WebAPI.Customers.ViewModels.CustomerFollows;
 
 namespace PPTS.WebAPI.Customers.Executors
 {
     [DataExecutorDescription("编辑跟进记录")]
-    public class EditCustomerFollowExecutor : PPTSEditCustomerExecutorBase<EditableFollowModel>
+    public class EditCustomerFollowExecutor : PPTSEditCustomerExecutorBase<ViewFollowModel>
     {
-        public EditCustomerFollowExecutor(EditableFollowModel model)
+        public EditCustomerFollowExecutor(ViewFollowModel model)
             : base(model, null)
         {
             //model.NullCheck("model");

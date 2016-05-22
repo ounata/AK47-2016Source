@@ -11,6 +11,8 @@ namespace PPTS.WebAPI.Orders.ViewModels.Unsubscribe
 {
     public class DebookOrderCriteriaModel
     {
+        [InConditionMapping("CampusID")]
+        public string [] CampusIDs { set; get; }
 
         [ConditionMapping("CustomerName")]
         public string StuName { set; get; }

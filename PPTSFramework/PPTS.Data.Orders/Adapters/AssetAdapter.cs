@@ -42,6 +42,12 @@ namespace PPTS.Data.Orders.Adapters
         {
             return this.Load(builder => builder.AppendItem("AssetID", assetid)).SingleOrDefault();
         }
+
+        public Asset LoadByItemId(string itemId)
+        {
+            return Load(builder => builder.AppendItem("AssetRefID", itemId)).SingleOrDefault();
+        }
+
         /// <summary>
         /// 获取课时数未排完的记录
         /// </summary>
@@ -58,7 +64,7 @@ namespace PPTS.Data.Orders.Adapters
 
         public void IncreaseAssignedAmountInContext(string assetID, decimal assignedAmount, string operaterID, string operaterName)
         {
-            UpdateAssignedAmountInContext (assetID, assignedAmount, operaterID, operaterName,"+=");
+            UpdateAssignedAmountInContext(assetID, assignedAmount, operaterID, operaterName, "+=");
         }
         public void DecreaseAssignedAmountInContext(string assetID, decimal assignedAmount, string operaterID, string operaterName)
         {
@@ -67,7 +73,7 @@ namespace PPTS.Data.Orders.Adapters
         /// <summary>
         /// 添加更新已分配课时数量字段的SQL语句
         /// </summary>
-        private void UpdateAssignedAmountInContext(string assetID, decimal assignedAmount, string operaterID, string operaterName,string directive)
+        private void UpdateAssignedAmountInContext(string assetID, decimal assignedAmount, string operaterID, string operaterName, string directive)
         {
             assetID.CheckStringIsNullOrEmpty("assetID");
             assignedAmount.NullCheck("assignedAmount");
@@ -83,25 +89,13 @@ namespace PPTS.Data.Orders.Adapters
             WhereSqlClauseBuilder wsb = new WhereSqlClauseBuilder();
             wsb.AppendItem("AssetID", assetID, "=");
 
-            sci.AppendSqlInContext(TSqlBuilder.Instance, "update {0} set {1} where {2}"
+            sci.AppendSqlInContext(TSqlBuilder.Instance, "update {0} set {1} where {2};"
                 , this.GetTableName()
                 , usb.ToSqlString(TSqlBuilder.Instance)
                 , wsb.ToSqlString(TSqlBuilder.Instance));
         }
 
-        protected override void BeforeInnerUpdateInContext(Asset data, SqlContextItem sqlContext, Dictionary<string, object> context)
-        {
-            if (data.CreateTime == DateTime.MinValue)
-                data.CreateTime = DateTime.Now;
-            data.ModifyTime = DateTime.Now;
-        }
 
-        protected override void BeforeInnerUpdate(Asset data, Dictionary<string, object> context)
-        {
-            if (data.CreateTime == DateTime.MinValue)
-                data.CreateTime = DateTime.Now;
-            data.ModifyTime = DateTime.Now;
-        }
 
 
         public void UpdateCollectionInContext(AssetCollection collection)
@@ -117,5 +111,33 @@ namespace PPTS.Data.Orders.Adapters
                 this.InnerInsertInContext(item, sqlContext, context, StringExtension.EmptyStringArray);
             }
         }
+
+        /// <summary>
+        /// 通过账户获得资产价值信息
+        /// </summary>
+        /// <param name="accountID">账户ID</param>
+        /// <returns>资产价值</returns>
+        public decimal LoadAssetsValueByAccountID(string accountID)
+        {
+            decimal assetsValue = 0;
+            DataSet ds = DbHelper.RunSqlReturnDS(LoadAssetsValueByAccountIDSQL(accountID), this.ConnectionName);
+            if (ds.Tables[0].Rows.Count > 0)
+                assetsValue = (decimal)(ds.Tables[0].Rows[0][0]);
+            return assetsValue;
+        }
+
+        private string LoadAssetsValueByAccountIDSQL(string accountID)
+        {
+            accountID.NullCheck("accountID");
+            WhereSqlClauseBuilder whereBuilder = new WhereSqlClauseBuilder();
+            whereBuilder.AppendItem("AccountID", accountID).AppendItem("Amount", 0, ">");
+            string sql = string.Format(@"select isnull(sum(isnull(Price,0)*(isnull(Amount,0)+isnull(AssignedAmount,0))),0) AssetsValue from {0} where {1}"
+            , this.GetQueryMappingInfo().GetQueryTableName()
+            , whereBuilder.ToSqlString(TSqlBuilder.Instance));
+            return sql;
+        }
+
+
+
     }
 }

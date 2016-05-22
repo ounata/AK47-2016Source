@@ -1,0 +1,33 @@
+﻿<form class="form-horizontal" role="form">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="alert" ng-click="vm.cancel()">
+            <i class="ace-icon fa fa-times"></i>
+        </button>
+        <h4 class="modal-title">申请解冻</h4>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <span class="col-sm-4 control-label no-padding-right">解冻原因：</span>
+            <div class="col-sm-8">
+                <textarea class="autosize-transition form-control" ng-model="vm.criteria.alertReasonName" style="overflow: hidden; word-wrap: break-word; resize: horizontal; height: 100px;"></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <span class="col-sm-4 control-label no-padding-right">上传附件：</span>
+            <div class="col-sm-8 mcs-padding-0">
+                <input type="file" ngf-select ngf-allow-dir="allowDir" ngf-multiple="true" ng-model="vm.files" name="vm.files" ngf-accept="'image/*'" required>
+                <i ng-show="form.files.$error.required">*required</i>
+                <button ng-click="vm.uploadFiles(vm.files)">上传</button>
+                <span class="progress" ng-show="vm.files.progress >= 0">
+                    <div style="width:{{vm.files.progress}}%" ng-bind="vm.files.progress + '%'"></div>
+                </span>
+                <span ng-show="vm.files.result">上传成功</span>
+                <span>{{vm.msg}}</span>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <mcs-button category="ok" click="vm.save()" />
+        <mcs-button category="close" click="vm.cancel()" />
+    </div>
+</form>

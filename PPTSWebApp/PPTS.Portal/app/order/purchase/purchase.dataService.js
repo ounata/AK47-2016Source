@@ -17,6 +17,9 @@
         resource.getPagedOrderItems = function (criteria, callback) {
             resource.post({ operation: 'GetPagedProducts' }, criteria, function (entity) { if (callback) { callback(entity); } });
         }
+        resource.getOrderItem = function (id, callback) {
+            resource.post({ operation: 'GetOrderItemView' }, { id: id }, function (entity) { if (callback) { callback(entity); } });
+        };
         //---------------------------------------------------------
 
 
@@ -39,6 +42,7 @@
 
         //---------------------------------------------------------
 
+        //------------------------订购清单-------------------------
 
         resource.getShoppingCart = function (data, callback) {
             resource.post({ operation: 'GetShoppingCart' }, data, function (entity) { if (callback) { callback(entity); } });
@@ -57,10 +61,49 @@
         }
 
         //获取要扣取的服务费
-        resource.getServiceMoney = function (customerId, callback) {
-            //resource.post({ operation: 'SubmitShoppingCart' }, data, function (entity) { if (callback) { callback(entity); } });
+        resource.getServiceCharge = function (data, callback) {
+            //{ customerId: customerId, campusId: campusId }
+            resource.post({ operation: 'GetServiceChargeByUserId' }, data, function (entity) { if (callback) { callback(entity); } });
         }
 
+        //---------------------------------------------------------
+
+        //------------------------查看订购清单-------------------------
+
+        resource.getOrder = function (data, callback) {
+            resource.post({ operation: 'GetOrder' }, data, function (entity) { if (callback) { callback(entity); } });
+        }
+
+
+
+        //---------------------------------------------------------
+
+
+        //------------------------资产兑换-------------------------
+
+
+        resource.getExchangeInfo = function (data, callback) {
+            resource.post({ operation: 'GetExchangeInfo' }, data, function (entity) { if (callback) { callback(entity); } });
+        }
+
+        resource.exchangeOrder = function (data, callback) {
+            resource.post({ operation: 'ExchangeOrder' }, data, function (entity) { if (callback) { callback(entity); } });
+        }
+
+
+        //------------------------------------------------------------------
+
+        //------------------------编辑缴费单-------------------------
+
+        resource.getEditPayment = function (data, callback) {
+            resource.post({ operation: 'GetEditPayment' }, data, function (entity) { if (callback) { callback(entity); } });
+        }
+
+        resource.editPayment = function (data, callback) {
+            resource.post({ operation: 'EditPayment' }, data, function (entity) { if (callback) { callback(entity); } });
+        }
+
+        //------------------------------------------------------------------
         return resource;
     }]);
 

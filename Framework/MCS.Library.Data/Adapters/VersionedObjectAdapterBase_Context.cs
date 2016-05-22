@@ -31,6 +31,26 @@ namespace MCS.Library.Data.Adapters
         }
 
         /// <summary>
+        /// 在上下文中生成删除数据的SQL（时间封口）
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="ignoreProperties"></param>
+        public void DeleteInContext(T data, params string[] ignoreProperties)
+        {
+            data.NullCheck("data");
+
+            Dictionary<string, object> context = new Dictionary<string, object>();
+
+            SqlContextItem sqlContext = this.GetSqlContext();
+
+            this.BeforeInnerDeleteInContext(data, sqlContext, context);
+
+            string sql = VersionStrategyUpdateSqlBuilder<T>.DefaultInstance.ToDeleteSql(data, this.GetMappingInfo(), false, ignoreProperties);
+
+            sqlContext.AppendSqlWithSperatorInContext(TSqlBuilder.Instance, sql);
+        }
+
+        /// <summary>
         /// 
         /// </summary>
         /// <param name="ownerKeyBuilder"></param>
@@ -69,6 +89,16 @@ namespace MCS.Library.Data.Adapters
         /// <param name="sqlContext"></param>
         /// <param name="context"></param>
         protected virtual void BeforeInnerUpdateCollectionInContext(IEnumerable<T> data, SqlContextItem sqlContext, Dictionary<string, object> context)
+        {
+        }
+
+        /// <summary>
+        /// 在上下文中删除单一对象前
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="sqlContext"></param>
+        /// <param name="context"></param>
+        protected virtual void BeforeInnerDeleteInContext(T data, SqlContextItem sqlContext, Dictionary<string, object> context)
         {
         }
 

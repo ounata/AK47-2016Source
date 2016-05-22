@@ -24,7 +24,7 @@ namespace UdpCacheTestClient
 
 					data.CacheData = cmd;
 
-					UdpCacheNotifier.Instance.SendNotify(data);
+					UdpCacheNotifier.Instance.SendNotifyAsync(data);
 				}
 
 				cmd = Console.ReadLine();

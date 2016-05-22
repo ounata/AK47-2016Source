@@ -1,0 +1,76 @@
+﻿<!-- #开始：添加潜客Form -->
+<form class="form-horizontal" role="form">
+    <div class="widget-box">
+        <div class="widget-header">
+            <h4>查看成绩</h4>
+        </div>
+        <div class="widget-body">
+            <div class="widget-main no-padding" disabled="disabled">
+                <div class="clearfix form-actions mcs-form-actions">
+                    <div class="col-md-offset-4 col-md-9">
+                        <mcs-button type="submit" category="edit" click="vm.edit()"></mcs-button>
+                    </div>
+                </div>
+                <div class="page-header">
+                    <span>学员姓名：{{ vm.customer.customerName }}</span>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-3">
+                        <mcs-label text="学年度：" css="col-sm-6" />
+                        <div class="col-sm-6 mcs-padding-0">
+                            <mcs-label text="{{vm.score.studyYear | studyYear}}" model="vm.score.studyYear" />
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <mcs-label text="学期：" css="col-sm-6" />
+                        <div class="col-sm-6 mcs-padding-0">
+                            <mcs-label text="{{vm.score.studyTerm | studyTerm}}" model="vm.score.studyTerm" />
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <mcs-label text="考试年级：" css="col-sm-6" />
+                        <div class="col-sm-6 mcs-padding-0">
+                            <mcs-label text="{{vm.score.scoreGrade | grade}}" model="vm.score.scoreGrade" />
+                        </div>
+                    </div>
+                    <div class="col-sm-3" ng-show="vm.score.studyStage">
+                        <mcs-label text="考试学段：" css="col-sm-6" />
+                        <div class="col-sm-6 mcs-padding-0">
+                            <mcs-label text="{{vm.score.studyStage | studyStage}}" model="vm.score.studyStage" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-3">
+                        <mcs-label text="考试类型：" css="col-sm-6" />
+                        <div class="col-sm-6 mcs-padding-0">
+                            <mcs-label text="{{vm.score.scoreType | scoreType}}" model="vm.score.scoreType" />
+                            <span ng-if="vm.score.otherScoreTypeName">-</span> {{vm.score.otherScoreTypeName}}
+                        </div>
+                    </div>
+                    <div class="col-sm-3" ng-show="vm.score.scoreType=='14'">
+                        <mcs-label text="学员类别：" css="col-sm-6" />
+                        <div class="col-sm-6 mcs-padding-0">
+                            {{vm.score.studentType | examCustomerType}}
+                        </div>
+                    </div>
+                    <div class="col-sm-3" ng-show="vm.score.scoreType=='15'">
+                        <mcs-label text="考试月份：" css="col-sm-6" />
+                        <div class="col-sm-6 mcs-padding-0">
+                            <mcs-label text="{{vm.score.examineMonth | examMonth}}" model="vm.score.examineMonth" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-3">
+                        <mcs-label required="true" text="成绩：" css="col-sm-4" />
+                    </div>
+                </div>
+            </div>
+
+            <mcs-datatable data="vm.data" style="padding:0 20px" />
+            
+        </div>
+    </div>
+</form>
+<!-- /结束：添加潜客Form -->

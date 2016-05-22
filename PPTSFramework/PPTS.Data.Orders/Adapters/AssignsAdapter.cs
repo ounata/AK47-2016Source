@@ -10,6 +10,7 @@ using MCS.Library.Data.Builder;
 using MCS.Library.Core;
 
 using PPTS.Data.Orders.Entities;
+using System.Data;
 
 namespace PPTS.Data.Orders.Adapters
 {
@@ -18,37 +19,13 @@ namespace PPTS.Data.Orders.Adapters
         public static readonly AssignsAdapter Instance = new AssignsAdapter();
         private AssignsAdapter()
         { }
-        /// <summary>
-        /// 更新指定记录的排课时间
-        /// </summary>
-        /// <param name="model"></param>
-        public void UpdateAssignTime(Assign model)
-        {
-            SqlContextItem sCI = AssignsAdapter.Instance.GetSqlContext();
-
-            UpdateSqlClauseBuilder uSCB = new UpdateSqlClauseBuilder();
-            uSCB.AppendItem("StartTime", model.StartTime, "=");
-            uSCB.AppendItem("EndTime", model.EndTime, "=");
-            uSCB.AppendItem("ModifierID", model.ModifierID, "=");
-            uSCB.AppendItem("ModifierName", model.ModifierName, "=");
-            uSCB.AppendItem("ModifyTime", "GETUTCDATE", "=", true);
-
-            WhereSqlClauseBuilder wSCB = new WhereSqlClauseBuilder();
-            wSCB.AppendItem("AssetID", model.AssetID, "in");
-
-            sCI.AppendSqlInContext(TSqlBuilder.Instance, "update {0} set {1} where {2}"
-                , this.GetTableName()
-                , uSCB.ToSqlString(TSqlBuilder.Instance)
-                , wSCB.ToSqlString(TSqlBuilder.Instance));
-
-        }
 
         /// <summary>
-        /// 取消排课
+        /// 更改排课状态
         /// </summary>
         /// <param name="assignID"></param>
         /// <param name="status"></param>
-        public void CancelAssignInContext(IList<string> assignID, string operaterID, string operaterName)
+        public void UpdateAssignStatusInContext(IList<string> assignID, string operaterID, string operaterName, AssignStatusDefine status)
         {
             assignID.NullCheck("assignID");
             operaterID.CheckStringIsNullOrEmpty("operaterID");
@@ -57,7 +34,7 @@ namespace PPTS.Data.Orders.Adapters
             SqlContextItem sCI = this.GetSqlContext();
 
             UpdateSqlClauseBuilder uSCB = new UpdateSqlClauseBuilder();
-            uSCB.AppendItem("AssignStatus", (int)AssignStatusDefine.Invalid, "=");
+            uSCB.AppendItem("AssignStatus", (int)status, "=");
             uSCB.AppendItem("ModifyTime", "GETUTCDATE()", "=", true);
             uSCB.AppendItem("ModifierID", operaterID, "=");
             uSCB.AppendItem("ModifierName", operaterName, "=");
@@ -72,14 +49,18 @@ namespace PPTS.Data.Orders.Adapters
 
             string assignIDs = string.Format("({0})", sb.ToString().Substring(1));
             WhereSqlClauseBuilder wSCB = new WhereSqlClauseBuilder();
-            wSCB.AppendItem("AssignID", assignIDs, "in");
+            wSCB.AppendItem("AssignID", assignIDs, "in", true);
             wSCB.AppendItem("AssignStatus", (int)AssignStatusDefine.Assigned, "=");
 
-            sCI.AppendSqlInContext(TSqlBuilder.Instance, "update {0} set {1} where {2}"
+            //InLoadingCondition c =  new InLoadingCondition(p => p.AppendItem(assignID), "AssignID");
+
+
+            sCI.AppendSqlInContext(TSqlBuilder.Instance, "update {0} set {1} where {2};"
                 , this.GetTableName()
                 , uSCB.ToSqlString(TSqlBuilder.Instance)
                 , wSCB.ToSqlString(TSqlBuilder.Instance));
         }
+
         /// <summary>
         /// 学员排课及教师排课冲突检查
         /// </summary>
@@ -95,50 +76,46 @@ namespace PPTS.Data.Orders.Adapters
             uSCB.AppendItem("@endTime", model.EndTime);
             sCI.AppendSqlWithSperatorInContext(TSqlBuilder.Instance, "exec OM.CheckConflictAssign {0}", uSCB.ToSqlString(TSqlBuilder.Instance));
         }
-        /// <summary>
-        /// 调课
-        /// </summary>
-        /// <param name="ac"></param>
-        public void ResetAssignInContext(AssignCollection ac)
-        {
-            SqlContextItem sCI = this.GetSqlContext();
-            foreach (var model in ac)
-            {
-                UpdateSqlClauseBuilder uSCB = new UpdateSqlClauseBuilder();
-                uSCB.AppendItem("StartTime", model.StartTime);
-                uSCB.AppendItem("EndTime", model.EndTime);
-                uSCB.AppendItem("ModifierID", model.ModifierID);
-                uSCB.AppendItem("ModifierName", model.ModifierName);
-                uSCB.AppendItem("ModifyTime", "GETUTCDATE", "=", true);
-
-                WhereSqlClauseBuilder wSCB = new WhereSqlClauseBuilder();
-                wSCB.AppendItem("AssetID", model.AssetID);
-                wSCB.AppendItem("AssignStatus", (int)AssignStatusDefine.Assigned);
-
-                sCI.AppendSqlInContext(TSqlBuilder.Instance, "update {0} set {1} where {2}" , this.GetTableName()
-                    ,uSCB.ToSqlString(TSqlBuilder.Instance),wSCB.ToSqlString(TSqlBuilder.Instance));
-            }
-        }
 
         /// <summary>
         /// 获取指定时间区间段及学员ID的排课记录
-        /// 注意时间要传递UTC时间
+        /// 例如：
+        /// 2016-04-25 至  2016-04-29
+        /// atStart ：  2016-04-25
+        /// atEnd   ：  2016-04-30
         /// </summary>
         /// <param name="atStart"></param>
         /// <param name="atEnd"></param>
-        /// <param name="customerID"></param>
+        /// <param name="cID">Customer ID</param>
         /// <returns></returns>
-        public AssignCollection LoadCollection(DateTime atStart, DateTime atEnd, string customerID)
+        public AssignCollection LoadCollection(string ID, bool isStuID, DateTime atStart, DateTime atEnd, bool isUTCTime)
         {
             atStart.NullCheck("atStart");
             atEnd.NullCheck("atEnd");
-            customerID.NullCheck("customerID");
+            ID.NullCheck("ID");
 
-            return this.Load(build => build
-            .AppendItem("StartTime", atStart, ">=")
-            .AppendItem("StartTime", atEnd, "<=")
-            .AppendItem("CustomerID", customerID, "="));
+            WhereSqlClauseBuilder wSCB = new WhereSqlClauseBuilder();
+            if (isUTCTime)
+                wSCB.AppendItem("StartTime", atStart, ">=").AppendItem("EndTime", atEnd, "<");
+            else
+            {
+                string atStartTxt = string.Empty, atEndTxt = string.Empty;
+                atStartTxt = string.Format("DATEADD(hour, DATEDIFF(hour,GETDATE(),GETUTCDATE()), '{0}')", atStart.ToString("yyyy-MM-dd"));
+                atEndTxt = string.Format("DATEADD(hour, DATEDIFF(hour,GETDATE(),GETUTCDATE()), '{0}')", atEnd.ToString("yyyy-MM-dd"));
+                wSCB.AppendItem("StartTime", atStartTxt, ">=", true).AppendItem("EndTime", atEndTxt, "<", true);
+            }
+            if (isStuID)
+                wSCB.AppendItem("CustomerID", ID, "=");
+            else
+                wSCB.AppendItem("TeacherID", ID, "=");
+            WhereLoadingCondition wLC = new WhereLoadingCondition(p => { foreach (var v in wSCB) { p.Add(v); } });
+            return this.Load(wLC);
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="assignID"></param>
+        /// <returns></returns>
         public AssignCollection LoadCollection(IList<string> assignID)
         {
             string assignIDs = string.Empty;
@@ -151,89 +128,131 @@ namespace PPTS.Data.Orders.Adapters
             return this.Load(builder => builder.AppendItem("AssignID", assignIDs, "in", true));
         }
 
-        public IList<AssignSuper> LoadAssignSuper(string OperaterCampusID,string CustomerID)
+        /// <summary>
+        /// 统计账户确认课时价值信息
+        /// </summary>
+        /// <param name="accountID">账户ID</param>
+        /// <param name="startTime">时间</param>
+        /// <returns></returns>
+        public decimal LoadAccountConfirmAssignByDateTime(string accountID, DateTime startTime)
         {
-            string sql = @"select a.AssetID,a.AssetCode,a.AssetName,a.CustomerID,a.Price
-                        ,b.Grade,b.GradeName ,b.[Subject] ,b.SubjectName ,b.CourseLevel ,b.CourseLevelName ,b.LessonDuration ,b.LessonDurationValue 
-                        ,b.ProductID ,b.ProductCode,b.ProductName,b.ProductCampusID,b.ProductCampusName
-                        ,c.CustomerCode,c.CustomerName,c.ConsultantID,c.ConsultantJobID,c.ConsultantName,c.EducatorID,c.EducatorJobID,c.EducatorName
-                        from Assets a
-                        left join OrderItems b on a.AssetRefID = b.ItemID
-                        left join Orders c on c.OrderID = b.OrderID";
-
-            WhereSqlClauseBuilder wSCB = new WhereSqlClauseBuilder();
-            wSCB.AppendItem("a.Amount", 0,">");
-            //wSCB.AppendItem("a.CustomerCampusID", OperaterCampusID);
-            wSCB.AppendItem("a.CustomerID", CustomerID);
-
-            sql = string.Format("{0} where {1}", sql, wSCB.ToSqlString(TSqlBuilder.Instance));
-            System.Data.DataSet ds = DbHelper.RunSqlReturnDS(sql,this.GetConnectionName());
-            IList<AssignSuper> result = GetAssignSupe(ds.Tables[0]);
-            return result;           
+            accountID.NullCheck("accountID");
+            decimal assignValue = 0;
+            DataSet ds = DbHelper.RunSqlReturnDS(LoadAccountConfirmAssignByDateTimeSQL(accountID, startTime), this.ConnectionName);
+            if (ds.Tables[0].Rows.Count > 0)
+                assignValue = (decimal)(ds.Tables[0].Rows[0][0]);
+            return assignValue;
         }
-        private IList<AssignSuper> GetAssignSupe(System.Data.DataTable dt)
-        {
-            IList<AssignSuper> result = new List<AssignSuper>();
-            if (dt == null || dt.Rows.Count == 0)
-                return result;
-
-            Type superType = typeof(AssignSuper);
-            System.Reflection.PropertyInfo[] stPropertyInfo = superType.GetProperties();
-            IList<System.Reflection.PropertyInfo> existsPI = new List<System.Reflection.PropertyInfo>();
-            foreach (var v in stPropertyInfo)
-            {
-                if (dt.Columns.Contains(v.Name))
-                {
-                    existsPI.Add(v);
-                }
-            }
-            foreach (System.Data.DataRow dr in dt.Rows)
-            {
-                AssignSuper super = new AssignSuper();
-                foreach (var pInfo in existsPI)
-                {
-                    try
-                    {
-                        pInfo.SetValue(super, dr[pInfo.Name] == System.DBNull.Value ? string.Empty : dr[pInfo.Name], null);
-                    }
-                    catch
-                    {
-
-                    }
-
-                }
-                result.Add(super);
-            }
-            return result;
-        }
-
-        ///// <summary>
-        ///// 加载学员最近一个月的排课记录
-        ///// </summary>
-        ///// <param name="customerID"></param>
-        ///// <returns></returns>
-        //public AssignCollection LoadCollection(string customerID,AssignStatusDefine)
-        //{
-        //    customerID.NullCheck("customerID");
-
-        //    return this.Load(build => build
-        //    .AppendItem("StartTime", "DATEADD(month,-1,(GETUTCDATE()-1))", ">=",true)
-        //    .AppendItem("StartTime", "GETUTCDATE()+1", "<=",true)
-        //    .AppendItem("CustomerID", customerID, "="));
-
-        //}
 
         /// <summary>
-        /// 加载操作
+        /// 统计账户折扣返还价值信息
         /// </summary>
-        /// <param name="assetid"></param>
+        /// <param name="accountID">账户ID</param>
+        /// <param name="newDiscount">新折扣</param>
+        /// <param name="startTime">起始时间</param>
         /// <returns></returns>
-        public Assign Load(string assignID)
+        public decimal LoadDiscountReturnConfirmAssignByDateTime(string accountID, decimal newDiscount, DateTime startTime)
         {
-            return this.Load(builder => builder.AppendItem("AssignID", assignID)).SingleOrDefault();
+            accountID.NullCheck("accountID");
+            decimal deductionValue = 0;
+            DataSet ds = DbHelper.RunSqlReturnDS(LoadDiscountReturnConfirmAssignByDateTimeSQL(accountID, newDiscount, startTime), this.ConnectionName);
+            if (ds.Tables[0].Rows.Count > 0)
+                deductionValue = (decimal)(ds.Tables[0].Rows[0][0]);
+            return deductionValue;
         }
 
+        /// <summary>
+        /// 统计退费需要的课时消耗价值及折扣返还价值信息
+        /// </summary>
+        /// <param name="accountID"></param>
+        /// <param name="newDiscount"></param>
+        /// <param name="startTime"></param>
+        /// <param name="assignValue"></param>
+        /// <param name="discountReturn"></param>
+        public void LoadAccountRefundInfoByDateTime(string accountID, decimal newDiscount, DateTime startTime, ref decimal assignValue, ref decimal discountReturn)
+        {
+            accountID.NullCheck("accountID");
+            string sql = string.Format("{0};{1};", LoadAccountConfirmAssignByDateTimeSQL(accountID, startTime), LoadDiscountReturnConfirmAssignByDateTimeSQL(accountID, newDiscount, startTime));
+            DataSet ds = DbHelper.RunSqlReturnDS(sql, this.ConnectionName);
+            if (ds.Tables[0].Rows.Count > 0)
+                assignValue = (decimal)(ds.Tables[0].Rows[0][0]);
+            if (ds.Tables[1].Rows.Count > 0)
+                discountReturn = (decimal)(ds.Tables[1].Rows[0][0]);
+        }
 
+        public bool ExistAccountConfirmAssignByDateTime(string accountID, DateTime startTime)
+        {
+            accountID.NullCheck("accountID");
+            DataSet ds = DbHelper.RunSqlReturnDS(ExistAccountConfirmAssignByDateTimeSQL(accountID, startTime), this.ConnectionName);
+            return (ds.Tables[0].Rows.Count > 0);
+        }
 
+        /// <summary>
+        /// 存在指定时间内的课时消耗记录信息
+        /// </summary>
+        /// <param name="accountID">账户ID</param>
+        /// <param name="startTime">起始时间</param>
+        /// <returns></returns>
+        private string ExistAccountConfirmAssignByDateTimeSQL(string accountID, DateTime startTime)
+        {
+            WhereSqlClauseBuilder whereBuilder = new WhereSqlClauseBuilder();
+            whereBuilder.AppendItem("asset.AccountID", accountID)
+                .AppendItem("ass.AssignStatus", AssignStatusDefine.Finished.GetHashCode())
+                .AppendItem("ass.StartTime", TimeZoneContext.Current.ConvertTimeToUtc(startTime), ">=");
+            string sql = string.Format(@"select top 1 1 from {0}  as ass inner join {1} AS asset
+            on ass.AssetID=asset.AssetID 
+            where {2}"
+            , this.GetQueryMappingInfo().GetQueryTableName()
+            , AssetAdapter.Instance.GetQueryMappingInfo().GetQueryTableName()
+            , whereBuilder.ToSqlString(TSqlBuilder.Instance));
+            return sql;
+        }
+
+        /// <summary>
+        /// 消耗价值取数规则
+        /// </summary>
+        /// <param name="accountID">账户ID</param>
+        /// <param name="startTime">开始时间</param>
+        /// <returns></returns>
+        private string LoadAccountConfirmAssignByDateTimeSQL(string accountID, DateTime startTime)
+        {
+            WhereSqlClauseBuilder whereBuilder = new WhereSqlClauseBuilder();
+            whereBuilder.AppendItem("asset.AccountID", accountID)
+                .AppendItem("ass.AssignStatus", AssignStatusDefine.Finished.GetHashCode())
+                .AppendItem("ass.StartTime", TimeZoneContext.Current.ConvertTimeToUtc(startTime), ">=");
+            string sql = string.Format(@"select isnull(sum(isnull(ass.ConfirmPrice,0)*isnull(ass.Amount,0)),0) AssignValue from {0}  as ass inner join {1} AS asset
+            on ass.AssetID=asset.AssetID 
+            where {2}"
+            , this.GetQueryMappingInfo().GetQueryTableName()
+            , AssetAdapter.Instance.GetQueryMappingInfo().GetQueryTableName()
+            , whereBuilder.ToSqlString(TSqlBuilder.Instance));
+            return sql;
+        }
+
+        /// <summary>
+        /// 折扣返还，指定日期的sum(消耗价值/对应折扣率*(新折扣率-对应折扣率))
+        /// </summary>
+        /// <param name="accountID">账户ID</param>
+        /// <param name="newDiscount">新折扣率</param>
+        /// <param name="startTime">当前日期</param>
+        /// <returns></returns>
+        private string LoadDiscountReturnConfirmAssignByDateTimeSQL(string accountID, decimal newDiscount, DateTime startTime)
+        {
+            WhereSqlClauseBuilder whereBuilder = new WhereSqlClauseBuilder();
+            whereBuilder.AppendItem("asset.AccountID", accountID)
+                .AppendItem("ass.AssignStatus", AssignStatusDefine.Finished.GetHashCode())
+                .AppendItem("ass.StartTime", TimeZoneContext.Current.ConvertTimeToUtc(startTime), ">=");
+            string sql = string.Format(@"select isnull(sum(isnull(ass.Amount,0)*isnull(ass.ConfirmPrice,0)/isnull(oi.DiscountRate,1)*({0}-isnull(oi.DiscountRate,1))),0) DeductionValue 
+                                         from {1} ass 
+                                         inner join {2} asset on ass.AssetID=asset.AssetID
+                                         inner join {3} oi on asset.AssetRefID=oi.ItemID and oi.DiscountType='1'
+                                         where {4} "
+                , newDiscount
+                , this.GetQueryMappingInfo().GetQueryTableName()
+                , AssetAdapter.Instance.GetQueryMappingInfo().GetQueryTableName()
+                , OrderItemAdapter.Instance.GetQueryMappingInfo().GetQueryTableName()
+                , whereBuilder.ToSqlString(TSqlBuilder.Instance));
+            return sql;
+        }
     }
 }

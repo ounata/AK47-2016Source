@@ -34,6 +34,7 @@ namespace PPTS.Data.Customers.Test
 
             Assert.AreEqual(1, summaryLoaded.FollowedCount);
         }
+ 
         [TestMethod]
         public void SingleFollowTestInContext()
         {
@@ -63,5 +64,23 @@ namespace PPTS.Data.Customers.Test
             Assert.AreEqual(1, summaryLoaded.FollowedCount);
         }
 
+        [TestMethod]
+        public void LoadPreviousFollow()
+        {
+            PotentialCustomer customer = DataHelper.PreparePotentialCustomerData();
+
+            PotentialCustomerAdapter.Instance.Update(customer);
+
+            DBTimePointActionContext.Current.TimePoint = DateTime.MinValue;
+
+            CustomerFollow follow = DataHelper.PrepareFollow(customer.CustomerID);
+
+            CustomerFollowAdapter.Instance.Update(follow);
+
+            CustomerFollow loadedFollow = CustomerFollowAdapter.Instance.LoadPreviousFollow(customer.CustomerID);
+
+            Assert.IsNotNull(loadedFollow);
+            follow.AreEqual(loadedFollow);
+        }
     }
 }

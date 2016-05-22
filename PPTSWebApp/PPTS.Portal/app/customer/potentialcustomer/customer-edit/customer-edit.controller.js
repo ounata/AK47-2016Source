@@ -1,14 +1,14 @@
 ﻿define([ppts.config.modules.customer,
-        ppts.config.dataServiceConfig.customerService,
-        ppts.config.dataServiceConfig.customerDataService],
+        ppts.config.dataServiceConfig.customerService],
     function (customer) {
         customer.registerController('customerEditController', [
             '$scope',
             '$stateParams',
+            'utilService',
             'customerService',
             'customerDataViewService',
             'customerRelationType',
-            function ($scope, $stateParams, customerService, customerDataViewService, relationType) {
+            function ($scope, $stateParams, util, customerService, customerDataViewService, relationType) {
                 var vm = this;
 
                 // 页面初始化加载

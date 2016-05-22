@@ -66,12 +66,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\AccountChargeCollectionQueryResult.cs" />
+    <Compile Include="Models\CustomerRelationByTeacherQueryResult.cs" />
+    <Compile Include="Models\CustomerExpenseCollectionQueryResult.cs" />
+    <Compile Include="Models\TeacherRelationByCustomerQueryResult.cs" />
+    <Compile Include="Models\TeacherJobModel.cs" />
     <Compile Include="Operations\IAccountQueryService.cs" />
     <Compile Include="Models\AccountCollectionQueryResult.cs" />
     <Compile Include="Models\CustomerCollectionQueryResult.cs" />
     <Compile Include="Models\CustomerQueryResult.cs" />
-    <Compile Include="Models\CustomerTeacherRelationQueryResult.cs" />
-    <Compile Include="Models\CustomerTearcherRelationQueryModel.cs" />
     <Compile Include="Operations\ICustomerQueryService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

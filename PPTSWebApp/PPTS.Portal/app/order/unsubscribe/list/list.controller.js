@@ -44,33 +44,41 @@
                                 field: "debookNo",
                                 name: "订单编号"
                             }, {
-                                field: "orderTime",
+                                //field: "debookTime",
                                 name: "退订日期",
-                                template: '<span>{{row.orderTime | date:"yyyy-MM-dd"}}</span>',
+                                template: '<span>{{row.debookTime | date:"yyyy-MM-dd"}}</span>',
                             }, {
-                                field: "categoryType",
+                                field: "categoryTypeName",
                                 name: "订单类型",
-                                template: '<span>{{row.categoryType | categoryType}}</span>'
+                                //template: '<span>{{row.categoryType | categoryType}}</span>'
                             }, {
                                 field: "orderAmount",
                                 name: "订购数量",
                             }, {
-                                field: "realPrice",
+                                //field: "realPrice",
                                 name: "订购金额（元）",
+                                template: '<span>{{row.realPrice * row.realAmount | currency}}</span>'
                             }, {
-                                field: "realPrice",
+                                //field: "realPrice",
                                 name: "实际单价（元）",
+                                template: '<span>{{row.realPrice | currency}}</span>'
                             }, {
-                                field: "realPrice",
+                                field: "usedOrderAmount",
                                 name: "已使用数量",
                             }, {
-                                field: "realPrice",
+                                //field: "realPrice",
                                 name: "已使用金额",
+                                template: '<span>{{ row.realPrice * row.usedOrderAmount | currency }}</span>'
                             }, {
-                                field: "realPrice",
+                                //field: "realPrice",
                                 name: "退订数量（赠送）",
+                                template: '<span>{{ row.debookAmount }}</span>'
+                                        + '<span ng-if="row.presentID!=\'\'">'
+                                        + '({{ row.orderAmount == row.usedOrderAmount ? row.debookAmount : (row.debookAmount - row.orderAmount - row.usedOrderAmount) }})'
+                                        + '</span>'
+                                        + '<span ng-if="row.presentID==\'\'">(0)</span>'
                             }, {
-                                field: "realPrice",
+                                field: "debookMoney",
                                 name: "退订金额",
                             }, {
                                 field: "submitterName",

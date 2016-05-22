@@ -114,6 +114,11 @@ namespace PPTS.Data.Customers.Entities
             return relations.Find(relation => relation.RelationType == relationType).GetStaffName();
         }
 
+        public static CustomerStaffRelation GetStaff(this CustomerStaffRelationCollection relations, CustomerRelationType relationType)
+        {
+            return relations.Find(relation => relation.RelationType == relationType);
+        }
+
         private static Phone FillPhoneInfo(this Phone phone, PhoneTypeDefine phoneType)
         {
             if (phone != null && phoneType != PhoneTypeDefine.Unknown)

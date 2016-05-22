@@ -81,7 +81,6 @@
     <Compile Include="WfClientDataSourceServiceProxy.cs" />
     <Compile Include="WfClientProcessDescriptorServiceProxy.cs" />
     <Compile Include="WfClientProcessRuntimeServiceProxy.cs" />
-    <Compile Include="WfClientServiceProxyBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MCS.Library.snk" />

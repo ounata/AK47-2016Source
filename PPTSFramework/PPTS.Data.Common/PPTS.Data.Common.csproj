@@ -77,12 +77,15 @@
     <Compile Include="Adapters\ConstantsCache.cs" />
     <Compile Include="Adapters\ConstantAdapter.cs" />
     <Compile Include="Adapters\ConfigAdapter.cs" />
+    <Compile Include="Adapters\PPTSOrganizationAdapter.cs" />
     <Compile Include="Adapters\TeacherAdapter.cs" />
     <Compile Include="Adapters\TeacherJobViewAdapter.cs" />
     <Compile Include="Adapters\TeacherJobAdapter.cs" />
     <Compile Include="Adapters\TeacherTeachingAdapter.cs" />
     <Compile Include="Common\ConnectionDefine.cs" />
+    <Compile Include="Common\OGUExtensions.cs" />
     <Compile Include="DataSources\GenericCommonDataSource.cs" />
+    <Compile Include="DataSources\UserAndJobDataSource.cs" />
     <Compile Include="Executors\PPTSEditEntityExecutorBase.cs" />
     <Compile Include="Executors\PPTSExecutorBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

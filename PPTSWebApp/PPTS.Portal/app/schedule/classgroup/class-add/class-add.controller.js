@@ -23,11 +23,36 @@
 
                 //获取产品信息
                 productDataService.getProduct($stateParams.id, function (result) {
-                    vm.product = result.product;                                           
+                    vm.product = result.product;
+                    vm.startTime = vm.convertStartTime(vm.product.startDate);
                     vm.class.grade = vm.product.grade;
                     vm.class.gradeName = gradeFilter(vm.product.grade);                    
                     $scope.$broadcast('dictionaryReady');
-                });                                                          
+                });
+
+                //计算 上课开始日期时间
+                vm.convertStartTime = function (dt) {
+                    var dt_now = new Date();
+                    var resultDT = dt;
+                    if (dt_now.getDay() == 1) {
+                        var preMonth = getPreMonth(dt_now);
+                        resultDT == preMonth < dt ? dt : preMonth;
+                    }
+                    else {
+                        resultDT == new Date(dt_now.getYear(), dt_now.getMonth(), dt_now.getDate(), 0, 0, 0, 0) < dt ? dt : new Date(dt_now.getYear(), dt_now.getMonth(), dt_now.getDate(), 0, 0, 0, 0);
+                    }
+                    return resultDT;
+                }
+
+                //获取上月第一天
+                vm.getPreMonth = function (dt) {
+                    var year = dt.getYear();
+                    var month = dt.getMonth();
+                    if (month == 1)
+                        return new Date(year - 1, 12, 1, 0, 0, 0, 0);
+                    else
+                        return new Date(year, month - 1, 1, 0, 0, 0, 0);
+                }
 
                 //选择按周的上课时间
                 vm.selectDayOfWeeks = function (classForm) {
@@ -103,7 +128,7 @@
                 vm.selectTeacher = function (classForm) {                    
                     mcsDialogService.create('app/schedule/classgroup/teacher-add/teacher-add.html', {
                         controller: 'teacherAddController',
-                        params: { campusID: 18, teacher: vm.teacher ? vm.teacher : [] ,form:classForm},//测试校区
+                        params: {  teacher: vm.teacher ? vm.teacher : [] ,form:classForm},
                         settings: {
                             size: 'lg'
                         }
@@ -130,7 +155,7 @@
                     //页面验证
                     if (classForm.$valid) {
                         classgroupDataService.createClass(vm.class, function () {
-                            $state.go('ppts.product');
+                            $state.go('ppts.classgroup');
                         });
                     }
                 }

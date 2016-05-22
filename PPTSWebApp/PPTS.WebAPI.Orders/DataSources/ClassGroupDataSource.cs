@@ -1,5 +1,6 @@
 ﻿using MCS.Library.Data;
 using MCS.Library.Data.Builder;
+using MCS.Library.Data.DataObjects;
 using MCS.Library.Data.Mapping;
 using PPTS.Data.Orders.DataSources;
 using PPTS.Data.Orders.Entities;
@@ -11,20 +12,20 @@ using System.Web;
 
 namespace PPTS.WebAPI.Orders.DataSources
 {
-    public class ClassGroupDataSource: GenericOrderDataSource<ClassSearchModel, ClassSearchModelCollection>
+    public class ClassGroupDataSource : GenericOrderDataSource<ClassSearchModel, ClassSearchModelCollection>
     {
         public static readonly new ClassGroupDataSource Instance = new ClassGroupDataSource();
 
-        private ClassGroupDataSource()
+        public ClassGroupDataSource()
         {
         }
 
 
         public PagedQueryResult<ClassSearchModel, ClassSearchModelCollection> LoadClasses(IPageRequestParams prp, ClassesQueryCriteriaModel condition, IEnumerable<IOrderByRequestItem> orderByBuilder)
         {
-            WhereSqlClauseBuilder classBuilder = ConditionMapping.GetWhereSqlClauseBuilder(condition, new AdjustConditionValueDelegate(ClassesQueryCriteriaModel.ClassesAdjustConditionValueDelegate));
-            WhereSqlClauseBuilder classLessonItemsBuilder = ConditionMapping.GetWhereSqlClauseBuilder(condition, new AdjustConditionValueDelegate(ClassesQueryCriteriaModel.ClassLessonItemsAdjustConditionValueDelegate));
-            WhereSqlClauseBuilder classLessonsBuilder = ConditionMapping.GetWhereSqlClauseBuilder(condition, new AdjustConditionValueDelegate(ClassesQueryCriteriaModel.ClassLessonsAdjustConditionValueDelegate));
+            var classBuilder = ConditionMapping.GetConnectiveClauseBuilder(condition, new AdjustConditionValueDelegate(ClassesQueryCriteriaModel.ClassesAdjustConditionValueDelegate));
+            var classLessonItemsBuilder = ConditionMapping.GetWhereSqlClauseBuilder(condition, new AdjustConditionValueDelegate(ClassesQueryCriteriaModel.ClassLessonItemsAdjustConditionValueDelegate));
+            var classLessonsBuilder = ConditionMapping.GetWhereSqlClauseBuilder(condition, new AdjustConditionValueDelegate(ClassesQueryCriteriaModel.ClassLessonsAdjustConditionValueDelegate));
 
             string classWhere =classBuilder.ToSqlString(TSqlBuilder.Instance);
             string classLessonsWhere = condition.CheckClassLessonsAdjustCondition() ? string.Format(" and exists(select * from [OM].[ClassLessons] cl where {0} and Classes.ClassID = cl.ClassID  )", classLessonsBuilder.ToSqlString(TSqlBuilder.Instance) ) : "";
@@ -37,7 +38,7 @@ namespace PPTS.WebAPI.Orders.DataSources
             return result;
         }
 
-        
+
 
 
 

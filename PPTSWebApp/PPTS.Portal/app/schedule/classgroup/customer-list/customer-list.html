@@ -1,0 +1,17 @@
+﻿<div class="modal-header">
+    <button type="button" class="close" data-dismiss="alert" ng-click="vm.close()">
+        <i class="ace-icon fa fa-times"></i>
+    </button>
+    <h4 class="modal-title">查看上课人员明细</h4>
+</div>
+
+<div class="modal-body">  
+    <div class="mcs-panel-toolbar">
+        <mcs-button category="delete" text="移出班级" click="vm.deleteCustomer()"></mcs-button>
+    </div>  
+    <mcs-datatable data="vm.data"  />
+</div>
+<!--<div class="modal-footer">
+    <mcs-button category="save" click="vm.save()" />
+    <mcs-button category="close" click="vm.close()" />
+</div>-->

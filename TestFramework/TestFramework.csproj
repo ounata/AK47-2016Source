@@ -1,0 +1,16 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="14.0">
+  <PropertyGroup>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectItem Include="MCS.Library.Test.Data\MCS.Library.Test.Data.csproj" />
+    <ProjectItem Include="MCS.Services.Test.Contracts\MCS.Services.Test.Contracts.csproj" />
+  </ItemGroup>
+  <Target Name="BuildOtherProjects">
+    <MSBuild Projects="@(ProjectItem)" RebaseOutputs="True" />
+  </Target>
+</Project>

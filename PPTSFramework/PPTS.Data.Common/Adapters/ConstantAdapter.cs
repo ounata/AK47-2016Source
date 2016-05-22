@@ -201,6 +201,29 @@ namespace PPTS.Data.Common.Adapters
             return result;
         }
 
+        public ConstantEntityInCategoryCollection LoadByCategoryAndParentKey(string category, string parentKey)
+        {
+            category.CheckStringIsNullOrEmpty("category");
+            category.CheckStringIsNullOrEmpty("parentKey");
+
+            WhereSqlClauseBuilder builder = new WhereSqlClauseBuilder();
+
+            builder.AppendItem("Category", category);
+            builder.AppendItem("ParentKey", parentKey);
+
+            string sql = string.Format("SELECT * FROM {0} WHERE {1} ORDER BY SortNo",
+                this.GetTableName(),
+                builder.ToSqlString(TSqlBuilder.Instance));
+
+            DataTable table = DbHelper.RunSqlReturnDS(sql, this.GetConnectionName()).Tables[0];
+
+            ConstantEntityInCategoryCollection result = new ConstantEntityInCategoryCollection();
+
+            ORMapping.DataViewToCollection(result, table.DefaultView);
+
+            return result;
+        }
+
         /// <summary>
         /// 清空缓存
         /// </summary>

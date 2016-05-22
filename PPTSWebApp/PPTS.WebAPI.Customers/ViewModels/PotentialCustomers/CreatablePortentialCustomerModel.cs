@@ -30,7 +30,7 @@ namespace PPTS.WebAPI.Customers.ViewModels.PotentialCustomers
         /// </summary>
         [ConstantCategory("C_CODE_ABBR_CHILDMALEDICTIONARY")]
         [ConstantCategory("C_CODE_ABBR_CHILDFEMALEDICTIONARY")]
-        public int CustomerRole
+        public string CustomerRole
         {
             get;
             set;
@@ -41,7 +41,7 @@ namespace PPTS.WebAPI.Customers.ViewModels.PotentialCustomers
         /// </summary>
         [ConstantCategory("C_CODE_ABBR_PARENTMALEDICTIONARY")]
         [ConstantCategory("C_CODE_ABBR_PARENTFEMALEDICTIONARY")]
-        public int ParentRole
+        public string ParentRole
         {
             get;
             set;

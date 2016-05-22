@@ -1,0 +1,38 @@
+﻿
+<div class="mcs-panel-search well well-sm">
+    <div class="portlet">
+        <div class="portlet-title line">
+            <div class="caption">
+                <label class="quick-search"><i class="ace-icon fa fa-search bigger-125"></i> 快速查询</label>
+            </div>
+        </div>
+        <div class="portlet-body line-height-40">
+            <div class="search-inline">
+                <label class="profile-info-name">反馈时间:</label>
+            </div>
+
+            
+            <div class="search-inline">
+                <ppts-daterangepicker start-date="vm.criteria.meetingTimeStart" end-date="vm.criteria.meetingTimeEnd"/>
+            </div>
+            <div class="search-inline">
+                <ppts-select category="replyObject" model="vm.criteria.replyObject" caption="反馈对象" class="ppts-select-search-nopadding"/>
+                <mcs-button category="search" click="vm.search()" size="medium" class="search-input"/>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!--ng-show="vm.isVisAdd()"-->
+<div class="mcs-panel-toolbar">
+    <mcs-button category="add" text="联系家长" click="vm.add()"></mcs-button>
+</div>
+<div>
+    <uib-tabset>
+        <uib-tab ng-click="vm.changeTab(tab)" ng-repeat="tab in vm.tabs" active="tab.active" heading="{{tab.title}}">
+            <div ng-include="'./app/customer/feedback/feedback-view/feedback-view-tpl.html'">
+            </div>
+        </uib-tab>
+    </uib-tabset>
+</div>
+

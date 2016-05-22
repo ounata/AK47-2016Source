@@ -43,10 +43,10 @@ namespace PPTS.Data.Customers.Entities
             set;
 		}
 
-		/// <summary>
-		/// 处理时间
-		/// </summary>
-		[ORFieldMapping("HandleTime")]
+        /// <summary>
+        /// 处理时间
+        /// </summary>
+        [ORFieldMapping("HandleTime", UtcTimeToLocal = true)]
         [DataMember]
 		public DateTime HandleTime
 		{

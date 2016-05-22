@@ -1,12 +1,16 @@
-﻿using PPTS.Data.Products.Adapters;
-using PPTS.Data.Products.Entities;
+﻿using PPTS.Data.Products.Entities;
 using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using PPTS.Contracts.Proxies;
+using PPTS.Contracts.Products.Models;
 
 namespace PPTS.WebAPI.Customers.ViewModels.Accounts
 {
+    /// <summary>
+    /// 折扣信息模型
+    /// </summary>
     [Serializable]
     [DataContract]
     public class DiscountModel
@@ -16,6 +20,16 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
         /// </summary>
         [DataMember]
         public string DiscountID
+        {
+            set;
+            get;
+        }
+
+        /// <summary>
+        /// 折扣编码
+        /// </summary>
+        [DataMember]
+        public string DiscountCode
         {
             set;
             get;
@@ -33,21 +47,21 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
                 return _items;
             }
         }
-        
+
         public static DiscountModel LoadByCampusID(string campusID)
         {
-            DiscountPermissionView view = DiscountPermissionViewAdapter.Instance.LoadByCampusID(campusID);
-            DiscountModel model = new DiscountModel();
-            if (view != null)
+            DiscountQueryResult result = PPTSConfigRuleQueryServiceProxy.Instance.QueryDiscountByCampusID(campusID);
+            if (result != null && result.Discount != null)
             {
-                model.DiscountID = view.DiscountID;
-                DiscountItemCollection items = DiscountItemAdapter.Instance.LoadCollectionByDiscountID(model.DiscountID);
-                foreach (DiscountItem item in items.OrderByDescending(x=>x.DiscountStandard))
-                {
+                DiscountModel model = new DiscountModel();
+                model.DiscountID = result.Discount.DiscountID;
+                model.DiscountCode = result.Discount.DiscountCode;
+                foreach (DiscountItem item in result.DiscountItemCollection.OrderByDescending(x => x.DiscountStandard))
                     model.Items.Add(AutoMapper.Mapper.DynamicMap<DiscountItemModel>(item));
-                }
+                return model;
             }
-            return model;
+            return null;
         }
+
     }
 }

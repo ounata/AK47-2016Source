@@ -27,7 +27,38 @@
                 label: '新增客户服务',
                 parent: 'ppts.custservice'
             },
-            dependencies: ['app/custcenter/custservice/custservice-add/custservice-add.controller']
+            dependencies: ['app/custcenter/custservice/custservice-add/custservice-add.controller',
+                          'app/customer/potentialcustomer/customer-search/customer-search.controller']
+        }).loadRoute($stateProvider, {
+            name: 'ppts.custservice-view',
+            url: '/custservice/view/:id',
+            templateUrl: 'app/custcenter/custservice/custservice-view/custservice-view.html',
+            controller: 'custserviceViewController',
+            breadcrumb: {
+                label: '查看客服',
+                parent: 'ppts.custservice'
+            },
+            dependencies: ['app/custcenter/custservice/custservice-view/custservice-view.controller']
+        }).loadRoute($stateProvider, {
+            name: 'ppts.custservice-nextProcess',
+            url: '/custservice/nextProcess/:id',
+            templateUrl: 'app/custcenter/custservice/custservice-nextProcess/custservice-nextProcess.html',
+            controller: 'custserviceNextProcessController',
+            breadcrumb: {
+                label: '选择下一个受理人',
+                parent: 'ppts.custservice'
+            },
+            dependencies: ['app/custcenter/custservice/custservice-nextProcess/custservice-nextProcess.controller']
+        }).loadRoute($stateProvider, {
+            name: 'ppts.custservice-edit',
+            url: '/custservice/edit/:id',
+            templateUrl: 'app/custcenter/custservice/custservice-edit/custservice-edit.html',
+            controller: 'custserviceEidtController',
+            breadcrumb: {
+                label: '编辑客服',
+                parent: 'ppts.custservice-view'
+            },
+            dependencies: ['app/custcenter/custservice/custservice-edit/custservice-edit.controller']
         });
     });
 

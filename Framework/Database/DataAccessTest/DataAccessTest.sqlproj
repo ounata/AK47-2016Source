@@ -64,6 +64,7 @@
     <Folder Include="Properties" />
     <Folder Include="Tables" />
     <Folder Include="Views" />
+    <Folder Include="Security" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Users.sql" />
@@ -72,6 +73,10 @@
     <Build Include="Tables\VersionedOrderItem.sql" />
     <Build Include="Views\VersionedOrder_Current.sql" />
     <Build Include="Views\VersionedOrderItem_Current.sql" />
+    <Build Include="Security\TX.sql" />
+    <Build Include="Tables\TRANSACTION_PROCESS.sql" />
+    <Build Include="Tables\Orders.sql" />
+    <Build Include="Tables\Repertories.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="DataAccessTest.refactorlog" />

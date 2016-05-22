@@ -1,6 +1,7 @@
 using MCS.Library.Core;
 using MCS.Library.Data.DataObjects;
 using MCS.Library.Data.Mapping;
+using PPTS.Data.Common.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -59,7 +60,8 @@ namespace PPTS.Data.Customers.Entities
 		/// </summary>
 		[ORFieldMapping("Subject")]
         [DataMember]
-		public string Subject
+        [ConstantCategory("C_CODE_ABBR_Customer_Exam_Subject")]
+        public string Subject
 		{
 			get;
             set;
@@ -109,10 +111,22 @@ namespace PPTS.Data.Customers.Entities
             set;
 		}
 
-		/// <summary>
-		/// 年纪名词
-		/// </summary>
-		[ORFieldMapping("GradeRank")]
+        /// <summary>
+        /// 成绩升降（持平、上升、下降）
+        /// </summary>
+        [ORFieldMapping("ScoreChangeType")]
+        [DataMember]
+        [ConstantCategory("C_CODE_ABBR_Exam_ScoreChangeType")]
+        public string ScoreChangeType
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 年纪名词
+        /// </summary>
+        [ORFieldMapping("GradeRank")]
         [DataMember]
 		public int GradeRank
 		{
@@ -152,7 +166,19 @@ namespace PPTS.Data.Customers.Entities
 			get;
             set;
 		}
-	}
+
+        /// <summary>
+        /// 创建时间
+        /// </summary>
+        [ORFieldMapping("CreateTime", UtcTimeToLocal = true)]
+        [DataMember]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.Select | ClauseBindingFlags.Where)]
+        public DateTime CreateTime
+        {
+            get;
+            set;
+        }
+    }
 
     [Serializable]
     [DataContract]

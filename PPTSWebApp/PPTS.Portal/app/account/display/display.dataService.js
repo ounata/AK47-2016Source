@@ -9,9 +9,9 @@
                 'query': { method: 'GET', isArray: false }
             });
         
-        //获取账户查询的信息
-        resource.getAccountQueryResult = function (customerID, success, error) {
-            resource.query({ operation: 'GetAccountQueryResult',customerID:customerID }, success, error);
+        //获取账户列表
+        resource.getAccountList = function (customerID, success, error) {
+            resource.query({ operation: 'GetAccountList',customerID:customerID }, success, error);
         }
 
         return resource;

@@ -1,13 +1,17 @@
 ﻿(function() {
     angular.module('app.component').controller('MCSDatatableController', [
-        '$scope', '$q', '$timeout',
-        function($scope, $q, $timeout) {
+        '$scope', '$q', '$timeout', 'printService',
+        function($scope, $q, $timeout, printService) {
             var vm = this;
 
             vm.reorder = function(field, direction) {
                 var a = direction;
 
             };
+
+            vm.print = function() {
+                printService.print();
+            }
 
             vm.removeRows = function() {
                 mcs.util.removeByObjectsWithKeys(vm.page1Data, vm.data.rowsSelected);

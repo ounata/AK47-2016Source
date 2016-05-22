@@ -183,7 +183,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </None>
-    <None Include="connectionManager.config" />
+    <None Include="connectionManager.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Schedules\作业调度测试用例.xlsx" />
     <None Include="wfActivitySettings.config">
       <SubType>Designer</SubType>

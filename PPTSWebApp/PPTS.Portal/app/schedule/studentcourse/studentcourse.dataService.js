@@ -1,46 +1,33 @@
-﻿define([ppts.config.modules.product], function (product) {
+﻿define([ppts.config.modules.schedule], function (schedule) {
 
-    product.registerFactory('productDataService', ['$resource', function ($resource) {
+    schedule.registerFactory('studentCourseDataService', ['$resource', function ($resource) {
 
-        var resource = $resource(ppts.config.productApiServerPath + 'api/products/:operation/:id', { operation: '@operation', id: '@id' }, { 'post': { method: 'POST' } });
+        var resource = $resource(ppts.config.orderApiBaseUrl + 'api/studentcourse/:operation/:id',
+           { operation: '@operation', id: '@id' },
+           {
+               'post': { method: 'POST' },
+               'query': { method: 'GET', isArray: false }
+           });
 
-        resource.getAllProducts = function (criteria, success, error) {
-            resource.post({ operation: 'getAllProducts' }, criteria, success, error);
+        resource.getStuCourse = function (criteria, success, error) {
+            resource.post({ operation: 'getStuCourse' }, criteria, success, error);
         }
 
-        resource.getPagedProducts = function (criteria, success, error) {
-            resource.post({ operation: 'getPagedProducts' }, criteria, success, error);
+        resource.getStuCoursePaged = function (criteria, success, error) {
+            resource.post({ operation: 'getStuCoursePaged' }, criteria, success, error);
         }
 
-        resource.getProduct = function (productId) {
-            resource.query({ operation: 'getProductBaseinfo', id: productId }, function (product) {
-
-            });
-        };
-
-        resource.addProduct = function () {
-            resource.query({ operation: 'createProduct' }, function (product) {
-
-            });
+        resource.deleteAssign = function (criteria, success, error) {
+            resource.post({ operation: 'deleteAssign' }, criteria, success, error);
         }
 
-        resource.editProduct = function (productId) {
-            resource.query({ operation: 'updateProduct', id: productId }, function (product) {
-
-            });
+        resource.confirmAssign = function (criteria, success, error) {
+            resource.post({ operation: 'confirmAssign' }, criteria, success, error);
         }
 
-        resource.saveProduct = function (product, productId) {
-            if (!productId) {
-                resource.save({ operation: 'createProduct' }, product, function (result) {
-
-                });
-            } else {
-                resource.save({ operation: 'updateProduct', id: productId }, product, function (result) {
-
-                });
-            }
-        };
+        resource.markupAssign = function (criteria, success, error) {
+            resource.post({ operation: 'markupAssign' }, criteria, success, error);
+        }
 
         return resource;
     }]);

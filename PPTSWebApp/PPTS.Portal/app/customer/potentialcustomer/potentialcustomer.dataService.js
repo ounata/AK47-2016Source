@@ -38,7 +38,7 @@
         }
 
         resource.getCustomerByCode = function (customerCode, success, error) {
-            resource.query({ operation: 'getCustomerByCode?customerCode=' + customerCode }, success, error);
+            resource.query({ operation: 'getCustomerByCode', customerCode: customerCode }, success, error);
         };
 
         resource.getStaffRelations = function (criteria, success, error) {
@@ -69,6 +69,14 @@
             resource.post({ operation: 'getAllParents' }, model, success, error);
         }
 
+        resource.initParentForCreate = function (studentId, success, error) {
+            resource.query({ operation: 'createParent', id: studentId }, success, error);
+        }
+
+        resource.createParent = function (model, success, error) {
+            resource.save({ operation: 'createParent' }, model, success, error);
+        }
+
         resource.getPagedParents = function (model, success, error) {
             resource.post({ operation: 'getPagedParents' }, model, success, error);
         }
@@ -80,6 +88,14 @@
         resource.assertAccountCharge = function (customerID, success, error) {
             resource.query({ operation: 'AssertAccountCharge', customerID: customerID }, success, error);
         }
+
+        resource.getTransferResources = function (customerIds, success, error) {
+            resource.post({ operation: 'getTransferResources' }, customerIds, success, error);
+        }
+
+        resource.transferCustomers = function (model) {
+            resource.post({ operation: 'transferCustomers' }, model, success, error);
+        };
 
         return resource;
     }]);
@@ -100,7 +116,7 @@
         { name: '未跟进时长：', template: '<ppts-radiobutton-group category="period" model="vm.followPeriodValue" async="false"/> <span ng-show="vm.followPeriodValue == 5"><input type="text" ng-model="vm.followDays" class="mcs-input-small" onkeyup="mcs.util.limit(this)" onafterpaste="mcs.util.limit(this)"/>天未跟进</span>' },
         { name: '在读学校：', template: '<mcs-input model="vm.criteria.schoolName" css="col-xs-4 col-sm-4" />' },
         { name: '家庭住址：', template: '<mcs-input model="vm.criteria.address" css="col-xs-4 col-sm-4" />' },
-        { name: '信息来源：', template: '<ppts-datarange min="vm.criteria.test" max="vm.criteria.test" css="col-xs-4 col-sm-4" />' },
+        //{ name: '信息来源：', template: '<ppts-source main="vm.criteria.test" sub="vm.criteria.test" css="col-xs-4 col-sm-4" />' },
         { name: '归属坐席：', template: '<ppts-checkbox-group category="assignment" model="vm.criteria.isAssignSeat" clear="vm.criteria.isAssignSeat=[]" async="false"/> <mcs-input placeholder="坐席姓名" model="vm.criteria.callcenterName"/>' },
         { name: '归属咨询师：', template: '<ppts-checkbox-group category="assignment" model="vm.criteria.isAssignConsultant" clear="vm.criteria.isAssignConsultant=[]" async="false"/> <mcs-input placeholder="咨询师姓名" model="vm.criteria.consultantName"/>' },
         { name: '归属市场专员：', template: '<ppts-checkbox-group category="assignment" model="vm.criteria.isAssignMarket" clear="vm.criteria.isAssignMarket=[]" async="false"/> <mcs-input placeholder="市场专员姓名" model="vm.criteria.marketName"/>' },
@@ -139,7 +155,7 @@
         }, {
             field: "createTime",
             name: "建档日期",
-            template: '<span>{{row.createTime | date:"yyyy-MM-dd"}}</span>'
+            template: '<span>{{row.createTime | date:"yyyy-MM-dd" | normalize}}</span>'
         }, {
             field: "creatorName",
             name: "建档人"
@@ -155,7 +171,7 @@
         }, {
             field: "followTime",
             name: "最后一次跟进时间",
-            template: '<span>{{row.followTime | date:"yyyy-MM-dd"}}</span>'
+            template: '<span>{{row.followTime | date:"yyyy-MM-dd" | normalize}}</span>'
         }, {
             field: 'marketStaff',
             name: "归属市场专员"
@@ -173,7 +189,7 @@
         }, {
             field: 'nextFollowTime',
             name: "下次沟通时间",
-            template: '<span>{{row.nextFollowTime | date:"yyyy-MM-dd"}}</span>'
+            template: '<span>{{row.nextFollowTime | date:"yyyy-MM-dd" | normalize}}</span>'
         }],
         pager: {
             pageIndex: 1,
@@ -183,7 +199,7 @@
         orderBy: [{ dataField: 'pcc.CreateTime', sortDirection: 1 }]
     });
 
-    customer.registerFactory('customerDataViewService', ['$state', 'customerDataService', 'dataSyncService', 'mcsDialogService', 'customerListDataHeader', 'customerRelationType',
+    customer.registerFactory('customerDataViewService', ['$state', 'customerDataService', 'dataSyncService', 'mcsDialogService', 'customerRelationType',
         function ($state, customerDataService, dataSyncService, mcsDialogService, customerRelationType) {
             var service = this;
 
@@ -216,9 +232,68 @@
                 });
             };
 
+            // 配置搜索潜客列表表头
+            service.configCustomerSearchHeaders = function (vm) {
+                vm.data = {
+                    selection: 'radio',
+                    rowsSelected: [],
+                    keyFields: ['customerID', 'customerName', 'parentName', 'grade', 'consultantStaff', 'consultant', 'Market'],
+                    headers: [{
+                        field: "orgName",
+                        name: "校区",
+                        sortable: true
+                    }, {
+                        field: "customerName",
+                        name: "学员姓名",
+                        sortable: true
+                    }, {
+                        field: "customerCode",
+                        name: "学员编号"
+                    }, {
+                        field: "parentName",
+                        name: "家长姓名"
+                    }, {
+                        field: "grade",
+                        name: "当前年级",
+                        template: '<span>{{row.entranceGrade | grade}}</span>'
+                    }, {
+                        field: "consultantStaff",
+                        name: "咨询师"
+                    }, {
+                        field: "primaryPhone",
+                        name: "家长联系方式"
+                    }
+                    ],
+                    pager: {
+                        pageIndex: 1,
+                        pageSize: 10,
+                        totalCount: -1,
+                        pageChange: function () {
+                            dataSyncService.initCriteria(vm, false);
+                            customerDataService.getPagedCustomers(vm.criteria, function (result) {
+                                vm.data.rows = result.pagedData;
+                            });
+                        }
+                    },
+                    orderBy: [{ dataField: 'pcc.CreateTime', sortDirection: 1 }]
+                }
+            };
+
+            // 初始化搜索潜客列表
+            service.initSearchCustomerList = function (vm, callback) {
+                dataSyncService.initCriteria(vm, false);
+                customerDataService.getAllCustomers(vm.criteria, function (result) {
+                    vm.data.rows = result.queryResult.pagedData;
+                    dataSyncService.updateTotalCount(vm, result.queryResult);
+                    if (ng.isFunction(callback)) {
+                        callback();
+                    }
+                });
+            };
+
             // 初始化新增潜客信息
             service.initCreateCustomerInfo = function (orginalParent, vm, callback) {
-                customerDataService.getCustomerForCreate(function(result) {
+                customerDataService.getCustomerForCreate(function (result) {
                     orginalParent = result.primaryParent;
                     dataSyncService.injectPageDict(['ifElse']);
                     dataSyncService.setDefaultValue(vm.customer, result.customer, ['idType', 'subjectType', 'vipType']);
@@ -231,7 +306,7 @@
 
             // 获取对话框标题
             service.getStaffRelationModalTitle = function (relationType) {
-                switch(relationType) {
+                switch (relationType) {
                     case customerRelationType.consultant:
                         return '咨询师';
                     case customerRelationType.educator:
@@ -242,7 +317,7 @@
                         return '坐席';
                     case customerRelationType.market:
                         return '市场专员';
-                    };
+                };
             };
 
             // 分配咨询师/学管师/坐席/市场专员
@@ -254,6 +329,20 @@
                         relationType: relationType,
                         type: 'assignStaff'
                     }
+                }).result.then(function () {
+                    vm.search();
+                });
+            };
+
+            // 资源划转
+            service.transferCustomers = function (vm, customers) {
+                mcsDialogService.create('app/customer/potentialcustomer/customer-transfer/customer-transfer.tpl.html', {
+                    controller: 'customerTransferController',
+                    params: {
+                        customers: customers
+                    }
+                }).result.then(function () {
+                    vm.search();
                 });
             };
 
@@ -339,11 +428,7 @@
                     vm.customerIds.push(item.customerID);
                 });
 
-                dataSyncService.injectDictData({
-                    c_codE_ABBR_MessageType: [{ key: 1, value: '发送邮件' }, {
-                        key: 2, value: '发送短信'
-                    }]
-                });
+                dataSyncService.injectPageDict(['messageType']);
 
                 if (ng.isFunction(callback)) {
                     callback();
@@ -354,18 +439,34 @@
                 //    dataSyncService.updateTotalCount(vm, result.queryResult);
                 //});
             };
-            
+
+            // 加载资源划转弹出框
+            service.getTransferCustomerInfo = function (vm, data, callback) {
+                vm.displayNames = '';
+                vm.customerNames = '';
+                vm.customerIds = [];
+
+                angular.forEach(data.customers, function (item, index) {
+                    var length = data.customers.length;
+                    if (index == 0) {
+                        vm.displayNames += length == 1 ? item.customerName : item.customerName + '...';
+                    }
+                    vm.customerNames += index == 0 ? item.customerName : ',' + item.customerName;
+                    vm.customerIds.push(item.customerID);
+                });
+
+                dataSyncService.injectPageDict(['messageType']);
+
+                customerDataService.getTransferResources(vm.customerIds, function (result) {
+                    // 初始化分公司和校区下拉框
+                });
+            };
+
             return service;
         }]);
 
     customer.registerFactory('customerParentService', ['customerDataService', 'customerRelationService', 'dataSyncService', 'mcsDialogService', 'utilService', function (customerDataService, customerRelationService, dataSyncService, mcsDialogService, util) {
         var service = this;
-
-        // 同步家长的字典信息(仅针对parent)
-        service.syncParentDict = function (vm) {
-            vm.parent.idTypes = ppts.dict[ppts.config.dictMappingConfig.idtype];
-            vm.parent.incomes = ppts.dict[ppts.config.dictMappingConfig.income];
-        };
 
         // 添加已有家长
         service.popupParentAdd = function (vm, title, type, callback) {
@@ -379,7 +480,7 @@
                 settings: {
                     size: 'lg'
                 }
-            }).result.then(function(parent) {
+            }).result.then(function (parent) {
                 vm.parent = parent;
                 if (ng.isFunction(callback)) {
                     callback();
@@ -439,15 +540,15 @@
         // 亲属关系切换
         service.initCustomerParentRelation = function ($scope, vm, lastIndex) {
             $scope.$watch('vm.parent.gender', function () {
-                if(!vm.parent || !vm.parent.gender) return;
+                if (!vm.parent || !vm.parent.gender) return;
                 service.updateParentRole(vm);
             });
 
             $scope.$watch('vm.customer.gender', function () {
-                if(!vm.customer || !vm.customer.gender) return;
+                if (!vm.customer || !vm.customer.gender) return;
                 vm.customerRoles = mcs.util.mapping(customerRelationService.children(vm.customer.gender), { key: 'sid', value: 'sr' });
-                vm.customerRole = vm.customerRoles && vm.customerRoles.length > 0 && lastIndex > - 1 ? vm.customerRoles[lastIndex].key : 0;
-                service.updateParentRole();
+                vm.customerRole = vm.customerRoles && vm.customerRoles.length > 0 && lastIndex > -1 ? vm.customerRoles[lastIndex].key : 0;
+                service.updateParentRole(vm);
             });
 
             $scope.selectCustomerRole = function (item, model) {

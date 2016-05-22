@@ -82,18 +82,29 @@
             </div>
         </div>
         <div class="portlet-body">
-            <select><option>选择分公司</option></select>
-            <select><option>选择校区</option></select>
-            <ppts-select category="subject" model="vm.criteria.subject" caption="科目" class="col-sm-3" />
-            <ppts-select category="courseLevel" model="vm.criteria.courseLevel" caption="课程级别" class="col-sm-3" />
-            <ppts-select category="duration" model="vm.criteria.duration" caption="课时时长" class="col-sm-3" />
+            <form name="orderListForm">
+                <div class="ppts-oneline-block">
+                    <div class="search-inline">
+                        <ppts-select-branch model="vm.criteria.campusIDs" />
+                    </div>
 
-            <mcs-input placeholder="学生姓名" model="vm.criteria.stuName" />
-            <mcs-input placeholder="家长姓名" model="vm.criteria.parentName" />
-            <mcs-input placeholder="学生编号" model="vm.criteria.stuCode" />
-            <mcs-input placeholder="订单编号" model="vm.criteria.orderCode" />
+                    <div class="search-inline">
 
-            <mcs-button category="search" click="vm.search()" size="medium" />
+                        <ppts-select category="subject" class="ppts-select-search" model="vm.criteria.subject" caption="科目" />
+                        <ppts-select category="courseLevel" class="ppts-select-search" model="vm.criteria.courseLevel" caption="课程级别" />
+                        <ppts-select category="duration" class="ppts-select-search" model="vm.criteria.duration" caption="课时时长" />
+                    </div>
+                </div>
+               
+                <div class="ppts-oneline-block">
+                    <mcs-input placeholder="学生姓名" model="vm.criteria.stuName" class="mcs-input-search"/>
+                    <mcs-input placeholder="家长姓名" model="vm.criteria.parentName" class="mcs-input-search"/>
+                    <mcs-input placeholder="学生编号" model="vm.criteria.stuCode" class="mcs-input-search"/>
+                    <mcs-input placeholder="订单编号" model="vm.criteria.orderCode" class="mcs-input-search"/>
+                    <mcs-button category="search" click="vm.search()" size="medium" class="mcs-input-search"/>
+                </div>
+
+            </form>
         </div>
     </div>
 </div>

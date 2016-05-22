@@ -22,13 +22,85 @@
                 <div class="col-sm-12">
                     <h3 class="header smaller lighter green">应用范例</h3>
                     <div ng-controller="MCSDatatableController">
+                        <div class="dialogs ace-scroll scroll-active" style="
+    width: 700px;
+    /* height: 400px; */
+    padding-top: 30px;
+">
+                            <div class="scroll-track" style="display: block;height: 320px;">
+                                <div class="scroll-bar" style="height: 262px; top: 38px;"></div>
+                            </div>
+                            <div class="scroll-content" style="max-height: 500px;height: 200px;">
+                                <div class="itemdiv dialogdiv" style="
+    /* vertical-align: middle; */
+    margin-top: 90px;
+">
+                                    <div class="user" style="
+    display: none;
+">
+                                        <img alt="Alexa's Avatar" src="../assets/avatars/avatar1.png">
+                                    </div>
+                                    <div class="body dialogArea">
+                                        <div class="time" style="
+    display: none;
+">
+                                            <i class="ace-icon fa fa-clock-o"></i>
+                                            <span class="green">4 sec</span>
+                                        </div>
+                                        <div class="name">
+                                            <a href="#">Alexa</a>
+                                        </div>
+                                        <div class="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque commodo massa sed ipsum porttitor facilisis.</div>
+                                        <div class="tools">
+                                            <a href="#" class="btn btn-minier btn-info">
+                                                <i class="icon-only ace-icon fa fa-share"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div>
                             <button class="btn btn-primary" type="button" ng-click="vm.addRow()">添加一行</button>
                             <button class="btn btn-primary" type="button" ng-click="vm.removeRow()">删除一行</button>
                             <button class="btn btn-primary" type="button" ng-click="vm.clearSelections()">清除已选行的状态记录</button>
                             <button class="btn btn-primary" type="button" ng-click="vm.removeRows()">删除已选行</button>
+                            <button type="button" class="btn btn-primary" ng-click="vm.print()">打印</button>
                         </div>
-                        <mcs-datatable on-order="vm.reorder(field,direction)" data="vm.data" />
+                        <div id="table">
+                            <div clas="datatable-container table-responsive" style="
+    width: 140px;
+    display: inline-block;
+   
+   
+    border: 0px;
+    margin: 0px;
+    padding: 0px;
+    margin-right: -3.5px;
+">
+                                <table style="
+    height: 436px;
+     margin-bottom: 13px !important;
+    width: 100%;" class="table table-striped table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Teacher</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>this is your name</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <mcs-datatable id="printArea" style="
+    display: inline-block;
+    width: 800px;
+    border-left: 0px;
+    margin-left: 0px;
+" on-order="vm.reorder(field,direction)" data="vm.data" />
+                        </div>
                     </div>
                     <div>
                         年龄合计(绑定到函数)：<span>{{vm.totalAge()}}</span>
@@ -115,6 +187,14 @@ angular.module(&#39;app.component&#39;).controller(&#39;MCSDatatableController&#
 ]);
 })();
 </pre></div>
+                    <div>
+                        <h3>单独使用的分页控件示例</h3>
+                        <div class="codehilite "><pre>
+    &lt;div ng-show="vm.PagedList.PagedParam.TotalCount&gt;0" class="mcs-panel-pager well well-sm"&gt;
+        &lt;span class="bigger-110"&gt;{{vm.PagedList.PagedParam.Message}}&lt;/span&gt;
+        &lt;uib-pagination boundary-links="true" ng-change="pageChanged()" total-items="vm.PagedList.PagedParam.TotalCount" ng-model="vm.criteria.PagedParam.Page" class="pagination" previous-text="&amp;lsaquo;" next-text="&amp;rsaquo;" first-text="&amp;laquo;" last-text="&amp;raquo;"&gt;&lt;/uib-pagination&gt;
+    &lt;/div&gt;</pre></div>
+                    </div>
                 </div>
                 <div class="col-sm-12 ">
                     <h3 class="header smaller lighter green ">参数说明</h3>

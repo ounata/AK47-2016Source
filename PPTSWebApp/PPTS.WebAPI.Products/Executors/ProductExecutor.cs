@@ -33,29 +33,20 @@ namespace PPTS.WebAPI.Products.Executors
         {
             base.PrepareData(context);
 
-            if (string.IsNullOrWhiteSpace(this.Model.Product.ProductID))
-            {
-                this.Model.Product.ProductID = Guid.NewGuid().ToString();
-            }
-            if (this.Model.CategoryType == CategoryType.OneToOne)
-            {
-                this.Model.Product.StartDate = this.Model.Product.EndDate = DateTime.Parse("3000-12-31");
-            }
-
+            this.Model.FillProduct()
+                    .FillExOfCourse()
+                    .FillSalaryRules()
+                    .FillPermissions();
+            
             ProductAdapter.Instance.UpdateInContext(this.Model.Product);
             if (this.Model.ExOfCourse != null)
             {
-                ProductExOfCourseAdapter.Instance.UpdateByProductIDInContext(this.Model.Product.ProductID, new ProductExOfCourseCollection() { this.Model.ExOfCourse });
+                ProductExOfCourseAdapter.Instance.UpdateByProductIDInContext(this.Model.Product.ProductID, this.Model.ExOfCourse);
             }
-            if (this.Model.SalaryRules != null && this.Model.SalaryRules.Count > 0)
-            {
-                
-                this.Model.SalaryRules[0].RuleObject = Data.Products.RuleObject.Consultant;
-                this.Model.SalaryRules[1].RuleObject = Data.Products.RuleObject.Educator;
-                this.Model.SalaryRules[2].RuleObject = Data.Products.RuleObject.Teacher;
+            
+            ProductSalaryRuleAdapter.Instance.UpdateByProductIDInContext(this.Model.Product.ProductID, this.Model.SalaryRules);
+            ProductPermissionAdapter.Instance.UpdateByProductIDInContext(this.Model.Product.ProductID, this.Model.Permissions);
 
-                ProductSalaryRuleAdapter.Instance.UpdateByProductIDInContext(this.Model.Product.ProductID, this.Model.SalaryRules);
-            }
 
         }
 

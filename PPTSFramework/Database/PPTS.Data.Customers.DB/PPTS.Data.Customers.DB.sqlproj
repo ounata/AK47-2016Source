@@ -98,7 +98,7 @@
     <Build Include="CM\Tables\CustomerVisits.sql" />
     <Build Include="CM\Tables\AccountDeductApplies.sql" />
     <Build Include="CM\Tables\AccountRefundApplies.sql" />
-    <Build Include="CM\Tables\AccountRefundPayments.sql" />
+    <Build Include="CM\Tables\AccountRefundVerifyings.sql" />
     <Build Include="CM\Tables\AccountTransferApplies.sql" />
     <Build Include="CM\Tables\CustomerTransferApplies.sql" />
     <Build Include="CM\Tables\CustomerReplies.sql" />
@@ -130,6 +130,15 @@
     <Build Include="CM\Views\Accounts_Current.sql" />
     <Build Include="CM\Views\ParentsFulltext.sql" />
     <Build Include="CM\Views\CustomersAndPotentialFulltext_1.sql" />
+    <Build Include="CM\Views\PotentialCustomerParentPhone_Current.sql" />
+    <Build Include="CM\Views\CustomerParentPhone_Current.sql" />
+    <Build Include="CM\Views\v_AccountTransferApplies.sql" />
+    <Build Include="CM\Views\v_CustomerTeacherRelations.sql" />
+    <Build Include="CM\Tables\CustomerRefundAlerts.sql" />
+    <Build Include="CM\Tables\CustomerStopAlerts.sql" />
+    <Build Include="CM\Tables\CustomerUserMapping.sql" />
+    <Build Include="CM\Tables\POSRecords.sql" />
+    <Build Include="CM\Tables\CustomerTeacherAssignApplies.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PPTS.Data.Customers.DB.refactorlog" />

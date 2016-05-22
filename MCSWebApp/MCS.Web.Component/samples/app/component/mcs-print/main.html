@@ -1,0 +1,75 @@
+<!-- #开始：位置条 -->
+<style>
+.max-button {
+    width: 200px;
+    height: 100px;
+    background-color: #660e0b;
+}
+</style>
+<div class="breadcrumbs" id="breadcrumbs">
+    <script type="text/javascript">
+    try {
+        ace.settings.check('breadcrumbs', 'fixed')
+    } catch (e) {}
+    </script>
+    <ul class="breadcrumb">
+        <li class="active">
+            <i class="ace-icon fa fa-home home-icon"></i> 首页
+        </li>
+        <li class="active">
+            <i class="ace-icon fa fa-buttons"></i> 打印
+        </li>
+    </ul>
+</div>
+<!-- /结束：位置条 -->
+<div class="page-content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h3 class="header smaller lighter green">打印说明：</h3>
+                    <div id="usage">
+                        本项目打印功能兼容包括IE/Edge/Chrome/Firefox，使用步骤：
+                        <ul>
+                            <li>在页面的Controller中引入'printService'服务。</li>
+                            <li>使用Div="printArea" 来标识出要打印的区域。</li>
+                            <li>在页面适当位置添加打印按钮，按钮点击事件ng-click="vm.print()"，完成打印。</li>
+                        </ul>
+                        <h4>打印实例</h4>
+                        <button type="button" ng-click="vm.print()">打印</button>
+                        <div id="printArea">
+                            <p>这里是要打印的内容啦！</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="laycode col-sm-12">
+                    <h3 class="header smaller lighter green">示例代码</h3>
+                    <div class="code_box code_skin0">
+                        <h3>HTML</h3>
+                        <div class="codehilite"><pre>    <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;printArea&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;p&gt;</span>这里是要打印的内容啦！<span class="nt">&lt;/p&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+</pre></div>
+                        <H3>JS</H3>
+                        <div class="codehilite"><pre>    <span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">&#39;app.component&#39;</span><span class="p">).</span><span class="nx">controller</span><span class="p">(</span><span class="s1">&#39;MCSDatatableController&#39;</span><span class="p">,</span> <span class="p">[</span>
+        <span class="s1">&#39;$scope&#39;</span><span class="p">,</span> <span class="s1">&#39;printService&#39;</span><span class="p">,</span>
+        <span class="kd">function</span><span class="p">(</span><span class="nx">$scope</span><span class="p">,</span> <span class="nx">$q</span><span class="p">,</span> <span class="nx">$timeout</span><span class="p">,</span> <span class="nx">printService</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">vm</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>            
+
+            <span class="nx">vm</span><span class="p">.</span><span class="nx">print</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                <span class="nx">printService</span><span class="p">.</span><span class="nx">print</span><span class="p">();</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">]);</span>
+</pre></div>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <h3 class="header smaller lighter green">参数说明</h3>
+                    <table class="table table-striped table-bordered table-hover">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

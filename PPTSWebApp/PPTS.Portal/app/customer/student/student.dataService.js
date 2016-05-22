@@ -6,7 +6,8 @@
             { operation: '@operation', id: '@id' },
             {
                 'post': { method: 'POST' },
-                'query': { method: 'GET', isArray: false }
+                'query': { method: 'GET', isArray: false },
+                'get': { method: 'GET', isArray: true }
             });
 
         resource.getAllStudents = function (criteria, success, error) {
@@ -40,6 +41,39 @@
         resource.updateParent = function (model, success, error) {
             resource.save({ operation: 'updateParent' }, model, success, error);
         }
+
+        resource.initParentForCreate = function (studentId, success, error) {
+            resource.query({ operation: 'createParent', id: studentId }, success, error);
+        }
+
+        resource.createParent = function (model, success, error) {
+            resource.save({ operation: 'createParent' }, model, success, error);
+        }
+
+        resource.assertAccountCharge = function (customerID, success, error) {
+            resource.query({ operation: 'AssertAccountCharge', customerID: customerID }, success, error);
+        }
+
+        resource.assignTeacher = function (model, success, error) {
+            resource.post({ operation: 'assignTeacher' }, model, success, error);
+        }
+
+        resource.getTeachers = function ( success, error) {
+            resource.get({ operation: 'getTeachers' }, success, error);
+        }
+
+        resource.calloutTeacher = function (model, success, error) {
+            resource.post({ operation: 'calloutTeacher' }, model, success, error);
+        }
+
+        resource.changeTeacher = function (model, success, error) {
+            resource.post({ operation: 'changeTeacher' }, model, success, error);
+        }
+
+        resource.getAllCustomerTeacherRelations = function ( model,success, error) {
+            resource.post({ operation: 'getAllCustomerTeacherRelations' },model, success, error);
+        }
+
         return resource;
     }]);
 
@@ -66,7 +100,7 @@
     customer.registerValue('studentListDataHeader', {
         selection: 'checkbox',
         rowsSelected: [],
-        keyFields: ['customerID', 'customerName'],
+        keyFields: ['customerID', 'customerName', 'customerCode', 'grade', 'campusID'],
         headers: [{
             field: "customerName",
             name: "学员姓名",
@@ -186,6 +220,34 @@
                         });
                     })();
                 }
+            };
+
+            // 转学
+            service.transferStudent = function (students) {
+                mcsDialogService.create('app/customer/student/student-transfer/student-transfer.tpl.html', {
+                    controller: 'studentTransferController',
+                    params: {
+                        students: students
+                    }
+                });
+            };
+
+            // 加载转学弹出框
+            service.getTransferStudentInfo = function (vm, data, callback) {
+                vm.displayNames = '';
+                vm.customerNames = '';
+                vm.customerIds = [];
+
+                angular.forEach(data.students, function (item, index) {
+                    var length = data.students.length;
+                    if (index == 0) {
+                        vm.displayNames += length == 1 ? item.customerName : item.customerName + '...';
+                    }
+                    vm.customerNames += index == 0 ? item.customerName : ',' + item.customerName;
+                    vm.customerIds.push(item.customerID);
+                });
+
+                dataSyncService.injectPageDict(['messageType']);
             };
 
             return service;

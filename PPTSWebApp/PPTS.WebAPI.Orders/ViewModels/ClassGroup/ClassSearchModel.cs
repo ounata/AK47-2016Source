@@ -9,6 +9,7 @@ namespace PPTS.WebAPI.Orders.ViewModels.ClassGroup
 {
     public class ClassSearchModel:Class
     {
+
     }
 
     public class ClassSearchModelCollection:  EditableDataObjectCollectionBase<ClassSearchModel>

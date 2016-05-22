@@ -13,7 +13,7 @@ namespace PPTS.Data.Products.Entities
     /// 产品归属权限表
     /// </summary>
     [Serializable]
-    [ORTableMapping("ProductPermissions")]
+    [ORTableMapping("PM.ProductPermissions")]
     [DataContract]
     public class ProductPermission
     {
@@ -79,7 +79,8 @@ namespace PPTS.Data.Products.Entities
         /// <summary>
         /// 创建时间
         /// </summary>
-        [ORFieldMapping("CreateTime")]
+        [ORFieldMapping("CreateTime", UtcTimeToLocal = true)]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.Select | ClauseBindingFlags.Where, DefaultExpression = "GETUTCDATE()", ForceUseDefaultExpression = true)]
         [DataMember]
         public DateTime CreateTime
         {

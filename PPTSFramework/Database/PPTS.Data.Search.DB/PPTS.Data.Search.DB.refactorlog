@@ -63,4 +63,417 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="LatestOrderDate" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="197ee5ee-94e3-478a-b7c3-137c142c58c8" ChangeDateTime="05/16/2016 07:18:31">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[CampusID]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="CampusName" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="7cea9e80-874c-4e5a-a961-574ee2ecede0" ChangeDateTime="05/16/2016 07:18:43">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[CampusName]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="CustomerCode" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="c5efbb2c-6512-4d16-b0da-47b408b56c5b" ChangeDateTime="05/16/2016 07:18:51">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[CustomerCode]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="CustomerName" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="be3a1e4c-16ea-47da-85c8-77e9dd5f4f80" ChangeDateTime="05/16/2016 07:18:57">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[CustomerName]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="CustomerLevel" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="e13c04c4-44fb-4119-a14d-1ff83b9a0e60" ChangeDateTime="05/16/2016 07:19:05">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[CustomerLevel]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="InvalidReason" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="69953aab-e9b4-4425-8fac-98e7aa7c8f6b" ChangeDateTime="05/16/2016 07:19:42">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[CustomerStatus]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="IsOneParent" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="427f81eb-0b89-446b-b953-336c7a76622e" ChangeDateTime="05/16/2016 07:19:48">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[IsOneParent]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Character" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="ec02a90f-8635-42d8-aeb2-9d04cca3cef4" ChangeDateTime="05/16/2016 07:19:54">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[Character]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Birthday" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="9b2275c7-e8f6-4ef7-9a0b-d8e933385b4c" ChangeDateTime="05/16/2016 07:20:00">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[Birthday]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Gender" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="37427e3a-652c-4c24-9649-eaca8a34951f" ChangeDateTime="05/16/2016 07:20:14">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[Gender]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Email" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="13f2f7cf-c612-4520-89b7-003ad1888f5b" ChangeDateTime="05/16/2016 07:20:21">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[Email]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="IDType" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="5b945972-8b86-4ed2-9ba5-3cac998976ba" ChangeDateTime="05/16/2016 07:20:29">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[IDType]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="IDNumber" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="50a7ba5d-5d15-4bfc-9d9d-aef4786ad589" ChangeDateTime="05/16/2016 07:20:36">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[IDNumber]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="VipType" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="12514665-6f86-489e-8c64-130dbc9ee770" ChangeDateTime="05/16/2016 07:20:42">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[VipType]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="VipLevel" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="f132914c-6d62-4532-8a0b-941ec27e70b6" ChangeDateTime="05/16/2016 07:20:49">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[VipLevel]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="EntranceGrade" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="097ee403-a626-4f46-bd57-4d44241a22ba" ChangeDateTime="05/16/2016 07:20:56">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[EntranceGrade]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Grade" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="66b682b4-0799-4158-ba4b-a44075b905b7" ChangeDateTime="05/16/2016 07:21:09">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[Grade]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="SchoolYear" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="d42169fc-fc8d-46c6-9762-d890f67f0dff" ChangeDateTime="05/16/2016 07:21:38">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[SubjectType]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="StudentType" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="fe9a3462-f07d-49df-8deb-75cefcbc595d" ChangeDateTime="05/16/2016 07:21:44">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[StudentType]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="ContactType" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="46f5776d-e590-4e75-9bb5-b4b1be178aeb" ChangeDateTime="05/16/2016 07:21:50">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[ContactType]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="SourceMainType" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="55917353-9a5d-4104-9530-4c80535611ce" ChangeDateTime="05/16/2016 07:21:57">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[SourceMainType]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="SourceSubType" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="0e2fced3-754b-45c2-a01b-b8a77861cd2f" ChangeDateTime="05/16/2016 07:22:04">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[SourceSubType]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="SourceSystem" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="b6f03b0e-ac0c-4756-ae34-7e1d46c019f2" ChangeDateTime="05/16/2016 07:22:11">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[SourceSystem]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="ReferralStaffID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="3ef7372d-f1b8-4e1e-9d61-9217ce2dfcdc" ChangeDateTime="05/16/2016 07:25:33">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[SchoolID]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="IsStudyAgain" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="2460b6bf-5b41-4085-9ec4-9cc7e834e53b" ChangeDateTime="05/16/2016 07:25:39">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[IsStudyAgain]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="FollowTime" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="e333231b-5ad9-40c7-85c6-a3dfefb5aae1" ChangeDateTime="05/16/2016 07:25:47">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[FollowTime]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="FollowStage" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="e2456ad0-c8d2-4cf7-86ac-269a7e2ff2ae" ChangeDateTime="05/16/2016 07:25:55">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[FollowStage]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="FollowedCount" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="3b6efb45-1f76-44de-b0c7-31fef633c1cf" ChangeDateTime="05/16/2016 07:26:03">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[FollowedCount]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="NextFollowTime" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="fe9f86fb-1fe0-4cc0-bfff-ef53b84ea77a" ChangeDateTime="05/16/2016 07:26:11">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[NextFollowTime]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="CreatorID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="6ed0a341-85c2-4334-828c-bdd33fd0d66f" ChangeDateTime="05/16/2016 07:33:07">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[ConsultantID]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="ConsultantName" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="7e7fbcc4-dc28-47f8-9604-70d06ad88a55" ChangeDateTime="05/16/2016 07:33:13">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[ConsultantName]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="EducatorJobID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="3e0d45b1-e45b-4aee-8c39-9cfc0a3d4e93" ChangeDateTime="05/16/2016 07:33:38">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[EducatorID]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="EducatorName" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="25ea2083-8cb6-4155-a2b6-49262127cd2f" ChangeDateTime="05/16/2016 07:33:45">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[EducatorName]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="CallCenterJobID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="5d48f67f-d6f0-4f88-885f-137530833b20" ChangeDateTime="05/16/2016 07:37:09">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[ParentID]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="ParentCode" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="b767dcb4-4d6f-4955-a2bc-a5355be547f8" ChangeDateTime="05/16/2016 07:37:15">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[ParentCode]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="ParentName" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="ce19459f-2780-4827-a205-b7e0e10f403a" ChangeDateTime="05/16/2016 07:37:21">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[ParentName]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="ParentIDType" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="32934afc-7086-4a28-b95e-21c7bf8783e2" ChangeDateTime="05/16/2016 07:44:44">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[FollowTime]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="FollowStage" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="87dc21c8-4adc-4ddc-88f5-86b48586ee50" ChangeDateTime="05/16/2016 07:44:50">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[FollowStage]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="NextFollowTime" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="05b2d229-aa4e-486f-a2e7-ec5ab5d332b7" ChangeDateTime="05/16/2016 07:44:55">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[NextFollowTime]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="FollowedCount" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="443b4e1e-4ee1-4d27-94fe-fea6120a26c2" ChangeDateTime="05/16/2016 07:46:36">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[FollowedCount]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="CustomerVisitTime" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="0e96439d-fe5b-4e4c-bde2-6f9c8e4f77d5" ChangeDateTime="05/19/2016 07:13:43">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[IsServiceFee]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="IsHasExpense" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="3e38d3c5-c1f4-4116-bf96-f61513964450" ChangeDateTime="05/19/2016 07:13:56">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[ServiceTime]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="ExpenseTime" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="6738163c-974d-4e7e-968e-34a2f03ba4ab" ChangeDateTime="05/19/2016 07:14:02">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[ServiceFee]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="ExpenseFee" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="0a29e4a5-599f-4123-a0f1-bffb799d46f3" ChangeDateTime="05/19/2016 07:31:29">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[OrderLastTime]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="OneToOneOrderLastTime" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="d6339f44-7692-42d4-80fd-42c914dcdb21" ChangeDateTime="05/19/2016 07:31:57">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[OneToOneOrderLastTime]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="OrderLastTime" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="ec63f084-c93e-4667-94f8-6633d002fbc2" ChangeDateTime="05/19/2016 07:34:27">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[AccountChargeApplyFirstTime]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="FirstAccountChargeApplyTime" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="a9b0a7b1-7030-4d45-91c2-3115ea7c1e13" ChangeDateTime="05/19/2016 07:34:30">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[AccountChargeApplyFirstMoney]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="AccountChargeApplyMoney" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="d671d5c6-4fd7-4211-bde3-905306ecd3ad" ChangeDateTime="05/19/2016 07:34:35">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[AccountChargeApplyMoney]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="FirstAccountChargeApplyMoney" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="55c36133-9093-4268-bdd3-21718a9e526f" ChangeDateTime="05/19/2016 07:34:40">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[AccountChargeApplyLastTime]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="LastAccountChargeApplyTime" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="b4c45db5-c3f9-46f9-be3b-629006316233" ChangeDateTime="05/19/2016 07:34:48">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[AccountChargeApplyLastMoney]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="LastAccountChargeApplyMoney" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="788c65f1-a3b3-469c-bf77-c0b69193af3b" ChangeDateTime="05/19/2016 07:34:54">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[AccountRefundLastTime]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="LastAccountRefundTime" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="516bc57c-e61c-4721-bed3-ba421afb5010" ChangeDateTime="05/19/2016 07:35:00">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[AccountRefundLastMoney]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="LastAccountRefundMoney" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="796ad0a7-b568-4926-9b87-8e62fb54e9e0" ChangeDateTime="05/19/2016 07:35:08">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[AccountTransferInLastTime]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="LastAccountTransferInTime" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="6bcb9554-cec0-4516-b7e0-b374d032f815" ChangeDateTime="05/19/2016 07:35:13">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[AccountTransferOutLastTime]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="LastAccountTransferOutTime" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="4efa5307-e3ae-45f9-81e9-bc6e96ecb636" ChangeDateTime="05/19/2016 07:35:27">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[OrderLastTime]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="LastOrderTime" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="f8b9e974-8de1-4428-9b68-85eb8bcbd63b" ChangeDateTime="05/19/2016 07:35:32">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[DebookOrderLastTime]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="LastDebookOrderTime" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="28b24921-713e-42e4-add4-812f109e0bef" ChangeDateTime="05/19/2016 07:35:38">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[AccountContractRefundLastTime]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="LastAccountContractRefundTime" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="509f0db0-dc71-4cd1-91b0-06b4919cf532" ChangeDateTime="05/19/2016 07:35:43">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[AccountContractRefundLastMoney]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="LastAccountContractRefundMoney" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="5f753e2e-e88a-486c-bcab-d236eac60dcb" ChangeDateTime="05/19/2016 07:37:09">
+    <Property Name="ElementName" Value="[SM].[CustomerSearch].[LatestOrderDate]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[CustomerSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="LastOneToOneOrderTime" />
+  </Operation>
 </Operations>

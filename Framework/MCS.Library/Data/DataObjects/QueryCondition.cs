@@ -17,6 +17,7 @@ namespace MCS.Library.Data.DataObjects
         private string groupByClause = string.Empty;
         private int rowIndex = 0;
         private int pageSize = 10;
+        private int top = -1;
 
         private string primaryKey = string.Empty;
 
@@ -145,6 +146,44 @@ namespace MCS.Library.Data.DataObjects
         {
             get { return this.groupByClause; }
             set { this.groupByClause = value; }
+        }
+
+        /// <summary>
+        /// 查询记录数的上限
+        /// </summary>
+        public int Top
+        {
+            get { return this.top; }
+            set { this.top = value; }
+        }
+
+        /// <summary>
+        /// 得到Top子句。如果Top属性小于0，则返回空串
+        /// </summary>
+        /// <returns></returns>
+        public string GetTopClause()
+        {
+            string result = string.Empty;
+
+            if (this.top >= 0)
+                result = string.Format("TOP {0} ", this.top);
+
+            return result;
+        }
+
+        /// <summary>
+        /// 根据totalCount和top的值，得到总记录数（它们之中的最小值）。如果top小于0，则返回totalCount
+        /// </summary>
+        /// <param name="totalCount"></param>
+        /// <returns></returns>
+        public int GetRealCount(int totalCount)
+        {
+            int result = totalCount;
+
+            if (this.top >= 0)
+                result = Math.Min(this.top, totalCount);
+
+            return result;
         }
     }
 }

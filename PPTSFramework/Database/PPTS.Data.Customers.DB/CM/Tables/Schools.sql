@@ -9,10 +9,10 @@
     [SchoolNature] NVARCHAR(32) NULL, 
     [CreatorID] NVARCHAR(36) NULL, 
     [CreatorName] NVARCHAR(64) NULL, 
-    [CreateTime] DATETIME NULL DEFAULT getdate(), 
+    [CreateTime] DATETIME NULL DEFAULT GETUTCDATE(), 
     [ModifierID] NVARCHAR(36) NULL, 
     [ModifierName] NVARCHAR(64) NULL, 
-    [ModifyTime] DATETIME NULL DEFAULT getdate(), 
+    [ModifyTime] DATETIME NULL DEFAULT GETUTCDATE(), 
     [TenantCode] NVARCHAR(36) NULL, 
     CONSTRAINT [PK_Schools] PRIMARY KEY NONCLUSTERED ([SchoolID]) 
 )

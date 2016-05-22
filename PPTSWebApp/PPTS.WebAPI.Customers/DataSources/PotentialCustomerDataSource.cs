@@ -22,6 +22,8 @@ namespace PPTS.WebAPI.Customers.DataSources
             {
                 var relations = CustomerStaffRelationAdapter.Instance.LoadByCustomerID(customer.CustomerID);
                 customer.ConsultantStaff = relations.GetStaffName(CustomerRelationType.Consultant);
+                customer.Consultant = relations.GetStaff(CustomerRelationType.Consultant); 
+                customer.Market = relations.GetStaff(CustomerRelationType.Market);
                 customer.MarketStaff = relations.GetStaffName(CustomerRelationType.Market);
             });
         }

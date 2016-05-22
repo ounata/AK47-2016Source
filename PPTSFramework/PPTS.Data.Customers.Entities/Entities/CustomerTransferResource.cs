@@ -88,6 +88,17 @@ namespace PPTS.Data.Customers.Entities
         }
 
         /// <summary>
+        /// 划转原因
+        /// </summary>
+        [ORFieldMapping("TransferMemo")]
+        [DataMember]
+        public string TransferMemo
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// 划转人ID
         /// </summary>
         [ORFieldMapping("TransferorID")]

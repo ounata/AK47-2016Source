@@ -19,13 +19,18 @@ namespace PPTS.Data.Orders.Executors
 
         public string CustomerId { set; get; }
 
+        /// <summary>
+        /// 1-常规订购 2-买赠订购 3-插班订购 4-补差兑换 5-不补差兑换
+        /// </summary>
+        public int OrderType { set; get; }
+
         public string[] CartIds { set; get; }
 
         protected override object DoOperation(DataExecutionContext<UserOperationLogCollection> context)
         {
             if (OperationType == "GetShoppingCart") {
                 CustomerId.CheckStringIsNullOrEmpty("CustomerId");
-                return ShoppingCartAdapter.Instance.Load(builder => builder.AppendItem("CustomerId", CustomerId));
+                return ShoppingCartAdapter.Instance.Load(builder => builder.AppendItem("CustomerId", CustomerId).AppendItem("OrderType", OrderType));
             }
             if (OperationType == "DelShoppingCart") {
                 CartIds.NullCheck("CartIds");

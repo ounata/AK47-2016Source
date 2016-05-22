@@ -1,5 +1,6 @@
 ﻿using MCS.Library.Core;
 using MCS.Library.Data.Executors;
+using MCS.Library.Principal;
 using MCS.Library.SOA.DataObjects;
 using PPTS.Contracts.Proxies;
 using PPTS.Data.Common.Security;
@@ -38,6 +39,10 @@ namespace PPTS.WebAPI.Orders.Executors
         protected override void PrepareData(DataExecutionContext<UserOperationLogCollection> context)
         {
             base.PrepareData(context);
+            CheckResultModel check = Model.CheckCreatClass();
+            if (!check.Sucess) {
+                throw new Exception(check.Message);
+            }
 
             Class c = new Class();
             #region 1.添加班级信息
@@ -46,9 +51,9 @@ namespace PPTS.WebAPI.Orders.Executors
             c.ProductID = Model.Product.ProductID;
             c.ProductName = Model.Product.ProductName;
             c.ProductCode = Model.Product.ProductCode;
-            c.DurationValue = Model.Product.LessonDurationValue;
+            c.LessonDurationValue = Model.Product.LessonDurationValue;
             c.LessonCount = Model.Product.LessonCount;
-            c.ClassName = Helper.GetClassName(Model.Product.ProductCode, Model.CampusName);
+            c.ClassName = Helper.GetClassName(Model.Product.ProductCode, Model.ShortCampusName);
             c.ClassID = UuidHelper.NewUuidString();
             c.ClassStatus = ClassStatusDefine.Createed;
             //RoomID  RoomCode  RoomName  暂时不处理
@@ -103,18 +108,21 @@ namespace PPTS.WebAPI.Orders.Executors
                     a.AssetID = asset.AssetID;
                     a.AssetCode = asset.AssetCode;
                     a.CustomerID = asset.CustomerID;
-                    a.CustomerID = customerQuery.Customer.CustomerID;
                     a.CustomerName = customerQuery.Customer.CustomerName;
                     a.CustomerCode = customerQuery.Customer.CustomerCode;
-                    a.ConsultantID = consultant.StaffID;
-                    a.ConsultantJobID = consultant.StaffJobID;
-                    a.ConsultantName = consultant.StaffName;
-                    a.EducatorID = educator.StaffID;
-                    a.EducatorJobID = educator.StaffJobID;
-                    cli.EducatorName = educator.StaffName;
+                    if (consultant != null) {
+                        a.ConsultantID = consultant.StaffID;
+                        a.ConsultantJobID = consultant.StaffJobID;
+                        a.ConsultantName = consultant.StaffName;
+                    }
+                    if (educator != null) {
+                        a.EducatorID = educator.StaffID;
+                        a.EducatorJobID = educator.StaffJobID;
+                        cli.EducatorName = educator.StaffName;
+                    }
                     a.ProductID = Model.Product.ProductID;
                     a.ProductName = Model.Product.ProductName;
-                    a.RoomCode = Model.Product.ProductCode;
+                    a.ProductCode = Model.Product.ProductCode;
                     //教室信息暂不处理
                     a.TeacherID = this.Model.TeacherID;
                     a.TeacherName = this.Model.TeacherName;
@@ -123,7 +131,7 @@ namespace PPTS.WebAPI.Orders.Executors
                     a.Subject = this.Model.Subject;
                     a.SubjectName = this.Model.SubjectName;
                     a.DurationValue = Model.Product.LessonDurationValue;
-                    a.Price = asset.Price;
+                    a.AssignPrice = asset.Price;
                     a.StartTime = startTime;
                     a.EndTime = startTime.AddMinutes((double)Model.Product.LessonDurationValue);
                     a.FillCreator();
@@ -137,17 +145,23 @@ namespace PPTS.WebAPI.Orders.Executors
                     cli.ConfirmStatus = ConfirmStatusDefine.Unconfirmed;    
                     cli.AssetID = asset.AssetID;
                     cli.AssetCode = asset.AssetCode;
-                    cli.CustomerID = asset.CustomerID;                    
-                    cli.CustomerID = asset.CustomerID;                    
+                    cli.CustomerID = asset.CustomerID;   
                     cli.CustomerCode = customerQuery.Customer.CustomerCode;
-                    cli.CreatorName = customerQuery.Customer.CreatorName;
+                    cli.CustomerName = customerQuery.Customer.CustomerName;
                     cli.CustomerCampusID = customerQuery.Customer.CampusID;
                     cli.CustomerCampusName = customerQuery.Customer.CampusName;
-                    cli.ConsultantID = consultant.StaffID;
-                    cli.ConsultantJobID = consultant.StaffJobID;
-                    cli.ConsultantName = consultant.StaffName;                    
-                    cli.EducatorID = educator.StaffID;
-                    cli.EducatorJobID = educator.StaffJobID;
+                    cli.CustomerGrade = Model.Grade;
+                    cli.CustomerGradeName = Model.GradeName;
+                    if (consultant != null) {
+                        cli.ConsultantID = consultant.StaffID;
+                        cli.ConsultantJobID = consultant.StaffJobID;
+                        cli.ConsultantName = consultant.StaffName;
+                    }
+                    if (educator != null) {
+                        cli.EducatorID = educator.StaffID;
+                        cli.EducatorJobID = educator.StaffJobID;
+                        cli.EducatorName = educator.StaffName;
+                    }
                     cli.FillCreator();
                     cli.FillModifier();
                     #endregion
@@ -170,6 +184,12 @@ namespace PPTS.WebAPI.Orders.Executors
             base.PrepareOperationLog(context);
 
 
+        }
+
+        protected override void Validate()
+        {
+            base.Validate();
+            
         }
     }
 }

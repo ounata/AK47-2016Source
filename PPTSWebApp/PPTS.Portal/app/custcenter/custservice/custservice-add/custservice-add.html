@@ -1,14 +1,137 @@
 ﻿<!-- #开始：新增客户服务页面Form -->
-<form class="form-horizontal" role="form">
-    <div class="widget-box">
-        <div class="widget-header">
-            <h4>
-                界面
-                
-            </h4>
-        </div>
-
-
+<div class="widget-box">
+    <div class="widget-header">
+        <h4>
+            <span ng-show="!vm.customerService.serviceType">新增客服界面</span>
+            <span ng-show="vm.customerService.serviceType == 1">投诉界面</span>
+            <span ng-show="vm.customerService.serviceType == 2">退费界面</span>
+            <span ng-show="vm.customerService.serviceType == 3">咨询界面</span>
+            <span ng-show="vm.customerService.serviceType == 4">其他界面</span>
+        </h4>
     </div>
-
-</form>
+    <div class="widget-main no-padding1">
+        <form class="form-horizontal" role="form">
+            <div class="clearfix form-actions mcs-form-actions">
+                <!-- #开始：保存客服.工具栏 -->
+                <div class="mcs-panel-toolbar col-sm-offset-3">
+                    <mcs-button category="save" text="保存" ppts-job-functions="新增客服信息" click="vm.save()"></mcs-button>
+                    <mcs-button icon="female" css="btn-success" text="转下一受理人" ppts-job-functions="转下一受理人" click="vm.saveAndNext()"></mcs-button>
+                </div>
+            </div>
+            <div class="space-10">
+            </div>
+            <div class="form-group pull-right col-sm-5 countdown">
+                <span>倒计时： {{60}}分{{20}}秒</span>
+            </div>
+            <div class="form-group">
+                <ppts-select-customer model="vm.customer" callback="vm.select"/> 
+            </div>
+            <div class="form-group">
+                <label required class="control-label col-sm-3">服务类型:</label>
+                <div class="input-group col-sm-9">
+                    <ppts-select category="serviceType" class="ppts-select-lg" model="vm.customerService.serviceType" />
+                    <span class="label-260">
+                        选项值内容有：投诉、退费、咨询、其他
+                    </span>
+                </div>
+            </div>
+            <div class="form-group" ng-hide="vm.customerService.serviceType == 3">
+                <label required class="control-label col-sm-3">投诉次数:</label>
+                <div class="input-group col-sm-9">
+                    <ppts-select category="complaintTimes" model="vm.customerService.complaintTimes" class="ppts-select-lg" />
+                    <span class="label-260">
+                        选项值内容有：一次、两次、三次、三次以上
+                    </span>
+                </div>
+            </div>
+            <div class="form-group" ng-hide="vm.customerService.serviceType == 3">
+                <label required class="control-label col-sm-3">投诉升级:</label>
+                <div class="input-group col-sm-9">
+                    <ppts-select category="complaintUpgrade" model="vm.customerService.complaintUpgrade" class="ppts-select-lg" />
+                    <span class="label-260">
+                        选项值内容有：普通、二级、三级、特级
+                    </span>
+                </div>
+            </div>
+            <div class="form-group" ng-hide="vm.customerService.serviceType == 3">
+                <label required class="control-label col-sm-3">严重程度:</label>
+                <div class="input-group col-sm-9">
+                    <ppts-select category="complaintLevel" model="vm.customerService.complaintLevel" class="ppts-select-lg" />
+                    <span class="label-260">
+                        选项值内容有：普通、严重、紧急
+                    </span>
+                </div>
+            </div>
+            <div class="form-group" ng-hide="vm.customerService.serviceType != 3">
+                <label required class="control-label col-sm-3">咨询:</label>
+                <div class="input-group col-sm-9">
+                    <ppts-select category="consultType" model="vm.customerService.consultType" class="ppts-select-lg" />
+                    <span class="label-260">
+                        选项值内容有：校区相关，退费相关，加盟，其他。 当选择其他时，可输入内容，不能超过15个字的文本字符。
+                    </span>
+                </div>
+            </div>
+            <div class="form-group" ng-hide="vm.customerService.consultType != 4 || vm.customerService.serviceType != 3">
+                <label class="control-label col-sm-3">
+                    咨询其他:
+                </label>
+                <div class="input-group col-sm-9">
+                    <textarea class="col-sm-8" rows="5" id="textArea" ng-model="vm.customerService.consultMemo" maxlength="15"></textarea>
+                    <span class="help-block col-sm-6">不允许输入15个字符，已经输入{{ vm.customerService.consultMemo.length || 0 }}个</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-3">
+                    客服受理情况详描述:
+                </label>
+                <div class="input-group col-sm-9">
+                    <textarea class="col-sm-8" rows="5" id="textArea" ng-model="vm.customerService.acceptMemo" maxlength="5000"></textarea>
+                    <span class="help-block col-sm-6">不允许输入5000个字符，已经输入{{ vm.customerService.acceptMemo.length || 0 }}个</span>
+                </div>
+            </div>
+            <div class="form-group" ng-hide="vm.customerService.serviceType == 3">
+                <label class="control-label col-sm-3">
+                    诉求:
+                </label>
+                <div class="input-group col-sm-9">
+                    <textarea class="col-sm-8" rows="5" id="textArea" ng-model="vm.customerService.appealMemo" maxlength="500"></textarea>
+                    <span class="help-block col-sm-6">不允许输入500个字符，已经输入{{ vm.customerService.appealMemo.length || 0 }}个</span>
+                </div>
+            </div>
+            <div class="form-group" ng-hide="vm.customerService.serviceType == 3">
+                <label class="control-label col-sm-3">
+                    处理建议:
+                </label>
+                <div class="input-group col-sm-9">
+                    <textarea class="col-sm-8" rows="5" id="textArea" ng-model="vm.customerService.handleAdvice" maxlength="100"></textarea>
+                    <span class="help-block col-sm-6">不允许输入100个字符，已经输入{{ vm.customerService.handleAdvice.length || 0 }}个</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-3">
+                    备注:
+                </label>
+                <div class="input-group col-sm-9">
+                    <textarea class="col-sm-8" rows="5" id="textArea" ng-model="vm.customerService.serviceMemo" maxlength="500"></textarea>
+                    <span class="help-block col-sm-6">不允许输入500个字符，已经输入{{ vm.customerService.serviceMemo.length || 0 }}个</span>
+                </div>
+            </div>
+            <div class="form-group" ng-hide="vm.customerService.serviceType == 3">
+                <label class="control-label col-sm-3">
+                    是否要升级处理:
+                </label>
+                <div class="input-group col-sm-9">
+                    <ppts-radiobutton-group category="ifElse" model="vm.customerService.isUpgradeHandle" />
+                </div>
+            </div>
+            <div class="form-group" ng-hide="vm.customerService.serviceType == 3">
+                <label class="control-label col-sm-3">
+                    要求分客服受理并回复的时间限制:
+                </label>
+                <div class="input-group col-sm-9">
+                    <ppts-radiobutton-group category="acceptLimit" model="vm.customerVisit.acceptLimit" /> 在每条记录的右上角，倒计时：
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

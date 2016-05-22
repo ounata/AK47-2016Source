@@ -1,16 +1,16 @@
 // 依赖于mcs.js, angularjs, 将会在应用程序启动之后执行
-(function () {
+(function() {
     'use strict';
 
-    mcs.ng = mcs.ng || angular.module('mcs.ng', ['mcs.ng.datatable', 'mcs.ng.treeControl', 'mcs.ng.paging', 'dialogs.main']);
+    mcs.ng = mcs.ng || angular.module('mcs.ng', ['mcs.ng.datatable', 'mcs.ng.uiCopy', 'mcs.ng.treeControl', 'mcs.ng.paging', 'dialogs.main']);
     mcs.ng.constant('httpErrorHandleMessage', {
         '404': 'no file!',
         '401': 'unauthenticated access!',
         'other': ''
-    }).service('httpErrorHandleService', function (httpErrorHandleMessage, dialogs) {
+    }).service('httpErrorHandleService', function(httpErrorHandleMessage, dialogs) {
 
         var httpErrorHandleService = this;
-        httpErrorHandleService.process = function (response) {
+        httpErrorHandleService.process = function(response) {
             //dialogs.error('error', httpErrorHandleMessage[response.StatusCode]);
             var title = response.status + ' ' + response.statusText;
             var message = response.data.message || response.data.description;
@@ -22,6 +22,7 @@
         return this;
     });
 })();
+
 (function () {
     'use strict';
 
@@ -57,18 +58,49 @@
             return $sce.trustAsHtml(text);
         };
     }]);
+
+    mcs.ng.filter('normalize', function () {
+        return function (text) {
+            return !text || text == '0001-01-01' ? '' : text;
+        };
+    });
 })();
 (function () {
     'use strict';
 
     mcs.ng.constant('buttonConfig', {
-        categories: ['add', 'edit', 'delete', 'search', 'save', 'cancel', 'ok', 'close', 'print', 'export', 'refresh', 'submit', 'approve', 'reject'],
-        defaultTexts: ['新 增', '编 辑', '删 除', '查 询', '保 存', '取 消', '确 定', '关 闭', '打 印', '导 出', '刷 新', '提交审批', '同 意', '驳 回'],
+        categories: ['add', 'edit', 'delete', 'search', 'view', 'save', 'cancel', 'ok', 'close', 'print', 'export', 'refresh', 'submit', 'approve', 'reject'],
+        defaultTexts: ['新 增', '编 辑', '删 除', '查 询', '查 看', '保 存', '取 消', '确 定', '关 闭', '打 印', '导 出', '刷 新', '提交审批', '同 意', '驳 回'],
         sizes: ['mini', 'medium', 'large'],
         sizeCss: ['btn-xs', 'btn-sm', 'btn-lg'],
-        iconClass: ['fa-plus', 'fa-pencil', 'fa-trash-o', 'fa-search', 'fa-save', 'fa-undo', 'fa-check', 'fa-times', 'fa-print', 'fa-share', 'fa-refresh', 'fa-arrow-right', 'fa-check-square', 'fa-undo']
+        iconClass: ['fa-plus', 'fa-pencil', 'fa-trash-o', 'fa-search', 'fa-eye', 'fa-save', 'fa-undo', 'fa-check', 'fa-times', 'fa-print', 'fa-share', 'fa-refresh', 'fa-arrow-right', 'fa-check-square', 'fa-undo']
     })
-    .directive('mcsButton', function (buttonConfig) {
+    .directive('mcsDropdownButton', function () {
+        return {
+            restrict: 'E',
+            scope: {
+                category: '@', //"info", "primary", "warning", "success", "danger"
+                css: '@',
+                title: '@',
+                items: '=',
+                icon: '@'
+            },
+            templateUrl: mcs.app.config.mcsComponentBaseUrl + '/src/tpl/mcs-dropdown-button.tpl.html',
+            replace: true,
+            link: function ($scope, $elem, $attrs, $ctrl) {
+                $scope.category = $scope.category || 'info';
+                $scope.title = $scope.title || '新 增';
+                if ($scope.icon) {
+                    if ($scope.icon.indexOf('fa-') == -1) {
+                        $scope.icon = 'fa-' + $scope.icon;
+                    }
+                } else {
+                    $scope.icon = 'fa-plus';
+                }
+                $elem.find('i').addClass($scope.icon);
+            }
+        };
+    }).directive('mcsButton', function (buttonConfig) {
 
         return {
             restrict: 'E',
@@ -91,6 +123,7 @@
                 var buttonCss = 'btn-info';
                 switch ($scope.category) {
                     case 'search':
+                    case 'view':
                         buttonCss = 'btn-primary';
                         break;
                     case 'delete':
@@ -137,44 +170,194 @@
         };
     });
 })();
-(function() {
-    mcs.ng.directive('mcsLinkList', function($compile) {
-        return {
-            restrict: 'A',
-            scope: {
-                data: '=',
-                click: '&'
-
-            },
-            template: '<button type="button" class="btn btn-link" data-toggle="button"  ng-repeat="item in data" ng-click="click({eventArgs:$event})">{{item.id}}</button>',
-
-            link: function($scope, ele, attrs, ctrl) {
-
-
-            }
-
-        }
-    })
-
-    .directive('mcsCascadingSelect', function($compile) {
-
+(function () {
+    mcs.ng.directive('mcsCascadingSelect', ['$http', function ($http) {
         return {
             restrict: 'E',
             scope: {
-                division: '=data',
-                ngModel: '=',
-                required: '@'
+                level: '@',
+                caption: '@',
+                data: '=?',
+                model: '=',
+                async: '@',
+                url: '@',
+                path: '@',
+                root: '@',
+                params: '=',
+                otherParams: '=?',
+                parentKey: '@',
+                customStyle: '@?',
+                callback: '&'
             },
-
-            templateUrl: mcs.app.config.componentBaseUrl + '/src/tpl/mcs-cascading-select.tpl.html ',
+            templateUrl: mcs.app.config.mcsComponentBaseUrl + '/src/tpl/mcs-cascading-select.tpl.html',
             replace: true,
+            controller: function ($scope) {
+                if (!$scope.caption) {
+                    $scope.level = $scope.level || 3;
+                    $scope.caption = [];
+                    for (var i = 0; i < $scope.level; i++) {
+                        $scope.caption.push('请选择');
+                    }
+                } else {
+                    $scope.level = mcs.util.toArray($scope.caption).length;
+                }
 
-            link: function($scope, iElm, iAttrs) {
+                $scope.percentage = '';
+                switch ($scope.level) {
+                    case 1:
+                        $scope.portion = 12;
+                        break;
+                    case 2:
+                        $scope.portion = 6;
+                        $scope.percentage = 'mcs-select-width-50';
+                        break;
+                    case 3:
+                    default:
+                        $scope.portion = 4;
+                        $scope.percentage = 'mcs-select-width-40';
+                        break;
+                    case 4:
+                        $scope.portion = 3;
+                        $scope.percentage = 'mcs-select-width-30';
+                        break;
+                }
+            },
+            link: function ($scope, $elem, $attrs, $ctrl) {
+                $scope.path = mcs.util.bool($scope.path || false);
+                $scope.root = $scope.root || '0';
+                $scope.async = mcs.util.bool($scope.async || true);
+                $scope.model = $scope.model || {};
+                $scope.params = $scope.params || {};
+                $scope.parentKey = $scope.parentKey || 'parentKey';
 
+                var loadData = function (elem, id) {
+                    if (!id) return;
+                    // 支持异步
+                    if (mcs.util.bool($scope.async)) {
+                        if (!$scope.url) return;
+                        $http({
+                            method: 'post',
+                            url: $scope.url,
+                            data: $scope.params,
+                            cache: true
+                        }).then(function (result) {
+                            if (!result.data) return;
+                            $scope.data = $scope.data || {};
+                            for (var i in result.data) {
+                                var item = result.data[i];
+                                $scope.data[id] = $scope.data[id] || {};
+                                $scope.data[id][item.key] = item.value;
+                            }
+                            loadDataCallback(elem, $scope.data[id]);
+                        });
+                    } else {
+                        if (typeof ($scope.data[id]) == "undefined")
+                            return false;
+                        loadDataCallback(elem, $scope.data[id]);
+                    }
+                    elem.select2("val", "");
+                };
 
+                var loadDataCallback = function (elem, json, selected_id) {
+                    if (json) {
+                        var index = 1;
+                        var selected_index = 0;
+                        $.each(json, function (k, v) {
+                            var option = '<option value="' + k + '">' + v + '</option>';
+                            elem.append(option);
+
+                            if (k == selected_id) {
+                                selected_index = index;
+                            }
+
+                            index++;
+                        })
+                        //el.attr('selectedIndex' , selected_index); 
+                    }
+                }
+
+                var captions = mcs.util.toArray($scope.caption);
+                // 构建option
+                $.each(captions, function (k, v) {
+                    var option = '<option value="">' + v + '</option>';
+                    var select = $elem.find('select').eq(k);
+                    var length = captions.length;
+                    var last = (k == captions.length - 1);
+
+                    // 返回已选择的数据
+                    $scope.model[k] = select.val();
+
+                    if ($scope.customStyle) {
+                        select.attr('style', $scope.customStyle);
+                    }
+
+                    select.append(option).select2().change(function () {
+                        // 返回已选择的数据
+                        $scope.model[k] = select.val();
+                        $scope.model['selected'] = $scope.model['selected'] || {};
+                        // 注册回调事件
+                        $scope.$watch('$scope.model', $scope.callback);
+                        switch (k) {
+                            case 0:
+                                $scope.model['selected'].key = select.val();
+                                $scope.model['selected'].value = select.select2('data').text;
+                                break;
+                            case 1:
+                                var prev = $elem.find('select').eq(k - 1);
+                                $scope.model['selected'].key = prev.val() + ',' + select.val();
+                                $scope.model['selected'].value = prev.select2('data').text + ',' + select.select2('data').text;
+                                break;
+                            case 2:
+                                var prev = $elem.find('select').eq(k - 1);
+                                var last = $elem.find('select').eq(k - 2);
+                                $scope.model['selected'].key = last.val() + ',' + prev.val() + ',' + select.val();
+                                $scope.model['selected'].value = last.select2('data').text + ',' + prev.select2('data').text + ',' + select.select2('data').text;
+                                break;
+                        }
+
+                        if (!last) {
+                            var next = $elem.find('select').eq(k + 1);
+                            next.empty().append('<option value="">' + captions[k + 1] + '</option>');
+                            var parent = select.val();
+
+                            if ($scope.path) {
+                                switch (k) {
+                                    case 0:
+                                        parent = $scope.root + ',' + parent;
+                                        break;
+                                    case 1:
+                                        parent = $scope.root + ',' + $elem.find('select').eq(k - 1).val() + ',' + parent;
+                                        break;
+                                    case 2:
+                                        parent = $scope.root + ',' + $elem.find('select').eq(k - 2).val() + ',' + $elem.find('select').eq(k - 1).val() + ',' + parent;
+                                        break;
+                                }
+                            }
+                            // 判断是否为异步且只加载当前项的数据
+                            if (mcs.util.bool($scope.async) && select.val()) {
+                                $scope.params[$scope.parentKey] = parent;
+                                if ($scope.otherParams) {
+                                    for (var prop in $scope.params) {
+                                        if ($scope.otherParams[prop]) {
+                                            $scope.params[prop] = $scope.otherParams[prop];
+                                        }
+                                    }
+                                }
+                                loadData(next, parent);
+                            } else {
+                                loadData(next, parent);
+                            }
+                            next.change();
+                        }
+                        // 触发$digest
+                        $scope.$apply('$scope.model');
+                    });
+                });
+                // 默认加载第一级
+                loadData($elem.find('select').eq(0), $scope.root);
             }
-        };
-    });
+        }
+    }]);
 })();
 (function () {
     'use strict';
@@ -219,9 +402,10 @@
                 '<li ng-class="{disabled: conf.pageIndex == conf.numberOfPages}" ng-click="nextPage()" style="cursor:pointer;"><span>&raquo;</span></li>' +
                 '</ul>' +
                 '<div class="page-total" ng-show="conf.totalCount > 0">' +
-                '第 <input type="text" ng-model="jumpPageNum" class="mcs-input-small" ng-blur="jumpToPage($event)" onkeyup="mcs.util.limit(this)" onafterpaste="mcs.util.limit(this)"/>页 ' +
+                '第 <input type="text" ng-model="jumpPageNum" class="mcs-input-small" ng-keypress="$event.keyCode == 13?jumpToPage($event):null" onkeyup="mcs.util.limit(this)" onafterpaste="mcs.util.limit(this)"/>页 ' +
 
-                '共<strong>{{ conf.totalCount }}</strong>条记录' +
+                '共<strong> {{ conf.totalCount }} </strong>条记录 ' +
+                '<button class="btn btn-minier btn-primary" ng-click="jumpToPage($event)"><i class="ace-icon fa bigger-110 fa-mail-forward"></i> 跳 转</button>' +
                 '</div>' +
                 '<div class="no-items" ng-show="conf.totalCount <= 0">暂无数据</div>' +
                 '</div>',
@@ -427,7 +611,7 @@
 
         return {
             restrict: 'E',
-            templateUrl: mcs.app.config.componentBaseUrl + '/src/tpl/mcs-datatable.tpl.html ',
+            templateUrl: mcs.app.config.mcsComponentBaseUrl + '/src/tpl/mcs-datatable.tpl.html ',
             replace: true,
             scope: {
 
@@ -517,9 +701,12 @@
                 }
 
                 $scope.pageChange = function(callback) {
-                    callback().then(function() {
-                        $scope.reMatchRowsSelected();
-                    })
+                    if (callback()) {
+                        callback().then(function() {
+                            $scope.reMatchRowsSelected();
+                        })
+                    }
+
 
                 }
 
@@ -696,7 +883,7 @@
 (function () {
     'use strict';
 
-    mcs.ng.directive('mcsInput', function () {
+    mcs.ng.directive('mcsInput', ['mcsValidationService', function (validationService) {
         return {
             restrict: 'E',
             replace: true,
@@ -707,7 +894,7 @@
                 readonly: '@',
                 css: '@',
                 integer: '@',
-                model: '=',
+                model: '='
             },
             template: '<input placeholder="{{placeholder}}" class="mcs-default-size-input mcs-margin-right-20 {{css}}" ng-model="model" />',
             link: function ($scope, $elem, $attrs) {
@@ -728,9 +915,13 @@
                     //$elem.attr('readonly', 'readonly');
                     $elem.attr('disabled', 'disabled');
                 }
+                // 执行验证
+                $elem.blur(function () {
+                    validationService.validate($elem);
+                });
             }
         };
-    });
+    }]);
 })();
 (function () {
     'use strict';
@@ -745,7 +936,7 @@
                 forInput: '@',
                 css: '@'
             },
-            template: '<label class="control-label no-padding-right {{css}}" for="{{forInput}}"> {{text}}</label>',
+            template: '<label class="control-label {{css}}" for="{{forInput}}"> {{text}}</label>',
             link: function ($scope, $elem, $attrs) {
                 if ($scope.required) {
                     $elem.prepend('<span class="required">*</span>');
@@ -757,6 +948,42 @@
         };
     });
 })();
+(
+    function() {
+        mcs.ng.service('printService', function() {
+                var printService = this;
+
+                function isIE() {
+                    if (!!window.ActiveXObject || "ActiveXObject" in window)
+                        return true;
+                    else
+                        return false;
+                }
+
+                printService.print = function() {
+
+
+
+                    var content = document.getElementById("printArea").innerHTML;
+
+                    var newwin = window.open(mcs.app.config.mcsComponentBaseUrl + '/src/mcs-print/mcs-print.html', '', '');
+                    newwin.opener = null;
+
+
+                    newwin.onload = function() {
+                        var container = newwin.document.getElementById('printContainer');
+                        container.innerHTML = content;
+                    }
+
+
+
+                }
+
+                return printService;
+            });
+    }
+)();
+
 (function () {
     'use strict';
 
@@ -766,58 +993,20 @@
             restrict: 'E',
             scope: {
                 data: '=',
-                model: '='
+                model: '=',
+                value: '='
             },
 
-            template: '<label class="radio-inline" ng-repeat="item in data"><input name="{{groupName}}" type="radio" class="ace" ng-checked="item.key==model" ng-click="change(item)"><span class="lbl"></span> {{item.value}}</label>',
+            template: '<label class="radio-inline" ng-repeat="item in data" ng-show="item.state"><input name="{{groupName}}" type="radio" class="ace" ng-checked="item.key==model" ng-click="change(item)"><span class="lbl"></span> {{item.value}}</label>',
             controller: function ($scope) {
                 $scope.groupName = mcs.util.newGuid();
                 $scope.change = function (item) {
                     $scope.model = item.key;
+                    $scope.value = item.value;
                 };
             },
             link: function ($scope, $elem) {
                 $elem.attr('groupName', $scope.groupName);
-            }
-        }
-    });
-
-    //mcs.ng.directive('mcsRadiobuttonGroup', ['$compile', function ($compile) {
-
-    //    return {
-    //        restrict: 'E',
-    //        replace: true,
-    //        scope: {
-    //            data: '=',
-    //            model: '='
-    //        },
-    //        template: '<div></div>',
-    //        link: function ($scope, $elem, $attrs, $ctrl) {
-    //            if (!$scope.data) return;
-    //            $scope.groupName = mcs.util.newGuid();
-    //            $scope.data.forEach(function (item, index) {
-    //                $elem.append($compile(angular.element('<label class="radio-inline"><input type="radio" name="{{groupName}}" class="ace" ng-model="model" value="' + item.key + '"/><span class="lbl"></span> ' + item.value + '</label>'))($scope));
-    //            });
-    //        }
-    //    }
-    //}]);
-})();
-(function () {
-    'use strict';
-
-    mcs.ng.directive('mcsSelect', function () {
-
-        return {
-            restrict: 'E',
-            scope: {
-                data: '=',
-                model: '=',
-                caption: '@'
-            },
-
-            templateUrl: mcs.app.config.componentBaseUrl + '/src/tpl/mcs-select.tpl.html',
-            link: function ($scope, $elem, $attrs, $ctrl) {
-                
             }
         }
     });
@@ -956,6 +1145,33 @@
         });
 
 
+})();
+
+(function function_name(argument) {
+    'use strict';
+
+    angular.module('mcs.ng.uiCopy', [])
+
+    .controller('uiCopyController', ['$scope', function() {
+
+    }])
+
+    .directive('mcsUicopy', function($compile, $http) {
+
+        return {
+            restrict: 'E',
+            scope: {
+                data: '=',
+                itemTemplateUrl: '@'
+            },
+            template: '<table style="width:100%" class="table-layout"><tr ng-repeat="row in data"><td><div ng-include="itemTemplateUrl"></div></td></tr></table>',
+
+            link: function($scope, iElm, iAttrs, controller) {
+
+
+            }
+        };
+    });
 })();
 
 (
@@ -1130,41 +1346,141 @@
 
 )();
 
-(
-  
-function () {
-  'use strict';  
-  
-  mcs.ng   
-    
-    .service('validateService', function () {
-      var validateService = this;
-      validateService.ruleSet = {
-        phone: {
-          required: true,
-          message: 'phone number valid',
-          patternDescription: 'phone number should be 15 bit',
-          pattern: function (value) {
-            if (!angular.isNumber(parseInt(value)) || value.length !=15) {
-            return flase;
+/* 验证框架 */
+(function () {
+    'use strict';
+
+    mcs.ng.service('mcsValidationService', ['mcsValidationRules', 'mcsValidationMessageConfig', function (rules, config) {
+        var service = this;
+
+        var checkValidationResult = function (elem, options) {
+            var opts = $.extend({
+                errorMessage: config.general,
+                validate: true
+            }, options);
+
+            var parent = elem.closest('.form-group');
+            // 如果验证通过，则跳转到下一规则继续验证
+            var message = parent.find('.help-block');
+            if (opts.validate) {
+                parent.removeClass('validate has-error');
+                message.text('').css('visibility', 'hidden');
+            } else {
+                parent.addClass('validate has-error');
+                message.text(opts.errorMessage).css('visibility', 'visible');
             }
-            return true;
-          }
 
-        }
-      }
-    })
-    .service('validateMessageService', function ($dialogs) {
-      var validMessageService = this;
-      validMessageService.processMessage = function (message, messageTargetElement) {
-        if (messageTargetElement) {
-          messageTargetElement.innerText = message.content;
-        } else {
-          $dialogs.error(message.title, message.content);
-        }
-      }
+            return opts.validate;
+        };
 
-      
+        service.validate = function (elem) {
+            var validationResult = true;
+            // 如不包含任何验证规则，则不参与验证
+            if (!mcs.util.hasAttrs(elem, rules)) return validationResult;
+            // required
+            if (validationResult && mcs.util.hasAttr(elem, 'required')) {
+                validationResult = checkValidationResult(elem, {
+                    errorMessage: elem.attr('data-validation-required-message') || config.required,
+                    validate: $.trim(elem.val()).length > 0
+                });
+            }
+            // minlength
+            if (validationResult && mcs.util.hasAttr(elem, 'minlength')) {
+                var minlength = parseInt(elem.attr('minlength'));
+                if (minlength > 0) {
+                    validationResult = checkValidationResult(elem, {
+                        errorMessage: elem.attr('data-validation-minlength-message') || mcs.util.format(config.minlength, minlength),
+                        validate: $.trim(elem.val()).length >= minlength
+                    });
+                }
+            }
+            //maxlength
+            if (validationResult && mcs.util.hasAttr(elem, 'maxlength')) {
+                var maxlength = parseInt(elem.attr('maxlength'));
+                if (maxlength > 0) {
+                    validationResult = checkValidationResult({
+                        errorMessage: elem.attr('data-validation-maxlength-message') || mcs.util.format(config.maxlength, maxlength),
+                        validate: $.trim(elem.val()).length <= maxlength
+                    });
+                }
+            }
+            //min
+            if (validationResult && mcs.util.hasAttr(elem, 'min')) {
+                var min = parseFloat(elem.attr('min'));
+                validationResult = checkValidationResult({
+                    errorMessage: elem.attr('data-validation-min-message') || mcs.util.format(config.min, min),
+                    validate: parseFloat($.trim(elem.val())) >= min
+                });
+            }
+            //max
+            if (validationResult && mcs.util.hasAttr(elem, 'max')) {
+                var max = parseFloat(elem.attr('max'));
+                validationResult = checkValidationResult({
+                    errorMessage: elem.attr('data-validation-max-message') || mcs.util.format(config.max, max),
+                    validate: parseFloat($.trim(elem.val())) <= max
+                });
+            }
+            //positive
+            if (validationResult && mcs.util.hasAttr(elem, 'positive')) {
+                validationResult = checkValidationResult({
+                    errorMessage: elem.attr('data-validation-positive-message') || config.positive,
+                    validate: (/^[1-9]+[0-9]*$/).test($.trim(elem.val()))
+                });
+            }
+            //negtive
+            if (validationResult && mcs.util.hasAttr(elem, 'negtive')) {
+                validationResult = checkValidationResult({
+                    errorMessage: elem.attr('data-validation-negtive-message') || config.negative,
+                    validate: (/^-[1-9]+[0-9]*$/).test($.elem(elem.val()))
+                });
+            }
+            //currency
+            if (validationResult && mcs.util.hasAttr(elem, 'currency')) {
+                validationResult = checkValidationResult({
+                    errorMessage: elem.attr('data-validation-currency-message') || config.currency,
+                    validate: (/^(([1-9]\d*)|0)(\.\d{1,2})?$/).test($.trim(elem.val()))
+                });
+            }
+            //between
+            if (validationResult && mcs.util.hasAttr(elem, 'between')) {
+                var between = elem.attr('between').split(',');
+                if (between.length == 2) {
+                    var min = parseFloat(between[0]);
+                    var max = parseFloat(between[1]);
+                    if (!isNaN(min) && !isNaN(max)) {
+                        validationResult = checkValidationResult({
+                            errorMessage: elem.attr('data-validation-between-message') || mcs.util.format(config.between, min, max),
+                            validate: parseFloat($.trim(elem.val())) >= min && parseFloat($.trim(elem.val())) <= max
+                        });
+                    }
+                }
+            }
+            // 设置已经过验证
+            elem.attr('data-validate-result', validationResult);
+            return validationResult;
+        };
+
+        return service;
+    }]).constant('mcsValidationRules', [
+        'required',
+        'minlength',
+        'maxlength',
+        'min',
+        'max',
+        'positive',
+        'negtive',
+        'currency',
+        'between'
+    ]).constant('mcsValidationMessageConfig', {
+        general: '输入数据项不正确，请重新输入!',
+        required: '输入数据项为必填！',
+        minlength: '应至少输入{0}个字符！',
+        maxlength: '最多只能输入{0}个字符！',
+        min: '输入数据项应大于{0}！',
+        max: '输入数据项应小于{0}！',
+        positive: '输入数据项应为正整数！',
+        negative: '输入数据项应为负整数！',
+        currency: '输入数据项应为小数或货币值！',
+        between: '输入数据项应在{0}和{1}之间！'
     });
-}
-)();
+})();

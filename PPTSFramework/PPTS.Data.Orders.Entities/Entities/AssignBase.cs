@@ -148,6 +148,12 @@ namespace PPTS.Data.Orders.Entities
         }
 
         /// <summary>
+        /// 教师岗位ID
+        /// </summary>
+        string TeacherJobID
+        { get; set; }
+
+        /// <summary>
         /// 创建时间
         /// </summary>
         DateTime CreateTime
@@ -173,7 +179,7 @@ namespace PPTS.Data.Orders.Entities
             get;
             set;
         }
+ 
         #endregion
     }
-
 }

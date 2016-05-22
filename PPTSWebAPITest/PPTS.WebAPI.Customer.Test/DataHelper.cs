@@ -49,8 +49,8 @@ namespace PPTS.WebAPI.Customer.Test
         {
             var relation = new CustomerParentRelation() { CustomerID = studentID, ParentID = parentID };
 
-            relation.CustomerRole = 1;
-            relation.ParentRole = 1;
+            relation.CustomerRole = "1";
+            relation.ParentRole = "1";
             relation.IsPrimary = true;
 
             return relation;

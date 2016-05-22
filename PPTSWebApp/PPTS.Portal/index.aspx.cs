@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using MCS.Library.Principal;
@@ -13,7 +12,7 @@ namespace PPTS.Portal
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-      
+
         }
 
         protected override void OnPreRender(EventArgs e)
@@ -28,9 +27,15 @@ namespace PPTS.Portal
 
             if (DeluxePrincipal.IsAuthenticated)
             {
+                PPTSJobCollection jobs = DeluxeIdentity.CurrentUser.Jobs();
+                parameters["userId"] = DeluxeIdentity.CurrentUser.ID;
                 parameters["displayName"] = DeluxeIdentity.CurrentUser.DisplayName;
-                parameters["jobs"] = DeluxeIdentity.CurrentUser.Jobs();
+                parameters["jobs"] = jobs;
                 parameters["roles"] = DeluxeIdentity.CurrentUser.PPTSRoles();
+                if (jobs.Count > 0)
+                {
+                    parameters["orgId"] = jobs[0].GetParentOrganizationByType(DepartmentType.HQ).ID;
+                }
             }
 
             Dictionary<string, Uri> urls = new Dictionary<string, Uri>();

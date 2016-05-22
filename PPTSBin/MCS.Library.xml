@@ -7908,6 +7908,16 @@
             翻译的类别
             </summary>
         </member>
+        <member name="P:MCS.Library.Core.EnumItemDescriptionAttribute.Filter">
+            <summary>
+            过滤器（预留的属性）
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Core.EnumItemDescriptionAttribute.Tag">
+            <summary>
+            标签
+            </summary>
+        </member>
         <member name="M:MCS.Library.Core.EnumItemDescriptionAttribute.GetAttribute(System.Enum)">
             <summary>
             获得枚举项附加属性的描述信息属性
@@ -7996,6 +8006,16 @@
             <remarks>
             该属性是只读的
             </remarks>
+        </member>
+        <member name="P:MCS.Library.Core.EnumItemDescription.Filter">
+            <summary>
+            过滤器（预留的属性）
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Core.EnumItemDescription.Tag">
+            <summary>
+            标签
+            </summary>
         </member>
         <member name="M:MCS.Library.Core.EnumItemDescription.Compare(MCS.Library.Core.EnumItemDescription,MCS.Library.Core.EnumItemDescription)">
             <summary>
@@ -9315,6 +9335,26 @@
             <param name="ignorProperties"></param>
             <returns></returns>
         </member>
+        <member name="T:MCS.Library.Data.DataObjects.BooleanState">
+            <summary>
+            三态的布尔状态
+            </summary>
+        </member>
+        <member name="F:MCS.Library.Data.DataObjects.BooleanState.Unknown">
+            <summary>
+            未知状态
+            </summary>
+        </member>
+        <member name="F:MCS.Library.Data.DataObjects.BooleanState.False">
+            <summary>
+            假
+            </summary>
+        </member>
+        <member name="F:MCS.Library.Data.DataObjects.BooleanState.True">
+            <summary>
+            真
+            </summary>
+        </member>
         <member name="T:MCS.Library.Data.DataObjects.IVersionDataObject">
             <summary>
             带版本信息的数据实体
@@ -9716,6 +9756,13 @@
             添加一个对象
             </summary>
             <param name="data"></param>
+        </member>
+        <member name="M:MCS.Library.Data.DataObjects.EditableDataObjectCollectionBase`1.Append(`0)">
+            <summary>
+            添加一个对象。与Add不同的是，返回添加的对象
+            </summary>
+            <param name="data"></param>
+            <returns></returns>
         </member>
         <member name="M:MCS.Library.Data.DataObjects.EditableDataObjectCollectionBase`1.AddNotExistsItem(`0,System.Predicate{`0})">
             <summary>
@@ -10900,6 +10947,24 @@
             GroupBy部分，包括Having部分
             </summary>
         </member>
+        <member name="P:MCS.Library.Data.DataObjects.QueryCondition.Top">
+            <summary>
+            查询记录数的上限
+            </summary>
+        </member>
+        <member name="M:MCS.Library.Data.DataObjects.QueryCondition.GetTopClause">
+            <summary>
+            得到Top子句。如果Top属性小于0，则返回空串
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MCS.Library.Data.DataObjects.QueryCondition.GetRealCount(System.Int32)">
+            <summary>
+            根据totalCount和top的值，得到总记录数（它们之中的最小值）。如果top小于0，则返回totalCount
+            </summary>
+            <param name="totalCount"></param>
+            <returns></returns>
+        </member>
         <member name="T:MCS.Library.Data.DataObjects.RowValueBase`2">
             <summary>
             Table中每一行中每一列的值
@@ -11329,6 +11394,11 @@
         <member name="P:MCS.Library.Data.IPageRequestParams.TotalCount">
             <summary>
             总行数。默认为-1，表示没有总行数
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Data.IPageRequestParams.Top">
+            <summary>
+            最多返回多少行
             </summary>
         </member>
         <member name="M:MCS.Library.Data.IPageRequestParams.ToRowIndex">
@@ -11937,6 +12007,11 @@
         <member name="P:MCS.Library.Data.PageRequestParams.TotalCount">
             <summary>
             总行数。默认为-1，表示没有总行数
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Data.PageRequestParams.Top">
+            <summary>
+            最多返回多少行（-1是默认值，表示没有限制）
             </summary>
         </member>
         <member name="M:MCS.Library.Data.PageRequestParams.ToRowIndex">

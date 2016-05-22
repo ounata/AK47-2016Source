@@ -19,14 +19,29 @@ namespace Diagnostics.AppPoolCheck
             string fileName = GetNotifyFileName();
         }
 
+        protected override void OnPreRender(EventArgs e)
+        {
+            if (this.IsPostBack == false)
+            {
+                if (ObjectCacheQueue.Instance.ContainsKey("FileTest") == false)
+                {
+                    ObjectCacheQueue.Instance.Add("FileTest", "尚未初始化", new FileCacheDependency(GetNotifyFileName()));
+
+                    this.receivedMessage.InnerText = "尚未初始化";
+                }
+            }
+
+            base.OnPreRender(e);
+        }
+
         protected void sendNotify_Click(object sender, EventArgs e)
         {
             string message = string.Format(MessageTemplate, DateTime.Now);
 
             ChangeNorifyFileText(message);
 
-            if (ObjectCacheQueue.Instance.ContainsKey("FileTest") == false)
-                ObjectCacheQueue.Instance.Add("UdpTest", "尚未初始化", new FileCacheDependency(GetNotifyFileName()));
+            //if (ObjectCacheQueue.Instance.ContainsKey("FileTest") == false)
+            //    ObjectCacheQueue.Instance.Add("FileTest", "尚未初始化", new FileCacheDependency(GetNotifyFileName()));
 
             sentMessage.InnerText = string.Format("发送内容: {0}", message);
         }

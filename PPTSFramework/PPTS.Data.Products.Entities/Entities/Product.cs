@@ -127,7 +127,7 @@ namespace PPTS.Data.Products.Entities
         /// 启售日期
         /// </summary>
         [ORFieldMapping("StartDate", UtcTimeToLocal = true)]
-        [SqlBehavior(BindingFlags = ClauseBindingFlags.Select | ClauseBindingFlags.Where)]
+        [SqlBehavior(BindingFlags =ClauseBindingFlags.All)]
         [DataMember]
         public DateTime StartDate { set; get; }
 
@@ -135,7 +135,7 @@ namespace PPTS.Data.Products.Entities
         /// 停售日期
         /// </summary>
         [ORFieldMapping("EndDate", UtcTimeToLocal = true)]
-        [SqlBehavior(BindingFlags = ClauseBindingFlags.Select | ClauseBindingFlags.Where)]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.All)]
         [DataMember]
         public DateTime EndDate { set; get; }
 
@@ -248,7 +248,7 @@ namespace PPTS.Data.Products.Entities
         /// 提交时间
         /// </summary>
         [ORFieldMapping("SubmitTime", UtcTimeToLocal = true)]
-        [SqlBehavior(BindingFlags = ClauseBindingFlags.Select | ClauseBindingFlags.Where)]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.Select | ClauseBindingFlags.Where, DefaultExpression = "GETUTCDATE()", ForceUseDefaultExpression = true)]
         [DataMember]
         public DateTime SubmitTime { set; get; }
 

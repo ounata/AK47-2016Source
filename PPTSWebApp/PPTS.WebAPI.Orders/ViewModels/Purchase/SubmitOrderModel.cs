@@ -11,7 +11,7 @@ namespace PPTS.WebAPI.Orders.ViewModels.Purchase
     public class SubmitOrderModel
     {
         /// <summary>
-        /// 提交清单类型 1:常规 2:买赠
+        /// 提交清单类型 1:常规 2:买赠 3:插班
         /// </summary>
         public int ListType { set; get; }
 
@@ -23,7 +23,18 @@ namespace PPTS.WebAPI.Orders.ViewModels.Purchase
         public string CustomerID { set; get; }
         public string AccountId { set; get; }
 
-        public List<OrderItem> item { set; get; }
+        /// <summary>
+        /// 特殊折扣类型代码
+        /// </summary>
+        public string SpecialType { set; get; }
+
+        /// <summary>
+        /// 特殊折扣说明
+        /// </summary>
+        public string SpecialMemo { set; get; }
+        public string CustomerCampusID { set; get; }
+
+        public List<OrderItemViewModel> item { set; get; }
 
 
 
@@ -31,16 +42,15 @@ namespace PPTS.WebAPI.Orders.ViewModels.Purchase
 
         public string CreatorID { set; get; }
         public string CreatorName { set; get; }
-        public string CustomerCampusID { set; get; }
-        public string ProductCampusID { set; get; }
-        public string ProductCampusName { set; get; }
-        public string OrgID { set; get; }
+
+        public string JobId { set; get; }
+        public string JobName { set; get; }
+        public string JobType { set; get; }
 
         #endregion
 
         #region
-
-        public Service.Account Account { set; get; }
+        public Data.Customers.Entities.Account Account { set; get; }
         public List<Data.Products.Entities.ProductView> ProductViews { set; get; }
 
         #endregion
@@ -50,14 +60,39 @@ namespace PPTS.WebAPI.Orders.ViewModels.Purchase
         {
             if (order == null)
             {
+                var parentInfo = Service.CustomerService.GetPrimaryParentByCustomerId(CustomerID);
+                var customerInfo = Service.CustomerService.GetCustomerByCustomerId(CustomerID);
+
                 order = new Order()
                 {
                     OrderID = Guid.NewGuid().ToString(),
                     CreatorID = CreatorID,
                     CreatorName = CreatorName,
+
+                    SubmitterID = CreatorID,
+                    SubmitterName = CreatorName,
+                    SubmitterJobName = JobName,
+                    SubmitterJobID = JobId,
+                    
+
                     CustomerID = CustomerID,
                     OrderStatus = OrderStatus.PendingApproval,
                     ChargeApplyID = ChargeApplyID,
+                    SpecialType = SpecialType,
+                    SpecialMemo = SpecialMemo,
+                    AccountID = AccountId,
+                    AccountCode = Account.AccountCode,
+                    CustomerCode = customerInfo.CustomerCode,
+                    CustomerGrade = customerInfo.Grade,
+                    CustomerName = customerInfo.CustomerName,
+                    ParentID = parentInfo!=null?parentInfo.ParentID:"",
+                    ParentName = parentInfo != null ? parentInfo.ParentName : "",
+
+                    OrderType = (OrderType)ListType,
+                    
+                    ProcessStatus="1",
+                    CampusID = CustomerCampusID,
+                    CampusName = "--",
                 };
             }
             return order;
@@ -68,11 +103,19 @@ namespace PPTS.WebAPI.Orders.ViewModels.Purchase
         {
             if (orderItems == null)
             {
+                var cartids = item.Select(m => m.CartID).ToArray();
+                var carts = Data.Orders.Adapters.ShoppingCartAdapter.Instance.Load(cartids);
+
+                var mapper = new AutoMapper.MapperConfiguration(c =>
+                {
+                    c.CreateMap<Data.Products.Entities.ProductView, Data.Orders.Entities.OrderItem>();
+                }).CreateMapper();
+
                 Service.Present preset = null;
                 //买赠
                 if (ListType == 2)
                 {
-                    preset = Service.ProductService.GetPresentByOrgId(OrgID);
+                    preset = Service.ProductService.GetPresentByOrgId(CustomerCampusID);
                 }
 
                 orderItems = new Data.Orders.Entities.OrderItemCollection();
@@ -80,43 +123,49 @@ namespace PPTS.WebAPI.Orders.ViewModels.Purchase
                 foreach (var product in ProductViews)
                 {
                     var submitItem = item.Single(m => m.ProductID == product.ProductID);
-                    var oitem = new Data.Orders.Entities.OrderItem()
-                    {
-                        OrderPrice = product.ProductPrice,
-                        OrderAmount = 1,
-                        ProductID = product.ProductID,
-                        ProductName = product.ProductName,
-                        Subject = product.Subject,
-                        Grade = product.Grade,
-                        Catalog = product.Catalog,
-                        CatalogName = product.CatalogName,
-                        CategoryType = ((int)product.CategoryType).ToString(),
-                        CourseLevel = product.CourseLevel,
-                        //CourseLevelName = 
-                        DiscountType = ((int)DiscountTypeDefine.None).ToString(),
+                    var oitem = mapper.Map<OrderItem>(product);
 
-                    };
+                    oitem.OrderPrice = product.ProductPrice;
+                    oitem.OrderAmount = 1;
+                    oitem.CategoryType = ((int)product.CategoryType).ToString();
+                    oitem.DiscountType = ((int)DiscountTypeDefine.None).ToString();
 
-                    //是否允许修改订购产品数量
-                    if (product.CanInput == 1)
+                    oitem.ProductCampusID = carts.Single(s=>s.ProductID == product.ProductID).ProductCampusID;
+
+                    if (product.CategoryType == CategoryType.CalssGroup)
                     {
-                        oitem.OrderAmount = submitItem.OrderAmount;
+                        oitem.OrderAmount = product.LessonCount;
                     }
-                    //是否允许特殊折扣
-                    if (product.SpecialAllowed == 1)
+                    else
                     {
-                        oitem.DiscountRate = oitem.SpecialRate = submitItem.SpecialRate;
-                        oitem.DiscountType = ((int)DiscountTypeDefine.Special).ToString();
+                        //是否允许修改订购产品数量
+                        if (product.CanInput == 1)
+                        {
+                            oitem.OrderAmount = submitItem.OrderAmount;
+                        }
                     }
+
                     //是否允许使用 客户折扣
                     if (product.TunlandAllowed == 1)
                     {
                         oitem.DiscountRate = oitem.TunlandRate = Account.DiscountRate;
                         oitem.DiscountType = ((int)DiscountTypeDefine.Tunland).ToString();
                     }
+                    //是否允许特殊折扣
+                    if (product.SpecialAllowed == 1)
+                    {
+                        if(oitem.DiscountRate> submitItem.SpecialRate)
+                        {
+                            oitem.DiscountRate = oitem.SpecialRate = submitItem.SpecialRate;
+                            oitem.DiscountType = ((int)DiscountTypeDefine.Special).ToString();
+                        }
+                        
+                    }
+                    
+                    //oitem.RealPrice = oitem.OrderPrice * oitem.OrderAmount * oitem.DiscountRate;
 
 
-                    ////是否允许产品优惠金额 因 优惠金额 出现 该属性失效
+                    //是否允许产品优惠金额 因 优惠金额 出现 该属性失效
                     //if (product.PromotionAllowed == 1)
                     //{
                     //    oitem.RealPrice = submitItem.RealPrice;
@@ -132,8 +181,11 @@ namespace PPTS.WebAPI.Orders.ViewModels.Purchase
                         var presetitem = preset.Items.FirstOrDefault(s => oitem.OrderAmount >= s.PresentStandard);
                         oitem.PresentID = preset.PresentID;
                         oitem.PresentQuato = presetitem == null ? 0 : presetitem.PresentStandard;
-                        oitem.PresentAmount = submitItem.PresentAmount;
                     }
+                    oitem.PresentAmount = submitItem.PresentAmount;
+
+                    oitem.RealPrice = oitem.OrderPrice * oitem.DiscountRate;
+                    oitem.RealAmount = oitem.OrderAmount + oitem.PresentAmount;
 
                     orderItems.Add(oitem);
                 }

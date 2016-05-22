@@ -78,13 +78,33 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Adapters\ConfirmDoorAdapter.cs" />
     <Compile Include="Adapters\CustomerInfoQueryAdapter.cs" />
+    <Compile Include="Adapters\CustomerMeetingItemAdapter.cs" />
+    <Compile Include="Adapters\CustomerMeetingAdapter.cs" />
+    <Compile Include="Adapters\CustomerMeetingItemAdapterBase.cs" />
+    <Compile Include="Adapters\CustomerMeetingAdapterBase.cs" />
+    <Compile Include="Adapters\CustomerExpenseRelationAdapter.cs" />
+    <Compile Include="Adapters\CustomerRefundAlertAdapter.cs" />
+    <Compile Include="Adapters\CustomerReplyAdapter.cs" />
+    <Compile Include="Adapters\CustomerReplyAdapterBase.cs" />
+    <Compile Include="Adapters\CustomerSchoolRelationAdapter.cs" />
+    <Compile Include="Adapters\CustomerScoreAdapter.cs" />
+    <Compile Include="Adapters\CustomerScoreItemAdapter.cs" />
+    <Compile Include="Adapters\CustomerServiceAdapter.cs" />
+    <Compile Include="Adapters\CustomerServiceItemsAdapter.cs" />
+    <Compile Include="Adapters\CustomerStopAlertAdapter.cs" />
+    <Compile Include="Adapters\CustomerTeacherAssignApplieAdapter.cs" />
     <Compile Include="Adapters\CustomerTeacherRelationAdapter.cs" />
+    <Compile Include="Adapters\CustomerVisitAdapter.cs" />
     <Compile Include="Adapters\GenericAccountAdapter.cs" />
     <Compile Include="Adapters\GenericCustomerAdapter.cs" />
+    <Compile Include="Adapters\GenericCustomerServiceAdapter.cs" />
+    <Compile Include="Adapters\GenericRefundAlertAdapter.cs" />
+    <Compile Include="Adapters\POSRecordAdapter.cs" />
     <Compile Include="Adapters\SchoolAdapter.cs" />
     <Compile Include="Adapters\CustomerAdapter.cs" />
-    <Compile Include="Adapters\AccountRefundPaymentAdapter.cs" />
+    <Compile Include="Adapters\AccountRefundVerifyingAdapter.cs" />
     <Compile Include="Adapters\AccountRefundApplyAdapter.cs" />
     <Compile Include="Adapters\AccountRefundAllotAdapter.cs" />
     <Compile Include="Adapters\AccountTransferApplyAdapter.cs" />
@@ -93,7 +113,6 @@
     <Compile Include="Adapters\AccountChargePaymentAdapter.cs" />
     <Compile Include="Adapters\AccountChargeApplyAdapter.cs" />
     <Compile Include="Adapters\AccountChargeAllotAdapter.cs" />
-    <Compile Include="Adapters\AccountAdapterBase.cs" />
     <Compile Include="Adapters\AccountAdapter.cs" />
     <Compile Include="Adapters\CustomerFulltextInfoAdapter.cs" />
     <Compile Include="Adapters\SearchAdapterBase.cs" />
@@ -112,10 +131,12 @@
     <Compile Include="Common\ConnectionDefine.cs" />
     <Compile Include="Common\Helper.cs" />
     <Compile Include="DataSources\GenericCustomerDataSource.cs" />
-    <Compile Include="Executors\PPTSAccountExecutorBase.cs" />
+    <Compile Include="Executors\AccountApproveRefundApplyExecutor.cs" />
+    <Compile Include="Executors\ApproveModelBase.cs" />
+    <Compile Include="Executors\AccountApproveTransferApplyExecutor.cs" />
+    <Compile Include="Executors\AccountApproveRefundModel.cs" />
+    <Compile Include="Executors\AccountApproveTransferModel.cs" />
     <Compile Include="Executors\PPTSCustomerExecutorBase.cs" />
-    <Compile Include="Executors\PPTSEditAccountExecutorBase.cs" />
-    <Compile Include="Executors\PPTSEditParentExecutorBase.cs" />
     <Compile Include="Executors\PPTSEditCustomerExecutorBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

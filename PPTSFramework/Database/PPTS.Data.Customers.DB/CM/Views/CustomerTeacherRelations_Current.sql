@@ -1,14 +1,15 @@
 ﻿CREATE VIEW [CM].[CustomerTeacherRelations_Current]
 WITH SCHEMABINDING 
 AS
-SELECT [CustomerID]
+SELECT [ID]
+	  ,[CustomerID]
       ,[TeacherID]
       ,[TeacherName]
       ,[TeacherJobID]
+	  ,[TeacherOACode]
       ,[TeacherJobOrgID]
+	  ,[TeacherJobOrgShortName]
       ,[TeacherJobOrgName]
-      ,[Subject]
-      ,[Grade]
       ,[CreatorID]
       ,[CreatorName]
       ,[CreateTime]

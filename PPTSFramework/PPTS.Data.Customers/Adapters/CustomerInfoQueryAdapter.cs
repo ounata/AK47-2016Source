@@ -106,6 +106,82 @@ namespace PPTS.Data.Customers.Adapters
         }
 
         /// <summary>
+        /// 查询客户、主要联系人和电话
+        /// </summary>
+        /// <param name="customerIDs"></param>
+        /// <returns></returns>
+        public CustomerParentPhoneCollection LoadCustomerParentPhoneByIDs(params string[] customerIDs)
+        {
+            ORMappingItemCollection mapping = ORMapping.GetMappingInfo(typeof(CustomerParentPhone));
+
+            InSqlClauseBuilder builder = new InSqlClauseBuilder("CustomerID");
+
+            builder.AppendItem(customerIDs);
+
+            CustomerParentPhoneCollection result = null;
+
+            if (builder.IsEmpty == false)
+            {
+                CustomerParentPhoneCollection dataInCustomers = this.Query<CustomerParentPhone, CustomerParentPhoneCollection>(
+                    mapping,
+                    "*",
+                    "CM.CustomerParentPhone_Current",
+                    builder);
+
+                CustomerParentPhoneCollection dataInPotentialCustomers = this.Query<CustomerParentPhone, CustomerParentPhoneCollection>(
+                    mapping,
+                    "*",
+                    "CM.PotentialCustomerParentPhone_Current",
+                    builder);
+
+                dataInPotentialCustomers.ForEach(c => dataInCustomers.AddNotExistsItem(c, (inner) => inner.CustomerID == c.CustomerID));
+
+                result = dataInCustomers;
+            }
+            else
+                result = new CustomerParentPhoneCollection();
+
+            return result;
+        }
+
+        /// <summary>
+        /// 在上下文中查询客户、主要联系人和电话
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="customerIDs"></param>
+        public void LoadCustomerParentPhoneByIDsInContext(Action<CustomerParentPhoneCollection> action, params string[] customerIDs)
+        {
+            ORMappingItemCollection mapping = ORMapping.GetMappingInfo(typeof(CustomerParentPhone));
+
+            InSqlClauseBuilder builder = new InSqlClauseBuilder("CustomerID");
+
+            builder.AppendItem(customerIDs);
+
+            CustomerParentPhoneCollection dataInCustomers = null;
+
+            if (builder.IsEmpty == false)
+            {
+                this.QueryInContext<CustomerParentPhone, CustomerParentPhoneCollection>(
+                    mapping,
+                    "*",
+                    "CM.CustomerParentPhone_Current",
+                    builder,
+                    (customers) => dataInCustomers = customers);
+
+                this.QueryInContext<CustomerParentPhone, CustomerParentPhoneCollection>(
+                    mapping,
+                    "*",
+                    "CM.PotentialCustomerParentPhone_Current",
+                    builder,
+                    (customers) =>
+                    {
+                        customers.ForEach(c => dataInCustomers.AddNotExistsItem(c, (inner) => inner.CustomerID == c.CustomerID));
+                        action(dataInCustomers);
+                    });
+            }
+        }
+
+        /// <summary>
         /// 返回DBContext
         /// </summary>
         /// <returns></returns>

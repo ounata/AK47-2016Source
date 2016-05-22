@@ -10,6 +10,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPTS.Data.Common.Test", "PP
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPTS.Data.Common", "..\..\PPTS.Data.Common\PPTS.Data.Common.csproj", "{0414177E-283E-4E91-8032-37228B715F16}"
+	ProjectSection(ProjectDependencies) = postProject
+		{FAE1D0A1-6BF2-47A1-8C62-109F00A15E86} = {FAE1D0A1-6BF2-47A1-8C62-109F00A15E86}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPTS.Data.Common.Entities", "..\..\PPTS.Data.Common.Entities\PPTS.Data.Common.Entities.csproj", "{FAE1D0A1-6BF2-47A1-8C62-109F00A15E86}"
 EndProject

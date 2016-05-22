@@ -1,0 +1,21 @@
+﻿<div class="widget-box">
+    <div class="widget-header">
+        <h4>
+            <span ng-show="!vm.customerService.serviceType">批量录入回访</span>
+        </h4>
+    </div>
+    <form class="form-horizontal" role="form">
+        <div class="clearfix form-actions mcs-form-actions">
+            <!-- #开始：保存客服.工具栏 -->
+            <div class="mcs-panel-toolbar col-sm-offset-3">
+                <mcs-button category="save" click="vm.save()" />
+                <mcs-button category="cancel" click="vm.cancel()" />
+            </div>
+        </div>
+
+        <!-- #开始：客户服务列表.数据表格 -->
+        <mcs-datatable data="vm.data" />
+        <!-- /结束：客户服务列表.数据表格 -->
+        
+    </form>
+</div>

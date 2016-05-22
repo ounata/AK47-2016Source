@@ -138,12 +138,16 @@
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\ExtraGiftController.cs" />
     <Compile Include="Controllers\ProductsController.cs" />
+    <Compile Include="DataSources\PresentDataSource.cs" />
     <Compile Include="Executors\ProductExecutor.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\ExtraGift\PresentsQueryCriteriaModel.cs" />
+    <Compile Include="ViewModels\ExtraGift\PresentsQueryResultModel.cs" />
     <Compile Include="ViewModels\Products\ProductModel.cs" />
     <Compile Include="ViewModels\Products\ProductQueryCriteriaModel.cs" />
     <Compile Include="ViewModels\Products\ProductQueryResult.cs" />

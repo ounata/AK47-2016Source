@@ -1,11 +1,34 @@
 define([ppts.config.modules.product,
-        ppts.config.dataServiceConfig.productDataService],
-        function (product) {
-            product.registerController('productListController', [
-                '$scope', '$state', 'dataSyncService', 'mcsDialogService', 'productDataService',
-                function ($scope, $state, dataSyncService, mcsDialogService, productDataService) {
-                    var vm = this;
+        ppts.config.dataServiceConfig.productDataService,
+        ppts.config.dataServiceConfig.classgroupDataService],
+        function (helper) {
+            helper.registerController('productListController', [
+                '$scope', '$state', 'dataSyncService', 'mcsDialogService', 'productDataService', 'classgroupDataService',
+                function ($scope, $state, dataSyncService, mcsDialogService, productDataService, classgroupDataService) {
 
+                    var vm = this;
+                    
+                    function getSelectedProductIds() {
+                        var productIds = $.map(vm.data.rowsSelected, function (obj, index) {
+                            return obj.productID;
+                        });
+                        return productIds;
+                    }
+                    function getSelectedIndexs(productId) {
+                        var productIds = [productId] || getSelectedProductIds();
+                        var selectedIndexs = $.map(vm.data.rows, function (obj, index) {
+                            if ($.inArray(obj.productID, productIds) > -1) { return index; } return null;
+                        });
+                        return selectedIndexs;
+                    }
+
+                    vm.products = [
+                          { text: '一对一', route: 'ppts.productAdd.onetoone'},
+                          { text: '班组', route: 'ppts.productAdd.classgroup'},
+                          { text: '游学', route: 'ppts.productAdd.youxue' },
+                          { text: '其他', route: 'ppts.productAdd.other'},
+                          { text: '无课收合作', route: 'ppts.productAdd.wukeshou'}
+                    ];
                     vm.data = {
                         selection: 'checkbox',
                         rowsSelected: [],
@@ -18,7 +41,7 @@ define([ppts.config.modules.product,
                         }, {
                             field: "productName",
                             name: "产品名称",
-                            template: '<a ui-sref="ppts.productView({id:row.productID})">{{row.productName}}</a>'
+                            template: '<a ui-sref="ppts.classgroup({productCode:row.productCode})">{{row.productName}}</a>'
                         }, {
                             field: "catalogName",
                             name: "产品类型"
@@ -73,7 +96,9 @@ define([ppts.config.modules.product,
                         orderBy: [{ dataField: 'CreateTime', sortDirection: 1 }]
                     }
 
-                    dataSyncService.initCriteria(vm);
+                    vm.purchase = function (item) {
+                        $state.go(item.route);
+                    };
                     vm.search = function () {
 
                         if ($.inArray('1', vm.criteria.priceTypes) > -1) {
@@ -114,10 +139,6 @@ define([ppts.config.modules.product,
                         });
 
                     };
-
-
-
-                    //复制
                     vm.copyProduct = function () {
 
                         var selectedData = vm.data.rowsSelected[0]
@@ -135,7 +156,6 @@ define([ppts.config.modules.product,
                         if (goName == '') { return; }
                         $state.go('ppts.productCopy.' + goName, param);
                     };
-
                     vm.delete = function () {
                         var failProduct = $.grep(vm.data.rowsSelected, function (obj, index) {
                             if (obj.productStatus != 2) return obj;
@@ -152,8 +172,6 @@ define([ppts.config.modules.product,
                                 });
                             });
                     };
-
-
                     vm.stopProduct = function () {
                         var rowProduct = vm.data.rowsSelected[0];
                         if (rowProduct.productStatus == 1
@@ -165,8 +183,6 @@ define([ppts.config.modules.product,
                             })
                         }
                     };
-
-
                     vm.delayProduct = function () {
                         var rowProduct = vm.data.rowsSelected[0];
                         if (rowProduct.productStatus == 1
@@ -183,74 +199,45 @@ define([ppts.config.modules.product,
                         }
 
                     };
-
-                    //创建班级
                     vm.createClass = function () {
-                        var msg = createClassCheck();
-                        msg = "";//测试  不检查
-                        if (!msg) {
-                            var rowProduct = vm.data.rowsSelected[0];
-                            //1.获取产品信息  
-                            $state.go('ppts.classAdd', { id: rowProduct.productID });
-                        }
-                        else {
+
+                        if (vm.data.rowsSelected.length != 1)
                             mcsDialogService.error(
-                                { title:'Error', message: msg }
+                                { title: 'Error', message: "请选择一条班组产品！" }
                             );
-                        }
+                        classgroupDataService.checkCreateClass_Product(vm.data.rowsSelected[0].productID, function (result) {
+                            if (result.sucess) {
+                                $state.go('ppts.classAdd', { id: vm.data.rowsSelected[0].productID });
+                            }else
+                                mcsDialogService.error(
+                               { title: 'Error', message: result.message }
+                           );
+                        }, function (result) {
+                            
+                        });                        
                         
                     }
 
-                    function createClassCheck() {
-                        //1.选择数量判断
-                        if (vm.data.rowsSelected.length != 1)
-                            return "请选择1条班组产品！";
+                    var init = (function () {
 
-                        var rowPro = vm.data.rowsSelected[0];
-                        //2.产品类型
-                        if (rowPro.categoryType != 2)
-                            return "只有班组产品才可以创建班级！";
+                        for (var index in vm.products) { vm.products[index].click = vm.purchase; }
 
-                        //3.产品状态
-                        if (rowPro.productStatus!=4  && rowPro.productStatus!=5)
-                            return "只有产品状态是使用中、已停售的才可以创建班级！";
-
-                        return "";
-                    }
-
-
-
-                    function getSelectedProductIds() {
-                        var productIds = $.map(vm.data.rowsSelected, function (obj, index) {
-                            return obj.productID;
-                        });
-                        return productIds;
-                    }
-
-                    function getSelectedIndexs(productId) {
-                        var productIds = [productId] || getSelectedProductIds();
-                        var selectedIndexs = $.map(vm.data.rows, function (obj, index) {
-                            if ($.inArray(obj.productID, productIds) > -1) { return index; } return null;
-                        });
-                        return selectedIndexs;
-                    }
-
-
-                    vm.init = function () {
                         var timeTypes = [{ key: '1', value: '启售时间' }, { key: '2', value: '止售时间' }, { key: '3', value: '创建时间' }, ];
-
                         dataSyncService.injectDictData(mcs.util.mapping(timeTypes, { key: 'key', value: 'value' }, 'TimeType'));
                         ppts.config.dictMappingConfig["timeType"] = "c_codE_ABBR_TimeType";
 
+                        dataSyncService.initCriteria(vm);
+
+                        //默认销售中  c_codE_ABBR_Product_ProductStatus
+                        vm.criteria.productStatus = "4";
                         vm.search();
 
-                    };
-                    vm.init();
+                    })();
 
                 }]);
 
 
-            product.registerController('delayController', [
+            helper.registerController('delayController', [
                 '$scope', '$uibModalInstance', 'data',
                 function ($scope, $uibModalInstance, data) {
 
@@ -273,135 +260,5 @@ define([ppts.config.modules.product,
 
                 }]);
 
-
-
-            product.registerController('selectCategoryController', [
-                '$scope', '$uibModalInstance', '$state', 'dataSyncService', 'data',
-                function ($scope, $uibModalInstance, $state, dataSyncService, data) {
-
-                    //console.log(data)
-
-                    var vm = {};
-                    $scope.vm = vm;
-
-
-
-                    vm.nodeClick = function (event, treeId, treeNode) {
-                        alert('you are selecting ' + treeNode.name);
-                    }
-                    vm.onCheck = function (event, treeId, treeNode) {
-                        alert('you are selecting ' + treeNode.name);
-                    }
-
-                    vm.loadDataWaiting = function (treeId, treeNode) {
-
-                    }
-
-
-                    vm.treeSetting = {
-                        data: {
-                            key: {
-                                children: 'children',
-                                name: 'name',
-                                title: 'name'
-                            }
-                        },
-                        view: {
-                            selectedMulti: true,
-                            showIcon: true,
-                            showLine: true,
-                            nameIsHTML: false,
-                            fontCss: {
-
-                            }
-
-                        },
-                        check: {
-                            enable: true,
-                            chkStyle: 'checkbox'
-
-                        },
-                        async: {
-                            enable: false,
-                            autoParam: ["id"],
-                            contentType: "application/json",
-                            type: 'post',
-                            dataType: "json",
-                            url: 'api/users'
-                        },
-                        callback: {
-                            onClick: vm.nodeClick,
-                            onCheck: vm.nodeCheck,
-                            beforeAsync: vm.loadDataWaiting
-                        }
-                    };
-
-
-
-
-
-                    vm.treeData = [{
-                        id: '0',
-                        name: 'root',
-                        open: true,
-                        parent: true,
-
-                        children: [{
-
-                            id: '1',
-                            name: 'company-1',
-                            open: true,
-                            children: [{
-                                id: 11,
-                                name: 'HR',
-                                checked: true,
-                                chkDisabled: false,
-                                icon: '',
-                                iconOpen: '',
-                                iconClose: '',
-                                iconSkin: '',
-                                isHidden: false
-
-
-                            }, {
-                                id: 12,
-                                name: 'IT'
-                            }]
-                        }, {
-                            id: '2',
-                            name: 'company-2',
-
-                            children: [{
-                                id: '21',
-                                name: 'HR'
-
-                            }]
-                        }]
-                    }];
-
-
-
-
-
-
-
-
-                    vm.cancel = function () {
-                        //alert(1)
-                        $uibModalInstance.dismiss('Canceled');
-                    };
-
-                    vm.save = function () {
-                        $uibModalInstance.close(vm.entity);
-                    };
-
-                    
-
-
-
-                }]);
-
-
-            //
         });
 

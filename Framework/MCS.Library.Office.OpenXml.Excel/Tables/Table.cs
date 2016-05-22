@@ -412,7 +412,7 @@ namespace MCS.Library.Office.OpenXml.Excel
                         if (creatingDataCellAction == null)
                             newRow[excelColumn].Value = drv[col.ColumnName];
                         else
-                            creatingDataCellAction(newRow[excelColumn], new CreatingDataCellParameters<DataRowView>(drv, drv[col.ColumnName], col.ColumnName, rowIndex));
+                            creatingDataCellAction(newRow[excelColumn], new CreatingDataCellParameters<DataRowView>(drv, drv[col.ColumnName], col.ColumnName, rowIndex, null));
                     }
                 }
 
@@ -442,7 +442,7 @@ namespace MCS.Library.Office.OpenXml.Excel
                         if (creatingDataCellAction == null)
                             newRow[excelColumn].Value = drv[col.PropertyName];
                         else
-                            creatingDataCellAction(newRow[excelColumn], new CreatingDataCellParameters<DataRowView>(drv, drv[col.PropertyName], col.ColumnName, rowIndex));
+                            creatingDataCellAction(newRow[excelColumn], new CreatingDataCellParameters<DataRowView>(drv, drv[col.PropertyName], col.ColumnName, rowIndex, col));
                     }
                 }
 
@@ -475,7 +475,7 @@ namespace MCS.Library.Office.OpenXml.Excel
 
                     object propertyValue = TypePropertiesCacheQueue.Instance.GetObjectPropertyValue(objItem, col.PropertyName);
 
-                    creatingDataCellAction(tbCell, new CreatingDataCellParameters<T>(objItem, propertyValue, col.ColumnName, rowIndex));
+                    creatingDataCellAction(tbCell, new CreatingDataCellParameters<T>(objItem, propertyValue, col.ColumnName, rowIndex, col));
                 }
 
                 rowIndex++;

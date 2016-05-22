@@ -11,10 +11,24 @@ namespace PPTS.Contracts.Proxies.Test
         [TestMethod]
         public void QueryAccountCollectionByCustomerIDTest()
         {
-            AccountCollectionQueryResult queryresult = PPTSAccountQueryServiceProxy.Instance.QueryCustomerTeacherRelationByCustomerID("1008915");
-            Assert.IsNotNull(queryresult);
-            Assert.IsNotNull(queryresult.AccountCollection);
-            Assert.IsTrue(queryresult.AccountCollection.Count > 0);
+            AccountCollectionQueryResult queryResult = PPTSAccountQueryServiceProxy.Instance.QueryAccountCollectionByCustomerID("1531137");
+            Assert.IsNotNull(queryResult);
+            Assert.IsNotNull(queryResult.AccountCollection);
+            Assert.IsTrue(queryResult.AccountCollection.Count > 0);
+        }
+
+        [TestMethod]
+        public void QueryAccountChargeCollectionByCustomerIDTest()
+        {
+            AccountChargeCollectionQueryResult  queryResult = PPTSAccountQueryServiceProxy.Instance.QueryAccountChargeCollectionByCustomerID("3785659");
+            Assert.IsNotNull(queryResult);
+            Assert.IsNotNull(queryResult.AccountChargeCollection);
+            Assert.IsTrue(queryResult.AccountChargeCollection.Count > 0);
+            foreach (var value in queryResult.AccountChargeCollection)
+            {
+                Console.WriteLine(value.AccountCode);
+                Console.WriteLine(value.ApplyNo);
+            }
         }
     }
 }

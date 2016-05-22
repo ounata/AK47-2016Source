@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8" ?> 
+<config>
+  <!--CTI中判断OA的所有岗位中归属于总呼叫中心和分呼叫中心的岗位-->
+  <CallingOrgCenter>
+    <orgcenter jobName="总区域电销经理" Value="总呼叫中心" Sortid ="3"/>
+    <orgcenter jobName="总座席代表" Value="总呼叫中心" Sortid ="1"/>
+    <orgcenter jobName="总呼出主管" Value="总呼叫中心" Sortid ="1"/>
+    <orgcenter jobName="总呼入主管" Value="总呼叫中心" Sortid ="2"/>
+    <orgcenter jobName="总在线咨询主管" Value="总呼叫中心" Sortid ="2"/>
+    <orgcenter jobName="全国电销经理" Value="总呼叫中心" Sortid ="3"/>
+    <orgcenter jobName="总高级呼叫中心经理" Value="总呼叫中心" Sortid ="3"/>
+    <orgcenter jobName="总呼叫中心经理" Value="总呼叫中心" Sortid ="3"/>
+    <orgcenter jobName="分呼叫中心经理" Value="分呼叫中心" Sortid ="3"/>
+    <orgcenter jobName="分呼叫中心主管" Value="分呼叫中心" Sortid ="1"/>
+    <orgcenter jobName="分呼叫中心专员" Value="分呼叫中心" Sortid ="0"/>
+    <orgcenter jobName="分外呼专员" Value="分呼叫中心" Sortid ="0"/>
+    <orgcenter jobName="外呼经理" Value="分呼叫中心" Sortid ="3"/>
+    <orgcenter jobName="校教育咨询师" Value="分呼叫中心" Sortid ="3"/>
+    <orgcenter jobName="校外呼专员" Value="分呼叫中心" Sortid ="3"/>
+    <orgcenter jobName="校咨询主任" Value="分呼叫中心" Sortid ="3"/>
+  </CallingOrgCenter>
+  <CTItoERPSourceInfo>
+    <SecondSourceInfo  CTISourceValue="慧学堂-短信" ERPSourceValue="慧学堂" />
+    <SecondSourceInfo  CTISourceValue="慧学堂-网络" ERPSourceValue="慧学堂" />
+    <SecondSourceInfo  CTISourceValue="慧学堂-平媒" ERPSourceValue="慧学堂" />
+    <SecondSourceInfo  CTISourceValue="慧学堂-活动" ERPSourceValue="慧学堂" />
+    <SecondSourceInfo  CTISourceValue="呼出-在线测评" ERPSourceValue="在线测评" />
+    <SecondSourceInfo  CTISourceValue="呼出-渠道" ERPSourceValue="渠道" />
+    <SecondSourceInfo  CTISourceValue="呼出-慧学堂" ERPSourceValue="慧学堂" />
+    <SecondSourceInfo  CTISourceValue="品牌-公交车身" ERPSourceValue="公交车身广告" />
+    <SecondSourceInfo  CTISourceValue="品牌-侯车亭" ERPSourceValue="候车亭" />
+    <SecondSourceInfo  CTISourceValue="品牌-地铁灯箱" ERPSourceValue="地铁灯箱" />
+    <SecondSourceInfo  CTISourceValue="品牌-地铁报站名" ERPSourceValue="地铁报站名" />
+    <SecondSourceInfo  CTISourceValue="品牌-楼宇LCD" ERPSourceValue="楼宇LCD" />
+    <SecondSourceInfo  CTISourceValue="品牌-社区灯箱" ERPSourceValue="社区灯箱" />
+    <SecondSourceInfo  CTISourceValue="品牌-户外大牌" ERPSourceValue="户外大牌" />
+    <SecondSourceInfo  CTISourceValue="品牌-户外LED" ERPSourceValue="户外LED" />
+    <SecondSourceInfo  CTISourceValue="Live800" ERPSourceValue="其它" />
+    <SecondSourceInfo  CTISourceValue="乐语-手动录入" ERPSourceValue="手动录入" />
+    <SecondSourceInfo  CTISourceValue="呼出-上自习" ERPSourceValue="上自习" />
+    <SecondSourceInfo  CTISourceValue="产品秋季营销资料" ERPSourceValue="其它" />
+    <SecondSourceInfo  CTISourceValue="呼出" ERPSourceValue="其它" />
+    <SecondSourceInfo  CTISourceValue="呼入_在线预约" ERPSourceValue="在线预约" />
+    <SecondSourceInfo  CTISourceValue="呼入_乐语_在线预约" ERPSourceValue="在线预约" />
+    <SecondSourceInfo  CTISourceValue="网络进校" ERPSourceValue="其它" />
+    <SecondSourceInfo  CTISourceValue="呼出-其他" ERPSourceValue="其它" />
+    <SecondSourceInfo  CTISourceValue="呼出-地推" ERPSourceValue="地推活动" />
+    <SecondSourceInfo  CTISourceValue="呼出-采购" ERPSourceValue="采购" />
+    <SecondSourceInfo  CTISourceValue="呼出-会销" ERPSourceValue="大型会销" />
+    <SecondSourceInfo  CTISourceValue="呼出-转介绍" ERPSourceValue="转介绍" />
+    <SecondSourceInfo  CTISourceValue="呼入_乐语_在线预约" ERPSourceValue="在线预约" />
+    <SecondSourceInfo  CTISourceValue="乐语-百度小专区" ERPSourceValue="百度小专区" LeYuSourceValue="k=bdxiaozhuanqu" />
+    <SecondSourceInfo  CTISourceValue="乐语-并行站二" ERPSourceValue="并行站二" LeYuSourceValue="k=bingxinger" />
+    <SecondSourceInfo  CTISourceValue="乐语-并行站一" ERPSourceValue="并行站一" LeYuSourceValue="k=bingxingyi" />
+    <SecondSourceInfo  CTISourceValue="乐语-赶集硬广" ERPSourceValue="赶集硬广" LeYuSourceValue="k=ganjiyg" />
+    <SecondSourceInfo  CTISourceValue="乐语-官网-edm" ERPSourceValue="官网-edm" LeYuSourceValue="k=edm" />
+    <SecondSourceInfo  CTISourceValue="乐语-官网-seo" ERPSourceValue="官网-seo" LeYuSourceValue="k=xuedafudao"/>
+    <SecondSourceInfo  CTISourceValue="乐语-官网-SEO免费推广" ERPSourceValue="官网-SEO免费推广" />
+    <SecondSourceInfo  CTISourceValue="乐语-官网-百度" ERPSourceValue="官网-百度" LeYuSourceValue="k=ppc&amp;f=baiduppc" />
+    <SecondSourceInfo  CTISourceValue="乐语-官网-百度掘金" ERPSourceValue="官网-百度掘金" LeYuSourceValue="k=juejin&amp;f=baidu" />
+    <SecondSourceInfo  CTISourceValue="乐语-官网-测试二" ERPSourceValue="官网-测试二" LeYuSourceValue="k=ppc&amp;f=zblsogouppc" />
+    <SecondSourceInfo  CTISourceValue="乐语-官网-测试三" ERPSourceValue="官网-测试三" LeYuSourceValue="k=ppc&amp;f=zblsosoppc" />
+    <SecondSourceInfo  CTISourceValue="乐语-官网-测试一" ERPSourceValue="官网-测试一" LeYuSourceValue="k=ppc&amp;f=zblgoogleppc"/>
+    <SecondSourceInfo  CTISourceValue="乐语-官网-谷歌" ERPSourceValue="官网-谷歌" LeYuSourceValue="k=ppc&amp;f=googleppc" />
+    <SecondSourceInfo  CTISourceValue="乐语-官网-精准" ERPSourceValue="官网-精准" LeYuSourceValue="k=jingzhun&amp;f=baidu" />
+    <SecondSourceInfo  CTISourceValue="乐语-官网-内容网络"	 ERPSourceValue="官网-内容网络" LeYuSourceValue="k=adsense&amp;f=google"/>
+    <SecondSourceInfo  CTISourceValue="乐语-官网-品牌竞价" ERPSourceValue="官网-品牌竞价" LeYuSourceValue="k=ppc&amp;f=brandbaiduppc" />
+    <SecondSourceInfo  CTISourceValue="乐语-官网-品牌专区" ERPSourceValue="官网-品牌专区" LeYuSourceValue="k=brand" />
+    <SecondSourceInfo  CTISourceValue="乐语-官网-搜狗" ERPSourceValue="官网-搜狗" LeYuSourceValue="k=ppc&amp;f=sogouppc"/>
+    <SecondSourceInfo  CTISourceValue="乐语-官网-搜搜" ERPSourceValue="官网-搜搜" LeYuSourceValue="k=ppc&amp;f=sosoppc" />
+    <SecondSourceInfo  CTISourceValue="乐语-官网-网易" ERPSourceValue="官网-网易" LeYuSourceValue="k=ppc&amp;f=Zbrandbaiduppc" />
+    <SecondSourceInfo  CTISourceValue="乐语-官网-学大辅导SEM" ERPSourceValue="官网-学大辅导SEM" LeYuSourceValue="k=bingxingsem" />
+    <SecondSourceInfo  CTISourceValue="乐语-奇虎360cpc" ERPSourceValue="奇虎360cpc" />
+    <SecondSourceInfo  CTISourceValue="乐语-深圳微博" ERPSourceValue="深圳微博" LeYuSourceValue="k=gulianszwb" />
+    <SecondSourceInfo  CTISourceValue="乐语-手动录入" ERPSourceValue="其它" />
+    <SecondSourceInfo  CTISourceValue="乐语-腾讯品牌专区" ERPSourceValue="腾讯品牌专区" LeYuSourceValue="k=qqpinpai" />
+    <SecondSourceInfo  CTISourceValue="乐语-腾讯智胜" ERPSourceValue="腾讯智胜" LeYuSourceValue="k=qqzhisheng" />
+    <SecondSourceInfo  CTISourceValue="乐语-易传媒" ERPSourceValue="易传媒" LeYuSourceValue="k=yichuanmei" />
+    <SecondSourceInfo  CTISourceValue="乐语语音" ERPSourceValue="乐语-语音" />
+    <SecondSourceInfo  CTISourceValue="乐语-总部微博" ERPSourceValue="总部微博" LeYuSourceValue="k=pinpaigulian" />
+    <SecondSourceInfo  CTISourceValue="乐语-并行站三" ERPSourceValue="并行站三" LeYuSourceValue="k=bingxingsan" />
+    <SecondSourceInfo  CTISourceValue="乐语-并行站四" ERPSourceValue="并行站四" LeYuSourceValue="k=bingxingsi" />
+    <SecondSourceInfo  CTISourceValue="乐语-官网-分公司并行" ERPSourceValue="官网-分公司并行" LeYuSourceValue="k=bingxingfen" />
+    <SecondSourceInfo  CTISourceValue="乐语-官网-社区固链" ERPSourceValue="官网-社区固链" />
+    <SecondSourceInfo   ERPSourceValue="知天下" LeYuSourceValue="k=ppc&amp;f=qihuppc" />
+    <SecondSourceInfo   ERPSourceValue="官网-测试一" LeYuSourceValue="k=ppc&amp;f=zblgoogle"/>
+    <SecondSourceInfo   ERPSourceValue="官网-测试二" LeYuSourceValue="k=ppc&amp;f=zblsogou" />
+    <SecondSourceInfo   ERPSourceValue="官网-测试三" LeYuSourceValue="k=ppc&amp;f=zblsoso" />
+    <SecondSourceInfo   ERPSourceValue="官网-网易" LeYuSourceValue="k=wangyi" />
+    <SecondSourceInfo   ERPSourceValue="高分网" LeYuSourceValue="k=gaofenwang" />
+    <SecondSourceInfo   ERPSourceValue="淘教中国" LeYuSourceValue="k=zhongshiwg" />
+    <SecondSourceInfo   ERPSourceValue="星团传媒" LeYuSourceValue="k=xingtuan" />
+    <SecondSourceInfo   ERPSourceValue="景悠" LeYuSourceValue="k=jingyou"/>
+    <SecondSourceInfo   ERPSourceValue="中国教育在线" LeYuSourceValue="k=zbsceol"/>
+    <SecondSourceInfo   ERPSourceValue="智邮营销" LeYuSourceValue="k=zhiyouyx"/>
+    <SecondSourceInfo   ERPSourceValue="华盛兴业" LeYuSourceValue="k=pyhudong"/>
+    <SecondSourceInfo   ERPSourceValue="搜狐广告" LeYuSourceValue="k=sohuad"/>
+    <SecondSourceInfo   ERPSourceValue="育路网" LeYuSourceValue="k=scwbsina"/>
+    <SecondSourceInfo   ERPSourceValue="奇虎360cpc" LeYuSourceValue="k=qihucpc"/>
+    <SecondSourceInfo   ERPSourceValue="麦恩思远" LeYuSourceValue="k=maiensy"/>
+  </CTItoERPSourceInfo>
+</config>

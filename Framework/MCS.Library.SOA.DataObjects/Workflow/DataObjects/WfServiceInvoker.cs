@@ -254,6 +254,9 @@ namespace MCS.Library.SOA.DataObjects.Workflow
 
             ExceptionHelper.DoSilentAction(() => doc = XDocument.Parse(xml));
 
+            if (doc == null)
+                return null;
+
             XElement firstElement = (XElement)doc.FirstNode;
 
             if (firstElement == null)
@@ -326,7 +329,7 @@ namespace MCS.Library.SOA.DataObjects.Workflow
             result.KeepAlive = false;
             result.ProtocolVersion = HttpVersion.Version10;
             result.Headers.CopyFrom(this.Headers);
-            
+
             string postData = string.Empty;
 
             switch (_SvcOperationDef.AddressDef.ContentType)
@@ -478,7 +481,7 @@ namespace MCS.Library.SOA.DataObjects.Workflow
                     }
                     else
                     {
-                        jsonDict.Add(item.Name, item.Value);
+                        jsonDict.Add(item.Name, item.GetDeserializedValue());
                     }
                 }
 

@@ -22,45 +22,17 @@ namespace PPTS.Data.Customers.Entities
         {
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         [ORFieldMapping("ID", PrimaryKey = true)]
         [DataMember]
-        public string ID
-        {
-            get;
-            set;
-        }
+        public string ID { get; set; }
+
 
         /// <summary>
         /// 
-        /// </summary>
+        /// </summary>        
         [ORFieldMapping("CustomerID")]
         [DataMember]
         public string CustomerID
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        [ORFieldMapping("OrgID")]
-        [DataMember]
-        public string OrgID
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        [ORFieldMapping("OrgName")]
-        [DataMember]
-        public string OrgName
         {
             get;
             set;
@@ -80,9 +52,9 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 
         /// </summary>
-        [ORFieldMapping("TeacherCode")]
+        [ORFieldMapping("TeacherOACode")]
         [DataMember]
-        public string TeacherCode
+        public string TeacherOACode
         {
             get;
             set;
@@ -99,23 +71,29 @@ namespace PPTS.Data.Customers.Entities
             set;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        [ORFieldMapping("Subject")]
+        [ORFieldMapping("TeacherJobID")]
         [DataMember]
-        public string Subject
+        public string TeacherJobID
         {
             get;
             set;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        [ORFieldMapping("Grade")]
+        [ORFieldMapping("TeacherJobOrgID")]
         [DataMember]
-        public string Grade
+        public string TeacherJobOrgID
+        {
+            get;
+            set;
+        }
+
+        [ORFieldMapping("TeacherJobOrgShortName")]
+        [DataMember]
+        public string TeacherJobOrgShortName { get; set; }
+
+        [ORFieldMapping("TeacherJobOrgName")]
+        [DataMember]
+        public string TeacherJobOrgName
         {
             get;
             set;
@@ -125,6 +103,7 @@ namespace PPTS.Data.Customers.Entities
         /// 
         /// </summary>
         [ORFieldMapping("CreatorID")]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update)]
         [DataMember]
         public string CreatorID
         {
@@ -136,6 +115,7 @@ namespace PPTS.Data.Customers.Entities
         /// 
         /// </summary>
         [ORFieldMapping("CreatorName")]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update)]
         [DataMember]
         public string CreatorName
         {
@@ -147,6 +127,7 @@ namespace PPTS.Data.Customers.Entities
         /// 
         /// </summary>
         [ORFieldMapping("CreateTime")]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.Select | ClauseBindingFlags.Where)]
         [DataMember]
         public DateTime CreateTime
         {
@@ -159,7 +140,7 @@ namespace PPTS.Data.Customers.Entities
         /// </summary>
         [DataMember]
         [ORFieldMapping("VersionStartTime", PrimaryKey = true, UtcTimeToLocal = true)]
-        [SqlBehavior(BindingFlags = ClauseBindingFlags.Select | ClauseBindingFlags.Where)]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update)]
         public DateTime VersionStartTime
         {
             get; set;
@@ -172,6 +153,11 @@ namespace PPTS.Data.Customers.Entities
         {
             get; set;
         }
+
+        [ConstantCategory(Category = "C_CODE_ABBR_BO_Customer_ChangeTeacherReason")]
+        [DataMember]
+        [NoMapping]
+        public string ChangeTeacherReason { get; set; }
     }
 
     [Serializable]

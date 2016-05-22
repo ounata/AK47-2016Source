@@ -1,0 +1,12 @@
+﻿<div class="customer-relation-container">
+    <div class="col-sm-12 mcs-padding-0">
+        <div class="col-sm-4 mcs-padding-0"><input class="mcs-readonly-input" ng-model="model.customer.customerName" onkeydown="return false;" style="width:88%;background:none;" />是</div>
+        <div class="col-sm-4 mcs-padding-0"><input class="mcs-readonly-input" ng-model="model.parent.parentName" onkeydown="return false;" style="width:88%;background:none;" />的</div>
+        <div class="col-sm-4 mcs-padding-0"><ppts-select data="model.customerRoles" model="model.customerRole" callback="selectCustomerRole(item, model)" css="mcs-padding-0" /></div>
+    </div>
+    <div class="col-sm-12 mcs-padding-0">
+        <div class="col-sm-4 mcs-padding-0"><input class="mcs-readonly-input" ng-model="model.parent.parentName" onkeydown="return false;" style="width:88%;background:none;" />是</div>
+        <div class="col-sm-4 mcs-padding-0"><input class="mcs-readonly-input" ng-model="model.customer.customerName" onkeydown="return false;" style="width:88%;background:none;" />的</div>
+        <div class="col-sm-4 mcs-padding-0"><ppts-select data="model.parentRoles" model="model.parentRole" disabled="!(model.parent.gender && model.customer.gender && model.customerRole && model.parentRoles.length > 1)" css="mcs-padding-0" /></div>
+    </div>
+</div>

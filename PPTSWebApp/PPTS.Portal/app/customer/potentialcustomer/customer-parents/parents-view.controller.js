@@ -1,6 +1,5 @@
 ﻿define([ppts.config.modules.customer,
-        ppts.config.dataServiceConfig.customerService,
-        ppts.config.dataServiceConfig.customerDataService],
+        ppts.config.dataServiceConfig.customerService],
     function (customer) {
         customer.registerController('parentsViewController', [
             '$scope',
@@ -40,6 +39,7 @@
                 vm.init = function () {
                     customerService.handle('get-parents', function (result) {
                         vm.data.rows = getCustomerRelationData(result);
+                        if (!vm.data.rows) return;
                         dataSyncService.injectPageDict(['ifElse']);
                         vm.data.rows.filter(function (obj) {
                             if (obj.isPrimary == true)
@@ -58,6 +58,15 @@
                         customerService.handle('get-parent', { parentID: vm.data.rowsSelected[0].parentID });
                     }
                 };
+
+                $scope.$watch('vm.data.rowsSelected[0].parentID', function () {
+                    if (!vm.data.rowsSelected || !vm.data.rowsSelected.length) return;
+                    var parentID = vm.data.rowsSelected[0].parentID;
+                    vm.data.rows.filter(function (obj) {
+                        if (obj.parentID == parentID)
+                            vm.parent = obj;
+                    });
+                });
 
                 var getCustomerRelationData = function (result) {
                     if (!result.parents || !result.relations) return;

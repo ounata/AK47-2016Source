@@ -1,5 +1,6 @@
 ﻿using MCS.Library.Data;
 using MCS.Library.Data.Mapping;
+using PPTS.Data.Orders;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,15 +39,15 @@ namespace PPTS.WebAPI.Orders.ViewModels.ClassGroup
             set;
         }
 
-        [ConditionMapping("Subject")]
-        public string Subject
+        [InConditionMapping("Subject")]
+        public string[] Subjects
         {
             get;
             set;
         }
 
-        [ConditionMapping("Grade")]
-        public string Grade
+        [InConditionMapping("Grade")]
+        public string[] Grades
         {
             get;
             set;
@@ -66,8 +67,8 @@ namespace PPTS.WebAPI.Orders.ViewModels.ClassGroup
             set;
         }
 
-        [ConditionMapping("ClassStatus")]
-        public string ClassStatus
+        [InConditionMapping("ClassStatus")]
+        public string[] ClassStatuses
         {
             get;
             set;
@@ -105,6 +106,10 @@ namespace PPTS.WebAPI.Orders.ViewModels.ClassGroup
         [ConditionMapping("TeacherName")]
         public string TeacherName { get; set; }
 
+        [ConditionMapping("LessonStatus",op:"!=")]
+        public LessonStatus LessonStatus {
+            get { return LessonStatus.Deleted; } }
+
         public static object ClassLessonsAdjustConditionValueDelegate(string propertyName, object propertyValue, ref bool ignored)
         {
             object returnValue = propertyValue;
@@ -126,6 +131,9 @@ namespace PPTS.WebAPI.Orders.ViewModels.ClassGroup
         #endregion
 
         #region ClassLessonItems条件
+        [ConditionMapping("CustomerID")]
+        public string CustomerID { get; set; }
+
         [ConditionMapping("CustomerName")]
         public string CustomerName { get; set; }
 
@@ -138,6 +146,7 @@ namespace PPTS.WebAPI.Orders.ViewModels.ClassGroup
 
             switch (propertyName)
             {
+                case "CustomerID":
                 case "CustomerName":
                 case "CustomerCode":
                     break;
@@ -149,7 +158,7 @@ namespace PPTS.WebAPI.Orders.ViewModels.ClassGroup
         }
 
         public bool CheckClassLessonItemsAdjustCondition() {
-            return !String.IsNullOrEmpty(CustomerName) || !string.IsNullOrEmpty(CustomerCode);
+            return !String.IsNullOrEmpty(CustomerName) || !string.IsNullOrEmpty(CustomerCode)||!string.IsNullOrEmpty(CustomerID);
         }
         #endregion
 

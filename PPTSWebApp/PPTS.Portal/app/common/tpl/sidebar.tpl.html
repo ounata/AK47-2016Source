@@ -36,7 +36,7 @@
         <b class="arrow"></b>
     </li>
     <!--审批管理-->
-    <li ui-sref-active="active" class="hsub" ng-class="{'open':vm.showSubMenu('auditing')}" ppts-functions="审批管理">
+    <li ui-sref-active="active" class="hsub" ng-class="{'open':vm.showSubMenu('auditing')}" ppts-functions="审批管理" onclick="javascript:void(0)">
         <a href="#" class="dropdown-toggle" ng-click="vm.toggle('auditing')">
             <i class="menu-icon fa fa-check-square-o"></i>
             <span class="menu-text">审批管理 </span>
@@ -91,8 +91,8 @@
                 </a>
                 <b class="arrow"></b>
             </li>
-            <li ng-class="{'active': $state.includes('ppts.returnvisit')}" ppts-functions="回访记录管理">
-                <a ui-sref="ppts.returnvisit">
+            <li ng-class="{'active': $state.includes('ppts.customervisit')}" ppts-functions="回访记录管理">
+                <a ui-sref="ppts.customervisit">
                     <i class="menu-icon fa fa-caret-right"></i>回访记录
                 </a>
                 <b class="arrow"></b>
@@ -109,14 +109,14 @@
                 </a>
                 <b class="arrow"></b>
             </li>
-            <li ng-class="{'active': $state.includes('ppts.feedback')}" ppts-functions="客户反馈管理">
-                <a ui-sref="ppts.feedback">
+            <li ng-class="{'active': $state.includes('ppts.customer-feedbacks-list')}" ppts-functions="客户反馈管理">
+                <a ui-sref="ppts.customer-feedbacks-list">
                     <i class="menu-icon fa fa-caret-right"></i>客户反馈
                 </a>
                 <b class="arrow"></b>
             </li>
-            <li ng-class="{'active': $state.includes('ppts.weeklyfeedback')}" ppts-functions="学大反馈管理">
-                <a ui-sref="ppts.weeklyfeedback">
+            <li ng-class="{'active': $state.includes('ppts.feedback-list')}" ppts-functions="学大反馈管理">
+                <a ui-sref="ppts.feedback-list">
                     <i class="menu-icon fa fa-caret-right"></i>学大反馈
                 </a>
                 <b class="arrow"></b>
@@ -132,20 +132,20 @@
         </a>
         <b class="arrow"></b>
         <ul class="submenu" style="display:{{vm.showSubMenu('account')?'block':'none'}}">
-            <li ng-class="{'active': $state.includes('ppts.receipt')}" ppts-functions="缴费单管理">
-                <a ui-sref="ppts.receipt">
+            <li ng-class="{'active': $state.includes('ppts.accountCharge-query')}" ppts-functions="缴费单管理">
+                <a ui-sref="ppts.accountCharge-query">
                     <i class="menu-icon fa fa-caret-right"></i>缴费单管理
                 </a>
                 <b class="arrow"></b>
             </li>
-            <li ng-class="{'active': $state.includes('ppts.pay')}" ppts-functions="收费管理">
-                <a ui-sref="ppts.pay">
-                    <i class="menu-icon fa fa-caret-right"></i>收费管理
+            <li ng-class="{'active': $state.includes('ppts.accountChargePayment-query')}" ppts-functions="收费管理">
+                <a ui-sref="ppts.accountChargePayment-query">
+                    <i class="menu-icon fa fa-caret-right"></i>收款管理
                 </a>
                 <b class="arrow"></b>
             </li>
-            <li ng-class="{'active': $state.includes('ppts.refund')}" ppts-functions="退费管理">
-                <a ui-sref="ppts.refund">
+            <li ng-class="{'active': $state.includes('ppts.accountRefund-query')}" ppts-functions="退费管理">
+                <a ui-sref="ppts.accountRefund-query">
                     <i class="menu-icon fa fa-caret-right"></i>退费管理
                 </a>
                 <b class="arrow"></b>
@@ -202,15 +202,15 @@
                 </a>
                 <b class="arrow"></b>
             </li>
-            <li ng-class="{'active': $state.includes('ppts.teachercourse')}" ppts-functions="单个教师上课记录管理">
-                <a ui-sref="ppts.teachercourse">
-                    <i class="menu-icon fa fa-caret-right"></i>教师上课记录
+            <li ng-class="{'active': $state.includes('ppts.teacherassignment')}" ppts-functions="按教师排课管理">
+                <a ui-sref="ppts.schedule-tchasgmt">
+                    <i class="menu-icon fa fa-caret-right"></i>教师排课
                 </a>
                 <b class="arrow"></b>
             </li>
-            <li ng-class="{'active': $state.includes('ppts.teacherassignment')}" ppts-functions="按教师排课管理">
-                <a ui-sref="ppts.teacherassignment">
-                    <i class="menu-icon fa fa-caret-right"></i>教师排课
+            <li ng-class="{'active': $state.includes('ppts.confirmcourse')}" ppts-functions="多教师课表查询">
+                <a ui-sref="ppts.teachercourse">
+                    <i class="menu-icon fa fa-caret-right"></i>教师课表
                 </a>
                 <b class="arrow"></b>
             </li>
@@ -226,9 +226,9 @@
                 </a>
                 <b class="arrow"></b>
             </li>
-            <li ng-class="{'active': $state.includes('ppts.confirmcourse')}" ppts-functions="多教师课表查询">
-                <a ui-sref="ppts.confirmcourse">
-                    <i class="menu-icon fa fa-caret-right"></i>教师课表
+            <li ng-class="{'active': $state.includes('ppts.teachercourserecord')}" ppts-functions="单个教师上课记录管理">
+                <a ui-sref="ppts.teachercourserecord">
+                    <i class="menu-icon fa fa-caret-right"></i>教师上课记录
                 </a>
                 <b class="arrow"></b>
             </li>
@@ -266,8 +266,8 @@
                 </a>
                 <b class="arrow"></b>
             </li>
-            <li ng-class="{'active': $state.includes('ppts.customerdiscount')}" ppts-functions="拓路表管理">
-                <a ui-sref="ppts.customerdiscount">
+            <li ng-class="{'active': $state.includes('ppts.discount')}" ppts-functions="拓路表管理">
+                <a ui-sref="ppts.discount">
                     <i class="menu-icon fa fa-caret-right"></i>拓路表管理
                 </a>
                 <b class="arrow"></b>
@@ -352,7 +352,23 @@
 </div>
 <!-- /结束：网站主体内容区域.左侧区域.最小化左侧区域按钮 -->
 <script>
+    
+    window.addEventListener('message', function (event) {
+        if (event.data == 'hide sidebar')
+        {
+            document.getElementById('sidebar').style.display = 'none';
+            document.getElementById('mainContent').style.marginLeft = '0px';
+            document.getElementById('breadcrumbs').style.display = "none";
+            document.getElementById('pageContent').style.paddingTop = "0px";
+        }
+    });
+    
+    if (window.parent) {
+
+        window.parent.postMessage('ready','*');
+    }
+   
     try {
-        ace.settings.check('sidebar', 'collapsed')
+        ace.settings.check('sidebar', 'collapsed');
     } catch (e) { }
 </script>

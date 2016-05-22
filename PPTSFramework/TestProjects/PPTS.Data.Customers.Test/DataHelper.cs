@@ -60,8 +60,8 @@ namespace PPTS.Data.Customers.Test
         {
             CustomerParentRelation relation = new CustomerParentRelation() { CustomerID = studentID, ParentID = parentID };
 
-            relation.CustomerRole = 1;
-            relation.ParentRole = 1;
+            relation.CustomerRole = "1";
+            relation.ParentRole = "1";
             relation.IsPrimary = true;
 
             return relation;
@@ -72,6 +72,7 @@ namespace PPTS.Data.Customers.Test
             CustomerFollow follow = new CustomerFollow()
             {
                 CustomerID = studentID,
+                FollowerID = UuidHelper.NewUuidString(),
                 FollowTime = SNTPClient.AdjustedTime,
                 NextFollowTime = SNTPClient.AdjustedTime.AddDays(1),
                 OrgID = UuidHelper.NewUuidString(),

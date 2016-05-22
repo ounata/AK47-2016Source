@@ -31,22 +31,30 @@
             </div>
         </div>
         <div class="portlet-body">
-
+            <div class="line-height-40">
+                <ppts-select-branch model="vm.criteria.CampusID"/>
+                <mcs-input placeholder="学员姓名" model="vm.criteria.customerName" css="mcs-input-search"/>
+                <mcs-input placeholder="学员编号" model="vm.criteria.customerCode" css="mcs-input-search"/>
+                <mcs-input placeholder="产品编号" model="vm.criteria.productCode" css="mcs-input-search"/>
+            </div>
+            <div class="line-height-40">
+                <mcs-input placeholder="产品名称" model="vm.criteria.productName" css="mcs-input-search" />
+                <mcs-input placeholder="班级名称" model="vm.criteria.className" css="mcs-input-search" />
+                <mcs-input placeholder="教师名称" model="vm.criteria.teacherName" css="mcs-input-search" />
+                <mcs-button category="search" click="vm.search()" class="search-btn" />
+            </div>
+           
+           
         </div>
     </div>
 </div>
 <!-- /结束：班级列表.快速查询条件 -->
 <!-- #开始：班级列表.工具栏 -->
 <div class="mcs-panel-toolbar">
+    <mcs-button category="delete" text="删除班级"  click="vm.deleteClass()"></mcs-button>
+    <mcs-button category="view" text="查看学生" click="vm.searchCustomers()"></mcs-button>
+</div>
 
-</div>
-<div class="alert alert-block alert-danger" ng-show="vm.errorMessage">
-    <button type="button" class="close" data-dismiss="alert">
-        <i class="ace-icon fa fa-times"></i>
-    </button>
-    <i class="ace-icon fa fa-warning"></i>
-    {{vm.errorMessage}}
-</div>
 <!-- /结束：班级列表.工具栏 -->
 <!-- #开始：班级列表.数据表格 -->
 <mcs-datatable data="vm.data" retrieve-data="vm.search();" />

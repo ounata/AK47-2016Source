@@ -143,6 +143,8 @@
     <Folder Include="dbo\Stored Procedures\" />
     <Folder Include="WF\Stored Procedures\" />
     <Folder Include="Assemblies\" />
+    <Folder Include="TX" />
+    <Folder Include="TX\Tables" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="WF\Tables\PROCESS_CURRENT_ACTIVITIES.sql" />
@@ -256,6 +258,9 @@
     <Build Include="WF\Tables\ROLE_PROPERTIES_USER_CONTAINERS.sql" />
     <Build Include="WF\Stored Procedures\ClearProcessInstanceData.sql" />
     <Build Include="WF\Stored Procedures\ClearTenantProcessInstanceData.sql" />
+    <Build Include="WF\Tables\FIXED_TIME_TASK.sql" />
+    <Build Include="Security\TX.sql" />
+    <Build Include="TX\Tables\TRANSACTION_PROCESS.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MCSWorkflowDB.local.UnitTest.publish.xml" />

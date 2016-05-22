@@ -42,9 +42,21 @@ namespace MCS.Library.Core
             if (tz == null)
                 tz = TimeZoneInfo.Local;
 
-            DateTime convertedTime = DateTime.SpecifyKind(utcTime, DateTimeKind.Utc);
+            DateTime unspecifiedTime = DateTime.SpecifyKind(utcTime, DateTimeKind.Unspecified);
 
-            return TimeZoneInfo.ConvertTimeFromUtc(convertedTime, tz);
+            DateTime result;
+
+            if (unspecifiedTime == DateTime.MinValue)
+            {
+                result = DateTime.MinValue;
+            }
+            else
+            {
+                DateTime convertedTime = DateTime.SpecifyKind(utcTime, DateTimeKind.Utc);
+                result = TimeZoneInfo.ConvertTimeFromUtc(convertedTime, tz);
+            }
+
+            return result;
         }
 
         /// <summary>

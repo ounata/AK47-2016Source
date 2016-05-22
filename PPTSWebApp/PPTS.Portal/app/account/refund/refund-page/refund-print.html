@@ -1,0 +1,28 @@
+﻿<form class="form-horizontal">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="alert" ng-click="vm.close()">
+            <i class="ace-icon fa fa-times"></i>
+        </button>
+        <h4 class="modal-title">打印退费凭证</h4>
+    </div>
+    <div class="modal-body">
+         <table class="table table-bordered">
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+         </table>
+    </div>
+    <div class="modal-footer">
+        <mcs-button category="print" click="vm.save()"></mcs-button>
+        <mcs-button category="close" click="vm.close()"></mcs-button>
+    </div>
+</form>

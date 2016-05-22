@@ -1,0 +1,35 @@
+﻿<form role="form">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="alert" ng-click="vm.cancel()">
+            <i class="ace-icon fa fa-times"></i>
+        </button>
+        <h4 class="modal-title">调整课表</h4>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <table>
+                <tr ng-repeat="cm in vm.resetModel">
+                    <td style="width:60%">{{cm.info}}</td>
+                    <td style="width:20%"><ppts-datepicker model="cm.reDate" css="col-xs-10 col-sm-10" /></td>
+                    <td style="width:20%">
+                        <ppts-select caption="" category="hour" model="cm.reHour"  class="ppts-select-search" />
+                        <ppts-select caption="" category="minute" model="cm.reMinute" class="ppts-select-search" />
+                    </td>
+                </tr>
+                <!--<tr>
+                    <td>将聂鑫航（ST00001）2016-05-05（星期二）13:00 - 15:00 的数学课调整为</td>
+                    <td><ppts-datepicker model="vm.customer.birthday" css="col-xs-10 col-sm-10" /></td>
+                    <td>
+                        <ppts-select caption="" category="hour" model="vm.endHour" callback="vm.calcDurationValueEHClick(item)" css="col-xs-2 col-sm-2" />
+                        <ppts-select caption="" category="minute" model="vm.endMinute" callback="vm.calcDurationValueEMClick(item)" css="col-xs-2 col-sm-2" />
+                    </td>
+                </tr>-->
+            </table>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <mcs-button category="save" click="vm.save()" />
+        <mcs-button category="close" click="vm.cancel()" />
+    </div>
+</form>
+

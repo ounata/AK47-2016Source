@@ -1,22 +1,30 @@
 ﻿CREATE TABLE [CM].[CustomerReplies]
 (
-    [CampusID] NVARCHAR(36) NULL, 
-    [CustomerID] NVARCHAR(36) NULL, 
 	[ReplyID] NVARCHAR(36) NOT NULL DEFAULT newid(), 
-    [ReplyTime] DATETIME NULL, 
-    [ReplyType] NVARCHAR(32) NULL, 
+    [BranchID] NVARCHAR(36) NULL, 
+    [BranchName] NVARCHAR(64) NULL, 
+    [CampusID] NVARCHAR(36) NULL, 
+    [CampusName] NVARCHAR(64) NULL, 
+    [CustomerID] NVARCHAR(36) NULL, 
+	[CustomerName] NVARCHAR(64) NULL,
+	[ParentID] NVARCHAR(36) NULL, 
+    [ParentPassportID] NVARCHAR(36) NULL, 
+	[ParentName] NVARCHAR(64) NULL, 
+	[PhoneNumber] NVARCHAR(64) NULL, 
+    [ReplyTime] DATETIME NULL DEFAULT GETUTCDATE(),
+    [ReplyObject] NVARCHAR(32) NULL, 
     [ReplyContent] NVARCHAR(MAX) NULL, 
     [ReplyFrom] NVARCHAR(32) NULL, 
     [ReplierID] NVARCHAR(36) NULL, 
+	[ReplierJobID] NVARCHAR(36) NULL, 
     [ReplierName] NVARCHAR(64) NULL, 
-    [ParentID] NVARCHAR(36) NULL, 
-    [ParentName] NVARCHAR(64) NULL, 
-    [PhoneNumber] NVARCHAR(64) NULL, 
     [Poster] NVARCHAR(32) NULL, 
     [CreatorID] NVARCHAR(36) NULL, 
     [CreatorName] NVARCHAR(64) NULL, 
-    [CreateTime] DATETIME NULL DEFAULT getdate(), 
-    CONSTRAINT [PK_CustomerReplies] PRIMARY KEY NONCLUSTERED ([ReplyID])  
+    [CreateTime] DATETIME NULL DEFAULT GETUTCDATE(), 
+    [FromSystemID] NVARCHAR(36) NULL, 
+    [Status] NVARCHAR(32) NULL DEFAULT '2', 
+    CONSTRAINT [PK_CustomerReplies] PRIMARY KEY NONCLUSTERED ([ReplyID]) 
 )
 
 GO
@@ -55,15 +63,6 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level1name = N'CustomerReplies',
     @level2type = N'COLUMN',
     @level2name = N'ReplyTime'
-GO
-EXEC sp_addextendedproperty @name = N'MS_Description',
-    @value = N'Teacher;School;MngTeacher;Inquiry，Inquiry[咨询师反馈]--1 MngTeacher[学管师反馈]--2 Teacher[教师反馈]--3 School[校区反馈]--4 家长反馈信息--5 WMng[周反馈]--6',
-    @level0type = N'SCHEMA',
-    @level0name = N'CM',
-    @level1type = N'TABLE',
-    @level1name = N'CustomerReplies',
-    @level2type = N'COLUMN',
-    @level2name = N'ReplyType'
 GO
 EXEC sp_addextendedproperty @name = N'MS_Description',
     @value = N'创建人ID',
@@ -120,7 +119,7 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level2name = N'PhoneNumber'
 GO
 EXEC sp_addextendedproperty @name = N'MS_Description',
-    @value = N'发言人（Xueda,Customer)',
+    @value = N'发言人（Xueda--1,Customer--2)',
     @level0type = N'SCHEMA',
     @level0name = N'CM',
     @level1type = N'TABLE',
@@ -138,7 +137,7 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level2name = N'ReplyContent'
 GO
 EXEC sp_addextendedproperty @name = N'MS_Description',
-    @value = N'回复人ID',
+    @value = N'学大响应人ID',
     @level0type = N'SCHEMA',
     @level0name = N'CM',
     @level1type = N'TABLE',
@@ -147,7 +146,7 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level2name = N'ReplierID'
 GO
 EXEC sp_addextendedproperty @name = N'MS_Description',
-    @value = N'回复人姓名',
+    @value = N'学大响应人姓名',
     @level0type = N'SCHEMA',
     @level0name = N'CM',
     @level1type = N'TABLE',
@@ -156,7 +155,7 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level2name = N'ReplierName'
 GO
 EXEC sp_addextendedproperty @name = N'MS_Description',
-    @value = N'回复来源(iOS,Andriod,WebPPTS)',
+    @value = N'回复来源(iOS--1,Andriod--2,PPTSWEB--3)',
     @level0type = N'SCHEMA',
     @level0name = N'CM',
     @level1type = N'TABLE',
@@ -165,7 +164,7 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level2name = N'ReplyFrom'
 GO
 EXEC sp_addextendedproperty @name = N'MS_Description',
-    @value = N'学大对学员反馈回复表',
+    @value = N'客户反馈表-存放客户与学大的交互反馈信息,含周反馈',
     @level0type = N'SCHEMA',
     @level0name = N'CM',
     @level1type = N'TABLE',
@@ -179,3 +178,89 @@ CREATE INDEX [IX_CustomerReplies_2] ON [CM].[CustomerReplies] ([CustomerID], [Re
 GO
 
 CREATE INDEX [IX_CustomerReplies_3] ON [CM].[CustomerReplies] ([ReplyTime])
+
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'学大沟通对象代码Inquiry--咨询师反馈(1);MngTeacher--学管师反馈(2);Teacher--教师反馈(3);School--校区反馈(4);WMng--周反馈(6)',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'CustomerReplies',
+    @level2type = N'COLUMN',
+    @level2name = N'ReplyObject'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'分公司ID',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'CustomerReplies',
+    @level2type = N'COLUMN',
+    @level2name = N'BranchID'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'分公司名称',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'CustomerReplies',
+    @level2type = N'COLUMN',
+    @level2name = N'BranchName'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'校区名称',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'CustomerReplies',
+    @level2type = N'COLUMN',
+    @level2name = N'CampusName'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'学大响应人岗位ID',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'CustomerReplies',
+    @level2type = N'COLUMN',
+    @level2name = N'ReplierJobID'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'学员姓名',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'CustomerReplies',
+    @level2type = N'COLUMN',
+    @level2name = N'CustomerName'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'家长PassportID',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'CustomerReplies',
+    @level2type = N'COLUMN',
+    @level2name = N'ParentPassportID'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'映射来源系统ID',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'CustomerReplies',
+    @level2type = N'COLUMN',
+    @level2name = N'FromSystemID'
+GO
+
+CREATE INDEX [IX_CustomerReplies_4] ON [CM].[CustomerReplies] ([FromSystemID], [ReplyObject], [ReplyFrom])
+
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'delete--0;new--1;normal--2;',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'CustomerReplies',
+    @level2type = N'COLUMN',
+    @level2name = N'Status'

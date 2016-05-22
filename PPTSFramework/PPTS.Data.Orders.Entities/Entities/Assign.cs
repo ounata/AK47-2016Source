@@ -23,6 +23,7 @@ namespace PPTS.Data.Orders.Entities
         }
 
         #region IAssignAttr
+
         /// <summary>
         /// 排课ID
         /// </summary>
@@ -49,7 +50,8 @@ namespace PPTS.Data.Orders.Entities
         /// <summary>
         /// 排课状态（排定，已上，异常，无效）
         /// </summary>
-        [ORFieldMapping("AssignStatus")]
+        [ORFieldMapping("AssignStatus")]    
+        [ConstantCategory("C_CODE_ABBR_Course_AssignStatus")]
         [DataMember]
         public AssignStatusDefine AssignStatus
         {
@@ -60,6 +62,7 @@ namespace PPTS.Data.Orders.Entities
         /// <summary>
         /// 排课来源（自动【班组】，手工【一对一】，补录）
         /// </summary>
+        [ConstantCategory("C_CODE_ABBR_Assign_Source")]
         [ORFieldMapping("AssignSource")]
         [DataMember]
         public AssignSourceDefine AssignSource
@@ -135,14 +138,6 @@ namespace PPTS.Data.Orders.Entities
         }
 
         /// <summary>
-		/// 教师岗位ID
-		/// </summary>
-		[ORFieldMapping("TeacherJobID")]
-        [DataMember]
-        public string TeacherJobID
-        { get; set; }
-
-        /// <summary>
         /// 咨询师ID
         /// </summary>
         [ORFieldMapping("ConsultantID")]
@@ -208,9 +203,8 @@ namespace PPTS.Data.Orders.Entities
             set;
         }
 
-        /// <summary>
+
         /// 时长（分钟）【班组就是课次时长，一对一就是课时时常】
-        /// </summary>
         [ORFieldMapping("DurationValue")]
         [DataMember]
         public decimal DurationValue
@@ -219,9 +213,17 @@ namespace PPTS.Data.Orders.Entities
             set;
         }
 
-        /// <summary>
-        /// 数量（实际时间除以时长）
-        /// </summary>
+        ///订单ID
+        [ORFieldMapping("OrderID")]
+        [DataMember]
+        public string OrderID { get; set; }
+
+        ///订单编号
+        [ORFieldMapping("OrderNo")]
+        [DataMember]
+        public string OrderNo { get; set; }
+
+        /// 排定课时数量（一对一是实际时间除以时长，以0.5为单位向下取整，班组是1）
         [ORFieldMapping("Amount")]
         [DataMember]
         public decimal Amount
@@ -229,17 +231,25 @@ namespace PPTS.Data.Orders.Entities
             get;
             set;
         }
-
-        /// <summary>
-        /// 单价
-        /// </summary>
-        [ORFieldMapping("Price")]
+        
+        ///实际排定课时数量（一对一是实际时间除以时长）
+        [ORFieldMapping("RealAmount")]
         [DataMember]
-        public decimal Price
+        public decimal RealAmount { get; set; }
+
+        /// 排定课程时的单价
+        [ORFieldMapping("AssignPrice")]
+        [DataMember]
+        public decimal AssignPrice
         {
             get;
             set;
         }
+
+        /// 确认时价格
+        [ORFieldMapping("ConfirmPrice")]
+        [DataMember]
+        public decimal ConfirmPrice { get; set; }
 
         /// <summary>
         /// 开始时间
@@ -338,6 +348,7 @@ namespace PPTS.Data.Orders.Entities
         /// 年级代码
         /// </summary>
         [ORFieldMapping("Grade")]
+        [ConstantCategory("C_CODE_ABBR_CUSTOMER_GRADE")]
         [DataMember]
         public string Grade
         {
@@ -361,8 +372,6 @@ namespace PPTS.Data.Orders.Entities
         /// </summary>
         [ORFieldMapping("Subject")]
         [DataMember]
-
-
         [ConstantCategory("C_CODE_ABBR_BO_Product_TeacherSubject")]
         public string Subject
         {
@@ -437,10 +446,18 @@ namespace PPTS.Data.Orders.Entities
         }
 
         /// <summary>
+        /// 教师岗位ID
+        /// </summary>
+        [ORFieldMapping("TeacherJobID")]
+        [DataMember]
+        public string TeacherJobID
+        { get; set; }
+
+        /// <summary>
         /// 创建时间
         /// </summary>
         [ORFieldMapping("CreateTime", UtcTimeToLocal = true)]
-        [SqlBehavior(BindingFlags = ClauseBindingFlags.Select | ClauseBindingFlags.Where)]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.Select | ClauseBindingFlags.Where, DefaultExpression = "GETUTCDATE()")]
         [DataMember]
         public DateTime CreateTime
         {
@@ -470,6 +487,15 @@ namespace PPTS.Data.Orders.Entities
             get;
             set;
         }
+        [ORFieldMapping("CampusID")]
+        [DataMember]
+        public string CampusID
+        { get; set; }
+        [ORFieldMapping("CampusName")]
+        [DataMember]
+        public string CampusName { get; set; }
+        
+        
         #endregion
 
         #region IEntityWithModifier
@@ -624,12 +650,6 @@ namespace PPTS.Data.Orders.Entities
         }
 
         /// <summary>
-        /// 教师岗位ID
-        /// </summary>
-        string TeacherJobID
-        { get; set; }
-
-        /// <summary>
         /// 咨询师ID
         /// </summary>
         string ConsultantID
@@ -683,32 +703,37 @@ namespace PPTS.Data.Orders.Entities
             set;
         }
 
-        /// <summary>
+        ///订单ID
+        string OrderID { get; set; }
+        ///订单编号
+        string OrderNo { get; set; }
         /// 时长（分钟）【班组就是课次时长，一对一就是课时时常】
-        /// </summary>
         decimal DurationValue
         {
             get;
             set;
         }
-
-        /// <summary>
-        /// 数量（实际时间除以时长）
-        /// </summary>
+        /// 排定课时数量（一对一是实际时间除以时长，以0.5为单位向下取整，班组是1）
         decimal Amount
         {
             get;
             set;
         }
+        ///实际排定课时数量（一对一是实际时间除以时长）
+        decimal RealAmount { get; set; }
 
         /// <summary>
-        /// 单价
+        /// 课程排定时的单价
         /// </summary>
-        decimal Price
+        decimal AssignPrice
         {
             get;
             set;
         }
+        /// <summary>
+        /// 确认时价格
+        /// </summary>
+        decimal ConfirmPrice { get; set; }
 
         /// <summary>
         /// 开始时间
@@ -727,5 +752,10 @@ namespace PPTS.Data.Orders.Entities
             get;
             set;
         }
+
+        ///校区ID
+        string CampusID { get; set; }
+        ///校区名称
+        string CampusName { get; set; }
     }
 }

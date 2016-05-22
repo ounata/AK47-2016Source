@@ -1,0 +1,14 @@
+﻿<form class="form-horizontal" role="form">
+    <div class="tabbable">
+        <ul class="nav nav-tabs" id="charge-view-tabs">
+            <li ng-repeat="tab in vm.tabs" ng-class="{'active':tab.active}" ui-sref="ppts.accountCharge-view.{{tab.route}}" class="dropdown" ng-click="vm.switchTab(this)">
+                <a class="dropdown-toggle" href="#">
+                    {{ tab.title }} &nbsp;
+                </a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div ui-view></div>
+        </div>
+    </div>
+</form>

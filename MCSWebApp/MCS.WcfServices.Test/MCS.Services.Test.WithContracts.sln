@@ -1,0 +1,64 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCS.Services.Test", "MCS.Services.Test.csproj", "{0665717B-5B4F-4F73-B714-EF6CFFA35DBD}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F4819ABF-3CD4-4158-BF86-8FE4D3F6A7A6} = {F4819ABF-3CD4-4158-BF86-8FE4D3F6A7A6}
+		{FC166FF5-5A7B-4E9F-98C8-F5CECE9D0E8A} = {FC166FF5-5A7B-4E9F-98C8-F5CECE9D0E8A}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCS.Services.Test.Contracts", "..\..\TestFramework\MCS.Services.Test.Contracts\MCS.Services.Test.Contracts.csproj", "{FC166FF5-5A7B-4E9F-98C8-F5CECE9D0E8A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCS.Library.WcfExtensions", "..\..\Framework\MCS.Library.WcfExtensions\MCS.Library.WcfExtensions.csproj", "{F4819ABF-3CD4-4158-BF86-8FE4D3F6A7A6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WfPlatformServices", "..\WfPlatformServices\WfPlatformServices.csproj", "{0E4F250A-4F96-4378-A64C-A723E38D01D3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F4819ABF-3CD4-4158-BF86-8FE4D3F6A7A6} = {F4819ABF-3CD4-4158-BF86-8FE4D3F6A7A6}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0665717B-5B4F-4F73-B714-EF6CFFA35DBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0665717B-5B4F-4F73-B714-EF6CFFA35DBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0665717B-5B4F-4F73-B714-EF6CFFA35DBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0665717B-5B4F-4F73-B714-EF6CFFA35DBD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC166FF5-5A7B-4E9F-98C8-F5CECE9D0E8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC166FF5-5A7B-4E9F-98C8-F5CECE9D0E8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC166FF5-5A7B-4E9F-98C8-F5CECE9D0E8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC166FF5-5A7B-4E9F-98C8-F5CECE9D0E8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4819ABF-3CD4-4158-BF86-8FE4D3F6A7A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4819ABF-3CD4-4158-BF86-8FE4D3F6A7A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4819ABF-3CD4-4158-BF86-8FE4D3F6A7A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4819ABF-3CD4-4158-BF86-8FE4D3F6A7A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E4F250A-4F96-4378-A64C-A723E38D01D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E4F250A-4F96-4378-A64C-A723E38D01D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E4F250A-4F96-4378-A64C-A723E38D01D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E4F250A-4F96-4378-A64C-A723E38D01D3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 5
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://10.1.56.70:8080/tfs/pptsv2.0
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = MCS.Services.Test.csproj
+		SccLocalPath1 = .
+		SccProjectUniqueName2 = ..\\..\\TestFramework\\MCS.Services.Test.Contracts\\MCS.Services.Test.Contracts.csproj
+		SccProjectName2 = ../../TestFramework/MCS.Services.Test.Contracts
+		SccLocalPath2 = ..\\..\\TestFramework\\MCS.Services.Test.Contracts
+		SccProjectUniqueName3 = ..\\..\\Framework\\MCS.Library.WcfExtensions\\MCS.Library.WcfExtensions.csproj
+		SccProjectName3 = ../../Framework/MCS.Library.WcfExtensions
+		SccLocalPath3 = ..\\..\\Framework\\MCS.Library.WcfExtensions
+		SccProjectUniqueName4 = ..\\WfPlatformServices\\WfPlatformServices.csproj
+		SccProjectName4 = ../WfPlatformServices
+		SccLocalPath4 = ..\\WfPlatformServices
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,28 @@
+﻿<form class="form-horizontal">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="alert" ng-click="vm.close()">
+            <i class="ace-icon fa fa-times"></i>
+        </button>
+        <h4 class="modal-title">{{vm.actionName}}</h4>
+    </div>
+    <div class="modal-body">
+        <table class="table table-bordered">
+            <tr>
+                <td class="col-sm-3">学生编号</td>
+                <td class="col-sm-3">学生姓名</td>
+                <td class="col-sm-3">实退金额(元)</td>
+                <td class="col-sm-3">领款人</td>
+            </tr>
+            <tr>
+                <td>{{ vm.apply.customerCode }}</td>
+                <td>{{ vm.apply.customerName }}</td>
+                <td>{{ vm.apply.realRefundMoney | currency:"￥" }}</td>
+                <td>{{ vm.apply.drawer }}</td>
+            </tr>
+        </table>
+    </div>
+    <div class="modal-footer">
+        <mcs-button category="ok" click="vm.save()"></mcs-button>
+        <mcs-button category="close" click="vm.close()"></mcs-button>
+    </div>
+</form>

@@ -97,7 +97,7 @@ namespace MCS.Library.Data.Mapping
             public List<SubClassPropertyEncryptionAttribute> SubClassPropertyEncryptions = new List<SubClassPropertyEncryptionAttribute>();
         }
 
-        private delegate void DoSqlClauseBuilder<T>(SqlClauseBuilderIUW builder, ORMappingItem item, T graph);
+        private delegate void DoSqlClauseBuilder<TBuilder, T>(TBuilder builder, ORMappingItem item, T graph) where TBuilder : SqlClauseBuilderIUW<TBuilder>;
 
         #region Ë½ÓÐ·½·¨
         private static object ConvertData(ORMappingItem item, object data)
@@ -136,13 +136,13 @@ namespace MCS.Library.Data.Mapping
             return result;
         }
 
-        private static void FillSqlClauseBuilder<T>(
-                SqlClauseBuilderIUW builder,
+        private static void FillSqlClauseBuilder<TBuilder, T>(
+                TBuilder builder,
                 T graph,
                 ORMappingItemCollection mapping,
                 ClauseBindingFlags bindingFlags,
-                DoSqlClauseBuilder<T> builderDelegate,
-                params string[] ignoreProperties)
+                DoSqlClauseBuilder<TBuilder, T> builderDelegate,
+                params string[] ignoreProperties) where TBuilder : SqlClauseBuilderIUW<TBuilder>
         {
             ExceptionHelper.FalseThrow<ArgumentNullException>(graph != null, "graph");
 
@@ -162,7 +162,7 @@ namespace MCS.Library.Data.Mapping
             builder.AppendTenantCode(typeof(T));
         }
 
-        private static void DoInsertUpdateSqlClauseBuilder<T>(SqlClauseBuilderIUW builder, ORMappingItem item, T graph)
+        private static void DoInsertUpdateSqlClauseBuilder<TBuilder, T>(TBuilder builder, ORMappingItem item, T graph) where TBuilder : SqlClauseBuilderIUW<TBuilder>
         {
             if (item.IsIdentity == false)
             {
@@ -177,7 +177,7 @@ namespace MCS.Library.Data.Mapping
             }
         }
 
-        private static void DoWhereSqlClauseBuilderByChangedFields<T>(SqlClauseBuilderIUW builder, ORMappingItem item, T graph)
+        private static void DoWhereSqlClauseBuilderByChangedFields<TBuilder, T>(TBuilder builder, ORMappingItem item, T graph) where TBuilder : SqlClauseBuilderIUW<TBuilder>
         {
             object data = GetValueFromObject(item, graph);
 
@@ -187,7 +187,7 @@ namespace MCS.Library.Data.Mapping
                 builder.AppendItem(item.DataFieldName, FormatValue(data, item), SqlClauseBuilderBase.NotEqualTo);
         }
 
-        private static void DoWhereSqlClauseBuilderByChangedFieldsWithoutPrimaryKey<T>(SqlClauseBuilderIUW builder, ORMappingItem item, T graph)
+        private static void DoWhereSqlClauseBuilderByChangedFieldsWithoutPrimaryKey<TBuilder, T>(TBuilder builder, ORMappingItem item, T graph) where TBuilder : SqlClauseBuilderIUW<TBuilder>
         {
             if (item.PrimaryKey == false)
             {
@@ -200,7 +200,7 @@ namespace MCS.Library.Data.Mapping
             }
         }
 
-        private static void DoSelectSqlClauseBuilder<T>(SqlClauseBuilderIUW builder, ORMappingItem item, T graph)
+        private static void DoSelectSqlClauseBuilder<TBuilder, T>(TBuilder builder, ORMappingItem item, T graph) where TBuilder : SqlClauseBuilderIUW<TBuilder>
         {
             if (item.PrimaryKey == false)
             {
@@ -218,7 +218,7 @@ namespace MCS.Library.Data.Mapping
             }
         }
 
-        private static void DoWhereSqlClauseBuilder<T>(SqlClauseBuilderIUW builder, ORMappingItem item, T graph)
+        private static void DoWhereSqlClauseBuilder<TBuilder, T>(TBuilder builder, ORMappingItem item, T graph) where TBuilder : SqlClauseBuilderIUW<TBuilder>
         {
             object data = GetValueFromObject(item, graph);
 
@@ -228,7 +228,7 @@ namespace MCS.Library.Data.Mapping
                 builder.AppendItem(item.DataFieldName, FormatValue(data, item));
         }
 
-        private static void DoWhereSqlClauseBuilderByPrimaryKey<T>(SqlClauseBuilderIUW builder, ORMappingItem item, T graph)
+        private static void DoWhereSqlClauseBuilderByPrimaryKey<TBuilder, T>(TBuilder builder, ORMappingItem item, T graph) where TBuilder : SqlClauseBuilderIUW<TBuilder>
         {
             if (item.PrimaryKey)
             {
@@ -453,7 +453,7 @@ namespace MCS.Library.Data.Mapping
                 }
                 else
                     if (dataType == typeof(TimeSpan))
-                    data = ((TimeSpan)data).TotalSeconds;
+                        data = ((TimeSpan)data).TotalSeconds;
             }
 
             return data;

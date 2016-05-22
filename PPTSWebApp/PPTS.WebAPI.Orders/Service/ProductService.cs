@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PPTS.Data.Products.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -8,15 +9,17 @@ namespace PPTS.WebAPI.Orders.Service
 {
     public class ProductService
     {
-        public static List<Product> GetProductsByIds(params string[] ids)
+        public static List<ProductView> GetProductsByIds(params string[] ids)
         {
-            var mapper = new AutoMapper.MapperConfiguration(c => c.CreateMap<Data.Products.Entities.ProductView, Product>()).CreateMapper();
-            var results = Data.Products.Adapters.ProductViewAdapter.Instance.LoadByInBuilder(new MCS.Library.Data.Adapters.InLoadingCondition() { DataField = "ProductId", BuilderAction = where => where.AppendItem(ids) });
-            return results.Select(m =>
-            {
-                var n = mapper.Map<Product>(m);
-                return n;
-            }).ToList();
+            return PPTS.Contracts.Proxies.PPTSProductQueryServiceProxy.Instance.QueryProductViewsByIDs(ids).ToList();
+
+            //var mapper = new AutoMapper.MapperConfiguration(c => c.CreateMap<Data.Products.Entities.ProductView, Product>()).CreateMapper();
+            //var results = Data.Products.Adapters.ProductViewAdapter.Instance.LoadByInBuilder(new MCS.Library.Data.Adapters.InLoadingCondition() { DataField = "ProductId", BuilderAction = where => where.AppendItem(ids) });
+            //return results.Select(m =>
+            //{
+            //    var n = mapper.Map<Product>(m);
+            //    return n;
+            //}).ToList();
 
         }
 
@@ -41,13 +44,24 @@ namespace PPTS.WebAPI.Orders.Service
                 n.Items = presetItemCollection.Where(c => c.PresentID == m.PresentID).OrderByDescending(o=>o.PresentStandard).Select(cm => mapper.Map<PresentItem>(cm)).ToList();
                 result.Add(n);
             });
-            return result.First();
+            return result.FirstOrDefault();
+        }
+
+
+        /// <summary>
+        /// 获取服务费用通过校区id
+        /// </summary>
+        /// <param name="campusId"></param>
+        /// <returns></returns>
+        public static Data.Products.Entities.Expense GetServiceChargeByCampusId(string campusId)
+        {
+            return PPTS.Contracts.Proxies.PPTSConfigRuleQueryServiceProxy.Instance.QueryExpenseByCampusID(campusId).Expense;
         }
 
 
     }
 
-    public class Product : Data.Products.Entities.ProductView { }
+    //public class Product : Data.Products.Entities.ProductView { }
 
 
 

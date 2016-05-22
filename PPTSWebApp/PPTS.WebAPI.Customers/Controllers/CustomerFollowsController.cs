@@ -6,9 +6,15 @@ using PPTS.WebAPI.Customers.ViewModels.CustomerFollows;
 using MCS.Library.Data;
 using PPTS.WebAPI.Customers.Executors;
 using PPTS.WebAPI.Customers.DataSources;
+using System.Collections.Generic;
+using MCS.Library.Core;
+using MCS.Web.MVC.Library.Filters;
+using MCS.Library.Principal;
+using PPTS.Data.Common.Security;
 
 namespace PPTS.WebAPI.Customers.Controllers
 {
+    [ApiPassportAuthentication]
     public class CustomerFollowsController : ApiController
     {
         #region api/customerfollows/getallfollows
@@ -23,7 +29,7 @@ namespace PPTS.WebAPI.Customers.Controllers
         {
             return new FollowQueryResult
             {
-                QueryResult = CustomersFollowDataSource.Instance.LoadCustomerFollow(criteria.PageParams, criteria, criteria.OrderBy),
+                QueryResult = CustomerFollowDataSource.Instance.LoadCustomerFollow(criteria.PageParams, criteria, criteria.OrderBy),
                 Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(CustomerFollow))
             };
         }
@@ -36,7 +42,7 @@ namespace PPTS.WebAPI.Customers.Controllers
         [HttpPost]
         public PagedQueryResult<FollowQueryModel, CustomerFollowQueryCollection> GetPagedFollows(FollowQueryCriteriaModel criteria)
         {
-            return CustomersFollowDataSource.Instance.LoadCustomerFollow(criteria.PageParams, criteria, criteria.OrderBy);
+            return CustomerFollowDataSource.Instance.LoadCustomerFollow(criteria.PageParams, criteria, criteria.OrderBy);
         }
 
         #endregion
@@ -51,57 +57,53 @@ namespace PPTS.WebAPI.Customers.Controllers
         [HttpGet]
         public CreatableFollowModel CreateFollow(string customerId, bool isPotential)
         {
-            return new CreatableFollowModel(customerId, isPotential)
-            {
-                Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(CustomerFollow), typeof(CreatableFollowModel))
-            };
+            return CreatableFollowModel.CreateFollow(customerId, isPotential);
         }
 
+        /// <summary>
+        /// 提交新建的跟进记录
+        /// </summary>
+        /// <param name="model">跟进记录实体类</param>
         [HttpPost]
         public void CreateFollow(CreatableFollowModel model)
         {
+            model.Follow.CreatorID = DeluxeIdentity.CurrentUser.ID;
+            model.Follow.CreatorName = DeluxeIdentity.CurrentUser.DisplayName;
+            model.Follow.FollowerJobID = DeluxeIdentity.CurrentUser.GetCurrentJob().ID;
+            model.Follow.FollowerJobName = DeluxeIdentity.CurrentUser.GetCurrentJob().Name;
             AddCustomerFollowExecutor executor = new AddCustomerFollowExecutor(model);
-
             executor.Execute();
+
+            List<CustomerFollowItem> itemList = model.FollowItems;
+            if (itemList != null && itemList.Count > 0)
+            {
+                foreach (CustomerFollowItem item in itemList)
+                {
+                    item.FollowID = model.Follow.FollowID;
+                    item.ItemID = UuidHelper.NewUuidString();
+                }
+            }
+            AddCustomerFollowItemExecutor itemExecutor = new AddCustomerFollowItemExecutor(model.FollowItems);
+            itemExecutor.Execute();
         }
 
         #endregion
 
-        #region api/customerfollows/updatefollow
+        #region api/customerfollows/viewfollow
 
         [HttpGet]
-        public EditableFollowModel UpdateFollow(string id)
+        public ViewFollowModel ViewFollow(string followId)
         {
-            EditableFollowModel result = new EditableFollowModel()
-            {
-                Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(CustomerFollow))
-            };
-
-            //GenericPotentialCustomerAdapter<PotentialCustomerModel, List<PotentialCustomerModel>>.Instance.LoadInContext(
-            //        id,
-            //        customer => result.Customer = customer
-            //    );
-
-            //PhoneAdapter.Instance.LoadByOwnerIDInContext(
-            //    id,
-            //    phones => result.Customer.FillFromPhones(phones)
-            //);
-
-            //using (DbContext context = PhoneAdapter.Instance.GetDbContext())
-            //{
-            //    context.ExecuteDataSetSqlInContext();
-            //}
-
-            return result;
+            return ViewFollowModel.LoadFollowModel(followId);
         }
 
-        [HttpPost]
-        public void UpdateFollow(EditableFollowModel model)
-        {
-            EditCustomerFollowExecutor executor = new EditCustomerFollowExecutor(model);
+        //[HttpPost]
+        //public void UpdateFollow(EditableFollowModel model)
+        //{
+        //    EditCustomerFollowExecutor executor = new EditCustomerFollowExecutor(model);
 
-            executor.Execute();
-        }
+        //    executor.Execute();
+        //}
         #endregion
     }
 }

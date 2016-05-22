@@ -8,15 +8,15 @@
                 vm.tabs = [{
                     title: '基本信息',
                     route: 'profiles({prev:vm.page})',
-                    active: $state.includes('ppts.customer-view.profiles') || $state.includes('ppts.customer-view.profiles-edit')
+                    active: true
                 }, {
                     title: '学员家长',
                     route: 'parents({prev:vm.page})',
-                    active: $state.includes('ppts.customer-view.parents') || $state.includes('ppts.customer-view.parents-edit')
+                    active: false
                 }, {
                     title: '跟进记录',
                     route: 'follows({prev:vm.page})',
-                    active: $state.includes('ppts.customer-view.follows')
+                    active: false
                 }];
 
                 vm.switchTab = function (scope) {

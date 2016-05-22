@@ -8,7 +8,7 @@
         <div class="widget-main no-padding">
             <form name="productCreateForm" class="form-horizontal">
                 <div class="clearfix form-actions mcs-form-actions">
-                    <div class=" col-md-offset-3 col-md-9">
+                    <div class=" col-sm-offset-3 col-sm-9">
                         <mcs-button category="submit" click="vm.submit()" text="提交审批"></mcs-button>
                     </div>
                 </div>
@@ -122,9 +122,7 @@
                 <div class="form-group">
                     <label class="control-label col-sm-2">销售范围：</label>
                     <div class="col-sm-10">
-                        <select class="span2" name="productCatagory">
-                            <option value="1">一对一教学</option>
-                        </select>
+                        <ppts-select-branch model="vm.m.onetoone.campusIDs" />
                         <span>（未选择校区则默认适用于所选分公司所有校区）</span>
                     </div>
                 </div>
@@ -137,7 +135,7 @@
                 <div class="from-group row">
                     <label class="control-label col-sm-2">创建人：</label>
                     <div class="col-sm-4">
-                        <label class="control-label">xxx</label>
+                        <label class="control-label">{{vm.creator()}}</label>
                     </div>
                 </div>
                 <div class="page-header"><span>折扣信息</span></div>

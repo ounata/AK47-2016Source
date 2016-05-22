@@ -9,7 +9,8 @@
             'customerDataViewService',
             'customerParentService',
             'customerRelationType',
-            function ($scope, $stateParams, customerService, customerDataViewService, customerParentService, relationType) {
+            'mcsDialogService',
+            function ($scope, $stateParams, customerService, customerDataViewService, customerParentService, relationType, mcsDialogService) {
                 var vm = this;
 
                 // 页面初始化加载
@@ -41,6 +42,18 @@
                 // 编辑
                 vm.edit = function () {
                     customerService.handle('edit');
+                }
+
+                //解冻
+                vm.thaw = function () {
+                    mcsDialogService.create('app/customer/student/student-thaw/student-thaw.html', {
+                        controller: 'studentThawController',
+                        params: {
+                            customerID: $stateParams.id
+                        }
+                    }).result.then(function () {
+                       // vm.init();
+                    });
                 }
             }]);
     });

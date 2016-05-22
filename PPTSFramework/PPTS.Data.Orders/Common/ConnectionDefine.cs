@@ -16,7 +16,7 @@ namespace PPTS.Data.Orders
 
         public const string PPTSSearchConnectionName = "PPTS_Search";
 
-
+        public const string PPTSMetaConnectionName = "PPTS_MetaData";
         /// <summary>
         /// 得到默认的数据操作上下文
         /// </summary>

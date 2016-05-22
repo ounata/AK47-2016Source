@@ -6,6 +6,7 @@ using System.Xml.Linq;
 using MCS.Library.Core;
 using MCS.Library.Data.DataObjects;
 using MCS.Web.Library.Script;
+using MCS.Library.WcfExtensions.Inspectors;
 
 namespace MCS.Library.SOA.DataObjects.Workflow
 {
@@ -17,11 +18,51 @@ namespace MCS.Library.SOA.DataObjects.Workflow
         private WfServiceOperationParameterCollection _Params;
         private TimeSpan _Timeout = TimeSpan.FromSeconds(30);
 
+        public static WfServiceOperationDefinition CreateFromAction<TChannel>(WfServiceAddressDefinition addressDef, Action<TChannel> action, string xmlStoreParaName = "")
+        {
+            WfServiceOperationDefinition opDefine = new WfServiceOperationDefinition();
+
+            opDefine.RtnXmlStoreParamName = xmlStoreParaName;
+            opDefine.SetAddress(addressDef);
+            FillFromChannel(opDefine, action);
+
+            return opDefine;
+        }
+
+        public static WfServiceOperationDefinition CreateFromAction<TChannel>(Action<TChannel> action, string xmlStoreParaName = "")
+        {
+            WfServiceOperationDefinition opDefine = new WfServiceOperationDefinition();
+
+            opDefine.RtnXmlStoreParamName = xmlStoreParaName;
+            FillFromChannel(opDefine, action);
+
+            return opDefine;
+        }
+
+        private static void FillFromChannel<TChannel>(WfServiceOperationDefinition opDefine, Action<TChannel> action)
+        {
+            if (action != null)
+            {
+                WfClientOperationInfo opInfo = WfClientInspector.InspectParameters<TChannel>(action);
+
+                opDefine.OperationName = opInfo.Name;
+                
+                foreach(WfClientParameter parameter in opInfo.Parameters)
+                    opDefine.AddParameter(parameter.Name, parameter.Value);
+            }
+        }
+
         /// <summary>
         /// 构造方法
         /// </summary>
         public WfServiceOperationDefinition()
         {
+        }
+
+        public WfServiceOperationDefinition(string operationName, string xmlStoreParaName)
+        {
+            this.OperationName = operationName;
+            this.RtnXmlStoreParamName = xmlStoreParaName;
         }
 
         public WfServiceOperationDefinition(string addressKey,
@@ -81,31 +122,10 @@ namespace MCS.Library.SOA.DataObjects.Workflow
             this.InvokeWhenPersist = element.InvokeWhenPersist;
         }
 
-        ///// <summary>
-        ///// 兼容2012-02-03之前保存的数据，故保留该属性
-        ///// </summary>
-        //public string AddressKey
-        //{
-        //    get;
-        //    set;
-        //}
-
         public WfServiceAddressDefinition AddressDef
         {
             get
             {
-                //// 如果全局地址表包含Key，那么就是用此Key去全局地址表取地址，否则使用默认的。
-                //if (string.IsNullOrEmpty(this.AddressKey) == false)
-                //{
-                //    this._AddressDef = WfGlobalParameters.Default.ServiceAddressDefs[this.AddressKey];
-                //}
-                //else
-                //{
-                //    if (this._AddressDef != null && string.IsNullOrEmpty(this._AddressDef.Key) == false && WfGlobalParameters.Default.ServiceAddressDefs.ContainsKey(this._AddressDef.Key))
-                //    {
-                //        return WfGlobalParameters.Default.ServiceAddressDefs[this._AddressDef.Key];
-                //    }
-                //}
                 WfServiceAddressDefinition result = this._AddressDef;
 
                 if (this._AddressDef != null && this._AddressDef.Key.IsNotEmpty())
@@ -196,6 +216,64 @@ namespace MCS.Library.SOA.DataObjects.Workflow
         {
             return (WfServiceOperationDefinition)SerializationHelper.CloneObject(this);
         }
+
+        #region 快捷方法
+        public WfServiceOperationDefinition SetAddress(string addressKey)
+        {
+            this.AddressDef = new WfServiceAddressDefinition(addressKey);
+
+            return this;
+        }
+
+        public WfServiceOperationDefinition SetAddress(WfServiceAddressDefinitionConfigurationElement element)
+        {
+            this.AddressDef = new WfServiceAddressDefinition(element);
+
+            return this;
+        }
+
+        public WfServiceOperationDefinition SetAddress(WfServiceRequestMethod method, string address, WfServiceContentType contentType)
+        {
+            this.AddressDef = new WfServiceAddressDefinition(method, address, contentType);
+
+            return this;
+        }
+
+        public WfServiceOperationDefinition SetAddress(WfServiceRequestMethod method, string address, WfServiceContentType contentType, WfNetworkCredential credential)
+        {
+            this.AddressDef = new WfServiceAddressDefinition(method, credential, address, contentType);
+
+            return this;
+        }
+
+        public WfServiceOperationDefinition SetAddress(WfServiceAddressDefinition addressDef)
+        {
+            this.AddressDef = addressDef;
+
+            return this;
+        }
+
+        public WfServiceOperationDefinition AddParameter(WfServiceOperationParameterConfigurationElement element)
+        {
+            this.Params.Add(new WfServiceOperationParameter(element));
+
+            return this;
+        }
+
+        public WfServiceOperationDefinition AddParameter(string name, object value)
+        {
+            this.Params.Add(new WfServiceOperationParameter(name, value));
+
+            return this;
+        }
+
+        public WfServiceOperationDefinition AddParameter(string name, WfSvcOperationParameterType type, object value)
+        {
+            this.Params.Add(new WfServiceOperationParameter(name, type, value));
+
+            return this;
+        }
+        #endregion 快捷方法
 
         #region ISimpleXmlSerializer Members
 

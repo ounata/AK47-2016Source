@@ -15,7 +15,7 @@
                 //绑定页面tab数据
                 vm.data = {
                     selection: 'radio',
-                    rowsSelected: [],
+                    rowsSelected: data.teacher,
                     keyFields: ['teacherID', 'teacherCode', 'teacherName'],
                     pager: {
                         pageIndex: 1,
@@ -54,6 +54,13 @@
                             description: ''
                         },
                         {
+                            field: "jobOrgName",
+                            name: "所属学科组",
+                            headerCss: 'datatable-header-align-right',
+                            sortable: false,
+                            description: ''
+                        },
+                        {
                             field: "gradeMemo",
                             name: "教师授课年级",
                             template: '<span uib-tooltip="{{row.gradeMemo | grade_full}}">{{row.gradeMemo | grade}}</span>',
@@ -73,12 +80,7 @@
                     ]
                 }
 
-                //查询条件
-                vm.criteria = {
-                    campusID: data.campusID
-                }
-
-                dataSyncService.initCriteria(vm);
+                dataSyncService.initCriteria(vm,false);
 
                 
 

@@ -1,11 +1,6 @@
-﻿<div>
-    <select ng-required="required" ng-model="ngModel[division.model['1'].name]" ng-options="item.key as item.value for item in division.data|filter:{parentKey:0}" ng-change="ngModel[division.model['2'].name]='';ngModel[division.model['3'].name]='';">
-        <option value="">{{division.model["1"].title}}</option>
-    </select>
-    <select ng-if="division.model.levelCount>1" ng-disabled="ngModel[division.model['1'].name] == ''" ng-required="required" ng-model="ngModel[division.model['2'].name]" ng-options="item.key as item.value for item in division.data|filter:{parentKey:ngModel[division.model['1'].name]}" ng-change="ngModel[division.model['3'].name]='';">
-        <option value="">{{division.model["2"].title}}</option>
-    </select>
-    <select ng-if="division.model.levelCount>2" ng-disabled="ngModel[division.model['2'].name] == ''" ng-required="required" ng-model="ngModel[division.model['3'].name]" ng-options="value as value for value in division.data|filter:{parentKey:ngModel[division.model['2'].name]}">
-        <option value="">{{division.model["3"].title}}</option>
-    </select>
+﻿<div class="mcs-cascading-select-container">
+    <select class="col-sm-{{portion}} mcs-padding-0 {{percentage}}" ng-class="{'mcs-rmargin-5':level>1}" ng-style="customeStyle"></select>
+    <select ng-show="level>1" class="col-sm-{{portion}} mcs-padding-0 {{percentage}}" ng-class="{'mcs-lmargin-5':level==2,'mcs-lrmargin-5':level>2}" ng-style="customeStyle"></select>
+    <select ng-show="level>2" class="col-sm-{{portion}} mcs-padding-0 {{percentage}}" ng-class="{'mcs-lmargin-5':level==3,'mcs-lrmargin-5':level>3}" ng-style="customeStyle"></select>
+    <select ng-show="level>3" class="col-sm-{{portion}} mcs-padding-0 {{percentage}} mcs-lmargin-5"></select>
 </div>

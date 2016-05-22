@@ -64,11 +64,13 @@
     <Compile Include="Entities\IEntityWithCreator.cs" />
     <Compile Include="Entities\IEntityWithModifier.cs" />
     <Compile Include="Entities\AssertResult.cs" />
+    <Compile Include="Entities\PPTSOrganization.cs" />
     <Compile Include="Entities\Teacher.cs" />
     <Compile Include="Entities\TeacherJobView.cs" />
     <Compile Include="Entities\TeacherJob.cs" />
     <Compile Include="Entities\TeacherTeaching.cs" />
     <Compile Include="Entities\TypeConstantCategoriesCache.cs" />
+    <Compile Include="Entities\UserAndJob.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\Enumerations.cs" />
     <Compile Include="Security\PPTSJob.cs" />

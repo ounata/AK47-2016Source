@@ -1,6 +1,7 @@
 using MCS.Library.Core;
 using MCS.Library.Data.DataObjects;
 using MCS.Library.Data.Mapping;
+using PPTS.Data.Common;
 using PPTS.Data.Common.Entities;
 using System;
 using System.Runtime.Serialization;
@@ -47,7 +48,7 @@ namespace PPTS.Data.Customers.Entities
         /// </summary>
         [ORFieldMapping("OrgType")]
         [DataMember]
-        public string OrgType
+        public OrgTypeDefine OrgType
         {
             get;
             set;
@@ -404,6 +405,17 @@ namespace PPTS.Data.Customers.Entities
         [SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update, DefaultExpression = "GETUTCDATE()", ForceUseDefaultExpression = true)]
         [DataMember]
         public DateTime ModifyTime
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 跟进情况备注
+        /// </summary>
+        [ORFieldMapping("FollowMemo")]
+        [DataMember]
+        public string FollowMemo
         {
             get;
             set;

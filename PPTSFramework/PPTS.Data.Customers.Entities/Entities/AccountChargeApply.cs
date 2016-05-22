@@ -79,6 +79,18 @@ namespace PPTS.Data.Customers.Entities
         }
 
         /// <summary>
+        /// 当时年级
+        /// </summary>
+        [ORFieldMapping("CustomerGrade")]
+        [ConstantCategory("C_CODE_ABBR_CUSTOMER_GRADE")]
+        [DataMember]
+        public string CustomerGrade
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// 账户ID
         /// </summary>
         [ORFieldMapping("AccountID")]
@@ -314,6 +326,17 @@ namespace PPTS.Data.Customers.Entities
         }
 
         /// <summary>
+        /// 充值前折扣编码
+        /// </summary>
+        [ORFieldMapping("ThatDiscountCode")]
+        [DataMember]
+        public string ThatDiscountCode
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// 充值前折扣基数
         /// </summary>
         [ORFieldMapping("ThatDiscountBase")]
@@ -347,11 +370,33 @@ namespace PPTS.Data.Customers.Entities
         }
 
         /// <summary>
+        /// 充值前账户余额
+        /// </summary>
+        [ORFieldMapping("ThatAccountMoney")]
+        [DataMember]
+        public decimal ThatAccountMoney
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// 充值后折扣ID
         /// </summary>
         [ORFieldMapping("ThisDiscountID")]
         [DataMember]
         public string ThisDiscountID
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 充值后折扣编码
+        /// </summary>
+        [ORFieldMapping("ThisDiscountCode")]
+        [DataMember]
+        public string ThisDiscountCode
         {
             get;
             set;
@@ -385,6 +430,17 @@ namespace PPTS.Data.Customers.Entities
         [ORFieldMapping("ThisAccountValue")]
         [DataMember]
         public decimal ThisAccountValue
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 充值后账户余额
+        /// </summary>
+        [ORFieldMapping("ThisAccountMoney")]
+        [DataMember]
+        public decimal ThisAccountMoney
         {
             get;
             set;
@@ -572,6 +628,73 @@ namespace PPTS.Data.Customers.Entities
         [ORFieldMapping("ApproveTime", UtcTimeToLocal = true)]
         [DataMember]
         public DateTime ApproveTime
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 审核人ID
+        /// </summary>
+        [ORFieldMapping("AuditorID")]
+        [DataMember]
+        public string AuditorID
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 审核人姓名
+        /// </summary>
+        [ORFieldMapping("AuditorName")]
+        [DataMember]
+        public string AuditorName
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 审核人岗位ID
+        /// </summary>
+        [ORFieldMapping("AuditorJobID")]
+        [DataMember]
+        public string AuditorJobID
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 审核人岗位名称
+        /// </summary>
+        [ORFieldMapping("AuditorJobName")]
+        [DataMember]
+        public string AuditorJobName
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 审核状态
+        /// </summary>
+        [ORFieldMapping("AuditStatus", UtcTimeToLocal = true)]
+        [ConstantCategory("Account_ChargeAuditStatus")]
+        [DataMember]
+        public ChargeAuditStatus AuditStatus
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 审核时间
+        /// </summary>
+        [ORFieldMapping("AuditTime", UtcTimeToLocal = true)]
+        [DataMember]
+        public DateTime AuditTime
         {
             get;
             set;

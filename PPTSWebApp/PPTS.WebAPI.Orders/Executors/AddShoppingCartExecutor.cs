@@ -8,11 +8,12 @@ using System.Linq;
 using System.Web;
 using MCS.Library.SOA.DataObjects;
 using PPTS.Data.Orders.Adapters;
+using MCS.Library.Data;
 
 namespace PPTS.WebAPI.Orders.Executors
 {
     [DataExecutorDescription("加入购物车")]
-    public class AddShoppingCartExecutor : PPTSEditShoppingCartExecutorBase<ShoppingCartCollection>
+    public class AddShoppingCartExecutor : PPTSEditPurchaseExecutorBase<ShoppingCartCollection>
     {
 
 
@@ -31,6 +32,16 @@ namespace PPTS.WebAPI.Orders.Executors
                 ShoppingCartAdapter.Instance.UpdateInContext(m);
             });
 
+        }
+
+        protected override object DoOperation(DataExecutionContext<UserOperationLogCollection> context)
+        {
+            using (DbContext dbContext = PPTS.Data.Orders.ConnectionDefine.GetDbContext())
+            {
+                return dbContext.ExecuteScalarSqlInContext();
+                
+            }
+            
         }
 
     }

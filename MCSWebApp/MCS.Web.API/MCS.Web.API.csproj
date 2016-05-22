@@ -46,10 +46,15 @@
     <Reference Include="MCS.Library">
       <HintPath>..\..\Bin\MCS.Library.dll</HintPath>
     </Reference>
+    <Reference Include="MCS.Library.Office.OpenXml.Excel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=62ea08f894871798, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Bin\MCS.Library.Office.OpenXml.Excel.dll</HintPath>
+    </Reference>
     <Reference Include="MCS.Library.OGUPermission">
       <HintPath>..\..\Bin\MCS.Library.OGUPermission.dll</HintPath>
     </Reference>
-    <Reference Include="MCS.Web.MVC.Library">
+    <Reference Include="MCS.Web.MVC.Library, Version=1.0.0.0, Culture=neutral, PublicKeyToken=62ea08f894871798, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Bin\MCS.Web.MVC.Library.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
@@ -93,10 +98,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\SampleController.cs" />
     <Compile Include="Controllers\UserGraphController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Book.cs" />
+    <Compile Include="Models\DataHelper.cs" />
+    <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -109,7 +118,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

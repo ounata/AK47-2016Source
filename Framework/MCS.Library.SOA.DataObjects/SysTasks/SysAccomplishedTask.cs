@@ -7,49 +7,49 @@ using MCS.Library.Data.Mapping;
 
 namespace MCS.Library.SOA.DataObjects
 {
-	[Serializable]
-	[ORTableMapping("WF.SYS_ACCOMPLISHED_TASK")]
-	public class SysAccomplishedTask : SysTaskBase
-	{
-		public SysAccomplishedTask()
-		{
-		}
+    [Serializable]
+    [ORTableMapping("WF.SYS_ACCOMPLISHED_TASK")]
+    public class SysAccomplishedTask : SysTaskBase
+    {
+        public SysAccomplishedTask()
+        {
+        }
 
-		public SysAccomplishedTask(SysTaskBase other)
-			: base(other)
-		{
-		}
+        public SysAccomplishedTask(SysTaskBase other)
+            : base(other)
+        {
+        }
 
-		/// <summary>
-		/// 结束时间
-		/// </summary>
-		[ORFieldMapping("END_TIME")]
-		[SqlBehavior(DefaultExpression = "GETDATE()")]
-		public override DateTime EndTime
-		{
-			get;
-			set;
-		}
+        /// <summary>
+        /// 结束时间
+        /// </summary>
+        [ORFieldMapping("END_TIME", UtcTimeToLocal = true)]
+        [SqlBehavior(DefaultExpression = "GETUTCDATE()")]
+        public override DateTime EndTime
+        {
+            get;
+            set;
+        }
 
-		public SysTask CreateNewSystask(string id)
-		{
-			var result = new SysTask(this);
+        public SysTask CreateNewSystask(string id)
+        {
+            var result = new SysTask(this);
 
-			result.TaskID = id;
-			result.Status = SysTaskStatus.NotRunning;
-			result.StatusText = string.Empty;
-			result.StartTime = DateTime.MinValue;
-			result.EndTime = DateTime.MinValue;
+            result.TaskID = id;
+            result.Status = SysTaskStatus.NotRunning;
+            result.StatusText = string.Empty;
+            result.StartTime = DateTime.MinValue;
+            result.EndTime = DateTime.MinValue;
 
-			return result;
-		}
-	}
+            return result;
+        }
+    }
 
-	/// <summary>
-	/// 已完成的系统任务集合
-	/// </summary>
-	[Serializable]
-	public class SysAccomplishedTaskCollection : EditableDataObjectCollectionBase<SysAccomplishedTask>
-	{
-	}
+    /// <summary>
+    /// 已完成的系统任务集合
+    /// </summary>
+    [Serializable]
+    public class SysAccomplishedTaskCollection : EditableDataObjectCollectionBase<SysAccomplishedTask>
+    {
+    }
 }

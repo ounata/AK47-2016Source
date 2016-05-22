@@ -33,4 +33,10 @@
             return $sce.trustAsHtml(text);
         };
     }]);
+
+    mcs.ng.filter('normalize', function () {
+        return function (text) {
+            return !text || text == '0001-01-01' ? '' : text;
+        };
+    });
 })();

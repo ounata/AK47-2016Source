@@ -406,4 +406,46 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="CampusID" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="384f96c6-857e-4479-b15d-04c1a36e3963" ChangeDateTime="04/28/2016 08:35:39">
+    <Property Name="ElementName" Value="[PM].[Products].[ProductKind]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[PM].[Products]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="ProductVersion" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="f182b8a3-616d-4933-8c0c-5dddc4d006d4" ChangeDateTime="05/19/2016 05:59:04">
+    <Property Name="ElementName" Value="[PM].[FK_PresentPermissionApplies]" />
+    <Property Name="ElementType" Value="SqlForeignKeyConstraint" />
+    <Property Name="ParentElementName" Value="[PM].[PresentPermissionApplies]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[FK_PresentPermissionApplies——Presents]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="62f74037-5ccc-4e8b-9f82-c9c80d226dec" ChangeDateTime="05/19/2016 05:59:09">
+    <Property Name="ElementName" Value="[PM].[FK_PresentPermissionApplies——Presents]" />
+    <Property Name="ElementType" Value="SqlForeignKeyConstraint" />
+    <Property Name="ParentElementName" Value="[PM].[PresentPermissionApplies]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[FK_PresentPermissionApplies_Presents]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="19160bee-4816-4cd9-bffb-881577703f32" ChangeDateTime="05/19/2016 08:30:33">
+    <Property Name="ElementName" Value="[PM].[CK_DiscountPermissionsApplies_Column]" />
+    <Property Name="ElementType" Value="SqlCheckConstraint" />
+    <Property Name="ParentElementName" Value="[PM].[DiscountPermissionsApplies]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[CK_DiscountPermissionsApplies_Discount]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="c761b1fb-d4ef-4d03-8628-dcd0a10f4945" ChangeDateTime="05/19/2016 08:30:38">
+    <Property Name="ElementName" Value="[PM].[CK_DiscountPermissionsApplies_Discount]" />
+    <Property Name="ElementType" Value="SqlCheckConstraint" />
+    <Property Name="ParentElementName" Value="[PM].[DiscountPermissionsApplies]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[CK_DiscountPermissionsApplies_DiscountS]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="4e0fdfac-fd44-475b-8059-9acdbb828dcb" ChangeDateTime="05/19/2016 08:30:43">
+    <Property Name="ElementName" Value="[PM].[CK_DiscountPermissionsApplies_DiscountS]" />
+    <Property Name="ElementType" Value="SqlCheckConstraint" />
+    <Property Name="ParentElementName" Value="[PM].[DiscountPermissionsApplies]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[CK_DiscountPermissionsApplies_Discounts]" />
+  </Operation>
 </Operations>

@@ -84,7 +84,9 @@
     <Compile Include="ActivateWfProcessServiceControlCreator.cs" />
     <Compile Include="ActivateWfProcessServiceSettings.cs" />
     <Compile Include="ActivateWfProcessServiceThread.cs" />
+    <Compile Include="ClearFixedTimeTasksThread.cs" />
     <Compile Include="ConvertJobToTaskThread.cs" />
+    <Compile Include="ExecuteFixedTimeTasksThread.cs" />
     <Compile Include="ExecuteSysTasksThread.cs" />
     <Compile Include="GenerateTaskControl.cs">
       <SubType>UserControl</SubType>

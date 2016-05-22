@@ -252,4 +252,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="[IX_EXTENDED_PROPERTIES_RESOURCE_ID]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="25b22673-b0ad-4fbe-9e85-4be7eec28a0c" ChangeDateTime="05/16/2016 11:32:15">
+    <Property Name="ElementName" Value="[dbo].[TRANSACTION_PROCESS].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[TRANSACTION_PROCESS]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="PROCESS_ID" />
+  </Operation>
 </Operations>

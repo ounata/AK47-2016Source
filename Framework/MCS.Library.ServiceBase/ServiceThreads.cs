@@ -119,6 +119,7 @@ namespace MCS.Library.Services
 
             serviceThread.currentThread = new Thread(new ThreadStart(serviceThread.Execute));
             serviceThread.currentThread.Name = tp.Name;
+            serviceThread.currentThread.IsBackground = true;
 
             serviceThread.callBack = callBack;
 

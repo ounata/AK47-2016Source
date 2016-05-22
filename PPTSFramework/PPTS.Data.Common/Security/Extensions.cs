@@ -284,10 +284,13 @@ namespace PPTS.Data.Common.Security
             {
                 ID = group.ID,
                 Name = group.Name,
+                JobType = group.GetJobType(),
+                IsPrimary= group.Properties.GetValue("IsPrimary", false),
+                JobName= group.Name,
                 ParentOrganizationID = group.Properties.GetValue("PARENT_GUID", string.Empty)
             };
 
-            string abbr = GetDataScopeAbbr(group.Parent);
+            string abbr = GetDataScopeUltraAbbr(group.Parent);
 
             if (abbr.IsNotEmpty())
                 job.Name = string.Format("{0} - {1}", job.Name, abbr);
@@ -297,6 +300,27 @@ namespace PPTS.Data.Common.Security
             job.Functions = new HashSet<string>(functions, StringComparer.OrdinalIgnoreCase);
 
             return job;
+        }
+
+        private static JobTypeDefine GetJobType(this IGroup group)
+        {
+            JobTypeDefine result = JobTypeDefine.Unknown;
+
+            EnumItemDescriptionList desps = EnumItemDescriptionAttribute.GetDescriptionList(typeof(JobTypeDefine));
+
+            foreach (EnumItemDescription item in desps)
+            {
+                if (item.Filter.IsNotEmpty())
+                {
+                    if (group.Name.IndexOf(item.Filter, 0, StringComparison.OrdinalIgnoreCase) >= 0)
+                    {
+                        result = (JobTypeDefine)Enum.Parse(typeof(JobTypeDefine), item.EnumValue.ToString());
+                        break;
+                    }
+                }
+            }
+
+            return result;
         }
 
         private static string GetShortNameLastPart(string shortName)
@@ -347,6 +371,16 @@ namespace PPTS.Data.Common.Security
         /// </summary>
         /// <param name="job"></param>
         /// <returns></returns>
+        public static string GetDataScopeUltraAbbr(this PPTSJob job)
+        {
+            return job.Organization().GetDataScopeUltraAbbr();
+        }
+
+        /// <summary>
+        /// 得到岗位所属数据范围的缩写
+        /// </summary>
+        /// <param name="job"></param>
+        /// <returns></returns>
         public static string GetDataScopeAbbr(this PPTSJob job)
         {
             return job.Organization().GetDataScopeAbbr();
@@ -357,17 +391,22 @@ namespace PPTS.Data.Common.Security
         /// </summary>
         /// <param name="org"></param>
         /// <returns></returns>
-        public static string GetDataScopeAbbr(this IOrganization org)
+        public static string GetDataScopeUltraAbbr(this IOrganization org)
         {
             string result = string.Empty;
             string shortName = string.Empty;
 
+            EnumItemDescriptionList desps = EnumItemDescriptionAttribute.GetDescriptionList(typeof(DepartmentType));
+
             while (org != null)
             {
-                shortName = org.Properties.GetValue("ShortName", string.Empty);
+                if (org.IsAbbrOrg(desps))
+                {
+                    shortName = org.Properties.GetValue("ShortName", string.Empty);
 
-                if (shortName.IsNotEmpty())
-                    break;
+                    if (shortName.IsNotEmpty())
+                        break;
+                }
 
                 org = org.Parent.GetUpperDataScope();
             }
@@ -377,9 +416,55 @@ namespace PPTS.Data.Common.Security
 
             return result;
         }
+
+        /// <summary>
+        /// 得到数据范围组织的缩写
+        /// </summary>
+        /// <param name="org"></param>
+        /// <returns></returns>
+        public static string GetDataScopeAbbr(this IOrganization org)
+        {
+            string shortName = string.Empty;
+
+            EnumItemDescriptionList desps = EnumItemDescriptionAttribute.GetDescriptionList(typeof(DepartmentType));
+
+            while (org != null)
+            {
+                if (org.IsDataScope(desps))
+                {
+                    shortName = org.Properties.GetValue("ShortName", string.Empty);
+
+                    if (shortName.IsNotEmpty())
+                        break;
+                }
+
+                org = org.Parent.GetUpperDataScope();
+            }
+
+            return shortName;
+        }
         #endregion 功能和岗位
 
         #region 部门类型和数据范围
+        /// <summary>
+        /// 根据PPTS的组织类型得到下一级的组织
+        /// </summary>
+        /// <param name="root"></param>
+        /// <param name="deptType"></param>
+        /// <returns></returns>
+        public static List<IOrganization> GetChildOrganizationsByPPTSType(this IOrganization root, DepartmentType deptType)
+        {
+            List<IOrganization> children = new List<IOrganization>();
+
+            foreach (IOrganization org in root.QueryChildren<IOrganization>("@SearchAll@", false, SearchLevel.OneLevel, int.MaxValue))
+            {
+                if (org.PPTSDepartmentType() == deptType)
+                    children.Add(org);
+            }
+
+            return children;
+        }
+
         /// <summary>
         /// 组织上的PPTS的部门类型
         /// </summary>
@@ -425,9 +510,7 @@ namespace PPTS.Data.Common.Security
 
                 job.Organization().ProbeParents(org =>
                 {
-                    DepartmentType deptType = org.Properties.GetValue("DepartmentType", DepartmentType.None);
-
-                    if (desps.IsDataScope(deptType))
+                    if (org.IsDataScope(desps))
                         result = org.ID;
 
                     return result.IsNullOrEmpty();
@@ -450,9 +533,7 @@ namespace PPTS.Data.Common.Security
 
             root.ProbeParents(org =>
             {
-                DepartmentType deptType = org.Properties.GetValue("DepartmentType", DepartmentType.None);
-
-                if (desps.IsDataScope(deptType))
+                if (org.IsDataScope(desps))
                     result = org;
 
                 return result == null;
@@ -500,15 +581,68 @@ namespace PPTS.Data.Common.Security
 
             current.ProbeParents(org =>
             {
-                DepartmentType deptType = org.Properties.GetValue("DepartmentType", DepartmentType.None);
-
-                if (desps.IsDataScope(deptType))
+                if (org.IsDataScope(desps))
                     result.Add(org);
             });
 
             return result;
         }
+
+        /// <summary>
+        /// 该部门是不是数据范围
+        /// </summary>
+        /// <param name="org"></param>
+        /// <param name="desps"></param>
+        /// <returns></returns>
+        public static bool IsDataScope(this IOrganization org, EnumItemDescriptionList desps = null)
+        {
+            if (desps == null)
+                desps = EnumItemDescriptionAttribute.GetDescriptionList(typeof(DepartmentType));
+
+            DepartmentType deptType = org.Properties.GetValue("DepartmentType", DepartmentType.None);
+
+            return desps.IsDataScope(deptType);
+        }
+
+        public static bool IsAbbrOrg(this IOrganization org, EnumItemDescriptionList desps = null)
+        {
+            if (desps == null)
+                desps = EnumItemDescriptionAttribute.GetDescriptionList(typeof(DepartmentType));
+
+            DepartmentType deptType = org.Properties.GetValue("DepartmentType", DepartmentType.None);
+
+            return desps.IsAbbrOrg(deptType);
+        }
         #endregion 部门类型和数据范围
+
+        #region 组织机构扩展
+        public static IOrganization ToBaseOrganization(this PPTSOrganization org)
+        {
+            IOrganization result = null;
+            if (org != null)
+                result = OguMechanismFactory.GetMechanism().GetObjects<IOrganization>(SearchOUIDType.Guid, org.ID).SingleOrDefault();
+            return result;
+        }
+        #endregion 组织机构扩展
+
+        #region 人员扩展
+        //public static IUser ToBaseUser(this PPTSUser user)
+        //{
+        //    IUser result = null;
+        //    if (user != null)
+        //    {
+        //        OguObjectCollection<IUser> users = OguMechanismFactory.GetMechanism().GetObjects<IUser>(SearchOUIDType.Guid, user.ID);
+        //        result = OguMechanismFactory.GetMechanism().GetObjects<IUser>(SearchOUIDType.Guid, user.ID).FirstOrDefault();
+        //    }
+        //    return result;
+        //}
+
+        //public static PPTSJobCollection Jobs(this PPTSUser user)
+        //{
+        //    IUser userBase = user.ToBaseUser();
+        //    return userBase.Jobs();
+        //}
+        #endregion 人员扩展
 
         private static IOrganization ProbeParents(this IOrganization org, Action<IOrganization> action)
         {
@@ -547,6 +681,18 @@ namespace PPTS.Data.Common.Security
 
             if (desp != null)
                 result = desp.Category == "DataScope";
+
+            return result;
+        }
+
+        private static bool IsAbbrOrg(this EnumItemDescriptionList desps, DepartmentType deptType)
+        {
+            EnumItemDescription desp = desps.FirstOrDefault(d => d.EnumValue == (int)deptType);
+
+            bool result = false;
+
+            if (desp != null)
+                result = deptType == DepartmentType.Branch || deptType == DepartmentType.Campus || deptType == DepartmentType.Region;
 
             return result;
         }

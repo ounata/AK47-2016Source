@@ -14,6 +14,9 @@ namespace PPTS.WebAPI.Customers.ViewModels.CustomerMeetings
         /// </summary>
         [InConditionMapping("Satisficing")]
         public int[] Satisfactions { set; get; }
+
+        [InConditionMapping("Satisficing")]
+        public int? Satisfaction { set; get; }
         /// <summary>
         /// 年级
         /// </summary>
@@ -51,6 +54,15 @@ namespace PPTS.WebAPI.Customers.ViewModels.CustomerMeetings
         public int[] MeetingTypes { set; get; }
 
         /// <summary>
+        /// 会议类型
+        /// </summary>
+        [InConditionMapping("MeetingType")]
+        public int? MeetingType { set; get; }
+
+        [ConditionMapping("customer.CustomerId", Operation = " = ")]
+        public string CustomerId { set; get; }
+
+        /// <summary>
         /// 学员姓名
         /// </summary>
         public string CustomerName { set; get; }
@@ -71,9 +83,11 @@ namespace PPTS.WebAPI.Customers.ViewModels.CustomerMeetings
         /// <summary>
         /// 会议组织人
         /// </summary>
-        [ConditionMapping("OrganizerName",Operation ="=")]
+        [ConditionMapping("OrganizerName", EscapeLikeString = true, Prefix = "%", Postfix = "%", Operation = "LIKE")]
         public string OrganizerName { set; get; }
 
+        [InConditionMapping("cMeetings.CampusID")]
+        public string[] OrgIds { get; set; }
         [NoMapping]
         public PageRequestParams PageParams
         {

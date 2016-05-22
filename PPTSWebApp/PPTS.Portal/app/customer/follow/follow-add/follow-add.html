@@ -41,7 +41,7 @@
                 <div class="form-group">
                     <mcs-label required="true" text="购买意愿" css="col-sm-3" />
                     <div class="col-sm-9">
-                        <ppts-radiobutton-group category="purchaseIntension" model="vm.follow.purchaseIntension" />
+                        <ppts-radiobutton-group category="purchaseIntention" model="vm.follow.purchaseIntention" />
                     </div>
                 </div>
                 <div class="form-group">
@@ -59,13 +59,13 @@
                 <div class="form-group">
                     <mcs-label text="沟通结果" css="col-sm-3" />
                     <div class="col-sm-9">
-                        {{ vm.follow.subTalk }}
+                        <mcs-cascading-select data="vm.talkData" ng-model="vm.selection" required="true" />
                     </div>
                 </div>
                 <div class="form-group">
                     <mcs-label text="跟进前阶段" css="col-sm-3" />
                     <div class="col-sm-9">
-                        {{ vm.follow.followStage }}
+                        {{ vm.previousFollowStage | followStage }}
                     </div>
                 </div>
                 <div class="form-group">
@@ -83,7 +83,7 @@
                 <div class="form-group">
                     <mcs-label required="true" text="预计下次沟通时间" css="col-sm-3" />
                     <div class="col-sm-9">
-                        <ppts-datepicker model="vm.follow.nextTalkTime" css="col-xs-5 col-sm-5" />
+                        <ppts-datepicker model="vm.follow.nextFollowTime" css="col-xs-5 col-sm-5" />
                     </div>
                 </div>
                 <div class="form-group">
@@ -100,29 +100,25 @@
                 </div>
                 <div class="form-group">
                     <mcs-label required="true" text="是否在其他机构辅导" css="col-sm-3" />
-                    <div class="col-sm-9">
-                        <ppts-radiobutton-group category="ifElse" model="vm.criteria.isStudyThere" />
+                    <div class="col-sm-5">
+                        <ppts-radiobutton-group category="ifElse" model="vm.follow.isStudyThere" />
+                    </div>
+                    <div class="col-sm-4">
+                        <a class="btn btn-link" ng-click="vm.addRow()" ng-show="vm.follow.isStudyThere==1" uib-tooltip="新增其他辅导机构"><i class="ace-icon fa fa-plus bigger-110"></i></a>
+                        <a class="btn btn-link" ng-click="vm.removeRow()" ng-show="vm.follow.isStudyThere==1" uib-tooltip="移除其他辅导机构"><i class="ace-icon fa fa-minus bigger-110"></i></a>
                     </div>
                 </div>
-                <div class="form-group" ng-show="vm.criteria.isStudyThere==1">
+                <div class="form-group" ng-show="vm.follow.isStudyThere==1">
                     <div class="col-sm-3"></div>
                     <div class="col-sm-6">
-                        <table>
-                            <tr>
-                                <td><ppts-select category="subject" style="width:120px"/></td>
-                                <td><input class="mcs-readonly-input" ng-model="vm.customer.customerName" style="margin: 0 0 0 15px" placeholder="请填写机构名称" /></td>
-                                <td><ppts-daterangepicker start-date="" end-date="" size="sm" /></td>
-                                <td><button ng-click="" class="btn btn-link"><i class="ace-icon fa fa-plus bigger-110"></i></button></td>
-                            </tr>
-                            <!--<tr ng-repeat="item in vm.instutionItems" ng-bind-html="item"></tr>-->
-                        </table>
+                        <mcs-uicopy data="vm.followItems" item-template-url="./app/customer/follow/follow-add/is-study-there.tpl.html"></mcs-uicopy>
                     </div>
                     <div class="col-sm-3"></div>
                 </div>
                 <div class="form-group">
                     <mcs-label required="true" text="跟进情况备注" css="col-sm-3" />
                     <div class="col-sm-6">
-                        <textarea rows="7" class="form-control" placeholder="请输入备注信息" ng-model="vm.criteria.followMemo">{{ vm.criteria.followMemo }}</textarea>
+                        <textarea rows="7" class="form-control" placeholder="请输入备注信息" ng-model="vm.follow.followMemo">{{ vm.criteria.followMemo }}</textarea>
                     </div>
                 </div>
             </div>

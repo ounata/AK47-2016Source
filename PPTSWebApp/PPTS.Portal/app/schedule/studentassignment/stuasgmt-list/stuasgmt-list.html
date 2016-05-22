@@ -1,24 +1,4 @@
-﻿<!-- #开始：位置条 -->
-<!--<div class="breadcrumbs" id="breadcrumbs">
-    <script type="text/javascript">
-        try {
-            ace.settings.check('breadcrumbs', 'fixed');
-        } catch (e) { }
-    </script>
-    <ul class="breadcrumb">
-        <li class="active">
-            <i class="ace-icon fa fa-home home-icon"></i>
-            <a ui-sref="index">首页</a>
-        </li>
-        <li>
-            <i class="ace-icon fa fa-pencil-square-o"></i> 排课管理
-        </li>
-        <li>
-            学员排课
-        </li>
-    </ul>
-</div>-->
-<!-- /结束：位置条 -->
+﻿
 <div class="page-content">
     <div class="page-content-area">
         <!-- #开始：潜客列表 -->
@@ -33,12 +13,12 @@
                             </div>
                         </div>
                         <div class="portlet-body">                        
-                            <ppts-select caption="上课班级" category="grade" model="vm.criteria.grade" class="col-sm-3" />                 
-                            <mcs-input placeholder="学员姓名" model="vm.criteria.customerName" />
-                            <mcs-input placeholder="学员编号" model="vm.criteria.customerCode" />
-                            <mcs-input placeholder="在读学校" model="vm.criteria.schoolName" />
-                            <mcs-input placeholder="学管师" model="vm.criteria.educatorName" />
-                            <mcs-button category="search" click="vm.init()" size="medium" />
+                            <ppts-select caption="上课班级" class="ppts-select-search-nopadding" category="grade" model="vm.criteria.grade" />                 
+                            <mcs-input class="search-input" placeholder="学员姓名" model="vm.criteria.customerName" />
+                            <mcs-input class="search-input" placeholder="学员编号" model="vm.criteria.customerCode" />
+                            <mcs-input class="search-input" placeholder="在读学校" model="vm.criteria.schoolName" />
+                            <mcs-input class="search-input" placeholder="学管师" model="vm.criteria.educatorName" />
+                            <mcs-button class="search-input" category="search" click="vm.init()" class="search-btn"/>
                         </div>
                     </div>
                 </div>

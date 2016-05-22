@@ -27,6 +27,29 @@
 
 </div>
 <!-- /结束：订购列表.工具条 -->
-<!-- #开始：订购列表.数据表格 -->
+<!-- #开始：数据表格 -->
+<div class="form-group row" style="color:red;">
+    列表中红色字体的产品不遵循客户折扣率
+</div>
 <mcs-datatable data="vm.data" />
-<!-- /结束：订购列表.数据表格 -->
+<!-- /结束：数据表格 -->
+
+<div class="form-group row">
+    总产品原价：{{ vm.totalOriginalMoney() | currency}}
+    总订购金额：{{ vm.totalMoney() | currency}}
+</div>
+<div class="form-group row">
+    <label class="control-label col-sm-3">
+        本次订购关联的缴费单：
+    </label>
+    <div class="col-sm-8">
+        <ppts-select category="chargePayment" model="vm.chargeApplyId" caption="选择关联缴费单" class="col-sm-3" />
+    </div>
+</div>
+
+<div class="form-group row" ng-show="vm.showPursueReason()">
+    <ppts-select category="orderSpecialType" model="vm.specialType" caption="申请原因" class="col-sm-3" />
+    <div class="col-sm-8">
+        <textarea ng-model="vm.specialMemo" ng-disabled="vm.specialType==1" />
+    </div>
+</div>

@@ -131,6 +131,13 @@
     <Compile Include="Archive\UserOpLogArchiveOperation.cs" />
     <Compile Include="Archive\UserTaskArchiveOperation.cs" />
     <Compile Include="Archive\WorkflowArchiveOperation.cs" />
+    <Compile Include="AsyncTransactional\Contracts\ITxProcessService.cs" />
+    <Compile Include="AsyncTransactional\Enumerations.cs" />
+    <Compile Include="AsyncTransactional\TxActivity.cs" />
+    <Compile Include="AsyncTransactional\TxContext.cs" />
+    <Compile Include="AsyncTransactional\TxProcess.cs" />
+    <Compile Include="AsyncTransactional\TxProcessAdapter.cs" />
+    <Compile Include="AsyncTransactional\TxProcessExecutor.cs" />
     <Compile Include="ClientValidator\ClientVdtAttribute.cs" />
     <Compile Include="CommonInfoMapping\CommonInfoMappingSettings.cs" />
     <Compile Include="CommonInfoMapping\DefaultCommonInfoMappingUpdater.cs" />
@@ -145,6 +152,7 @@
     <Compile Include="Common\WorkflowObjectBase.cs" />
     <Compile Include="Configuration\ConnectionNameMappingSettings.cs" />
     <Compile Include="Configuration\EnumSettings.cs" />
+    <Compile Include="Configuration\FixedTimeTaskSettings.cs" />
     <Compile Include="Configuration\ObjectToPropertySettings.cs" />
     <Compile Include="Configuration\ObjectValueToPropertyValueConfigurationElement.cs" />
     <Compile Include="Configuration\PropertyDefineSettings.cs" />
@@ -206,6 +214,9 @@
     <Compile Include="PropertyDefine\PropertyValidatorParameterDescriptorConverter.cs" />
     <Compile Include="SysTasks\ExecuteSysTaskActivityTask.cs" />
     <Compile Include="SysTasks\ExecuteSysTaskActivityTaskExecutor.cs" />
+    <Compile Include="SysTasks\FixedTimeTask.cs" />
+    <Compile Include="SysTasks\FixedTimeTaskAdapter.cs" />
+    <Compile Include="SysTasks\InvokeServiceFixedTimeTask.cs" />
     <Compile Include="SysTasks\InvokeServiceSyncTask.cs" />
     <Compile Include="SysTasks\InvokeServiceTask.cs" />
     <Compile Include="SysTasks\InvokeServiceTaskAdapter.cs" />
@@ -230,6 +241,8 @@
     <Compile Include="SysTasks\SysTaskProcessRuntimeContext.cs" />
     <Compile Include="SysTasks\SysTaskProcessStatus.cs" />
     <Compile Include="SysTasks\SysTaskSettings.cs" />
+    <Compile Include="SysTasks\TxActivityActionServiceTask.cs" />
+    <Compile Include="SysTasks\TxActivityActionServiceTaskExecutor.cs" />
     <Compile Include="TaskAssignees\TaskAssignedObject.cs" />
     <Compile Include="TaskAssignees\TaskAssignedObjectAdapter.cs" />
     <Compile Include="TaskAssignees\TaskAssigneeAdapterBase.cs" />
@@ -796,8 +809,7 @@ IF EXIST "$(ProjectDir)..\..\Bin\$(TargetName).xml" DEL "$(ProjectDir)..\..\Bin\
   <PropertyGroup>
     <PostBuildEvent>set path=%25path%25;C:\Windows\System32
  
-
- XCOPY "$(TargetPath)"  "$(ProjectDir)..\..\Bin" /Y /D /R
+XCOPY "$(TargetPath)"  "$(ProjectDir)..\..\Bin" /Y /D /R
 IF EXIST "$(TargetDir)$(TargetName).pdb" XCOPY "$(TargetDir)$(TargetName).pdb" "$(ProjectDir)..\..\Bin" /Y /D /R
 IF EXIST "$(TargetDir)$(TargetName).xml"  XCOPY "$(TargetDir)$(TargetName).xml" "$(ProjectDir)..\..\Bin" /Y /D /R</PostBuildEvent>
   </PropertyGroup>

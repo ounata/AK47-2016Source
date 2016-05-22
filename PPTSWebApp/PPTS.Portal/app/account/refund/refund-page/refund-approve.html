@@ -1,0 +1,111 @@
+﻿<form class="form-horizontal">
+    <div class="widget-box">
+        <div class="widget-header">
+            <h4 class="col-sm-8">退费审批</h4>
+        </div>
+        <div class="widget-body">
+            <div class="clearfix form-actions mcs-form-actions">
+                <div>
+                    <mcs-button category="approve" text="通过" click="vm.approve()" ng-disabled="!vm.apply.canApprove"></mcs-button>
+                    <mcs-button category="approve" text="拒绝" click="vm.refuse()" ng-disabled="!vm.apply.canApprove"></mcs-button>
+                </div>
+            </div>
+            <div class="alert alert-block alert-danger" ng-show="vm.errorMessage">
+                <button type="button" class="close" data-dismiss="alert">
+                    <i class="ace-icon fa fa-times"></i>
+                </button>
+                <i class="ace-icon fa fa-warning"></i>
+                {{vm.errorMessage}}
+            </div>
+            <div class="page-header">
+                <span>退费信息</span>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-6">
+                    <mcs-label text="学员校区：" css="col-sm-3" />
+                    <div class="col-sm-9">
+                        {{ vm.apply.campusName }}
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-6">
+                    <mcs-label text="学员姓名：" css="col-sm-3" />
+                    <div class="col-sm-9">
+                        {{ vm.apply.customerName }}（{{vm.apply.customerCode}}）
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-6">
+                    <mcs-label text="退费原因：" css="col-sm-3" />
+                    <div class="col-sm-9">                        
+                        {{ vm.apply.applyMemo }}
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-6">
+                    <mcs-label text="提交申请时间：" css="col-sm-3" />
+                    <div class="col-sm-9">
+                        {{ vm.apply.applyTime | date:"yyyy-MM-dd Hh:mm" }}
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-6">
+                    <mcs-label text="申请人：" css="col-sm-3" />
+                    <div class="col-sm-9">
+                        {{vm.apply.applierName }}
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-6">
+                    <mcs-label text="家长联系电话：" css="col-sm-3" />
+                    <div class="col-sm-9">
+                        {{vm.customer.phoneNumber}}
+                    </div>
+                </div>
+            </div>
+            <table class="table table-bordered">
+                <tr>
+                    <td>可退金额</td>
+                    <td>申退金额</td>
+                    <td>退前折扣基数</td>
+                    <td>退前折扣率</td>
+                    <td>退后折扣基数</td>
+                    <td>退后折扣率</td>
+                    <td>已消耗课时价值</td>
+                    <td>折扣返还</td>
+                    <td>应退金额</td>
+                </tr>
+                <tr>
+                    <td>{{ vm.apply.thatAccountMoney | currency:"￥" }}</td>
+                    <td>{{ vm.apply.applyRefundMoney | currency:"￥" }}</td>
+                    <td>{{ vm.apply.thatDiscountBase | currency:"￥" }}</td>
+                    <td>{{ vm.apply.thatDiscountRate | number:2 }}</td>
+                    <td>{{ vm.apply.thisDiscountBase | currency:"￥" }}</td>
+                    <td>{{ vm.apply.thisDiscountRate | number:2 }}</td>
+                    <td>{{ vm.apply.consumptionValue | currency:"￥" }}</td>
+                    <td>{{ vm.apply.reallowanceMoney | currency:"￥" }}</td>
+                    <td>{{ vm.apply.oughtRefundMoney | currency:"￥" }}</td>
+                </tr>
+                <tr>
+                    <td colspan="9">
+                        差价补偿：{{vm.apply.compensateMoney | currency:"￥"}}，支付给客户的制度外退款：{{vm.apply.extraRefundMoney | currency:"￥"}}，实退金额：{{vm.apply.realRefundMoney | currency:"￥"}}
+                    </td>
+                </tr>
+            </table>
+            <div class="form-group">
+                <div class="col-sm-6">
+                    <mcs-label text="领款人：" css="col-sm-3" />
+                    <div class="col-sm-9">
+                        {{vm.apply.drawer}}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</form>

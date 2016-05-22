@@ -82,6 +82,12 @@ namespace PPTS.Data.Customers
         Normal = 11,
 
         /// <summary>
+        /// 停课
+        /// </summary>
+        [EnumItemDescription("停课")]
+        Stopped,
+
+        /// <summary>
         /// 休学
         /// </summary>
         [EnumItemDescription("休学")]
@@ -149,6 +155,96 @@ namespace PPTS.Data.Customers
     }
 
     /// <summary>
+    /// 对账状态
+    /// </summary>
+    public enum CheckStatusDefine
+    {
+        /// <summary>
+        /// 未对帐
+        /// </summary>
+        [EnumItemDescription("未对帐")]
+        UnCheck,
+
+        /// <summary>
+        /// 已对账
+        /// </summary>
+        [EnumItemDescription("已对账")]
+        Checked
+    }
+
+    /// <summary>
+    /// 缴费单审核状态
+    /// </summary>
+    public enum ChargeAuditStatus
+    {
+        /// <summary>
+        /// 未审核
+        /// </summary>
+        [EnumItemDescription("未审核")]
+        UnAudit,
+
+        /// <summary>
+        /// 已审核
+        /// </summary>
+        [EnumItemDescription("已审核")]
+        Audited
+    }
+
+    /// <summary>
+    /// 退费确认状态
+    /// </summary>
+    public enum RefundVerifyStatus
+    {
+        /// <summary>
+        /// 待分出纳确认
+        /// </summary>
+        [EnumItemDescription("待分出纳确认")]
+        WaitCashierVerify,
+
+        /// <summary>
+        /// 待分财务确认
+        /// </summary>
+        [EnumItemDescription("待分财务确认")]
+        WaitFinanceVerify,
+
+        /// <summary>
+        /// 待分区域确认
+        /// </summary>
+        [EnumItemDescription("待分区域确认")]
+        WaitRegionVerify,
+
+        /// <summary>
+        /// 已退款到账
+        /// </summary>
+        [EnumItemDescription("已退款到账")]
+        Refunded
+    }
+
+    /// <summary>
+    /// 退费确认操作
+    /// </summary>
+    public enum RefundVerifyAction
+    {
+        /// <summary>
+        /// 分出纳确认
+        /// </summary>
+        [EnumItemDescription("分出纳确认")]
+        CashierVerify = 1,
+
+        /// <summary>
+        /// 分财务确认
+        /// </summary>
+        [EnumItemDescription("分财务确认")]
+        FinanceVerify = 2,
+
+        /// <summary>
+        /// 分区域确认
+        /// </summary>
+        [EnumItemDescription("分区域确认")]
+        RegionVerify = 3
+    }
+
+    /// <summary>
     /// 申请状态
     /// </summary>
     public enum ApplyStatusDefine
@@ -183,6 +279,12 @@ namespace PPTS.Data.Customers
     /// </summary>
     public enum ChargeTypeDefine
     {
+        /// <summary>
+        /// 不支持
+        /// </summary>
+        [EnumItemDescription("无")]
+        NaN = 0,
+
         /// <summary>
         /// 新签
         /// </summary>
@@ -359,6 +461,24 @@ namespace PPTS.Data.Customers
     }
 
     /// <summary>
+    /// 账户转让类型
+    /// </summary>
+    public enum AccountTransferType
+    {
+        /// <summary>
+        /// 转出
+        /// </summary>
+        [EnumItemDescription("转出")]
+        TransferOut = 1,
+
+        /// <summary>
+        /// 转入
+        /// </summary>
+        [EnumItemDescription("转入")]
+        TransferIn = 2
+    }
+
+    /// <summary>
     /// 客服服务类型  Customer_ServiceType 
     /// </summary>
     public enum CustomerServiceType
@@ -405,5 +525,175 @@ namespace PPTS.Data.Customers
         /// </summary>
         [EnumItemDescription("已转出")]
         TransferredOut = 3
+    }
+
+    /// <summary>
+    /// 学情会会议内容代码
+    /// </summary>
+    public enum ContentType
+    {
+        /// <summary>
+        /// 解决方案
+        /// </summary>
+        [EnumItemDescription("解决方案")]
+        Solution = 2,
+
+        /// <summary>
+        /// 反馈内容
+        /// </summary>
+        [EnumItemDescription("反馈内容")]
+        FeedbackContent = 1
+    }
+
+    /// <summary>
+    /// 接触方式
+    /// </summary>
+    public enum NewContactType
+    {
+        /// <summary>
+        /// 呼入
+        /// </summary>
+        [EnumItemDescription("呼入")]
+        CallIn = 1,
+
+        /// <summary>
+        /// 呼出
+        /// </summary>
+        [EnumItemDescription("呼出")]
+        CallOut = 2,
+
+        /// <summary>
+        /// 直访
+        /// </summary>
+        [EnumItemDescription("直访")]
+        Direct = 3,
+
+        /// <summary>
+        /// 在线咨询-乐语
+        /// </summary>
+        [EnumItemDescription("在线咨询-乐语")]
+        OnlineLeYu = 4,
+
+        /// <summary>
+        /// 在线咨询-其他
+        /// </summary>
+        [EnumItemDescription("在线咨询-其他")]
+        OnlineOhter = 5
+    }
+
+    /// <summary>
+    /// 跟进对象代码
+    /// </summary>
+    public enum SaleContactTarget
+    {
+        /// <summary>
+        /// 母亲
+        /// </summary>
+        [EnumItemDescription("母亲")]
+        Mother = 1,
+
+        /// <summary>
+        /// 父亲
+        /// </summary>
+        [EnumItemDescription("父亲")]
+        Father = 2,
+
+        /// <summary>
+        /// 学生本人
+        /// </summary>
+        [EnumItemDescription("学生本人")]
+        Onself = 3,
+
+        /// <summary>
+        /// 其他联系人
+        /// </summary>
+        [EnumItemDescription("其他联系人")]
+        Others = 4,
+    }
+
+    /// <summary>
+    /// 停课休学类型
+    /// </summary>
+    public enum StopAlertType
+    {
+        /// <summary>
+        /// 停课
+        /// </summary>
+        [EnumItemDescription("停课")]
+        Stop,
+
+        /// <summary>
+        /// 休学
+        /// </summary>
+        [EnumItemDescription("休学")]
+        DropOut,
+    }
+
+    /// <summary>
+    /// 退费预警状态
+    /// </summary>
+    public enum RefundAlertStatus
+    {
+        /// <summary>
+        /// 预警中
+        /// </summary>
+        Warning,
+
+        /// <summary>
+        /// 解除预警
+        /// </summary>
+        Warned
+    }
+
+    /// <summary>
+    /// 跟进方式
+    /// </summary>
+    public enum SaleContactType
+    {
+        /// <summary>
+        /// 短信
+        /// </summary>
+        [EnumItemDescription("短信")]
+        Message = 1,
+        /// <summary>
+        /// 邮件
+        /// </summary>
+        [EnumItemDescription("邮件")]
+        Email = 2,
+        /// <summary>
+        /// 致电
+        /// </summary>
+        [EnumItemDescription("致电")]
+        Call = 3,
+        /// <summary>
+        /// 接听来电
+        /// </summary>
+        [EnumItemDescription("接听来电")]
+        InCommingCall = 4,
+        /// <summary>
+        /// 面谈
+        /// </summary>
+        [EnumItemDescription("面谈")]
+        ToFace = 5,
+        /// <summary>
+        /// 在线咨询
+        /// </summary>
+        [EnumItemDescription("在线咨询")]
+        OnLine = 6
+    }
+
+    /// <summary>
+    /// 成绩是否全部添加
+    /// </summary>
+    public enum ScoreIsAllAdded
+    {
+        /// <summary>
+        /// 否
+        /// </summary>
+        No,
+        /// <summary>
+        /// 是
+        /// </summary>
+        Yes
     }
 }

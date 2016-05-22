@@ -17,6 +17,7 @@
     <link href="../libs/ace-1.2.3/ace.min.css" rel="stylesheet" />
     <!-- ngTags auto complete -->
     <link href="../libs/ng-tags-input-3.0.0/ng-tags-input.css" rel="stylesheet" />
+    <!--  <link href="../libs/ng-tags-input-3.0.0/ng-tags-input.customize.css" rel="stylesheet" /> -->
     <!--zTree style -->
     <link href="../libs/zTree-3.5.22/css/metroStyle/metroStyle.css" rel="stylesheet" />
     <!--dialog service style -->
@@ -24,15 +25,18 @@
     <!--#blockUI样式-->
     <link href="../libs/angular-block-ui-0.2.2/dist/angular-block-ui.css" rel="stylesheet" />
     <link href="../libs/laycode-v1.1/laycode.css" rel="stylesheet" />
-    <link href="../libs/jquery-2.2.1/plugins/chosen/chosen.css" rel="stylesheet" />
     <link href="../libs/angular-ui-select-0.13.2/dist/select.min.css" rel="stylesheet" />
-    <!--<link href="../libs/angular-ui-select-0.13.2/dist/select2.css" rel="stylesheet" />-->
+    <link href="../libs/angular-ui-select-0.13.2/dist/select2.css" rel="stylesheet" />
     <link href="../libs/angular-ui-select-0.13.2/dist/themes/selectize.default.css" rel="stylesheet" />
     <link href="../libs/mcs-jslib-1.0.0/component/mcs.component.css" rel="stylesheet" />
+    <link href="../libs/date-time-3.0.0/css/datepicker.css" rel="stylesheet" />
+    <link href="../libs/date-time-3.0.0/css/bootstrap-timepicker.css" rel="stylesheet" />
+    <link href="../libs/date-time-3.0.0/css/daterangepicker.css" rel="stylesheet" />
+    <link href="../libs/date-time-3.0.0/css/bootstrap-datetimepicker.css" rel="stylesheet" />
     <!--paging style-->
     <link href="../src/css/paging.css" rel="stylesheet" />
     <!--component css -->
-    <link here="../src/css/mcs.css" rel="stylesheet" />
+    <link href="../src/css/mcs.css" rel="stylesheet" />
     <!--#网站主样式-->
     <link href="assets/css/site.css" rel="stylesheet" />
     <style>
@@ -167,6 +171,12 @@
                             <b class="arrow"></b>
                         </li>
                         <li class="">
+                            <a href="#/dropdownButton">
+                                <i class="menu-icon fa fa-caret-right"></i> 下拉按钮
+                            </a>
+                            <b class="arrow"></b>
+                        </li>
+                        <li class="">
                             <a href="#/inputs">
                                 <i class="menu-icon fa fa-caret-right"></i> 文本框
                             </a>
@@ -185,26 +195,26 @@
                             <b class="arrow"></b>
                         </li>
                         <li class="">
-                            <a href="#/select">
-                                <i class="menu-icon fa fa-caret-right"></i> 下拉列表框
-                            </a>
-                            <b class="arrow"></b>
-                        </li>
-                        <li class="">
                             <a href="#/cascadingSelect">
                                 <i class="menu-icon fa fa-caret-right"></i> 级联下拉框
                             </a>
                             <b class="arrow"></b>
                         </li>
                         <li class="">
-                            <a href="#/dropdownButton">
-                                <i class="menu-icon fa fa-caret-right"></i> 下拉按钮
+                            <a href="#/datatable">
+                                <i class="menu-icon fa fa-caret-right"></i> 表格
                             </a>
                             <b class="arrow"></b>
                         </li>
                         <li class="">
-                            <a href="#/datatable">
-                                <i class="menu-icon fa fa-caret-right"></i> 表格
+                            <a href="#/uiCopy">
+                                <i class="menu-icon fa fa-caret-right"></i> UI拷贝
+                            </a>
+                            <b class="arrow"></b>
+                        </li>
+                        <li class="">
+                            <a href="#/print">
+                                <i class="menu-icon fa fa-caret-right"></i> 打印
                             </a>
                             <b class="arrow"></b>
                         </li>
@@ -253,7 +263,7 @@
                     </ul>
                 </li>
                 <!--第三方组件-->
-                <li class="">
+                <!--<li class="">
                     <a href="#" class="dropdown-toggle">
                         <i class="menu-icon fa fa-list"></i>
                         <span class="menu-text"> 第三方组件 </span>
@@ -264,6 +274,66 @@
                         <li class="">
                             <a href="#/ui-select">
                                 <i class="menu-icon fa fa-caret-right"></i> 下拉列表框
+                            </a>
+                            <b class="arrow"></b>
+                        </li>
+                    </ul>
+                </li>
+                -->
+                <!--应用组件-->
+                <li class="">
+                    <a href="#" class="dropdown-toggle">
+                        <i class="menu-icon fa fa-cogs"></i>
+                        <span class="menu-text"> 应用组件 </span>
+                        <b class="arrow fa fa-angle-down"></b>
+                    </a>
+                    <b class="arrow"></b>
+                    <ul class="submenu">
+                        <li class="">
+                            <a href="#/ppts-datarange">
+                                <i class="menu-icon fa fa-caret-right"></i> 数据范围控件
+                            </a>
+                            <b class="arrow"></b>
+                        </li>
+                        <li class="">
+                            <a href="#/ppts-daterangepicker">
+                                <i class="menu-icon fa fa-caret-right"></i> 日期范围控件
+                            </a>
+                            <b class="arrow"></b>
+                        </li>
+                        <li class="">
+                            <a href="#/ppts-datepicker">
+                                <i class="menu-icon fa fa-caret-right"></i> 日期控件
+                            </a>
+                            <b class="arrow"></b>
+                        </li>
+                        <li class="">
+                            <a href="#/ppts-datetimepicker">
+                                <i class="menu-icon fa fa-caret-right"></i> 日期时间控件
+                            </a>
+                            <b class="arrow"></b>
+                        </li>
+                        <li class="">
+                            <a href="#/ppts-select">
+                                <i class="menu-icon fa fa-caret-right"></i> 下拉选择控件
+                            </a>
+                            <b class="arrow"></b>
+                        </li>
+                        <li class="">
+                            <a href="#/ppts-checkbox-group">
+                                <i class="menu-icon fa fa-caret-right"></i> 多选控件
+                            </a>
+                            <b class="arrow"></b>
+                        </li>
+                        <li class="">
+                            <a href="#/ppts-radiobutton-group">
+                                <i class="menu-icon fa fa-caret-right"></i> 单选控件
+                            </a>
+                            <b class="arrow"></b>
+                        </li>
+                        <li class="">
+                            <a href="#/ppts-select-branch">
+                                <i class="menu-icon fa fa-caret-right"></i> 大区/分公司/校区树
                             </a>
                             <b class="arrow"></b>
                         </li>
@@ -366,6 +436,12 @@
                             </a>
                             <b class="arrow"></b>
                         </li>
+                        <li ui-sref-active="active">
+                            <a ui-sref="error">
+                                <i class="menu-icon fa fa-caret-right"></i> Web API异常处理
+                            </a>
+                            <b class="arrow"></b>
+                        </li>
                     </ul>
                 </li>
                 <!-- 开发参考 -->
@@ -442,9 +518,9 @@
     <!--#bootstrap插件主文件-->
     <script src="../libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
     <!--#ace主要的功能文件-->
-    <script src="../libs/ace-1.2.3/ace.min.js"></script>
+    <script src="../libs/ace-1.3.1/ace.min.js"></script>
     <!--#ace配置项-->
-    <script src="../libs/ace-1.2.3/ace-extra.min.js"></script>
+    <script src="../libs/ace-1.3.1/ace-extra.min.js"></script>
     <!--#bootbox是一个全局的对话框插件-->
     <script src="../libs/bootbox-4.2.0/bootbox.min.js"></script>
     <!--#AngularJS主文件-->
@@ -464,14 +540,12 @@
     <!--#angular-ui-bootstrap主文件-->
     <!--<script src="libs/ui-bootstrap-1.1.0/ui-bootstrap-1.1.0.js"></script>-->
     <script src="../libs/ui-bootstrap-1.1.0/ui-bootstrap-tpls-1.1.0.js"></script>
-    <script src="../libs/jquery-2.2.1/plugins/chosen/jquery.chosen.min.js"></script>
     <!--#angular-ui-router，负责客户端路由功能-->
     <script src="../libs/angular-ui-router-0.2.18/release/angular-ui-router.js"></script>
     <script src="../libs/angular-ui-select-0.13.2/dist/select.js"></script>
+    <script src="../libs/angular-ui-select-0.13.2/dist/select2.js"></script>
+    <script src="../libs/angular-ui-select-0.13.2/dist/select2_locale_zh-CN.js"></script>
     <script src="../libs/mcs-jslib-1.0.0/global/mcs.min.js"></script>
-    <script>
-    mcs.app.config.componentBaseUrl = 'http://' + location.host + '/MCSWebApp/MCS.Web.Component';
-    </script>
     <script src="../libs/mcs-jslib-1.0.0/component/mcs.component.js"></script>
     <!--#主程序-->
     <script src="app/app.js"></script>
@@ -483,6 +557,11 @@
     <script src="app/lib/ui-select/app-ui-select.controller.js"></script>
     <script src="../libs/zTree-3.5.22/js/jquery.ztree.all.js"></script>
     <script src="../libs/ng-file-upload/dist/ng-file-upload.js"></script>
+    <script src="../libs/date-time-3.0.0/bootstrap-datepicker.min.js"></script>
+    <script src="../libs/date-time-3.0.0/bootstrap-timepicker.min.js"></script>
+    <script src="../libs/date-time-3.0.0/daterangepicker.min.js"></script>
+    <script src="../libs/date-time-3.0.0/bootstrap-datetimepicker.min.js"></script>
+    <script src="../libs/date-time-3.0.0/locales/bootstrap-datepicker.zh-CN.js"></script>
     <!--/结束：第三方组件模块-->
     <!--#开始：公共组件模块-->
     <!--auto complete -->
@@ -490,6 +569,7 @@
     <script src="app/component/mcs-autocomplete/mcs-autocomplete.controller.js"></script>
     <script src="app/component/mcs-label/mcs-label.controller.js"></script>
     <script src="app/component/mcs-button/mcs-button.controller.js"></script>
+    <script src="app/component/mcs-dropdown-button/mcs-dropdown-button.controller.js"></script>
     <script src="app/component/mcs-input/mcs-input.controller.js"></script>
     <script src="app/component/mcs-checkboxgroup/mcs-checkboxgroup.controller.js"></script>
     <script src="app/component/mcs-radiobuttongroup/mcs-radiobuttongroup.controller.js"></script>
@@ -498,13 +578,31 @@
     <script src="app/component/mcs-dialog/mcs-dialog.controller.js"></script>
     <script src="app/component/mcs-datatable/mcs-datatable.controller.js"></script>
     <script src="app/component/mcs-tab/mcs-tab.controller.js"></script>
-    <script src="app/component/mcs-dropdown-button/mcs-dropdown-button.controller.js"></script>
     <script src="app/component/mcs-tree/mcs-tree.controller.js"></script>
     <script src="app/component/mcs-datepicker/mcs-datepicker.controller.js"></script>
     <script src="app/component/mcs-route/mcs-route.controller.js"></script>
     <script src="app/component/mcs-upload/mcs-upload.controller.js"></script>
     <script src="app/component/mcs-validation/mcs-validation.controller.js"></script>
+    <script src="app/component/mcs-uiCopy/mcs-uiCopy.controller.js"></script>
+    <script src="app/component/mcs-print/mcs-print.controller.js"></script>
     <!--/结束：公共组件模块-->
+    <!--#开始：项目组件模块-->
+    <script src="app/widget/ppts.js"></script>
+    <script src="app/widget/ppts-datarange/ppts-datarange.directive.js"></script>
+    <script src="app/widget/ppts-datarange/ppts-datarange.controller.js"></script>
+    <script src="app/widget/ppts-checkbox-group/ppts-checkbox-group.directive.js"></script>
+    <script src="app/widget/ppts-checkbox-group/ppts-checkbox-group.controller.js"></script>
+    <script src="app/widget/ppts-radiobutton-group/ppts-radiobutton-group.directive.js"></script>
+    <script src="app/widget/ppts-radiobutton-group/ppts-radiobutton-group.controller.js"></script>
+    <script src="app/widget/ppts-select/ppts-select.directive.js"></script>
+    <script src="app/widget/ppts-select/ppts-select.controller.js"></script>
+    <script src="app/widget/ppts-datepicker/ppts-datepicker.directive.js"></script>
+    <script src="app/widget/ppts-datepicker/ppts-datepicker.controller.js"></script>
+    <script src="app/widget/ppts-daterangepicker/ppts-daterangepicker.directive.js"></script>
+    <script src="app/widget/ppts-daterangepicker/ppts-daterangepicker.controller.js"></script>
+    <script src="app/widget/ppts-datetimepicker/ppts-datetimepicker.directive.js"></script>
+    <script src="app/widget/ppts-datetimepicker/ppts-datetimepicker.controller.js"></script>
+    <!--/结束：项目组件模块-->
     <!--#开始：页面布局-->
     <script src="app/page/mcs-page.controller.js"></script>
     <!--/结束：页面布局-->

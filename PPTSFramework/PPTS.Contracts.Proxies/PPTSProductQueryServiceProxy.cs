@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace PPTS.Contracts.Proxies
 {
-    public class PPTSProductQueryServiceProxy : PPTSClientServiceProxyBase<IProductQueryService>
+    public class PPTSProductQueryServiceProxy : WfClientServiceProxyBase<IProductQueryService>
     {
         public static readonly PPTSProductQueryServiceProxy Instance = new PPTSProductQueryServiceProxy();
 
@@ -22,18 +22,18 @@ namespace PPTS.Contracts.Proxies
         /// <summary>
         /// 通过产品ID集合获得产品信息
         /// </summary>
-        /// <param name="productids">产品ID集合</param>
+        /// <param name="productIDs">产品ID集合</param>
         /// <returns></returns>
-        public ProductViewCollection QueryProductViewsByIDs(string[] productids)
+        public ProductViewCollection QueryProductViewsByIDs(string[] productIDs)
         {
 
-            PPTS.Contracts.Products.Models.ProductViewQueryResult pvqr = this.SingleCall(action => action.QueryProductViewsByIDs(productids));
-            ProductViewCollection pvc = new ProductViewCollection();
-            foreach (ProductView pv in pvqr.ProductViews)
+            PPTS.Contracts.Products.Models.ProductViewQueryResult productViewQueryResult = this.SingleCall(action => action.QueryProductViewsByIDs(productIDs));
+            ProductViewCollection productViewCollection = new ProductViewCollection();
+            foreach (ProductView productView in productViewQueryResult.ProductViews)
             {
-                pvc.Add(pv);
+                productViewCollection.Add(productView);
             }
-            return pvc;
+            return productViewCollection;
         }
 
         protected override WfClientChannelFactory<IProductQueryService> GetService()

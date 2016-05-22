@@ -51,23 +51,23 @@ namespace PPTS.Data.Products.Adapters
         /// <returns>拼装SQL</returns>
         private string PrepareLoadDiscountSqlByPermission(string CampusID)
         {
-            WhereSqlClauseBuilder discount_builder = new WhereSqlClauseBuilder();
-            discount_builder.AppendItem("DiscountStatus", DiscountStatusDefine.Enabled.GetHashCode());
-            WhereSqlClauseBuilder discountpermission_builder = new WhereSqlClauseBuilder();
-            discountpermission_builder.AppendItem("UseOrgType", PPTS.Data.Common.Security.DepartmentType.Campus.GetHashCode());
-            discountpermission_builder.AppendItem("UseOrgID", CampusID);
-            OrderBySqlClauseBuilder orderbuilder = new OrderBySqlClauseBuilder();
-            orderbuilder.AppendItem("CreateTime", FieldSortDirection.Descending);
+            WhereSqlClauseBuilder discountBuilder = new WhereSqlClauseBuilder();
+            discountBuilder.AppendItem("DiscountStatus", DiscountStatusDefine.Enabled.GetHashCode());
+            WhereSqlClauseBuilder discountPermissionBuilder = new WhereSqlClauseBuilder();
+            discountPermissionBuilder.AppendItem("UseOrgType", PPTS.Data.Common.Security.DepartmentType.Campus.GetHashCode());
+            discountPermissionBuilder.AppendItem("UseOrgID", CampusID);
+            OrderBySqlClauseBuilder orderBuilder = new OrderBySqlClauseBuilder();
+            orderBuilder.AppendItem("CreateTime", FieldSortDirection.Descending);
             string sql = string.Format(@"select top 1 * from {0} where {1} and DiscountID in 
                                     (
 	                                    select DiscountID from {2}  where {3}
                                     ) 
                                     order by {4} "
             , this.GetQueryMappingInfo().GetQueryTableName()
-            , discount_builder.ToSqlString(TSqlBuilder.Instance)
+            , discountBuilder.ToSqlString(TSqlBuilder.Instance)
             , DiscountPermissionAdapter.Instance.GetQueryMappingInfo().GetQueryTableName()
-            , discountpermission_builder.ToSqlString(TSqlBuilder.Instance)
-            , orderbuilder.ToSqlString(TSqlBuilder.Instance));
+            , discountPermissionBuilder.ToSqlString(TSqlBuilder.Instance)
+            , orderBuilder.ToSqlString(TSqlBuilder.Instance));
             return sql;
         }
     }

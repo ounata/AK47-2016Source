@@ -196,6 +196,12 @@
     <Build Include="SC\Functions\GetSchemaApplicationXml.sql" />
     <Build Include="SC\Functions\GetSchemaPermissionXml.sql" />
     <Build Include="SC\Functions\GetSchemaRoleXml.sql" />
+    <Build Include="SC\Views\ConsultantJobSnapshot.sql" />
+    <Build Include="SC\Views\EducatorJobSnapshot_Current.sql" />
+    <Build Include="SC\Views\TeacherJobSnapshot_Current.sql" />
+    <Build Include="SC\Views\CallcenterJobSnapshot_Current.sql" />
+    <Build Include="SC\Views\MarketingJobSnapshot_Current.sql" />
+    <Build Include="SC\Functions\SplitString.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PermissionsCenterDB.local.UnitTest.publish.xml" />

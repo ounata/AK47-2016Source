@@ -86,6 +86,12 @@
     <Compile Include="Adapters\AssignsAdapter.cs" />
     <Compile Include="Adapters\AssignAdapterBase.cs" />
     <Compile Include="Adapters\AssignsOperationLogAdapter.cs" />
+    <Compile Include="Adapters\DebookOrderAdapter.cs" />
+    <Compile Include="Adapters\DebookOrderAdapterBase.cs" />
+    <Compile Include="Adapters\DebookOrderItemAdapter.cs" />
+    <Compile Include="Adapters\GenericAssetAdapter.cs" />
+    <Compile Include="Adapters\GenericClassGroupAdapter.cs" />
+    <Compile Include="Adapters\VersionedOrderAdapterBase.cs" />
     <Compile Include="Adapters\ClassesAdapter.cs" />
     <Compile Include="Adapters\ClassGroupAdapterBase.cs" />
     <Compile Include="Adapters\ClassLessonItemsAdapter.cs" />
@@ -98,8 +104,10 @@
     <Compile Include="Adapters\OrderItemViewAdapter.cs" />
     <Compile Include="Adapters\OrderUserOperationLogAdapter.cs" />
     <Compile Include="Adapters\ShoppingCartAdapter.cs" />
+    <Compile Include="Common\PageParamsBase.cs" />
     <Compile Include="Common\ConnectionDefine.cs" />
     <Compile Include="Common\Helper.cs" />
+    <Compile Include="DataSources\GenericMetaDataSource.cs" />
     <Compile Include="DataSources\GenericOrderDataSource.cs" />
     <Compile Include="DataSources\GenericPurchaseSource.cs" />
     <Compile Include="DataSources\GenericSearchDataSource.cs" />
@@ -108,8 +116,9 @@
     <Compile Include="Executors\PPTSClassGroupExecutorBase.cs" />
     <Compile Include="Executors\PPTSEditClassGroupExecutorBase.cs" />
     <Compile Include="Executors\PPTSEditAssignExecutorBase.cs" />
-    <Compile Include="Executors\PPTSEditOrderExecutorBase.cs" />
-    <Compile Include="Executors\PPTSEditShoppingCartExecutorBase.cs" />
+    <Compile Include="Executors\PPTSEditUnsubscribeExecutorBase.cs" />
+    <Compile Include="Executors\PPTSEditPurchaseExecutorBase.cs" />
+    <Compile Include="Executors\PPTSOrderExecutor.cs" />
     <Compile Include="Executors\PPTSShoppingCartExecutor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

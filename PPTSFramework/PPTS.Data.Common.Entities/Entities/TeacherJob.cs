@@ -13,7 +13,7 @@ namespace PPTS.Data.Common.Entities
     /// 教师岗位表
     /// </summary>
     [Serializable]
-    [ORTableMapping("TeacherJobs")]
+    [ORTableMapping("MT.TeacherJobs")]
     [DataContract]
     public class TeacherJob
     {
@@ -55,11 +55,34 @@ namespace PPTS.Data.Common.Entities
         }
 
         /// <summary>
-        /// 岗位类型名称
+        /// 岗位组织机构名称
         /// </summary>
         [ORFieldMapping("JobOrgName")]
         [DataMember]
         public string JobOrgName
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 岗位组织机构简称
+        /// </summary>
+        [ORFieldMapping("JobOrgShortName")]
+        [DataMember]
+        public string JobOrgShortName
+        {
+            get;
+            set;
+        }
+
+
+        /// <summary>
+        /// 岗位组织机构类型
+        /// </summary>
+        [ORFieldMapping("JobOrgType")]
+        [DataMember]
+        public OrgTypeDefine JobOrgType
         {
             get;
             set;

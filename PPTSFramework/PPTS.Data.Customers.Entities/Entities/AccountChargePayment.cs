@@ -90,10 +90,20 @@ namespace PPTS.Data.Customers.Entities
             set;
 		}
 
-		/// <summary>
-		/// 支付状态（未支付，已支付）
-		/// </summary>
-		[ORFieldMapping("PayStatus")]
+        /// <summary>
+        /// 小票号
+        /// </summary>
+        [ORFieldMapping("PayTicket")]
+        [DataMember]
+        public string PayTicket
+        {
+            get;
+            set;
+        }
+        /// <summary>
+        /// 支付状态（未支付，已支付）
+        /// </summary>
+        [ORFieldMapping("PayStatus")]
         [DataMember]
 		public PayStatusDefine PayStatus
 		{
@@ -133,84 +143,7 @@ namespace PPTS.Data.Customers.Entities
             set;
             get;
         }
-
-		/// <summary>
-		/// 付款单位名称（电汇或支票）
-		/// </summary>
-		[ORFieldMapping("PayCorp")]
-        [DataMember]
-		public string PayCorp
-		{
-			get;
-            set;
-		}
-
-		/// <summary>
-		/// 电汇号（电汇）
-		/// </summary>
-		[ORFieldMapping("TelexNo")]
-        [DataMember]
-		public string TelexNo
-		{
-			get;
-            set;
-		}
-
-		/// <summary>
-		/// 支票号（支票）
-		/// </summary>
-		[ORFieldMapping("ChequeNo")]
-        [DataMember]
-		public string ChequeNo
-		{
-			get;
-            set;
-		}
-
-		/// <summary>
-		/// 刷卡交易参考号（刷卡）
-		/// </summary>
-		[ORFieldMapping("CardReceiptNo")]
-        [DataMember]
-		public string CardReceiptNo
-		{
-			get;
-            set;
-		}
-
-		/// <summary>
-		/// 天猫短信码（天猫）
-		/// </summary>
-		[ORFieldMapping("TmallSMSNo")]
-        [DataMember]
-		public string TmallSMSNo
-		{
-			get;
-            set;
-		}
-
-		/// <summary>
-		/// 手机后四位（天猫）
-		/// </summary>
-		[ORFieldMapping("PhoneTail4")]
-        [DataMember]
-		public string PhoneTail4
-		{
-			get;
-            set;
-		}
-
-		/// <summary>
-		/// 代金券
-		/// </summary>
-		[ORFieldMapping("CashCoupon")]
-        [DataMember]
-		public string CashCoupon
-		{
-			get;
-            set;
-		}
-
+        
 		/// <summary>
 		/// 回款人
 		/// </summary>
@@ -278,28 +211,6 @@ namespace PPTS.Data.Customers.Entities
 		}
 
 		/// <summary>
-		/// 是否对账
-		/// </summary>
-		[ORFieldMapping("Checked")]
-        [DataMember]
-		public int Checked
-		{
-			get;
-            set;
-		}
-
-		/// <summary>
-		/// 对账日期
-		/// </summary>
-		[ORFieldMapping("CheckTime", UtcTimeToLocal = true)]
-        [DataMember]
-		public DateTime CheckTime
-		{
-			get;
-            set;
-		}
-
-		/// <summary>
 		/// 对账人ID
 		/// </summary>
 		[ORFieldMapping("CheckerID")]
@@ -342,6 +253,29 @@ namespace PPTS.Data.Customers.Entities
 			get;
             set;
 		}
+
+        /// <summary>
+        /// 对账状态
+        /// </summary>
+        [ORFieldMapping("CheckStatus")]
+        [ConstantCategory(Category = "Common_CheckStatus")]
+        [DataMember]
+        public CheckStatusDefine CheckStatus
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 对账日期
+        /// </summary>
+        [ORFieldMapping("CheckTime", UtcTimeToLocal = true)]
+        [DataMember]
+        public DateTime CheckTime
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// 创建人ID

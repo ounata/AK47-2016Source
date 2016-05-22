@@ -1,4 +1,5 @@
 ﻿using MCS.Library.Core;
+using MCS.Library.OGUPermission;
 using PPTS.Data.Common.Security;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace PPTS.Data.Common.Test
         public static void Output(this PPTSJob job)
         {
             if (job != null)
-                Console.WriteLine("ID: {0}, Name: {1}", job.ID, job.Name);
+                Console.WriteLine("ID: {0}, Name: {1}, Type: {2}", job.ID, job.Name, job.JobType);
         }
 
         public static void Output(this IEnumerable<string> functions)
@@ -35,6 +36,14 @@ namespace PPTS.Data.Common.Test
         public static void Output(this IEnumerable<PPTSRole> roles)
         {
             roles.ForEach(role => role.Output());
+        }
+
+        public static void Output(this IEnumerable<IOguObject> objs)
+        {
+            foreach(IOguObject obj in objs)
+            {
+                Console.WriteLine("ID: {0}, Name: {1}", obj.ID, obj.Name);
+            }
         }
     }
 }

@@ -35,7 +35,7 @@
                     <div class="profile-info-row">
                         <div class="profile-info-name">购买意愿：</div>
                         <div class="profile-info-value">
-                            <ppts-checkbox-group category="purchaseIntension" model="vm.criteria.purchaseIntensions" clear="vm.criteria.purchaseIntensions=[]" />
+                            <ppts-checkbox-group category="purchaseIntention" model="vm.criteria.purchaseIntentions" clear="vm.criteria.purchaseIntentions=[]" />
                         </div>
                     </div>
                     <div class="profile-info-row">
@@ -54,38 +54,19 @@
                         <div class="profile-info-name">跟进时间：</div>
                         <div class="profile-info-value">
                             <ppts-radiobutton-group category="dateRange" model="vm.followTimeValue" />
-                            <!--<div ng-show="vm.followTimeValue == 5" style="display:inline;">
-                                <input type="date" ng-model="vm.criteria.followStartTime" /> 到 
-                                <input type="date" ng-model="vm.criteria.followEndTime" />
-                            </div>-->
-                            <!--<div class="input-daterange input-group mcs-input-group input-xxlarge large">
-                                <input class="form-control date-picker" name="start" type="text" data-date-format="dd-mm-yyyy">
-                                <span class="input-group-addon">
-                                    <i class="fa fa-calendar bigger-110"></i>
-                                </span>
-                                <span class="input-group-addon">
-                                    <i class="ace-icon fa fa-arrow-right icon-on-right"></i>
-                                </span>
-                                <input class="form-control date-picker" name="end" type="text" data-date-format="dd-mm-yyyy">
-                                <span class="input-group-addon">
-                                    <i class="fa fa-calendar bigger-110"></i>
-                                </span>
-                            </div>-->
-                            <!--<div class="input-group mcs-input-group input-xlarge">
-                                <input class="form-control date-picker" id="id-date-picker-1" type="text" data-date-format="dd-mm-yyyy" />
-                                <span class="input-group-addon">
-                                    <i class="fa fa-calendar bigger-110"></i>
-                                </span>
-                            </div>-->
+                            <div ng-show="vm.followTimeValue == 5" style="display:inline;">
+                                <ppts-datepicker model="vm.criteria.followStartTime" class="inline-ppts-datepicker" /> 到
+                                <ppts-datepicker model="vm.criteria.followEndTime" class="inline-ppts-datepicker" />
+                            </div>
                         </div>
                     </div>
                     <div class="profile-info-row">
                         <div class="profile-info-name">下次沟通时间：</div>
                         <div class="profile-info-value">
-                            <ppts-radiobutton-group category="dateRange" model="vm.nextTalkTimeValue" />
-                            <div ng-show="vm.nextTalkTimeValue == 5" style="display:inline;">
-                                <input type="date" ng-model="vm.criteria.nextTalkStartTime" /> 到
-                                <input type="date" ng-model="vm.criteria.nextTalkEndTime" />
+                            <ppts-radiobutton-group category="dateRange" model="vm.nextFollowTimeValue" />
+                            <div ng-show="vm.nextFollowTimeValue == 5" style="display:inline;">
+                                <ppts-datepicker model="vm.criteria.nextTalkStartTime" class="inline-ppts-datepicker" /> 到
+                                <ppts-datepicker model="vm.criteria.nextTalkEndTime" class="inline-ppts-datepicker" />
                             </div>
                         </div>
                     </div>
@@ -96,16 +77,25 @@
                         </div>
                     </div>
                     <div class="profile-info-row">
+                        <div class="profile-info-name">预计上门时间：</div>
+                        <div class="profile-info-value">
+                            <ppts-radiobutton-group category="dateRange" model="vm.planVerifyTimeValue" />
+                            <div ng-show="vm.planVerifyTimeValue == 5" style="display:inline;">
+                                <ppts-datepicker model="vm.criteria.planVerifyStartTime" class="inline-ppts-datepicker" /> 到
+                                <ppts-datepicker model="vm.criteria.planVerifyEndTime" class="inline-ppts-datepicker" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="profile-info-row">
                         <div class="profile-info-name">预计签约时间：</div>
                         <div class="profile-info-value">
                             <ppts-radiobutton-group category="dateRange" model="vm.planSignDateValue" />
                             <div ng-show="vm.planSignDateValue == 5" style="display:inline;">
-                                <input type="date" ng-model="vm.criteria.planSignStartTime" /> 到
-                                <input type="date" ng-model="vm.criteria.planSignEndTime" />
+                                <ppts-datepicker model="vm.criteria.planSignStartTime" class="inline-ppts-datepicker" /> 到
+                                <ppts-datepicker model="vm.criteria.planSignEndTime" class="inline-ppts-datepicker" />
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -114,33 +104,22 @@
 <!-- /结束：潜客列表.高级查询条件 -->
 <!-- #开始：潜客列表.快速查询条件 -->
 <div class="mcs-panel-search well well-sm">
-    <div class="portlet">
+    <div class="portlet portlet-height-50">
         <div class="portlet-title line">
             <div class="caption">
                 <label class="quick-search"><i class="ace-icon fa fa-search bigger-125"></i> 快速查询</label>
             </div>
         </div>
         <div class="portlet-body">
-            <mcs-input placeholder="大区/分公司/校区" model="" />
-            <mcs-input placeholder="学员/家长姓名" model="vm.criteria.name" />
-            <mcs-input placeholder="学员编号" model="vm.criteria.customerCode" />
-            <mcs-input placeholder="家长联系方式" model="vm.criteria.parentContact" />
-            <mcs-input placeholder="咨询师姓名" model="vm.criteria.parentName" />
-            <mcs-button category="search" click="vm.search()" size="medium" />
+            <div class="input-group input-xlarge mcs-input-group pull-left">
+                <ppts-select-branch model="vm.criteria.orgIds" />
+            </div>
+            <mcs-input placeholder="咨询师姓名" class="input-width-160 search-input" model="vm.criteria.staffName" />
+            <ppts-search placeholder="输入学员、家长姓名，学员编号，联系方式进行查询" click="vm.search()" model="vm.criteria.keyword" />
         </div>
     </div>
 </div>
 <!-- /结束：潜客列表.快速查询条件 -->
-<!-- #开始：潜客列表.工具栏 -->
-<!--<div class="mcs-panel-toolbar">
-    <mcs-button category="add" text="新增潜在客户" click="$state.go('ppts.customer-add')"></mcs-button>
-    <mcs-button category="add" text="新增跟进记录"></mcs-button>
-    <mcs-button icon="mail-forward" css="btn-yellow" text="划转资源"></mcs-button>
-    <mcs-button icon="user-plus" css="btn-success" text="分配咨询师"></mcs-button>
-    <mcs-button icon="female" css="btn-success" text="分配坐席"></mcs-button>
-    <mcs-button icon="cny" css="btn-purple" text="充 值"></mcs-button>
-</div>-->
-<!-- /结束：潜客列表.工具栏 -->
 <!-- #开始：潜客列表.数据表格 -->
 <mcs-datatable data="vm.data" />
 <!-- /结束：潜客列表.数据表格 -->

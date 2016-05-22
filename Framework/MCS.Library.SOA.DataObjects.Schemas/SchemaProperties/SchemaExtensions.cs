@@ -35,7 +35,7 @@ namespace MCS.Library.SOA.DataObjects.Schemas.SchemaProperties
 				action();
 		}
 
-		public static void SchemaToSqlClauseBuilder<T>(this VersionedSchemaObjectBase obj, SnapshotModeDefinition constSmd, T builder) where T : SqlClauseBuilderIUW
+		public static void SchemaToSqlClauseBuilder<TBuilder>(this VersionedSchemaObjectBase obj, SnapshotModeDefinition constSmd, TBuilder builder) where TBuilder : SqlClauseBuilderIUW<TBuilder>
 		{
 			if (obj != null && builder != null)
 			{

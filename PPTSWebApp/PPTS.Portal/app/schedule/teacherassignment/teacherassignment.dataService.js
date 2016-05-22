@@ -1,46 +1,70 @@
-﻿define([ppts.config.modules.product], function (product) {
+﻿define([ppts.config.modules.schedule], function (schedule) {
 
-    product.registerFactory('productDataService', ['$resource', function ($resource) {
+    schedule.registerFactory('teacherAssignmentDataService', ['$resource', function ($resource) {
 
-        var resource = $resource(ppts.config.productApiServerPath + 'api/products/:operation/:id', { operation: '@operation', id: '@id' }, { 'post': { method: 'POST' } });
+        var resource = $resource(ppts.config.orderApiBaseUrl + 'api/teacherassignment/:operation/:id',
+        { operation: '@operation', id: '@id' },
+        {
+            'post': { method: 'POST' },
+            'query': { method: 'GET', isArray: false }
+        });
 
-        resource.getAllProducts = function (criteria, success, error) {
-            resource.post({ operation: 'getAllProducts' }, criteria, success, error);
+
+        resource.getTeacherList = function (criteria, success, error) {
+            resource.post({ operation: 'getTeacherList' }, criteria, success, error);
         }
 
-        resource.getPagedProducts = function (criteria, success, error) {
-            resource.post({ operation: 'getPagedProducts' }, criteria, success, error);
+        resource.getTeacherListPaged = function (criteria, success, error) {
+            resource.post({ operation: 'getTeacherListPaged' }, criteria, success, error);
         }
 
-        resource.getProduct = function (productId) {
-            resource.query({ operation: 'getProductBaseinfo', id: productId }, function (product) {
-
-            });
-        };
-
-        resource.addProduct = function () {
-            resource.query({ operation: 'createProduct' }, function (product) {
-
-            });
+        resource.getTeacherWeekCourse = function (criteria, success, error) {
+            resource.post({ operation: 'getTeacherWeekCourse' }, criteria, success, error);
         }
 
-        resource.editProduct = function (productId) {
-            resource.query({ operation: 'updateProduct', id: productId }, function (product) {
-
-            });
+        resource.getCurMonthStat = function (criteria, success, error) {
+            resource.post({ operation: 'getCurMonthStat' }, criteria, success, error);
         }
 
-        resource.saveProduct = function (product, productId) {
-            if (!productId) {
-                resource.save({ operation: 'createProduct' }, product, function (result) {
+        resource.initCreateAssign = function (criteria, success, error) {
+            resource.post({ operation: 'initCreateAssign' }, criteria, success, error);
+        }
 
-                });
-            } else {
-                resource.save({ operation: 'updateProduct', id: productId }, product, function (result) {
+        resource.getAssetByCustomerID = function (criteria, success, error) {
+            resource.post({ operation: 'getAssetByCustomerID' }, criteria, success, error);
+        }
 
-                });
-            }
-        };
+        resource.createAssign = function (criteria, success, error) {
+            resource.post({ operation: 'createAssign' }, criteria, success, error);
+        }
+
+        resource.getAssetByAssetID = function (criteria, success, error) {
+            resource.post({ operation: 'getAssetByAssetID' }, criteria, success, error);
+        }
+
+        resource.cancelAssign = function (criteria, success, error) {
+            resource.post({ operation: 'cancelAssign' }, criteria, success, error);
+        }
+
+        resource.copyAssign = function (criteria, success, error) {
+            resource.post({ operation: 'copyAssign' }, criteria, success, error);
+        }
+
+        resource.initResetAssign = function (criteria, success, error) {
+            resource.post({ operation: 'initResetAssign' }, criteria, success, error);
+        }
+
+        resource.resetAssign = function (criteria, success, error) {
+            resource.post({ operation: 'resetAssign' }, criteria, success, error);
+        }
+        
+        resource.getSCLV = function (criteria, success, error) {
+            resource.post({ operation: 'getSCLV' }, criteria, success, error);
+        }
+
+        resource.getPagedSCLV = function (criteria, success, error) {
+            resource.post({ operation: 'getPagedSCLV' }, criteria, success, error);
+        }
 
         return resource;
     }]);

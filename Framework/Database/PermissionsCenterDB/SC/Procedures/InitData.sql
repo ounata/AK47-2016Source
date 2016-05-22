@@ -2,7 +2,7 @@
 CREATE PROCEDURE [SC].[InitData]
 AS
 BEGIN
-	exec SC.ClearAllData
+	exec SC.ClearNoSchemaData
 
 	DECLARE @now DATETIME
 

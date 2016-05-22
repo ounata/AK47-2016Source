@@ -25,7 +25,7 @@ namespace MCS.Web.Library
 			{
 				HttpRequest request = HttpContext.Current.Request;
 
-				if (request.Browser.IsBrowser("IE") || request.Browser.IsBrowser("internetexplorer"))
+				if (request.Browser.IsBrowser("IE") || request.Browser.IsBrowser("internetexplorer") || request.UserAgent.IndexOf(" edge/", StringComparison.OrdinalIgnoreCase) >= 0)
 					result = HttpUtility.UrlEncode(fileName);
 			}
 			else

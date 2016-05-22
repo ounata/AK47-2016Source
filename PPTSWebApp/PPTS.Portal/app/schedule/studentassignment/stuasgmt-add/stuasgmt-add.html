@@ -31,7 +31,7 @@
                                         <div class="profile-info-row">
                                             <div class="profile-info-name"> 校区 </div>
                                             <div class="profile-info-value">
-                                                <span class="editable editable-click">{{ vm.dataContent }}</span>
+                                                {{ vm.result.assign.campusName }}
                                             </div>
                                         </div>
                                         <div class="profile-info-row">
@@ -52,7 +52,8 @@
                                         <div class="profile-info-row">
                                             <div class="profile-info-name"> 上课年级 </div>
                                             <div class="profile-info-value">
-                                                <span>
+                                                <ppts-select ng-show="vm.showGradeSelect" caption="上课年级" category="subGrade" callback="vm.selectGradeClick(item)" model="vm.result.assign.grade" css="col-xs-7 col-sm-7" />
+                                                <span ng-show="!vm.showGradeSelect">
                                                   {{vm.result.assign.gradeName}}
                                                 </span>
                                             </div>
@@ -60,15 +61,15 @@
                                         <div class="profile-info-row">
                                             <div class="profile-info-name"> 上课科目 </div>
                                             <div class="profile-info-value">
-                                                <ppts-select category="subject" model="vm.result.assign.subject"  ng-show="vm.showSubjectSelect" callback="vm.selectSubjectClick(item)" css="col-xs-7 col-sm-7" />
+                                                <ppts-select category="subSubject" model="vm.result.assign.subject"  ng-show="vm.showSubjectSelect" callback="vm.selectSubjectClick(item)" css="col-xs-7 col-sm-7" />
                                                 <span ng-show="!vm.showSubjectSelect">{{ vm.result.assign.subjectName }}</span>
                                             </div>
                                         </div>
                                         <div class="profile-info-row">
                                             <div class="profile-info-name"> 上课教师 </div>
                                             <div class="profile-info-value">
-                                                <ppts-select category="teacher" ng-show="vm.showOrderSelect" model="vm.result.assign.teacherID" callback="vm.selectTeacherClick(item)" css="col-xs-7 col-sm-7" />
-                                                <span ng-show="!vm.showOrderSelect">{{ vm.result.assign.teacherName }}</span>
+                                                <ppts-select category="teacher" ng-show="vm.showTchSelect" model="vm.result.assign.teacherID" callback="vm.selectTeacherClick(item)" css="col-xs-7 col-sm-7" />
+                                                <span ng-show="!vm.showTchSelect">{{ vm.result.assign.teacherName }}</span>
                                             </div>
                                         </div>
                                         <div class="profile-info-row">
@@ -86,14 +87,7 @@
                                         <div class="profile-info-row">
                                             <div class="profile-info-name"> 上课日期 </div>
                                             <div class="profile-info-value">                                              
-                                                <p class="input-group col-sm-5">
-                                                    <input type="text" class="form-control" value="2016-11-11" uib-datepicker-popup="yyyy-MM-dd" ng-model="vm.beginDate" is-open="vm.popup1.opened" datepicker-options="vm.dateOptions" ng-required="true" close-text="Close" alt-input-formats="vm.altInputFormats" />
-                                                    <span class="input-group-btn">
-                                                        <button type="button" class="btn btn-default" ng-click="vm.open1()">
-                                                            <i class="glyphicon glyphicon-calendar"></i>
-                                                        </button>
-                                                    </span>
-                                                </p>
+                                                <ppts-datepicker model="vm.beginDate" />
                                             </div>
                                         </div>
                                         <div class="profile-info-row">
@@ -110,7 +104,7 @@
                                             <div class="profile-info-name"> 实际上课时长 </div>
                                             <div class="profile-info-value">
                                                 <span>
-                                                   {{vm.result.assign.durationValue}}
+                                                   {{ vm.assignDuration }} 分钟
                                                 </span>
                                             </div>
                                         </div>
@@ -118,7 +112,7 @@
                                             <div class="profile-info-name"> 排定课时数 </div>
                                             <div class="profile-info-value">
                                                 <span >
-                                                    {{vm.result.assign.Amount}} 
+                                                    {{vm.result.assign.amount}} 
                                                 </span>
                                             </div>
                                         </div>

@@ -1,0 +1,87 @@
+<!-- #开始：位置条 -->
+<div class="breadcrumbs" id="breadcrumbs">
+    <script type="text/javascript">
+    try {
+        ace.settings.check('breadcrumbs', 'fixed')
+    } catch (e) {}
+    </script>
+    <ul class="breadcrumb">
+        <li class="active">
+            <i class="ace-icon fa fa-home home-icon"></i> 首页
+        </li>
+        <li class="active">
+            <i class="ace-icon fa fa-buttons"></i> 日期控件
+        </li>
+    </ul>
+</div>
+<!-- /结束：位置条 -->
+<div class="page-content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h3 class="header smaller lighter green">应用范例</h3>
+                    <div>
+                       默认用法：<ppts-datepicker model="vm.meetingTime" /><br/>
+                       增加zIndex(防覆盖)： <ppts-datepicker model="vm.meetingTime" z-index="1060" /><br />
+                               <span>会议日期：{{vm.meetingTime}} </span>
+                    </div>
+                </div>
+                <div class="laycode col-sm-12">
+                    <h3 class="header smaller lighter green">示例代码</h3>
+                    <div class="code_box code_skin0">
+                        <span class="code_title">Html及Javascript</span>
+                        <pre class="codes">
+                        <code><b>Html</b></code><br />
+                        默认用法：&lt;ppts-datepicker model="vm.meetingTime" /&gt;&lt;br/&gt;
+                        增加zIndex(防覆盖)： &lt;ppts-datepicker model="vm.meetingTime" z-index="1060" /&gt;&lt;br/&gt;
+                        &lt;span&gt;开会日期：{{vm.meetingTime}} &lt;/span&gt;
+                        <code><b>Javascript</b></code><br />
+                        angular.module('app.widget')
+                            .controller('PPTSDatepickerController', ['$scope', function ($scope) {
+                                var vm = this;
+                            }]);
+                        </pre>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <h3 class="header smaller lighter green">参数说明</h3>
+                    <table class="table table-striped table-bordered table-hover" id="sample-table-1">
+                        <thead>
+                            <tr>
+                                <th>属性</th>
+                                <th style="width:400px;">用途</th>
+                                <th>是否必选</th>
+                                <th>默认值</th>
+                                <th>示例</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>model</code></td>
+                                <td>绑定选中的日期</td>
+                                <td>是</td>
+                                <td>无</td>
+                                <td>&lt;ppts-datepicker model="vm.meetingTime" /&gt;</td>
+                            </tr>
+                            <tr>
+                                <td><code>zIndex</code></td>
+                                <td>增加zIndex防覆盖(主页面和弹出页面交互)</td>
+                                <td>是</td>
+                                <td>无</td>
+                                <td>&lt;ppts-datepicker model="vm.meetingTime" z-index="1060"/&gt;</td>
+                            </tr>
+                            <tr>
+                                <td><code>css</code></td>
+                                <td>自定义样式</td>
+                                <td>否</td>
+                                <td>无</td>
+                                <td>&lt;ppts-datepicker model="vm.meetingTime" css="col-sm-4"/&gt;</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

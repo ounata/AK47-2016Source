@@ -54,6 +54,24 @@ namespace PPTS.Data.Products.Entities
         }
 
         /// <summary>
+        /// 分类代码
+        /// </summary>
+        [ORFieldMapping("Catalog")]
+        [DataMember]
+        public string Catalog { set; get; }
+
+        /// <summary>
+        /// 产品分类名称
+        /// </summary>
+        [ORFieldMapping("CatalogName")]
+        [DataMember]
+        public string CatalogName
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// 科目代码
         /// </summary>
         [ORFieldMapping("Subject")]

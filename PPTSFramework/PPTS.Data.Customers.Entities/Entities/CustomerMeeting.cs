@@ -16,7 +16,7 @@ namespace PPTS.Data.Customers.Entities
     [Serializable]
     [ORTableMapping("CustomerMeetings")]
     [DataContract]
-    public class CustomerMeeting
+    public class CustomerMeeting : IEntityWithCreator, IEntityWithModifier
     {
         public CustomerMeeting()
         {
@@ -78,6 +78,16 @@ namespace PPTS.Data.Customers.Entities
         }
 
         /// <summary>
+        /// 会议结束时间
+        /// </summary>
+        [ORFieldMapping("MeetingEndTime")]
+        [DataMember]
+        public DateTime MeetingEndTime
+        {
+            get;
+            set;
+        }
+        /// <summary>
         /// 开会时长（分钟）
         /// </summary>
         [ORFieldMapping("MeetingDuration")]
@@ -105,6 +115,7 @@ namespace PPTS.Data.Customers.Entities
         /// </summary>
         [ORFieldMapping("MeetingEvent")]
         [DataMember]
+        [ConstantCategory("c_codE_ABBR_MeetingEvent")]
         public string MeetingEvent
         {
             get;
@@ -183,6 +194,7 @@ namespace PPTS.Data.Customers.Entities
         /// </summary>
         [ORFieldMapping("Participants")]
         [DataMember]
+        [ConstantCategory("C_CODE_ABBR_Customer_CRM_MeetingObject")]
         public string Participants
         {
             get;
@@ -254,6 +266,15 @@ namespace PPTS.Data.Customers.Entities
             get;
             set;
         }
+
+        /// <summary>
+        /// 会议主题代码
+        /// </summary>
+        
+        [ORFieldMapping("MeetingTitle")]
+        [DataMember]
+        [ConstantCategory("c_codE_ABBR_MeetingTitle")]
+        public string MeetingTitle { set; get; }
     }
 
     [Serializable]

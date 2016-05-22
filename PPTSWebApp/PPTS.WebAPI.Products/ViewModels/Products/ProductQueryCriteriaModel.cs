@@ -7,6 +7,8 @@ namespace PPTS.WebAPI.Products.ViewModels.Products
 {
     public class ProductQueryCriteriaModel
     {
+        [NoMapping]
+        public string[] CampusIDs { get; set; }
 
         [ConditionMapping("CategoryType")]
         public string CategoryType { get; set; }
@@ -20,6 +22,8 @@ namespace PPTS.WebAPI.Products.ViewModels.Products
         [ConditionMapping("ProductStatus")]
         public string ProductStatus { get; set; }
 
+        [ConditionMapping("PeriodDuration")]
+        public string PeriodDuration { get; set; }
 
         [ConditionMapping("ProductName", EscapeLikeString = true, Prefix = "%", Postfix = "%", Operation = "LIKE")]
         public string Name { get; set; }
@@ -48,13 +52,78 @@ namespace PPTS.WebAPI.Products.ViewModels.Products
         [ConditionMapping("EndDate", Operation = "<", AdjustDays = 1)]
         public DateTime EndEndDate { get; set; }
 
+        
+
         //----------------------------
 
+        [NoMapping]
+        public string Grade
+        {
+            set
+            {
+                if (!string.IsNullOrEmpty(value))
+                {
+                    if (SelectedGrades != null)
+                    {
+                        SelectedGrades[SelectedGrades.Length] = value;
+                    }
+                    else {
+                        SelectedGrades= new string[] { value };
+                    }
+                }
+            }
+        }
+
+        [NoMapping]
+        public string Subject
+        {
+            set
+            {
+                if (!string.IsNullOrEmpty(value))
+                {
+                    if (SelectedSubjects != null)
+                    {
+                        SelectedSubjects[SelectedSubjects.Length] = value;
+                    }
+                    else
+                    {
+                        SelectedSubjects = new string[] { value };
+                    }
+                }
+            }
+        }
+
+        [NoMapping]
+        public string CourseLevel
+        {
+            set
+            {
+                if (!string.IsNullOrEmpty(value))
+                {
+                    if (SelectedCourseLevels != null)
+                    {
+                        SelectedCourseLevels[SelectedCourseLevels.Length] = value;
+                    }
+                    else
+                    {
+                        SelectedCourseLevels = new string[] { value };
+                    }
+                }
+            }
+        }
+
+
+
+        //----------------------------
         [InConditionMapping("Grade")]
-        public string [] SelectedGrades { set; get; }
+        public string[] SelectedGrades { set; get; }
 
         [InConditionMapping("Subject")]
         public string[] SelectedSubjects { set; get; }
+
+        [InConditionMapping("CourseLevel")]
+        public string[] SelectedCourseLevels { set; get; }
+        
 
 
         [ConditionMapping("MinPeoples", Operation = ">=")]
@@ -114,7 +183,7 @@ namespace PPTS.WebAPI.Products.ViewModels.Products
             }
         }
 
-        private OrderByRequestItem[] obris = new OrderByRequestItem[] { new OrderByRequestItem() { DataField= "CreateTime" } };
+        private OrderByRequestItem[] obris = new OrderByRequestItem[] { new OrderByRequestItem() { DataField = "CreateTime" } };
         [NoMapping]
         public OrderByRequestItem[] OrderBy
         {

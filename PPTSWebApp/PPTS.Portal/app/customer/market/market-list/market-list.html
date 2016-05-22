@@ -31,15 +31,7 @@
             </div>
         </div>
         <div class="portlet-body">
-            <div class="input-group input-xlarge mcs-input-group pull-left">
-                <mcs-input placeholder="选择大区/分公司/校区" model="" readonly="true" css="form-control mcs-input-search" />
-                <span class="input-group-btn">
-                    <button class="btn btn-sm btn-info" type="button" ng-click="vm.select()">
-                        <i class="ace-icon fa fa-check bigger-110"></i>
-                        选择
-                    </button>
-                </span>
-            </div>
+            <ppts-select-branch model="vm.criteria.orgIds" />
             <ppts-search placeholder="输入学员、家长姓名，学员编号，联系方式进行查询" click="vm.search()" model="vm.criteria.keyword" />
         </div>
     </div>
@@ -51,7 +43,7 @@
 <!-- /结束：潜客列表.快速查询条件 -->
 <!-- #开始：潜客列表.工具栏 -->
 <div class="mcs-panel-toolbar">
-    <mcs-button icon="mail-forward" css="btn-yellow" text="划转资源" ppts-job-functions="划转资源"></mcs-button>
+    <mcs-button icon="mail-forward" css="btn-yellow" text="划转资源" ppts-job-functions="划转资源" click="vm.transfer()"></mcs-button>
     <mcs-button icon="user" css="btn-success" text="分配市场专员" ppts-job-functions="分配市场专员" click="vm.assign(vm.relationType.market)"></mcs-button>
 </div>
 <div class="alert alert-block alert-danger" ng-show="vm.errorMessage">

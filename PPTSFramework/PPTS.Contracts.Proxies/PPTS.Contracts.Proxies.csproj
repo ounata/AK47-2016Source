@@ -47,6 +47,9 @@
     <Reference Include="PPTS.Contracts.Customers">
       <HintPath>..\..\PPTSBin\PPTS.Contracts.Customers.dll</HintPath>
     </Reference>
+    <Reference Include="PPTS.Contracts.Orders">
+      <HintPath>..\..\PPTSBin\PPTS.Contracts.Orders.dll</HintPath>
+    </Reference>
     <Reference Include="PPTS.Contracts.Products">
       <HintPath>..\..\PPTSBin\PPTS.Contracts.Products.dll</HintPath>
     </Reference>
@@ -55,6 +58,9 @@
     </Reference>
     <Reference Include="PPTS.Data.Customers.Entities">
       <HintPath>..\..\PPTSBin\PPTS.Data.Customers.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="PPTS.Data.Orders.Entities">
+      <HintPath>..\..\PPTSBin\PPTS.Data.Orders.Entities.dll</HintPath>
     </Reference>
     <Reference Include="PPTS.Data.Products.Entities">
       <HintPath>..\..\PPTSBin\PPTS.Data.Products.Entities.dll</HintPath>
@@ -72,8 +78,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="PPTSAccountQueryServiceProxy.cs" />
-    <Compile Include="PPTSClientServiceProxyBase.cs" />
+    <Compile Include="PPTSAssetQueryServiceProxy.cs" />
     <Compile Include="PPTSConfigRuleQueryServiceProxy.cs" />
+    <Compile Include="PPTSCourseQueryServiceProxy.cs" />
     <Compile Include="PPTSCustomerQueryServiceProxy.cs" />
     <Compile Include="PPTSProductQueryServiceProxy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

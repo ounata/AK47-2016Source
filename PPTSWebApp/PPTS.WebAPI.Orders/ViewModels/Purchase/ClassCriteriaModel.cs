@@ -55,13 +55,17 @@ namespace PPTS.WebAPI.Orders.ViewModels.Purchase
 
     public class ClassCollectionModel: EditableDataObjectCollectionBase<ClassModel> {
 
-        public void FillOrderAmount()
-        {
-            var classIds = this.Select(m => m.ClassID).ToArray();
+        //public void FillOrderAmount()
+        //{
+        //    var classIds = this.Select(m => m.ClassID).ToArray();
             
-            var openAccountDate = DateTime.Parse( DateTime.Now.ToString("yyyy-" + (DateTime.Now.Month + 1) + "-1"));
-            ClassLessonsAdapter.Instance.GetNoOpenAccountLessonCount(classIds, openAccountDate).ToList().ForEach(kv => { this.Single(s => s.ClassID == kv.Key).OrderAmount = kv.Value; });
-        }
+        //    var openAccountDate = Service.CommonService.GetOpenAccountDate();
+        //    ClassLessonsAdapter.Instance.GetNoOpenAccountLessonCount(openAccountDate, classIds)
+        //        .ToList()
+        //        .ForEach(kv => {
+        //            this.Single(s => s.ClassID == kv.Key).OrderAmount = kv.Value.ToString();
+        //        });
+        //}
     }
 
 }

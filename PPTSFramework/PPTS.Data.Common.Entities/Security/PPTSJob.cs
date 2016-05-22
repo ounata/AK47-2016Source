@@ -34,6 +34,10 @@ namespace PPTS.Data.Common.Security
             get;
             set;
         }
+        /// <summary>
+        /// 岗位名称
+        /// </summary>
+        public string JobName { get; set; }
 
         /// <summary>
         /// 所属组织的ID
@@ -43,6 +47,20 @@ namespace PPTS.Data.Common.Security
             get;
             set;
         }
+
+        /// <summary>
+        /// 岗位类型
+        /// </summary>
+        public JobTypeDefine JobType
+        {
+            get;
+            set;
+        }
+        /// <summary>
+        /// 是否主岗
+        /// </summary>
+        public bool IsPrimary
+        { get; set; }
 
         public HashSet<string> Functions
         {

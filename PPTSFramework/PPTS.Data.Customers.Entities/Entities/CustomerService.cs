@@ -16,7 +16,7 @@ namespace PPTS.Data.Customers.Entities
 	[Serializable]
     [ORTableMapping("CustomerServices")]
     [DataContract]
-	public class CustomerService
+	public class CustomerService:IEntityWithCreator, IEntityWithModifier
 	{		
 		public CustomerService()
 		{
@@ -392,10 +392,21 @@ namespace PPTS.Data.Customers.Entities
             set;
 		}
 
-		/// <summary>
-		/// 是否发送邮件
+        /// <summary>
+		/// 处理意见
 		/// </summary>
-		[ORFieldMapping("IsSendEmail")]
+		[ORFieldMapping("HandleAdvice")]
+        [DataMember]
+        public string HandleAdvice
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 是否发送邮件
+        /// </summary>
+        [ORFieldMapping("IsSendEmail")]
         [DataMember]
 		public int IsSendEmail
 		{

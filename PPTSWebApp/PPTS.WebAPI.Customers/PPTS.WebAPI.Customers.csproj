@@ -69,6 +69,10 @@
     <Reference Include="MCS.Library.SOA.DataObjects">
       <HintPath>..\..\Bin\MCS.Library.SOA.DataObjects.dll</HintPath>
     </Reference>
+    <Reference Include="MCS.Library.WcfExtensions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=62ea08f894871798, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Bin\MCS.Library.WcfExtensions.dll</HintPath>
+    </Reference>
     <Reference Include="MCS.Web.MVC.Library">
       <HintPath>..\..\Bin\MCS.Web.MVC.Library.dll</HintPath>
     </Reference>
@@ -80,6 +84,12 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\ThirdPartComponent\Bin\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="PPTS.Contracts.Products">
+      <HintPath>..\..\PPTSBin\PPTS.Contracts.Products.dll</HintPath>
+    </Reference>
+    <Reference Include="PPTS.Contracts.Proxies">
+      <HintPath>..\..\PPTSBin\PPTS.Contracts.Proxies.dll</HintPath>
+    </Reference>
     <Reference Include="PPTS.Data.Common">
       <HintPath>..\..\PPTSBin\PPTS.Data.Common.dll</HintPath>
     </Reference>
@@ -90,12 +100,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\PPTSBin\PPTS.Data.Customers.dll</HintPath>
     </Reference>
-    <Reference Include="PPTS.Data.Customers.Entities">
-      <HintPath>..\..\PPTSBin\PPTS.Data.Customers.Entities.dll</HintPath>
-    </Reference>
-    <Reference Include="PPTS.Data.Products, Version=1.0.0.0, Culture=neutral, PublicKeyToken=62ea08f894871798, processorArchitecture=MSIL">
+    <Reference Include="PPTS.Data.Customers.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=62ea08f894871798, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\PPTSBin\PPTS.Data.Products.dll</HintPath>
+      <HintPath>..\..\PPTSBin\PPTS.Data.Customers.Entities.dll</HintPath>
     </Reference>
     <Reference Include="PPTS.Data.Products.Entities">
       <HintPath>..\..\PPTSBin\PPTS.Data.Products.Entities.dll</HintPath>
@@ -151,21 +158,69 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountsController.cs" />
     <Compile Include="Controllers\CustomerFollowsController.cs" />
+    <Compile Include="Controllers\CustomerRefundAlertsController.cs" />
+    <Compile Include="Controllers\CustomerScoresController.cs" />
     <Compile Include="Controllers\CustomerServicesController.cs" />
     <Compile Include="Controllers\CustomerMeetingsController.cs" />
+    <Compile Include="Controllers\ConfirmDoorsController.cs" />
+    <Compile Include="Controllers\CustomerVisitsController.cs" />
+    <Compile Include="Controllers\FeedbackController.cs" />
     <Compile Include="Controllers\PotentialCustomersController.cs" />
+    <Compile Include="Controllers\CustomerStopAlertsController.cs" />
+    <Compile Include="Controllers\StudentsController.cs" />
+    <Compile Include="Controllers\WeeklyFeedbackController.cs" />
+    <Compile Include="DataSources\AccountChargeApplyDataSource.cs" />
+    <Compile Include="DataSources\AccountChargePaymentDataSource.cs" />
+    <Compile Include="DataSources\ConfirmDoorDataSource.cs" />
+    <Compile Include="DataSources\CustomerFeedbacksDataSource.cs" />
+    <Compile Include="DataSources\CustomerRefundAlertDataSource.cs" />
+    <Compile Include="DataSources\CustomerRepliesDataSource.cs" />
+    <Compile Include="DataSources\CustomerScoresBatchDataSource.cs" />
     <Compile Include="DataSources\CustomerServiceDataSource.cs" />
-    <Compile Include="DataSources\CustomersFollowDataSource.cs" />
+    <Compile Include="DataSources\AccountRefundApplyDataSource.cs" />
+    <Compile Include="DataSources\CustomerServiceItemDataSource.cs" />
+    <Compile Include="DataSources\CustomerFollowDataSource.cs" />
     <Compile Include="DataSources\CustomerMeetingDataSource.cs" />
+    <Compile Include="DataSources\CustomerScoresDataSource.cs" />
+    <Compile Include="DataSources\CustomerVisitDataSource.cs" />
     <Compile Include="DataSources\ParentDataSource.cs" />
     <Compile Include="DataSources\PotentialCustomerDataSource.cs" />
+    <Compile Include="DataSources\CustomerStopAlertDataSource.cs" />
+    <Compile Include="Executors\AddConfirmDoorExecutor.cs" />
+    <Compile Include="Executors\AccountEditRefundApplyExecutor.cs" />
+    <Compile Include="Executors\AccountVerifyRefundApplyExecutor.cs" />
+    <Compile Include="Executors\AccountCheckRefundApplyExecutor.cs" />
+    <Compile Include="Executors\AccountCheckChargePaymentExecutor.cs" />
     <Compile Include="Executors\AddCustomerFollowExecutor.cs" />
+    <Compile Include="Executors\AddCustomerFollowItemExecutor.cs" />
+    <Compile Include="Executors\AddCustomerRefundAlertExecutor.cs" />
+    <Compile Include="Executors\AddBatchScoresExecutor.cs" />
+    <Compile Include="Executors\AddCustomerStopAlertExecutor.cs" />
+    <Compile Include="Executors\AssignTeacherExecutor.cs" />
+    <Compile Include="Executors\CalloutTeacherExecutor.cs" />
+    <Compile Include="Executors\ChangeTeacherExecutor.cs" />
+    <Compile Include="Executors\AddCustomerVisitBatchExecutor.cs" />
+    <Compile Include="Executors\EditableStudentVisitExecutor.cs" />
+    <Compile Include="Executors\EditCustomerRefundAlertExecutor.cs" />
+    <Compile Include="Executors\EditCustomerScoresExecutor.cs" />
+    <Compile Include="Executors\AddCustomerScoresExecutor.cs" />
+    <Compile Include="Executors\AddCustomerServiceExecutor.cs" />
+    <Compile Include="Executors\AddCustomerTranferResourceExecutor.cs" />
+    <Compile Include="Executors\AddCustomerVisitExecutor.cs" />
     <Compile Include="Executors\AddParentExecutor.cs" />
     <Compile Include="Executors\AddPotentialCustomerExecutor.cs" />
-    <Compile Include="Executors\EditChargePaymentItemExecutor.cs" />
-    <Compile Include="Executors\DeleteChargeApplyExecutor.cs" />
-    <Compile Include="Executors\EditChargePaymentExecutor.cs" />
-    <Compile Include="Executors\EditChargeApplyExecutor.cs" />
+    <Compile Include="Executors\CreatePotentialCustomerParentExecutor.cs" />
+    <Compile Include="Executors\CreateStudentParentExecutor.cs" />
+    <Compile Include="Executors\CustomerMeetingExecutor.cs" />
+    <Compile Include="Executors\CustomerRepliesExecutor.cs" />
+    <Compile Include="Executors\EditableStudentParentExecutor.cs" />
+    <Compile Include="Executors\EditableStudentSverviceExecutor.cs" />
+    <Compile Include="Executors\AccountEditTransferApplyExecutor.cs" />
+    <Compile Include="Executors\AccountPrintChargePaymentExecutor.cs" />
+    <Compile Include="Executors\AddStudentParentExecutor.cs" />
+    <Compile Include="Executors\AccountDeleteChargeApplyExecutor.cs" />
+    <Compile Include="Executors\AccountEditChargePaymentExecutor.cs" />
+    <Compile Include="Executors\AccountEditChargeApplyExecutor.cs" />
     <Compile Include="Executors\EditableStudentExecutor.cs" />
     <Compile Include="Executors\EditCustomerFollowExecutor.cs" />
     <Compile Include="Executors\EditableParentExecutor.cs" />
@@ -174,48 +229,90 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\Accounts\ExpenseResult.cs" />
+    <Compile Include="ViewModels\Accounts\ExpenseModel.cs" />
+    <Compile Include="ViewModels\Accounts\DiscountResult.cs" />
+    <Compile Include="ViewModels\Accounts\TransferApplyListResult.cs" />
+    <Compile Include="ViewModels\Accounts\RefundAllotItemModel.cs" />
     <Compile Include="ViewModels\Accounts\ChargeAllotItemModel.cs" />
+    <Compile Include="ViewModels\Accounts\RefundAllotModel.cs" />
     <Compile Include="ViewModels\Accounts\ChargeAllotModel.cs" />
-    <Compile Include="ViewModels\Accounts\ChargeApplyQueryCriterialModel.cs" />
-    <Compile Include="ViewModels\Accounts\ChargeApplyViewModel.cs" />
+    <Compile Include="ViewModels\Accounts\ChargeApplyQueryCriteriaModel.cs" />
+    <Compile Include="ViewModels\Accounts\ChargeApplyListResult.cs" />
     <Compile Include="ViewModels\Accounts\ChargeApplyQueryResult.cs" />
+    <Compile Include="ViewModels\Accounts\ChargeApplyQueryModel.cs" />
+    <Compile Include="ViewModels\Accounts\TransferApplyResult.cs" />
     <Compile Include="ViewModels\Accounts\ChargePaymentItemModel.cs" />
-    <Compile Include="ViewModels\Accounts\ChargePaymentQueryCriterialModel.cs" />
+    <Compile Include="ViewModels\Accounts\ChargePaymentQueryCriteriaModel.cs" />
     <Compile Include="ViewModels\Accounts\ChargePaymentQueryResult.cs" />
-    <Compile Include="ViewModels\Accounts\ChargePaymentViewModel.cs" />
+    <Compile Include="ViewModels\Accounts\ChargePaymentQueryModel.cs" />
     <Compile Include="ViewModels\Accounts\CustomerModel.cs" />
     <Compile Include="ViewModels\Accounts\AccountModel.cs" />
-    <Compile Include="ViewModels\Accounts\AccountQueryResult.cs" />
+    <Compile Include="ViewModels\Accounts\AccountListResult.cs" />
     <Compile Include="ViewModels\Accounts\ChargeApplyModel.cs" />
     <Compile Include="ViewModels\Accounts\ChargePaymentModel.cs" />
-    <Compile Include="ViewModels\Accounts\ChargeDisplayResult.cs" />
+    <Compile Include="ViewModels\Accounts\ChargeApplyResult.cs" />
     <Compile Include="ViewModels\Accounts\DiscountItemModel.cs" />
     <Compile Include="ViewModels\Accounts\DiscountModel.cs" />
-    <Compile Include="ViewModels\Accounts\ChargePaymentPrintModel.cs" />
     <Compile Include="ViewModels\Accounts\RefundApplyModel.cs" />
-    <Compile Include="ViewModels\Accounts\RefundDisplayResult.cs" />
-    <Compile Include="ViewModels\Accounts\RefundPaymentModel.cs" />
-    <Compile Include="ViewModels\Accounts\RefundPaymentQueryCriterialMode.cs" />
-    <Compile Include="ViewModels\Accounts\RefundPaymentQueryResult.cs" />
-    <Compile Include="ViewModels\Accounts\RefundPaymentViewModel.cs" />
+    <Compile Include="ViewModels\Accounts\RefundApplyResult.cs" />
+    <Compile Include="ViewModels\Accounts\RefundVerifyingModel.cs" />
+    <Compile Include="ViewModels\Accounts\RefundApplyQueryCriteriaModel.cs" />
+    <Compile Include="ViewModels\Accounts\RefundApplyQueryResult.cs" />
+    <Compile Include="ViewModels\Accounts\RefundApplyQueryModel.cs" />
     <Compile Include="ViewModels\Accounts\ReturnApplyModel.cs" />
-    <Compile Include="ViewModels\Accounts\ReturnDisplayResult.cs" />
+    <Compile Include="ViewModels\Accounts\ReturnApplyResult.cs" />
     <Compile Include="ViewModels\Accounts\TeacherModel.cs" />
     <Compile Include="ViewModels\Accounts\TransferApplyModel.cs" />
     <Compile Include="ViewModels\CustomerFollows\CreatableFollowModel.cs" />
-    <Compile Include="ViewModels\CustomerFollows\EditableFollowModel.cs" />
+    <Compile Include="ViewModels\CustomerFollows\CreateFollowItemModel.cs" />
+    <Compile Include="ViewModels\CustomerFollows\CurrentCustomerModel.cs" />
     <Compile Include="ViewModels\CustomerFollows\FollowQueryCriteriaModel.cs" />
     <Compile Include="ViewModels\CustomerFollows\FollowQueryModel.cs" />
     <Compile Include="ViewModels\CustomerFollows\FollowQueryResult.cs" />
+    <Compile Include="ViewModels\CustomerFollows\ViewFollowModel.cs" />
+    <Compile Include="ViewModels\CustomerScores\CustomerScoresModel.cs" />
+    <Compile Include="ViewModels\CustomerScores\CustomerScoresQueryCriteriaModel.cs" />
+    <Compile Include="ViewModels\CustomerScores\CustomerScoresQueryResult.cs" />
+    <Compile Include="ViewModels\CustomerMeetings\EditCustomerMeetingModel.cs" />
+    <Compile Include="ViewModels\CustomerServiceItems\CustomerServiceItemListMosel.cs" />
+    <Compile Include="ViewModels\CustomerServiceItems\CustomerServiceItemQueryCriteriaModel.cs" />
+    <Compile Include="ViewModels\CustomerServiceItems\CustomerServiceItemQueryResult.cs" />
     <Compile Include="ViewModels\CustomerServices\CustomerServiceQueryCriteriaModel.cs" />
     <Compile Include="ViewModels\CustomerServices\CustomerServiceQueryResult.cs" />
     <Compile Include="ViewModels\CustomerMeetings\CustomerMeetingQueryModel.cs" />
     <Compile Include="ViewModels\CustomerMeetings\CustomerMeetingCriteriaModel.cs" />
     <Compile Include="ViewModels\CustomerMeetings\CustomerMeetingQueryResult.cs" />
+    <Compile Include="ViewModels\CustomerServices\CreatableCustomerServiceModel.cs" />
     <Compile Include="ViewModels\CustomerServices\CustomerServiceListMosel.cs" />
     <Compile Include="ViewModels\CustomerServices\CustomerServiceListResult.cs" />
+    <Compile Include="ViewModels\CustomerServices\EditableCustomerServiceModel.cs" />
+    <Compile Include="ViewModels\RefundAlerts\RefundAlertCreateModel.cs" />
+    <Compile Include="ViewModels\RefundAlerts\RefundAlertCrieriaModel.cs" />
+    <Compile Include="ViewModels\RefundAlerts\RefundAlertEditModel.cs" />
+    <Compile Include="ViewModels\RefundAlerts\RefundAlertQueryModel.cs" />
+    <Compile Include="ViewModels\RefundAlerts\RefundAlertQueryResult.cs" />
+    <Compile Include="ViewModels\StopAlerts\StopAlertCriteriaModel.cs" />
+    <Compile Include="ViewModels\StopAlerts\StopAlertCreateModel.cs" />
+    <Compile Include="ViewModels\StopAlerts\StopAlertQueryModel.cs" />
+    <Compile Include="ViewModels\StopAlerts\StopAlertQueryResult.cs" />
+    <Compile Include="ViewModels\CustomerVerifies\ConfirmDoorCreateModel.cs" />
+    <Compile Include="ViewModels\CustomerVerifies\ConfirmDoorCriteriaModel.cs" />
+    <Compile Include="ViewModels\CustomerVerifies\ConfirmDoorQueryModel.cs" />
+    <Compile Include="ViewModels\CustomerVerifies\ConfirmDoorQueryResult.cs" />
+    <Compile Include="ViewModels\CustomerVisits\CreatableCustomerVisitModel.cs" />
+    <Compile Include="ViewModels\CustomerVisits\CreatableVisitBatchModel.cs" />
+    <Compile Include="ViewModels\CustomerVisits\CustomerVisitModel.cs" />
+    <Compile Include="ViewModels\CustomerVisits\CustomerVisitQueryCriteriaModel.cs" />
+    <Compile Include="ViewModels\CustomerVisits\CustomerVisitQueryResult.cs" />
+    <Compile Include="ViewModels\CustomerVisits\EditableCustomerVisitModel.cs" />
+    <Compile Include="ViewModels\Feedback\CustomerRepliesCriteriaModel.cs" />
+    <Compile Include="ViewModels\Feedback\CustomerRepliesQueryModel.cs" />
+    <Compile Include="ViewModels\Feedback\CustomerRepliesQueryResult.cs" />
+    <Compile Include="ViewModels\Feedback\EditCustomerRepliesModel.cs" />
     <Compile Include="ViewModels\Parents\ParentsSearchQueryCriteriaModel.cs" />
     <Compile Include="ViewModels\Parents\ParentsSearchQueryResult.cs" />
+    <Compile Include="ViewModels\PotentialCustomers\CreatableCustomerTransferResourceModel.cs" />
     <Compile Include="ViewModels\PotentialCustomers\CreatablePortentialCustomerModel.cs" />
     <Compile Include="ViewModels\PotentialCustomers\CustomerStaffRelationQueryCriteriaModel.cs" />
     <Compile Include="ViewModels\PotentialCustomers\CustomerStaffRelationQueryResult.cs" />
@@ -227,9 +324,16 @@
     <Compile Include="ViewModels\PotentialCustomers\CustomerParentsQueryResult.cs" />
     <Compile Include="ViewModels\PotentialCustomers\PotentialCustomerQueryResult.cs" />
     <Compile Include="ViewModels\PotentialCustomers\PotentialCustomerSearchModel.cs" />
+    <Compile Include="ViewModels\Students\AddStudentParentModel.cs" />
+    <Compile Include="ViewModels\Students\CustomerTeacherRelationQueryCriteriaModel.cs" />
+    <Compile Include="ViewModels\Students\CustomerTeacherRelationQueryResultModel.cs" />
     <Compile Include="ViewModels\Students\EditableStudentModel.cs" />
     <Compile Include="ViewModels\Students\StudentModel.cs" />
     <Compile Include="ViewModels\Students\StudentQueryCriteriaModel.cs" />
+    <Compile Include="ViewModels\WeeklyFeedback\CustomerFeedbacksCriteriaModel.cs" />
+    <Compile Include="ViewModels\WeeklyFeedback\CustomerFeedbacksQueryResult.cs" />
+    <Compile Include="ViewModels\WeeklyFeedback\CustomerFeedbacksQueryModel.cs" />
+    <Compile Include="ViewModels\Students\TeachersQueryCriteriaModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
@@ -244,6 +348,7 @@
   <ItemGroup>
     <None Include="Properties\PublishProfiles\PPTS.WebAPI.Customers.pubxml" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

@@ -31,11 +31,13 @@ namespace PPTS.Data.Products.Adapters
             productId.CheckStringIsNullOrEmpty("productId");
             salaryRules.NullCheck("salaryRules");
 
+            if (salaryRules.Count < 1) return;
+
             Dictionary<string, object> context = new Dictionary<string, object>();
 
             SqlContextItem sqlContext = this.GetSqlContext();
 
-            this.DeleteInContext(builder => builder.AppendItem("ProductID", productId));
+            //this.DeleteInContext(builder => builder.AppendItem("ProductID", productId));
 
             foreach (ProductSalaryRule salaryRule in salaryRules)
             {

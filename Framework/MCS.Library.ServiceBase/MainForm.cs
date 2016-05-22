@@ -55,8 +55,8 @@ namespace MCS.Library.Services
 
 			CreateAddIns();
 
-			this.serviceMain.Log.AddTextBoxTraceListener(this.textBoxLog);
-			this.serviceMain.CreateThreadEvent += new CreateThreadDelegete(OnCreateThreadEvent);
+			this.serviceMain.ServiceContainer.Log.AddTextBoxTraceListener(this.textBoxLog);
+			this.serviceMain.ServiceContainer.CreateThreadEvent += new CreateThreadDelegete(OnCreateThreadEvent);
 
 			Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(Application_ThreadException);
 		}
@@ -80,7 +80,7 @@ namespace MCS.Library.Services
 			//this.outputBuffer.Remove(0, this.outputBuffer.Length);
 			this.textBoxLog.Text = string.Empty;
 
-			this.serviceMain.StarService();
+			this.serviceMain.ServiceContainer.StarService();
 
 			this.btnStop.Enabled = true;
 			this.btnStart.Enabled = false;
@@ -88,7 +88,7 @@ namespace MCS.Library.Services
 
 		private void btnStop_Click(object sender, EventArgs e)
 		{
-			this.serviceMain.StopService();
+			this.serviceMain.ServiceContainer.StopService();
 
 			this.btnStart.Enabled = true;
 			this.btnStop.Enabled = false;
@@ -101,7 +101,7 @@ namespace MCS.Library.Services
 
 		private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
 		{
-			this.serviceMain.StopService();
+			this.serviceMain.ServiceContainer.StopService();
 
 			CloseAllInnerControls(e);
 		}
@@ -151,7 +151,7 @@ namespace MCS.Library.Services
 					}
 					catch (Exception ex)
 					{
-						this.serviceMain.Log.Write(ex, ServiceLogEventID.SERVICEMAIN_CREATECONTROL);
+						this.serviceMain.ServiceContainer.Log.Write(ex, ServiceLogEventID.SERVICEMAIN_CREATECONTROL);
 					}
 				}
 			}

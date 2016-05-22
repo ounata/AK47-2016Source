@@ -4,6 +4,8 @@
     [JobName] NVARCHAR(64) NULL, 
     [JobOrgID] NVARCHAR(36) NULL, 
     [JobOrgName] NVARCHAR(128) NULL, 
+	[JobOrgShortName]  NVARCHAR(64) NULL, 
+    [JobOrgType] NVARCHAR(32) NULL, 
     [JobStatus] NVARCHAR(32) NULL, 
     [TeacherID] NVARCHAR(36) NULL, 
     [CampusID] NVARCHAR(36) NULL, 
@@ -81,7 +83,7 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level2name = N'JobName'
 GO
 EXEC sp_addextendedproperty @name = N'MS_Description',
-    @value = N'岗位组织机构ID',
+    @value = N'岗位组织机构ID（一般指学科组ID）',
     @level0type = N'SCHEMA',
     @level0name = N'MT',
     @level1type = N'TABLE',
@@ -90,7 +92,7 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level2name = 'JobOrgID'
 GO
 EXEC sp_addextendedproperty @name = N'MS_Description',
-    @value = N'学科组名称',
+    @value = N'岗位组织机构名称（一般指学科组名称）',
     @level0type = N'SCHEMA',
     @level0name = N'MT',
     @level1type = N'TABLE',
@@ -106,3 +108,27 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level1name = N'TeacherJobs',
     @level2type = N'COLUMN',
     @level2name = N'JobStatus'
+GO
+
+GO
+
+GO
+
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'岗位组织机构类型（一般指学科组）',
+    @level0type = N'SCHEMA',
+    @level0name = N'MT',
+    @level1type = N'TABLE',
+    @level1name = N'TeacherJobs',
+    @level2type = N'COLUMN',
+    @level2name = N'JobOrgType'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'岗位组织机构名称简称（一般指学科组名称简称）',
+    @level0type = N'SCHEMA',
+    @level0name = N'MT',
+    @level1type = N'TABLE',
+    @level1name = N'TeacherJobs',
+    @level2type = N'COLUMN',
+    @level2name = 'JobOrgShortName'

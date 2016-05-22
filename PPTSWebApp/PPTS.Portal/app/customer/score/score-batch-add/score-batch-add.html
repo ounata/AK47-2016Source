@@ -1,0 +1,74 @@
+﻿<!-- #开始：添加潜客Form -->
+<form class="form-horizontal" role="form">
+    <div class="widget-box">
+        <div class="widget-header">
+            <h4>批量录入成绩<small><i class="icon-double-angle-right"></i>(<span class="required"> * </span>表示必填字段)</small></h4>
+        </div>
+        <div class="widget-body">
+            <div class="widget-main no-padding" disabled="disabled">
+                <div class="clearfix form-actions mcs-form-actions">
+                    <div class="col-md-offset-4 col-md-9">
+                        <mcs-button type="submit" category="save" click="vm.save()"></mcs-button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-3">
+                        <mcs-label required="true" text="学年度：" css="col-sm-6" />
+                        <div class="col-sm-6 mcs-padding-0">
+                            <ppts-select category="studyYear" model="vm.criteria.studyYear" caption="学年度" css="mcs-padding-0" />
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <mcs-label required="true" text="学期：" css="col-sm-6" />
+                        <div class="col-sm-6 mcs-padding-0">
+                            <ppts-select category="studyTerm" model="vm.criteria.studyTerm" caption="学期" css="mcs-padding-0" />
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <mcs-label required="true" text="学段：" css="col-sm-6" />
+                        <div class="col-sm-6 mcs-padding-0">
+                            <ppts-select category="studyStage" model="vm.criteria.studyStage" caption="学段" css="mcs-padding-0" />
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <mcs-label required="true" text="考试年级：" css="col-sm-6" />
+                        <div class="col-sm-6 mcs-padding-0">
+                            <ppts-select category="grade" model="vm.criteria.scoreGrade" filter="{{vm.criteria.studyStage}}" prop="parentKey" caption="考试年级" css="mcs-padding-0" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-3">
+                        <mcs-label required="true" text="考试类型：" css="col-sm-6" />
+                        <div class="col-sm-6 mcs-padding-0">
+                            <ppts-select category="scoreType" model="vm.criteria.scoreType" filter="{{vm.criteria.studyStage}}" prop="parentKey" caption="考试类型" css="mcs-padding-0" />
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <mcs-label css="col-sm-6" />
+                        <div class="col-sm-6 mcs-padding-0">
+                            <mcs-button type="submit" category="save" text="开始录" click="vm.search()"></mcs-button>
+                        </div>
+                    </div>
+                </div>
+            </div>  
+            <!--pageIndex={{vm.data.pager.pageIndex}}
+            totalCount={{vm.data.pager.totalCount}}
+            pageSize={{vm.data.pager.pageSize}}-->
+
+            <div ng-repeat="data in vm.dataList">
+                <mcs-datatable data="data" style="display: inline-block;border-left: 0px;margin-left: 0px;" />
+            </div>
+            <div class="mcs-panel-pager well well-sm" ng-show="vm.data.pager.totalCount>0">
+                <span class="bigger-110"></span>
+                <uib-pagination boundary-links="true" ng-change="vm.data.pager.pageChange()" 
+                                total-items="vm.data.pager.totalCount" 
+                                ng-model="vm.data.pager.pageIndex" 
+                                items-per-page="vm.data.pager.pageSize" 
+                                class="pagination" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></uib-pagination>
+            </div>
+
+        </div>
+    </div>
+</form>
+<!-- /结束：添加潜客Form -->

@@ -25,10 +25,10 @@ namespace PPTS.Data.Products.Adapters
             this.LoadInContext(new WhereLoadingCondition(builder => builder.AppendItem("ProductID", productId)), action);
         }
 
-        public void UpdateByProductIDInContext(string productId, ProductExOfCourseCollection productExOfCourses)
+        public void UpdateByProductIDInContext(string productId, ProductExOfCourse productExOfCourse)
         {
             productId.CheckStringIsNullOrEmpty("productId");
-            productExOfCourses.NullCheck("productExOfCourse");
+            productExOfCourse.NullCheck("productExOfCourse");
 
             Dictionary<string, object> context = new Dictionary<string, object>();
 
@@ -36,12 +36,10 @@ namespace PPTS.Data.Products.Adapters
 
             this.DeleteInContext(builder => builder.AppendItem("ProductID", productId));
 
-            foreach (ProductExOfCourse item in productExOfCourses)
-            {
-                item.ProductID = productId;
-                sqlContext.AppendSqlInContext(TSqlBuilder.Instance, TSqlBuilder.Instance.DBStatementSeperator);
-                this.InnerInsertInContext(item, sqlContext, context, StringExtension.EmptyStringArray);
-            }
+            productExOfCourse.ProductID = productId;
+            sqlContext.AppendSqlInContext(TSqlBuilder.Instance, TSqlBuilder.Instance.DBStatementSeperator);
+            this.InnerInsertInContext(productExOfCourse, sqlContext, context, StringExtension.EmptyStringArray);
+
         }
     }
 }

@@ -6,6 +6,7 @@ using PPTS.Data.Common.Executors;
 using PPTS.Data.Common.Security;
 using PPTS.Data.Customers.Adapters;
 using PPTS.Data.Customers.Entities;
+using PPTS.Data.Customers.Executors;
 using PPTS.WebAPI.Customers.ViewModels.PotentialCustomers;
 using System;
 using System.Linq;
@@ -45,7 +46,7 @@ namespace PPTS.WebAPI.Customers.Executors
             {
                 if (collection.Where(r => r.ParentID == this.Model.PrimaryParent.ParentID).Count() > 0)
                     return;
-                if (collection.Where(r => r.IsPrimary == true).Count() > 0)
+                if (collection.Where(r => r.IsPrimary).Count() > 0)
                     relation.IsPrimary = false;
             }
 

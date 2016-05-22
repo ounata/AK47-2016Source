@@ -3,7 +3,7 @@
 CREATE VIEW [SC].[SchemaOrganizationSnapshot_Current]
 WITH SCHEMABINDING 
 AS
-SELECT [ID], [VersionStartTime], [VersionEndTime], [Status], [CreateDate], [Name], [DisplayName], [CodeName], [AllowAclInheritance], [SearchContent], [RowUniqueID], [SchemaType], [ShortName], [WP], [Address], [CreatorID], [CreatorName], [Comment]
+SELECT [ID], [VersionStartTime], [VersionEndTime], [Status], [CreateDate], [Name], [DisplayName], [CodeName], [AllowAclInheritance], [SearchContent], [RowUniqueID], [SchemaType], [ShortName], [WP], [Address], [DepartmentType], [CreatorID], [CreatorName], [Comment]
 FROM [SC].[SchemaOrganizationSnapshot]
 WHERE [VersionEndTime] = CONVERT(DATETIME, '99990909 00:00:00', 112) AND [Status] = 1
 
@@ -22,6 +22,14 @@ CREATE UNIQUE INDEX [IX_SchemaOrganizationSnapshot_Current_RowID] ON [SC].[Schem
 GO
 
 CREATE INDEX [IX_SchemaOrganizationSnapshot_Current_CodeName] ON [SC].[SchemaOrganizationSnapshot_Current] ([CodeName])
+
+GO
+
+CREATE INDEX [IX_SchemaOrganizationSnapshot_Current_Name] ON [SC].[SchemaOrganizationSnapshot_Current] ([Name])
+
+GO
+
+CREATE INDEX [IX_SchemaOrganizationSnapshot_Current_ShortName] ON [SC].[SchemaOrganizationSnapshot_Current] ([ShortName])
 
 GO
 

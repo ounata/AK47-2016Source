@@ -24,6 +24,11 @@ namespace PPTS.Data.Customers.Adapters
             return this.LoadByInBuilder(new InLoadingCondition(builder => builder.AppendItem(customerID), "CustomerID"), DateTime.MinValue).SingleOrDefault();
         }
 
+        public T LoadByCustomerCode(string customerCode)
+        {
+            return this.LoadByInBuilder(new InLoadingCondition(builder => builder.AppendItem(customerCode), "CustomerCode"), DateTime.MinValue).SingleOrDefault();
+        }
+
         public void LoadInContext(string customerID, Action<T> action)
         {
             this.LoadByInBuilderInContext(new InLoadingCondition(builder => builder.AppendItem(customerID), "CustomerID"),

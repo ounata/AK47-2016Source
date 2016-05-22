@@ -1,0 +1,39 @@
+﻿<div class="widget-box">
+    <div class="widget-header">
+        <h4>
+            选择下一个处理人
+        </h4>
+    </div>
+    <div class="widget-main no-padding1">
+        <form class="form-horizontal" role="form">
+            <div class="clearfix form-actions mcs-form-actions">
+                <!-- #开始：选择下一个处理人.工具栏 -->
+                <div class="mcs-panel-toolbar col-sm-offset-3">
+                    <mcs-button category="ok" text="确定" ppts-job-functions="转下一个处理人" click="vm.nextProcess()"></mcs-button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-3">通知下一个处理人:</label>
+                <div class="input-group col-sm-9">
+                    <ppts-radiobutton-group category="headquarters" model="vm.headquarters" value="vm.customerService.handlerJobType" ng-show="vm.currJobType == 1" />
+                    <ppts-radiobutton-group category="update" model="vm.update" value="vm.customerService.handlerJobType" ng-show="vm.currJobType == 2" />
+                    <ppts-radiobutton-group category="updateHeadquarters" model="vm.updateHeadquarters" value="vm.customerService.handlerJobType" ng-show="vm.currJobType == 3" />
+                    <ppts-radiobutton-group category="branch" model="vm.branch" value="vm.customerService.handlerJobType" ng-show="vm.currJobType == 4" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-3">通知处理人:</label>
+                <div class="input-group col-sm-9">
+                    <ppts-checkbox-group category="messageType" model="vm.selectTypes" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-3">同时指定邮箱:</label>
+                <div class="input-group col-sm-9">
+                    <mcs-input model="vm.selectTypes.emailAddress" css="col-xs-5 col-sm-9" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+`

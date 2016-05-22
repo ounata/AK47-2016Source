@@ -20,7 +20,7 @@
                         pageSize: 10,
                         totalCount: -1,
                         pageChange: function () {
-                            dataSyncService.initCriteria(vm);
+                            dataSyncService.initCriteria(vm,false);
                             var deferred = $q.defer();
 
                             classgroupDataService.getPageAssets(vm.criteria, function (result) {
@@ -98,11 +98,12 @@
                     productID: data.productID
                 }
 
-                dataSyncService.initCriteria(vm);
+                
 
 
                 vm.init = function () {
                     var deferred = $q.defer();
+                    dataSyncService.initCriteria(vm, false);
 
                     //获取学生订单信息
                     classgroupDataService.getAllAssets(
@@ -124,7 +125,8 @@
                 //关闭窗口
                 vm.close = function () {
                     $uibModalInstance.dismiss('Canceled');
-                    data.form.customers.$setDirty();
+                    if (data.form)
+                        data.form.customers.$setDirty();
                 };
 
                 //保存按周上课时间

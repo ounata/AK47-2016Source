@@ -37,7 +37,7 @@
 
             vm.init = function () {
                 // ajax query
-                $http.get(mcs.app.config.componentBaseUrl + '/samples/app/page/demo.json').then(function (result) {
+                $http.get(mcs.app.config.mcsComponentBaseUrl + '/samples/app/page/demo.json').then(function (result) {
                     vm.data.rows = result.data.people;
                     vm.criteria.pageParams.totalCount = result.data.people.length;
                     vm.dictionaries = {

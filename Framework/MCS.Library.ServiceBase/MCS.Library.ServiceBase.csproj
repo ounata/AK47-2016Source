@@ -93,6 +93,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceArguments.cs" />
+    <Compile Include="ServiceContainer.cs" />
     <Compile Include="ServiceDictionaryCache.cs" />
     <Compile Include="ServiceToRun.cs" />
     <Compile Include="ServiceTranslator.cs" />

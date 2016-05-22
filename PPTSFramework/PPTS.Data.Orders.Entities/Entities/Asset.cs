@@ -1,6 +1,7 @@
 using MCS.Library.Core;
 using MCS.Library.Data.DataObjects;
 using MCS.Library.Data.Mapping;
+using PPTS.Data.Common.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,10 +14,10 @@ namespace PPTS.Data.Orders.Entities
 	/// 订购资产表（需要快照）
 	/// </summary>
 	[Serializable]
-    [ORTableMapping("OM.Assets")]
+    [ORTableMapping("OM.Assets", "OM.Assets_Current")]
     [DataContract]
-	public class Asset
-	{		
+	public class Asset : IEntityWithCreator, IEntityWithModifier, IVersionDataObjectWithoutID
+    {		
 		public Asset()
 		{
 		}		
@@ -331,7 +332,32 @@ namespace PPTS.Data.Orders.Entities
 			get;
             set;
 		}
-	}
+
+
+        /// <summary>
+        /// 版本开始时间
+        /// </summary>
+        [DataMember]
+        [ORFieldMapping("VersionStartTime", PrimaryKey = true, UtcTimeToLocal = true)]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.Select | ClauseBindingFlags.Where)]
+        public DateTime VersionStartTime
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 版本结束时间
+        /// </summary>
+        [DataMember]
+        [ORFieldMapping("VersionEndTime", UtcTimeToLocal = true)]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.Select | ClauseBindingFlags.Where)]
+        public DateTime VersionEndTime
+        {
+            get;
+            set;
+        }
+    }
 
     [Serializable]
     [DataContract]

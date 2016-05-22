@@ -22,7 +22,6 @@ namespace PPTS.Contracts.Products.Models
         /// 折扣表明细数据契约对象信息集合
         /// </summary>
         [DataMember]
-        [NoMapping]
         public List<DiscountItem> DiscountItemCollection { get; set; }
     }
 }

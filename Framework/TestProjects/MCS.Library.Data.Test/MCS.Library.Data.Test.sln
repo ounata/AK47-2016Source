@@ -1,12 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCS.Library.Data.Test", "MCS.Library.Data.Test.csproj", "{C6044B60-B88A-4067-8941-A7AC37D331D6}"
 	ProjectSection(ProjectDependencies) = postProject
 		{4313DE1E-738F-477D-B7FD-B237E9116670} = {4313DE1E-738F-477D-B7FD-B237E9116670}
 		{4077B0B7-062A-4F6D-8A45-A180A2ED3215} = {4077B0B7-062A-4F6D-8A45-A180A2ED3215}
+		{0F1DD1DE-D3D0-4291-883C-616D244002E3} = {0F1DD1DE-D3D0-4291-883C-616D244002E3}
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2B89641A-4CB1-41A5-BDAE-CEC7D7FC51DF}"
@@ -22,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCS.Library.Data", "..\..\M
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCS.Library", "..\..\MCS.Library\MCS.Library.csproj", "{4077B0B7-062A-4F6D-8A45-A180A2ED3215}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCS.Library.Test.Data", "..\..\..\TestFramework\MCS.Library.Test.Data\MCS.Library.Test.Data.csproj", "{0F1DD1DE-D3D0-4291-883C-616D244002E3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -78,12 +81,30 @@ Global
 		{4077B0B7-062A-4F6D-8A45-A180A2ED3215}.Release|x64.Build.0 = Release|x64
 		{4077B0B7-062A-4F6D-8A45-A180A2ED3215}.Release|x86.ActiveCfg = Release|x86
 		{4077B0B7-062A-4F6D-8A45-A180A2ED3215}.Release|x86.Build.0 = Release|x86
+		{0F1DD1DE-D3D0-4291-883C-616D244002E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F1DD1DE-D3D0-4291-883C-616D244002E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F1DD1DE-D3D0-4291-883C-616D244002E3}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0F1DD1DE-D3D0-4291-883C-616D244002E3}.Debug|x64.Build.0 = Debug|Any CPU
+		{0F1DD1DE-D3D0-4291-883C-616D244002E3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0F1DD1DE-D3D0-4291-883C-616D244002E3}.Debug|x86.Build.0 = Debug|Any CPU
+		{0F1DD1DE-D3D0-4291-883C-616D244002E3}.DELUXEWORKSTEST|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F1DD1DE-D3D0-4291-883C-616D244002E3}.DELUXEWORKSTEST|Any CPU.Build.0 = Debug|Any CPU
+		{0F1DD1DE-D3D0-4291-883C-616D244002E3}.DELUXEWORKSTEST|x64.ActiveCfg = Debug|Any CPU
+		{0F1DD1DE-D3D0-4291-883C-616D244002E3}.DELUXEWORKSTEST|x64.Build.0 = Debug|Any CPU
+		{0F1DD1DE-D3D0-4291-883C-616D244002E3}.DELUXEWORKSTEST|x86.ActiveCfg = Debug|Any CPU
+		{0F1DD1DE-D3D0-4291-883C-616D244002E3}.DELUXEWORKSTEST|x86.Build.0 = Debug|Any CPU
+		{0F1DD1DE-D3D0-4291-883C-616D244002E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F1DD1DE-D3D0-4291-883C-616D244002E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F1DD1DE-D3D0-4291-883C-616D244002E3}.Release|x64.ActiveCfg = Release|Any CPU
+		{0F1DD1DE-D3D0-4291-883C-616D244002E3}.Release|x64.Build.0 = Release|Any CPU
+		{0F1DD1DE-D3D0-4291-883C-616D244002E3}.Release|x86.ActiveCfg = Release|Any CPU
+		{0F1DD1DE-D3D0-4291-883C-616D244002E3}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 4
+		SccNumberOfProjects = 5
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://10.1.56.70:8080/tfs/pptsv2.0
 		SccLocalPath0 = .
@@ -95,6 +116,9 @@ Global
 		SccLocalPath2 = ..\\..\\MCS.Library
 		SccProjectUniqueName3 = MCS.Library.Data.Test.csproj
 		SccLocalPath3 = .
+		SccProjectUniqueName4 = ..\\..\\..\\TestFramework\\MCS.Library.Test.Data\\MCS.Library.Test.Data.csproj
+		SccProjectName4 = ../../../TestFramework/MCS.Library.Test.Data
+		SccLocalPath4 = ..\\..\\..\\TestFramework\\MCS.Library.Test.Data
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = MCS.Library.Data.Test.vsmdi

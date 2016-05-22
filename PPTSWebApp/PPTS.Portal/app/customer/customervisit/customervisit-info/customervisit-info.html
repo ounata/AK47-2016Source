@@ -1,0 +1,62 @@
+﻿<div class="clearfix form-actions mcs-form-actions">
+    <div class="col-md-offset-3 col-md-9">
+        <mcs-button category="edit" click="$state.go('ppts.student-view.customervisit-edit',{visitId:vm.customerVisit.visitID,prev:'ppts.student'})"></mcs-button>
+        <mcs-button category="cancel" click="vm.cancel()"></mcs-button>
+    </div>
+</div>
+<div class="profile-user-info profile-user-info-striped mcs-user-profile">
+    <div class="profile-info-row">
+        <div class="profile-info-name"> 被访学员 </div>
+        <div class="profile-info-value">
+            <span>{{ vm.customer.customerName }}</span>
+        </div>
+    </div>
+    <div class="profile-info-row">
+        <div class="profile-info-name"> 回访人 </div>
+        <div class="profile-info-value">
+            <span>{{ vm.customerVisit.visitorName }}</span>
+        </div>
+    </div>
+    <div class="profile-info-row">
+        <div class="profile-info-name"> 回访方式 </div>
+        <div class="profile-info-value">
+            <span>{{ vm.customerVisit.visitWay | visitWay }}</span>
+        </div>
+    </div>
+    <div class="profile-info-row">
+        <div class="profile-info-name"> 回访方式 </div>
+        <div class="profile-info-value">
+            <span>{{ vm.customerVisit.visitType | visitType }}</span>
+        </div>
+    </div>
+    <div class="profile-info-row">
+        <div class="profile-info-name"> 回访时间 </div>
+        <div class="profile-info-value">
+            <span>{{ vm.customerVisit.visitTime |  date:"yyyy-MM-dd hh:mm" }}</span>
+        </div>
+    </div>
+    <div class="profile-info-row">
+        <div class="profile-info-name"> 回访内容 </div>
+        <div class="profile-info-value">
+            <span>{{ vm.customerVisit.visitContent }}</span>
+        </div>
+    </div>
+    <div class="profile-info-row">
+        <div class="profile-info-name"> 家长满意度 </div>
+        <div class="profile-info-value">
+            <span>{{ vm.customerVisit.satisficing | satisficing }}</span>
+        </div>
+    </div>
+    <div class="profile-info-row">
+        <div class="profile-info-name"> 预计下次回访时间 </div>
+        <div class="profile-info-value">
+            <span>{{ vm.customerVisit.nextVisitTime |  date:"yyyy-MM-dd hh:mm" }}</span>
+        </div>
+    </div>
+    <div class="profile-info-row">
+        <div class="profile-info-name"> 提醒时间 </div>
+        <div class="profile-info-value">
+            <span>  （短信提醒）</span>
+        </div>
+    </div>
+</div>

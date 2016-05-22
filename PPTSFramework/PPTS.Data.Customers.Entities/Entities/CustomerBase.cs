@@ -53,17 +53,6 @@ namespace PPTS.Data.Customers.Entities
         }
 
         /// <summary>
-        /// 归属组织机构类型
-        /// </summary>
-        [ORFieldMapping("OrgType")]
-        [DataMember]
-        public string OrgType
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
         /// 客户名称
         /// </summary>
         [ORFieldMapping("CustomerName")]

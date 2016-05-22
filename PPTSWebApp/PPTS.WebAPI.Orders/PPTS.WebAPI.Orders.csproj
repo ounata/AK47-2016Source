@@ -7,7 +7,7 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{6A483A50-C71F-4312-A2ED-49B10AF30D90}</ProjectGuid>
+    <ProjectGuid>{AFB29479-3C6A-42E4-976D-1D61DB732842}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -62,9 +62,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Bin\MCS.Library.Data.dll</HintPath>
     </Reference>
-    <Reference Include="MCS.Library.OGUPermission, Version=1.3.0.0, Culture=neutral, PublicKeyToken=62ea08f894871798, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Bin\MCS.Library.OGUPermission.dll</HintPath>
+    <Reference Include="MCS.Library.OGUPermission">
+      <HintPath>..\..\PPTSBin\MCS.Library.OGUPermission.dll</HintPath>
     </Reference>
     <Reference Include="MCS.Library.Passport, Version=1.3.0.0, Culture=neutral, PublicKeyToken=62ea08f894871798, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -73,6 +72,10 @@
     <Reference Include="MCS.Library.SOA.DataObjects, Version=1.0.0.0, Culture=neutral, PublicKeyToken=62ea08f894871798, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Bin\MCS.Library.SOA.DataObjects.dll</HintPath>
+    </Reference>
+    <Reference Include="MCS.Library.WcfExtensions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=62ea08f894871798, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Bin\MCS.Library.WcfExtensions.dll</HintPath>
     </Reference>
     <Reference Include="MCS.Web.MVC.Library">
       <HintPath>..\..\Bin\MCS.Web.MVC.Library.dll</HintPath>
@@ -105,7 +108,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\PPTSBin\PPTS.Data.Customers.dll</HintPath>
     </Reference>
-    <Reference Include="PPTS.Data.Customers.Entities">
+    <Reference Include="PPTS.Data.Customers.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=62ea08f894871798, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\PPTSBin\PPTS.Data.Customers.Entities.dll</HintPath>
     </Reference>
     <Reference Include="PPTS.Data.Orders, Version=1.0.0.0, Culture=neutral, PublicKeyToken=62ea08f894871798, processorArchitecture=MSIL">
@@ -121,6 +125,9 @@
     </Reference>
     <Reference Include="PPTS.Data.Products.Entities">
       <HintPath>..\..\PPTSBin\PPTS.Data.Products.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="PPTS.Web.MVC.Library">
+      <HintPath>..\..\PPTSBin\PPTS.Web.MVC.Library.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -168,43 +175,78 @@
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\TeacherCourseController.cs" />
+    <Compile Include="Controllers\StudentCourseController.cs" />
+    <Compile Include="Controllers\PagedQueryResult.cs" />
+    <Compile Include="Controllers\TeacherAssignmentController.cs" />
     <Compile Include="Controllers\ClassGroupController.cs" />
     <Compile Include="Controllers\PurchaseController.cs" />
     <Compile Include="Controllers\StudentAssignmentController.cs" />
+    <Compile Include="DataSources\ClassCustomerDataSource.cs" />
     <Compile Include="DataSources\ClassGroupDataSource.cs" />
     <Compile Include="Controllers\UnsubscribeController.cs" />
+    <Compile Include="DataSources\CustomerClassesDataSource.cs" />
     <Compile Include="Executors\AddClassExecutor.cs" />
+    <Compile Include="Executors\AddCustomerExecutor.cs" />
     <Compile Include="Executors\AddOrderExecutor.cs" />
     <Compile Include="Executors\AddShoppingCartExecutor.cs" />
     <Compile Include="Executors\AssignAddExecutor.cs" />
-    <Compile Include="Executors\AssignCopyExecutor.cs" />
     <Compile Include="Executors\AssignCancelExecutor.cs" />
+    <Compile Include="Executors\AssignCopyExecutor.cs" />
+    <Compile Include="Executors\AssignDeleteExecutor.cs" />
+    <Compile Include="Executors\AssignMarkupExecutor.cs" />
     <Compile Include="Executors\AssignResetExecutor.cs" />
+    <Compile Include="Executors\AssignConfirmExecutor.cs" />
+    <Compile Include="Executors\DebookOrderExecutor.cs" />
+    <Compile Include="Executors\DeleteClassExecutor.cs" />
+    <Compile Include="Executors\DeleteCustomerExecutor.cs" />
+    <Compile Include="Executors\EditClassLessonesExecutor.cs" />
+    <Compile Include="Executors\EditTeacherExecutor.cs" />
+    <Compile Include="Executors\ExchangeExecutor.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Service\AccountService.cs" />
+    <Compile Include="Service\CustomerService.cs" />
     <Compile Include="Service\ProductService.cs" />
-    <Compile Include="ViewModels\AssignConditions\AssignConditionQueryModel.cs" />
-    <Compile Include="ViewModels\AssignConditions\AssignConditionQueryResult.cs" />
-    <Compile Include="ViewModels\AssignConditions\AssignExtension.cs" />
-    <Compile Include="ViewModels\AssignConditions\AssignCopyModel.cs" />
+    <Compile Include="ViewModels\Assignment\AssignSuperModel.cs" />
+    <Compile Include="ViewModels\Assignment\TeacherCourseModel.cs" />
+    <Compile Include="ViewModels\Assignment\Common.cs" />
+    <Compile Include="ViewModels\Assignment\QueryResult.cs" />
+    <Compile Include="ViewModels\Assignment\QueryModel.cs" />
+    <Compile Include="ViewModels\Assignment\QueryCriteriaModel.cs" />
+    <Compile Include="ViewModels\Assignment\QueryCriteriaResult.cs" />
+    <Compile Include="ViewModels\ClassGroup\AddCustomerModel.cs" />
     <Compile Include="ViewModels\ClassGroup\AssetsQueryCriteriaModel.cs" />
+    <Compile Include="ViewModels\ClassGroup\CheckResultModel.cs" />
+    <Compile Include="ViewModels\ClassGroup\ClassCustomerQueryCriteriaModel.cs" />
+    <Compile Include="ViewModels\ClassGroup\ClassCustomerQueryResultModel.cs" />
+    <Compile Include="ViewModels\ClassGroup\ClassDetailModel.cs" />
     <Compile Include="ViewModels\ClassGroup\ClassesQueryCriteriaModel.cs" />
     <Compile Include="ViewModels\ClassGroup\ClassesQueryResultModel.cs" />
+    <Compile Include="ViewModels\ClassGroup\ClassLessonQueryCriteriaModel.cs" />
+    <Compile Include="ViewModels\ClassGroup\ClassLessonQueryResultModel.cs" />
     <Compile Include="ViewModels\ClassGroup\ClassSearchModel.cs" />
     <Compile Include="ViewModels\ClassGroup\CreatableClassModel.cs" />
     <Compile Include="ViewModels\ClassGroup\AssetsQueryResultModel.cs" />
+    <Compile Include="ViewModels\ClassGroup\CustomerClassQueryCriteriaModel.cs" />
+    <Compile Include="ViewModels\ClassGroup\CustomerClassQueryResultModel.cs" />
+    <Compile Include="ViewModels\ClassGroup\CustomerClassSearchModel.cs" />
+    <Compile Include="ViewModels\ClassGroup\DeleteCustomerModel.cs" />
+    <Compile Include="ViewModels\ClassGroup\EditClassLessonesModel.cs" />
+    <Compile Include="ViewModels\ClassGroup\EditTeacherModel.cs" />
     <Compile Include="ViewModels\ClassGroup\TeacherJobsCriteriaModel.cs" />
     <Compile Include="ViewModels\ClassGroup\TeacherJobsQueryResultModel.cs" />
-    <Compile Include="ViewModels\CustomerSearchs\CustomerSearchQueryCriteriaModel.cs" />
-    <Compile Include="ViewModels\CustomerSearchs\CustomerSearchQueryResult.cs" />
+    <Compile Include="ViewModels\CustomerSearchNS\CustomerSearchQCM.cs" />
+    <Compile Include="ViewModels\CustomerSearchNS\CustomerSearchQCR.cs" />
+    <Compile Include="ViewModels\Exchange\ExchangeAmountModel.cs" />
     <Compile Include="ViewModels\Purchase\ClassCriteriaModel.cs" />
     <Compile Include="ViewModels\Purchase\OrderItemViewCriteriaModel.cs" />
+    <Compile Include="ViewModels\Purchase\OrderModel.cs" />
     <Compile Include="ViewModels\Purchase\ShoppingCartModel.cs" />
     <Compile Include="ViewModels\Purchase\SubmitOrderModel.cs" />
     <Compile Include="ViewModels\Unsubscribe\DebookOrderCriteriaModel.cs" />
+    <Compile Include="ViewModels\Unsubscribe\DebookOrderModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />

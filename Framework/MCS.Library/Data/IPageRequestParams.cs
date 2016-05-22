@@ -36,6 +36,14 @@ namespace MCS.Library.Data
         }
 
         /// <summary>
+        /// 最多返回多少行
+        /// </summary>
+        int Top
+        {
+            get;
+        }
+
+        /// <summary>
         /// 转换为行号
         /// </summary>
         /// <returns></returns>

@@ -1,4 +1,5 @@
 ﻿using MCS.Library.Data;
+using MCS.Library.Data.DataObjects;
 using MCS.Library.Data.Mapping;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,10 @@ namespace PPTS.WebAPI.Customers.ViewModels.CustomerServices
 {
     public class CustomerServiceQueryCriteriaModel
     {
+        public CustomerServiceQueryCriteriaModel()
+        {
+            this.IsUpgradeHandle = BooleanState.Unknown;
+        }
         /// <summary>
         /// 家长姓名
         /// </summary>
@@ -34,7 +39,7 @@ namespace PPTS.WebAPI.Customers.ViewModels.CustomerServices
         public int[] Grades { get; set; }
 
         /// <summary>
-        /// 受力状态
+        /// 受理状态
         /// </summary>
         [InConditionMapping("ServiceStatus")]
         public int[] ServiceStatuses { get; set; }
@@ -69,8 +74,9 @@ namespace PPTS.WebAPI.Customers.ViewModels.CustomerServices
         //// <summary>
         /// 是否升级
         /// </summary>
-        [InConditionMapping("IsUpgradeHandle")]
-        public int IsUpgradeHandle { get; set; }
+        ///[ConditionMapping("IsUpgradeHandle", DefaultValueUsage = DefaultValueUsageType.UseDefaultValue)]
+        [ConditionMapping("IsUpgradeHandle")]
+        public BooleanState IsUpgradeHandle { get; set; }
 
         //// <summary>
         /// 严重程度

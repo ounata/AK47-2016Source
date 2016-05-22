@@ -19,10 +19,10 @@ namespace PPTS.WebAPI.Customers.DataSources
             string select = " cs.[CustomerID],cs.[ServiceID],pc.[CustomerName] CustomerName ,p.ParentName ParentName,pc.grade,cs.AcceptTime,";
             select += "cs.serviceType,cs.accepterName,cs.serviceStatus,cs.handlerName,";
             select += " cs.complaintTimes,'校区反馈' SchoolMemo,cs.isUpgradeHandle,cs.VoiceID,'录音状态' VoiceStatus ";
-            string from = @" [CustomerServices] cs inner join [PotentialCustomers] pc 
+            string from = @" [CustomerServices] cs left join [PotentialCustomers] pc 
                               on cs.CustomerID = pc.CustomerID
-                              inner join[CustomerParentRelations] csr on cs.CustomerID = csr.CustomerID
-                              inner join[Parents] p on csr.ParentID = p.ParentID";
+                              left join[CustomerParentRelations] csr on cs.CustomerID = csr.CustomerID
+                              left join[Parents] p on csr.ParentID = p.ParentID";
 
             PagedQueryResult<CustomerServiceModel, CustomerServiceModelCollection> result = Query(prp, select, from, condition, orderByBuilder);
             return result;

@@ -96,10 +96,51 @@
     };
 
     /*
+    * 格式化字符串
+    */
+    mcs.util.format = function (str, args) {
+        var result = str;
+        if (arguments.length > 0) {
+            if (arguments.length == 2 && typeof (args) == "object") {
+                for (var key in args) {
+                    if (args[key] != undefined) {
+                        var reg = new RegExp("({" + key + "})", "g");
+                        result = result.replace(reg, args[key]);
+                    }
+                }
+            }
+            else {
+                for (var i = 1; i < arguments.length; i++) {
+                    if (arguments[i] != undefined) {
+                        //var reg = new RegExp("({[" + i + "]})", "g");//这个在索引大于9时会有问题
+                        var reg = new RegExp("({)" + (i - 1) + "(})", "g");
+                        result = result.replace(reg, arguments[i]);
+                    }
+                }
+            }
+        }
+        return result;
+    };
+
+    /*
      * 判断是否为字符串
      */
     mcs.util.isString = function(value) {
         return typeof value === 'string';
+    };
+
+    /*
+     * 判断是否为数组
+     */
+    mcs.util.isArray = function (value) {
+        return value instanceof Array && value.constructor == Array;
+    };
+
+    /*
+    * 判断是否为对象
+    */
+    mcs.util.isObject = function (value) {
+        return value instanceof Object && value.constructor == Object;
     };
 
     /*
@@ -117,27 +158,32 @@
      * 对象列表映射成字典
      * data 对象数组, kvp 键值对{key,value},category 所属类别
      */
-    mcs.util.mapping = function(data, kvp, category) {
+    mcs.util.mapping = function (data, kvp, category) {
         if (!data || !kvp.key || !kvp.value) return;
-        if (category == undefined) {
-            var result = [];
-            for (var index in data) {
-                result.push({
-                    key: data[index][kvp.key],
-                    value: data[index][kvp.value]
-                });
+        var getItems = function () {
+            var items = [];
+            for (var i in data) {
+                var item = {
+                    key: data[i][kvp.key],
+                    value: data[i][kvp.value]
+                };
+                if (kvp.props) {
+                    var props = mcs.util.toArray(kvp.props);
+                    for (var j in props) {
+                        var prop = props[j];
+                        item[prop] = data[i][prop];
+                    }
+                }
+                items.push(item);
             }
-            return result;
+            return items;
+        };
+        if (category == undefined) {
+            return getItems();
         } else {
             category = category.indexOf('c_codE_ABBR_') == 0 ? category : 'c_codE_ABBR_' + category;
             var result = {};
-            result[category] = [];
-            for (var index in data) {
-                result[category].push({
-                    key: data[index][kvp.key],
-                    value: data[index][kvp.value]
-                });
-            }
+            result[category] = getItems();
             return result;
         }
     };
@@ -195,6 +241,13 @@
     };
 
     /*
+   * 判断对象数组中是否包含指定属性的对象
+   */
+    mcs.util.containsElement = function (data, elem) {
+        return mcs.util.toArray(data).indexOf(elem) > -1;
+    };
+
+    /*
      * 将指定元素转化为数组
      */
     mcs.util.toArray = function(data, separator) {
@@ -222,11 +275,25 @@
     };
 
     /*
+    * 判断元素是否存在属性
+    */
+    mcs.util.hasAttrs = function (elem, attrNames) {
+        var attrs = mcs.util.toArray(attrNames);
+        for (var index in attrs) {
+            if (mcs.util.hasAttr(elem, attrs[index])) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+    /*
      * 将字符串转化为bool类型, isIgnoreZero为解决单选框存在有0的选项
      */
-    mcs.util.bool = function(str, isIgnoreZero) {
+    mcs.util.bool = function (str, isIgnoreZero) {
         isIgnoreZero = isIgnoreZero || false;
         if (typeof str === 'boolean') return str;
+        str += '';
         if (isIgnoreZero && str == '0') return true;
         if (!str || !str.length) return false;
         str = str.toLowerCase();
@@ -572,7 +639,7 @@
             'self',
             // Allow loading from our assets domain.  Notice the difference between * and **.
             //'http://10.1.56.80/mcsweb**'
-            mcs.app.config.componentBaseUrl + '**'
+            mcs.app.config.mcsComponentBaseUrl + '**'
         ]);
     };
 

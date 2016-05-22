@@ -31,6 +31,16 @@ namespace PPTS.Data.Customers.Test
             Assert.AreEqual(expected.CustomerCode, actual.CustomerCode);
         }
 
+        public static void AreEqual(this IBasicCustomerInfo expected, CustomerParentPhone actual)
+        {
+            Assert.IsNotNull(expected);
+            Assert.IsNotNull(actual);
+
+            Assert.AreEqual(expected.CustomerID, actual.CustomerID);
+            Assert.AreEqual(expected.CustomerName, actual.CustomerName);
+            Assert.AreEqual(expected.CustomerCode, actual.CustomerCode);
+        }
+
         public static void AreEqual(this PotentialCustomer expected, PotentialCustomer actual)
         {
             Assert.IsNotNull(expected);
@@ -78,6 +88,15 @@ namespace PPTS.Data.Customers.Test
             Assert.AreEqual(expected.ParentID, actual.ParentID);
             Assert.AreEqual(expected.CustomerRole, actual.CustomerRole);
             Assert.AreEqual(expected.ParentRole, actual.ParentRole);
+        }
+
+        public static void AreEqual(this CustomerFollow expected, CustomerFollow actual)
+        {
+            Assert.IsNotNull(expected);
+            Assert.IsNotNull(actual);
+
+            Assert.AreEqual(expected.CustomerID, actual.CustomerID);
+            Assert.AreEqual(expected.FollowerID, actual.FollowerID);
         }
     }
 }

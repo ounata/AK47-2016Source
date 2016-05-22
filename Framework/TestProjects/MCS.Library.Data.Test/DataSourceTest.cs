@@ -31,6 +31,32 @@ namespace MCS.Library.Data.Test
         }
 
         [TestMethod]
+        public void QueryUserTheFirstPageWithTopTest()
+        {
+            UserAdapter.Instance.ClearAll();
+
+            PrepareUsers(10);
+
+            UserCondition condition = new UserCondition() { UserName = "沈" };
+
+            UserDataSource dataSource = new UserDataSource();
+
+            condition.PageParams.PageIndex = 0;
+            condition.PageParams.PageSize = 0;
+
+            condition.PageParams.Top = 5;
+
+            var result = dataSource.Query(condition.PageParams, condition, condition.OrderByBuilder);
+
+            Console.WriteLine("PageIndex: {0}, PageSize: {1}, TotalCount: {2}",
+                result.PageIndex, result.PageSize, result.TotalCount);
+
+            Assert.AreEqual(5, result.TotalCount);
+            Assert.AreEqual(1, result.PageIndex);
+            Assert.AreEqual(5, result.PagedData.Count);
+        }
+
+        [TestMethod]
         public void QueryUserTheSecondPageTest()
         {
             UserAdapter.Instance.ClearAll();

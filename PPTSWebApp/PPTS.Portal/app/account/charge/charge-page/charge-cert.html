@@ -1,0 +1,34 @@
+﻿<form class="form-horizontal">
+    <div class="widget-box">
+        <div class="widget-header">
+            <h4 class="col-sm-8">缴费单凭证</h4>
+        </div>
+        <div class="widget-body">
+            <div class="clearfix form-actions mcs-form-actions">
+                <div>
+                    <mcs-button category="print" click="vm.showPrint()" text="打印缴费凭证"></mcs-button>
+                    <mcs-button category="export" click="vm.showPrint()" text="导出服务协议"></mcs-button>
+                </div>
+            </div>
+            <table class="table table-bordered">
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td colspan="3"></td>
+                    <td colspan="4"></td>
+                    <td colspan="3">{{vm.apply.applyNo}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</form>

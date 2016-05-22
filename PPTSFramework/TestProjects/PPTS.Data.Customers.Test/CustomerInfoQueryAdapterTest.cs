@@ -50,6 +50,47 @@ namespace PPTS.Data.Customers.Test
             CustomerInfoQueryAdapter.Instance.GetDbContext().DoAction(context => context.ExecuteDataSetSqlInContext());
         }
 
+        [TestMethod]
+        public void QueryCustomerParentPhoneByID()
+        {
+            PotentialCustomer pcustomer = DataHelper.PreparePotentialCustomerData();
+
+            UpdateInContext(pcustomer);
+
+            Customer customer = DataHelper.PrepareCustomerData();
+
+            UpdateInContext(customer);
+
+            CustomerParentPhoneCollection loaded = CustomerInfoQueryAdapter.Instance.LoadCustomerParentPhoneByIDs(customer.CustomerID, pcustomer.CustomerID);
+
+            Assert.AreEqual(2, loaded.Count);
+            customer.AreEqual(loaded[0]);
+            pcustomer.AreEqual(loaded[1]);
+        }
+
+        [TestMethod]
+        public void QueryCustomerParentPhoneByIDInContext()
+        {
+            PotentialCustomer pcustomer = DataHelper.PreparePotentialCustomerData();
+
+            UpdateInContext(pcustomer);
+
+            Customer customer = DataHelper.PrepareCustomerData();
+
+            UpdateInContext(customer);
+
+            CustomerInfoQueryAdapter.Instance.LoadCustomerParentPhoneByIDsInContext((loaded) =>
+            {
+                Assert.AreEqual(2, loaded.Count);
+                customer.AreEqual(loaded[0]);
+                pcustomer.AreEqual(loaded[1]);
+            },
+            customer.CustomerID,
+            pcustomer.CustomerID);
+
+            CustomerInfoQueryAdapter.Instance.GetDbContext().DoAction(context => context.ExecuteDataSetSqlInContext());
+        }
+
         private static PotentialCustomer UpdateInContext(PotentialCustomer customer)
         {
             PotentialCustomerAdapter.Instance.UpdateInContext(customer);

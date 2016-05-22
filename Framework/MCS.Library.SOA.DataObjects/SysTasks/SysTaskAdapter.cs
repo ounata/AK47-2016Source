@@ -106,7 +106,7 @@ namespace MCS.Library.SOA.DataObjects
 
             string affectedFields = string.Join(",", fields);
 
-            string sql = string.Format("INSERT INTO {0}({1}, END_TIME, STATUS, STATUS_TEXT) SELECT {2}, GETDATE() AS END_TIME, {3} AS STATUS, {4} AS STATUS_TEXT FROM {5} WHERE TASK_GUID = {6}",
+            string sql = string.Format("INSERT INTO {0}({1}, END_TIME, STATUS, STATUS_TEXT) SELECT {2}, GETUTCDATE() AS END_TIME, {3} AS STATUS, {4} AS STATUS_TEXT FROM {5} WHERE TASK_GUID = {6}",
                 mappingsCompleted.TableName,
                 affectedFields,
                 affectedFields,

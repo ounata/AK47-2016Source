@@ -33,5 +33,6 @@ namespace PPTS.Data.Customers.Adapters
 
             return this.Load(builder => builder.AppendItem("CustomerID", customerID), DateTime.MinValue);
         }
+       
     }
 }

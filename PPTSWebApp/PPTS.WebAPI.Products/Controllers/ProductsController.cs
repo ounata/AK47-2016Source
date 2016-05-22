@@ -1,4 +1,5 @@
 ﻿using MCS.Library.Data;
+using PPTS.Data.Common.Security;
 using PPTS.Data.Common.Adapters;
 using PPTS.Data.Products.Adapters;
 using PPTS.Data.Products.DataSources;
@@ -12,12 +13,15 @@ using PPTS.Data.Products.Entities;
 using PPTS.Data.Products;
 using System;
 using PPTS.Data.Products.Executors;
+using MCS.Web.MVC.Library.Filters;
+using MCS.Library.Principal;
 
 namespace PPTS.WebAPI.Products.Controllers
 {
     /// <summary>
     /// 产品管理
     /// </summary>
+    [ApiPassportAuthentication]
     public class ProductsController : ApiController
     {
         public ProductsController() { }
@@ -64,9 +68,11 @@ namespace PPTS.WebAPI.Products.Controllers
         [HttpPost]
         public ProductQueryResult GetAllProducts(ProductQueryCriteriaModel criteria)
         {
+            var dataSource = ProductViewDataSource.Instance;
+            dataSource.CampusIDs = criteria.CampusIDs;
             return new ProductQueryResult
             {
-                QueryResult = GenericProductDataSource<ProductView, ProductViewCollection>.Instance.Query(criteria.PageParams, criteria, criteria.OrderBy),
+                QueryResult = dataSource.Query(criteria.PageParams, criteria, criteria.OrderBy),
                 Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(ProductView)),
             };
         }
@@ -81,7 +87,9 @@ namespace PPTS.WebAPI.Products.Controllers
         [HttpPost]
         public PagedQueryResult<ProductView, ProductViewCollection> GetPagedProducts(ProductQueryCriteriaModel criteria)
         {
-            return GenericProductDataSource<ProductView, ProductViewCollection>.Instance.Query(criteria.PageParams, criteria, criteria.OrderBy);
+            var dataSource = ProductViewDataSource.Instance;
+            dataSource.CampusIDs = criteria.CampusIDs;
+            return dataSource.Query(criteria.PageParams, criteria, criteria.OrderBy);
         }
 
         [HttpGet]
@@ -116,7 +124,13 @@ namespace PPTS.WebAPI.Products.Controllers
         [HttpPost]
         public ProductModel SubmitProduct(ProductModel model)
         {
-            
+            model.Product.SubmitterID = model.CreatorID = DeluxeIdentity.CurrentUser.ID;
+            model.Product.SubmitterName = model.CreatorName = DeluxeIdentity.CurrentUser.DisplayName;
+            model.Product.SubmitterJobID = DeluxeIdentity.CurrentUser.GetCurrentJob().ID;
+            model.Product.SubmitterJobName = DeluxeIdentity.CurrentUser.GetCurrentJob().Name;
+
+            model.CreatorName = DeluxeIdentity.CurrentUser.DisplayName;
+
             ProductExecutor executor = new ProductExecutor(model);
             executor.Execute();
 
@@ -158,6 +172,7 @@ namespace PPTS.WebAPI.Products.Controllers
         }
 
         
+
     }
 
 

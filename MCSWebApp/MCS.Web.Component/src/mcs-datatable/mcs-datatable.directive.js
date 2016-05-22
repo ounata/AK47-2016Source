@@ -17,7 +17,7 @@
 
         return {
             restrict: 'E',
-            templateUrl: mcs.app.config.componentBaseUrl + '/src/tpl/mcs-datatable.tpl.html ',
+            templateUrl: mcs.app.config.mcsComponentBaseUrl + '/src/tpl/mcs-datatable.tpl.html ',
             replace: true,
             scope: {
 
@@ -107,9 +107,12 @@
                 }
 
                 $scope.pageChange = function(callback) {
-                    callback().then(function() {
-                        $scope.reMatchRowsSelected();
-                    })
+                    if (callback()) {
+                        callback().then(function() {
+                            $scope.reMatchRowsSelected();
+                        })
+                    }
+
 
                 }
 

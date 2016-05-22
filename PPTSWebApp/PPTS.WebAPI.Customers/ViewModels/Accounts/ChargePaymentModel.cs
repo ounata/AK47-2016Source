@@ -7,6 +7,9 @@ using PPTS.Data.Common;
 using PPTS.Data.Customers.Entities;
 using PPTS.Data.Customers.Adapters;
 using PPTS.Data.Customers;
+using MCS.Library.OGUPermission;
+using PPTS.Data.Common.Security;
+using MCS.Library.Net.SNTP;
 
 namespace PPTS.WebAPI.Customers.ViewModels.Accounts
 {
@@ -76,7 +79,7 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
             get;
             set;
         }
-        
+
         /// <summary>
         /// 支付金额
         /// </summary>
@@ -87,7 +90,7 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
             get;
         }
 
-        private List<ChargePaymentItemModel> _items = new List<ChargePaymentItemModel>();
+        List<ChargePaymentItemModel> _item = new List<ChargePaymentItemModel>();
         /// <summary>
         /// 缴费支付表
         /// </summary>
@@ -96,15 +99,28 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
         {
             get
             {
-                return _items;
+                return _item;
             }
             set
             {
-                if (value != null)
-                {
-                    _items = value;
-                }
+                if (value == null)
+                    _item.Clear();
+                else
+                    _item = value;
             }
+        }
+
+        /// <summary>
+        /// 初始化收款人
+        /// </summary>
+        /// <param name="user"></param>
+        public void InitPayee(IUser user)
+        {
+            this.PayeeID = user.ID;
+            this.PayeeName = user.DisplayName;
+            this.PayeeJobID = user.GetCurrentJob().ID;
+            this.PayeeJobName = user.GetCurrentJob().Name;
+            this.PayTime = SNTPClient.AdjustedTime;
         }
 
         public static ChargePaymentModel Load(string applyID)
@@ -118,7 +134,7 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
                 ChargePaymentItemModel item = AutoMapper.Mapper.DynamicMap<ChargePaymentItemModel>(payment);
                 model.Items.Add(item);
             }
-            return model;                
+            return model;
         }
     }
 }

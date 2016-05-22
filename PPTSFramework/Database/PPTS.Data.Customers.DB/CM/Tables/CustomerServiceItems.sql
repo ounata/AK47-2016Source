@@ -2,7 +2,7 @@
 (
 	[ServiceID] NVARCHAR(36) NOT NULL, 
     [ItemID] NVARCHAR(36) NOT NULL DEFAULT newid(), 
-    [HandleTime] DATETIME NOT NULL DEFAULT getdate(), 
+    [HandleTime] DATETIME NOT NULL DEFAULT GETUTCDATE(), 
     [HandleStatus] NVARCHAR(32) NULL, 
     [HandleMemo] NVARCHAR(255) NULL, 
     [HandlerID] NVARCHAR(36) NOT NULL, 

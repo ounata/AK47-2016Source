@@ -45,8 +45,6 @@ namespace PPTS.WebAPI.Customers.ViewModels.PotentialCustomers
         {
             EditablePotentialCustomerModel result = new EditablePotentialCustomerModel();
 
-            result.Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(PotentialCustomer));
-
             GenericPotentialCustomerAdapter<PotentialCustomerModel, List<PotentialCustomerModel>>.Instance.LoadInContext(id, customer => result.Customer = customer);
 
             GenericParentAdapter<ParentModel, List<ParentModel>>.Instance.LoadPrimaryParentInContext(id, parent => result.Parent = parent);
@@ -56,6 +54,8 @@ namespace PPTS.WebAPI.Customers.ViewModels.PotentialCustomers
             PhoneAdapter.Instance.LoadByOwnerIDInContext(id, phones => result.Customer.FillFromPhones(phones));
 
             PhoneAdapter.Instance.GetDbContext().DoAction(context => context.ExecuteDataSetSqlInContext());
+
+            result.Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(PotentialCustomer));
 
             return result;
         }

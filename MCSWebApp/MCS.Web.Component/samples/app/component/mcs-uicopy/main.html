@@ -1,0 +1,87 @@
+<!-- #开始：位置条 -->
+<style>
+.max-button {
+    width: 200px;
+    height: 100px;
+    background-color: #660e0b;
+}
+</style>
+<div class="breadcrumbs" id="breadcrumbs">
+    <script type="text/javascript">
+    try {
+        ace.settings.check('breadcrumbs', 'fixed')
+    } catch (e) {}
+    </script>
+    <ul class="breadcrumb">
+        <li class="active">
+            <i class="ace-icon fa fa-home home-icon"></i> 首页
+        </li>
+        <li class="active">
+            <i class="ace-icon fa fa-buttons"></i> 数据驱动的UI复制
+        </li>
+    </ul>
+</div>
+<!-- /结束：位置条 -->
+<div class="page-content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h3 class="header smaller lighter green">应用范例</h3>
+                    <div id="usage" ng-controller="MCSUICopyController" class="widget-box">
+                        <div class="widget-header">
+                            <h3 class="widget-title">添加客户</h3>
+                            <div class="widget-toolbar">
+                                <a style="cursor:pointer;" class="orange2">
+                                    <i class="ace-icon fa fa-expand" ng-click="vm.add()"></i>
+                                </a>
+                                <a style="cursor:pointer;">
+                                    <i class="ace-icon fa fa-refresh" ng-click="vm.remove()"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="widget-body">
+                            <div class="widget-main widget-main.padding-32 ">
+                                <mcs-uicopy data="vm.students" item-template-url="./app/component/mcs-uiCopy/item-tpl.html"></mcs-uicopy>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="laycode col-sm-12">
+                    <h3 class="header smaller lighter green">示例代码</h3>
+                    <div class="code_box code_skin0">
+                        mcs-uicopy data="vm.students" item-template-url="./app/component/mcs-uiCopy/item-tpl.html"
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <h3 class="header smaller lighter green">参数说明</h3>
+                    <table class="table table-striped table-bordered table-hover">
+                        <br>
+                        <thead>
+                            <thead>
+                                <th>参数</th>
+                                <th>用途</th>
+                                <th>取值范围</th>
+                                <th>示例</th>
+                            </thead>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>data</td>
+                                <td>给定一个数据集</td>
+                                <td>array</td>
+                                <td>data="vm.students"</td>
+                            </tr>
+                            <tr>
+                                <td>item-template-url</td>
+                                <td>设定复制区域的模板</td>
+                                <td>url</td>
+                                <td>见上例</td>
+                            </tr>
+                            <tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

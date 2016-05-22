@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MCS.Library.Net.SNTP;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,16 @@ namespace PPTS.Data.Common
     public struct ConfigArgs
     {
         /// <summary>
+        /// 获取当前结账日期
+        /// </summary>
+        /// <returns></returns>
+        public DateTime GetCurrentClosingAccountDate()
+        {
+            DateTime date = SNTPClient.AdjustedTime.Date;
+            return date.AddHours(24).AddMinutes(59).AddSeconds(59);            
+        }
+
+        /// <summary>
         /// 使用的折扣方案
         /// </summary>
         public DiscountSchemaDefine DiscountSchema
@@ -16,7 +27,7 @@ namespace PPTS.Data.Common
             set;
             get;
         }
-        
+
         /// <summary>
         /// 结账日
         /// </summary>
@@ -60,6 +71,15 @@ namespace PPTS.Data.Common
         {
             set;
             get;
+        }
+
+        /// <summary>
+        /// 账户退费类型判定的天数（默认7天）
+        /// </summary>
+        public int AccountRefundTypeJudgeDays
+        {
+            get;
+            set;
         }
     }
 

@@ -1,22 +1,55 @@
 ﻿define([ppts.config.modules.customer,
-        ppts.config.dataServiceConfig.customerDataService,
-        ppts.config.dataServiceConfig.studentDataService],
+        ppts.config.dataServiceConfig.customerDataService],
     function (customer) {
         customer.registerController('customerAddController', [
             '$scope',
             '$state',
             'customerDataService',
-            'studentDataService',
             'customerDataViewService',
             'customerParentService',
-            function ($scope, $state, customerDataService, studentDataService, customerDataViewService, customerParentService) {
+            '$http',
+            function ($scope, $state, customerDataService, customerDataViewService, customerParentService, $http) {
                 var vm = this, orginalParent, lastIndex = 0;
+                vm.teacher = [];
+
+
+
+                vm.queryTeacherList = function (keyword) {
+                    var url = 'http://localhost/PPTS.Web.Course/api/Schedule/QueryTeacher';
+                    return $http.post(url, { Keyword: keyword }).then(function (response) {
+                        var teachers = response.data.Data.List;
+                        return teachers;
+                    });
+                };
+
+                vm.queryStudentList = function (query) {
+
+
+                    return $http.post('http://localhost/MCSWebApp/MCS.Web.API/api/UserGraph/query', JSON.stringify({
+                        searchTerm: query,
+                        maxCount: 10,
+                        listMark: 15
+                    }), {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+
+                        }
+                    }).then(function (result) {
+                        if (result.data) {
+                            return result.data;
+                        }
+
+                    });
+
+
+
+                };
+
 
                 // 页面初始化加载
                 (function () {
                     customerDataViewService.initCreateCustomerInfo(orginalParent, vm, function () {
-                        // 仅针对parent
-                        customerParentService.syncParentDict(vm);
                         $scope.$broadcast('dictionaryReady');
                     });
                 })();
@@ -24,7 +57,6 @@
                 // 清空家长信息
                 vm.reset = function () {
                     vm.parent = mcs.util.clone(orginalParent);
-                    customerParentService.syncParentDict(vm);
                 };
 
                 // 保存数据
@@ -42,7 +74,6 @@
                 // 添加已有家长
                 vm.parentAdd = function (title) {
                     customerParentService.popupParentAdd(vm, title, 'add', function () {
-                        customerParentService.syncParentDict(vm);
                         $scope.$broadcast('dictionaryReady');
                     });
                 }
@@ -58,8 +89,6 @@
                     });
                 };
 
-                // 获取当前浏览器
-                vm.isIE = mcs.browser.get().msie;
                 // 亲属关系切换
                 customerParentService.initCustomerParentRelation($scope, vm, lastIndex);
             }]);

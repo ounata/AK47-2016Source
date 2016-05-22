@@ -278,6 +278,7 @@
     <Compile Include="Core\NonXElementSerializedFieldsAttribute.cs" />
     <Compile Include="Core\ValidatorTypeConfigurationElement.cs" />
     <Compile Include="Core\XmlSerializableHashtable.cs" />
+    <Compile Include="Data\DataObjects\Enumerations.cs" />
     <Compile Include="Data\DataObjects\IVersionDataObject.cs" />
     <Compile Include="Data\DataObjects\IVersionDataObjectWithoutID.cs" />
     <Compile Include="Data\FieldSortDirection.cs" />

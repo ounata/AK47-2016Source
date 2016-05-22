@@ -141,3 +141,39 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level1name = N'SchemaOrganizationSnapshot',
     @level2type = N'COLUMN',
     @level2name = N'Comment'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'组织的短名',
+    @level0type = N'SCHEMA',
+    @level0name = N'SC',
+    @level1type = N'TABLE',
+    @level1name = N'SchemaOrganizationSnapshot',
+    @level2type = N'COLUMN',
+    @level2name = N'ShortName'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'工作电话',
+    @level0type = N'SCHEMA',
+    @level0name = N'SC',
+    @level1type = N'TABLE',
+    @level1name = N'SchemaOrganizationSnapshot',
+    @level2type = N'COLUMN',
+    @level2name = N'WP'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'地址',
+    @level0type = N'SCHEMA',
+    @level0name = N'SC',
+    @level1type = N'TABLE',
+    @level1name = N'SchemaOrganizationSnapshot',
+    @level2type = N'COLUMN',
+    @level2name = N'Address'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'部门类型',
+    @level0type = N'SCHEMA',
+    @level0name = N'SC',
+    @level1type = N'TABLE',
+    @level1name = N'SchemaOrganizationSnapshot',
+    @level2type = N'COLUMN',
+    @level2name = N'DepartmentType'
