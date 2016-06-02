@@ -1,9 +1,10 @@
-﻿define([ppts.config.modules.schedule,
+﻿/*学员课表*/
+define([ppts.config.modules.schedule,
         ppts.config.dataServiceConfig.studentCourseDataService],
         function (schedule) {
             schedule.registerController('stuCourseListController', [
-                '$scope', 'studentCourseDataService', 'dataSyncService', 'mcsDialogService', 'blockUI', 'studentassignmentDataService',
-                function ($scope, studentCourseDataService, dataSyncService, mcsDialogService, blockUI, studentassignmentDataService) {
+                '$scope', 'studentCourseDataService', 'dataSyncService', 'mcsDialogService', 'blockUI', 'studentassignmentDataService', 'printService',
+                function ($scope, studentCourseDataService, dataSyncService, mcsDialogService, blockUI, studentassignmentDataService, printService) {
                     var vm = this;
 
                     vm.weekText = new Array("星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六");
@@ -22,6 +23,7 @@
                     vm.criteria.teacherName = '';
                     vm.criteria.educatorName = '';
                     vm.criteria.consultantName = '';
+                    vm.criteria.assetCode = '';
 
                     vm.data = {
                         selection: 'checkbox',
@@ -30,18 +32,15 @@
                         headers: [{
                             field: "teacherName",
                             name: "教师姓名",
-                            template: '<span>{{row.teacherName}}</span>',
-                            sortable: true
+                            template: '<span>{{row.teacherName}}</span>'
                         }, {
                             field: "customerName",
                             name: "学员姓名",
-                            template: '<span>{{row.customerName}}</span>',
-                            sortable: true
+                            template: '<span>{{row.customerName}}</span>'
                         }, {
                             field: "customerName",
                             name: "学员编号",
-                            template: '<span>{{row.customerCode}}</span>',
-                            sortable: true
+                            template: '<span>{{row.customerCode}}</span>'
                         }, {
                             field: "startTime",
                             name: "上课日期",
@@ -49,7 +48,7 @@
                         }, {
                             field: "endTime",
                             name: "上课时段",
-                            template: '<span>{{  vm.getCourseHour(row.startTime,row.endTime) }}</span>'
+                            template: '<span>{{  row.courseSE }}</span>'
                         }, {
                             field: "amount",
                             name: "课时",
@@ -57,7 +56,7 @@
                         }, {
                             field: "realAmount",
                             name: "实际小时",
-                            template: '<span>{{row.realAmount}}</span>'
+                            template: '<span> {{ row.realTime }}  </span>'
                         }, {
                             field: "subjectName",
                             name: "上课科目",
@@ -83,13 +82,13 @@
                             name: "课时类型",
                             template: '<span>{{row.assignSource | assignSource }}</span>'
                         }, {
-                            field: "orderID",
+                            field: "assetCode",
                             name: "订单编号",
-                            template: '<span></span>'
+                            template: '<span>{{ row.assetCode }}</span>'
                         }],
                         pager: {
                             pageIndex: 1,
-                            pageSize: 10,
+                            pageSize: 20,
                             totalCount: -1,
                             pageChange: function () {
                                 dataSyncService.initCriteria(vm);
@@ -101,11 +100,10 @@
                         orderBy: [{ dataField: 'startTime', sortDirection: 1 }]
                     }
 
-                    // 页面初始化加载或重新搜索时查询
+                    /*页面初始化加载或重新搜索时查询*/
                     vm.init = function () {
                         blockUI.start();
                         dataSyncService.initCriteria(vm);
-
                         vm.criteria.assignSource = new Array();
                         vm.criteria.assignStatus = new Array();
                         if (vm.assignSource != '' && vm.assignSource != null)
@@ -155,7 +153,8 @@
                                         reMinute: '',
                                         startTime: objCollecton[i].startTime,
                                         endTime: objCollecton[i].endTime,
-                                        allowResetDateTime: new Date()
+                                        allowResetDateTime: new Date(),
+                                        customerID: objCollecton[i].customerID
                                     };
                                     tempM.reHour = vm.getDoubleStr(objCollecton[i].startTime.getHours());
                                     tempM.reMinute = vm.getDoubleStr(objCollecton[i].startTime.getMinutes());
@@ -163,6 +162,12 @@
                                 };
                             }
                         };
+                        if (selectedObj.length > 0 && model.length == 0)
+                        {
+                            vm.showMsg("选择的记录不允许调课，请重新选择！");
+                            return;
+                        }
+
                         if (model.length == 0) {
                             vm.showMsg("请选择要调课的记录！");
                             return;
@@ -231,8 +236,8 @@
                         var objCollecton = vm.data.rows;
                         for (var i in selectedObj) {
                             for (var j in objCollecton) {
-                                ///已经状态的课表可以删除
                                 if (selectedObj[i].assignID == objCollecton[j].assignID) {
+                                    ///已上状态的课表可以删除
                                     if (objCollecton[j].assignStatus == 3) {
                                         model.push({
                                             assetID: objCollecton[j].assetID,
@@ -329,13 +334,15 @@
                         });
                     };
 
-                    vm.getCourseHour = function (sDate, eDate) {
-                        var startDate = new Date(sDate);
-                        var endDate = new Date(eDate);
-
-                        return vm.getDoubleStr(startDate.getHours()) + ':' + vm.getDoubleStr(startDate.getMinutes()) + ' - ' +
-                           vm.getDoubleStr(endDate.getHours()) + ':' + vm.getDoubleStr(endDate.getMinutes());
+                    // 导出
+                    vm.export = function () {
+                        mcs.util.postMockForm(ppts.config.orderApiBaseUrl + '/api/studentcourse/exportPageStuCourse', vm.criteria);
                     };
+
+              
+                    vm.print = function () {
+                        printService.print();
+                    }
 
                     vm.getCourseDate = function (sDate) {
                         var startDate = new Date(sDate);

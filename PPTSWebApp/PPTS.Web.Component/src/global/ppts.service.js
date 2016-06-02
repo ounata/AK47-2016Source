@@ -71,15 +71,20 @@
                         'people': [{
                             key: '0', value: '自己'
                         }, {
-                            key: '1', value: '总呼叫中心'
+                            key: '1', value: '本部门'
+                        }]
+                    });
+                    break;
+                case 'relation':
+                    mcs.util.merge({
+                        'relation': [{
+                            key: '0', value: '咨询关系'
                         }, {
-                            key: '2', value: '分呼叫中心'
+                            key: '1', value: '学管关系'
                         }, {
-                            key: '3', value: '分/校市场专员'
+                            key: '2', value: '市场关系'
                         }, {
-                            key: '4', value: '校教育咨询部'
-                        }, {
-                            key: '5', value: '学管部'
+                            key: '3', value: '电销关系'
                         }]
                     });
                     break;
@@ -224,7 +229,8 @@
             },
             check: {
                 enable: true,
-                chkStyle: 'checkbox'
+                chkStyle: options.selection || 'checkbox',
+                radioType: 'all'
             },
             async: {
                 enable: true,
@@ -235,6 +241,13 @@
                 url: ppts.config.pptsApiBaseUrl + 'api/organization/getdatascopechildren'
             }
         }, options);
+
+        if (options.distinctLevel) {
+            options.callback =  options.callback || {};
+            options.callback.beforeCheck = function (treeId, treeNode) {
+                return options.justCheckWithinSameParent(treeId, treeNode);
+            };
+        }
 
         return options;
     };
@@ -260,9 +273,7 @@ ppts.ng.service('userService', ['storage', function (storage) {
     var service = this;
 
     service.initJob = function (vm) {
-        var parameters = jQuery('#portalParameters');
-        if (!parameters.val()) return;
-        var ssoUser = ng.fromJson(parameters.val());
+        var ssoUser = ng.fromJson(sessionStorage.getItem('configData'));
         var currentUser = storage.get('vm.currentUser');
         if (currentUser && ssoUser.userId != currentUser.userId) {
             storage.remove('vm.currentUser');
@@ -281,6 +292,7 @@ ppts.ng.service('userService', ['storage', function (storage) {
         ppts.user.name = ssoUser.displayName;
         ppts.user.orgId = ssoUser.orgId;
         ppts.user.roles = ssoUser.roles;
+        ppts.user.jobs = ssoUser.jobs;
         ppts.user.functions = [];
         ppts.user.jobFunctions = [];
         for (var i in ssoUser.jobs) {

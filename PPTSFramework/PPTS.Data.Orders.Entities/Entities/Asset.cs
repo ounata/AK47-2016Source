@@ -20,29 +20,29 @@ namespace PPTS.Data.Orders.Entities
     {		
 		public Asset()
 		{
-		}		
-
-		/// <summary>
-		/// 资产ID
-		/// </summary>
-		[ORFieldMapping("AssetID", PrimaryKey=true)]
-        [DataMember]
-		public string AssetID
-		{
-			get;
-            set;
 		}
 
-		/// <summary>
-		/// 资产编码
-		/// </summary>
-		[ORFieldMapping("AssetCode")]
+        /// <summary>
+        /// 资产ID
+        /// </summary>
+        [ORFieldMapping("AssetID", PrimaryKey = true)]
         [DataMember]
-		public string AssetCode
-		{
-			get;
+        public string AssetID
+        {
+            get;
             set;
-		}
+        }
+
+        /// <summary>
+        /// 资产编码
+        /// </summary>
+        [ORFieldMapping("AssetCode")]
+        [DataMember]
+        public string AssetCode
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// 资产名称（资产编号+产品名称）
@@ -60,38 +60,49 @@ namespace PPTS.Data.Orders.Entities
         /// </summary>
         [ORFieldMapping("AssetType")]
         [DataMember]
-		public string AssetType
-		{
-			get;
-            set;
-		}
-
-		/// <summary>
-		/// 资产来源（0-订单）
-		/// </summary>
-		[ORFieldMapping("AssetRefType")]
-        [DataMember]
-		public string AssetRefType
+        public string AssetType
         {
-			get;
+            get;
             set;
-		}
-
-		/// <summary>
-		/// 资产来源ID（订单明细ID）
-		/// </summary>
-		[ORFieldMapping("AssetRefID")]
-        [DataMember]
-		public string AssetRefID
-        {
-			get;
-            set;
-		}
+        }
 
         /// <summary>
-		/// 学员ID
-		/// </summary>
-		[ORFieldMapping("CustomerID")]
+        /// 资产来源（0-订单）
+        /// </summary>
+        [ORFieldMapping("AssetRefType")]
+        [DataMember]
+        public string AssetRefType
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 资产来源ID（订单明细ID）
+        /// </summary>
+        [ORFieldMapping("AssetRefID")]
+        [DataMember]
+        public string AssetRefID
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 账户ID
+        /// </summary>
+        [ORFieldMapping("AccountID")]
+        [DataMember]
+        public string AccountID
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 学员ID
+        /// </summary>
+        [ORFieldMapping("CustomerID")]
         [DataMember]
         public string CustomerID
         {
@@ -99,165 +110,403 @@ namespace PPTS.Data.Orders.Entities
             set;
         }
 
-        /// <summary>
-		/// 学员归属校区ID
-		/// </summary>
-		[ORFieldMapping("CustomerCampusID")]
+        [ORFieldMapping("CustomerCode")]
         [DataMember]
-        public string CustomerCampusID
-        {
-            get;
-            set;
-        }
+        public string CustomerCode { get; set; }
 
+        [ORFieldMapping("CustomerName")]
+        [DataMember]
+        public string CustomerName { get; set; }
 
         /// <summary>
         /// 产品ID
         /// </summary>
         [ORFieldMapping("ProductID")]
         [DataMember]
-		public string ProductID
-		{
-			get;
+        public string ProductID
+        {
+            get;
             set;
-		}
+        }
 
         /// <summary>
-        /// 产品归属校区ID
+        /// 产品编码
         /// </summary>
-        [ORFieldMapping("ProductCampusID")]
+        [ORFieldMapping("ProductCode")]
         [DataMember]
-		public string ProductCampusID
+        public string ProductCode
         {
-			get;
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 过期日期
-		/// </summary>
-		[ORFieldMapping("ExpirationDate", UtcTimeToLocal = true)]
+        /// <summary>
+        /// 产品名称
+        /// </summary>
+        [ORFieldMapping("ProductName")]
         [DataMember]
-		public DateTime ExpirationDate
-		{
-			get;
+        public string ProductName
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 已排数量（课程资产用）
-		/// </summary>
-		[ORFieldMapping("AssignedAmount")]
+        /// <summary>
+        /// 颗粒度代码
+        /// </summary>
+        [ORFieldMapping("ProductUnit")]
         [DataMember]
-		public decimal AssignedAmount
-		{
-			get;
+        public string ProductUnit
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 已上数量（课程资产用）
-		/// </summary>
-		[ORFieldMapping("ConfirmedAmount")]
+        /// <summary>
+        /// 颗粒度名称
+        /// </summary>
+        [ORFieldMapping("ProductUnitName")]
         [DataMember]
-		public decimal ConfirmedAmount
-		{
-			get;
+        public string ProductUnitName
+        {
+            get;
             set;
-		}
-
-		/// <summary>
-		/// 已兑换数量（课程资产用）
-		/// </summary>
-		[ORFieldMapping("ExchangedAmount")]
+        }
+        
+        /// <summary>
+        /// 产品年级代码
+        /// </summary>
+        [ORFieldMapping("Grade")]
         [DataMember]
-		public decimal ExchangedAmount
-		{
-			get;
+        public string Grade
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 已使用订购数量（课程资产用）
-		/// </summary>
-		[ORFieldMapping("UsedOrderAmount")]
+        /// <summary>
+        /// 产品年级名称
+        /// </summary>
+        [ORFieldMapping("GradeName")]
         [DataMember]
-		public decimal UsedOrderAmount
-		{
-			get;
+        public string GradeName
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 已使用赠送数量（课程资产用）
-		/// </summary>
-		[ORFieldMapping("UsedPresentAmount")]
+        /// <summary>
+        /// 产品科目代码
+        /// </summary>
+        [ORFieldMapping("Subject")]
         [DataMember]
-		public decimal UsedPresentAmount
-		{
-			get;
+        public string Subject
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 已退数量（课程资产用）
-		/// </summary>
-		[ORFieldMapping("DebookedAmount")]
+        /// <summary>
+        /// 产品科目名称
+        /// </summary>
+        [ORFieldMapping("SubjectName")]
         [DataMember]
-		public decimal DebookedAmount
-		{
-			get;
+        public string SubjectName
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 已确认金额（课程资产与非课程资产用）
-		/// </summary>
-		[ORFieldMapping("ConfirmedMoney")]
+        /// <summary>
+        /// 产品分类代码
+        /// </summary>
+        [ORFieldMapping("Catalog")]
         [DataMember]
-		public decimal ConfirmedMoney
-		{
-			get;
+        public string Catalog
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 返还金额（课程资产用）
-		/// </summary>
-		[ORFieldMapping("ReturnedMoney")]
+        /// <summary>
+        /// 产品分类名称
+        /// </summary>
+        [ORFieldMapping("CatalogName")]
         [DataMember]
-		public decimal ReturnedMoney
-		{
-			get;
+        public string CatalogName
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 当前数量
-		/// </summary>
-		[ORFieldMapping("Amount")]
+        /// <summary>
+        /// 产品类型代码
+        /// </summary>
+        [ORFieldMapping("CategoryType")]
         [DataMember]
-		public decimal Amount
-		{
-			get;
+        public string CategoryType
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 当前单价（针对课时资产由于退订可能与订购时不同）
-		/// </summary>
-		[ORFieldMapping("Price")]
+        /// <summary>
+        /// 产品类型名称
+        /// </summary>
+        [ORFieldMapping("CategoryTypeName")]
         [DataMember]
-		public decimal Price
-		{
-			get;
+        public string CategoryTypeName
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 创建人ID
-		/// </summary>
-		[ORFieldMapping("CreatorID")]
+        /// <summary>
+        /// 课程级别代码
+        /// </summary>
+        [ORFieldMapping("CourseLevel")]
+        [DataMember]
+        public string CourseLevel
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 课程级别名称
+        /// </summary>
+        [ORFieldMapping("CourseLevelName")]
+        [DataMember]
+        public string CourseLevelName
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 课次时长代码
+        /// </summary>
+        [ORFieldMapping("LessonDuration")]
+        [DataMember]
+        public string LessonDuration
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 课次时长名称
+        /// </summary>
+        [ORFieldMapping("LessonDurationValue")]
+        [DataMember]
+        public decimal LessonDurationValue
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 订购的原始单价
+        /// </summary>
+        [ORFieldMapping("OrderPrice")]
+        [DataMember]
+        public decimal OrderPrice
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 订购的数量
+        /// </summary>
+        [ORFieldMapping("OrderAmount")]
+        [DataMember]
+        public decimal OrderAmount
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 赠送的数量
+        /// </summary>
+        [ORFieldMapping("PresentAmount")]
+        [DataMember]
+        public decimal PresentAmount
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 拓路折扣率
+        /// </summary>
+        [ORFieldMapping("TunlandRate")]
+        [DataMember]
+        public decimal TunlandRate
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 特殊折扣率
+        /// </summary>
+        [ORFieldMapping("SpecialRate")]
+        [DataMember]
+        public decimal SpecialRate
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 折扣类型（参考订购明细）
+        /// </summary>
+        [ORFieldMapping("DiscountType")]
+        [DataMember]
+        public string DiscountType
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 折扣率
+        /// </summary>
+        [ORFieldMapping("DiscountRate")]
+        [DataMember]
+        public decimal DiscountRate
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 订购的实际单价
+        /// </summary>
+        [ORFieldMapping("RealPrice")]
+        [DataMember]
+        public decimal RealPrice
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 订购的实际数量
+        /// </summary>
+        [ORFieldMapping("RealAmount")]
+        [DataMember]
+        public decimal RealAmount
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 过期日期
+        /// </summary>
+        [ORFieldMapping("ExpirationDate")]
+        [DataMember]
+        public DateTime ExpirationDate
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 累计已排数量（课程资产用，排课+，取消-，确认-）
+        /// </summary>
+        [ORFieldMapping("AssignedAmount")]
+        [DataMember]
+        public decimal AssignedAmount
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 累计确认数量（即已上数量，课程资产用，确认+，删除-）
+        /// </summary>
+        [ORFieldMapping("ConfirmedAmount")]
+        [DataMember]
+        public decimal ConfirmedAmount
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 累计已兑换数量（课程资产用）
+        /// </summary>
+        [ORFieldMapping("ExchangedAmount")]
+        [DataMember]
+        public decimal ExchangedAmount
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 累计已退数量（课程资产用，退订+）
+        /// </summary>
+        [ORFieldMapping("DebookedAmount")]
+        [DataMember]
+        public decimal DebookedAmount
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 累计已确认金额（课程资产与非课程资产用，确认+，删除-）
+        /// </summary>
+        [ORFieldMapping("ConfirmedMoney")]
+        [DataMember]
+        public decimal ConfirmedMoney
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 累计返还金额（课程资产用，买赠退订时使用）
+        /// </summary>
+        [ORFieldMapping("ReturnedMoney")]
+        [DataMember]
+        public decimal ReturnedMoney
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 剩余资产数量（未上的数量，确认-，删除+）
+        /// </summary>
+        [ORFieldMapping("Amount")]
+        [DataMember]
+        public decimal Amount
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 剩余资产单价（针对课时资产由于退订可能与订购时不同）
+        /// </summary>
+        [ORFieldMapping("Price")]
+        [DataMember]
+        public decimal Price
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 创建人ID
+        /// </summary>
+        [ORFieldMapping("CreatorID")]
         [DataMember]
 		public string CreatorID
 		{

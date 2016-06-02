@@ -76,73 +76,73 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
     public class AssignResetQM
     {
         #region
-        /// <summary>
+
         /// 排课ID
-        /// </summary>
         [DataMember]
         public string AssignID
         {
             get;
             set;
         }
-        /// <summary>
+
         /// 
-        /// </summary>
         [DataMember]
         public string Info
         {
             get;
             set;
         }
-        /// <summary>
+
         /// 调课后日期
-        /// </summary>
         [DataMember]
         public DateTime ReDate
         {
             get;
             set;
         }
-        /// <summary>
+
         /// 调课后小时
-        /// </summary>
         [DataMember]
         public string ReHour
         {
             get;
             set;
         }
-        /// <summary>
+
         /// 调整后分钟
-        /// </summary>
         [DataMember]
         public string ReMinute
         {
             get;
             set;
         }
-        /// <summary>
+
         /// 原排课开始时间
-        /// </summary>
         [DataMember]
         public DateTime StartTime
         {
             get;
             set;
         }
-        /// <summary>
+
         /// 原排课结束时间
-        /// </summary>
         [DataMember]
         public DateTime EndTime
         {
             get;
             set;
         }
-        /// <summary>
+
+        ///学员ID
+        [DataMember]
+        public string CustomerID
+        {
+            get;
+            set;
+        }
+
         /// 该排课允许调整的最大时间
         /// 规则： 1.时间选择框只能选择当前日期后10日内的日期，例：今天是3月25日，只可选择4月3日（含）之前的日期 
-        /// </summary>
         [DataMember]
         public DateTime AllowResetDateTime
         {
@@ -151,5 +151,13 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
         }
         #endregion
     }
+
+    public class ACCEditQM
+    {
+        public string CustomerID { get; set; }
+        public string AccID { get; set; }
+    }
+
+
 
 }

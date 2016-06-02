@@ -36,26 +36,25 @@ namespace PPTS.Data.Products.Adapters
         /// <summary>
         /// 通过校区获得折扣表信息
         /// </summary>
-        /// <param name="CampusID">校区ID</param>
+        /// <param name="campusID">校区ID</param>
         /// <returns></returns>
-        public Discount LoadByCampusID(string CampusID)
+        public Discount LoadByCampusID(string campusID)
         {
-            DiscountCollection dc = this.QueryData(PrepareLoadDiscountSqlByPermission(CampusID));
+            DiscountCollection dc = this.QueryData(PrepareLoadDiscountSqlByPermission(campusID));
            return dc.FirstOrDefault();
         }
 
         /// <summary>
         /// 拼装通过校区获得折扣表信息
         /// </summary>
-        /// <param name="CampusID">校区ID</param>
+        /// <param name="campusID">校区ID</param>
         /// <returns>拼装SQL</returns>
-        private string PrepareLoadDiscountSqlByPermission(string CampusID)
+        private string PrepareLoadDiscountSqlByPermission(string campusID)
         {
             WhereSqlClauseBuilder discountBuilder = new WhereSqlClauseBuilder();
-            discountBuilder.AppendItem("DiscountStatus", DiscountStatusDefine.Enabled.GetHashCode());
+            discountBuilder.AppendItem("DiscountStatus", (int)DiscountStatusDefine.Enabled);
             WhereSqlClauseBuilder discountPermissionBuilder = new WhereSqlClauseBuilder();
-            discountPermissionBuilder.AppendItem("UseOrgType", PPTS.Data.Common.Security.DepartmentType.Campus.GetHashCode());
-            discountPermissionBuilder.AppendItem("UseOrgID", CampusID);
+            discountPermissionBuilder.AppendItem("CampusID", campusID);
             OrderBySqlClauseBuilder orderBuilder = new OrderBySqlClauseBuilder();
             orderBuilder.AppendItem("CreateTime", FieldSortDirection.Descending);
             string sql = string.Format(@"select top 1 * from {0} where {1} and DiscountID in 
@@ -65,10 +64,14 @@ namespace PPTS.Data.Products.Adapters
                                     order by {4} "
             , this.GetQueryMappingInfo().GetQueryTableName()
             , discountBuilder.ToSqlString(TSqlBuilder.Instance)
-            , DiscountPermissionAdapter.Instance.GetQueryMappingInfo().GetQueryTableName()
+            , DiscountPermissionViewAdapter.Instance.GetQueryMappingInfo().GetQueryTableName()
             , discountPermissionBuilder.ToSqlString(TSqlBuilder.Instance)
             , orderBuilder.ToSqlString(TSqlBuilder.Instance));
             return sql;
+        }
+
+        public DiscountCollection LoadCollectionByDiscountIDs(string discountIDs) {
+            return this.Load(builder => builder.AppendItem("DiscountID", discountIDs, "in", true));
         }
     }
 }

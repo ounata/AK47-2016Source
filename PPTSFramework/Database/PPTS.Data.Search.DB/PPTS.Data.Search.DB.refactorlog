@@ -476,4 +476,298 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="LastOneToOneOrderTime" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="4fa2633d-7535-4405-8548-b121cfd46cd8" ChangeDateTime="05/26/2016 03:45:02">
+    <Property Name="ElementName" Value="[MT].[TeacherSearch].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[MT].[TeacherSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="TeacherID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="3a656226-6236-45e7-b837-3e18bde01f4e" ChangeDateTime="05/26/2016 08:02:08">
+    <Property Name="ElementName" Value="[SM].[TeacherSearch].[TeacherOrgID]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[TeacherSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="TeacherJobOrgID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="45584e2a-86fc-4bf2-8687-d28aa5c18d5c" ChangeDateTime="05/26/2016 08:02:12">
+    <Property Name="ElementName" Value="[SM].[TeacherSearch].[TeacherOrgName]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[TeacherSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="TeacherJobOrgName" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="57125196-c632-492c-9108-4514cac66c9d" ChangeDateTime="05/26/2016 09:10:04">
+    <Property Name="ElementName" Value="[SM].[TeacherSearch].[TeacherJobOrgID]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[TeacherSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="TeacherOrgID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="5a6c9bf5-3e10-4b5e-993b-374c4d36e174" ChangeDateTime="05/26/2016 09:10:06">
+    <Property Name="ElementName" Value="[SM].[TeacherSearch].[TeacherJobOrgName]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[TeacherSearch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="TeacherOrgName" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="e8f7c509-65c9-4cfc-b004-ebb050b13619" ChangeDateTime="05/31/2016 01:12:12">
+    <Property Name="ElementName" Value="[MT].[ConsultStaffPerfDaySum].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[MT].[ConsultStaffPerfDaySum]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="RegionID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="efbdfe90-d186-4245-96d7-d804898cd4e1" ChangeDateTime="05/31/2016 01:17:37">
+    <Property Name="ElementName" Value="[MT].[ConsultStaffPerfMonthSum].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[MT].[ConsultStaffPerfMonthSum]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="RegionID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="d57e4716-97f6-4250-aaae-63fc7e089ed1" ChangeDateTime="05/31/2016 02:11:13">
+    <Property Name="ElementName" Value="[MT].[ConsultCampusPerfDaySum].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[MT].[ConsultCampusPerfDaySum]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="RegionID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="a3b8f6be-6275-4b37-80a7-45706090fd87" ChangeDateTime="05/31/2016 02:39:47">
+    <Property Name="ElementName" Value="[SM].[ConsultBranchPerfMonthSum].[MoneyBranchRank]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[ConsultBranchPerfMonthSum]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="MoneyRegionRank" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="cf9d03a8-7aa4-43ac-a74a-68164e7e32cc" ChangeDateTime="05/31/2016 02:39:55">
+    <Property Name="ElementName" Value="[SM].[ConsultBranchPerfMonthSum].[PeopleBranchRank]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[ConsultBranchPerfMonthSum]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="PeopleRegionRank" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="b2f9cd80-5667-438f-93f8-98073a383913" ChangeDateTime="05/31/2016 02:40:11">
+    <Property Name="ElementName" Value="[SM].[ConsultBranchPerfMonthSum].[NewMoneyBranchRank]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[ConsultBranchPerfMonthSum]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="NewMoneyRegionRank" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="bd18cc51-9e6c-46f7-8634-7411f04132c0" ChangeDateTime="05/31/2016 02:49:08">
+    <Property Name="ElementName" Value="[SM].[ConsultStaffCrmDaySum].[MoneyCount]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[ConsultStaffCrmDaySum]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="VisitingCountOfPotiential" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="118c2862-cd6d-4b05-9385-3f94e986277d" ChangeDateTime="05/31/2016 02:49:52">
+    <Property Name="ElementName" Value="[SM].[ConsultStaffCrmDaySum].[PeopleCount]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[ConsultStaffCrmDaySum]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="VisitingCountOfStudent" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="67209a0e-b9e8-4194-8da0-00dbbded35ed" ChangeDateTime="05/31/2016 02:50:17">
+    <Property Name="ElementName" Value="[SM].[ConsultStaffCrmDaySum].[NewMoneyCount]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[ConsultStaffCrmDaySum]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="VerifingCount" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="354363bd-26ab-4bb4-91f9-cc8b2de30f70" ChangeDateTime="05/31/2016 02:50:44">
+    <Property Name="ElementName" Value="[SM].[ConsultStaffCrmDaySum].[NewPeopleCount]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[ConsultStaffCrmDaySum]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="SigningCount" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="f5f70d5f-1edd-4dd5-bfc4-afac4256e196" ChangeDateTime="05/31/2016 02:56:20">
+    <Property Name="ElementName" Value="[SM].[ConsultStaffCrmMonthSum].[MoneyCount]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[ConsultStaffCrmMonthSum]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="VisitingCountOfPotential" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="f3b1f3c8-4c2f-401c-bbae-ef04d79e296b" ChangeDateTime="05/31/2016 02:56:40">
+    <Property Name="ElementName" Value="[SM].[ConsultStaffCrmDaySum].[VisitingCountOfPotiential]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[ConsultStaffCrmDaySum]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="VisitingCountOfPotential" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="c7a76447-58da-4d4d-aa58-21169879b9e6" ChangeDateTime="05/31/2016 02:56:44">
+    <Property Name="ElementName" Value="[SM].[ConsultStaffCrmDaySum].[WeekVisitingCountOfPotiential]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[ConsultStaffCrmDaySum]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="WeekVisitingCountOfPotential" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="ab9b6ae7-7c08-4709-b900-a0bdd92c66df" ChangeDateTime="05/31/2016 02:57:12">
+    <Property Name="ElementName" Value="[SM].[ConsultStaffCrmMonthSum].[MoneyCampusRank]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[ConsultStaffCrmMonthSum]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="VisitingCountOfStudent" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="a3388e36-5df1-4498-bcfe-6e3c85128cb3" ChangeDateTime="05/31/2016 02:57:25">
+    <Property Name="ElementName" Value="[SM].[ConsultStaffCrmMonthSum].[MoneyBranchRank]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[ConsultStaffCrmMonthSum]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="VerifyingCount" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="dc67c08f-21e9-44dd-8424-be682893675e" ChangeDateTime="05/31/2016 02:57:30">
+    <Property Name="ElementName" Value="[SM].[ConsultStaffCrmMonthSum].[MoneyCountryRank]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[ConsultStaffCrmMonthSum]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="SigningCount" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="805e35ca-0af4-44cc-83dd-2e40d704aaf1" ChangeDateTime="05/31/2016 02:57:38">
+    <Property Name="ElementName" Value="[SM].[ConsultStaffCrmDaySum].[VerifingCount]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[ConsultStaffCrmDaySum]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="VerifyingCount" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="826318d3-f1af-4f8c-9f3f-34988a4f9f85" ChangeDateTime="05/31/2016 02:57:48">
+    <Property Name="ElementName" Value="[SM].[ConsultStaffCrmDaySum].[WeekVerifingCount]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[ConsultStaffCrmDaySum]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="WeekVerifyingCount" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="2a63b939-1977-4068-b758-535bc67beba9" ChangeDateTime="05/31/2016 02:58:06">
+    <Property Name="ElementName" Value="[SM].[ConsultStaffCrmMonthSum].[PeopleCount]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[ConsultStaffCrmMonthSum]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="UnVisitCountOfPotential" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="59095377-8036-4beb-97f8-19a14bd50d83" ChangeDateTime="05/31/2016 02:58:19">
+    <Property Name="ElementName" Value="[SM].[ConsultStaffCrmMonthSum].[PeopleCampusRank]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[ConsultStaffCrmMonthSum]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="UnVisitCountOfStudent" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="5ef65987-f275-4c41-b510-d7ba212a7d9d" ChangeDateTime="05/31/2016 02:58:27">
+    <Property Name="ElementName" Value="[SM].[ConsultStaffCrmMonthSum].[PeopleBranchRank]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[ConsultStaffCrmMonthSum]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="UnVerifyingCount" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="4ad0f84f-1f17-45e5-badf-9cce83e0d718" ChangeDateTime="05/31/2016 02:58:32">
+    <Property Name="ElementName" Value="[SM].[ConsultStaffCrmMonthSum].[UnVerifyingCount]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[ConsultStaffCrmMonthSum]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="UnVerifyCount" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="2138ecb7-6b7d-4954-9d22-fb9fb9e1eecf" ChangeDateTime="05/31/2016 02:58:40">
+    <Property Name="ElementName" Value="[SM].[ConsultStaffCrmMonthSum].[PeopleCountryRank]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[ConsultStaffCrmMonthSum]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="UnSignCount" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="002161d0-cad5-49f4-a520-4a32c61a1f6c" ChangeDateTime="05/31/2016 02:58:49">
+    <Property Name="ElementName" Value="[SM].[ConsultStaffCrmMonthSum].[NewMoneyTask]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[ConsultStaffCrmMonthSum]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="VisitedCountOfPotential" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="286f16b9-9c19-4cdc-8b9c-8b26ed794817" ChangeDateTime="05/31/2016 02:58:58">
+    <Property Name="ElementName" Value="[SM].[ConsultStaffCrmMonthSum].[NewMoney]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[ConsultStaffCrmMonthSum]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="VisitedCountOfStudent" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="c53ab3ca-ba4a-4e6c-a3f9-1765102ab04d" ChangeDateTime="05/31/2016 02:59:05">
+    <Property Name="ElementName" Value="[SM].[ConsultStaffCrmMonthSum].[NewMoneyCampusRank]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[ConsultStaffCrmMonthSum]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="VerifiedCount" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="80e50684-23ba-43d3-8ec1-c4db0a717ceb" ChangeDateTime="05/31/2016 02:59:15">
+    <Property Name="ElementName" Value="[SM].[ConsultStaffCrmMonthSum].[NewMoneyBranchRank]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[ConsultStaffCrmMonthSum]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="SignedCount" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="544e6ea5-9c0a-476a-bdde-acbda45a8a6d" ChangeDateTime="05/31/2016 02:59:21">
+    <Property Name="ElementName" Value="[SM].[ConsultStaffCrmMonthSum].[NewMoneyCountryRank]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[ConsultStaffCrmMonthSum]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="NewCount" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="c2eb6971-a6f5-41f9-b12b-17ce438c8763" ChangeDateTime="05/31/2016 02:59:38">
+    <Property Name="ElementName" Value="[SM].[ConsultStaffCrmMonthSum].[NewCount]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[ConsultStaffCrmMonthSum]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="NewPotentialCount" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="144e7c5f-e9b8-4a03-9932-5012990bf250" ChangeDateTime="05/31/2016 02:59:47">
+    <Property Name="ElementName" Value="[SM].[ConsultStaffCrmMonthSum].[NewPeopleCount]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[ConsultStaffCrmMonthSum]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="VerifyRatio" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="12653daa-a4db-4e2e-bbc0-065f46ae1577" ChangeDateTime="05/31/2016 02:59:58">
+    <Property Name="ElementName" Value="[SM].[ConsultStaffCrmMonthSum].[NewPeopleCampusRank]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[ConsultStaffCrmMonthSum]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="SignedRatio" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="4f4cc0dd-13c4-46c7-bf2e-d7fbcf58985a" ChangeDateTime="05/31/2016 03:00:03">
+    <Property Name="ElementName" Value="[SM].[ConsultStaffCrmMonthSum].[VerifyRatio]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[ConsultStaffCrmMonthSum]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="VerifiedRatio" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="e886faee-30a8-4eb9-9c04-59bad60f5b87" ChangeDateTime="05/31/2016 03:00:36">
+    <Property Name="ElementName" Value="[SM].[ConsultStaffCrmMonthSum].[NewPeopleBranchRank]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[ConsultStaffCrmMonthSum]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="ConvertedRatio" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="2ed538b2-5968-4d0a-8b55-cbb78cda3c10" ChangeDateTime="05/31/2016 03:34:23">
+    <Property Name="ElementName" Value="[SM].[OrgBranches].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[OrgBranches]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="BranchID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="a1423abd-3353-42fd-8ad4-040b719eb4a6" ChangeDateTime="05/31/2016 03:35:28">
+    <Property Name="ElementName" Value="[SM].[OrgCampuses].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[OrgCampuses]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="CampusID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="2572392e-f8b1-4f07-bbcf-afdee3b0a051" ChangeDateTime="05/31/2016 03:36:13">
+    <Property Name="ElementName" Value="[SM].[OrgRegions].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[OrgRegions]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="RegionID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="a144c559-d335-401f-b559-c53b9bfdee4a" ChangeDateTime="05/31/2016 03:40:30">
+    <Property Name="ElementName" Value="[SM].[OrgConsultantJobs].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SM].[OrgConsultantJobs]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="CampusID" />
+  </Operation>
 </Operations>

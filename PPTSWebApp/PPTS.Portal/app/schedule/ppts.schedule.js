@@ -15,28 +15,18 @@
             templateUrl: 'app/schedule/studentassignment/stuasgmt-list/stuasgmt-list.html',
             controller: 'stuAsgmtListController',
             breadcrumb: {
-                label: '学员排课列表',
+                label: '学员排课',
                 parent: 'ppts'
             },
             dependencies: ['app/schedule/studentassignment/stuasgmt-list/stuasgmt-list.controller']
-        }).loadRoute($stateProvider, {
-            name: 'ppts.schedule-tchasgmt',
-            url: '/schedule/tchasgmt/:cID',
-            templateUrl: 'app/schedule/teacherassignment/tchasgmt-list/tchasgmt-list.html',
-            controller: 'tchAsgmtListController',
-            breadcrumb: {
-                label: '教师排课列表',
-                parent: 'ppts'
-            },
-            dependencies: ['app/schedule/teacherassignment/tchasgmt-list/tchasgmt-list.controller']
         }).loadRoute($stateProvider, {
             name: 'ppts.stuasgmt-course',
             url: '/course/:cID/:tn',
             templateUrl: 'app/schedule/studentassignment/stuasgmt-course/stuasgmt-course.html',
             controller: 'stuAsgmtCourseController',
             breadcrumb: {
-                label: '学生排课-周视图',
-                parent: 'ppts'
+                label: '周视图',
+                parent: 'ppts.schedule'
             },
             dependencies: ['app/schedule/studentassignment/stuasgmt-course/stuasgmt-course.controller'
                 , 'app/schedule/studentassignment/stuasgmt-add/stuasgmt-add.controller'
@@ -44,27 +34,13 @@
                 , 'app/schedule/studentassignment/stuasgmt-course/stuasgmt-course-reset.controller'
             ]
         }).loadRoute($stateProvider, {
-            name: 'ppts.tchasgmt-course',
-            url: '/tchcourse/:cID/:tn/:tji',
-            templateUrl: 'app/schedule/teacherassignment/tchasgmt-course/tchasgmt-course.html',
-            controller: 'tchAsgmtCourseController',
-            breadcrumb: {
-                label: '教师排课-周视图',
-                parent: 'ppts'
-            },
-            dependencies: ['app/schedule/teacherassignment/tchasgmt-course/tchasgmt-course.controller'
-                , 'app/schedule/teacherassignment/tchasgmt-add/tchasgmt-add.controller'
-                , 'app/schedule/teacherassignment/tchasgmt-course/tchasgmt-course-copy.controller'
-                , 'app/schedule/teacherassignment/tchasgmt-course/tchasgmt-course-reset.controller'
-            ]
-        }).loadRoute($stateProvider, {
             name: 'ppts.stuasgmt-course-list',
             url: '/courselist/:cID',
             templateUrl: 'app/schedule/studentassignment/stuasgmt-course/stuasgmt-course-list.html',
             controller: 'stuAsgmtCourseListController',
             breadcrumb: {
-                label: '学生排课-列表视图',
-                parent: 'ppts'
+                label: '列表视图',
+                parent: 'ppts.schedule'
             },
             dependencies: ['app/schedule/studentassignment/stuasgmt-course/stuasgmt-course-list.controller'
                 , 'app/schedule/studentassignment/stuasgmt-add/stuasgmt-add.controller'
@@ -72,13 +48,37 @@
                 , 'app/schedule/studentassignment/stuasgmt-course/stuasgmt-course-reset.controller'
             ]
         }).loadRoute($stateProvider, {
+            name: 'ppts.schedule-tchasgmt',
+            url: '/schedule/tchasgmt/:cID',
+            templateUrl: 'app/schedule/teacherassignment/tchasgmt-list/tchasgmt-list.html',
+            controller: 'tchAsgmtListController',
+            breadcrumb: {
+                label: '教师排课',
+                parent: 'ppts'
+            },
+            dependencies: ['app/schedule/teacherassignment/tchasgmt-list/tchasgmt-list.controller']
+        }).loadRoute($stateProvider, {
+            name: 'ppts.tchasgmt-course',
+            url: '/tchcourse/:cID/:tn/:tji',
+            templateUrl: 'app/schedule/teacherassignment/tchasgmt-course/tchasgmt-course.html',
+            controller: 'tchAsgmtCourseController',
+            breadcrumb: {
+                label: '周视图',
+                parent: 'ppts.schedule-tchasgmt'
+            },
+            dependencies: ['app/schedule/teacherassignment/tchasgmt-course/tchasgmt-course.controller'
+                , 'app/schedule/teacherassignment/tchasgmt-add/tchasgmt-add.controller'
+                , 'app/schedule/teacherassignment/tchasgmt-course/tchasgmt-course-copy.controller'
+                , 'app/schedule/teacherassignment/tchasgmt-course/tchasgmt-course-reset.controller'
+            ]
+        }).loadRoute($stateProvider, {
             name: 'ppts.tchasgmt-course-list',
             url: '/tchcourselist/:cID/:tn/:tji',
             templateUrl: 'app/schedule/teacherassignment/tchasgmt-course/tchasgmt-course-list.html',
             controller: 'tchAsgmtCourseListController',
             breadcrumb: {
-                label: '教师排课-列表视图',
-                parent: 'ppts'
+                label: '列表视图',
+                parent: 'ppts.schedule-tchasgmt'
             },
             dependencies: ['app/schedule/teacherassignment/tchasgmt-course/tchasgmt-course-list.controller'
                 , 'app/schedule/teacherassignment/tchasgmt-add/tchasgmt-add.controller'
@@ -108,6 +108,31 @@
                 parent: 'ppts'
             },
             dependencies: ['app/schedule/teachercourse/teacher-course/teacher-course.controller'
+            ]
+        }).loadRoute($stateProvider, {
+            name: 'ppts.teachercourserecord',
+            url: '/tchcrsrecord',
+            templateUrl: 'app/schedule/teachercourse/tchrecord-list.html',
+            controller: 'tchcrsListController',
+            breadcrumb: {
+                label: '教师上课记录',
+                parent: 'ppts'
+            },
+            dependencies: ['app/schedule/teachercourse/tchrecord-list.controller'
+                , 'app/schedule/teachercourse/tchrecord-list-markup.controller'
+                 , 'app/schedule/studentcourse/sturecord-list.controller'
+                   , 'app/schedule/teachercourse/tchrecord-list-companion.controller'
+            ]
+        }).loadRoute($stateProvider, {
+            name: 'ppts.accedit',
+            url: '/accedit/:accid/:cid',
+            templateUrl: 'app/schedule/studentassignment/stuasgmt-condition/stuasgmt-condition-edit.html',
+            controller: 'asgmtConditionEditController',
+            breadcrumb: {
+                label: '排课条件',
+                parent: 'ppts'
+            },
+            dependencies: ['app/schedule/studentassignment/stuasgmt-condition/stuasgmt-condition-edit.controller'
             ]
         }).loadRoute($stateProvider, {
             name: 'ppts.classgroup',

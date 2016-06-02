@@ -12,168 +12,160 @@ namespace PPTS.Data.Orders.Entities
     public interface IAssignShareAttr
     {
         #region
-        /// <summary>
-        /// 学员ID
-        /// </summary>
-        string CustomerID
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
         /// 资产ID
-        /// </summary>
         string AssetID
         {
             get;
             set;
         }
-
-        /// <summary>
+        
         /// 资产编码
-        /// </summary>
         string AssetCode
         {
             get;
             set;
         }
 
-        /// <summary>
+        /// 学员ID
+        string CustomerID
+        {
+            get;
+            set;
+        }
+
+        /// 学员编码
+        string CustomerCode
+        {
+            get;
+            set;
+        }
+
+        /// 学员姓名
+        string CustomerName
+        {
+            get;
+            set;
+        }
+
         /// 产品ID
-        /// </summary>
         string ProductID
         {
             get;
             set;
         }
 
-        /// <summary>
         /// 产品编码
-        /// </summary>
         string ProductCode
         {
             get;
             set;
         }
 
-        /// <summary>
 		/// 产品名称
-		/// </summary>
         string ProductName
         {
             get;
             set;
         }
 
-        /// <summary>
-		/// 年级代码
-		/// </summary>
-        string Grade
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 年级名称
-        /// </summary>
-        string GradeName
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 科目代码
-        /// </summary>
-        string Subject
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 科目名称
-        /// </summary>
-        string SubjectName
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
         /// 教室ID
-        /// </summary>
         string RoomID
         {
             get;
             set;
         }
 
-        /// <summary>
         /// 教室编码
-        /// </summary>
         string RoomCode
         {
             get;
             set;
         }
 
-        /// <summary>
         /// 教室名称
-        /// </summary>
         string RoomName
         {
             get;
             set;
         }
-
-        /// <summary>
+        
         /// 教师ID
-        /// </summary>
         string TeacherID
         {
             get;
             set;
         }
 
-        /// <summary>
         /// 教师姓名
-        /// </summary>
         string TeacherName
         {
             get;
             set;
         }
 
-        /// <summary>
         /// 教师岗位ID
-        /// </summary>
-        string TeacherJobID
-        { get; set; }
+        string TeacherJobID { get; set; }
 
-        /// <summary>
+        ///教师学科组名称
+        string TeacherJobOrgName
+        {
+            get; set;
+        }
+
+        ///教师学科组ID
+        string TeacherJobOrgID
+        {
+            get; set;
+        }
+
+        ///教师，全职还是兼职
+        int IsFullTimeTeacher { get; set; }
+
+        ///学员账户ID
+        string AccountID { get; set; }
+
+        /// 年级代码
+        string Grade
+        {
+            get;
+            set;
+        }
+
+        /// 年级名称
+        string GradeName
+        {
+            get;
+            set;
+        }
+
+        /// 科目代码
+        string Subject
+        {
+            get;
+            set;
+        }
+
+        /// 科目名称
+        string SubjectName
+        {
+            get;
+            set;
+        }
+
         /// 创建时间
-        /// </summary>
         DateTime CreateTime
         {
             get;
             set;
         }
 
-        /// <summary>
         /// 最后修改时间
-        /// </summary>
         DateTime ModifyTime
         {
             get;
             set;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         string TenantCode
         {
             get;

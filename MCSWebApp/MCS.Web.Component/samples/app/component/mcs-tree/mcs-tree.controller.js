@@ -16,6 +16,15 @@
 
         }
 
+        vm.clearChecked = function() {
+            vm.treeSetting.clearChecked();
+        }
+
+        vm.justCheckWithinSameParent = function(treeId, treeNode) {
+            return vm.treeSetting.justCheckWithinSameParent(treeId, treeNode);
+
+        }
+
 
 
         vm.treeSetting = {
@@ -56,6 +65,7 @@
             callback: {
                 onClick: vm.nodeClick,
                 onCheck: vm.nodeCheck,
+                beforeCheck: vm.justCheckWithinSameParent,
                 beforeAsync: vm.loadDataWaiting
             }
         };
@@ -95,7 +105,20 @@
                 isParent: true,
                 open: false,
 
-                children: []
+                children: [{
+                    id: 11,
+                    name: 'HR',
+                    checked: true,
+                    chkDisabled: false,
+
+                    iconSkin: 'user',
+                    isHidden: false
+
+
+                }, {
+                    id: 12,
+                    name: 'IT'
+                }]
             }]
         }];
 

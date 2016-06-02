@@ -20,7 +20,7 @@ namespace PPTS.Data.Common.Entities
         }
 
         [DataMember]
-        public string UserNmae
+        public string UserName
         {
             get;
             set;

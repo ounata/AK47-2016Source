@@ -14,7 +14,7 @@ namespace PPTS.Data.Customers.Entities
     /// 学大对学员反馈回复表
     /// </summary>
     [Serializable]
-    [ORTableMapping("CustomerReplies")]
+    [ORTableMapping("CM.CustomerReplies")]
     [DataContract]
     public class CustomerReply
     {

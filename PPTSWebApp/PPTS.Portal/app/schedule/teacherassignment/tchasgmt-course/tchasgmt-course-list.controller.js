@@ -22,13 +22,11 @@
                         headers: [{
                             field: "teacherName",
                             name: "教师姓名",
-                            template: '<span>{{row.teacherName}}</span>',
-                            sortable: true
+                            template: '<span>{{row.teacherName}}</span>'
                         }, {
                             field: "customerName",
                             name: "学员姓名",
-                            template: '<span>{{row.customerName}}</span>',
-                            sortable: true
+                            template: '<span>{{row.customerName}}</span>'
                         }, {
                             field: "startTime",
                             name: "上课日期",
@@ -56,7 +54,7 @@
                         }],
                         pager: {
                             pageIndex: 1,
-                            pageSize: 10,
+                            pageSize: 20,
                             totalCount: -1,
                             pageChange: function () {
                                 dataSyncService.initCriteria(vm);
@@ -65,7 +63,7 @@
                                 });
                             }
                         },
-                        orderBy: [{ dataField: 'CustomerCode', sortDirection: 1 }]
+                        orderBy: [{ dataField: 'StartTime', sortDirection: 1 }]
                     }
 
                     // 页面初始化加载或重新搜索时查询
@@ -176,7 +174,8 @@
                                         reMinute: '',
                                         startTime: objCollecton[i].startTime,
                                         endTime: objCollecton[i].endTime,
-                                        allowResetDateTime: new Date()
+                                        allowResetDateTime: new Date(),
+                                        customerID: objCollecton[i].customerID
                                     };
                                     tempM.reHour = vm.getDoubleStr(objCollecton[i].startTime.getHours());
                                     tempM.reMinute = vm.getDoubleStr(objCollecton[i].startTime.getMinutes());
@@ -212,6 +211,11 @@
 
                     vm.gotoCourseWeek = function () {
                         $state.go('ppts.tchasgmt-course', { cID: vm.CID,tn:$stateParams.tn,tji:$stateParams.tji });
+                    };
+
+                    /*跳转教师排课列表*/
+                    vm.gotoAssignList = function () {
+                        $state.go('ppts.schedule-tchasgmt');
                     };
 
                 }]);

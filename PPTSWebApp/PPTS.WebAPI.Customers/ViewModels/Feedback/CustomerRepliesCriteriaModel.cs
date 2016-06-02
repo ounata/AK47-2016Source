@@ -9,9 +9,11 @@ namespace PPTS.WebAPI.Customers.ViewModels.Feedback
 {
     public class CustomerRepliesCriteriaModel
     {
-        [InConditionMapping("cReplies.CampusID")]
+        [InConditionMapping("CampusID")]
         public string[] OrgIds { get; set; }
 
+        [ConditionMapping("CustomerId")]
+        public string CustomerId { set; get; }
         /// <summary>
         /// 学员编号
         /// </summary>
@@ -20,7 +22,7 @@ namespace PPTS.WebAPI.Customers.ViewModels.Feedback
         /// <summary>
         /// 学员姓名
         /// </summary>
-        [ConditionMapping("customer.CustomerName", EscapeLikeString = true, Prefix = "%", Postfix = "%", Operation = "LIKE")]
+        [ConditionMapping("CustomerName", EscapeLikeString = true, Prefix = "%", Postfix = "%", Operation = "LIKE")]
         public string CustomerName { set; get; }
 
         /// <summary>
@@ -49,34 +51,35 @@ namespace PPTS.WebAPI.Customers.ViewModels.Feedback
         //    set;
         //}
 
-        [InConditionMapping("cReplies.ReplyObject")]
+        [InConditionMapping("ReplyObject1")]
         public string[] ReplyObjects
         {
             get;
             set;
         }
 
-        [ConditionMapping("cReplies.Poster")]
+        [ConditionMapping("Poster")]
         public string Poster
         {
             set;get;
         }
-        [ConditionMapping("customer.Grade")]
+        [ConditionMapping("Grade")]
         public string Grades
         {
             get;
             set;
         }
         [ConditionMapping("ReplyTime", Operation = ">=")]
-        public string ReplyTimeStart {
+        public DateTime ReplyTimeStart {
             set;get;
         }
 
-        [ConditionMapping("ReplyTime", Operation = "<")]
-        public string ReplyTimeEnd
+        [ConditionMapping("ReplyTime", Operation = "<=")]
+        public DateTime ReplyTimeEnd
         {
             set; get;
         }
-
+        [NoMapping]
+        public string ReplyID { set; get; }
     }
 }

@@ -523,7 +523,7 @@ namespace PPTS.Data.Customers.Entities
 		/// </summary>
 		[ORFieldMapping("SubmitterJobType")]
         [DataMember]
-		public string SubmitterJobType
+		public JobTypeDefine SubmitterJobType
 		{
 			get;
             set;

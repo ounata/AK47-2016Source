@@ -13,7 +13,7 @@ namespace PPTS.Data.Customers.Entities
 	/// 在读学校信息
 	/// </summary>
 	[Serializable]
-    [ORTableMapping("Schools")]
+    [ORTableMapping("CM.Schools")]
     [DataContract]
 	public class School
 	{		

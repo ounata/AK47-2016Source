@@ -64,19 +64,7 @@ namespace PPTS.Data.Common.Entities
             get;
             set;
         }
-
-        /// <summary>
-        /// 岗位组织机构简称
-        /// </summary>
-        [ORFieldMapping("JobOrgShortName")]
-        [DataMember]
-        public string JobOrgShortName
-        {
-            get;
-            set;
-        }
-
-
+        
         /// <summary>
         /// 岗位组织机构类型
         /// </summary>

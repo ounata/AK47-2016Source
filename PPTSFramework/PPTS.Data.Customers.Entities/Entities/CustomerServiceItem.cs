@@ -13,7 +13,7 @@ namespace PPTS.Data.Customers.Entities
 	/// 客服处理明细
 	/// </summary>
 	[Serializable]
-    [ORTableMapping("CustomerServiceItems")]
+    [ORTableMapping("CM.CustomerServiceItems")]
     [DataContract]
 	public class CustomerServiceItem
 	{		

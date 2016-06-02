@@ -22,6 +22,7 @@
                 <div class="col-sm-12">
                     <h3 class="header smaller lighter green">应用范例</h3>
                     <div ng-controller="MCSDatatableController">
+                        <h4>交互式问答布局示例</h4>
                         <div class="dialogs ace-scroll scroll-active" style="
     width: 700px;
     /* height: 400px; */
@@ -35,11 +36,6 @@
     /* vertical-align: middle; */
     margin-top: 90px;
 ">
-                                    <div class="user" style="
-    display: none;
-">
-                                        <img alt="Alexa's Avatar" src="../assets/avatars/avatar1.png">
-                                    </div>
                                     <div class="body dialogArea">
                                         <div class="time" style="
     display: none;
@@ -66,6 +62,8 @@
                             <button class="btn btn-primary" type="button" ng-click="vm.clearSelections()">清除已选行的状态记录</button>
                             <button class="btn btn-primary" type="button" ng-click="vm.removeRows()">删除已选行</button>
                             <button type="button" class="btn btn-primary" ng-click="vm.print()">打印</button>
+                            <button type="button" class="btn btn-primary" ng-click="vm.exportExcel()">导出</button>
+                            <button type="button" class="btn btn-primary" ng-click="vm.importExcel()">导入</button>
                         </div>
                         <div id="table">
                             <div clas="datatable-container table-responsive" style="

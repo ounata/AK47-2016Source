@@ -40,7 +40,7 @@ namespace PPTS.WebAPI.Customers.DataSources
             select += "a.OrgID,a.FollowTime,a.FollowType,a.FollowObject,a.PlanVerifyTime,a.FollowStage,";
             select += "a.PurchaseIntention,a.CustomerLevel,a.IntensionSubjects,a.followerName,";
             select += "a.IsStudyThere,a.PlanSignDate,a.CreateTime,a.FollowID,a.FollowMemo,a.CustomerID, " +
-                      "(select top 1 StaffName from CustomerStaffRelations_Current aa where aa.CustomerID = a.CustomerID and aa.[RelationType] = 1 order by aa.CreateTime desc)StaffName ";
+                      "(select top 1 StaffName from CM.[CustomerStaffRelations_Current] aa where aa.CustomerID = a.CustomerID and aa.[RelationType] = 1 order by aa.CreateTime desc)StaffName ";
             string from = "";
             from += "CM.[CustomerFollows] a inner join CM.[PotentialCustomersFulltext] c on a.CustomerID = c.OwnerID";
             PagedQueryResult<FollowQueryModel, CustomerFollowQueryCollection> result = Query(prp, select, from, condition, orderByBuilder);

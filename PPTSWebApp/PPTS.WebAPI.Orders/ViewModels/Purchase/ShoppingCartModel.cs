@@ -1,7 +1,9 @@
-﻿using PPTS.Data.Common.Entities;
+﻿using PPTS.Data.Common.Adapters;
+using PPTS.Data.Common.Entities;
 using PPTS.Data.Customers.Entities;
 using PPTS.Data.Orders.Adapters;
 using PPTS.Data.Orders.Entities;
+using PPTS.Data.Orders.Executors;
 using PPTS.Data.Products.Entities;
 using System;
 using System.Collections.Generic;
@@ -15,6 +17,9 @@ namespace PPTS.WebAPI.Orders.ViewModels.Purchase
 
     public class ShoppingCartModel
     {
+        public ShoppingCartModel() {
+            Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(ProductView), typeof(Order));
+        }
         public int ListType { set; get; }
 
         public List<AccountModel> Account { private set; get; }
@@ -25,16 +30,22 @@ namespace PPTS.WebAPI.Orders.ViewModels.Purchase
         /// <summary>
         /// 缴费单列表
         /// </summary>
-        public List<AccountChargePayment> ChargePayments { set; get; }
+        public List<AccountChargeApply> ChargePays { private set; get; }
 
-        public IDictionary<string, IEnumerable<BaseConstantEntity>> Dictionaries { get; set; }
-
-
+        public IDictionary<string, IEnumerable<BaseConstantEntity>> Dictionaries { private set; get; }
 
 
-        public ShoppingCartModel FillAccount(List<Data.Customers.Entities.Account> accounts)
+
+
+        private string CustomerID { set; get; }
+        private string CampusID { set; get; }
+
+
+        public ShoppingCartModel FillAccount()
         {
-            var mapper = new AutoMapper.MapperConfiguration(c => c.CreateMap<Data.Customers.Entities.Account, AccountModel>()).CreateMapper();
+            var accounts = Service.CustomerService.GetAccountbyCustomerId(CustomerID);
+
+            var mapper = new AutoMapper.MapperConfiguration(c => c.CreateMap<Account, AccountModel>()).CreateMapper();
             Account = new List<AccountModel>();
             accounts.ForEach(m =>
             {
@@ -44,29 +55,30 @@ namespace PPTS.WebAPI.Orders.ViewModels.Purchase
             return this;
         }
 
-        public ShoppingCartModel FillCart(ShoppingCartCollection collection)
+        public static ShoppingCartModel FillCart(string customerId, string campusId, int orderType)
         {
+            var model = new ShoppingCartModel() { CustomerID = customerId, CampusID = campusId, ListType = orderType };
+
+            var collection = (ShoppingCartCollection)new PPTSShoppingCartExecutor("GetShoppingCart") { CustomerId = customerId, OrderType = orderType }.Execute();
+            var productIds = collection.Select(m => m.ProductID).ToArray();
+
             var mapper = new AutoMapper.MapperConfiguration(c => c.CreateMap<ShoppingCart, CartModel>()).CreateMapper();
-            Cart = new List<CartModel>();
+            model.Cart = new List<CartModel>();
             foreach (var item in collection)
             {
                 var n = mapper.Map<CartModel>(item);
                 n.Item = new OrderItemViewModel() { CartID = item.CartID, OrderAmount = 1 };
-                Cart.Add(n);
+                model.Cart.Add(n);
             }
-            return this;
+
+            Service.ProductService.GetProductsByIds(productIds).ForEach(m =>
+            {
+                model.Cart.Single(s => s.ProductID == m.ProductID).Product = m;
+            });
+
+            return model;
         }
 
-        public ShoppingCartModel FillCartProduct(List<ProductView> products)
-        {
-            //var mapper = new AutoMapper.MapperConfiguration(c => { c.CreateMap<ProductView, ProductViewModel>(); }).CreateMapper();
-            products.ForEach(m =>
-            {
-                Cart.Single(s => s.ProductID == m.ProductID).Product = m;
-                //Cart.Single(s => s.ProductID == m.ProductID).Product = mapper.Map<ProductViewModel>(m);
-            });
-            return this;
-        }
 
         public ShoppingCartModel FillClassGroupAmount()
         {
@@ -75,7 +87,8 @@ namespace PPTS.WebAPI.Orders.ViewModels.Purchase
                 var classIds = Cart.Where(w => !string.IsNullOrWhiteSpace(w.ClassID)).Select(s => s.ClassID).ToArray();
                 if (classIds.Length > 0)
                 {
-                    ClassesAdapter.Instance.Load(classIds).ForEach(m => {
+                    ClassesAdapter.Instance.Load(classIds).ForEach(m =>
+                    {
                         var cart = Cart.Single(c => c.ClassID == m.ClassID);
 
                         cart.NoOpenClassCount = m.LessonCount - m.FinishedLessons;
@@ -84,33 +97,25 @@ namespace PPTS.WebAPI.Orders.ViewModels.Purchase
                         cart.Item.OrderAmount = cart.RemainLessonCount;
                     });
 
-                    
-
-                    //ClassLessonsAdapter.Instance.GetNoOpenAccountLessonCountInContext(d =>
-                    //{
-                    //    d.ToList().ForEach(kv =>
-                    //    {
-                    //        var cart = Cart.Single(s => s.ClassID == kv.Key);
-                    //        cart.RemainLessonCount += kv.Value;
-                    //        cart.Item.OrderAmount = cart.RemainLessonCount;
-                    //    });
-                    //}, openAccountDate, classIds);
-
-                    //PPTS.Data.Orders.ConnectionDefine.GetDbContext().DoAction(c => c.ExecuteDataSetSqlInContext());
-
                 }
             }
             return this;
         }
 
-        public ShoppingCartModel FillPreset(Service.Present preset)
+        public ShoppingCartModel FillPreset()
         {
             if (ListType == 2)
             {
-                Present = preset;
+                Present = Service.ProductService.GetPresentByOrgId(CampusID);
             }
             return this;
         }
+
+        public ShoppingCartModel FillChargePays() {
+            ChargePays = Service.CustomerService.GetChargePaysByCustomerId(CustomerID);
+            return this;
+        }
+
         /// <summary>
         /// 设置使用折扣
         /// </summary>
@@ -169,9 +174,7 @@ namespace PPTS.WebAPI.Orders.ViewModels.Purchase
 
 
     }
-
-    //public class ProductViewModel : ProductView { }
-
+    
     public class OrderItemViewModel
     {
         public string CartID { set; get; }

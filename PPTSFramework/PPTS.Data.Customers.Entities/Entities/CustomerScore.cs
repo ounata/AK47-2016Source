@@ -11,7 +11,7 @@ namespace PPTS.Data.Customers.Entities
     /// 学员成绩表
     /// </summary>
     [Serializable]
-    [ORTableMapping("CustomerScores")]
+    [ORTableMapping("CM.CustomerScores")]
     [DataContract]
     public class CustomerScore : IEntityWithCreator, IEntityWithModifier
     {

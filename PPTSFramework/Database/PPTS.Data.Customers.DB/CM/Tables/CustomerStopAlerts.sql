@@ -10,6 +10,7 @@
     [OperatorJobID] NVARCHAR(36) NULL, 
     [OperatorJobName] NVARCHAR(64) NULL, 
     [CustomerID] NVARCHAR(36) NULL, 
+	[TenantCode] NVARCHAR(36) NULL, 
     CONSTRAINT [PK_CustomerStopAlerts] PRIMARY KEY NONCLUSTERED ([AlertID])
 )
 

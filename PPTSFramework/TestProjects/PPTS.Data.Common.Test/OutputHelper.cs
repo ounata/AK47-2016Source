@@ -1,5 +1,6 @@
 ﻿using MCS.Library.Core;
 using MCS.Library.OGUPermission;
+using PPTS.Data.Common.Entities;
 using PPTS.Data.Common.Security;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,17 @@ namespace PPTS.Data.Common.Test
 {
     public static class OutputHelper
     {
+        public static void Output(this IEnumerable<UserAndJob> ujs)
+        {
+            ujs.ForEach(uj => uj.Output());
+        }
+
+        public static void Output(this UserAndJob uj)
+        {
+            Console.WriteLine("Job ID: {0}, Job Name: {1}, User ID: {2}, User Name: {3}",
+                uj.JobID, uj.JobName, uj.UserID, uj.UserName);
+        }
+
         public static void Output(this IEnumerable<PPTSJob> jobs)
         {
             jobs.ForEach(job => job.Output());
@@ -40,7 +52,7 @@ namespace PPTS.Data.Common.Test
 
         public static void Output(this IEnumerable<IOguObject> objs)
         {
-            foreach(IOguObject obj in objs)
+            foreach (IOguObject obj in objs)
             {
                 Console.WriteLine("ID: {0}, Name: {1}", obj.ID, obj.Name);
             }

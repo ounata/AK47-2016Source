@@ -17,7 +17,7 @@ namespace PPTS.Portal
 
         protected override void OnPreRender(EventArgs e)
         {
-            this.portalParameters.Value = JsonConvert.SerializeObject(PreparePortalParameters());
+            this.configData.Value = JsonConvert.SerializeObject(PreparePortalParameters());
             base.OnPreRender(e);
         }
 
@@ -38,11 +38,11 @@ namespace PPTS.Portal
                 }
             }
 
-            Dictionary<string, Uri> urls = new Dictionary<string, Uri>();
+            Dictionary<string, Uri> webAPIs = new Dictionary<string, Uri>();
 
-            UriSettings.GetConfig().GetUrlsInGroup("pptsWebAPI").ForEach(u => urls[u.Key] = u.Value.Uri);
+            UriSettings.GetConfig().GetUrlsInGroup("pptsWebAPIs").ForEach(u => webAPIs[u.Key] = u.Value.Uri);
 
-            parameters["pptsWebAPI"] = urls;
+            parameters["pptsWebAPIs"] = webAPIs;
 
             return parameters;
         }

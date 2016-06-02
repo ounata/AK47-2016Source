@@ -35,7 +35,7 @@ namespace PPTS.Services.Products.Services
         public ExpenseQueryResult QueryExpenseByCampusID(string campusID)
         {
             ExpenseQueryResult queryResult = new ExpenseQueryResult();
-            queryResult.Expense = ExpenseAdapter.Instance.LoadByCampusID(campusID);
+            queryResult.ExpenseCollection = ExpenseAdapter.Instance.LoadByCampusID(campusID).ToList();
             return queryResult;
         }
 

@@ -35,6 +35,9 @@ define([ppts.config.modules.customer,
                             $scope.$broadcast('dictionaryReady');
                         });
                     };
+                    vm.export = function () {
+                        mcs.util.postMockForm(ppts.config.customerApiBaseUrl+'/api/feedback/exportCustomerReplies', vm.criteria);
+                    }
                     vm.search();
                 }]);
         });

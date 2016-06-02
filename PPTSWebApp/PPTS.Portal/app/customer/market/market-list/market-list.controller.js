@@ -25,7 +25,7 @@
                     // 分配咨询师/学管师/坐席/市场专员
                     vm.assign = function (relationType) {
                         if (util.selectMultiRows(vm)) {
-                            customerDataViewService.assignStaffRelation(vm.data.rowsSelected, relationType);
+                            customerDataViewService.assignStaffRelation(vm.data.rowsSelected, relationType,vm);
                         }
                     };
 

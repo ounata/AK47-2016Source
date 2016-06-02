@@ -1,9 +1,10 @@
-﻿define([ppts.config.modules.schedule,
+﻿/*按学员排课列表*/
+define([ppts.config.modules.schedule,
         ppts.config.dataServiceConfig.studentAssignmentDataService],
         function (schedule) {
             schedule.registerController('stuAsgmtListController', [
-                '$scope', '$state', 'dataSyncService', 'studentassignmentDataService', 'blockUI',
-                function ($scope, $state, dataSyncService, studentassignmentDataService, blockUI) {
+                '$scope', '$state', 'dataSyncService', 'studentassignmentDataService', 'blockUI', 'mcsDialogService',
+                function ($scope, $state, dataSyncService, studentassignmentDataService, blockUI, mcsDialogService) {
                     var vm = this;
                     vm.data = {
                         selection: 'radio',
@@ -12,13 +13,12 @@
                         headers: [{
                             field: "customerName",
                             name: "学员姓名",
-                            template: '<span>{{row.customerName}}</span>',
-                            sortable: true
+                            template: '<span>{{row.customerName}}</span>'
                         }, {
                             field: "customerCode",
-                            name: "学员编号",   
+                            name: "学员编号",
                             template: '<span>{{row.customerCode}}</span>'
-                        },{
+                        }, {
                             field: "gender",
                             name: "性别",
                             template: '<span>{{row.gender | gender }}</span>'
@@ -39,13 +39,13 @@
                             name: "学管师",
                             template: '<span>{{row.educatorName}}</span>'
                         }, {
-                            field: "remainOne2Ones",
+                            field: "assetOneToOneAmount",
                             name: "剩余数量",
-                            template: '<span>{{row.remainOne2Ones}}</span>'
+                            template: '<span>{{row.assetOneToOneAmount}}</span>'
                         }],
                         pager: {
                             pageIndex: 1,
-                            pageSize: 10,
+                            pageSize: 20,
                             totalCount: -1,
                             pageChange: function () {
                                 dataSyncService.initCriteria(vm);
@@ -57,7 +57,7 @@
                         orderBy: [{ dataField: 'CustomerCode', sortDirection: 1 }]
                     }
 
-                    // 页面初始化加载或重新搜索时查询
+                    /*页面初始化加载或重新搜索时查询*/
                     vm.init = function () {
                         blockUI.start();
                         dataSyncService.initCriteria(vm);
@@ -73,26 +73,10 @@
                     };
                     vm.init();
 
-                    // 翻页/排序实现
-                    //vm.query = function () {
-                    //    dataSyncService.initCriteria(vm);
-                    //    customerDataService.getPagedCustomers(vm.criteria, function (result) {
-                    //        vm.data.rows = result.pagedData;
-                    //    });
-                    //};
-
-                    /** 关闭条件搜索项
-                    vm.close = function (category, dictionary) {
-                        vm.criteria[category].length = 0;
-
-                        vm.dictionaries[dictionary].forEach(function (item, value) {
-                            item.checked = false;
-                        });
-                    };**/
-
+                    /*跳转排课*/
                     vm.stuAssignClick = function () {
                         if (vm.data.rowsSelected[0] == undefined) {
-                            alert("请选择一个学员");
+                            vm.showMsg("请选择一个学员");
                             return;
                         }
                         var stuName = '';
@@ -101,9 +85,15 @@
                                 stuName = vm.data.rows[i].customerName;
                                 break;
                             };
-
                         };
                         $state.go('ppts.stuasgmt-course', { cID: vm.data.rowsSelected[0].customerID, tn: stuName });
                     };
+
+
+                    vm.showMsg = function (msg) {
+                        mcsDialogService.error({ title: '提示信息', message: msg });
+                    };
+
+
                 }]);
         });

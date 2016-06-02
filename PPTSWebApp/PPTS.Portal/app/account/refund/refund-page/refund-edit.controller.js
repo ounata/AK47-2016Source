@@ -83,6 +83,7 @@
                         vm.calcAllot();
                     }
 
+                    //获取老师信息
                     vm.fetchTeacher = function (row) {
                         if (row.teacherOACode && row.teacherOACode != '') {
                             accountDataService.getTeacher(row.teacherOACode, function (result) {
@@ -96,7 +97,7 @@
                             });
                         }
                     }
-
+                                        
                     //计算业绩分配总额
                     vm.calcAllot = function () {
                         var totalMoney = 0;
@@ -140,18 +141,6 @@
                             field: "accountMoney",
                             name: "可退金额",
                             template: '<span>{{row.accountMoney|currency:"￥"}}</span>'
-                        }, {
-                            field: "assetMoney",
-                            name: "订购资金余额",
-                            template: '<span>{{row.assetMoney|currency:"￥"}}</span>'
-                        }, {
-                            field: "occurenceValue",
-                            name: "当前课时价值",
-                            template: '<span>{{row.occurenceValue|currency:"￥"}}</span>'
-                        }, {
-                            field: "consumptionValue",
-                            name: "已消耗课时价值",
-                            template: '<span>{{row.consumptionValue|currency:"￥"}}</span>'
                         }],
                         pager: {
                             pagable: false
@@ -191,10 +180,57 @@
                         return null;
                     }
 
-                    vm.calcData = function() {
-                        if (!vm.apply)
+                    vm.calcDataEvent = function (e) {
+                        if (e && e.keyCode != 13) {
                             return;
-                        if (vm.apply.applyRefundMoney == 'undefined')
+                        }
+                        var currentRow = vm.getCurrentRow();
+                        if (currentRow == null) {
+
+                            mcsDialogService.error({ title: '警告', message: '请选择要退费的账户' });
+                            return;
+                        }
+                        if (vm.apply.inputRefundMoney == 'undefined') {
+                            mcsDialogService.error({ title: '警告', message: '请输入合法的申退金额' });
+                            return;
+                        }
+                        if (vm.apply.inputRefundMoney <= 0) {
+
+                            mcsDialogService.error({ title: '警告', message: '申退金额必须大于零' });
+                            return;
+                        }
+                        if (vm.apply.inputRefundMoney > currentRow.accountMoney) {
+
+                            mcsDialogService.error({ title: '警告', message: '申退金额不能大于可退金额' });
+                            return;
+                        }                        
+                        //消耗的课时价值(consumptionValue>=thatDiscountBase)当前折扣基数
+                        if (vm.apply.consumptionValue >= vm.apply.thatDiscountBase) {
+
+                            vm.apply.applyRefundMoney = vm.apply.inputRefundMoney;
+                            vm.calcData();
+                        }
+                        else {
+
+                            //新的折扣基数=以前的折扣基数-申请金额      
+                            var accountID = vm.apply.accountID;
+                            var discountID = vm.apply.refundDiscountID;
+                            var discountBase = vm.apply.thatDiscountBase - vm.apply.inputRefundMoney;
+                            var reallowanceStartTime = vm.apply.reallowanceStartTime;
+                            accountDataService.getRefundReallowance(accountID, discountID, discountBase, reallowanceStartTime, function (result) {
+                                
+                                    vm.apply.applyRefundMoney = vm.apply.inputRefundMoney;
+                                    vm.apply.thisDiscountBase = vm.apply.thatDiscountBase - vm.apply.applyRefundMoney;
+                                    vm.apply.thisDiscountID = result.discountID;
+                                    vm.apply.thisDiscountCode = result.discountCode;
+                                    vm.apply.thisDiscountRate = result.discountRate;
+                                    vm.apply.reallowanceMoney = result.reallowanceMoney;
+                                    vm.calcData();
+                            });
+                        }
+                    }
+                    vm.calcData = function () {
+                        if (!vm.apply)
                             return;
                         if (!vm.apply.compensateMoney || vm.apply.compensateMoney < 0)
                             vm.apply.compensateMoney = 0;
@@ -206,53 +242,21 @@
                         //新的账户价值=以前的账户价值-申退金额
                         vm.apply.thisAccountValue = vm.apply.thatAccountValue - vm.apply.applyRefundMoney;
 
-                        //当前发生的课时价值(confirmedValue>=thatDiscountBase)当前折扣基数
-                        if (vm.apply.occurenceValue >= vm.apply.thatDiscountBase) {
-                            vm.apply.consumptionValue = 0;
-                            vm.apply.reallowanceMoney = 0;
+                        if (vm.apply.applyRefundMoney == 0 || vm.apply.consumptionValue >= vm.apply.thatDiscountBase) {
 
+                            vm.apply.thisDiscountBase = vm.apply.thatDiscountBase;
                             vm.apply.thisDiscountID = vm.apply.thatDiscountID;
                             vm.apply.thisDiscountCode = vm.apply.thatDiscountCode;
-                            vm.apply.thisDiscountBase = vm.apply.thatDiscountBase;
                             vm.apply.thisDiscountRate = vm.apply.thatDiscountRate;
+                            vm.apply.reallowanceMoney = 0;
                         }
-                        else {
-                            //计算折扣相关数值
-                            //新的账户价值=以前的账户价值                            
-                            vm.apply.thisDiscountBase = vm.apply.thatDiscountBase - vm.apply.applyRefundMoney;
-                            //新的折扣率计算
-                            vm.apply.thisDiscountRate = 1;
-                            if (vm.discount && vm.discount.items.length != 0) {
-                                vm.apply.thisDiscountID = vm.discount.discountID;
-                                vm.apply.thisDiscountCode = vm.discount.discountCode;
-                                vm.apply.thisDiscountRate = vm.discount.items[0].discountValue;
-                                for (var i = 0; i < vm.discount.items.length; i++) {
 
-                                    var item = vm.discount.items[i];
-                                    if (vm.apply.thisDiscountBase >= item.discountStandard * 10000) {
-                                        vm.apply.thisDiscountRate = item.discountValue;
-                                        break;
-                                    }
-                                }
-                            }
-
-                            //已消耗课时价值不变
-                            //折扣返还金额 = 已消耗课时价值/退费前折扣率*（退费后折扣率-退费前折扣率）
-                            if (vm.apply.thatDiscountRate > 0) {
-                                vm.apply.reallowanceMoney = vm.apply.consumptionValue / vm.apply.thatDiscountRate * (vm.apply.thisDiscountRate - vm.apply.thatDiscountRate);
-                            }
-                        }
                         //应退金额 = 申退金额-折扣返还
                         vm.apply.oughtRefundMoney = vm.apply.applyRefundMoney - vm.apply.reallowanceMoney;
                         //实退金额 = 应退金额-差价补偿+制度外退款
                         vm.apply.realRefundMoney = vm.apply.oughtRefundMoney - vm.apply.compensateMoney + vm.apply.extraRefundMoney;
                     }
-
-                    //监控申退金额
-                    $scope.$watch('vm.apply.applyRefundMoney', function () {
-                        vm.calcData();
-                    });
-
+                    
                     //监控差价补偿
                     $scope.$watch('vm.apply.compensateMoney', function () {
                         vm.calcData();
@@ -285,13 +289,16 @@
                             vm.apply.thatAccountValue = row.accountValue;
                             vm.apply.thatAccountMoney = row.accountMoney;
 
-                            vm.apply.assetMoney = row.assetMoney;  //订购资金余额
-                            vm.apply.occurenceValue = row.occurenceValue;      //当前发生课时价值
-                            vm.apply.consumptionValue = row.consumptionValue;  //已消耗课时价值
-                            vm.apply.applyRefundMoney = row.accountMoney;      //申退金额
+                            vm.apply.assetMoney = row.assetMoney;                    //订购资金余额
+                            vm.apply.consumptionValue = row.consumptionValue         //课时消耗价值
+                            vm.apply.reallowanceStartTime = row.reallowanceStartTime //计算折扣返还的开始时间点
+                            vm.apply.refundDiscountID = row.refundDiscountID;        //退费对应的折扣ID
+                            vm.apply.applyRefundMoney = 0;                           //重置申退金额
+                            vm.calcData();
                         }
                     });
-                    //新增转让单
+
+                    //保存退费单
                     vm.save = function () {
 
                         var currentRow = vm.getCurrentRow();

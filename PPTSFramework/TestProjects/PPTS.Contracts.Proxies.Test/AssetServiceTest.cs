@@ -14,12 +14,9 @@ namespace PPTS.Contracts.Proxies.Test
     {
 
         [TestMethod]
-        public void QueryAssetStatisticByAccountIDTest()
+        public void QueryAssetMoneyCollectionByAccountIDsTest()
         {
-            AssetStatisticQueryResult queryResult = PPTSAssetQueryServiceProxy.Instance.QueryAssetStatisticByAccountID("145291");
-            Assert.IsNotNull(queryResult);
-            Assert.IsNotNull(queryResult.AssetsValue);
-            Console.WriteLine(queryResult.AssetsValue);
+          
         }
     }
 }

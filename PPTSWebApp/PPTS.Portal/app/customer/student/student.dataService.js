@@ -13,7 +13,7 @@
         resource.getAllStudents = function (criteria, success, error) {
             resource.post({ operation: 'getAllStudents' }, criteria, success, error);
         }
-        
+
         resource.getPagedStudents = function (criteria, success, error) {
             resource.post({ operation: 'getPagedStudents' }, criteria, success, error);
         }
@@ -58,7 +58,7 @@
             resource.post({ operation: 'assignTeacher' }, model, success, error);
         }
 
-        resource.getTeachers = function ( success, error) {
+        resource.getTeachers = function (success, error) {
             resource.get({ operation: 'getTeachers' }, success, error);
         }
 
@@ -70,8 +70,30 @@
             resource.post({ operation: 'changeTeacher' }, model, success, error);
         }
 
-        resource.getAllCustomerTeacherRelations = function ( model,success, error) {
-            resource.post({ operation: 'getAllCustomerTeacherRelations' },model, success, error);
+        resource.getAllCustomerTeacherRelations = function (model, success, error) {
+            resource.post({ operation: 'getAllCustomerTeacherRelations' }, model, success, error);
+        }
+
+        //根据学员ID获取转学信息
+        resource.getStudentTransferApplyByCustomerID = function (id, success, error) {
+            resource.query({ operation: 'GetStudentTransferApplyByCustomerID', id: id }, success, error);
+        }
+
+        //根据申请ID获取转学信息
+        resource.getStudentTransferApplyByApplyID = function (id, success, error) {
+            resource.query({ operation: 'GetStudentTransferApplyByApplyID', id: id }, success, error);
+        }
+
+        //保存转学申请
+        resource.saveStudentTransferApply = function (apply, success, error) {
+            resource.post({ operation: 'SaveStudentTransferApply' }, apply, success, error);
+        }
+
+        //审批转学申请
+        resource.approveStudentTransferApply = function (applyID, opinion, success, error) {
+
+            var apply = { applyID: applyID, opinion: opinion };
+            resource.post({ operation: 'ApproveStudentTransferApply' }, apply, success, error);
         }
 
         return resource;

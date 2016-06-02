@@ -44,66 +44,7 @@
         headers: [{
             field: "customerName",
             name: "学员姓名",
-            template: '<a ui-sref="ppts.follow-view({followId:row.followID})">{{row.customerName}}</a>',
-        }, {
-            field: "customerCode",
-            name: "学员编号",
-            template: '<span>{{row.customerCode}}</span>',
-        }, {
-            field: "parentName",
-            name: "家长姓名",//parentName
-            template: '<span>{{row.parentName}}</span>',
-        }, {
-            field: "followTime",
-            name: "跟进时间",
-            //template: '<a ui-sref="ppts.follow-view({id:row.followID,page:\'info\'})"><span>{{row.followTime | date:"yyyy-MM-dd"}}</span></a>',
-            template: '<span>{{row.followTime | date:"yyyy-MM-dd"}}</span>'
-        }, {
-            field: "followType",
-            name: "跟进方式",
-            template: '<span>{{row.followType | followType}}</span>',
-        }, {
-            field: "followObject",
-            name: "跟进对象",
-            template: '<span>{{row.followObject | followObject}}</span>',
-        }, {
-            field: "planVerifyTime",
-            name: "预计上门时间",
-            template: '<span>{{row.planVerifyTime | date:"yyyy-MM-dd"}}</span>'
-        }, {
-            field: "followStage",
-            name: "跟进后阶段",
-            template: '<span>{{row.followStage | followStage}}</span>'
-        }, {
-            field: "purchaseIntention",
-            name: "购买意愿",
-            template: '<span>{{row.purchaseIntention | purchaseIntention }}</span>'
-        }, {
-            field: "customerLevel",
-            name: "客户级别",
-            template: '<span>{{row.customerLevel | customerLevel}}</span>'
-        }, {
-            field: "intensionSubjects",
-            name: "跟进情况备注",
-            template: '<span>{{row.intensionSubjects}}</span>'
-        }, {
-            field: "followName",
-            name: "记录人（所在部门）",
-            template: '<span>{{row.FollowName}}({{row.FollowerName}})</span>'
-        }],
-        pager: {
-            pageIndex: 1,
-            pageSize: 10,
-            totalCount: -1
-        },
-        orderBy: [{ dataField: 'a.CreateTime', sortDirection: 1 }]
-    });
-
-    customer.registerValue('showfollowListDataHeader', {
-        headers: [{
-            field: "customerName",
-            name: "学员姓名",
-            template: '{{row.customerName}}',
+            template: '<a ui-sref="ppts.student-view.follows({id:row.customerID,prev:\'ppts.student\'})">{{row.customerName}}</a>',
         }, {
             field: "customerCode",
             name: "学员编号",
@@ -115,6 +56,52 @@
         }, {
             field: "followTime",
             name: "跟进时间",
+            template: '<a ui-sref="ppts.follow-view({followId:row.followID})">{{row.followTime | date:"yyyy-MM-dd"}}</a>'
+        }, {
+            field: "followType",
+            name: "跟进方式",
+            template: '<span>{{row.followType | followType}}</span>',
+        }, {
+            field: "followObject",
+            name: "跟进对象",
+            template: '<span>{{row.followObject | followObject}}</span>',
+        }, {
+            field: "planVerifyTime",
+            name: "预计上门时间",
+            template: '<span>{{row.planVerifyTime | date:"yyyy-MM-dd"}}</span>'
+        }, {
+            field: "followStage",
+            name: "跟进后阶段",
+            template: '<span>{{row.followStage | followStage}}</span>'
+        }, {
+            field: "purchaseIntention",
+            name: "购买意愿",
+            template: '<span>{{row.purchaseIntention | purchaseIntention }}</span>'
+        }, {
+            field: "customerLevel",
+            name: "客户级别",
+            template: '<span>{{row.customerLevel | customerLevel}}</span>'
+        }, {
+            field: "intensionSubjects",
+            name: "跟进情况备注",
+            template: '<span>{{row.intensionSubjects}}</span>'
+        }, {
+            field: "followerAndJobName",
+            name: "记录人（所在部门）",
+            template: '<span>{{row.followerAndJobName}}</span>'
+        }],
+        pager: {
+            pageIndex: 1,
+            pageSize: 10,
+            totalCount: -1
+        },
+        orderBy: [{ dataField: 'a.CreateTime', sortDirection: 1 }]
+    });
+
+    customer.registerValue('showfollowListDataHeader', {
+        headers: [{
+            field: "followTime",
+            name: "跟进时间",
             template: '<span>{{row.followTime | date:"yyyy-MM-dd"}}</span>'
         }, {
             field: "followType",
@@ -145,9 +132,9 @@
             name: "跟进情况备注",
             template: '<span>{{row.intensionSubjects}}</span>'
         }, {
-            field: "followName",
+            field: "followerAndJobName",
             name: "记录人（所在部门）",
-            template: '<span>{{row.FollowName}}({{row.FollowerName}})</span>'
+            template: '<span>{{row.followerAndJobName}}</span>'
         }],
         pager: {
             pageIndex: 1,
@@ -214,21 +201,7 @@
             for (var index in subTalk) {
                 mainTalk.push(subTalk[index]);
             }
-            vm.talkData = {
-                model: {
-                    "levelCount": 2,
-                    "1": {
-                        "title": "请选择",
-                        "name": "one"
-                    },
-                    "2": {
-                        "title": "请选择",
-                        "name": "two"
-                    }
-                },
-                data: mainTalk
-            };
-
+            vm.talkData = mcs.util.convert(mainTalk);
         };
 
         // 初始化新增跟进记录信息

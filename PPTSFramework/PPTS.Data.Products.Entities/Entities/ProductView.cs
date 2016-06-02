@@ -14,7 +14,7 @@ namespace PPTS.Data.Products.Entities
     /// 产品
     /// </summary>
     [Serializable]
-    [ORTableMapping("PM.v_Product")]
+    [ORTableMapping("PM.v_Products")]
     [DataContract]
     public class ProductView
     {
@@ -214,28 +214,7 @@ namespace PPTS.Data.Products.Entities
         [ORFieldMapping("PromotionQuota")]
         [DataMember]
         public decimal PromotionQuota { set; get; }
-
-        /// <summary>
-        /// 所有者组织类型
-        /// </summary>
-        [ORFieldMapping("OwnOrgID")]
-        [DataMember]
-        public string OwnOrgID { set; get; }
-
-        /// <summary>
-        /// 使用者组织类型
-        /// </summary>
-        [ORFieldMapping("OwnOrgType")]
-        [DataMember]
-        public string OwnOrgType { set; get; }
-
-        /// <summary>
-        /// 使用者组织类型
-        /// </summary>
-        [ORFieldMapping("UseOrgType")]
-        [DataMember]
-        public string UseOrgType { set; get; }
-
+        
         /// <summary>
         /// 提交人ID
         /// </summary>

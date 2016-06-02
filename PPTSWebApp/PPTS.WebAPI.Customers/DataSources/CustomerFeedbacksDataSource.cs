@@ -27,7 +27,7 @@ namespace PPTS.WebAPI.Customers.DataSources
                             ParentName,ParentID,
                             customer.CustomerCode,customer.CustomerName,customer.CampusName,
                             customer.Grade";
-            string from = @"CustomerFeedbacks feedbacks LEFT JOIN Customers_Current customer on feedbacks.CustomerId=customer.CustomerId";
+            string from = @" CM.CustomerFeedbacks feedbacks LEFT JOIN CM.Customers_Current customer on feedbacks.CustomerId=customer.CustomerId";
             PagedQueryResult<CustomerFeedbacksQueryModel, CustomerFeedbacksQueryCollection> result = Query(prp, select, from, condition, orderByBuilder);
             return result;
         }

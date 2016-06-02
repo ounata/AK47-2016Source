@@ -1,31 +1,36 @@
 ﻿define([ppts.config.modules.order,
-        ppts.config.dataServiceConfig.unsubscribeCourseDataService], function (unsubscribe) {
-            unsubscribe.registerController('unsubscribeListController', [
+        ppts.config.dataServiceConfig.unsubscribeCourseDataService], function (helper) {
+            helper.registerController('unsubscribeListController', [
                 '$scope', '$state', 'dataSyncService', 'unsubscribeCourseDataService',
                 function ($scope, $state, dataSyncService, unsubscribeCourseDataService) {
                     var vm = this;
 
-                    function bindEvent() {
+                    vm.search = function () {
+                        if (vm.criteria.dateRange) {
+                            var dateRange = dataSyncService.selectPageDict('dateRange', vm.criteria.dateRange);
+                            vm.criteria.startDate = dateRange.start || vm.criteria.customStartDate;
+                            vm.criteria.endDate = dateRange.end || vm.criteria.customEndDate;
+                        }
 
-                        vm.search = function () {
-                            if (vm.criteria.dateRange) {
-                                var dateRange = dataSyncService.selectPageDict('dateRange', vm.criteria.dateRange);
-                                vm.criteria.startDate = dateRange.start || vm.criteria.customStartDate;
-                                vm.criteria.endDate = dateRange.end || vm.criteria.customEndDate;
-                            }
-                            console.log(vm.criteria);
-                            unsubscribeCourseDataService.getAllDebookOrders(vm.criteria, function (result) {
-                                vm.data.rows = result.queryResult.pagedData;
-                                dataSyncService.updateTotalCount(vm, result.queryResult);
-                                $scope.$broadcast('dictionaryReady');
-                            });
-                        };
+                        console.log(vm.criteria);
 
+                        unsubscribeCourseDataService.getAllDebookOrders(vm.criteria, function (result) {
 
+                            console.log(result);
 
+                            vm.data.rows = result.queryResult.pagedData;
+                            dataSyncService.updateTotalCount(vm, result.queryResult);
+                            $scope.$broadcast('dictionaryReady');
+
+                        });
                     };
+                    vm.export = function () {
+                        mcs.util.postMockForm(ppts.config.orderApiBaseUrl + 'api/Unsubscribe/ExportDebookItemList', vm.criteria);
+                    }
 
-                    function init() {
+
+                    var init = (function () {
+
                         //定义
                         vm.data = {
                             selection: 'radio',
@@ -41,7 +46,7 @@
                                 field: "parentName",
                                 name: "家长姓名"
                             }, {
-                                field: "debookNo",
+                                field: "orderNo",
                                 name: "订单编号"
                             }, {
                                 //field: "debookTime",
@@ -50,9 +55,9 @@
                             }, {
                                 field: "categoryTypeName",
                                 name: "订单类型",
-                                //template: '<span>{{row.categoryType | categoryType}}</span>'
+                                template: '<span>{{row.orderType | orderType }}</span>'
                             }, {
-                                field: "orderAmount",
+                                field: "realAmount",//orderAmount
                                 name: "订购数量",
                             }, {
                                 //field: "realPrice",
@@ -63,20 +68,16 @@
                                 name: "实际单价（元）",
                                 template: '<span>{{row.realPrice | currency}}</span>'
                             }, {
-                                field: "usedOrderAmount",
+                                field: "confirmedAmount",
                                 name: "已使用数量",
                             }, {
                                 //field: "realPrice",
                                 name: "已使用金额",
-                                template: '<span>{{ row.realPrice * row.usedOrderAmount | currency }}</span>'
+                                template: '<span>{{ row.confirmedMoney | currency }}</span>'
                             }, {
                                 //field: "realPrice",
                                 name: "退订数量（赠送）",
-                                template: '<span>{{ row.debookAmount }}</span>'
-                                        + '<span ng-if="row.presentID!=\'\'">'
-                                        + '({{ row.orderAmount == row.usedOrderAmount ? row.debookAmount : (row.debookAmount - row.orderAmount - row.usedOrderAmount) }})'
-                                        + '</span>'
-                                        + '<span ng-if="row.presentID==\'\'">(0)</span>'
+                                template: '<span>{{ row.debookAmount }}({{row.presentAmountOfDebook}})</span>'                                        
                             }, {
                                 field: "debookMoney",
                                 name: "退订金额",
@@ -102,14 +103,12 @@
                         dataSyncService.initCriteria(vm);
                         vm.criteria.dateRange = '0';
                         dataSyncService.injectPageDict(['dateRange']);
-                        
-
-                        //绑定
-                        bindEvent();
 
 
                         vm.search();
-                    };
-                    init();
+
+                    })();
+
+
                 }]);
         });

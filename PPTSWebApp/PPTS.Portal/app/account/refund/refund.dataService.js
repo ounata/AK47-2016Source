@@ -34,6 +34,12 @@
             resource.query({ operation: 'GetRefundApplyByApplyID', id: id }, success, error);
         }
 
+        //获取折扣返还信息
+        resource.getRefundReallowance = function (accountID, discountID, discountBase, reallowanceStartTime, success, error) {
+
+            resource.query({ operation: 'GetRefundReallowance', accountID: accountID, discountID: discountID, discountBase: discountBase, reallowanceStartTime: reallowanceStartTime }, success, error);
+        }
+
         //保存退费申请
         resource.saveRefundApply = function (apply, success, error) {
             resource.post({ operation: 'SaveRefundApply' }, apply, success, error);

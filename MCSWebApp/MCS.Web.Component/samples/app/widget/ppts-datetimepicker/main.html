@@ -23,6 +23,7 @@
                     <h3 class="header smaller lighter green">应用范例</h3>
                     <div>
                         默认用法：<ppts-datetimepicker model="vm.meetingTime" /><br />
+                        带提示： <ppts-datetimepicker model="vm.meetingTime" placeholder="会议时间"/><br />
                         增加zIndex(防覆盖)： <ppts-datetimepicker model="vm.meetingTime" z-index="1060"/><br />
                         <span>会议日期：{{vm.meetingTime}} </span>
                     </div>
@@ -34,6 +35,7 @@
                         <pre class="codes">
                         <code><b>Html</b></code><br />
                         默认用法：&lt;ppts-datetimepicker model="vm.meetingTime" /&gt;&lt;br/&gt;
+                        带提示： &lt;ppts-datetimepicker model="vm.meetingTime" placeholder="会议时间" /&gt;&lt;br/&gt;
                         增加zIndex(防覆盖)： &lt;ppts-datetimepicker model="vm.meetingTime" z-index="1060"/&gt;&lt;br/&gt;
                         &lt;span&gt;开会日期：{{vm.meetingTime}} &lt;/span&gt;
                         <code><b>Javascript</b></code><br />
@@ -63,6 +65,13 @@
                                 <td>是</td>
                                 <td>无</td>
                                 <td>&lt;ppts-datetimepicker model="vm.meetingTime" /&gt;</td>
+                            </tr>
+                            <tr>
+                                <td><code>placeholder</code></td>
+                                <td>时间控件提示文本</td>
+                                <td>否</td>
+                                <td>"输入时间"</td>
+                                <td>&lt;ppts-datetimepicker model="vm.meetingTime"  placeholder="会议时间"/&gt;</td>
                             </tr>
                             <tr>
                                 <td><code>zIndex</code></td>

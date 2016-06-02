@@ -29,12 +29,17 @@
                 <div class="col-sm-12">
                     <h3 class="header smaller lighter green">应用范例</h3>
                     <div id="usage">
-                        <ul id="treeDemo" mcs-tree="vm.treeSetting" class="ztree" set-nodes="vm.setTreeData">
+                        <div>
+                            <input type="button" ng-click="vm.clearChecked()" value="清除选中">
+                        </div>
+                        <ul id="treeDemo" mcs-tree="vm.treeSetting" distinct-level="1" class="ztree" set-nodes="vm.setTreeData">
                         </ul>
                         <h4>接口说明：</h4>
                         <ol>
                             <li>树的容器标签必须使用可唯一标识的id属性，例如：id="userTree"</li>
                             <li>树控件初始化以后，在tree setting 对象上添加接口方法，例如：getNodesChecked 获取已经check的所有节点；getNamesOfNodesChecked 获取已经check的节点的名称数组；getIdsOfNodesChecked 获取已经check的节点的id数组</li>
+                            <li>如果需要改变节点选取框为radio，则请修改树的配置对象 check: { enable: true, chkStyle: 'radio', radioType: "all" }
+                            </li>
                         </ol>
                     </div>
                 </div>

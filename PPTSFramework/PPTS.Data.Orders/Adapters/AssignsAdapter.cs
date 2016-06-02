@@ -14,7 +14,7 @@ using System.Data;
 
 namespace PPTS.Data.Orders.Adapters
 {
-    public class AssignsAdapter : AssignAdapterBase<Assign, AssignCollection>
+    public class AssignsAdapter : OrderAdapterBase<Assign, AssignCollection>
     {
         public static readonly AssignsAdapter Instance = new AssignsAdapter();
         private AssignsAdapter()
@@ -88,7 +88,7 @@ namespace PPTS.Data.Orders.Adapters
         /// <param name="atEnd"></param>
         /// <param name="cID">Customer ID</param>
         /// <returns></returns>
-        public AssignCollection LoadCollection(string ID, bool isStuID, DateTime atStart, DateTime atEnd, bool isUTCTime)
+        public AssignCollection LoadCollection(AssignTypeDefine atd, string ID,  DateTime atStart, DateTime atEnd, bool isUTCTime)
         {
             atStart.NullCheck("atStart");
             atEnd.NullCheck("atEnd");
@@ -104,10 +104,15 @@ namespace PPTS.Data.Orders.Adapters
                 atEndTxt = string.Format("DATEADD(hour, DATEDIFF(hour,GETDATE(),GETUTCDATE()), '{0}')", atEnd.ToString("yyyy-MM-dd"));
                 wSCB.AppendItem("StartTime", atStartTxt, ">=", true).AppendItem("EndTime", atEndTxt, "<", true);
             }
-            if (isStuID)
-                wSCB.AppendItem("CustomerID", ID, "=");
-            else
-                wSCB.AppendItem("TeacherID", ID, "=");
+            switch (atd)
+            {
+                case AssignTypeDefine.ByStudent:
+                    wSCB.AppendItem("CustomerID", ID, "=");
+                    break;
+                case AssignTypeDefine.ByTeacher:
+                    wSCB.AppendItem("TeacherJobID", ID, "=");
+                    break;
+            }
             WhereLoadingCondition wLC = new WhereLoadingCondition(p => { foreach (var v in wSCB) { p.Add(v); } });
             return this.Load(wLC);
         }
@@ -138,14 +143,14 @@ namespace PPTS.Data.Orders.Adapters
         {
             accountID.NullCheck("accountID");
             decimal assignValue = 0;
-            DataSet ds = DbHelper.RunSqlReturnDS(LoadAccountConfirmAssignByDateTimeSQL(accountID, startTime), this.ConnectionName);
+            DataSet ds = DbHelper.RunSqlReturnDS(LoadAccountConfirmAssignForRefundByDateTimeSQL(accountID, startTime), this.ConnectionName);
             if (ds.Tables[0].Rows.Count > 0)
                 assignValue = (decimal)(ds.Tables[0].Rows[0][0]);
             return assignValue;
         }
 
         /// <summary>
-        /// 统计账户折扣返还价值信息
+        /// 统计退费需要的课时消耗价值及折扣返还价值信息
         /// </summary>
         /// <param name="accountID">账户ID</param>
         /// <param name="newDiscount">新折扣</param>
@@ -172,7 +177,7 @@ namespace PPTS.Data.Orders.Adapters
         public void LoadAccountRefundInfoByDateTime(string accountID, decimal newDiscount, DateTime startTime, ref decimal assignValue, ref decimal discountReturn)
         {
             accountID.NullCheck("accountID");
-            string sql = string.Format("{0};{1};", LoadAccountConfirmAssignByDateTimeSQL(accountID, startTime), LoadDiscountReturnConfirmAssignByDateTimeSQL(accountID, newDiscount, startTime));
+            string sql = string.Format("{0};{1};", LoadAccountConfirmAssignForRefundByDateTimeSQL(accountID, startTime), LoadDiscountReturnConfirmAssignByDateTimeSQL(accountID, newDiscount, startTime));
             DataSet ds = DbHelper.RunSqlReturnDS(sql, this.ConnectionName);
             if (ds.Tables[0].Rows.Count > 0)
                 assignValue = (decimal)(ds.Tables[0].Rows[0][0]);
@@ -197,7 +202,7 @@ namespace PPTS.Data.Orders.Adapters
         {
             WhereSqlClauseBuilder whereBuilder = new WhereSqlClauseBuilder();
             whereBuilder.AppendItem("asset.AccountID", accountID)
-                .AppendItem("ass.AssignStatus", AssignStatusDefine.Finished.GetHashCode())
+                .AppendItem("ass.AssignStatus", (int)AssignStatusDefine.Finished)
                 .AppendItem("ass.StartTime", TimeZoneContext.Current.ConvertTimeToUtc(startTime), ">=");
             string sql = string.Format(@"select top 1 1 from {0}  as ass inner join {1} AS asset
             on ass.AssetID=asset.AssetID 
@@ -209,28 +214,32 @@ namespace PPTS.Data.Orders.Adapters
         }
 
         /// <summary>
-        /// 消耗价值取数规则
+        /// 消耗价值取数规则[不包含买赠部分]
         /// </summary>
         /// <param name="accountID">账户ID</param>
         /// <param name="startTime">开始时间</param>
         /// <returns></returns>
-        private string LoadAccountConfirmAssignByDateTimeSQL(string accountID, DateTime startTime)
+        private string LoadAccountConfirmAssignForRefundByDateTimeSQL(string accountID, DateTime startTime)
         {
             WhereSqlClauseBuilder whereBuilder = new WhereSqlClauseBuilder();
             whereBuilder.AppendItem("asset.AccountID", accountID)
-                .AppendItem("ass.AssignStatus", AssignStatusDefine.Finished.GetHashCode())
+                .AppendItem("ass.AssignStatus", (int)AssignStatusDefine.Finished)
                 .AppendItem("ass.StartTime", TimeZoneContext.Current.ConvertTimeToUtc(startTime), ">=");
             string sql = string.Format(@"select isnull(sum(isnull(ass.ConfirmPrice,0)*isnull(ass.Amount,0)),0) AssignValue from {0}  as ass inner join {1} AS asset
             on ass.AssetID=asset.AssetID 
-            where {2}"
+            inner join {2} oi on asset.AssetRefID=oi.ItemID
+            and oi.DiscountType in (1,2,3)
+            where {3}"
             , this.GetQueryMappingInfo().GetQueryTableName()
             , AssetAdapter.Instance.GetQueryMappingInfo().GetQueryTableName()
-            , whereBuilder.ToSqlString(TSqlBuilder.Instance));
+            , OrderItemAdapter.Instance.GetQueryMappingInfo().GetQueryTableName()
+            , whereBuilder.ToSqlString(TSqlBuilder.Instance)
+            );
             return sql;
         }
 
         /// <summary>
-        /// 折扣返还，指定日期的sum(消耗价值/对应折扣率*(新折扣率-对应折扣率))
+        /// 折扣返还，指定日期的sum(消耗价值/对应订购单使用折扣率*(新折扣率-对应订购单使用折扣率))[不包含买赠部分]
         /// </summary>
         /// <param name="accountID">账户ID</param>
         /// <param name="newDiscount">新折扣率</param>
@@ -240,12 +249,13 @@ namespace PPTS.Data.Orders.Adapters
         {
             WhereSqlClauseBuilder whereBuilder = new WhereSqlClauseBuilder();
             whereBuilder.AppendItem("asset.AccountID", accountID)
-                .AppendItem("ass.AssignStatus", AssignStatusDefine.Finished.GetHashCode())
+                .AppendItem("ass.AssignStatus", (int)AssignStatusDefine.Finished)
                 .AppendItem("ass.StartTime", TimeZoneContext.Current.ConvertTimeToUtc(startTime), ">=");
             string sql = string.Format(@"select isnull(sum(isnull(ass.Amount,0)*isnull(ass.ConfirmPrice,0)/isnull(oi.DiscountRate,1)*({0}-isnull(oi.DiscountRate,1))),0) DeductionValue 
                                          from {1} ass 
                                          inner join {2} asset on ass.AssetID=asset.AssetID
-                                         inner join {3} oi on asset.AssetRefID=oi.ItemID and oi.DiscountType='1'
+                                         inner join {3} oi on asset.AssetRefID=oi.ItemID
+                                         and oi.DiscountType in (1,2,3)
                                          where {4} "
                 , newDiscount
                 , this.GetQueryMappingInfo().GetQueryTableName()

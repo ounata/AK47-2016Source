@@ -55,11 +55,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Authorization\CourseOrgAuthorization.cs" />
+    <Compile Include="Authorization\CustomerFiledMappingAttribute.cs" />
+    <Compile Include="Authorization\CustomerOrgAuthorization.cs" />
+    <Compile Include="Authorization\Enumerations.cs" />
+    <Compile Include="Authorization\OrgCustomerRelationScopeAttribute.cs" />
+    <Compile Include="Authorization\OwnerRelationAuthorization.cs" />
+    <Compile Include="Authorization\OwnerRelationScopeAttribute.cs" />
+    <Compile Include="Authorization\KeyFiledMappingAttribute.cs" />
+    <Compile Include="Authorization\RecordOrgAuthorization.cs" />
+    <Compile Include="Authorization\RecordOrgScopeAttribute.cs" />
+    <Compile Include="Authorization\CustomerRelationScopeAttribute.cs" />
+    <Compile Include="Authorization\EntityAuthAttribute.cs" />
+    <Compile Include="Authorization\ScopeBaseAttribute.cs" />
     <Compile Include="Entities\BaseConstantEntity.cs" />
     <Compile Include="Entities\ConfigArgs.cs" />
     <Compile Include="Entities\ConfigEntity.cs" />
     <Compile Include="Entities\ConstantCategoryAttribute.cs" />
     <Compile Include="Entities\ConstantEntity.cs" />
+    <Compile Include="Authorization\CustomerRelationAuthorization.cs" />
     <Compile Include="Entities\Enumerations.cs" />
     <Compile Include="Entities\IEntityWithCreator.cs" />
     <Compile Include="Entities\IEntityWithModifier.cs" />

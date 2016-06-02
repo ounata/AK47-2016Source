@@ -23,6 +23,7 @@
                     <h3 class="header smaller lighter green">应用范例</h3>
                     <div>
                         默认用法：<ppts-daterangepicker start-date="vm.meetingStartTime" end-date="vm.meetingEndTime"/><br />
+                        带提示：<ppts-daterangepicker start-date="vm.meetingStartTime" end-date="vm.meetingEndTime" start-text="会议开始日期" end-text="会议结束日期"/><br />
                         增加zIndex(防覆盖)： <ppts-daterangepicker start-date="vm.meetingStartTime" end-date="vm.meetingEndTime" z-index="1060" /><br />
                         <span>会议开始日期：{{vm.meetingStartTime}}, 会议结束日期：{{vm.meetingEndTime}} </span>
                     </div>
@@ -34,6 +35,7 @@
                         <pre class="codes">
                         <code><b>Html</b></code><br />
                         默认用法：&lt;ppts-daterangepicker start-date="vm.meetingStartTime" end-date="vm.meetingEndTime"/&gt;&lt;br /&gt;
+                        带提示：&lt;ppts-daterangepicker start-date="vm.meetingStartTime" end-date="vm.meetingEndTime" start-text="会议开始日期" end-text="会议结束日期" /&gt;&lt;br /&gt;
                         增加zIndex(防覆盖)： &lt;ppts-daterangepicker start-date="vm.meetingStartTime" end-date="vm.meetingEndTime" z-index="1060"/&gt;&lt;br /&gt;
                         &lt;span&gt;会议开始日期：{{vm.meetingStartTime}}, 会议结束日期：{{vm.meetingEndTime}} &lt;/span&gt;
                         <code><b>Javascript</b></code><br />
@@ -68,8 +70,22 @@
                                 <td><code>endDate</code></td>
                                 <td>绑定选中的结束日期</td>
                                 <td>是</td>
-                                <td>无</td>
+                                <td>否</td>
                                 <td>&lt;ppts-daterangepicker start-date="vm.meetingStartTime" end-date="vm.meetingEndTime"/&gt;</td>
+                            </tr>
+                            <tr>
+                                <td><code>startText</code></td>
+                                <td>开始日期提示</td>
+                                <td>否</td>
+                                <td>“开始时间”</td>
+                                <td>&lt;ppts-daterangepicker start-date="vm.meetingStartTime" end-date="vm.meetingEndTime" start-text="会议开始日期"/&gt;</td>
+                            </tr>
+                            <tr>
+                                <td><code>endText</code></td>
+                                <td>结束日期提示</td>
+                                <td>否</td>
+                                <td>“结束时间”</td>
+                                <td>&lt;ppts-daterangepicker start-date="vm.meetingStartTime" end-date="vm.meetingEndTime" end-text="会议结束日期"/&gt;</td>
                             </tr>
                             <!--<tr>
                                 <td><code>size</code></td>

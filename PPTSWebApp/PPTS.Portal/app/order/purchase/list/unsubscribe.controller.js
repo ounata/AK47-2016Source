@@ -65,17 +65,19 @@
                         //买赠
                         if (entity.presentID != "") {
                             vm.data.headers = vm.data.headers.concat([{
-                                field: "usedOrderAmount",
+                                field: "confirmedAmount",
                                 name: "已使用订购数量",
                             }, {
-                                field: "usedPresentAmount",
                                 name: "已使用赠送数量",
+                                template: '{{ row.confirmedAmount > row.orderAmount ? row.confirmedAmount - row.orderAmount:0  }}'
                             }, {
                                 name: "剩余订购数量(排课数量)",
-                                template: '{{ row.orderAmount - row.usedOrderAmount  }}({{row.assignedAmount}})'
+                                template: '{{ row.confirmedAmount > row.orderAmount? 0:row.orderAmount-row.confirmedAmount  }}'
+                                        + '({{ row.confirmedAmount > row.orderAmount ? 0: row.assignedAmount > ( row.orderAmount - row.confirmedAmount )? (row.orderAmount - row.confirmedAmount):row.assignedAmount  }})'
                             }, {
                                 name: "剩余赠送数量(排课数量)",
-                                template: '{{ row.presetAmount - row.usedPresentAmount  }}({{row.assignedAmount}})'
+                                template: '{{ row.confirmedAmount > row.orderAmount ? row.presetAmount -(row.confirmedAmount - row.orderAmount ) :row.presetAmount  }}'
+                                        + '({{ row.confirmedAmount > row.orderAmount ? row.assignedAmount-(row.orderAmount - row.confirmedAmount) : 0 }})'
                             }, {
                                 name: "申请退掉数量",
                                 template: '{{ row.debookedAmount  }}'

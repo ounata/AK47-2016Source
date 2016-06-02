@@ -46,6 +46,9 @@ namespace PPTS.WebAPI.Orders.ViewModels.Purchase
         [InConditionMapping("CustomerGrade")]
         public string[] selectedStuGrades { set; get; }
 
+        [InConditionMapping("Grade")]
+        public string[] selectedProductGrades { set; get; }
+
         [InConditionMapping("ProductUnit")]
         public string[] selectedUnits { set; get; }
 
@@ -62,6 +65,14 @@ namespace PPTS.WebAPI.Orders.ViewModels.Purchase
         //剩余课时
         [ConditionMapping("Amount", Operation = "<=")]
         public string RemainLessonEnd { set; get; }
+
+        //订购日期
+        [ConditionMapping("SubmitTime", Operation = ">=")]
+        public DateTime StartDate { set; get; }
+
+        //订购日期
+        [ConditionMapping("SubmitTime", Operation = "<=")]
+        public DateTime endDate { set; get; }
 
         //
 

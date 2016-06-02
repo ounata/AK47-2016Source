@@ -43,12 +43,16 @@
     <Reference Include="MCS.Library">
       <HintPath>..\..\..\Bin\MCS.Library.dll</HintPath>
     </Reference>
+    <Reference Include="MCS.Library.Data">
+      <HintPath>..\..\..\Bin\MCS.Library.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="MCS.Library.SOA.DataObjects, Version=1.0.0.0, Culture=neutral, PublicKeyToken=62ea08f894871798, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Bin\MCS.Library.SOA.DataObjects.dll</HintPath>
+    </Reference>
     <Reference Include="MCS.Library.WcfExtensions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=62ea08f894871798, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Bin\MCS.Library.WcfExtensions.dll</HintPath>
-    </Reference>
-    <Reference Include="MCS.Web.Library.Script.Json">
-      <HintPath>..\..\..\Bin\MCS.Web.Library.Script.Json.dll</HintPath>
     </Reference>
     <Reference Include="PPTS.Contracts.Customers">
       <HintPath>..\..\..\PPTSBin\PPTS.Contracts.Customers.dll</HintPath>
@@ -63,6 +67,9 @@
     <Reference Include="PPTS.Contracts.Proxies, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\PPTSBin\PPTS.Contracts.Proxies.dll</HintPath>
+    </Reference>
+    <Reference Include="PPTS.Contracts.Search">
+      <HintPath>..\..\..\PPTSBin\PPTS.Contracts.Search.dll</HintPath>
     </Reference>
     <Reference Include="PPTS.Data.Common.Entities">
       <HintPath>..\..\..\PPTSBin\PPTS.Data.Common.Entities.dll</HintPath>
@@ -100,6 +107,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProductServiceTest.cs" />
     <Compile Include="ConfigRuleServiceTest.cs" />
+    <Compile Include="CustomerSearchUpdateServiceTest.cs" />
+    <Compile Include="POSRecordsUpdateServiceTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

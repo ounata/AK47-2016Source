@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Web;
+using MCS.Library.Core;
 
 namespace PPTS.WebAPI.Orders.Service
 {
@@ -12,15 +13,7 @@ namespace PPTS.WebAPI.Orders.Service
         public static List<ProductView> GetProductsByIds(params string[] ids)
         {
             return PPTS.Contracts.Proxies.PPTSProductQueryServiceProxy.Instance.QueryProductViewsByIDs(ids).ToList();
-
-            //var mapper = new AutoMapper.MapperConfiguration(c => c.CreateMap<Data.Products.Entities.ProductView, Product>()).CreateMapper();
-            //var results = Data.Products.Adapters.ProductViewAdapter.Instance.LoadByInBuilder(new MCS.Library.Data.Adapters.InLoadingCondition() { DataField = "ProductId", BuilderAction = where => where.AppendItem(ids) });
-            //return results.Select(m =>
-            //{
-            //    var n = mapper.Map<Product>(m);
-            //    return n;
-            //}).ToList();
-
+            
         }
 
         /// <summary>
@@ -30,21 +23,17 @@ namespace PPTS.WebAPI.Orders.Service
         /// <returns></returns>
         public static Present GetPresentByOrgId(string orgId)
         {
-            var presetCollection = Data.Products.Adapters.PresentAdapter.Instance.LoadByOrgId(orgId);
-            var presetItemCollection = Data.Products.Adapters.PresentItemAdapter.Instance.LoadByPresentIds(presetCollection.Select(m => m.PresentID).ToArray());
+            var serviceResult = PPTS.Contracts.Proxies.PPTSConfigRuleQueryServiceProxy.Instance.QueryPresentByCampusID(orgId);
+            if (serviceResult.PresentItemCollection ==null) return null;
 
-            var mapper = new AutoMapper.MapperConfiguration(c => {
+            var mapper = new AutoMapper.MapperConfiguration(c =>
+            {
                 c.CreateMap<Data.Products.Entities.Present, Present>();
-                c.CreateMap<Data.Products.Entities.PresentItem, PresentItem>();
             }).CreateMapper();
+            var result = mapper.Map<Present>(serviceResult.Present);
+            result.Items = serviceResult.PresentItemCollection.OrderByDescending(o => o.PresentStandard).ToList();
 
-            var result = new List<Present>();
-            presetCollection.ForEach(m => {
-                var n = mapper.Map<Present>(m);
-                n.Items = presetItemCollection.Where(c => c.PresentID == m.PresentID).OrderByDescending(o=>o.PresentStandard).Select(cm => mapper.Map<PresentItem>(cm)).ToList();
-                result.Add(n);
-            });
-            return result.FirstOrDefault();
+            return result;
         }
 
 
@@ -53,24 +42,19 @@ namespace PPTS.WebAPI.Orders.Service
         /// </summary>
         /// <param name="campusId"></param>
         /// <returns></returns>
-        public static Data.Products.Entities.Expense GetServiceChargeByCampusId(string campusId)
+        public static List<Data.Products.Entities.Expense> GetServiceChargeByCampusId(string campusId)
         {
-            return PPTS.Contracts.Proxies.PPTSConfigRuleQueryServiceProxy.Instance.QueryExpenseByCampusID(campusId).Expense;
+            return PPTS.Contracts.Proxies.PPTSConfigRuleQueryServiceProxy.Instance.QueryExpenseByCampusID(campusId).ExpenseCollection;
         }
 
 
     }
-
-    //public class Product : Data.Products.Entities.ProductView { }
-
+    
 
 
     public class Present : Data.Products.Entities.Present {
         [DataMember]
         public List<PresentItem> Items { set; get; }
     }
-
-    public class PresentItem : Data.Products.Entities.PresentItem { }
-
-
+    
 }

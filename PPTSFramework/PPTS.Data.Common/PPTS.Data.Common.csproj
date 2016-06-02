@@ -82,7 +82,14 @@
     <Compile Include="Adapters\TeacherJobViewAdapter.cs" />
     <Compile Include="Adapters\TeacherJobAdapter.cs" />
     <Compile Include="Adapters\TeacherTeachingAdapter.cs" />
+    <Compile Include="Authorization\CourseOrgAuthorizationAdapterBase.cs" />
+    <Compile Include="Authorization\CustomerOrgAuthorizationAdapterBase.cs" />
+    <Compile Include="Authorization\CustomerRelationAuthorizationAdaperBase.cs" />
+    <Compile Include="Authorization\OwnerRelationAuthorizationAdapterBase.cs" />
+    <Compile Include="Authorization\RecordOrgAuthorizationAdapterBase.cs" />
+    <Compile Include="Authorization\ScopeAuthorizationBase.cs" />
     <Compile Include="Common\ConnectionDefine.cs" />
+    <Compile Include="Common\Helper.cs" />
     <Compile Include="Common\OGUExtensions.cs" />
     <Compile Include="DataSources\GenericCommonDataSource.cs" />
     <Compile Include="DataSources\UserAndJobDataSource.cs" />
@@ -94,6 +101,7 @@
   <ItemGroup>
     <None Include="MCS.Library.snk" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>IF NOT EXIST "$(ProjectDir)..\..\PPTSBin" MD "$(ProjectDir)..\..\PPTSBin"

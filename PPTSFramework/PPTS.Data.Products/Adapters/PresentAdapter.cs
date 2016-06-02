@@ -36,9 +36,9 @@ namespace PPTS.Data.Products.Adapters
         /// </summary>
         /// <param name="CampusID">校区ID</param>
         /// <returns></returns>
-        public Present LoadByCampusID(string CampusID)
+        public Present LoadByCampusID(string campusID)
         {
-            PresentCollection dc = this.QueryData(PrepareLoadPresentSqlByPermission(CampusID));
+            PresentCollection dc = this.QueryData(PrepareLoadPresentSqlByPermission(campusID));
             return dc.FirstOrDefault();
         }
 
@@ -47,13 +47,12 @@ namespace PPTS.Data.Products.Adapters
         /// </summary>
         /// <param name="CampusID">校区ID</param>
         /// <returns>拼装SQL</returns>
-        private string PrepareLoadPresentSqlByPermission(string CampusID)
+        private string PrepareLoadPresentSqlByPermission(string campusID)
         {
             WhereSqlClauseBuilder presentBuilder = new WhereSqlClauseBuilder();
-            presentBuilder.AppendItem("PresentStatus", PresentStatusDefine.Enabled.GetHashCode());
+            presentBuilder.AppendItem("PresentStatus", (int)PresentStatusDefine.Enabled);
             WhereSqlClauseBuilder presentPermissionBuilder = new WhereSqlClauseBuilder();
-            presentPermissionBuilder.AppendItem("UseOrgType", PPTS.Data.Common.Security.DepartmentType.Campus.GetHashCode());
-            presentPermissionBuilder.AppendItem("UseOrgID", CampusID);
+            presentPermissionBuilder.AppendItem("CampusID", campusID);
             OrderBySqlClauseBuilder orderBuilder = new OrderBySqlClauseBuilder();
             orderBuilder.AppendItem("CreateTime", FieldSortDirection.Descending);
             string sql = string.Format(@"select top 1 * from {0} where {1} and PresentID in 
@@ -63,7 +62,7 @@ namespace PPTS.Data.Products.Adapters
                                     order by {4} "
             , this.GetQueryMappingInfo().GetQueryTableName()
             , presentBuilder.ToSqlString(TSqlBuilder.Instance)
-            , PresentPermissionAdapter.Instance.GetQueryMappingInfo().GetQueryTableName()
+            , PresentPermissionViewAdapter.Instance.GetQueryMappingInfo().GetQueryTableName()
             , presentPermissionBuilder.ToSqlString(TSqlBuilder.Instance)
             , orderBuilder.ToSqlString(TSqlBuilder.Instance));
             return sql;

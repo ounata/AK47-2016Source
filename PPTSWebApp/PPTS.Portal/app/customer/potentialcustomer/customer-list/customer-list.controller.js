@@ -33,14 +33,20 @@
                     // 分配咨询师/学管师/坐席/市场专员
                     vm.assign = function (relationType) {
                         if (util.selectMultiRows(vm)) {
-                            customerDataViewService.assignStaffRelation(vm.data.rowsSelected, relationType);
+                            customerDataViewService.assignStaffRelation(vm.data.rowsSelected, relationType, vm);
                         }
                     };
 
                     // 划转资源
                     vm.transfer = function () {
                         if (util.selectMultiRows(vm)) {
-                            customerDataViewService.transferCustomers(vm, vm.data.rowsSelected);
+                            var customers = [];
+                            for (var index in vm.data.rows) {
+                                if (vm.data.rows[index].selected) {
+                                    customers.push(vm.data.rows[index]);
+                                }
+                            }
+                            customerDataViewService.transferCustomers(vm, customers);
                         }
                     };
 

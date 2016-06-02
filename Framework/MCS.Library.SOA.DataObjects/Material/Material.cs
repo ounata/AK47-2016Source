@@ -17,6 +17,7 @@ using MCS.Library.Principal;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.Serialization;
 using System.Web.Script.Serialization;
 using System.Xml;
 using System.Xml.Linq;
@@ -44,6 +45,7 @@ namespace MCS.Library.SOA.DataObjects
 	[Serializable]
 	[ORTableMapping("WF.MATERIAL")]
     [TenantRelativeObject]
+    [DataContract]
 	public class Material
 	{
 		#region 私有变量
@@ -202,6 +204,7 @@ namespace MCS.Library.SOA.DataObjects
 		/// 附件的ID
 		/// </summary>
 		[ORFieldMapping("ID", PrimaryKey = true, IsNullable = false)]
+        [DataMember]
 		public string ID
 		{
 			get
@@ -221,7 +224,8 @@ namespace MCS.Library.SOA.DataObjects
 		[SubClassORFieldMapping("Name", "DEPARTMENT_NAME")]
 		[SubClassORFieldMapping("GlobalSortID", "DEPARTMENT_GLOBALSORT_ID")]
 		[SubClassType(typeof(OguOrganization))]
-		public IOrganization Department
+        [DataMember]
+        public IOrganization Department
 		{
 			get
 			{
@@ -237,7 +241,8 @@ namespace MCS.Library.SOA.DataObjects
 		/// 表单ID
 		/// </summary>
 		[ORFieldMapping("RESOURCE_ID", IsNullable = true)]
-		public string ResourceID
+        [DataMember]
+        public string ResourceID
 		{
 			get
 			{
@@ -253,7 +258,8 @@ namespace MCS.Library.SOA.DataObjects
 		/// 排序号
 		/// </summary>
 		[ORFieldMapping("SORT_ID", IsNullable = true)]
-		public int SortID
+        [DataMember]
+        public int SortID
 		{
 			get
 			{
@@ -269,7 +275,8 @@ namespace MCS.Library.SOA.DataObjects
 		/// 类别
 		/// </summary>
 		[ORFieldMapping("CLASS", IsNullable = true)]
-		public string MaterialClass
+        [DataMember]
+        public string MaterialClass
 		{
 			get
 			{
@@ -285,7 +292,8 @@ namespace MCS.Library.SOA.DataObjects
 		/// 文件标题
 		/// </summary>
 		[ORFieldMapping("TITLE", IsNullable = false)]
-		public string Title
+        [DataMember]
+        public string Title
 		{
 			get
 			{
@@ -301,7 +309,8 @@ namespace MCS.Library.SOA.DataObjects
 		/// 页数
 		/// </summary>
 		[ORFieldMapping("PAGE_QUANTITY", IsNullable = true)]
-		public int PageQuantity
+        [DataMember]
+        public int PageQuantity
 		{
 			get
 			{
@@ -317,7 +326,8 @@ namespace MCS.Library.SOA.DataObjects
 		/// 相对路径
 		/// </summary> 
 		[ORFieldMapping("RELATIVE_FILE_PATH", IsNullable = false)]
-		public string RelativeFilePath
+        [DataMember]
+        public string RelativeFilePath
 		{
 			get
 			{
@@ -350,7 +360,8 @@ namespace MCS.Library.SOA.DataObjects
 		/// 文件原始名称
 		/// </summary>
 		[ORFieldMapping("ORIGINAL_NAME", IsNullable = true)]
-		public string OriginalName
+        [DataMember]
+        public string OriginalName
 		{
 			get
 			{
@@ -368,7 +379,8 @@ namespace MCS.Library.SOA.DataObjects
 		[SubClassORFieldMapping("ID", "CREATOR_ID", IsNullable = false)]
 		[SubClassORFieldMapping("DisplayName", "CREATOR_USER_NAME", IsNullable = false)]
 		[SubClassType(typeof(OguUser))]
-		public IUser Creator
+        [DataMember]
+        public IUser Creator
 		{
 			get
 			{
@@ -384,7 +396,8 @@ namespace MCS.Library.SOA.DataObjects
 		/// 最后上传标记
 		/// </summary>
 		[ORFieldMapping("LAST_UPLOAD_TAG", IsNullable = false)]
-		public string LastUploadTag
+        [DataMember]
+        public string LastUploadTag
 		{
 			get
 			{
@@ -401,7 +414,8 @@ namespace MCS.Library.SOA.DataObjects
 		/// </summary>
 		[ORFieldMapping("CREATE_DATETIME", IsNullable = false)]
 		[SqlBehavior(BindingFlags = ClauseBindingFlags.Select, DefaultExpression = "getdate()")]
-		public DateTime CreateDateTime
+        [DataMember]
+        public DateTime CreateDateTime
 		{
 			get
 			{
@@ -417,7 +431,8 @@ namespace MCS.Library.SOA.DataObjects
 		/// 最后修改时间
 		/// </summary>
 		[ORFieldMapping("MODIFY_TIME", IsNullable = true)]
-		public DateTime ModifyTime
+        [DataMember]
+        public DateTime ModifyTime
 		{
 			get
 			{
@@ -433,7 +448,8 @@ namespace MCS.Library.SOA.DataObjects
 		/// 工作流流程ID
 		/// </summary>
 		[ORFieldMapping("WF_PROCESS_ID", IsNullable = true)]
-		public string WfProcessID
+        [DataMember]
+        public string WfProcessID
 		{
 			get
 			{
@@ -449,7 +465,8 @@ namespace MCS.Library.SOA.DataObjects
 		/// 工作流活动ID
 		/// </summary>
 		[ORFieldMapping("WF_ACTIVITY_ID", IsNullable = true)]
-		public string WfActivityID
+        [DataMember]
+        public string WfActivityID
 		{
 			get
 			{
@@ -465,7 +482,8 @@ namespace MCS.Library.SOA.DataObjects
 		/// 工作流活动名称
 		/// </summary>
 		[ORFieldMapping("WF_ACTIVITY_NAME", IsNullable = true)]
-		public string WfActivityName
+        [DataMember]
+        public string WfActivityName
 		{
 			get
 			{
@@ -481,7 +499,8 @@ namespace MCS.Library.SOA.DataObjects
 		/// 父版本ID
 		/// </summary>
 		[ORFieldMapping("PARENT_ID", IsNullable = true)]
-		public string ParentID
+        [DataMember]
+        public string ParentID
 		{
 			get
 			{
@@ -497,7 +516,7 @@ namespace MCS.Library.SOA.DataObjects
 		/// 原始附件对象。 副本使用
 		/// </summary>
 		[SqlBehavior(BindingFlags = ClauseBindingFlags.None)]
-		public Material SourceMaterial
+        public Material SourceMaterial
 		{
 			get
 			{
@@ -509,7 +528,8 @@ namespace MCS.Library.SOA.DataObjects
 		/// 版本类型
 		/// </summary>
 		[ORFieldMapping("VERSION_TYPE", IsNullable = false)]
-		public MaterialVersionType VersionType
+        [DataMember]
+        public MaterialVersionType VersionType
 		{
 			get
 			{
@@ -526,7 +546,8 @@ namespace MCS.Library.SOA.DataObjects
 		/// </summary>
 		[Obsolete("请使用ExtraDataDictionary")]
 		[ORFieldMapping("EXTRA_DATA", IsNullable = true)]
-		public string ExtraData
+        [DataMember]
+        public string ExtraData
 		{
 			get
 			{
@@ -573,32 +594,39 @@ namespace MCS.Library.SOA.DataObjects
 		{
 			Material newMaterial = new Material();
 
-			newMaterial.id = this.id;
-			newMaterial.Department = this.department;
-			newMaterial.resourceID = this.resourceID;
-			newMaterial.sortID = this.sortID;
-			newMaterial.materialClass = this.materialClass;
-			newMaterial.title = this.title;
-			newMaterial.pageQuantity = this.pageQuantity;
-			newMaterial.relativeFilePath = this.relativeFilePath.Replace(this.id, newMaterial.ID);
-			newMaterial.originalName = this.originalName;
-			newMaterial.creator = this.creator;
-			newMaterial.lastUploadTag = this.lastUploadTag;
-			newMaterial.createDateTime = this.createDateTime;
-			newMaterial.modifyTime = this.modifyTime;
-			newMaterial.wfProcessID = wfProcessID;
-			newMaterial.wfActivityID = wfActivityID;
-			newMaterial.wfActivityName = wfActivityName;
-			newMaterial._SourceMaterialID = this.id;
-			newMaterial.versionType = MaterialVersionType.Normal;
-			newMaterial.extraData = this.extraData;
-			newMaterial.showFileUrl = this.showFileUrl;
-
-			if (this._Content != null)
-				newMaterial._Content = this._Content.Clone();
+            this.Fill(newMaterial);
 
 			return newMaterial;
 		}
+
+        public T Fill<T>(T newMaterial) where T: Material
+        {
+            newMaterial.id = this.id;
+            newMaterial.Department = this.department;
+            newMaterial.resourceID = this.resourceID;
+            newMaterial.sortID = this.sortID;
+            newMaterial.materialClass = this.materialClass;
+            newMaterial.title = this.title;
+            newMaterial.pageQuantity = this.pageQuantity;
+            newMaterial.relativeFilePath = this.relativeFilePath.Replace(this.id, newMaterial.ID);
+            newMaterial.originalName = this.originalName;
+            newMaterial.creator = this.creator;
+            newMaterial.lastUploadTag = this.lastUploadTag;
+            newMaterial.createDateTime = this.createDateTime;
+            newMaterial.modifyTime = this.modifyTime;
+            newMaterial.wfProcessID = wfProcessID;
+            newMaterial.wfActivityID = wfActivityID;
+            newMaterial.wfActivityName = wfActivityName;
+            newMaterial._SourceMaterialID = this.id;
+            newMaterial.versionType = MaterialVersionType.Normal;
+            newMaterial.extraData = this.extraData;
+            newMaterial.showFileUrl = this.showFileUrl;
+
+            if (this._Content != null)
+                newMaterial._Content = this._Content.Clone();
+
+            return newMaterial;
+        }
 
 		public MaterialContent GenerateMaterialContent()
 		{
@@ -620,10 +648,6 @@ namespace MCS.Library.SOA.DataObjects
 		public void GenerateTempPhysicalFilePath(string rootPathName)
 		{
 			this.tempPhysicalFilePath = GetTempPhysicalFilePath(rootPathName);
-			//if (this.showFileUrl.IsNotEmpty())
-			//    this.tempPhysicalFilePath = GetTempPhysicalFilePath(rootPathName);
-			//else
-			//    this.tempPhysicalFilePath = string.Empty;
 		}
 
 		/// <summary>

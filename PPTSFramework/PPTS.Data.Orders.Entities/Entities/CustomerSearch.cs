@@ -96,9 +96,9 @@ namespace PPTS.Data.Orders.Entities
         /// <summary>
         /// 一对一剩余课次数
         /// </summary>
-        [ORFieldMapping("RemainOne2Ones")]
+        [ORFieldMapping("AssetOneToOneAmount")]
         [DataMember]
-        public decimal RemainOne2Ones
+        public decimal AssetOneToOneAmount
         {
             get;
             set;

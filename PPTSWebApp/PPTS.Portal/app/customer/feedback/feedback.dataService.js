@@ -1,7 +1,11 @@
-﻿define(['angular', ppts.config.modules.customer], function (ng, customer) {
+﻿define(['angular',
+    ppts.config.modules.customer,
+    ppts.config.dataServiceConfig.customerDataService
+    ],
+    function (ng, customer) {
 
     //web api后端交互
-    customer.registerFactory('feedbackDataService', ['$resource', function ($resource) {
+        customer.registerFactory('feedbackDataService', ['$resource', 'customerDataService', function ($resource, customerDataService) {
 
         var resource = $resource(ppts.config.customerApiBaseUrl + 'api/feedback/:operation/:id',
             { operation: '@operation', id: '@id' },
@@ -21,7 +25,9 @@
         resource.loadDictionaries = function (success, error) {
             resource.query({ operation: 'loadDictionaries' }, success, error);
         }
-
+        resource.getCustomerInfo = function (id, success, error) {
+            customerDataService.getCustomerInfo(id, success, error);
+        }
         //resource.getCustomerForUpdate = function (id, success, error) {
         //    resource.query({ operation: 'updateCustomer', id: id }, success, error);
         //}
@@ -44,7 +50,7 @@
         headers: [{
             field: "replyTime",
             name: "反馈时间",
-            template: '<a ui-sref="ppts.feedback-view({rId:row.replyID,customerId:row.customerId,prev:\'ppts\'})"><span>{{row.replyTime | date:"yyyy-MM-dd HH:mm"}}</span></a>'
+            template: '<a ui-sref="ppts.feedback-view({customerId:row.customerId,replyTime:(row.replyTime.getTime()),prev:\'ppts.feedback\'})">{{row.replyTime | date:"yyyy-MM-dd HH:mm"}}</a>'
         }, {
             field: "campusName",
             name: "所属校区"
@@ -108,7 +114,6 @@
                 dataSyncService.initCriteria(vm);
                 feedbackDataService.GetCustomerRepliesList(vm.criteria, function (result) {
                     vm.data.rows = result.queryResult.pagedData;
-                    vm.dictionaries = result.dictionaries;
                     dataSyncService.injectDictData();
                     dataSyncService.updateTotalCount(vm, result.queryResult);
                     if (ng.isFunction(callback)) {
@@ -120,9 +125,14 @@
         }]);
 
     //联系家长
-    customer.registerFactory('feedbackAddDataViewService', ['feedbackDataService', function (feedbackDataService) {
+    customer.registerFactory('feedbackAddDataViewService', ['feedbackDataService',  function (feedbackDataService) {
         var service = this;
-        service.init = function (vm) { }
+        service.init = function (vm) {
+           feedbackDataService.getCustomerInfo(vm.customerId, function (result) {
+               vm.customerName = result.customer.customerName;
+               vm.parentName = result.parent.parentName;
+            });
+        }
 
         return service;
     }]);
@@ -136,7 +146,7 @@
                 vm.data = {};
                 vm.data.pager = {
                     pageIndex: 0,
-                    pageSize:2
+                    pageSize:10
                 };
                 vm.data.keyFields = ['replyID'];//vm.data.rows.length
                 vm.data.orderBy = [{ dataField: 'replyTime', sortDirection: 1 }];
@@ -151,10 +161,10 @@
             service.initData = function (vm, callback) {
                 //初始化词典
                 feedbackDataService.loadDictionaries(function (result) {
-                    vm.dictionaries = result.dictionaries;
+                    //vm.dictionaries = result.dictionaries;
                     dataSyncService.injectDictData();
                     //填充选项卡
-                    var replyObjects = vm.dictionaries[ppts.config.dictMappingConfig.replyObject];
+                    var replyObjects = ppts.dict[ppts.config.dictMappingConfig.replyObject];
                     for (var index in replyObjects) {
                         vm.tabs.push({
                             title: replyObjects[index].value,
@@ -165,7 +175,7 @@
                     //加载数据到第一个选项卡
                     dataSyncService.initCriteria(vm);
                     if (vm.criteria) {
-                        vm.criteria.replyObjects = new Array();
+                        vm.criteria.replyObjects = [];
                         if (!vm.criteria.replyObject) {
                             vm.criteria.replyObjects.push(vm.tabs[0].key);
                         }

@@ -14,9 +14,8 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
     public class AssignSuperModel : IAssignShareAttr,IAssignAttr,IAssignConditionAttr,IEntityWithCreator,IEntityWithModifier
     {
         #region IAssignShareAttr
-        /// <summary>
-        /// 学员ID
-        /// </summary>
+        
+        /// 学员ID     
         [DataMember]
         public string CustomerID
         {
@@ -24,286 +23,7 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
             set;
         }
 
-        /// <summary>
-        /// 资产ID
-        /// </summary>
-        [DataMember]
-        public string AssetID
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 资产编码
-        /// </summary>
-        [DataMember]
-        public string AssetCode
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 产品ID
-        /// </summary>
-        [DataMember]
-        public string ProductID
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 产品编码
-        /// </summary>
-        [DataMember]
-        public string ProductCode
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 产品名称
-        /// </summary>
-        [DataMember]
-        public string ProductName
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 年级代码
-        /// </summary>
-        [DataMember]
-        public string Grade
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 年级名称
-        /// </summary>
-        [DataMember]
-        public string GradeName
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 科目代码
-        /// </summary>
-        [DataMember]
-        public string Subject
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 科目名称
-        /// </summary>
-        [DataMember]
-        public string SubjectName
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 教室ID
-        /// </summary>
-        [DataMember]
-        public string RoomID
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 教室编码
-        /// </summary>
-        [DataMember]
-        public string RoomCode
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 教室名称
-        /// </summary>
-        [DataMember]
-        public string RoomName
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 教师ID
-        /// </summary>
-        [DataMember]
-        public string TeacherID
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 教师姓名
-        /// </summary>
-        [DataMember]
-        public string TeacherName
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 教师岗位ID
-        /// </summary>
-        [DataMember]
-        public string TeacherJobID
-        { get; set; }
-
-        /// <summary>
-        /// 创建时间
-        /// </summary>
-        [DataMember]
-        public DateTime CreateTime
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 最后修改时间
-        /// </summary>
-        [DataMember]
-        public DateTime ModifyTime
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        [DataMember]
-        public string TenantCode
-        {
-            get;
-            set;
-        }
-        #endregion
-
-        #region IAssignAttr
-        /// <summary>
-        /// 排课ID
-        /// </summary>
-        [DataMember]
-        public string AssignID
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 排定时间
-        /// </summary>
-        [DataMember]
-        public DateTime AssignTime
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 排课状态（排定，已上，异常，无效）
-        /// </summary>
-        [DataMember]
-        public AssignStatusDefine AssignStatus
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 排课来源（自动【班组】，手工【一对一】，补录）
-        /// </summary>
-        [DataMember]
-        public AssignSourceDefine AssignSource
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 异常原因
-        /// </summary>
-        [DataMember]
-        public string AssignMemo
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 是否允许复制
-        /// </summary>
-        [DataMember]
-        public bool CopyAllowed
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 确认状态（0-未确认，1-已确认，3-已删除，4-部分确认）
-        /// </summary>
-        [DataMember]
-        public ConfirmStatusDefine ConfirmStatus
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 确认时间
-        /// </summary>
-        [DataMember]
-        public DateTime ConfirmTime
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 当前操作人校区ID
-        /// </summary>
-        [DataMember]
-        public string CampusID
-        {
-            get; set;
-        }
-
-        /// <summary>
-        /// 当前操作人校区名称
-        /// </summary>
-        [DataMember]
-        public string CampusName
-        {
-            get; set;
-        }
-
-        /// <summary>
         /// 学员编码
-        /// </summary>
         [DataMember]
         public string CustomerCode
         {
@@ -311,9 +31,7 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
             set;
         }
 
-        /// <summary>
         /// 学员姓名
-        /// </summary>
         [DataMember]
         public string CustomerName
         {
@@ -321,9 +39,252 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
             set;
         }
 
-        /// <summary>
+        /// 资产ID
+        [DataMember]
+        public string AssetID
+        {
+            get;
+            set;
+        }
+
+        /// 资产编码 
+        [DataMember]
+        public string AssetCode
+        {
+            get;
+            set;
+        }
+
+        /// 产品ID
+        [DataMember]
+        public string ProductID
+        {
+            get;
+            set;
+        }
+
+        /// 产品编码
+        [DataMember]
+        public string ProductCode
+        {
+            get;
+            set;
+        }
+       
+        /// 产品名称
+        [DataMember]
+        public string ProductName
+        {
+            get;
+            set;
+        }
+    
+        /// 年级代码
+        [DataMember]
+        public string Grade
+        {
+            get;
+            set;
+        }
+
+        /// 年级名称
+        [DataMember]
+        public string GradeName
+        {
+            get;
+            set;
+        }
+
+        /// 科目代码
+        [DataMember]
+        public string Subject
+        {
+            get;
+            set;
+        }
+
+        /// 科目名称
+        [DataMember]
+        public string SubjectName
+        {
+            get;
+            set;
+        }
+
+        /// 教室ID
+        [DataMember]
+        public string RoomID
+        {
+            get;
+            set;
+        }
+
+        /// 教室编码
+        [DataMember]
+        public string RoomCode
+        {
+            get;
+            set;
+        }
+
+        /// 教室名称
+        [DataMember]
+        public string RoomName
+        {
+            get;
+            set;
+        }
+
+        /// 教师ID
+        [DataMember]
+        public string TeacherID
+        {
+            get;
+            set;
+        }
+
+        /// 教师姓名
+        [DataMember]
+        public string TeacherName
+        {
+            get;
+            set;
+        }
+
+        /// 教师岗位ID
+        [DataMember]
+        public string TeacherJobID
+        { get; set; }
+
+        /// 创建时间
+        [DataMember]
+        public DateTime CreateTime
+        {
+            get;
+            set;
+        }
+
+        /// 最后修改时间
+        [DataMember]
+        public DateTime ModifyTime
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public string TenantCode
+        {
+            get;
+            set;
+        }
+
+        ///教师学科组名称
+        [DataMember]
+        public string TeacherJobOrgName
+        {
+            get; set;
+        }
+
+        ///教师学科组ID
+        [DataMember]
+        public string TeacherJobOrgID
+        {
+            get; set;
+        }
+
+        ///教师，全职还是兼职
+        [DataMember]
+        public int IsFullTimeTeacher { get; set; }
+
+        ///学员账户ID
+        [DataMember]
+        public string AccountID { get; set; }
+
+
+        #endregion
+
+        #region IAssignAttr
+
+        /// 排课ID
+        [DataMember]
+        public string AssignID
+        {
+            get;
+            set;
+        }
+
+        /// 排定时间
+        [DataMember]
+        public DateTime AssignTime
+        {
+            get;
+            set;
+        }
+
+        /// 排课状态（排定，已上，异常，无效）
+        [DataMember]
+        public AssignStatusDefine AssignStatus
+        {
+            get;
+            set;
+        }
+
+        /// 排课来源（自动【班组】，手工【一对一】，补录）
+        [DataMember]
+        public AssignSourceDefine AssignSource
+        {
+            get;
+            set;
+        }
+
+        /// 异常原因
+        [DataMember]
+        public string AssignMemo
+        {
+            get;
+            set;
+        }
+
+        /// 是否允许复制
+        [DataMember]
+        public bool CopyAllowed
+        {
+            get;
+            set;
+        }
+
+        /// 确认状态（0-未确认，1-已确认，3-已删除，4-部分确认）
+        [DataMember]
+        public ConfirmStatusDefine ConfirmStatus
+        {
+            get;
+            set;
+        }
+
+        /// 确认时间    
+        [DataMember]
+        public DateTime ConfirmTime
+        {
+            get;
+            set;
+        }
+
+        /// 当前操作人校区ID
+        [DataMember]
+        public string CampusID
+        {
+            get; set;
+        }
+
+        /// 当前操作人校区名称
+        [DataMember]
+        public string CampusName
+        {
+            get; set;
+        }
+
         /// 咨询师ID
-        /// </summary>
         [DataMember]
         public string ConsultantID
         {
@@ -331,9 +292,7 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
             set;
         }
 
-        /// <summary>
         /// 咨询师姓名
-        /// </summary>
         [DataMember]
         public string ConsultantName
         {
@@ -341,9 +300,7 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
             set;
         }
 
-        /// <summary>
         /// 咨询师岗位ID
-        /// </summary>
         [DataMember]
         public string ConsultantJobID
         {
@@ -351,9 +308,7 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
             set;
         }
 
-        /// <summary>
-        /// 学管师ID
-        /// </summary>
+        /// 学管师ID   
         [DataMember]
         public string EducatorID
         {
@@ -361,9 +316,7 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
             set;
         }
 
-        /// <summary>
         /// 学管师姓名
-        /// </summary>
         [DataMember]
         public string EducatorName
         {
@@ -371,22 +324,13 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
             set;
         }
 
-        /// <summary>
         /// 学管师岗位ID
-        /// </summary>
         [DataMember]
         public string EducatorJobID
         {
             get;
             set;
         }
-
-        ///订单ID
-        [DataMember]
-        public string OrderID { get; set; }
-        ///订单编码
-        [DataMember]
-        public string OrderNo { get; set; }
 
         /// 时长（分钟）【课次时长】
         [DataMember]
@@ -403,13 +347,8 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
             get;
             set;
         }
-        ///实际排定课时数量（一对一是实际时间除以时长）
-        [DataMember]
-        public decimal RealAmount { get; set; }
 
-        /// <summary>
-        /// 排定单价
-        /// </summary>
+        /// 排定单价      
         [DataMember]
         public decimal AssignPrice
         {
@@ -417,9 +356,7 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
             set;
         }
 
-        /// <summary>
-        /// 确认单价
-        /// </summary>
+        /// 确认单价    
         [DataMember]
         public decimal ConfirmPrice
         {
@@ -427,9 +364,7 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
             set;
         }
 
-        /// <summary>
-        /// 开始时间
-        /// </summary>
+        /// 开始时间  
         [DataMember]
         public DateTime StartTime
         {
@@ -437,9 +372,7 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
             set;
         }
 
-        /// <summary>
-        /// 结束时间
-        /// </summary>
+        /// 结束时间 
         [DataMember]
         public DateTime EndTime
         {
@@ -449,9 +382,8 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
         #endregion
 
         #region  IAssignConditionAttr
-        /// <summary>
+
         /// 排课条件ID
-        /// </summary>
         [DataMember]
         public string ConditionID
         {
@@ -459,19 +391,7 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
             set;
         }
 
-        ///// <summary>
-        ///// 排课条件名称（资产编码+科目+老师+年级）
-        ///// </summary>
-        //[DataMember]
-        //public string ConditionName
-        //{
-        //    get;
-        //    set;
-        //}
-
-        /// <summary>
         /// 排课条件名称（学员视图排课条件名称（资产编码+科目+老师+年级））
-        /// </summary>
         [DataMember]
         public string ConditionName4Customer
         {
@@ -479,9 +399,7 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
             set;
         }
 
-        /// <summary>
         /// 排课条件名称（教师视图排课条件名称（资产编码+科目+学员+年级））
-        /// </summary>
         [DataMember]
         public string ConditionName4Teacher
         {
@@ -489,13 +407,7 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
             set;
         }
 
-
-
-      
-
-        /// <summary>
 		/// 课程级别代码
-		/// </summary>
         [DataMember]
         public string CourseLevel
         {
@@ -503,9 +415,7 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
             set;
         }
 
-        /// <summary>
 		/// 课程级别名称
-		/// </summary>
         [DataMember]
         public string CourseLevelName
         {
@@ -513,9 +423,7 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
             set;
         }
 
-        /// <summary>
         /// 课次时长代码
-        /// </summary>
         [DataMember]
         public string LessonDuration
         {
@@ -523,9 +431,7 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
             set;
         }
 
-        /// <summary>
         /// 课次时长名称
-        /// </summary>
         [DataMember]
         public decimal LessonDurationValue
         {
@@ -533,31 +439,11 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
             set;
         }
 
-        /// <summary>
-        /// 每周课次（预留）
-        /// </summary>
-        [DataMember]
-        public decimal LessonsOfWeek
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 首次上课时间（预留）
-        /// </summary>
-        [DataMember]
-        public DateTime FirstLessonTime
-        {
-            get;
-            set;
-        }
         #endregion
 
         #region IEntityWithModifier
-        /// <summary>
+
         /// 最后修改人ID
-        /// </summary>
         [DataMember]
         public string ModifierID
         {
@@ -565,9 +451,7 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
             set;
         }
 
-        /// <summary>
         /// 最后修改人姓名
-        /// </summary>
         [DataMember]
         public string ModifierName
         {
@@ -577,9 +461,8 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
         #endregion
 
         #region IEntityWithCreator
-        /// <summary>
+        
         /// 创建人ID
-        /// </summary>
         [DataMember]
         public string CreatorID
         {
@@ -587,9 +470,7 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
             set;
         }
 
-        /// <summary>
         /// 创建人姓名
-        /// </summary>
         [DataMember]
         public string CreatorName
         {

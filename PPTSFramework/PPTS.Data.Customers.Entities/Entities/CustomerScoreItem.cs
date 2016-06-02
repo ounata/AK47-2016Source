@@ -14,7 +14,7 @@ namespace PPTS.Data.Customers.Entities
 	/// 学员成绩明细表
 	/// </summary>
 	[Serializable]
-    [ORTableMapping("CustomerScoreItems")]
+    [ORTableMapping("CM.CustomerScoreItems")]
     [DataContract]
 	public class CustomerScoreItem
 	{		
@@ -89,10 +89,32 @@ namespace PPTS.Data.Customers.Entities
             set;
 		}
 
-		/// <summary>
-		/// 卷面分
+        /// <summary>
+		/// 教师学科组ID
 		/// </summary>
-		[ORFieldMapping("PaperScore")]
+		[ORFieldMapping("TeacherOrgID")]
+        [DataMember]
+        public string TeacherOrgID
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+		/// 教师学科组名称
+		/// </summary>
+		[ORFieldMapping("TeacherOrgName")]
+        [DataMember]
+        public string TeacherOrgName
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 卷面分
+        /// </summary>
+        [ORFieldMapping("PaperScore")]
         [DataMember]
 		public decimal PaperScore
 		{

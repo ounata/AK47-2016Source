@@ -1,0 +1,58 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPTS.ExtServices.UnionPay", "PPTS.ExtServices.UnionPay.csproj", "{2BDB003E-6769-43F6-B417-95A7D61F0D7A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPTS.ExtServices.UnionPay.Test", "..\..\PPTSWebAPITest\PPTS.ExtServices.UnionPay.Test\PPTS.ExtServices.UnionPay.Test.csproj", "{F7299666-FF2A-46A6-B21C-F09B47CFFC6D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{4D5215BE-6E51-43F0-9763-9441A6E3A6D6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{797753C9-B45C-43C4-8FC9-23151926AA1C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPTS.Data.Customers.Entities", "..\..\PPTSFramework\PPTS.Data.Customers.Entities\PPTS.Data.Customers.Entities.csproj", "{33E530F9-6028-4884-BF6A-4F01CCAF4A84}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2BDB003E-6769-43F6-B417-95A7D61F0D7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BDB003E-6769-43F6-B417-95A7D61F0D7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2BDB003E-6769-43F6-B417-95A7D61F0D7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BDB003E-6769-43F6-B417-95A7D61F0D7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7299666-FF2A-46A6-B21C-F09B47CFFC6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7299666-FF2A-46A6-B21C-F09B47CFFC6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7299666-FF2A-46A6-B21C-F09B47CFFC6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7299666-FF2A-46A6-B21C-F09B47CFFC6D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33E530F9-6028-4884-BF6A-4F01CCAF4A84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33E530F9-6028-4884-BF6A-4F01CCAF4A84}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33E530F9-6028-4884-BF6A-4F01CCAF4A84}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33E530F9-6028-4884-BF6A-4F01CCAF4A84}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F7299666-FF2A-46A6-B21C-F09B47CFFC6D} = {4D5215BE-6E51-43F0-9763-9441A6E3A6D6}
+		{33E530F9-6028-4884-BF6A-4F01CCAF4A84} = {797753C9-B45C-43C4-8FC9-23151926AA1C}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 4
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://10.1.56.70:8080/tfs/pptsv2.0
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = ..\\..\\PPTSWebAPITest\\PPTS.ExtServices.UnionPay.Test\\PPTS.ExtServices.UnionPay.Test.csproj
+		SccProjectTopLevelParentUniqueName1 = PPTS.ExtServices.UnionPay.sln
+		SccProjectName1 = ../../PPTSWebAPITest/PPTS.ExtServices.UnionPay.Test
+		SccLocalPath1 = ..\\..\\PPTSWebAPITest\\PPTS.ExtServices.UnionPay.Test
+		SccProjectUniqueName2 = PPTS.ExtServices.UnionPay.csproj
+		SccLocalPath2 = .
+		SccProjectUniqueName3 = ..\\..\\PPTSFramework\\PPTS.Data.Customers.Entities\\PPTS.Data.Customers.Entities.csproj
+		SccProjectTopLevelParentUniqueName3 = PPTS.ExtServices.UnionPay.sln
+		SccProjectName3 = ../../PPTSFramework/PPTS.Data.Customers.Entities
+		SccLocalPath3 = ..\\..\\PPTSFramework\\PPTS.Data.Customers.Entities
+	EndGlobalSection
+EndGlobal

@@ -7,7 +7,7 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{AFB29479-3C6A-42E4-976D-1D61DB732842}</ProjectGuid>
+    <ProjectGuid>{6A483A50-C71F-4312-A2ED-49B10AF30D90}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -62,6 +62,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Bin\MCS.Library.Data.dll</HintPath>
     </Reference>
+    <Reference Include="MCS.Library.Office.OpenXml.Excel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=62ea08f894871798, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Bin\MCS.Library.Office.OpenXml.Excel.dll</HintPath>
+    </Reference>
     <Reference Include="MCS.Library.OGUPermission">
       <HintPath>..\..\PPTSBin\MCS.Library.OGUPermission.dll</HintPath>
     </Reference>
@@ -90,6 +94,10 @@
     </Reference>
     <Reference Include="PPTS.Contracts.Customers">
       <HintPath>..\..\PPTSBin\PPTS.Contracts.Customers.dll</HintPath>
+    </Reference>
+    <Reference Include="PPTS.Contracts.Orders, Version=1.0.0.0, Culture=neutral, PublicKeyToken=62ea08f894871798, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\PPTSBin\PPTS.Contracts.Orders.dll</HintPath>
     </Reference>
     <Reference Include="PPTS.Contracts.Products">
       <HintPath>..\..\PPTSBin\PPTS.Contracts.Products.dll</HintPath>
@@ -175,6 +183,8 @@
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\TeacherRecordController.cs" />
+    <Compile Include="Controllers\StudentRecordController.cs" />
     <Compile Include="Controllers\TeacherCourseController.cs" />
     <Compile Include="Controllers\StudentCourseController.cs" />
     <Compile Include="Controllers\PagedQueryResult.cs" />
@@ -258,9 +268,7 @@
       <DependentUpon>Web.config</DependentUpon>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\ClassGroup\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="Properties\PublishProfiles\PPTS.WebAPI.Orders.pubxml" />
   </ItemGroup>

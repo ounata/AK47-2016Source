@@ -76,7 +76,7 @@ namespace PPTS.Data.Customers.Test
                 FollowTime = SNTPClient.AdjustedTime,
                 NextFollowTime = SNTPClient.AdjustedTime.AddDays(1),
                 OrgID = UuidHelper.NewUuidString(),
-                OrgType = "Campus",
+                //OrgType = "Campus",
                 OrgName = "Campus"
             };
 

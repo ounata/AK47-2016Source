@@ -74,6 +74,9 @@
     <Folder Include="WF\Tables" />
     <Folder Include="CM\Views" />
     <Folder Include="Storage" />
+    <Folder Include="MT" />
+    <Folder Include="MT\Tables" />
+    <Folder Include="TX" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Security\CM.sql" />
@@ -88,7 +91,6 @@
     <Build Include="CM\Tables\AccountChargeApplies.sql" />
     <Build Include="CM\Tables\AccountChargePayments.sql" />
     <Build Include="CM\Tables\CustomerExpenseRelations.sql" />
-    <Build Include="CM\Tables\CustomerFeedbacks.sql" />
     <Build Include="CM\Tables\CustomerMeetingItems.sql" />
     <Build Include="CM\Tables\CustomerMeetings.sql" />
     <Build Include="CM\Tables\CustomerScoreItems.sql" />
@@ -139,6 +141,17 @@
     <Build Include="CM\Tables\CustomerUserMapping.sql" />
     <Build Include="CM\Tables\POSRecords.sql" />
     <Build Include="CM\Tables\CustomerTeacherAssignApplies.sql" />
+    <Build Include="MT\Tables\CustomerOrgAuthorizations.sql" />
+    <Build Include="MT\Tables\CustomerRelationAuthorizations.sql" />
+    <Build Include="MT\Tables\OwnerRelationAuthorizations.sql" />
+    <Build Include="MT\Tables\RecordOrgAuthorizations.sql" />
+    <Build Include="Security\MT.sql" />
+    <Build Include="Security\TX.sql" />
+    <Build Include="TX\TRANSACTION_PROCESS.sql" />
+    <Build Include="CM\Tables\CustomerUpgradeRelations.sql" />
+    <Build Include="CM\Tables\SpecialCampuses.sql" />
+    <Build Include="CM\Stored Procedures\CustomerAutoUpgrade.sql" />
+    <Build Include="CM\Stored Procedures\CustomerGraduated.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PPTS.Data.Customers.DB.refactorlog" />
@@ -150,5 +163,6 @@
     <Build Include="Storage\PPTSCustomerCatalog.sql" />
     <None Include="PPTS.Data.Customer.XueDa.Dev.Test.DB.publish.xml" />
     <None Include="PPTS.Data.Customer.Cloud.Test.DB.publish.xml" />
+    <None Include="PPTS.Data.Customer.XueDa.Alpha.Test.DB.publish.xml" />
   </ItemGroup>
 </Project>

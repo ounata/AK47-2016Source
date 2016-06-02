@@ -1,6 +1,7 @@
 using MCS.Library.Core;
 using MCS.Library.Data.DataObjects;
 using MCS.Library.Data.Mapping;
+using PPTS.Data.Common.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -170,6 +171,7 @@ namespace PPTS.Data.Orders.Entities
         /// </summary>
         [ORFieldMapping("Subject")]
         [DataMember]
+        [ConstantCategory("C_CODE_ABBR_BO_Product_TeacherSubject")]
         public string Subject
         {
             get;
@@ -214,6 +216,7 @@ namespace PPTS.Data.Orders.Entities
         /// </summary>
         [ORFieldMapping("CategoryType")]
         [DataMember]
+        [ConstantCategory("c_codE_ABBR_Product_CategoryType")]
         public string CategoryType
         {
             get;
@@ -236,7 +239,8 @@ namespace PPTS.Data.Orders.Entities
         /// </summary>
         [ORFieldMapping("CourseLevel")]
         [DataMember]
-		public string CourseLevel
+        [ConstantCategory("c_codE_ABBR_Product_CourseLevel")]
+        public string CourseLevel
         {
 			get;
             set;
@@ -258,6 +262,7 @@ namespace PPTS.Data.Orders.Entities
         /// </summary>
         [ORFieldMapping("LessonDuration")]
         [DataMember]
+        [ConstantCategory("c_codE_ABBR_BO_ProductDuration")]
         public string LessonDuration
         {
             get;

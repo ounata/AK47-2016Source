@@ -28,6 +28,9 @@ namespace PPTS.WebAPI.Customers.ViewModels.PotentialCustomers
         public string CustomerCode { get; set; }
 
         [DataMember]
+        public string CustomerStatus { get; set; }
+
+        [DataMember]
         public int ClassRank { get; set; }
 
         [DataMember]

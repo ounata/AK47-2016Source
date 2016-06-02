@@ -27,7 +27,8 @@ namespace PPTS.WebAPI.Customers.Executors
             base.Validate();
             // 学年度、学期、考试类型、年级每个学员只能添加一条，重复提示：已添加过该成绩，请勿重复添加。
             CustomerScoreCollection scores = CustomerScoreAdapter.Instance.Load(where =>
-                                       where.AppendItem("StudyYear", Model.Score.StudyYear)
+                                       where.AppendItem("CustomerID", Model.Score.CustomerID)
+                                            .AppendItem("StudyYear", Model.Score.StudyYear)
                                             .AppendItem("StudyTerm", Model.Score.StudyTerm)
                                             .AppendItem("ScoreType", Model.Score.ScoreType)
                                             .AppendItem("ScoreGrade", Model.Score.ScoreGrade));

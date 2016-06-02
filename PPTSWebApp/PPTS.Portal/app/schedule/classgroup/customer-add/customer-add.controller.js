@@ -63,6 +63,13 @@
                             description: ''
                         },
                         {
+                            field: "AssetCode",
+                            name: "订购编号",
+                            headerCss: 'datatable-header-align-right',
+                            sortable: false,
+                            description: ''
+                        },
+                        {
                             field: "submitterName",
                             name: "订购人姓名",
                             headerCss: 'datatable-header-align-right',

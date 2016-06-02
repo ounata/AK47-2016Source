@@ -1,6 +1,7 @@
 using MCS.Library.Core;
 using MCS.Library.Data.DataObjects;
 using MCS.Library.Data.Mapping;
+using PPTS.Data.Common.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,35 +32,14 @@ namespace PPTS.Data.Products.Entities
             get;
             set;
         }
-
-        /// <summary>
-        /// 服务费编码
-        /// </summary>
-        [ORFieldMapping("ExpenseCode")]
-        [DataMember]
-        public string ExpenseCode
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 服务费名称
-        /// </summary>
-        [ORFieldMapping("ExpenseName")]
-        [DataMember]
-        public string ExpenseName
-        {
-            get;
-            set;
-        }
-
+        
         /// <summary>
         /// 服务费类型（一对一，班组）
         /// </summary>
         [ORFieldMapping("ExpenseType")]
         [DataMember]
-        public ExpenseTypeDefine ExpenseType
+        [ConstantCategory("c_codE_ABBR_ServiceFee_ServiceType")]
+        public string ExpenseType
         {
             get;
             set;
@@ -75,172 +55,51 @@ namespace PPTS.Data.Products.Entities
             get;
             set;
         }
-
+        
         /// <summary>
-        /// 状态（审批中，已完成，已拒绝）
+        /// 分工司ID
         /// </summary>
-        [ORFieldMapping("ExpenseStatus")]
+        [ORFieldMapping("BranchID")]
         [DataMember]
-        public ExpenseStatusDefine ExpenseStatus
+        public string BranchID
         {
             get;
             set;
         }
 
         /// <summary>
-        /// 生效日期
+        /// 分公司名称
         /// </summary>
-        [ORFieldMapping("StartDate")]
+        [ORFieldMapping("BranchName")]
         [DataMember]
-        public DateTime StartDate
+        public string BranchName
         {
             get;
             set;
         }
 
         /// <summary>
-        /// 所有者组织ID
+        /// 校区ID列表（逗号分割）
         /// </summary>
-        [ORFieldMapping("OwnOrgID")]
+        [ORFieldMapping("CampusIDs")]
         [DataMember]
-        public string OwnOrgID
+        public string CampusIDs
         {
             get;
             set;
         }
 
         /// <summary>
-        /// 所有者组织类型
+        /// 校区名称列表（逗号分割）
         /// </summary>
-        [ORFieldMapping("OwnOrgType")]
+        [ORFieldMapping("CampusNames")]
         [DataMember]
-        public string OwnOrgType
+        public string CampusNames
         {
             get;
             set;
         }
-
-        /// <summary>
-        /// 使用者组织类型
-        /// </summary>
-        [ORFieldMapping("UseOrgType")]
-        [DataMember]
-        public string UseOrgType
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 提交时间
-        /// </summary>
-        [ORFieldMapping("SubmitTime")]
-        [DataMember]
-        public DateTime SubmitTime
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 提交人ID
-        /// </summary>
-        [ORFieldMapping("SubmitterID")]
-        [DataMember]
-        public string SubmitterID
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 提交人姓名
-        /// </summary>
-        [ORFieldMapping("SubmitterName")]
-        [DataMember]
-        public string SubmitterName
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 提交人岗位ID
-        /// </summary>
-        [ORFieldMapping("SubmitterJobId")]
-        [DataMember]
-        public string SubmitterJobId
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 提交人岗位名称
-        /// </summary>
-        [ORFieldMapping("SubmitterJobName")]
-        [DataMember]
-        public string SubmitterJobName
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 最后审批人ID
-        /// </summary>
-        [ORFieldMapping("ApproverID")]
-        [DataMember]
-        public string ApproverID
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 最后审批人姓名
-        /// </summary>
-        [ORFieldMapping("ApproverName")]
-        [DataMember]
-        public string ApproverName
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 最后审批人岗位ID
-        /// </summary>
-        [ORFieldMapping("ApproverJobID")]
-        [DataMember]
-        public string ApproverJobID
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 最后审批人岗位名称
-        /// </summary>
-        [ORFieldMapping("ApproverJobName")]
-        [DataMember]
-        public string ApproverJobName
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 最后审批时间
-        /// </summary>
-        [ORFieldMapping("ApproveTime")]
-        [DataMember]
-        public DateTime ApproveTime
-        {
-            get;
-            set;
-        }
-
+        
         /// <summary>
         /// 创建人ID
         /// </summary>

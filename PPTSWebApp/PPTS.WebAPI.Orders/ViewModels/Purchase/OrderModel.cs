@@ -20,9 +20,9 @@ namespace PPTS.WebAPI.Orders.ViewModels.Purchase
         public OrderItemCollection Items { set; get; }
         public Data.Customers.Entities.Account Account { set; get; }
 
-        public Data.Customers.Entities.AccountChargePayment ChargePayment { set;get;}
+        public Data.Customers.Entities.AccountChargeApply ChargePayment { set;get;}
 
-        public List<Data.Customers.Entities.AccountChargePayment> Payments { set; get; }
+        public List<Data.Customers.Entities.AccountChargeApply> Payments { set; get; }
 
         public Dictionary<string, IEnumerable<BaseConstantEntity>> Dictionaries { set; get; }
 
@@ -47,12 +47,12 @@ namespace PPTS.WebAPI.Orders.ViewModels.Purchase
         }
 
         public OrderModel FillChargePayment() {
-            ChargePayment = Service.CustomerService.GetChargePaymentById(Order.ChargeApplyID);
+            ChargePayment = Service.CustomerService.GetChargePayById(Order.CustomerID, Order.ChargeApplyID);
             return this;
         }
 
         public OrderModel FillPayments() {
-            Payments = Service.CustomerService.GetChargePaymentsByCustomerId(Order.CustomerID);
+            Payments = Service.CustomerService.GetChargePaysByCustomerId(Order.CustomerID);
             return this;
         }
 

@@ -39,11 +39,11 @@
                 <mcs-input placeholder="学员编号" model="vm.criteria.customerCode" css="mcs-input-search" />
                 <mcs-input placeholder="咨询师" model="vm.criteria.consultant" css="mcs-input-search" />
             </div>
-           
+
             <div class="line-height-40">
-                <mcs-input placeholder="学管师" model="vm.criteria.educator" css="mcs-input-search"/>
-                <mcs-input placeholder="家长联系方式" model="vm.criteria.parentContact" css="mcs-input-search"/>
-                <mcs-button category="search" click="vm.search()" class="search-btn"/>
+                <mcs-input placeholder="学管师" model="vm.criteria.educator" css="mcs-input-search" />
+                <mcs-input placeholder="家长联系方式" model="vm.criteria.parentContact" css="mcs-input-search" />
+                <mcs-button category="search" click="vm.search()" class="search-btn" />
             </div>
 
         </div>
@@ -56,12 +56,10 @@
 <!-- /结束：潜客列表.快速查询条件 -->
 <!-- #开始：潜客列表.工具栏 -->
 <div class="mcs-panel-toolbar">
-    <mcs-dropdown-button title="订 购" items="vm.products" icon="shopping-cart"></mcs-dropdown-button>   
+    <mcs-dropdown-button title="订 购" items="vm.products" icon="shopping-cart"></mcs-dropdown-button>
+    <mcs-dropdown-button title="分 配" items="vm.relations" icon="user-plus" category="success"></mcs-dropdown-button>
     <mcs-button category="add" text="新增跟进记录" click="vm.addFollow()"></mcs-button>
     <mcs-button category="add" text="录入回访" click="vm.batchVisit()"></mcs-button>
-    <mcs-button icon="user-plus" css="btn-success" text="分配学管师" ppts-job-functions="分配学管师"></mcs-button>
-    <mcs-button icon="user-plus" css="btn-success" text="分配咨询师" ppts-job-functions="分配咨询师"></mcs-button>
-    <mcs-button icon="user-plus" css="btn-success" click="vm.assignTeacher()" text="分配教师" ppts-job-functions="分配教师"></mcs-button>
     <mcs-button icon="cny" css="btn-purple" text="充 值" ppts-job-functions="充值" click="vm.pay()"></mcs-button>
     <mcs-button icon="mail-forward" css="btn-yellow" text="申请转学" click="vm.transfer()"></mcs-button>
     <mcs-button category="export"></mcs-button>

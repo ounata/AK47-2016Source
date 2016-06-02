@@ -87,6 +87,15 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
         }
 
         /// <summary>
+        /// 上门记录
+        /// </summary>
+        public CustomerVerify PreparedVerify
+        {
+            set;
+            get;
+        }
+
+        /// <summary>
         /// 准备保存的潜客实体
         /// </summary>
         public PotentialCustomer PreparedCustomer
@@ -151,8 +160,10 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
         /// 为缴费单收款准备数据
         /// </summary>
         /// <param name="jobType"></param>
-        public void Prepare4SavePayment(JobTypeDefine jobType)
+        public void Prepare4SavePayment(IUser user)
         {
+            JobTypeDefine jobType = user.GetCurrentJob().JobType;
+
             bool isPotential = false;
             PotentialCustomer potential = PotentialCustomerAdapter.Instance.Load(this.CustomerID);
             if (potential != null && potential.Status != CustomerStatus.Formal)
@@ -162,7 +173,22 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
             this.Caculate(isPotential, discount, jobType, out account);
             this.PreparedAccount = account;
             if (isPotential)
+            {
+                CustomerVerify verify = new CustomerVerify();
+                verify.CampusID = this.CampusID;
+                verify.CampusName = this.CampusName;
+                verify.CustomerID = this.CustomerID;
+                verify.VerifyID = Guid.NewGuid().ToString().ToUpper();
+                verify.VerifyTime = SNTPClient.AdjustedTime;
+                verify.VerifierID = user.ID;
+                verify.VerifierName = user.Name;
+                verify.VerifierJobID = user.GetCurrentJob().ID;
+                verify.VerifierJobName = user.GetCurrentJob().Name;
+                verify.IsSigned = true;
+
+                this.PreparedVerify = verify;
                 this.PreparedCustomer = potential;
+            }
         }
 
         public void Init(CustomerModel customer, DiscountModel discount, JobTypeDefine jobType)
@@ -174,8 +200,8 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
         {
             decimal totalAccountValue;
             ConfigArgs args = ConfigsCache.GetArgs(this.CampusID);
-            account = AccountModel.LoadCurrentByCustomerID(this.CustomerID, out totalAccountValue);
-            //如果不存在账户或者不是拓路折扣1则新创建账户
+            account = AccountModel.LoadChargableByCustomerID(this.CustomerID, out totalAccountValue);
+            //如果没有可充值账户或者不是拓路折扣1则新创建账户
             if (account == null || args.DiscountSchema != DiscountSchemaDefine.Schema1)
                 account = new AccountModel();
 
@@ -231,18 +257,16 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
             }
             else
             {
-                return ChargeTypeDefine.NaN;
+                throw new Exception("该岗位不可进行充值缴费");
             }
         }
 
         /// <summary>
         /// 根据学员ID获取缴费单模型
         /// </summary>
-        /// <param name="campusID">校区ID</param>
-        /// <param name="customerID">学员ID</param>
-        /// <param name="jobType">申请人岗位类型</param>
+        /// <param name="customer">学员</param>
         /// <returns></returns>
-        public static ChargeApplyModel LoadByCustomerID(CustomerModel customer)
+        public static ChargeApplyModel LoadByCustomer(CustomerModel customer)
         {
             ChargeApplyModel model = null;
             AccountChargeApply apply = AccountChargeApplyAdapter.Instance.LoadUnpayByCustomerID(customer.CustomerID);

@@ -59,7 +59,7 @@
                 <div class="form-group">
                     <mcs-label text="沟通结果" css="col-sm-3" />
                     <div class="col-sm-9">
-                        <mcs-cascading-select data="vm.talkData" ng-model="vm.selection" required="true" />
+                        <mcs-cascading-select caption="一级沟通结果,二级沟通结果" data="vm.talkData" model="vm.selection" async="false" required-level="1" />
                     </div>
                 </div>
                 <div class="form-group">

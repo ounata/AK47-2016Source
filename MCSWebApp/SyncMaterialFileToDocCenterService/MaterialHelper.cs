@@ -24,7 +24,7 @@ namespace SyncMaterialFileToDocCenterService
 				connectionName,
 				() =>
 				{
-					result = MaterialAdapter.Instance.LoadMaterialByMaterialID(materialId).FirstOrDefault();
+                    result = MaterialAdapter.Instance.LoadMaterialByMaterialID(materialId);
 				});
 
 			return result;

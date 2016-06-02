@@ -189,6 +189,10 @@ namespace PPTS.WebAPI.Orders.ViewModels.ClassGroup
                 if (CustomerCollection.CustomerCollection.Where(c => c.Customer.CustomerID == item.Customer.CustomerID).Count() > 1) {
                     result.SetErrorMsg("学员不能重复！");
                 }
+
+                if (item.Customer.StudentStatus == Data.Customers.StudentStatusDefine.Blocked) {
+                    result.SetErrorMsg("冻结学生不能排班组课");
+                }
             }
             return result;
         }

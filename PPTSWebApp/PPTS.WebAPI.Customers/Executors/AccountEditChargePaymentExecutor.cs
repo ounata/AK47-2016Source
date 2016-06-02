@@ -52,24 +52,27 @@ namespace PPTS.WebAPI.Customers.Executors
             {
                 Account account = this.Model.PreparedAccount;
                 if (account == null)
-                {
                     account = new Account();
-                    account.CampusID = this.Model.CampusID;
-                    account.CampusName = this.Model.CampusName;
-                    account.CustomerID = this.Model.CustomerID;
-                    account.AccountID = this.Model.AccountID;
-                    account.AccountCode = this.Model.AccountCode;
-                    account.AccountType = AccountTypeDefine.Tunland;
-                    account.AccountMoney = this.Model.ThisAccountMoney;
-                    account.DiscountID = this.Model.ThisDiscountID;
-                    account.DiscountCode = this.Model.ThisDiscountCode;
-                    account.DiscountBase = this.Model.ThisDiscountBase;
-                    account.DiscountRate = this.Model.ThisDiscountRate;
-                    account.ChargeApplyID = this.Model.ApplyID;
-                    account.FillCreator();
-                    account.FillModifier();
+                account.CustomerID = this.Model.CustomerID;
+                account.AccountID = this.Model.AccountID;
+                account.AccountCode = this.Model.AccountCode;
+                account.AccountType = AccountTypeDefine.Tunland;
+                account.AccountMoney = this.Model.ThisAccountMoney;
+                account.DiscountID = this.Model.ThisDiscountID;
+                account.DiscountCode = this.Model.ThisDiscountCode;
+                account.DiscountBase = this.Model.ThisDiscountBase;
+                account.DiscountRate = this.Model.ThisDiscountRate;
+                account.ChargeApplyID = this.Model.ApplyID;
+                account.ChargePayTime = this.Model.PayTime;
+                if(this.Model.ChargeType == ChargeTypeDefine.New)
+                {
+                    account.FirstChargeApplyID = this.Model.ApplyID;
+                    account.FirstChargePayTime = this.Model.PayTime;
                 }
+                account.FillCreator();
+                account.FillModifier();
                 AccountAdapter.Instance.UpdateInContext(account);
+
                 if (this.Model.PreparedCustomer != null)
                 {
                     PotentialCustomer potential = this.Model.PreparedCustomer;
@@ -78,8 +81,16 @@ namespace PPTS.WebAPI.Customers.Executors
                     Customer customer = AutoMapper.Mapper.DynamicMap<Customer>(potential);
                     customer.FillCreator();
                     customer.FillModifier();
+                    customer.VersionEndTime = DateTime.MinValue;
+                    customer.VersionStartTime = DateTime.MinValue;
                     PotentialCustomerAdapter.Instance.UpdateInContext(potential);
                     CustomerAdapter.Instance.UpdateInContext(customer);
+                }
+                if (this.Model.PreparedVerify != null)
+                {
+                    CustomerVerify verify = this.Model.PreparedVerify;
+                    verify.FillCreator();
+                    CustomerVerifyAdapter.Instance.UpdateInContext(verify);
                 }
             }
         }

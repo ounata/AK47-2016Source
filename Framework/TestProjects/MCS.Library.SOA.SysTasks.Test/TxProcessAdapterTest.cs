@@ -18,6 +18,7 @@ namespace MCS.Library.SOA.SysTasks.Test
 
             Assert.IsNotNull(loaded);
             Assert.AreEqual(process.ProcessID, loaded.ProcessID);
+            Assert.AreEqual(process.ResourceID, loaded.ResourceID);
             Assert.AreEqual(process.Activities.Count, loaded.Activities.Count);
         }
 

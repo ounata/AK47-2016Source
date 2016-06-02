@@ -40,7 +40,15 @@
                     $state.go('ppts.score-edit', { id: vm.data.rowsSelected[0].scoreID, prev: 'ppts.student-view.score' });
                 };
 
-                // 导入
+                // 查看
+                vm.view = function () {
+                    $state.go('ppts.score-view', { id: vm.data.rowsSelected[0].scoreID, prev: 'ppts.student-view.score' });
+                };
                 
+                // 导出
+                vm.export = function () {
+                    dataSyncService.initCriteria(vm);
+                    mcs.util.postMockForm('http://localhost/PPTSWebApp/PPTS.WebAPI.Customers/api/customerscores/exportallScores', vm.criteria);
+                };
             }]);
     });

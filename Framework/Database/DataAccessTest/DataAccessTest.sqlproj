@@ -77,6 +77,8 @@
     <Build Include="Tables\TRANSACTION_PROCESS.sql" />
     <Build Include="Tables\Orders.sql" />
     <Build Include="Tables\Repertories.sql" />
+    <Build Include="Security\WF.sql" />
+    <Build Include="Tables\MATERIAL.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="DataAccessTest.refactorlog" />

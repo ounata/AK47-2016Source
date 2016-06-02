@@ -1,0 +1,44 @@
+<ng-form name="fileUploadForm" class="fileUploadForm">
+    <div>
+        <input type="file" ngf-multiple="true" ngf-select="fileSelect($files)" ngf-max-files="filesAmount?filesAmount:5" ng-model="filesUpload" name="files" ngf-validate="{{pattern}}">
+        <span ng-show="fileUploadForm.files.$error.pattern">只能选择图片文件，且最多{{filesAmount?filesAmount:5}}个</span>
+    </div>
+    <table style="width:800px;" class="table table-bordered">
+        <tr ng-repeat="f in filesUpload">
+            <td>
+                <span>{{f.name}}</span>
+            </td>
+            <td>
+                <input ng-disabled="readonly" type="text" name="fileTitle" ng-model="f.title">
+            </td>
+            <td>
+                <span class="progress" ng-show="f.progress >= 0">
+        <div style="width:{{f.progress}}%"  
+            ng-bind="f.progress + '%'"></div>
+      </span>
+            </td>
+            <td>
+                <span>{{f.status}}</span>
+            </td>
+        </tr>
+        <tr ng-repeat="f in model|filter:{method:'edit'}">
+            <td>
+                <span>{{f.originalName}}</span>
+            </td>
+            <td>
+                <input ng-disabled="readonly" type="text" name="fileTitle" ng-model="f.title">
+            </td>
+            <td>
+                <a ng-click="downloadFile(f)" title="{{f.originalName}}">点击下载</a>
+            </td>
+            <td>
+                <input ng-disabled="readonly" type="button" class="btn btn-info" ng-click="editFile(f)" value="修改">
+                <input ng-disabled="readonly" type="button" class="btn btn-info" ng-click="delecteFile(f)" value="删除">
+            </td>
+        </tr>
+        <tr>
+    </table>
+    <div>
+        <button ng-disabled="!fileUploadForm.$valid || readonly" ng-click="uploadFiles(filesUpload)">提交文件</button>
+    </div>
+</ng-form>

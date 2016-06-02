@@ -46,6 +46,7 @@
     [ModifierID] NVARCHAR(36) NULL, 
     [ModifierName] NVARCHAR(64) NULL, 
     [ModifyTime] DATETIME NULL DEFAULT GETUTCDATE(), 
+	[TenantCode] NVARCHAR(36) NULL, 
     CONSTRAINT [PK_CustomerServices] PRIMARY KEY NONCLUSTERED ([ServiceID]) 
 )
 

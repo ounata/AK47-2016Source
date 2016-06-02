@@ -14,9 +14,7 @@ namespace PPTS.Data.Orders
         [EnumItemDescription("审批通过")]
         ApprovalPass = 2,
         [EnumItemDescription("驳回")]
-        Reject = 3,
-        [EnumItemDescription("已退")]
-        Returned = 4,
+        Reject = 3
     }
 
     public enum DebookStatus
@@ -26,9 +24,7 @@ namespace PPTS.Data.Orders
         [EnumItemDescription("审批通过")]
         ApprovalPass = 2,
         [EnumItemDescription("驳回")]
-        Reject = 3,
-        [EnumItemDescription("已退")]
-        Returned = 4,
+        Reject = 3
     }
 
     /// <summary>

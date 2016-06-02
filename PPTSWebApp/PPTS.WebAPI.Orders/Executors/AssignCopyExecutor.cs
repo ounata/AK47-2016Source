@@ -11,6 +11,7 @@ using MCS.Library.SOA.DataObjects;
 using PPTS.Data.Orders.Entities;
 using PPTS.Data.Common.Security;
 using MCS.Library.Data;
+using PPTS.Data.Customers.Entities;
 
 namespace PPTS.WebAPI.Orders.Executors
 {
@@ -34,6 +35,13 @@ namespace PPTS.WebAPI.Orders.Executors
             ///6. 插入排课记录及更新资产表已排课数量
 
             base.PrepareData(context);
+
+            ///1. 学员是否被冻结
+            Customer cust = PPTS.WebAPI.Orders.Service.CustomerService.GetCustomerByCustomerId(this.Model.CustomerID);
+            if (cust.Locked)
+            {
+                throw new Exception("学员被冻结，不允许复制课表");
+            }
 
             ///计算复制源与目标间隔天数
             TimeSpan ts = this.Model.DestDateStart.Subtract(this.Model.SrcDateStart);
@@ -87,9 +95,9 @@ namespace PPTS.WebAPI.Orders.Executors
                 return null;
             AssignCollection ac = null;
             if (!string.IsNullOrEmpty(this.Model.CustomerID))
-                ac = AssignsAdapter.Instance.LoadCollection(this.Model.CustomerID, true, this.Model.SrcDateStart.Date, this.Model.SrcDateEnd.AddDays(1).Date, false);
+                ac = AssignsAdapter.Instance.LoadCollection( Data.Orders.AssignTypeDefine.ByStudent,this.Model.CustomerID, this.Model.SrcDateStart.Date, this.Model.SrcDateEnd.AddDays(1).Date, false);
             else
-                ac = AssignsAdapter.Instance.LoadCollection(this.Model.TeacherID, false, this.Model.SrcDateStart.Date, this.Model.SrcDateEnd.AddDays(1).Date, false);
+                ac = AssignsAdapter.Instance.LoadCollection( Data.Orders.AssignTypeDefine.ByTeacher,this.Model.TeacherJobID, this.Model.SrcDateStart.Date, this.Model.SrcDateEnd.AddDays(1).Date, false);
             IEnumerable<Assign> assignCollection = null;
             ///挑选允许复制的记录
             if (ac != null)

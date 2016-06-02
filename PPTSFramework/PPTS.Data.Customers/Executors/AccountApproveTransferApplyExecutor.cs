@@ -63,12 +63,10 @@ namespace PPTS.WebAPI.Customers.Executors
             if (bizAccount == null)
             {
                 bizAccount = new Account();
-                bizAccount.CampusID = apply.CampusID;
-                bizAccount.CampusName = apply.CampusName;
                 bizAccount.AccountID = apply.BizAccountID;
                 bizAccount.AccountCode = apply.BizAccountCode;
                 bizAccount.AccountType = apply.BizAccountType;
-                bizAccount.AccountStatus = AccountStatusDefine.Enabled;
+                bizAccount.AccountStatus = AccountStatusDefine.Uncharged;
                 bizAccount.AccountMoney = apply.BizThisAccountMoney;
                 bizAccount.DiscountID = apply.BizThisDiscountID;
                 bizAccount.DiscountCode = apply.BizThisDiscountCode;

@@ -31,18 +31,7 @@ namespace PPTS.Contracts.Proxies
         /// <returns></returns>
         public AccountChargeCollectionQueryResult QueryAccountChargeCollectionByCustomerID(string customerID)
         {
-            return QueryAccountChargeCollectionByCustomerID(customerID, DateTime.MinValue);
-        }
-
-        /// <summary>
-        /// 查看所有有账户余额的付款记录集合
-        /// </summary>
-        /// <param name="customerID">客户ID</param>
-        /// <param name="startTime">付款记录付款时间，默认DateTime.Min</param>
-        /// <returns></returns>
-        private AccountChargeCollectionQueryResult QueryAccountChargeCollectionByCustomerID(string customerID, DateTime startTime)
-        {
-            return this.SingleCall(action => action.QueryAccountChargeCollectionByCustomerID(customerID, startTime));
+            return this.SingleCall(action => action.QueryAccountChargeCollectionByCustomerID(customerID));
         }
 
         protected override WfClientChannelFactory<IAccountQueryService> GetService()

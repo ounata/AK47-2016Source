@@ -213,7 +213,13 @@ namespace PPTS.Data.Common.Security
                 if (jobID.IsNotEmpty())
                     result = user.Jobs()[jobID];
             }
-
+            #region 服务于单元测试
+            else
+            {
+                if (user.Jobs().Count > 0)
+                    return user.Jobs()[0];
+            }
+            #endregion 服务于单元测试
             return result;
         }
 
@@ -588,6 +594,21 @@ namespace PPTS.Data.Common.Security
             return result;
         }
 
+        public static IOrganization GetParentOrganizationByType(this IOrganization current, DepartmentType targetDeptType)
+        {
+            IOrganization result = null;
+            current.ProbeParents(org =>
+             {
+                 DepartmentType deptType = org.Properties.GetValue("DepartmentType", DepartmentType.None);
+
+                 if (deptType == targetDeptType)
+                     result = org;
+
+                 return result == null;
+             });
+            return result;
+        }
+
         /// <summary>
         /// 该部门是不是数据范围
         /// </summary>
@@ -612,6 +633,26 @@ namespace PPTS.Data.Common.Security
             DepartmentType deptType = org.Properties.GetValue("DepartmentType", DepartmentType.None);
 
             return desps.IsAbbrOrg(deptType);
+        }
+
+        /// <summary>
+        /// 获得英文拼音的首字母信息
+        /// </summary>
+        /// <param name="org">组织信息</param>
+        /// <returns></returns>
+        public static string GetFirstInitial(this IOrganization org)
+        {
+           return org.Properties.GetValue("SimplePinyin","B");
+        }
+
+        public static string GetShortName(this IOrganization org)
+        {
+            return org.Properties.GetValue("ShortName", string.Empty);
+        }
+
+        public static string GetShowShortName(this IOrganization org)
+        {
+            return GetShortNameLastPart(org.GetShortName());
         }
         #endregion 部门类型和数据范围
 

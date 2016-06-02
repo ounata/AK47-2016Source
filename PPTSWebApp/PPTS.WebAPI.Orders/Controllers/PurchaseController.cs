@@ -17,7 +17,13 @@ using PPTS.Data.Orders.Adapters;
 using MCS.Web.MVC.Library.Filters;
 using MCS.Library.Principal;
 using PPTS.Data.Common.Security;
+
 using PPTS.WebAPI.Orders.ViewModels.Exchange;
+using System.Web.Http.ModelBinding;
+using MCS.Web.MVC.Library.ModelBinder;
+using MCS.Library.Office.OpenXml.Excel;
+using System.Data;
+using MCS.Web.MVC.Library.ApiCore;
 
 namespace PPTS.WebAPI.Orders.Controllers
 {
@@ -37,7 +43,7 @@ namespace PPTS.WebAPI.Orders.Controllers
             return new OrderItemViewQueryResult
             {
                 QueryResult = GenericPurchaseSource<OrderItemView, OrderItemViewCollection>.Instance.Query(criteria.PageParams, criteria, criteria.OrderBy),
-                Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(OrderItemView)),
+                Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(OrderItemView),typeof(Product)),
             };
         }
 
@@ -97,7 +103,7 @@ namespace PPTS.WebAPI.Orders.Controllers
 
             return new
             {
-                IsDeduct = Service.CustomerService.GetWhetherToDeductServiceChargeByCustomerId(customerId),
+                DeductList = Service.CustomerService.GetWhetherToDeductServiceChargeByCustomerId(customerId),
                 ServiceCharge = Service.ProductService.GetServiceChargeByCampusId(campusId)
             };
         }
@@ -129,23 +135,12 @@ namespace PPTS.WebAPI.Orders.Controllers
             //查看清单类型 1：普通 2：买赠 3：插班
             int listType = data.listType;
 
-            var sccollection = (ShoppingCartCollection)new PPTSShoppingCartExecutor("GetShoppingCart") { CustomerId = customerId, OrderType = listType }.Execute();
-            var productIds = sccollection.Select(m => m.ProductID).ToArray();
-
-            var scm = new ShoppingCartModel() { ListType = listType };
-
-            scm.FillAccount(Service.CustomerService.GetAccountbyCustomerId(customerId))
-                .FillCart(sccollection)
-                .FillCartProduct(Service.ProductService.GetProductsByIds(productIds))
-                .FillPreset(Service.ProductService.GetPresentByOrgId(orgId))
-                .SetDiscount()
-                .FillClassGroupAmount()
-                .ChargePayments = Service.CustomerService.GetChargePaymentsByCustomerId(customerId);
-
-            scm.Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(ProductView), typeof(Order));
-
-            return scm;
-
+            return ShoppingCartModel.FillCart(customerId, orgId, listType)
+                            .FillAccount()
+                            .FillPreset()
+                            .FillClassGroupAmount()
+                            .FillChargePays()
+                            .SetDiscount();
 
         }
 
@@ -168,11 +163,12 @@ namespace PPTS.WebAPI.Orders.Controllers
         [HttpPost]
         public void AddShoppingCart(ShoppingCartCollection collection)
         {
+            collection.NullCheck("提交数据有误！");
+
             collection.ForEach(m =>
             {
                 m.Amount = 1;
-                m.CreatorID = DeluxeIdentity.CurrentUser.ID;
-                m.CreatorName = DeluxeIdentity.CurrentUser.DisplayName;
+                DeluxeIdentity.CurrentUser.FillCreatorInfo(m);
             });
             new AddShoppingCartExecutor(collection).Execute();
 
@@ -183,65 +179,15 @@ namespace PPTS.WebAPI.Orders.Controllers
         /// </summary>
         /// <param name="model"></param>
         [HttpPost]
-        public string SubmitShoppingCart(SubmitOrderModel model)
+        public void SubmitShoppingCart(SubmitOrderModel model)
         {
             model.NullCheck("model");
             model.CustomerID.CheckStringIsNullOrEmpty("model.CustomerID");
-            model.AccountId.CheckStringIsNullOrEmpty("model.AccountId");
+            model.AccountID.CheckStringIsNullOrEmpty("model.AccountId");
 
+            model.CurrentUser = DeluxeIdentity.CurrentUser;
+            new AddOrderExecutor(model) { NeedValidation = true }.Execute();
 
-            model.ProductViews = Service.ProductService.GetProductsByIds(model.item.Select(m => m.ProductID).ToArray());
-            model.Account = Service.CustomerService.GetAccountbyCustomerId(model.CustomerID).SingleOrDefault(m => m.AccountID == model.AccountId);
-
-            model.CreatorID = DeluxeIdentity.CurrentUser.ID;
-            model.CreatorName = DeluxeIdentity.CurrentUser.DisplayName;
-            model.JobId = DeluxeIdentity.CurrentUser.GetCurrentJob().ID;
-            model.JobName = DeluxeIdentity.CurrentUser.GetCurrentJob().Name;
-            model.JobType = ((int)DeluxeIdentity.CurrentUser.GetCurrentJob().JobType).ToString();
-
-            //常规订购
-            if (model.ListType == 1)
-            {
-                if (
-                    model.ProductViews.Any(m => m.CategoryType == Data.Products.CategoryType.YouXue)
-                    && model.ProductViews.Any(m => m.CategoryType != Data.Products.CategoryType.YouXue)
-                    )
-                {
-                    return "游学类产品不能与其他类产品同时订购";
-                }
-            }
-
-
-            var totalMoney = model.ToOrderItemCollection().Sum(m => m.RealPrice);
-            ////是否扣除过综合服务费
-            //var kfdict = Service.CustomerService.GetWhetherToDeductServiceChargeByCustomerId(model.CustomerID);
-            //if (model.ProductViews.Select(m => (int)m.CategoryType).Any(w => kfdict[w] == false))
-            //{
-            //    //获取该校区综合服务费
-            //    var expense = Service.ProductService.GetServiceChargeByCampusId(model.CustomerCampusID);
-            //    if (expense == null) { return "该校区未创建综合服务费"; }
-            //    totalMoney += expense.ExpenseValue;
-            //}
-            if (totalMoney > model.Account.AccountMoney)
-            {
-                return "该学员帐户余额不足";
-            }
-
-
-            //买赠订购
-            //有未完成的退费操作不允许订购
-            //提交订单后，扣减对应账户的可用金额，订购资金余额增加对应金额。
-
-            //常规订购
-            //有未完成的退费操作不允许订购
-            //游学类产品不能与其他类产品同时订购
-
-            var status = (int)new AddOrderExecutor(model).Execute();
-            switch (status)
-            {
-                case -1: return "有未完成的退费操作不允许订购";
-            }
-            return "";
         }
 
 
@@ -260,6 +206,7 @@ namespace PPTS.WebAPI.Orders.Controllers
 
         }
 
+        [HttpPost]
         public void ExchangeOrder(ExchangeOrderModel model)
         {
             new ExchangeExecutor(model).Execute();
@@ -281,7 +228,7 @@ namespace PPTS.WebAPI.Orders.Controllers
         {
             string orderId = data.orderId;
             string chargeApplyID = data.chargeApplyId;
-            
+
             var param = new Dictionary<string, object>() {
                 { "ChargeApplyID", chargeApplyID },
                 { "ModifierID", DeluxeIdentity.CurrentUser.ID },
@@ -293,5 +240,80 @@ namespace PPTS.WebAPI.Orders.Controllers
 
         #endregion
 
+        #region 导出
+
+        [HttpPost]
+        public HttpResponseMessage ExportOrderItemList([ModelBinder(typeof(FormBinder))]OrderItemViewCriteriaModel criteria)
+        {
+
+            var wb = WorkBook.CreateNew();
+            var sheet = wb.Sheets["sheet1"];
+            var tableDesp = new TableDescription("订购列表");
+            criteria.PageParams.PageIndex = 0;
+            criteria.PageParams.PageSize = 0;
+            var pageData = GenericPurchaseSource<OrderItemView, OrderItemViewCollection>.Instance.Query(criteria.PageParams, criteria, criteria.OrderBy);
+
+            var columns = new Dictionary<string, string>() {
+{ "校区", "CampusName"},
+{"学生姓名", "CustomerName"},
+{"学生编号", "CustomerCode"},
+{"家长姓名", "ParentName"},
+{"订购单编号", "OrderNo"},
+{"订购日期", "OrderTime"},
+{"产品类型", "CatalogName"},
+{"年级", "Grade"},
+{"科目", "Subject"},
+{"课程级别", "CourseLevel"},
+{"实际单价(元)", "RealPrice"},
+{"客户折扣率", "DiscountRate"},
+{"订购数量", "OrderAmount"},
+{"订购金额(元)", "BookMoney"},
+{"赠送数量", "PresentAmount"},
+{"已退数量", "DebookedAmount"},
+{"已排数量", "AssignedAmount"},
+{"已上数量", "ConfirmedAmount"},
+{"剩余数量", "RemainCount"},
+{"订单状态", "OrderStatus"},
+{"订购操作人", "SubmitterName"},
+{"操作人岗位", "SubmitterJobName"},
+ };
+            columns.ToList().ForEach(kv =>
+            {
+                tableDesp.AllColumns.Add(new TableColumnDescription(new DataColumn(kv.Key, typeof(string))) { PropertyName = kv.Value });
+            });
+            
+            var dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(OrderItemView));
+            sheet.LoadFromCollection(pageData.PagedData, tableDesp, (cell, param) =>
+            {
+
+                switch (param.ColumnDescription.PropertyName)
+                {
+                    case "CourseLevel":
+                        var cl = dictionaries["c_codE_ABBR_Product_CourseLevel"].Where(c => c.Key == Convert.ToString(param.PropertyValue));
+                        cell.Value = null != cl ? (null == cl.FirstOrDefault() ? null : cl.FirstOrDefault().Value) : null;
+                        break;
+                    case "Grade":
+                        var g = dictionaries["c_codE_ABBR_CUSTOMER_GRADE"].Where(c => c.Key == Convert.ToString(param.PropertyValue));
+                        cell.Value = null != g ? (null == g.FirstOrDefault() ? null : g.FirstOrDefault().Value) : null;
+                        break;
+                    case "Subject":
+                        var rt = dictionaries["C_CODE_ABBR_BO_Product_TeacherSubject"].Where(c => c.Key == Convert.ToString(param.PropertyValue));
+                        cell.Value = null != rt ? (null == rt.FirstOrDefault() ? null : rt.FirstOrDefault().Value) : null;
+                        break;
+                    case "OrderStatus":
+                        var ro = dictionaries["c_codE_ABBR_Order_OrderStatus"].Where(c => c.Key == Convert.ToString(param.PropertyValue));
+                        cell.Value = null != ro ? (null == ro.FirstOrDefault() ? null : ro.FirstOrDefault().Value) : null;
+                        break;
+                    default:
+                        cell.Value = param.PropertyValue;
+                        break;
+                }
+            });
+
+            return wb.ToResponseMessage("订购列表.xlsx");
+        }
+
+
+        #endregion
     }
 }

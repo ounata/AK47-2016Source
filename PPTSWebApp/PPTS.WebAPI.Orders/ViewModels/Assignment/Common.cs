@@ -1,5 +1,6 @@
 ﻿using PPTS.Contracts.Customers.Models;
 using PPTS.Data.Common.Entities;
+using PPTS.Data.Customers.Entities;
 using PPTS.Data.Orders.Entities;
 using System;
 using System.Collections.Generic;
@@ -20,45 +21,12 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
             public string TeacherID { get; set; }
             public string TeacherJobID { get; set; }
             public string TeacherName { get; set; }
-        }
-
-
-        public Dictionary<string, IEnumerable<BaseConstantEntity>> GetWCAS(Dictionary<string, IEnumerable<BaseConstantEntity>> dic)
-        {
-            string key = "C_Code_Abbr_Course_AssignStatus";
-            foreach (var v in dic)
+            public string JobOrgID { get; set; }
+            public string JobOrgName { get; set; }
+            public int IsFullTimeTeacher
             {
-                if (v.Key.ToLower() == key.ToLower())
-                {
-                    key = v.Key;
-                    System.Collections.Generic.List<BaseConstantEntity> ie = (System.Collections.Generic.List<BaseConstantEntity>)v.Value;
-                    ie.Add(new BaseConstantEntity() { Key = "-1", Value = "全部" });
-                    var cc = from c in ie
-                             where (new[] { "1", "3", "8", "-1" }).Contains(c.Key)
-                             select c;
-                    dic.Remove(key);
-                    dic.Add(key, cc);
-                    break;
-                }
+                get; set;
             }
-            key = "C_CODE_ABBR_Assign_Source";
-            foreach (var v in dic)
-            {
-                if (v.Key.ToLower() == key.ToLower())
-                {
-                    key = v.Key;
-                    System.Collections.Generic.List<BaseConstantEntity> ie = (System.Collections.Generic.List<BaseConstantEntity>)v.Value;
-                    ie.Add(new BaseConstantEntity() { Key = "-1", Value = "全部" });
-                    var cc = from c in ie
-                             where (new[] { "1", "2", "-1" }).Contains(c.Key)
-                             select c;
-                    dic.Remove(key);
-                    dic.Add(key, cc);
-                    break;
-                }
-            }
-
-            return dic;
         }
 
         public TeacherModel GetTeacher(string stuID, string campusID, Dictionary<string, IEnumerable<BaseConstantEntity>> dic)
@@ -66,8 +34,7 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
             IEnumerable<BaseConstantEntity> grade = dic.Where(p => p.Key.ToLower() == "C_CODE_ABBR_CUSTOMER_GRADE".ToLower()).FirstOrDefault().Value;
             IEnumerable<BaseConstantEntity> subject = dic.Where(p => p.Key.ToLower() == "C_CODE_ABBR_BO_Product_TeacherSubject".ToLower()).FirstOrDefault().Value;
 
-            TeacherRelationByCustomerQueryResult queryModel = new TeacherRelationByCustomerQueryResult() { };
-            TeacherRelationByCustomerQueryResult result = PPTS.Contracts.Proxies.PPTSCustomerQueryServiceProxy.Instance.QueryCustomerTeacherRelationByCustomerID(stuID);
+            TeacherRelationByCustomerQueryResult result = PPTS.WebAPI.Orders.Service.CustomerService.GetTeacherRelationByCustomer(stuID);
 
             TeacherModel teacher = new TeacherModel();
             teacher.CustomerID = stuID;
@@ -76,27 +43,40 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
                 return teacher;
 
             ///当前校区的老师集合
+            #region
             var tchs = result.TeacherJobCollection.Where(p => p.TeacherJob.CampusID == campusID);
             var tmpTeacher = new List<TmpTeacherModel>();
             foreach (var tch in tchs)///循环老师
             {
                 foreach (var gs in tch.TeacherTeachingCollection)///循环当前老师年级科目关系
                 {
-                    ///教师 科目 年级关系
-                    tmpTeacher.Add(new TmpTeacherModel
+                    var grades = grade.Where(p => p.Key == gs.Grade);
+                    if (grades == null)
+                        continue;
+                    var subjects = subject.Where(p => p.Key == gs.Subject);
+                    var t = new TmpTeacherModel
                     {
                         Grade = gs.Grade,
-                        GradeName = grade.Where(p => p.Key == gs.Grade).First().Value,
+                        //GradeName = grade.Where(p => p.Key == gs.Grade).First().Value,
                         Subject = gs.Subject,
-                        SubjectName = subject.Where(p => p.Key == gs.Subject).First().Value,
+                        //SubjectName = bce.Value,
                         TeacherID = tch.TeacherJob.TeacherID,
                         TeacherJobID = tch.TeacherJob.JobID,
-                        TeacherName = tch.TeacherJob.TeacherName
-                    });
+                        TeacherName = tch.TeacherJob.TeacherName,
+                        JobOrgID = tch.TeacherJob.JobOrgID,
+                        JobOrgName = tch.TeacherJob.JobOrgName,
+                        IsFullTimeTeacher = tch.TeacherJob.IsFullTime
+                    };
+                    t.GradeName = grades.First().Value;
+                    if (subject != null)
+                        t.SubjectName = subjects.First().Value;
+                    ///教师 科目 年级关系
+                    tmpTeacher.Add(t);
                 }
             }
             if (tmpTeacher.Count() == 0)
                 return teacher;
+            #endregion
 
             ///年级集合
             var gradeCollection = from grd in tmpTeacher
@@ -104,7 +84,6 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
                                   select new KeyValue() { Key = g.Key.Grade, Value = g.Key.GradeName };
 
             teacher.Grade = gradeCollection.ToList();
-
             ///年级对应科目集合
             #region
             foreach (var v in gradeCollection)
@@ -121,21 +100,36 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
                 {
                     var person = from p in tmpTeacher
                                  where p.Grade == v.Key && p.Subject == sj.Key
-                                 select new KeyValue() { Key = p.TeacherID, Value = p.TeacherName, Field01 = p.TeacherJobID };
+                                 select new TeacherInfo()
+                                 {
+                                     Key = p.TeacherID,
+                                     Value = p.TeacherName,
+                                     Field01 = p.TeacherJobID,
+                                     TeacherJobOrgID = p.JobOrgID,
+                                     TeacherJobOrgName = p.JobOrgName,
+                                     IsFullTimeTeacher = p.IsFullTimeTeacher
+                                 };
 
-                    teacher.Tch.Add(new TchSubjectGradeRela() { Grade = v.Key, Subject = sj.Key, Teachers = person.ToList() });
+                    teacher.Tch.Add(new TchSubjectGradeRela()
+                    {
+                        Grade = v.Key,
+                        Subject = sj.Key,
+                        Teachers = person.ToList()
+                    });
                 }
             }
             #endregion
             return teacher;
         }
 
-        public StudentModel GetStudent(string teacherJobID,string campusID,Dictionary<string, IEnumerable<BaseConstantEntity>> dic)
+        public StudentModel GetStudent(string teacherJobID, string campusID, Dictionary<string, IEnumerable<BaseConstantEntity>> dic)
         {
             StudentModel student = new StudentModel();
-            CustomerRelationByTeacherQueryResult result = PPTS.Contracts.Proxies.PPTSCustomerQueryServiceProxy.Instance.QueryCustomerTeacherRelationByTeacherJobID(teacherJobID);
+            CustomerRelationByTeacherQueryResult result= PPTS.WebAPI.Orders.Service.CustomerService.GetCustomerRelationByTeacher(teacherJobID);
             if (result == null || result.CustomerCollection.Count() == 0)
                 return student;
+            student.TeacherJobOrgID = result.TeacherJob.TeacherJob.JobOrgID;
+            student.TeacherJobOrgName = result.TeacherJob.TeacherJob.JobOrgName;
             ///挑选本校的学员,并且不被冻结状态
             var cusCollction = result.CustomerCollection.Where(p => p.CampusID == campusID && p.StudentStatus != Data.Customers.StudentStatusDefine.Blocked);
             if (cusCollction == null || cusCollction.Count() == 0)
@@ -151,6 +145,7 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
             foreach (var gs in result.TeacherJob.TeacherTeachingCollection)///循环年级科目关系
             {
                 ///教师 科目 年级关系
+                #region
                 tmpGradeSubject.Add(new TmpTeacherModel
                 {
                     Grade = gs.Grade,
@@ -158,13 +153,17 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
                     Subject = gs.Subject,
                     SubjectName = subject.Where(p => p.Key == gs.Subject).First().Value
                 });
+                #endregion
             }
             ///年级集合
+           #region
             var gradeCollection = from grd in tmpGradeSubject
                                   group grd.Grade by new { grd.Grade, grd.GradeName } into g
                                   select new KeyValue() { Key = g.Key.Grade, Value = g.Key.GradeName };
             student.Grade = gradeCollection.ToList();
+            #endregion
             //年级对应科目集合
+            #region
             foreach (var v in gradeCollection)
             {
                 var subjects = from tch in tmpGradeSubject
@@ -173,6 +172,7 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
                                select new KeyValue() { Key = g.Key.Subject, Value = g.Key.SubjectName };
                 student.GradeSubjectRela.Add(v.Key, subjects.ToList());
             }
+            #endregion
             return student;
         }
     }

@@ -26,6 +26,10 @@
                 src: ['build/ppts.startup.js'],
                 dest: 'build/ppts.startup.min.js',
             },
+            buildRequire: {
+                src: ['src/config/require.config.js'],
+                dest: 'build/require.config.min.js',
+            },
             buildGlobal: {
                 src: ['build/ppts.global.js'],
                 dest: 'build/ppts.global.min.js',

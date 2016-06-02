@@ -45,9 +45,6 @@ namespace PPTS.WebAPI.Customers.DataSources
 
             CustomerScoresBatchSearchModelCollection data = result.PagedData;
 
-            InLoadingCondition inBuilder = new InLoadingCondition(action => data.ForEach(item => action.AppendItem(item.CustomerID)), "CustomerID");
-            CustomerScoreCollection scores = CustomerScoreAdapter.Instance.LoadByInBuilder(inBuilder);
-
             data.ForEach(item =>
             {
                 CustomerScoreAdapter.Instance.LoadInContext(new WhereLoadingCondition(
@@ -63,15 +60,18 @@ namespace PPTS.WebAPI.Customers.DataSources
                    {
                        collection.ForEach(score =>
                        {
-                           if (item.CustomerID == score.CustomerID)
+                           data.ForEach(o =>
                            {
-                               item.Scores = score;
-                           }
+                               if (o.CustomerID == score.CustomerID)
+                               {
+                                   o.Scores = score;
+                               }
+                           });
                        });
                    });
             });
             CustomerScoreAdapter.Instance.GetDbContext().DoAction(context => context.ExecuteDataSetSqlInContext());
-            
+
             data.ForEach(item =>
             {
                 if (item.Scores != null)
@@ -84,20 +84,41 @@ namespace PPTS.WebAPI.Customers.DataSources
                     {
                         collection.ForEach(scoreItem =>
                         {
-                            if (item.Scores.CustomerID == item.CustomerID && item.Scores.ScoreID == scoreItem.ScoreID)
+                            data.ForEach(s =>
                             {
-                                if (item.ScoreItems == null)
+                                if (s.Scores != null)
                                 {
-                                    item.ScoreItems = new CustomerScoreItemCollection();
+                                    if (s.Scores.CustomerID == s.CustomerID && s.Scores.ScoreID == scoreItem.ScoreID)
+                                    {
+                                        if (s.ScoreItems == null)
+                                        {
+                                            s.ScoreItems = new CustomerScoreItemCollection();
+                                        }
+                                        s.ScoreItems.Add(scoreItem);
+                                    }
                                 }
-                                item.ScoreItems.Add(scoreItem);
-                            }
+                            });
                         });
                     });
                 }
             });
             CustomerScoreItemAdapter.Instance.GetDbContext().DoAction(context => context.ExecuteDataSetSqlInContext());
-            
+
+            TeacherSearchCollection teachers = null;
+            data.ForEach(item =>
+            {
+                bool isTeacher = DeluxeIdentity.CurrentUser.GetCurrentJob().JobType == Data.Common.JobTypeDefine.Teacher;
+                if (isTeacher)
+                {
+                    teachers = TeacherSearchAdapter.Instance.Load(item.CustomerID, DeluxeIdentity.CurrentUser.ID);
+                }
+                else
+                {
+                    teachers = TeacherSearchAdapter.Instance.Load(item.CustomerID);
+                }
+                item.Teachers = teachers;
+            });
+
             return result;
         }
     }

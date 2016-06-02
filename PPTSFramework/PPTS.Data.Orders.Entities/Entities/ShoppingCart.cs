@@ -1,6 +1,7 @@
 using MCS.Library.Core;
 using MCS.Library.Data.DataObjects;
 using MCS.Library.Data.Mapping;
+using PPTS.Data.Common.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,8 +16,8 @@ namespace PPTS.Data.Orders.Entities
 	[Serializable]
     [ORTableMapping("OM.ShoppingCarts")]
     [DataContract]
-	public class ShoppingCart
-	{		
+	public class ShoppingCart : IEntityWithCreator
+    {		
 		public ShoppingCart()
 		{
 		}		

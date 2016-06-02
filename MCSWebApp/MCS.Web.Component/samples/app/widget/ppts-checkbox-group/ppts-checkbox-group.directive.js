@@ -21,6 +21,11 @@
                     $scope.data = ppts.dict[ppts.config.dictMappingConfig[$scope.category]];
                 }
 
+                if (mcs.util.hasAttr($elem, 'required')) {
+                    $scope.required = true;
+                    $elem.parent().append('<p class="help-block"></p>');
+                }
+
                 $scope.model = $scope.model || [];
                 if (angular.isFunction($scope.clear)) {
                     $elem.prepend($compile(angular.element('<button class="btn btn-link" ng-click="clear()">清空</button>'))($scope));
@@ -28,5 +33,4 @@
             }
         }
     }]);
-
 })();

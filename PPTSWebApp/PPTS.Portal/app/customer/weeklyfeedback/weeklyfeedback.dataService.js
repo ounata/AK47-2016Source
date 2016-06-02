@@ -88,7 +88,7 @@
                 dataSyncService.initCriteria(vm);
                 weeklyFeedbackDataService.GetCustomerFeedbackList(vm.criteria, function (result) {
                     vm.data.rows = result.queryResult.pagedData;
-                    vm.dictionaries = result.dictionaries;
+                    //vm.dictionaries = result.dictionaries;
                     dataSyncService.injectDictData();
                     dataSyncService.updateTotalCount(vm, result.queryResult);
                     if (ng.isFunction(callback)) {

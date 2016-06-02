@@ -89,12 +89,14 @@ namespace MCS.Web.MVC.Library.ApiCore
         /// <param name="request"></param>
         /// <param name="fileName"></param>
         /// <returns></returns>
-        public static string EncodeFileNameByBrowser(this HttpRequest request, string fileName)
+        public static string EncodeFileNameByBrowser(this HttpContext context, string fileName)
         {
             string result = fileName;
 
-            if (request != null)
+            if (context != null)
             {
+                HttpRequest request = context.Request;
+
                 if (request.Browser.IsBrowser("IE") || request.Browser.IsBrowser("internetexplorer") || request.UserAgent.IndexOf(" edge/", StringComparison.OrdinalIgnoreCase) >= 0)
                     result = HttpUtility.UrlEncode(fileName);
             }
@@ -130,7 +132,7 @@ namespace MCS.Web.MVC.Library.ApiCore
 
             result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("Attachment")
             {
-                FileName = HttpContext.Current.Request.EncodeFileNameByBrowser(fileName)
+                FileName = HttpContext.Current.EncodeFileNameByBrowser(fileName)
             };
 
             return result;

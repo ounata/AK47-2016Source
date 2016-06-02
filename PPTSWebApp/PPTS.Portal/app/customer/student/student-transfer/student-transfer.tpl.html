@@ -9,13 +9,13 @@
         <div class="form-group">
             <span class="col-sm-4 control-label no-padding-right" style="padding-top:8px;">我申请将<span class="required" title="{{vm.customerNames}}">{{vm.displayNames}}</span>转到：</span>
             <div class="col-sm-8">
-                <ppts-organization branch="vm.transferResources.branch" campus="vm.transferResources.campus" selected="vm.transferResources.selected" />
+                <ppts-organization branch="vm.apply.toBranchID" campus="vm.apply.toCampusID" />
             </div>
         </div>
         <div class="form-group">
             <span class="col-sm-4 control-label no-padding-right" style="padding-top:0px">转学原因：</span>
             <div class="col-sm-8">
-                <textarea class="autosize-transition form-control" ng-model="vm.tranfer.transferMemo" style="overflow-x: hidden; overflow-y: auto;word-wrap: break-word; resize: horizontal; height: 100px;"></textarea>
+                <textarea class="autosize-transition form-control" ng-model="vm.apply.applyMemo" style="overflow-x: hidden; overflow-y: auto;word-wrap: break-word; resize: horizontal; height: 100px;"></textarea>
             </div>
         </div>
         <div class="form-group">
@@ -26,7 +26,7 @@
         </div>
     </div>
     <div class="modal-footer">
-        <mcs-button category="ok" click="vm.transfer()" />
+        <mcs-button category="ok" click="vm.save()" />
         <mcs-button category="close" click="vm.close()" />
     </div>
 </form>

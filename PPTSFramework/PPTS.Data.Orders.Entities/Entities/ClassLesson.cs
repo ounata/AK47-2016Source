@@ -206,10 +206,54 @@ namespace PPTS.Data.Orders.Entities
             set;
 		}
 
-		/// <summary>
-		/// 创建人ID
-		/// </summary>
-		[ORFieldMapping("CreatorID")]
+        /// <summary>
+        /// 本次课教师岗位ID
+        /// </summary>
+        [ORFieldMapping("TeacherJobID")]
+        [DataMember]
+        public string TeacherJobID
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 本次课教师岗位所属学科组ID
+        /// </summary>
+        [ORFieldMapping("TeacherJobOrgID")]
+        [DataMember]
+        public string TeacherJobOrgID
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 本次课教师岗位所属学科组名称
+        /// </summary>
+        [ORFieldMapping("TeacherJobOrgName")]
+        [DataMember]
+        public string TeacherJobOrgName
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 本次课是否全职教师
+        /// </summary>
+        [ORFieldMapping("TeacherJobOrgName")]
+        [DataMember]
+        public bool IsFullTimeTeacher
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 创建人ID
+        /// </summary>
+        [ORFieldMapping("CreatorID")]
         [SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update)]
         [DataMember]
 		public string CreatorID

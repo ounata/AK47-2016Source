@@ -71,6 +71,7 @@
     <Folder Include="PM\Tables" />
     <Folder Include="Scripts" />
     <Folder Include="PM\Views" />
+    <Folder Include="TX" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Security\PM.sql" />
@@ -97,10 +98,13 @@
     <Build Include="PM\Views\v_CategoryCatalogs.sql" />
     <Build Include="PM\Views\v_Products.sql" />
     <Build Include="PM\Tables\ProductClassStats.sql" />
-    <Build Include="PM\Tables\PresentPermissionApplies.sql" />
+    <Build Include="PM\Tables\PresentPermissionsApplies.sql" />
     <Build Include="PM\Views\v_PresentPermissions_Current.sql" />
     <Build Include="PM\Tables\DiscountPermissionsApplies.sql" />
     <Build Include="PM\Views\v_DiscountPermissions_Current.sql" />
+    <Build Include="Security\TX.sql" />
+    <Build Include="TX\TRANSACTION_PROCESS.sql" />
+    <Build Include="PM\Views\v_ProductClassStats.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PPTS.Data.Product.Local.Dev.DB.publish.xml" />
@@ -108,6 +112,7 @@
     <None Include="PPTS.Data.Product.XueDa.Dev.DB.publish.xml" />
     <None Include="PPTS.Data.Product.XueDa.Dev.Test.DB.publish.xml" />
     <None Include="PPTS.Data.Product.Cloud.Test.DB.publish.xml" />
+    <None Include="PPTS.Data.Product.XueDa.Alpha.DB.publish.xml" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PPTS.Data.Products.DB.refactorlog" />

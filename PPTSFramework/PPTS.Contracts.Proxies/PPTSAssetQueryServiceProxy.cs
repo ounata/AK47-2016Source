@@ -19,14 +19,24 @@ namespace PPTS.Contracts.Proxies
         {
         }
 
-        /// <summary>
-        /// 通过账户获得资产对应价值信息
-        /// </summary>
-        /// <param name="accountID">账户ID</param>
-        /// <returns></returns>
         public AssetStatisticQueryResult QueryAssetStatisticByAccountID(string accountID)
         {
             return this.SingleCall(action => action.QueryAssetStatisticByAccountID(accountID));
+        }
+
+        public AssetStatisticQueryResult QueryAssetStatisticByCustomerID(string customerID)
+        {
+            return this.SingleCall(action => action.QueryAssetStatisticByCustomerID(customerID));
+        }
+
+        public RefundConsumptionValueQueryResult QueryConsumptionValue(RefundConsumptionValueQueryCriteriaModel criteria)
+        {
+            return this.SingleCall(action => action.QueryConsumptionValue(criteria));
+        }
+
+        public RefundReallowanceMoneyQueryResult QueryReallowanceMoney(RefundReallowanceMoneyQueryCriteriaModel criteria)
+        {
+            return this.SingleCall(action => action.QueryReallowanceMoney(criteria));
         }
 
 

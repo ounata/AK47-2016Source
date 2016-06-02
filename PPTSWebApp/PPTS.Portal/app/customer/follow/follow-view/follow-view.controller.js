@@ -10,7 +10,7 @@
 
                     (function () {
                         vm.criteria = vm.criteria || {};
-                        vm.criteria.customerID = $stateParams.id;
+                        vm.criteria.customerID = ($stateParams.id ? $stateParams.id : $stateParams.customerID);
                         followDataViewService.initFollowList(vm, function () {
                             $scope.$broadcast('dictionaryReady');
                         });

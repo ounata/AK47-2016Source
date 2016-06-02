@@ -2,7 +2,7 @@
 (function() {
     'use strict';
 
-    mcs.ng = mcs.ng || angular.module('mcs.ng', ['mcs.ng.datatable', 'mcs.ng.uiCopy', 'mcs.ng.treeControl', 'mcs.ng.paging', 'dialogs.main']);
+    mcs.ng = mcs.ng || angular.module('mcs.ng', ['mcs.ng.datatable', 'mcs.ng.filesUpload', 'mcs.ng.uiCopy', 'mcs.ng.treeControl', 'mcs.ng.paging', 'dialogs.main']);
     mcs.ng.constant('httpErrorHandleMessage', {
         '404': 'no file!',
         '401': 'unauthenticated access!',

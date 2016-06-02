@@ -169,7 +169,7 @@ namespace MCS.Library.Configuration
 				else
 					currPath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
 
-				settings.GlobalConfigurationFile = EnvironmentHelper.ReplaceEnvironmentVariablesInString(metaSection.Instances.GetMatchedPath(currPath));
+				settings.GlobalConfigurationFile = EnvironmentHelper.ReplaceVariablesInString(metaSection.Instances.GetMatchedPath(currPath));
 
 				if (string.IsNullOrEmpty(settings.GlobalConfigurationFile))
 					settings.GlobalConfigurationFile = ConfigurationBroker.GlobalConfigurationFile;
@@ -283,7 +283,7 @@ namespace MCS.Library.Configuration
 					fileSettings.MetaConfigurationFile = ConfigurationBroker.LocalConfigurationFile;
 				else
 					fileSettings.MetaConfigurationFile =
-						EnvironmentHelper.ReplaceEnvironmentVariablesInString(section.Settings[ConfigurationBroker.MetaConfigurationItem].Value);
+						EnvironmentHelper.ReplaceVariablesInString(section.Settings[ConfigurationBroker.MetaConfigurationItem].Value);
 			}
 
 			if (string.IsNullOrEmpty(fileSettings.MetaConfigurationFile) == true)

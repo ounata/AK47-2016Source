@@ -78,15 +78,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Adapters\DiscountPermissionsApplyAdapter.cs" />
+    <Compile Include="Adapters\DiscountPermissionViewAdapter.cs" />
+    <Compile Include="Adapters\GenericDiscountAdapter.cs" />
     <Compile Include="Adapters\PresentItemAdapter.cs" />
     <Compile Include="Adapters\PresentAdapter.cs" />
-    <Compile Include="Adapters\DiscountPermissionViewAdapter.cs" />
     <Compile Include="Adapters\DiscountPermissionAdapter.cs" />
     <Compile Include="Adapters\DiscountItemAdapter.cs" />
     <Compile Include="Adapters\DiscountAdapter.cs" />
     <Compile Include="Adapters\ExpenseAdapter.cs" />
     <Compile Include="Adapters\ExpensePermissionAdapter.cs" />
     <Compile Include="Adapters\PresentPermissionAdapter.cs" />
+    <Compile Include="Adapters\PresentPermissionsApplyAdapter.cs" />
+    <Compile Include="Adapters\PresentPermissionViewAdapter.cs" />
     <Compile Include="Adapters\ProductPermissionAdapter.cs" />
     <Compile Include="Adapters\ProductViewAdapter.cs" />
     <Compile Include="Adapters\ProductAdapter.cs" />

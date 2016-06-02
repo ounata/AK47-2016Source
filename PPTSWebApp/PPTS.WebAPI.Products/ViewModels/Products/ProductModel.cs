@@ -109,7 +109,7 @@ namespace PPTS.WebAPI.Products.ViewModels.Products
         {
             Permissions = new ProductPermissionCollection();
             CampusIDs.ToList().ForEach(s => {
-                Permissions.Add(new ProductPermission() { ProductID=this.Product.ProductID, UseOrgID=s, CreatorID= CreatorID, CreatorName=CreatorName, UseOrgType=4 });
+                Permissions.Add(new ProductPermission() { ProductID=this.Product.ProductID, CampusID=s, CreatorID= CreatorID, CreatorName=CreatorName });
             });
 
             return this;

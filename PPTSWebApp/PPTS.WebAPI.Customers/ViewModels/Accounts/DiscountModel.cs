@@ -63,5 +63,19 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
             return null;
         }
 
+        public static DiscountModel LoadByDiscountID(string discountID)
+        {
+            //DiscountQueryResult result = PPTSConfigRuleQueryServiceProxy.Instance.QueryDiscountByDiscountID(discountID);
+            //if (result != null && result.Discount != null)
+            //{
+            //    DiscountModel model = new DiscountModel();
+            //    model.DiscountID = result.Discount.DiscountID;
+            //    model.DiscountCode = result.Discount.DiscountCode;
+            //    foreach (DiscountItem item in result.DiscountItemCollection.OrderByDescending(x => x.DiscountStandard))
+            //        model.Items.Add(AutoMapper.Mapper.DynamicMap<DiscountItemModel>(item));
+            //    return model;
+            //}
+            return null;
+        }
     }
 }

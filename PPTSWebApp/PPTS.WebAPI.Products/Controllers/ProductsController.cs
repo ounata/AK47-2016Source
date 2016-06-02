@@ -122,8 +122,9 @@ namespace PPTS.WebAPI.Products.Controllers
         }
         
         [HttpPost]
-        public ProductModel SubmitProduct(ProductModel model)
+        public IHttpActionResult SubmitProduct(ProductModel model)
         {
+
             model.Product.SubmitterID = model.CreatorID = DeluxeIdentity.CurrentUser.ID;
             model.Product.SubmitterName = model.CreatorName = DeluxeIdentity.CurrentUser.DisplayName;
             model.Product.SubmitterJobID = DeluxeIdentity.CurrentUser.GetCurrentJob().ID;
@@ -131,44 +132,36 @@ namespace PPTS.WebAPI.Products.Controllers
 
             model.CreatorName = DeluxeIdentity.CurrentUser.DisplayName;
 
-            ProductExecutor executor = new ProductExecutor(model);
-            executor.Execute();
-
-            return model;
+            return Ok( new ProductExecutor(model) { NeedValidation=true }.Execute());
+            
         }
 
         [HttpGet]
         public ProductViewModel CopyProduct(string id)
         {
-            var result = ProductViewModel.GetProducViewtById(id);
-            result.Product.ProductID = result.Product.ProductCode = string.Empty;
-            result.Catalogs = CategoryCatalogAdapter.Instance.LoadByCategoryType((CategoryType)Convert.ToInt32(result.Product.CategoryType));
-            return result;
+            return ProductViewModel.GetProducViewtById(id).FillCatalogs().Empty();
         }
 
         #endregion
 
         [HttpGet]
-        public bool StopSellProduct(string id)
+        public IHttpActionResult StopSellProduct(string id)
         {
-            var executor = new Data.Products.Executors.PPTSProductExecutor("StopSell") { ProductId = id };
-
-            return (bool)executor.Execute();
+            var result = new PPTSProductExecutor("StopSell") { ProductId = id }.Execute();
+            return Ok(new {EndDate= result });
         }
 
 
         [HttpPost]
-        public bool DelayProduct(dynamic param)
+        public IHttpActionResult DelayProduct(dynamic param)
         {
-            var executor = new Data.Products.Executors.PPTSProductExecutor("DelaySell") { ProductId = param.id, Date = param.endDate };
-            return (bool)executor.Execute();
+            return Ok(new PPTSProductExecutor("DelaySell") { ProductId = param.id, Date = param.endDate }.Execute());
         }
 
         [HttpPost]
-        public bool DelProduct(string []ids)
+        public IHttpActionResult DelProduct(string []ids)
         {
-            var executor = new Data.Products.Executors.PPTSProductExecutor("DelProduct") { ProductId = string.Join( ",", ids) };
-            return (bool)executor.Execute();
+            return Ok( new PPTSProductExecutor("DelProduct") { ProductId = string.Join( ",", ids) }.Execute());
         }
 
         

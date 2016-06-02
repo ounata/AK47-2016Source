@@ -4,30 +4,11 @@ var ppts = ppts || mcs.app;
 (function () {
     ppts.name = 'ppts';
     ppts.version = '1.0';
-    ppts.currentEnv = 'local';
     ppts.user = ppts.user || {};
-    ppts.rootUrl = mcs.config.baseUrl;
-
-    // 加载基地址
-    switch (ppts.currentEnv) {
-        case 'dev': //仅适合调试webapi,不适合加载资源
-            ppts.rootUrl = 'http://localhost:1399/';
-            break;
-        case 'local':
-        default:
-            ppts.rootUrl = 'http://localhost';
-            break;
-        case 'test':
-            ppts.rootUrl = 'http://10.1.56.80';
-            break;
-        case 'prod':
-            ppts.rootUrl = '';
-            break;
-    }
 
     ppts.config = {
         datePickerFormat: 'yyyy-mm-dd',
-        datetimePickerFormat: 'yyyy-mm-dd hh:ii:ss',
+        datetimePickerFormat: 'yyyy-mm-dd hh:ii',
         datePickerLang: 'zh-CN',
         modules: {
             dashboard: 'app/dashboard/ppts.dashboard',
@@ -45,6 +26,7 @@ var ppts = ppts || mcs.app;
             // 公共相关
             dateRange: 'c_codE_ABBR_dateRange',
             people: 'c_codE_ABBR_people',
+            relation: 'c_codE_ABBR_relation',
             period: 'c_codE_ABBR_period',
             ifElse: 'c_codE_ABBR_ifElse',
             messageType: 'c_codE_ABBR_messageType',
@@ -63,7 +45,7 @@ var ppts = ppts || mcs.app;
             parentFemale: 'c_codE_ABBR_PARENTFEMALEDICTIONARY',
             parent: 'c_codE_ABBR_PARENTDICTIONARY',
             child: 'c_codE_ABBR_CHILDDICTIONARY',
-            source: 'c_Code_Abbr_BO_Customer_Source',
+            source: 'c_codE_ABBR_BO_Customer_Source',
             assignment: 'c_codE_ABBR_Customer_Assign',
             valid: 'c_codE_ABBR_Customer_Valid',
             contactType: 'c_codE_ABBR_Customer_CRM_NewContactType',
@@ -94,8 +76,10 @@ var ppts = ppts || mcs.app;
             //停课休学类型
             stopAlertType: 'c_codE_ABBR_Customer_StopAlertType',
             //退费预警状态
-            refundAlertStatus: 'c_codE_ABBR_Customer_RefundAlertStatus',                   
+            refundAlertStatus: 'c_codE_ABBR_Customer_RefundAlertStatus',
             changeTeacherReason: 'c_codE_ABBR_BO_Customer_ChangeTeacherReason',
+            // 分配教师操作类型
+            teacherApplyType: 'c_codE_ABBR_Customer_Teacher_ApplyType',
 
             /*
             * 教学服务会相关
@@ -163,6 +147,10 @@ var ppts = ppts || mcs.app;
             examMonth: 'c_codE_ABBR_Exam_Month',
             // 成绩升降
             scoreChangeType: 'c_codE_ABBR_Exam_ScoreChangeType',
+            // 任课教师
+            scoreTeacher: 'c_codE_ABBR_scoreTeacher',
+            // 教师所在学科组
+            scoreTeacherOrgName: 'c_codE_ABBR_scoreTeacherOrgName',
 
             /*
             * 通用
@@ -262,6 +250,9 @@ var ppts = ppts || mcs.app;
             subGrade: 'c_codE_ABBR_SubGrade',
             subSubject: 'c_codE_ABBR_SubSubject',
             assignSource: 'c_codE_ABBR_Assign_Source',
+            /*课时数，补录课时用*/
+            courseAmount: 'c_codE_ABBR_CourseAmount',
+
             /*
             * 订单相关
             */
@@ -291,7 +282,14 @@ var ppts = ppts || mcs.app;
             visitType: 'c_codE_ABBR_BO_Customer_ReturnInfoType',
             visitWay: 'c_codE_ABBR_Customer_CRM_ReturnWay',
             satisficing: 'c_codE_ABBR_BO_Customer_Satisfaction',
-            timeType: 'c_codE_ABBR_TimeType_Service'
+            timeType: 'c_codE_ABBR_TimeType_Service',
+
+            /*基础数据*/
+            discountStatus: 'c_codE_ABBR_BO_Infra_DiscountStatus',
+            presentStatus: 'c_codE_ABBR_BO_Infra_PresentStatus',
+            campusUseInfo: 'c_codE_ABBR_BO_Infra_CampusUseInfo',
+            /*综合服务费*/
+            serviceFeeType: 'c_codE_ABBR_ServiceFee_ServiceType'
         },
         dataServiceConfig: {
             // Auditing Services
@@ -299,7 +297,7 @@ var ppts = ppts || mcs.app;
 
             // Customer Services
             customerService: 'app/customer/ppts.customer.service',
-            confirmdoorDataService: 'app/customer/confirmdoor/confirmdoor.dataService',
+            customerVerifyDataService: 'app/customer/customerverify/customerverify.dataService',
             feedbackDataService: 'app/customer/feedback/feedback.dataService',
             marketDataService: 'app/customer/market/market.dataService',
             customerMeetingDataService: 'app/customer/customermeeting/customermeeting.dataService',
@@ -311,7 +309,7 @@ var ppts = ppts || mcs.app;
             weeklyFeedbackDataService: 'app/customer/weeklyfeedback/weeklyfeedback.dataService',
             stopAlertDataService: 'app/customer/stopalerts/stopalerts.dataService',
             refundAlertDataService: 'app/customer/refundalerts/refundalerts.dataService',
-            discountDataService: 'app/customer/discount/discount.dataService',
+            discountDataService: 'app/infra/discount/discount.dataService',
 
             // Account Services
             //账户公用
@@ -351,7 +349,7 @@ var ppts = ppts || mcs.app;
             // Infra Services
             customerDiscountDataService: 'app/infra/customerdiscount/customerdiscount.dataService',
             dictionaryDataService: 'app/infra/dictionary/dictionary.dataService',
-            extraGiftDataService: 'app/infra/extragift/extragift.dataService',
+            presentDataService: 'app/infra/present/present.dataService',
             nonCustomerDiscountDataService: 'app/infra/noncustomerdiscount/noncustomerdiscount.dataService',
             servicefeeDataService: 'app/infra/servicefee/servicefee.dataService',
 
@@ -362,17 +360,79 @@ var ppts = ppts || mcs.app;
             contractListDataService: 'app/contract/contractlist/contractlist.dataService',
             payListDataService: 'app/contract/paylist/paylist.dataService',
             refundListDataService: 'app/contract/refundlist/refundlist.dataService',
-        },
-        mcsComponentBaseUrl: ppts.rootUrl + '/MCSWebApp/MCS.Web.Component/',
-        pptsComponentBaseUrl: ppts.rootUrl + '/PPTSWebApp/PPTS.Web.Component/',
-        pptsApiBaseUrl: ppts.rootUrl + '/PPTSWebApp/PPTS.WebAPI.Common/',
-        customerApiBaseUrl: ppts.rootUrl + '/PPTSWebApp/PPTS.WebAPI.Customers/',
-        orderApiBaseUrl: ppts.rootUrl + '/PPTSWebApp/PPTS.WebAPI.Orders/',
-        productApiBaseUrl: ppts.rootUrl + '/PPTSWebApp/PPTS.WebAPI.Products/'
+        }
     };
 
-    mcs.app.config.mcsComponentBaseUrl = ppts.config.mcsComponentBaseUrl;
-    mcs.app.config.pptsComponentBaseUrl = ppts.config.pptsComponentBaseUrl;
+    // 读取配置文件
+    var initConfigSection = function (section) {
+        if (section) {
+            for (var item in section) {
+                ppts.config[item] = section[item];
+            }
+        }
+    }
+
+    var initConfig = function () {
+        window.onload = function () {
+            var configData = sessionStorage.getItem('configData');
+            if (!configData) {
+                var parameters = document.getElementById('configData');
+                sessionStorage.setItem('configData', parameters.value);
+                configData = sessionStorage.getItem('configData');
+                parameters.value = '';
+            }
+
+            var config = JSON.parse(configData);
+
+            initConfigSection(config.pptsWebAPIs);
+
+            mcs.app.config.mcsComponentBaseUrl = ppts.config.mcsComponentBaseUrl;
+            mcs.app.config.pptsComponentBaseUrl = ppts.config.pptsComponentBaseUrl;
+
+            loadAssets();
+        };
+    };
+
+    var loadAssets = function () {
+        mcs.g.loadCss({
+            cssFiles: [
+                //<!--#bootstrap基础样式-->
+                'libs/bootstrap-3.3.5/css/bootstrap',
+                //<!--#datetime组件样式-->
+                'libs/date-time-3.0.0/css/datepicker',
+                'libs/date-time-3.0.0/css/bootstrap-timepicker',
+                'libs/date-time-3.0.0/css/daterangepicker',
+                'libs/date-time-3.0.0/css/bootstrap-datetimepicker',
+                //<!--#ztree组件样式-->
+                'libs/zTree-3.5.22/css/metroStyle/metroStyle',
+                //<!--#autocomplete组件样式-->
+                'libs/ng-tags-input-3.0.0/ng-tags-input',
+                //<!--#font awesome字体样式-->
+                'libs/font-awesome-4.5.0/css/font-awesome.min',
+                //<!--#ace admin基础样式-->
+                'libs/ace-1.3.1/css/ace.min',
+                'libs/ace-1.3.1/css/ace-fonts',
+                //<!--#blockUI样式-->
+                'libs/angular-block-ui-0.2.2/dist/angular-block-ui',
+                 //<!--#日程插件的样式-->
+                'libs/fullcalendar-2.6.1/fullcalendar',
+                //<!--#全局组件样式-->
+                'libs/mcs-jslib-1.0.0/component/mcs.component',
+                //<!--下拉框样式-->
+                'libs/angular-ui-select-0.13.2/dist/select2',
+                'libs/angular-dialog-service-5.3.0/dist/dialogs.min'
+            ], localCssFiles: [
+                //<!--#网站主样式-->
+                'assets/styles/site'
+            ]
+        });
+
+        mcs.g.loadRequireJs(
+            'libs/requirejs-2.1.22/require',
+            mcs.app.config.pptsComponentBaseUrl + 'build/require.config.min');
+    };
+
+    initConfig();
 
     return ppts;
 

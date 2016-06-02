@@ -95,6 +95,7 @@
     <None Include="PPTS.Data.Common.XueDa.Dev.DB.publish.xml" />
     <None Include="PPTS.Data.Common.XueDa.Dev.Test.DB.publish.xml" />
     <None Include="PPTS.Data.Common.Cloud.Test.DB.publish.xml" />
+    <None Include="PPTS.Data.Common.XueDa.Alpha.Test.DB.publish.xml" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\Script.PostDeployment.sql" />

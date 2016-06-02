@@ -51,14 +51,36 @@ namespace PPTS.Data.Customers.Adapters
         }
 
         /// <summary>
+        /// 根据学员ID获取新签的缴费单申请信息
+        /// </summary>
+        /// <param name="customerID">学员ID</param>
+        /// <returns></returns>
+        public AccountChargeApply LoadNewSignByCustomerID(string customerID)
+        {
+            return this.Load(builder => builder.AppendItem("CustomerID", customerID)
+            .AppendItem("PayStatus", (int)PayStatusDefine.Paid)
+            .AppendItem("ChargeType", (int)ChargeTypeDefine.New)).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// 获得指定账户ID已支付的缴费单信息
+        /// </summary>
+        /// <param name="accountID">账户ID</param>
+        /// <returns></returns>
+        public AccountChargeApplyCollection LoadPaidCollectionByAccountID(string accountID)
+        {
+            return this.Load(builder => builder.AppendItem("AccountID", accountID)
+            .AppendItem("PayStatus", (int)PayStatusDefine.Paid));
+        }
+
+        /// <summary>
         /// 获得指定客户ID的有效缴费单信息
         /// </summary>
         /// <param name="customerID">客户ID</param>
-        /// <param name="date">日期，默认DateTime.Min</param>
         /// <returns></returns>
-        public AccountChargeApplyCollection LoadValidChargeByCustomerID(string customerID, DateTime date)
+        public AccountChargeApplyCollection LoadValidChargeByCustomerID(string customerID)
         {
-            return this.QueryData(PrepareValidChargeSQLByCustomerID(customerID, date));
+            return this.QueryData(PrepareValidChargeSQLByCustomerID(customerID));
         }
 
         protected override void BeforeInnerUpdateInContext(AccountChargeApply data, SqlContextItem sqlContext, Dictionary<string, object> context)
@@ -86,32 +108,23 @@ namespace PPTS.Data.Customers.Adapters
         }
 
         /// <summary>
-        /// 拼接有效缴费单信息查询SQL 
+        /// 拼接有效缴费单信息查询SQL(付款时间接口)
         /// </summary>
         /// <param name="customerID">客户ID</param>
         /// <param name="date">日期，默认DateTime.Min</param>
         /// <returns></returns>
-        private string PrepareValidChargeSQLByCustomerID(string customerID, DateTime date)
+        private string PrepareValidChargeSQLByCustomerID(string customerID)
         {
             WhereSqlClauseBuilder payBuilder = new WhereSqlClauseBuilder();
             payBuilder.AppendItem("aca.CustomerID", customerID)
-                      .AppendItem("aca.ApplyStatus", ApplyStatusDefine.Approved.GetHashCode());
-            if (date > DateTime.MinValue)
-                payBuilder.AppendItem("aca.ApplyTime", TimeZoneContext.Current.ConvertTimeToUtc(date), ">=");
-
+                      .AppendItem("aca.ApplyStatus", (int)ApplyStatusDefine.Approved);
             OrderBySqlClauseBuilder payOrderByBuilder = new OrderBySqlClauseBuilder();
-            payOrderByBuilder.AppendItem("aca.ApplyTime", FieldSortDirection.Descending);
-
-            WhereSqlClauseBuilder accountBuilder = new WhereSqlClauseBuilder();
-            accountBuilder.AppendItem("ac.CustomerID", customerID);
+            payOrderByBuilder.AppendItem("aca.PayTime", FieldSortDirection.Descending);
 
             string sql = string.Format(@"select aca.* from {0} aca 
-                                        where {1} and aca.AccountID in 
-                                        (select ac.AccountID from {2} ac where {3}) ",
+                                        where {1} ",
                                         this.GetQueryMappingInfo().GetQueryTableName(),
-                                        payBuilder.ToSqlString(TSqlBuilder.Instance),
-                                        AccountAdapter.Instance.GetQueryMappingInfo().GetQueryTableName(),
-                                        accountBuilder.ToSqlString(TSqlBuilder.Instance)
+                                        payBuilder.ToSqlString(TSqlBuilder.Instance)
             );
             return sql;
         }

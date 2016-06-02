@@ -1,6 +1,7 @@
 ﻿CREATE TABLE [TX].[TRANSACTION_PROCESS]
 (
 	[PROCESS_ID] NVARCHAR(36) NOT NULL PRIMARY KEY, 
+	[RESOURCE_ID] NVARCHAR(36) NULL,
 	[CURRENT_ACTIVITY_INDEX] INT NULL DEFAULT -1,
     [PROCESS_NAME] NVARCHAR(64) NULL, 
     [CATEGORY] NVARCHAR(64) NULL, 
@@ -141,3 +142,15 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level1name = N'TRANSACTION_PROCESS',
     @level2type = N'COLUMN',
     @level2name = N'CURRENT_ACTIVITY_INDEX'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'对应的而业务资源ID',
+    @level0type = N'SCHEMA',
+    @level0name = N'TX',
+    @level1type = N'TABLE',
+    @level1name = N'TRANSACTION_PROCESS',
+    @level2type = N'COLUMN',
+    @level2name = N'RESOURCE_ID'
+GO
+
+CREATE INDEX [IX_TRANSACTION_PROCESS_RESOURCE_ID] ON [TX].[TRANSACTION_PROCESS] ([RESOURCE_ID])

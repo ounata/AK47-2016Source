@@ -5,10 +5,12 @@ CREATE TABLE [OM].[AssetConfirms](
 	[CustomerID] [nvarchar](36) NOT NULL,
 	[CustomerCode] [nvarchar](64) NULL,
 	[CustomerName] [nvarchar](128) NULL,
+    [AccountID] NVARCHAR(36) NULL, 
     [AssetID] NVARCHAR(36) NULL, 
 	[AssetCode] [nvarchar](64) NULL,
 	[ConfirmID] [nvarchar](36) NOT NULL DEFAULT newid(),
 	[ConfirmType] [nvarchar](32) NOT NULL,
+    [ConfirmFlag] INT NULL DEFAULT 1, 
 	[ConfirmMoney] [decimal](18, 4) NOT NULL DEFAULT 0,
 	[ConfirmMemo] [nvarchar](255) NULL,
 	[ConfirmStatus] [nvarchar](32) NOT NULL,
@@ -143,7 +145,7 @@ GO
 GO
 
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'账户缴费申请表' , @level0type=N'SCHEMA',@level0name=N'OM', @level1type=N'TABLE',@level1name=N'AssetConfirms'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'资产收入确认记录表' , @level0type=N'SCHEMA',@level0name=N'OM', @level1type=N'TABLE',@level1name=N'AssetConfirms'
 GO
 
 EXEC sp_addextendedproperty @name = N'MS_Description',
@@ -288,3 +290,21 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level1name = N'AssetConfirms',
     @level2type = N'COLUMN',
     @level2name = N'ConfirmerJobType'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'账户ID',
+    @level0type = N'SCHEMA',
+    @level0name = N'OM',
+    @level1type = N'TABLE',
+    @level1name = N'AssetConfirms',
+    @level2type = N'COLUMN',
+    @level2name = N'AccountID'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'确认标志（1-收入确认，-1收入取消）',
+    @level0type = N'SCHEMA',
+    @level0name = N'OM',
+    @level1type = N'TABLE',
+    @level1name = N'AssetConfirms',
+    @level2type = N'COLUMN',
+    @level2name = N'ConfirmFlag'

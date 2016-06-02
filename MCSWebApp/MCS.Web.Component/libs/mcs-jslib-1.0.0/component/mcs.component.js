@@ -2,7 +2,7 @@
 (function() {
     'use strict';
 
-    mcs.ng = mcs.ng || angular.module('mcs.ng', ['mcs.ng.datatable', 'mcs.ng.uiCopy', 'mcs.ng.treeControl', 'mcs.ng.paging', 'dialogs.main']);
+    mcs.ng = mcs.ng || angular.module('mcs.ng', ['mcs.ng.datatable', 'mcs.ng.filesUpload', 'mcs.ng.uiCopy', 'mcs.ng.treeControl', 'mcs.ng.paging', 'dialogs.main']);
     mcs.ng.constant('httpErrorHandleMessage', {
         '404': 'no file!',
         '401': 'unauthenticated access!',
@@ -63,6 +63,19 @@
         return function (text) {
             return !text || text == '0001-01-01' ? '' : text;
         };
+    });
+
+    mcs.ng.filter('truncate', function () {
+        return function (text, length) {
+            var array = mcs.util.toArray(text);
+            if (array.length > 1) {
+                return array[0] + '...';
+            }
+            if (length > 0 && length < text.length) {
+                return text.substr(0, length) + '...';
+            }
+            return text;
+        }
     });
 })();
 (function () {
@@ -171,22 +184,22 @@
     });
 })();
 (function () {
-    mcs.ng.directive('mcsCascadingSelect', ['$http', function ($http) {
+    mcs.ng.directive('mcsCascadingSelect', ['$http', 'mcsValidationService', function ($http, validationService) {
         return {
             restrict: 'E',
             scope: {
                 level: '@',
                 caption: '@',
                 data: '=?',
-                model: '=',
+                model: '=?',
                 async: '@',
                 url: '@',
                 path: '@',
                 root: '@',
-                params: '=',
+                params: '=?',
                 otherParams: '=?',
                 parentKey: '@',
-                customStyle: '@?',
+                customStyle: '@',
                 callback: '&'
             },
             templateUrl: mcs.app.config.mcsComponentBaseUrl + '/src/tpl/mcs-cascading-select.tpl.html',
@@ -200,26 +213,6 @@
                     }
                 } else {
                     $scope.level = mcs.util.toArray($scope.caption).length;
-                }
-
-                $scope.percentage = '';
-                switch ($scope.level) {
-                    case 1:
-                        $scope.portion = 12;
-                        break;
-                    case 2:
-                        $scope.portion = 6;
-                        $scope.percentage = 'mcs-select-width-50';
-                        break;
-                    case 3:
-                    default:
-                        $scope.portion = 4;
-                        $scope.percentage = 'mcs-select-width-40';
-                        break;
-                    case 4:
-                        $scope.portion = 3;
-                        $scope.percentage = 'mcs-select-width-30';
-                        break;
                 }
             },
             link: function ($scope, $elem, $attrs, $ctrl) {
@@ -251,110 +244,160 @@
                             loadDataCallback(elem, $scope.data[id]);
                         });
                     } else {
-                        if (typeof ($scope.data[id]) == "undefined")
+                        if (typeof ($scope.data[id]) == undefined)
                             return false;
                         loadDataCallback(elem, $scope.data[id]);
                     }
-                    elem.select2("val", "");
+                    elem.select2('val', '');
                 };
 
+                var captions = mcs.util.toArray($scope.caption);
+                // 添加验证消息
+                $scope.$watch('$parent.required', function () {
+                    if ($scope.$parent.required) {
+                        $elem.attr('required', 'required');
+                    }
+                    if ($scope.$parent.requiredLevel) {
+                        $elem.attr('required-level', $scope.$parent.requiredLevel);
+                    }
+                    loadWatchDataCallback();
+                });
+
                 var loadDataCallback = function (elem, json, selected_id) {
+                    var width = ($elem.width() - ($scope.level * 10)) / $scope.level;
+                    $elem.find('.select2-container').width(width);
                     if (json) {
-                        var index = 1;
-                        var selected_index = 0;
                         $.each(json, function (k, v) {
                             var option = '<option value="' + k + '">' + v + '</option>';
                             elem.append(option);
+                        });
+                    }
+                };
 
-                            if (k == selected_id) {
-                                selected_index = index;
+                var loadWatchDataCallback = function () {
+                    if (mcs.util.hasAttr($elem, 'required') || mcs.util.hasAttr($elem, 'required-level')) {
+                        var parent = $elem.parent();
+                        if ($scope.$parent.required || $scope.$parent.requiredLevel) {
+                            parent = parent.parent();
+                        }
+                        var validationItem = $elem.closest('.form-group');
+                        var message = validationItem.find('.help-block');
+                        var validateRow = $elem.closest('.row');
+                        var validationItems = validateRow.find('.form-group');
+                        if (!message || !message.length) {
+                            // 对于单行中只有一个验证项则附加水平消息框
+                            if (validationItems.length == 1) {
+                                validationItem.append('<div class="help-block horizontal"></div>');
+                            } else {
+                                parent.append('<div class="help-block"></div>');
                             }
-
-                            index++;
-                        })
-                        //el.attr('selectedIndex' , selected_index); 
-                    }
-                }
-
-                var captions = mcs.util.toArray($scope.caption);
-                // 构建option
-                $.each(captions, function (k, v) {
-                    var option = '<option value="">' + v + '</option>';
-                    var select = $elem.find('select').eq(k);
-                    var length = captions.length;
-                    var last = (k == captions.length - 1);
-
-                    // 返回已选择的数据
-                    $scope.model[k] = select.val();
-
-                    if ($scope.customStyle) {
-                        select.attr('style', $scope.customStyle);
+                        }
                     }
 
-                    select.append(option).select2().change(function () {
+                    // 构建option
+                    $.each(captions, function (k, v) {
+                        var option = '<option value="">' + v + '</option>';
+                        var select = $elem.find('select').eq(k);
+                        var length = captions.length;
+                        var isLast = (k == captions.length - 1);
+
                         // 返回已选择的数据
                         $scope.model[k] = select.val();
-                        $scope.model['selected'] = $scope.model['selected'] || {};
-                        // 注册回调事件
-                        $scope.$watch('$scope.model', $scope.callback);
-                        switch (k) {
-                            case 0:
-                                $scope.model['selected'].key = select.val();
-                                $scope.model['selected'].value = select.select2('data').text;
-                                break;
-                            case 1:
-                                var prev = $elem.find('select').eq(k - 1);
-                                $scope.model['selected'].key = prev.val() + ',' + select.val();
-                                $scope.model['selected'].value = prev.select2('data').text + ',' + select.select2('data').text;
-                                break;
-                            case 2:
-                                var prev = $elem.find('select').eq(k - 1);
-                                var last = $elem.find('select').eq(k - 2);
-                                $scope.model['selected'].key = last.val() + ',' + prev.val() + ',' + select.val();
-                                $scope.model['selected'].value = last.select2('data').text + ',' + prev.select2('data').text + ',' + select.select2('data').text;
-                                break;
+
+                        if ($scope.customStyle) {
+                            select.attr('style', $scope.customStyle);
                         }
 
-                        if (!last) {
-                            var next = $elem.find('select').eq(k + 1);
-                            next.empty().append('<option value="">' + captions[k + 1] + '</option>');
-                            var parent = select.val();
-
-                            if ($scope.path) {
-                                switch (k) {
-                                    case 0:
-                                        parent = $scope.root + ',' + parent;
-                                        break;
-                                    case 1:
-                                        parent = $scope.root + ',' + $elem.find('select').eq(k - 1).val() + ',' + parent;
-                                        break;
-                                    case 2:
-                                        parent = $scope.root + ',' + $elem.find('select').eq(k - 2).val() + ',' + $elem.find('select').eq(k - 1).val() + ',' + parent;
-                                        break;
-                                }
-                            }
-                            // 判断是否为异步且只加载当前项的数据
-                            if (mcs.util.bool($scope.async) && select.val()) {
-                                $scope.params[$scope.parentKey] = parent;
-                                if ($scope.otherParams) {
-                                    for (var prop in $scope.params) {
-                                        if ($scope.otherParams[prop]) {
-                                            $scope.params[prop] = $scope.otherParams[prop];
-                                        }
+                        // 添加必选规则
+                        if (mcs.util.hasAttr($elem, 'required') ||
+                           (mcs.util.hasAttr($elem, 'required-level') && $elem.attr('required-level') == length)) {
+                            select.attr('required', 'required');
+                        } else {
+                            // 添加部分必选规则
+                            if (mcs.util.hasAttr($elem, 'required-level')) {
+                                var requiredLevel = parseInt($elem.attr('required-level'));
+                                if (requiredLevel > 0 && requiredLevel < length) {
+                                    if (k < requiredLevel) {
+                                        select.attr('required-level', $elem.attr('required-level'));
                                     }
                                 }
-                                loadData(next, parent);
-                            } else {
-                                loadData(next, parent);
                             }
-                            next.change();
                         }
-                        // 触发$digest
-                        $scope.$apply('$scope.model');
+
+                        select.append(option).select2().change(function () {
+                            // 返回已选择的数据
+                            $scope.model[k] = select.val();
+                            $scope.model['selected'] = $scope.model['selected'] || {};
+                            // 注册回调事件
+                            $scope.$watch('$scope.model', $scope.callback);
+                            switch (k) {
+                                case 0:
+                                    $scope.model['selected'].key = select.val();
+                                    $scope.model['selected'].value = select.select2('data').text;
+                                    break;
+                                case 1:
+                                    var prev = $elem.find('select').eq(k - 1);
+                                    $scope.model['selected'].key = prev.val() + ',' + select.val();
+                                    $scope.model['selected'].value = prev.select2('data').text + ',' + select.select2('data').text;
+                                    break;
+                                case 2:
+                                    var prev = $elem.find('select').eq(k - 1);
+                                    var last = $elem.find('select').eq(k - 2);
+                                    $scope.model['selected'].key = last.val() + ',' + prev.val() + ',' + select.val();
+                                    $scope.model['selected'].value = last.select2('data').text + ',' + prev.select2('data').text + ',' + select.select2('data').text;
+                                    break;
+                            }
+
+                            if (!isLast) {
+                                var next = $elem.find('select').eq(k + 1);
+                                next.empty().append('<option value="">' + captions[k + 1] + '</option>');
+                                var parent = select.val();
+
+                                if ($scope.path) {
+                                    switch (k) {
+                                        case 0:
+                                            parent = $scope.root + ',' + parent;
+                                            break;
+                                        case 1:
+                                            parent = $scope.root + ',' + $elem.find('select').eq(k - 1).val() + ',' + parent;
+                                            break;
+                                        case 2:
+                                            parent = $scope.root + ',' + $elem.find('select').eq(k - 2).val() + ',' + $elem.find('select').eq(k - 1).val() + ',' + parent;
+                                            break;
+                                    }
+                                }
+                                // 判断是否为异步且只加载当前项的数据
+                                if (mcs.util.bool($scope.async) && select.val()) {
+                                    $scope.params[$scope.parentKey] = parent;
+                                    if ($scope.otherParams) {
+                                        for (var prop in $scope.params) {
+                                            if ($scope.otherParams[prop]) {
+                                                $scope.params[prop] = $scope.otherParams[prop];
+                                            }
+                                        }
+                                    }
+                                    loadData(next, parent);
+                                } else {
+                                    loadData(next, parent);
+                                }
+                                next.change();
+                            } else {
+                                var validateElem = select;
+                                if (mcs.util.hasAttr($elem, 'required-level')) {
+                                    validateElem = select.parent().parent().find('select[required-level]:last');
+                                }
+                                validationService.validate(validateElem, $scope);
+                            }
+                            // 触发$digest
+                            $scope.$apply('$scope.model');
+                        });
                     });
-                });
-                // 默认加载第一级
-                loadData($elem.find('select').eq(0), $scope.root);
+
+                    // 默认加载第一级
+                    $scope.$watch('data', function () {
+                        loadData($elem.find('select').eq(0), $scope.root);
+                    });
+                };
             }
         }
     }]);
@@ -362,7 +405,7 @@
 (function () {
     'use strict';
 
-    mcs.ng.directive('mcsCheckboxGroup', function () {
+    mcs.ng.directive('mcsCheckboxGroup', ['mcsValidationService', function (validationService) {
         return {
             restrict: 'E',
             scope: {
@@ -373,10 +416,18 @@
             controller: function ($scope) {
                 $scope.change = function (item, event) {
                     mcs.util.setSelectedItems($scope.model, item, event);
+                    validationService.validate($(event.target), $scope);
                 };
+            },
+            link: function ($scope, $elem) {
+                $scope.$watch('$parent.required', function () {
+                    if ($scope.$parent.required) {
+                        $elem.find(':checkbox').attr('required', 'required');
+                    }
+                })
             }
         }
-    });
+    }]);
 
 })();
 /**
@@ -893,20 +944,23 @@
                 placeholder: '@',
                 readonly: '@',
                 css: '@',
-                integer: '@',
+                customStyle: '@',
+                datatype: '@', //int, float
                 model: '='
             },
-            template: '<input placeholder="{{placeholder}}" class="mcs-default-size-input mcs-margin-right-20 {{css}}" ng-model="model" />',
+            template: '<input placeholder="{{placeholder}}" class="mcs-default-size-input mcs-margin-right-20 {{css}}" ng-model="model" style="{{customStyle}}"/>',
             link: function ($scope, $elem, $attrs) {
-                var integer = mcs.util.bool($scope.integer);
+                var dataType = ($scope.datatype || 'string').toLowerCase();
                 if ($scope.id) {
                     $elem.attr('id', $scope.id);
                 }
-                if (integer) {
-                    $elem.keyup(function () {
+                if (dataType == 'int') {
+                    $elem.bind('keyup afterpaste', function () {
                         mcs.util.limit($elem);
-                    }).afterpaste(function () {
-                        mcs.util.limit($elem);
+                    });
+                } else if (dataType == 'float') {
+                    $elem.bind('keyup afterpaste', function () {
+                        mcs.util.number($elem);
                     });
                 }
                 $elem.attr('type', $scope.type || 'text');
@@ -916,8 +970,16 @@
                     $elem.attr('disabled', 'disabled');
                 }
                 // 执行验证
-                $elem.blur(function () {
-                    validationService.validate($elem);
+                $scope.$watch('$parent.required', function () {
+                    if ($scope.$parent.required) {
+                        $elem.attr('required', 'required');
+                    }
+                    var events = $elem.data('events');
+                    if (!events || !events['blur']) {
+                        $elem.blur(function () {
+                            validationService.validate($elem, $scope.$parent);
+                        });
+                    }
                 });
             }
         };
@@ -933,10 +995,9 @@
             scope: {
                 required: '@',
                 text: '@',
-                forInput: '@',
                 css: '@'
             },
-            template: '<label class="control-label {{css}}" for="{{forInput}}"> {{text}}</label>',
+            template: '<label class="control-label {{css}}"> {{text}}</label>',
             link: function ($scope, $elem, $attrs) {
                 if ($scope.required) {
                     $elem.prepend('<span class="required">*</span>');
@@ -951,43 +1012,44 @@
 (
     function() {
         mcs.ng.service('printService', function() {
-                var printService = this;
+            var printService = this;
 
-                function isIE() {
-                    if (!!window.ActiveXObject || "ActiveXObject" in window)
-                        return true;
-                    else
-                        return false;
+            function isIE() {
+                if (!!window.ActiveXObject || "ActiveXObject" in window)
+                    return true;
+                else
+                    return false;
+            }
+
+            printService.print = function() {
+
+
+
+                var content = document.getElementById("printArea").cloneNode(true);
+
+                var newwin = window.open(mcs.app.config.mcsComponentBaseUrl + '/src/mcs-print/mcs-print.html', '', '');
+                newwin.opener = null;
+
+
+
+                newwin.onload = function() {
+                    var container = newwin.document.getElementById('printContainer');
+                    container.appendChild(content);
                 }
 
-                printService.print = function() {
 
 
+            }
 
-                    var content = document.getElementById("printArea").innerHTML;
-
-                    var newwin = window.open(mcs.app.config.mcsComponentBaseUrl + '/src/mcs-print/mcs-print.html', '', '');
-                    newwin.opener = null;
-
-
-                    newwin.onload = function() {
-                        var container = newwin.document.getElementById('printContainer');
-                        container.innerHTML = content;
-                    }
-
-
-
-                }
-
-                return printService;
-            });
+            return printService;
+        });
     }
 )();
 
 (function () {
     'use strict';
 
-    mcs.ng.directive('mcsRadiobuttonGroup', function () {
+    mcs.ng.directive('mcsRadiobuttonGroup', ['mcsValidationService', function (validationService) {
 
         return {
             restrict: 'E',
@@ -997,19 +1059,25 @@
                 value: '='
             },
 
-            template: '<label class="radio-inline" ng-repeat="item in data" ng-show="item.state"><input name="{{groupName}}" type="radio" class="ace" ng-checked="item.key==model" ng-click="change(item)"><span class="lbl"></span> {{item.value}}</label>',
+            template: '<label class="radio-inline" ng-repeat="item in data" ng-show="item.state"><input name="{{groupName}}" type="radio" class="ace" ng-checked="item.key==model" ng-click="change(item, $event)"><span class="lbl"></span> {{item.value}}</label>',
             controller: function ($scope) {
                 $scope.groupName = mcs.util.newGuid();
-                $scope.change = function (item) {
+                $scope.change = function (item, event) {
                     $scope.model = item.key;
                     $scope.value = item.value;
+                    validationService.validate($(event.target), $scope);
                 };
             },
             link: function ($scope, $elem) {
                 $elem.attr('groupName', $scope.groupName);
+                $scope.$watch('$parent.required', function () {
+                    if ($scope.$parent.required) {
+                        $elem.find(':radio').attr('required', 'required');
+                    }
+                });
             }
         }
-    });
+    }]);
 })();
 (function() {
     'use strict';
@@ -1059,15 +1127,67 @@
                 restrict: 'A',
                 scope: {
                     setting: '=mcsTree',
-                    setNodes: '&'
+                    setNodes: '&',
+                    distinctLevel: '@?'
                 },
 
                 link: function($scope, iElm, iAttrs, controller) {
+
+                    var parentNodeChecked = null;
+                    var distinctLevel = parseInt($scope.distinctLevel);
 
 
                     $scope.setting.getRawNodesChecked = function() {
                         return zTreeObj.getCheckedNodes(true);
                     };
+
+                    $scope.setting.clearChecked = function() {
+
+                        zTreeObj.checkAllNodes(false);
+
+                    }
+
+                    $scope.setting.justCheckWithinSameParent = function(treeId, treeNode) {
+
+                        if (treeNode.checked) {
+                            if ($scope.setting.getRawNodesChecked().length == 0) {
+                                parentNodeChecked = null;
+                            }
+                            return true;
+                        }
+
+                        if (treeNode.level > distinctLevel) {
+
+                            if (!parentNodeChecked) {
+                                parentNodeChecked = treeNode.getParentNode();
+
+                                return true;
+
+                            }
+
+                            if (parentNodeChecked != treeNode.getParentNode()) {
+                                $scope.setting.clearChecked();
+                                parentNodeChecked = treeNode.getParentNode();
+                            }
+
+
+
+                            return true;
+
+                        } else if (treeNode.level == distinctLevel) {
+                            if (parentNodeChecked) {
+                                $scope.setting.clearChecked();
+
+                            }
+                            parentNodeChecked = treeNode.getParentNode();
+                            return true;
+
+
+                        }
+
+                        return false;
+
+                    }
 
                     $scope.setting.getNodesChecked = function(includingParent) {
                         var nodes = [];
@@ -1077,14 +1197,16 @@
                                 if (!node.isParent) {
                                     nodes.push({
                                         id: node.id,
-                                        name: node.name
+                                        name: node.name,
+                                        level: node.level
                                     });
                                 }
 
                             } else {
                                 nodes.push({
                                     id: node.id,
-                                    name: node.name
+                                    name: node.name,
+                                    level: node.level
                                 });
                             }
 
@@ -1092,6 +1214,7 @@
 
                         return nodes;
                     };
+
 
 
                     $scope.setting.getNamesOfNodesChecked = function(includingParent) {
@@ -1164,7 +1287,7 @@
                 data: '=',
                 itemTemplateUrl: '@'
             },
-            template: '<table style="width:100%" class="table-layout"><tr ng-repeat="row in data"><td><div ng-include="itemTemplateUrl"></div></td></tr></table>',
+            template: '<table style="width:100%" class="table-layout"><tr ng-repeat="row in data track by $index"><td><div ng-include="itemTemplateUrl"></div></td></tr></table>',
 
             link: function($scope, iElm, iAttrs, controller) {
 
@@ -1176,181 +1299,139 @@
 
 (
     function() {
-        'use strict';
-        mcs.ng.directive('number', function() {
+        mcs.ng.service('excelImportService', function() {
+            var excelImportService = this;
 
-            return {
-                restrict: 'A',
-                require: 'ngModel',
+            excelImportService.import = function(param) {
+                var win = window.open('../src/tpl/mcs-excelImport.tpl.html', '_blank', "height=600, width=700, toolbar =no, menubar=no, scrollbars=no, resizable=no, location=no, status=no");
+                win.onload = function() {
+                    win.setParam(param);
+                };
 
-                link: function($scope, iElm, iAttrs, ngCtrl) {
-
-                    var precision = parseInt(iAttrs.precision);
-                    var float = iAttrs.float;
-                    var numberLength = parseInt(iAttrs.numberLength);
-                    var positiveInteger = iAttrs.positiveInteger;
-                    var max = parseFloat(iAttrs.maxnum);
-                    var min = parseFloat(iAttrs.minnum);
-
-                    var p = /^[1-9]+[0-9]*$/;
-                    var f = /^[0-9]+.?[0-9]*$/;
-                    var l = eval('/^[0-9]+.[0-9]{' + precision + '}$/');
-
-
-
-                    function checkVal(val) {
-                        if (!val || val.length === 0) {
-                            return;
-                        }
-                    }
-
-                    iElm.bind('blur', function(event) {
-                        var val = parseFloat(iElm.val());
-                        checkVal(val);
-                        if (!angular.isNumber(val)) {
-                            $scope.$apply(ngCtrl.$setValidity('number', false));
-
-
-                        } else {
-                            $scope.$apply(ngCtrl.$setValidity('number', true));
-                        }
-
-                        if (positiveInteger) {
-                            if (p.test(val)) {
-                                $scope.$apply(ngCtrl.$setValidity('positiveInteger', true));
-
-                            } else {
-                                $scope.$apply(ngCtrl.$setValidity('positiveInteger', false));
-
-                            }
-                        }
-
-                        if (numberLength != NaN) {
-                            if (val.toString().length > numberLength) {
-                                $scope.$apply(ngCtrl.$setValidity('numberLength', false));
-
-                            } else {
-                                $scope.$apply(ngCtrl.$setValidity('numberLength', true));
-
-                            }
-                        }
-
-                        if (float) {
-                            if (f.test(val)) {
-                                $scope.$apply(ngCtrl.$setValidity('float', true));
-
-
-                            } else {
-                                $scope.$apply(ngCtrl.$setValidity('float', false));
-
-                            }
-
-                        }
-
-                        if (precision != NaN) {
-                            if (l.test(val)) {
-                                $scope.$apply(ngCtrl.$setValidity('precision', true));
-
-                            } else {
-                                $scope.$apply(ngCtrl.$setValidity('precision', false));
-
-                            }
-                        }
-                        if (max != NaN) {
-                            if (parseFloat(val) > max) {
-                                $scope.$apply(ngCtrl.$setValidity('max', false));
-
-                            } else {
-                                $scope.$apply(ngCtrl.$setValidity('max', true));
-
-                            }
-                        }
-
-                        if (min != NaN) {
-
-                            if (parseFloat(val) < min) {
-                                $scope.$apply(ngCtrl.$setValidity('min', false));
-
-                            } else {
-                                $scope.$apply(ngCtrl.$setValidity('min', true));
-
-                            }
-                        }
-
-
-                    });
-
-
-
-                }
             };
-        })
-
-        .directive('phone', function() {
-
-            return {
-                require: 'ngModel',
-                restrict: 'A',
-                link: function($scope, iElm, iAttrs, ngCtrl) {
-                    var reg = /(^1[34578]\d{9}$)|(^\d{3,4}-\d{7,8}-\d{1,5}$)|(^\d{3,4}-\d{7,8}$)/;
 
 
 
-                    iElm.bind('blur', function(event) {
-                        var val = iElm.val().trim();
-                        if (val == undefined || val.length == 0) {
-                            return;
-                        }
-
-                        if (val.length < 19 && reg.test(val)) {
-                            $scope.$apply(ngCtrl.$setValidity('phone', true));
-
-                        } else {
-
-                            $scope.$apply(ngCtrl.$setValidity('phone', false));
-
-                        }
-
-                    });
-
-
-
-                }
-            };
-        })
-
-        .directive('identityCard', function() {
-
-            return {
-                require: 'ngModel',
-                restrict: 'A',
-                link: function($scope, iElm, iAttrs, ngCtrl) {
-                    var reg = /^(\d{18,18}|\d{15,15}|\d{17,17}x|\d{17,17}X)$/;
-
-                    iElm.bind('blur', function(event) {
-                        var val = iElm.val().trim();
-
-                        if (val.length == 18 && reg.test(val)) {
-                            $scope.$apply(ngCtrl.$setValidity('identityCard', true));
-
-                        } else {
-                            $scope.$apply(ngCtrl.$setValidity('identityCard', false));
-                        }
-                    });
-
-                }
-            };
+            return excelImportService;
         });
-
     }
-
 )();
 
-/* 验证框架 */
+(
+    function() {
+        angular.module('mcs.ng.filesUpload', ['ngFileUpload'])
+
+        .directive('filesUpload', ['Upload', '$timeout', '$http', function(Upload, $timeout, $http) {
+
+
+
+            return {
+                restrict: 'A',
+                templateUrl: '../src/tpl/upload.tpl.html',
+                scope: {
+                    filesAmount: '=?',
+                    pattern: '@?',
+                    model: '=?',
+                    url: '@',
+                    downloadUrl: '@',
+                    moduleName: '@',
+                    resourceId: '@',
+                    readonly: '=?'
+
+                },
+                link: function($scope, iElm, iAttrs, controller) {
+
+                    $scope.filesUpload = [];
+
+                    $scope.editFile = function(file) {
+                        file.method = "edit";
+
+
+                    };
+
+                    $scope.delecteFile = function(file) {
+                        file.method = "delete";
+
+                    };
+
+                    $scope.downloadFile = function(file) {
+                        $http.post($scope.downloadUrl, {
+                            status: file.status,
+                            id: file.id,
+                            originalName: file.originalName
+                        }).then(function(response) {
+
+                            var win = window.open('_blank', 'filedownloadwin');
+                            win.write(response.data);
+
+                        });
+                    };
+
+                    $scope.uploadFiles = function(files) {
+
+
+                        angular.forEach(files, function(file) {
+
+                            file.upload = Upload.upload({
+                                url: $scope.url,
+                                data: {
+                                    materialUploadModel: JSON.stringify({
+                                        materialClass: $scope.moduleName,
+                                        resourceID: $scope.resourceId,
+                                        originalName: file.name,
+                                        title: file.title,
+                                        method: file.method
+
+
+                                    }),
+                                    file: file
+                                }
+                            });
+
+                            file.upload.then(function(response) {
+                                $timeout(function() {
+                                    mcs.util.removeByObject(files, file);
+                                    response.data.method = 'edit';
+
+                                    $scope.model.push(response.data);
+                                });
+                            }, function(response) {
+                                if (response.status > 0) {
+                                    $scope.errorMsg = response.status + ': ' + response.data;
+
+
+                                }
+                            }, function(evt) {
+                                file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+                            });
+                        });
+
+
+
+                    };
+
+
+
+                    $scope.fileSelect = function(files) {
+                        files.forEach(function(file, index) {
+                            file.method = 'add';
+
+                        });
+                    };
+
+
+                }
+            };
+        }]);
+
+
+    }
+)();
+
 (function () {
     'use strict';
 
-    mcs.ng.service('mcsValidationService', ['mcsValidationRules', 'mcsValidationMessageConfig', function (rules, config) {
+    mcs.ng.service('mcsValidationService', ['mcsValidationRules', 'mcsValidationMessageConfig', '$parse', function (rules, config, $parse) {
         var service = this;
 
         var checkValidationResult = function (elem, options) {
@@ -1360,29 +1441,154 @@
             }, options);
 
             var parent = elem.closest('.form-group');
-            // 如果验证通过，则跳转到下一规则继续验证
-            var message = parent.find('.help-block');
-            if (opts.validate) {
-                parent.removeClass('validate has-error');
-                message.text('').css('visibility', 'hidden');
+            var validateRow = elem.closest('.row');
+            if (!parent || !parent.length) {
+                var message = elem.parent().find('.help-block');
+                if (!message || !message.length) {
+                    elem.parent().append('<div class="help-block"></div>');
+                    message = elem.parent().find('.help-block');
+                }
+                if (opts.validate) {
+                    elem.removeClass('has-error');
+                    elem.parent().find('.control-label').removeClass('has-error');
+                    message.removeClass('has-error').text('').css('visibility', 'hidden');
+                } else {
+                    elem.addClass('has-error');
+                    elem.parent().find('.control-label').addClass('has-error');
+                    message.text(opts.errorMessage).css('visibility', 'visible');
+                }
             } else {
-                parent.addClass('validate has-error');
-                message.text(opts.errorMessage).css('visibility', 'visible');
+                var message = parent.find('.help-block');
+                var validationItems = validateRow.find('.form-group');
+                if (!message || !message.length) {
+                    // 对于单行中只有一个验证项则附加水平消息框
+                    if (validationItems.length == 1) {
+                        parent.append('<div class="help-block horizontal"></div>');
+                    } else {
+                        elem.parent().append('<div class="help-block"></div>');
+                    }
+                    message = parent.find('.help-block');
+                }
+
+                if (opts.validate) {
+                    parent.removeClass('validate has-error');
+                    message.text('').css('visibility', 'hidden');
+                } else {
+                    parent.addClass('validate has-error');
+                    message.text(opts.errorMessage).css('visibility', 'visible');
+                }
+            }
+
+            // 设置已经过验证（如果启用提交时验证则不需要设置验证结果）
+            if (!mcs.util.hasAttr(elem, 'submit-validate')) {
+                elem.attr('data-validate-result', opts.validate);
             }
 
             return opts.validate;
         };
 
-        service.validate = function (elem) {
+        var filterValidationElems = function (form, callback) {
+            // 查找页面中需要进行验证的元素
+            var elems = !form ? $('input, select, textarea') : $('input, select, textarea', form);
+            elems.each(function () {
+                var $this = $(this);
+                // 如果是隐藏域或文件输入或父级隐藏则不参与验证
+                if ($this.is(':hidden') && !($this.is('select') && $this.next().hasClass('select2-container'))
+                    || $this.is(':file')
+                    || $this.closest('.form-group').is(':hidden')
+                    || !mcs.util.hasAttrs($this, rules)) {
+                    return true;
+                }
+                //如果当前元素从未验证过则参与验证，否则将维持原状
+                if (!mcs.util.hasAttr($this, 'data-validate-result')) {
+                    if (typeof callback === 'function') {
+                        callback($this);
+                    };
+                }
+            });
+        };
+
+        service.validate = function (elem, scope) {
             var validationResult = true;
+
             // 如不包含任何验证规则，则不参与验证
             if (!mcs.util.hasAttrs(elem, rules)) return validationResult;
+            // 如果验证通过，则跳转到下一规则继续验证
             // required
             if (validationResult && mcs.util.hasAttr(elem, 'required')) {
+                var cascading = elem.is('select') && elem.parent().siblings().not(':hidden').length > 0;
                 validationResult = checkValidationResult(elem, {
-                    errorMessage: elem.attr('data-validation-required-message') || config.required,
-                    validate: $.trim(elem.val()).length > 0
+                    errorMessage: elem.attr('data-validation-required-message') || function () {
+                        if (elem.is(':checkbox') || elem.is(':radio')) {
+                            return config.selected;
+                        } else if (elem.is('select')) {
+                            return cascading ? config.requiredAll : config.selected;
+                        } else {
+                            return config.required;
+                        }
+                    }(),
+                    validate: function () {
+                        if (elem.is(':checkbox')) {
+                            return scope.model == undefined ? elem.parent().parent().find(':checkbox:checked').length > 0 : scope.model.length > 0;
+                        } else if (elem.is(':radio')) {
+                            return scope.model == undefined ? elem.parent().parent().find(':radio:checked').length > 0 : !!scope.model;
+                        } else if (elem.is('select')) {
+                            if (cascading) {
+                                // 如果是级联框
+                                var selected = true;
+                                elem.parent().not(':hidden').find('select[required]').each(function () {
+                                    var $this = $(this);
+                                    if ($.trim($this.find('option:selected').val()).length == 0) {
+                                        selected = false;
+                                        return false; // 跳出循环
+                                    }
+                                });
+                                return selected;
+                            } else {
+                                // 如果是单选框
+                                return scope.model == undefined ? $.trim(elem.find('option:selected').val()) > 0 : !!scope.model;
+                            }
+                        } else if (mcs.util.hasClasses(elem, 'date-picker data-range')) {
+                            // 对日期范围，数据范围控件单独处理
+                            var valid = true;
+                            elem.each(function () {
+                                var $this = $(this);
+                                if ($.trim($this.val()).length == 0) {
+                                    valid = false;
+                                    return false; // 跳出循环
+                                }
+                            });
+                            return valid;
+                        } else {
+                            return $.trim(elem.val()).length > 0;
+                        }
+                    }()
                 });
+            }
+            // required-level(only for mcs-cascading-select)
+            if (validationResult && mcs.util.hasAttr(elem, 'required-level')) {
+                // 如果当前元素是级联控件才参与验证
+                var parent = elem.closest('.mcs-cascading-select-container');
+                if (parent) {
+                    var requiredLevel = parseInt(parent.attr('required-level'));
+                    if (requiredLevel > 0) {
+                        validationResult = checkValidationResult(elem, {
+                            errorMessage: elem.attr('data-validation-required-message') || mcs.util.format(config.requiredLevel, requiredLevel),
+                            validate: function () {
+                                var selected = true;
+                                elem.parent().not(':hidden').find('select[required-level]').each(function (index) {
+                                    var $this = $(this);
+                                    if ($.trim($this.find('option:selected').val()).length == 0) {
+                                        selected = false;
+                                        return false; // 跳出循环
+                                    }
+                                });
+
+                                return selected;
+                            }()
+                        });
+                    }
+                }
             }
             // minlength
             if (validationResult && mcs.util.hasAttr(elem, 'minlength')) {
@@ -1398,7 +1604,7 @@
             if (validationResult && mcs.util.hasAttr(elem, 'maxlength')) {
                 var maxlength = parseInt(elem.attr('maxlength'));
                 if (maxlength > 0) {
-                    validationResult = checkValidationResult({
+                    validationResult = checkValidationResult(elem, {
                         errorMessage: elem.attr('data-validation-maxlength-message') || mcs.util.format(config.maxlength, maxlength),
                         validate: $.trim(elem.val()).length <= maxlength
                     });
@@ -1407,7 +1613,7 @@
             //min
             if (validationResult && mcs.util.hasAttr(elem, 'min')) {
                 var min = parseFloat(elem.attr('min'));
-                validationResult = checkValidationResult({
+                validationResult = checkValidationResult(elem, {
                     errorMessage: elem.attr('data-validation-min-message') || mcs.util.format(config.min, min),
                     validate: parseFloat($.trim(elem.val())) >= min
                 });
@@ -1415,30 +1621,53 @@
             //max
             if (validationResult && mcs.util.hasAttr(elem, 'max')) {
                 var max = parseFloat(elem.attr('max'));
-                validationResult = checkValidationResult({
+                validationResult = checkValidationResult(elem, {
                     errorMessage: elem.attr('data-validation-max-message') || mcs.util.format(config.max, max),
                     validate: parseFloat($.trim(elem.val())) <= max
                 });
             }
             //positive
             if (validationResult && mcs.util.hasAttr(elem, 'positive')) {
-                validationResult = checkValidationResult({
+                validationResult = checkValidationResult(elem, {
                     errorMessage: elem.attr('data-validation-positive-message') || config.positive,
-                    validate: (/^[1-9]+[0-9]*$/).test($.trim(elem.val()))
+                    validate: ($.trim(elem.val()) == '0' || (/^[1-9]+[0-9]*$/).test($.trim(elem.val())))
                 });
             }
-            //negtive
-            if (validationResult && mcs.util.hasAttr(elem, 'negtive')) {
-                validationResult = checkValidationResult({
-                    errorMessage: elem.attr('data-validation-negtive-message') || config.negative,
-                    validate: (/^-[1-9]+[0-9]*$/).test($.elem(elem.val()))
+            //negative
+            if (validationResult && mcs.util.hasAttr(elem, 'negative')) {
+                validationResult = checkValidationResult(elem, {
+                    errorMessage: elem.attr('data-validation-negative-message') || config.negative,
+                    validate: ($.trim(elem.val()) == '0' || (/^-[1-9]+[0-9]*$/).test($.trim(elem.val())))
+                });
+            }
+            //number
+            if (validationResult && mcs.util.hasAttr(elem, 'number')) {
+                validationResult = checkValidationResult(elem, {
+                    errorMessage: elem.attr('data-validation-number-message') || config.number,
+                    validate: (/^(([1-9]\d*)|0)(\.\d+)?$/).test($.trim(elem.val()))
                 });
             }
             //currency
             if (validationResult && mcs.util.hasAttr(elem, 'currency')) {
-                validationResult = checkValidationResult({
+                validationResult = checkValidationResult(elem, {
                     errorMessage: elem.attr('data-validation-currency-message') || config.currency,
                     validate: (/^(([1-9]\d*)|0)(\.\d{1,2})?$/).test($.trim(elem.val()))
+                });
+            }
+            //less
+            if (validationResult && mcs.util.hasAttr(elem, 'less')) {
+                var less = parseFloat(elem.attr('less'));
+                validationResult = checkValidationResult(elem, {
+                    errorMessage: elem.attr('data-validation-less-message') || mcs.util.format(config.less, less),
+                    validate: parseFloat($.trim(elem.val())) > less
+                });
+            }
+            //great
+            if (validationResult && mcs.util.hasAttr(elem, 'great')) {
+                var great = parseFloat(elem.attr('great'));
+                validationResult = checkValidationResult(elem, {
+                    errorMessage: elem.attr('data-validation-great-message') || mcs.util.format(config.great, great),
+                    validate: parseFloat($.trim(elem.val())) < great
                 });
             }
             //between
@@ -1448,39 +1677,105 @@
                     var min = parseFloat(between[0]);
                     var max = parseFloat(between[1]);
                     if (!isNaN(min) && !isNaN(max)) {
-                        validationResult = checkValidationResult({
+                        validationResult = checkValidationResult(elem, {
                             errorMessage: elem.attr('data-validation-between-message') || mcs.util.format(config.between, min, max),
                             validate: parseFloat($.trim(elem.val())) >= min && parseFloat($.trim(elem.val())) <= max
                         });
                     }
                 }
             }
-            // 设置已经过验证
-            elem.attr('data-validate-result', validationResult);
+            //phone
+            if (validationResult && mcs.util.hasAttr(elem, 'phone')) {
+                validationResult = checkValidationResult(elem, {
+                    errorMessage: elem.attr('data-validation-phone-message') || config.phone,
+                    validate: (/(^1[34578]\d{9}$)|(^\d{3,4}-\d{7,8}-\d{1,5}$)|(^\d{3,4}-\d{7,8}$)/).test($.trim(elem.val()))
+                });
+            }
+            //email
+            if (validationResult && mcs.util.hasAttr(elem, 'email')) {
+                validationResult = checkValidationResult(elem, {
+                    errorMessage: elem.attr('data-validation-email-message') || config.email,
+                    validate: (/^[0-9a-z][_.0-9a-z-]{0,31}@([0-9a-z][0-9a-z-]{0,30}[0-9a-z]\.){1,4}[a-z]{2,4}$/).test($.trim(elem.val()))
+                });
+            }
+            //idcard
+            if (validationResult && mcs.util.hasAttr(elem, 'idcard')) {
+                validationResult = checkValidationResult(elem, {
+                    errorMessage: elem.attr('data-validation-idcard-message') || config.idcard,
+                    validate: (/^(\d{18,18}|\d{15,15}|\d{17,17}x|\d{17,17}X)$/).test($.trim(elem.val()))
+                });
+            }
+            //validate
+            if (validationResult && mcs.util.hasAttr(elem, 'validate')) {
+                return $parse(elem.attr('validate'))(scope);
+            }
+
             return validationResult;
+        };
+
+        service.init = function (scope, form) {
+            // 查找页面中需要进行验证的元素
+            scope.$on('$viewContentLoaded', function (event) {
+                filterValidationElems(form, function (elem) {
+                    if (elem.is(':input[type=text]') || elem.is('textarea')) {
+                        elem.blur(function () {
+                            service.validate(elem, scope);
+                        });
+                    }
+                });
+            });
+        };
+        // 提交整个页面时开始触发
+        service.run = function (scope, form) {
+            // 查找页面中需要进行验证的元素
+            filterValidationElems(form, function (elem) {
+                if ((elem.is(':input[type=text]') || elem.is('textarea')) && !mcs.util.hasClasses(elem, 'date-picker date-timepicker data-range')) {
+                    elem.blur();
+                } else {
+                    service.validate(elem, scope);
+                }
+            });
+            return !$('.has-error').length;
         };
 
         return service;
     }]).constant('mcsValidationRules', [
         'required',
+        'required-level', // 用于指定级联下拉规则
         'minlength',
         'maxlength',
         'min',
         'max',
         'positive',
-        'negtive',
+        'negative',
+        'number',
         'currency',
-        'between'
+        'great',
+        'less',
+        'between',
+        'phone',
+        'email',
+        'idcard',
+        'validate'
     ]).constant('mcsValidationMessageConfig', {
         general: '输入数据项不正确，请重新输入!',
         required: '输入数据项为必填！',
+        requiredLevel: '请选择到第{0}级数据！',
+        requiredAll: '请选择所有级别数据！',
+        selected: '请至少选择一项！',
         minlength: '应至少输入{0}个字符！',
         maxlength: '最多只能输入{0}个字符！',
-        min: '输入数据项应大于{0}！',
-        max: '输入数据项应小于{0}！',
+        min: '输入数据项应大于或等于{0}！',
+        max: '输入数据项应小于或等于{0}！',
         positive: '输入数据项应为正整数！',
         negative: '输入数据项应为负整数！',
-        currency: '输入数据项应为小数或货币值！',
-        between: '输入数据项应在{0}和{1}之间！'
+        number: '输入数据项应为小数！',
+        currency: '输入数据项应为货币值(最多保留两位小数)！',
+        great: '输入数据项应小于{0}！',
+        less: '输入数据项应大于{0}！',
+        between: '输入数据项应在{0}和{1}之间！',
+        phone: '输入数据项不是合法电话！',
+        email: '输入数据项不是合法电子邮件！',
+        idcard: '输入数据项不是合法身份证号！'
     });
 })();

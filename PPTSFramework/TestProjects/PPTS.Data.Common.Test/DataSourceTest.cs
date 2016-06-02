@@ -27,6 +27,7 @@ namespace PPTS.Data.Common.Test
             UserAndJobCollection result = dataSource.Query(0, int.MaxValue, ref totalCount);
 
             Console.WriteLine(result.Count);
+            result.Output();
 
             Assert.IsTrue(result.ContainsKey(educatorJob.ID));
         }

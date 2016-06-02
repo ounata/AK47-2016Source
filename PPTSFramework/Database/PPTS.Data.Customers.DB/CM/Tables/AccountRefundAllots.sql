@@ -11,6 +11,7 @@
     [CategoryType] NVARCHAR(32) NULL, 
     [AllotAmount] DECIMAL(18, 2) NULL DEFAULT 0, 
     [AllotMoney] DECIMAL(18, 4) NULL DEFAULT 0, 
+	[TenantCode] NVARCHAR(36) NULL, 
     CONSTRAINT [PK_AccountRefundAllots] PRIMARY KEY NONCLUSTERED ([AllotID]) 
 )
 
@@ -126,3 +127,4 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level1name = N'AccountRefundAllots',
     @level2type = N'COLUMN',
     @level2name = N'SortNo'
+GO

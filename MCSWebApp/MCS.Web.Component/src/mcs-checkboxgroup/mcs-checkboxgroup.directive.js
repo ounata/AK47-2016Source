@@ -1,7 +1,7 @@
 ﻿(function () {
     'use strict';
 
-    mcs.ng.directive('mcsCheckboxGroup', function () {
+    mcs.ng.directive('mcsCheckboxGroup', ['mcsValidationService', function (validationService) {
         return {
             restrict: 'E',
             scope: {
@@ -12,9 +12,17 @@
             controller: function ($scope) {
                 $scope.change = function (item, event) {
                     mcs.util.setSelectedItems($scope.model, item, event);
+                    validationService.validate($(event.target), $scope);
                 };
+            },
+            link: function ($scope, $elem) {
+                $scope.$watch('$parent.required', function () {
+                    if ($scope.$parent.required) {
+                        $elem.find(':checkbox').attr('required', 'required');
+                    }
+                })
             }
         }
-    });
+    }]);
 
 })();

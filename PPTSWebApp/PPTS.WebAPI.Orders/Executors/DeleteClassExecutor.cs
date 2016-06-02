@@ -60,7 +60,9 @@ namespace PPTS.WebAPI.Orders.Executors
                 {
                     a.AssignStatus = AssignStatusDefine.Invalid;
                     AssignsAdapter.Instance.UpdateInContext(a);
-                    AssetAdapter.Instance.IncreaseAssignedAmountInContext(a.AssetID, 1, a.CreatorID, a.CreatorName);
+                    Data.Orders.Entities.Asset at = GenericAssetAdapter<Data.Orders.Entities.Asset, AssetCollection>.Instance.Load(a.AssetID);
+                    at.AssignedAmount -= 1;
+                    GenericAssetAdapter<Data.Orders.Entities.Asset, AssetCollection>.Instance.UpdateInContext(at);
                 }
 
             }

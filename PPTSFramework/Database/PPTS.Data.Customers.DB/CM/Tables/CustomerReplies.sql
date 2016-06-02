@@ -24,6 +24,7 @@
     [CreateTime] DATETIME NULL DEFAULT GETUTCDATE(), 
     [FromSystemID] NVARCHAR(36) NULL, 
     [Status] NVARCHAR(32) NULL DEFAULT '2', 
+	[TenantCode] NVARCHAR(36) NULL, 
     CONSTRAINT [PK_CustomerReplies] PRIMARY KEY NONCLUSTERED ([ReplyID]) 
 )
 

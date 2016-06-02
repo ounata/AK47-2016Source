@@ -25,7 +25,8 @@
                         vm.score = result.score;
                         vm.scoreItems = result.scoreItems;
 
-                        dataSyncService.injectDictData(mcs.util.mapping(vm.teachers, { key: 'teacherID', value: 'teacherName', props: 'subjectMemo' }, 'Teacher'));
+                        dataSyncService.injectDictData(mcs.util.mapping(vm.teachers, { key: 'teacherID', value: 'teacherName', props: 'subject' }, 'scoreTeacher'));
+                        dataSyncService.injectDictData(mcs.util.mapping(vm.teachers, { key: 'teacherJobOrgID', value: 'teacherJobOrgName', props: 'teacherID' }, 'scoreTeacherOrgName'));
                         dataSyncService.injectDictData({
                             c_codE_ABBR_Score_Satisficing: [{ key: '1', value: '对成绩满意' }, { key: '0', value: '对成绩不满意' }]
                         });
@@ -33,6 +34,7 @@
                         scoresDataViewService.fillGradeParentKey();
                         $scope.$broadcast('dictionaryReady');
                         scoresDataViewService.showRowItems(vm, vm.score.studyStage);
+                        scoresDataViewService.handleTeachers();
                         scoresDataViewService.checkCanEdit(vm);
                         vm.fillItemsData();
                     });
@@ -79,6 +81,10 @@
                     scoreDataService.editScores(data, function (result) {
                         $state.go('ppts.score-view', { id: $stateParams.id, prev: 'ppts.score' });
                     });
+                };
+
+                vm.cancel = function () {
+                    $state.go('ppts.score-view', { id: $stateParams.id, prev: $stateParams.prev });
                 };
 
                 // 总分-得分

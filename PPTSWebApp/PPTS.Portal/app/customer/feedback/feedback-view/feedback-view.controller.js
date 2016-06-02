@@ -9,29 +9,46 @@
 define([ppts.config.modules.customer,
         ppts.config.dataServiceConfig.feedbackDataService],
         function (customer) {
-            customer.registerController('feedbackViewController', ['$scope', '$state', '$location', '$stateParams', 'dataSyncService', 'feedbackDataService', 'feedbackViewDataViewService',
+            customer.registerController('feedbackViewController',
+                [
+                    '$scope',
+                    '$state',
+                    '$location',
+                    '$stateParams',
+                    'dataSyncService', 'feedbackDataService', 'feedbackViewDataViewService',
                 function ($scope, $state, $location, $stateParams, dataSyncService, feedbackDataService, feedbackViewDataViewService) {
                     var vm = this;
                     vm.tabs = [];
 
-                    vm.customerId = $stateParams.id;
-                    if ("" == $stateParams.id) {
-                        vm.customerId = $stateParams.customerId;
+                    switch ($stateParams.prev) {
+                        case "ppts.feedback": //来源学大反馈
+                            if (!vm.criteria) vm.criteria = {};
+                            vm.customerId = $stateParams.customerId;
+                            //vm.criteria.replyID = $stateParams.replyID;
+                            vm.criteria.replyTimeEnd = new Date(parseInt($stateParams.replyTime));
+                            vm.criteria.customerId = $stateParams.customerId;
+                            break;
+                        default:
+                            if (!vm.criteria) vm.criteria = {};
+                            vm.customerId = $stateParams.id;
+                            vm.criteria.customerId = $stateParams.id;
+                            break;
                     }
+
                     feedbackViewDataViewService.initConfig(vm);
                     feedbackViewDataViewService.initData(vm, function () {
                         $scope.$broadcast('dictionaryReady');
                     });
-                  
+
                     vm.changeTab = function (tab) {
                         dataSyncService.initCriteria(vm);
                         if (vm.criteria) {
-                            vm.criteria.replyObjects = new Array();
+                            vm.criteria.replyObjects = [];
                             vm.criteria.replyObjects.push(tab.key);
                         }
                         feedbackDataService.GetCustomerRepliesList(vm.criteria, function (result) {
                             vm.data.rows = result.queryResult.pagedData;
-                            vm.dictionaries = result.dictionaries;
+                            //vm.dictionaries = result.dictionaries;
                             dataSyncService.injectDictData();
                             vm.data.pager.totalCount = result.queryResult.totalCount;
                             $scope.$broadcast('dictionaryReady');

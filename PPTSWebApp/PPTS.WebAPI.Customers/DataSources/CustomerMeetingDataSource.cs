@@ -26,10 +26,10 @@ namespace PPTS.WebAPI.Customers.DataSources
             string select = @"cMeetings.MeetingID,cMeetings.MeetingTime,cMeetings.CampusName,customer.CustomerId,customer.CustomerName,customer.CustomerCode,customer.Grade,cMeetings.CampusID,
                              Parent.ParentName,CMeetings.MeetingType,CMeetings.OrganizerName,
                              CMeetings.Satisficing";
-            string from = @"CustomerMeetings cMeetings
-                           LEFT JOIN Customers_Current customer on cMeetings.CustomerId=customer.CustomerId
-                           LEFT JOIN (Select CustomerId,ParentId From CustomerParentRelations Where IsPrimary=1) CusParentRelation on CusParentRelation.CustomerId=customer.CustomerId
-                           LEFT JOIN Parents parent on parent.parentId=CusParentRelation.parentId";
+            string from = @" CM.CustomerMeetings cMeetings
+                           LEFT JOIN CM.Customers_Current customer on cMeetings.CustomerId=customer.CustomerId
+                           LEFT JOIN (Select CustomerId,ParentId From CM.CustomerParentRelations Where IsPrimary=1) CusParentRelation on CusParentRelation.CustomerId=customer.CustomerId
+                           LEFT JOIN CM.Parents parent on parent.parentId=CusParentRelation.parentId";
 
             PagedQueryResult<CustomerMeetingQueryModel, CustomerMeetingQueryCollection> result = Query(prp, select, from, condition, orderByBuilder);
             return result;

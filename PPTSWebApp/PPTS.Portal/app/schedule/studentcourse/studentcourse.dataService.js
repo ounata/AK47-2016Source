@@ -29,6 +29,14 @@
             resource.post({ operation: 'markupAssign' }, criteria, success, error);
         }
 
+        resource.getStuClassRecord = function (criteria, success, error) {
+            resource.post({ operation: 'getStuClassRecord' }, criteria, success, error);
+        }
+
+        resource.getStuClassRecordPaged = function (criteria, success, error) {
+            resource.post({ operation: 'getStuClassRecordPaged' }, criteria, success, error);
+        }
+
         return resource;
     }]);
 });

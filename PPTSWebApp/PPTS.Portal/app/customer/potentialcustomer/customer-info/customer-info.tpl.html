@@ -1,177 +1,213 @@
-﻿<div class="clearfix form-actions mcs-form-actions">
-    <div class="col-md-offset-3 col-md-9">
-        <mcs-button category="edit" click="vm.edit()"></mcs-button>
-        <mcs-button category="add" click="vm.parentAdd()" text="添加孩子家长"></mcs-button>
-        <mcs-button category="thaw" click="vm.thaw()" text="解冻"></mcs-button>
-    </div>
-</div>
-<div class="profile-user-info profile-user-info-striped mcs-user-profile">
-    <div class="profile-info-row">
-        <div class="profile-info-name"> 接触方式 </div>
-        <div class="profile-info-value">
-            
-            <span>{{ vm.customer.contactType | contactType }}</span>
-        </div>
-    </div>
-    <div class="profile-info-row">
-        <div class="profile-info-name"> 信息来源 </div>
-        <div class="profile-info-value">
-            <span>{{ vm.customer.sourceMainType | source }}</span>
-        </div>
-    </div>
-    <div class="profile-info-row">
-        <div class="profile-info-name"> 转介绍员工 </div>
-        <div class="profile-info-value">
-            <span>{{ vm.customer.referralStaffInfo }}</span>
-        </div>
-    </div>
-    <div class="profile-info-row">
-        <div class="profile-info-name"> 学员姓名 </div>
-        <div class="profile-info-value">
-            <span>{{ vm.customer.customerName }}</span>
-        </div>
-    </div>
-    <div class="profile-info-row">
-        <div class="profile-info-name"> vip客户 </div>
-        <div class="profile-info-value">
-            <span>{{ vm.customer.vipType | vipType }}</span>
-        </div>
-    </div>
-    <div class="profile-info-row">
-        <div class="profile-info-name"> vip客户等级 </div>
-        <div class="profile-info-value">
-            <span>{{ vm.customer.vipLevel | vipLevel }}</span>
-        </div>
-    </div>
-    <div class="profile-info-row">
-        <div class="profile-info-name"> 学员的主监护人 </div>
-        <div class="profile-info-value">
-            <span>{{ vm.parent.parentName }}</span>
-        </div>
-    </div>
-    <div class="profile-info-row">
-        <div class="profile-info-name"> 客户资源所属地 </div>
-        <div class="profile-info-value">
-            <span>{{ vm.customer.orgName }}</span>
-        </div>
-    </div>
-    <div class="profile-info-row">
-        <div class="profile-info-name"> 学员编号 </div>
-        <div class="profile-info-value">
-            <span>{{ vm.customer.customerCode }}</span>
-        </div>
-    </div>
-    <div class="profile-info-row">
-        <div class="profile-info-name"> 学员性别 </div>
-        <div class="profile-info-value">
-            <span>{{ vm.customer.gender | gender }}</span>
-        </div>
-    </div>
-    <div class="profile-info-row">
-        <div class="profile-info-name"> 学员出生日期 </div>
-        <div class="profile-info-value">
-            <span>{{ vm.customer.birthday | date:'yyyy-MM-dd' }}</span>
-        </div>
-    </div>
-    <div class="profile-info-row">
-        <div class="profile-info-name"> 学员身份证号码 </div>
-        <div class="profile-info-value">
-            <span>{{ vm.customer.idNumber }}</span>
-        </div>
-    </div>
-    <div class="profile-info-row">
-        <div class="profile-info-name"> 入学大年级 </div>
-        <div class="profile-info-value">
-            <span>{{ vm.customer.entranceGrade | grade }}</span>
-        </div>
-    </div>
-    <div class="profile-info-row">
-        <div class="profile-info-name"> 当前年级 </div>
-        <div class="profile-info-value">
-            <span>{{ vm.customer.grade | grade }}</span>
-        </div>
-    </div>
-    <div class="profile-info-row">
-        <div class="profile-info-name"> 在读学校 </div>
-        <div class="profile-info-value">
-            <span>{{ vm.customer.schoolID }}</span>
-        </div>
-    </div>
-    <div class="profile-info-row">
-        <div class="profile-info-name"> 当前状态 </div>
-        <div class="profile-info-value">
-            <span>{{ vm.customer.customerStatus }}</span>
-        </div>
-    </div>
-    <div class="profile-info-row">
-        <div class="profile-info-name"> 学年制 </div>
-        <div class="profile-info-value">
-            <span>{{ vm.customer.schoolYear }}</span>
-        </div>
-    </div>
-    <div class="profile-info-row">
-        <div class="profile-info-name"> 文理科 </div>
-        <div class="profile-info-value">
-            <span>{{ vm.customer.subjectType | subjectType }}</span>
-        </div>
-    </div>
-    <div class="profile-info-row">
-        <div class="profile-info-name"> 是否复读 </div>
-        <div class="profile-info-value">
-            <span>{{ vm.customer.isStudyAgain | ifElse }}</span>
-        </div>
-    </div>
-    <div class="profile-info-row">
-        <div class="profile-info-name"> 联系方式 </div>
-        <div class="profile-info-value">
-            <span>{{ vm.customer.primaryPhone.phoneNumber }}</span>
-            <span ng-if="vm.customer.secondaryPhone.phoneNumber != ''">{{ vm.customer.secondaryPhone.phoneNumber }}</span>
-        </div>
-    </div>
-    <div class="profile-info-row">
-        <div class="profile-info-name"> 初始签约人 </div>
-        <div class="profile-info-value">
-            <span>{{  }}</span>
-        </div>
-    </div>
-    <div class="profile-info-row">
-        <div class="profile-info-name"> 归属坐席 </div>
-        <div class="profile-info-value">
-            <span class="editable editable-click" ng-repeat="relation in (vm.customerStaffRelation | filter:{'relationType':vm.relationType.callcenter})">{{ relation.staffName }}</span>
-            <mcs-button text="查看历史" click="vm.viewHistory(vm.relationType.callcenter)" css="btn-link" />
-        </div>
-    </div>
-    <div class="profile-info-row">
-        <div class="profile-info-name"> 归属咨询师 </div>
-        <div class="profile-info-value">
-            <span class="editable editable-click" ng-repeat="relation in (vm.customerStaffRelation | filter:{'relationType':vm.relationType.consultant})">{{ relation.staffName }}</span>
-            <mcs-button text="查看历史" click="vm.viewHistory(vm.relationType.consultant)" css="btn-link" />
-        </div>
-    </div>
-    <div class="profile-info-row">
-        <div class="profile-info-name"> 归属学管师 </div>
-        <div class="profile-info-value">
-            <span class="editable editable-click" ng-repeat="relation in (vm.customerStaffRelation | filter:{'relationType':vm.relationType.educator})">{{ relation.staffName }}</span>
-            <mcs-button text="查看历史" click="vm.viewHistory(vm.relationType.educator)" css="btn-link" />
-        </div>
-    </div>
-    <div class="profile-info-row">
-        <div class="profile-info-name"> 归属市场专员 </div>
-        <div class="profile-info-value">
-            <span class="editable editable-click" ng-repeat="relation in (vm.customerStaffRelation | filter:{'relationType':vm.relationType.market})">{{ relation.staffName }}</span>
-            <mcs-button text="查看历史" click="vm.viewHistory(vm.relationType.market)" css="btn-link" />
-        </div>
-    </div>
-    <div class="profile-info-row">
-        <div class="profile-info-name"> 建档部门 </div>
-        <div class="profile-info-value">
-            <span>{{ }}</span>
-        </div>
-    </div>
-    <div class="profile-info-row">
-        <div class="profile-info-name"> 建档人 </div>
-        <div class="profile-info-value">
-            <span>{{ vm.customer.CreatorName }}</span>
-        </div>
+﻿<div class="portlet light">
+    <div class="portlet-body form" >
+        <form class="form-horizontal form-bordered form-row-stripped" action="#" role="form" novalidate>
+            <div class="form-actions noborder">
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <mcs-button category="edit" click="vm.edit()"></mcs-button>
+                        <mcs-button category="add" click="vm.parentAdd()" text="添加孩子家长"></mcs-button>
+                        <mcs-button icon="unlock" click="vm.thaw()" text="解冻"></mcs-button>
+                    </div>
+                </div>
+            </div>
+            <div class="form-body">
+                <div class="form-group">
+                    <mcs-label text="接触方式" css="col-md-3"/>
+                    <div class="col-md-4">
+                        <p class="form-control-static">{{ vm.customer.contactType | contactType }}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="信息来源" css="col-md-3"/>
+                    <div class="col-md-4">
+                        <p class="form-control-static">
+                            <span ng-if="vm.customer.sourceMainType!='' && vm.customer.sourceSubType!=''">
+                                {{ vm.customer.sourceMainType | source }}-{{vm.customer.sourceSubType | source}}
+                            </span>
+                            <span ng-if="vm.customer.sourceMainType!='' && vm.customer.sourceSubType==''">
+                                {{ vm.customer.sourceMainType | source }}
+                            </span>
+                            <span ng-if="vm.customer.sourceMainType=='' && vm.customer.sourceSubType!=''">
+                                {{vm.customer.sourceSubType | source}}
+                            </span>
+                        </p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="转介绍员工" css="col-md-3"/>
+                    <div class="col-md-4">
+                        <p class="form-control-static">
+                            {{ vm.customer.referralStaffName }}
+                            <span ng-if="vm.customer.referralStaffJobName != '' && vm.customer.referralStaffOACode != ''">
+                                {{ "（" + vm.customer.referralStaffJobName + "-" + vm.customer.referralStaffOACode + "）"  }}
+                            </span>
+                            <span ng-if="vm.customer.referralStaffJobName != ''">
+                                {{ "（" + vm.customer.referralStaffJobName + "）" }}
+                            </span>
+                            <span ng-if="vm.customer.referralStaffOACode != ''">
+                                {{ "（" + vm.customer.referralStaffOACode + "）"  }}
+                            </span>
+                        </p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="学员姓名" css="col-md-3"/>
+                    <div class="col-md-4">
+                        <p class="form-control-static">{{ vm.customer.customerName }}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="vip客户" css="col-md-3"/>
+                    <div class="col-md-4">
+                        <p class="form-control-static">{{ vm.customer.vipType | vipType }}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="vip客户等级" css="col-md-3"/>
+                    <div class="col-md-4">
+                        <p class="form-control-static">{{ vm.customer.vipLevel | vipLevel }}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="学员的主监护人" css="col-md-3"/>
+                    <div class="col-md-4">
+                        <p class="form-control-static">{{ vm.parent.parentName }}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="客户资源所属地" css="col-md-3"/>
+                    <div class="col-md-4">
+                        <p class="form-control-static">{{ vm.customer.orgName }}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="学员编号" css="col-md-3"/>
+                    <div class="col-md-4">
+                        <p class="form-control-static">{{ vm.customer.customerCode }}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="学员性别" css="col-md-3"/>
+                    <div class="col-md-4">
+                        <p class="form-control-static">{{ vm.customer.gender | gender }}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="出生日期" css="col-md-3"/>
+                    <div class="col-md-4">
+                        <p class="form-control-static">{{ vm.customer.birthday | date:'yyyy-MM-dd' | normalize }}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="身份证号码" css="col-md-3"/>
+                    <div class="col-md-4">
+                        <p class="form-control-static">{{ vm.customer.idNumber }}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="入学大年级" css="col-md-3"/>
+                    <div class="col-md-4">
+                        <p class="form-control-static">{{ vm.customer.entranceGrade | grade }}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="当前年级" css="col-md-3"/>
+                    <div class="col-md-4">
+                        <p class="form-control-static">{{ vm.customer.grade | grade }}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="在读学校" css="col-md-3"/>
+                    <div class="col-md-4">
+                        <p class="form-control-static">{{ vm.customer.schoolID }}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="当前状态" css="col-md-3"/>
+                    <div class="col-md-4">
+                        <p class="form-control-static">{{ vm.customer.customerStatus }}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="学年制" css="col-md-3"/>
+                    <div class="col-md-4">
+                        <p class="form-control-static">{{ vm.customer.schoolYear }}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="文理科" css="col-md-3"/>
+                    <div class="col-md-4">
+                        <p class="form-control-static">{{ vm.customer.subjectType | subjectType }}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="是否复读" css="col-md-3"/>
+                    <div class="col-md-4">
+                        <p class="form-control-static">{{ vm.customer.isStudyAgain | ifElse }}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="联系方式" css="col-md-3"/>
+                    <div class="col-md-4">
+                        <p class="form-control-static">{{ vm.customer.primaryPhone.phoneNumber }}</p>
+                        <p ng-if="vm.customer.secondaryPhone.phoneNumber" class="form-control-static">{{ vm.customer.secondaryPhone.phoneNumber }}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="初始签约人" css="col-md-3"/>
+                    <div class="col-md-4">
+                        <p class="form-control-static">{{  }}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="建档部门" css="col-md-3"/>
+                    <div class="col-md-4">
+                        <p class="form-control-static">{{  }}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="建档人" css="col-md-3"/>
+                    <div class="col-md-4">
+                        <p class="form-control-static">{{ vm.customer.CreatorName }}</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <mcs-label text="归属咨询师" css="col-md-3"/>
+                    <div class="col-md-4 mcs-padding-0">
+                        <mcs-button text="查看历史" click="vm.viewHistory(vm.relationType.consultant)" css="btn-link" style="width:auto;" />
+                        <span class="form-control-static" ng-repeat="relation in (vm.customerStaffRelation | filter:{'relationType':vm.relationType.consultant})">{{ relation.staffName }}</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="归属学管师" css="col-md-3"/>
+                    <div class="col-md-4 mcs-padding-0">
+                        <mcs-button text="查看历史" click="vm.viewHistory(vm.relationType.educator)" css="btn-link" style="width:auto;" />
+                        <span class="form-control-static" ng-repeat="relation in (vm.customerStaffRelation | filter:{'relationType':vm.relationType.educator})">{{ relation.staffName }}</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="归属教师" css="col-md-3" />
+                    <div class="col-md-4 mcs-padding-0">
+                        <mcs-button text="查看历史" click="vm.viewHistoryTeachers(vm.customer.customerID)" css="btn-link" style="width:auto;" />
+                        <span class="form-control-static" ng-repeat="relation in (vm.customerStaffRelation | filter:{'relationType':vm.relationType.educator})">{{ relation.staffName }}</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="归属坐席" css="col-md-3"/>
+                    <div class="col-md-4 mcs-padding-0">
+                        <mcs-button text="查看历史" click="vm.viewHistory(vm.relationType.callcenter)" css="btn-link" style="width:auto;" />
+                        <span class="form-control-static" ng-repeat="relation in (vm.customerStaffRelation | filter:{'relationType':vm.relationType.callcenter})">{{ relation.staffName }}</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="归属市场专员" css="col-md-3"/>
+                    <div class="col-md-4 mcs-padding-0">
+                        <mcs-button text="查看历史" click="vm.viewHistory(vm.relationType.market)" css="btn-link" style="width:auto;" />
+                        <span class="form-control-static" ng-repeat="relation in (vm.customerStaffRelation | filter:{'relationType':vm.relationType.market})">{{ relation.staffName }}</span>
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
 </div>

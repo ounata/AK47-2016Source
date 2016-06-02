@@ -49,7 +49,7 @@ namespace PPTS.WebAPI.Orders.ViewModels.Unsubscribe
     }
 
     public class DebookOrderQueryResult {
-        public PagedQueryResult<DebookOrder, DebookOrderCollection> QueryResult { get; set; }
+        public PagedQueryResult<DebookOrderItemView, DebookOrderItemViewCollection> QueryResult { get; set; }
         public IDictionary<string, IEnumerable<BaseConstantEntity>> Dictionaries { get; set; }
     }
 }

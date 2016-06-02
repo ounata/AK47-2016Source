@@ -30,6 +30,11 @@
                     customerDataViewService.viewStaffRelation($stateParams.id, relationType);
                 };
 
+                // 归属教师
+                vm.viewHistoryTeachers = function (customerID) {
+                    customerDataViewService.viewHistoryTeachers(customerID);
+                };
+
                 // 添加孩子家长
                 vm.parentAdd = function () {
                     var title = '查找 ' + vm.customer.customerName + ' 的家长，勾选查询结果，确认亲属关系';

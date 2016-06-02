@@ -1,7 +1,10 @@
-﻿/*创建用户msuser，这是可选的*/
+﻿CREATE LOGIN [msuser] WITH PASSWORD=N'xueda123$'
+
+GO
+
 CREATE USER [msuser]
-	WITHOUT LOGIN
-	WITH DEFAULT_SCHEMA = [SC]
+	FOR LOGIN [msuser]
+	WITH DEFAULT_SCHEMA = [dbo]
 GO
 
 EXEC sp_addrolemember 'db_owner', 'msuser'

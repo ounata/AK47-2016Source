@@ -1,6 +1,7 @@
 using MCS.Library.Core;
 using MCS.Library.Data.DataObjects;
 using MCS.Library.Data.Mapping;
+using PPTS.Data.Common.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,151 +9,169 @@ using System.Runtime.Serialization;
 
 namespace PPTS.Data.Orders.Entities
 {
-	/// <summary>
-	/// This object represents the properties and methods of a AccompanyAssign.
-	/// 
-	/// </summary>
-	[Serializable]
-    [ORTableMapping("AccompanyAssigns")]
+    /// <summary>
+    /// This object represents the properties and methods of a AccompanyAssign.
+    /// 
+    /// </summary>
+    [Serializable]
+    [ORTableMapping("OM.AccompanyAssigns")]
     [DataContract]
-	public class AccompanyAssign
-	{		
-		public AccompanyAssign()
-		{
-		}		
+    public class AccompanyAssign : IEntityWithCreator, IEntityWithModifier
+    {
+        public AccompanyAssign()
+        {
+        }
 
-		/// <summary>
-		/// 校区ID
-		/// </summary>
-		[ORFieldMapping("CampusID")]
+        /// 校区ID
+        [ORFieldMapping("CampusID")]
         [DataMember]
-		public string CampusID
-		{
-			get;
+        public string CampusID
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 校区名称
-		/// </summary>
-		[ORFieldMapping("CampusName")]
+        /// 校区名称
+        [ORFieldMapping("CampusName")]
         [DataMember]
-		public string CampusName
-		{
-			get;
+        public string CampusName
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 排定 ID
-		/// </summary>
-		[ORFieldMapping("AssignID", PrimaryKey=true)]
+        /// 排定 ID
+        [ORFieldMapping("AssignID", PrimaryKey = true)]
         [DataMember]
-		public string AssignID
-		{
-			get;
+        public string AssignID
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 排定时间
-		/// </summary>
-		[ORFieldMapping("AssignTime")]
+        /// 排定时间
+        [ORFieldMapping("AssignTime", UtcTimeToLocal = true)]
+        [SqlBehavior(DefaultExpression = "GETUTCDATE()")]
         [DataMember]
-		public DateTime AssignTime
-		{
-			get;
+        public DateTime AssignTime
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 排定状态
-		/// </summary>
-		[ORFieldMapping("AssignStatus")]
+        /// 排定状态
+        [ORFieldMapping("AssignStatus")]
         [DataMember]
-		public string AssignStatus
-		{
-			get;
+        public AssignStatusDefine AssignStatus
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 数量
-		/// </summary>
-		[ORFieldMapping("Amount")]
+        /// 数量
+        [ORFieldMapping("Amount")]
         [DataMember]
-		public decimal Amount
-		{
-			get;
+        public decimal Amount
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 教师ID
-		/// </summary>
-		[ORFieldMapping("TeacherID")]
+        [ORFieldMapping("StartTime", UtcTimeToLocal = true)]
         [DataMember]
-		public string TeacherID
-		{
-			get;
+        public DateTime StartTime
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 教师编码
-		/// </summary>
-		[ORFieldMapping("TeacherCode")]
+        [ORFieldMapping("EndTime", UtcTimeToLocal = true)]
         [DataMember]
-		public string TeacherCode
-		{
-			get;
+        public DateTime EndTime
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 教师姓名
-		/// </summary>
-		[ORFieldMapping("TeacherName")]
+        /// 教师ID
+        [ORFieldMapping("TeacherID")]
         [DataMember]
-		public string TeacherName
-		{
-			get;
+        public string TeacherID
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 创建人ID
-		/// </summary>
-		[ORFieldMapping("CreatorID")]
+        /// 教师姓名
+        [ORFieldMapping("TeacherName")]
         [DataMember]
-		public string CreatorID
-		{
-			get;
+        public string TeacherName
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 创建人姓名
-		/// </summary>
-		[ORFieldMapping("CreatorName")]
+        /// 教师岗位ID
+        [ORFieldMapping("TeacherJobID")]
         [DataMember]
-		public string CreatorName
-		{
-			get;
+        public string TeacherJobID
+        {
+            get;
             set;
-		}
+        }
+    
+        /// 创建人ID
+        [ORFieldMapping("CreatorID")]
+        [DataMember]
+        public string CreatorID
+        {
+            get;
+            set;
+        }
 
-		/// <summary>
-		/// 创建时间
-		/// </summary>
-		[ORFieldMapping("CreateTime")]
+        /// 创建人姓名
+        [ORFieldMapping("CreatorName")]
         [DataMember]
-		public DateTime CreateTime
-		{
-			get;
+        public string CreatorName
+        {
+            get;
             set;
-		}
-	}
+        }
+
+        /// 创建时间  
+        [ORFieldMapping("CreateTime", UtcTimeToLocal = true)]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.Select | ClauseBindingFlags.Where, DefaultExpression = "GETUTCDATE()")]
+        [DataMember]
+        public DateTime CreateTime
+        {
+            get;
+            set;
+        }
+
+        [ORFieldMapping("ModifierID")]
+        [DataMember]
+        public string ModifierID
+        {
+            get;
+            set;
+        }
+
+        [ORFieldMapping("ModifierName")]
+        [DataMember]
+        public string ModifierName
+        {
+            get;
+            set;
+        }
+
+        [ORFieldMapping("ModifyTime", UtcTimeToLocal = true)]
+        [SqlBehavior(DefaultExpression = "GETUTCDATE()", ForceUseDefaultExpression = true)]
+        [DataMember]
+        public DateTime ModifyTime
+        {
+            get;set;
+        }
+    }
 
     [Serializable]
     [DataContract]

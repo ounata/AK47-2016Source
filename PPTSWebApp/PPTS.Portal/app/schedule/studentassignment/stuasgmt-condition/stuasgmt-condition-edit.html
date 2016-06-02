@@ -1,1 +1,48 @@
-﻿
+﻿<div class="portlet light">
+    <div class="portlet-body form">
+        <form class="form-horizontal form-bordered form-row-stripped" action="#" role="form" novalidate>
+            <div class="form-actions noborder">
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <mcs-button category="save" click="vm.save()"></mcs-button>
+                        <mcs-button category="cancel" click="vm.cancel()" text="返回"></mcs-button>
+                    </div>
+                </div>
+            </div>
+            <div class="form-body">
+                <div class="form-group">
+                    <mcs-label text="校区" />
+                    <div class="col-md-4">
+                        {{ vm.result.campusName }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="订单编号" />
+                    <div class="col-md-8">
+                        <ppts-select category="asset" caption="请选择" model="vm.result.acc.assetID" callback="vm.selectAssetClick(item)" css="col-xs-7 col-sm-7" />
+                     </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="上课年级" />
+                    <div class="col-md-4">
+                         {{vm.result.acc.gradeName}}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="上课科目" />
+                    <div class="col-md-4">
+                        <ppts-select category="subSubject" model="vm.result.acc.subject" ng-show="vm.showSubjectSelect" callback="vm.selectSubjectClick(item)" css="col-xs-7 col-sm-7" />
+                        <span ng-show="!vm.showSubjectSelect">{{ vm.result.acc.subjectName }}</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="上课教师" />
+                    <div class="col-md-4">
+                        <ppts-select category="teacher" ng-show="vm.showTchSelect" model="vm.result.acc.teacherID" callback="vm.selectTeacherClick(item)" css="col-xs-7 col-sm-7" />
+                        <span ng-show="!vm.showTchSelect">{{ vm.result.acc.teacherName }}</span>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

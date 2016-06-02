@@ -51,6 +51,7 @@
                 (function () {
                     customerDataViewService.initCreateCustomerInfo(orginalParent, vm, function () {
                         $scope.$broadcast('dictionaryReady');
+                        $scope.$broadcast('dataReady');
                     });
                 })();
 

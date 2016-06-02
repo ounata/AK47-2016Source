@@ -35,7 +35,7 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 1 销售关系: 学生，销售（咨询师）[原来写的是家长，销售关系，但是看到逻辑是学生和销售关系];2 教管关系：学生，学管（班主任）;3 教学关系: 学生，老师;4 电销关系
         /// </summary>
-        [ORFieldMapping("RelationType")]
+        [ORFieldMapping("RelationType",PrimaryKey =true)]
         [DataMember]
         public CustomerRelationType RelationType
         {
@@ -90,7 +90,7 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 员工岗位ID
         /// </summary>
-        [ORFieldMapping("StaffJobID", PrimaryKey = true)]
+        [ORFieldMapping("StaffJobID")]
         [DataMember]
         public string StaffJobID
         {
@@ -180,7 +180,7 @@ namespace PPTS.Data.Customers.Entities
         /// </summary>
         [DataMember]
         [ORFieldMapping("VersionStartTime", PrimaryKey = true, UtcTimeToLocal = true)]
-        [SqlBehavior(BindingFlags = ClauseBindingFlags.Select | ClauseBindingFlags.Where)]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update)]
         public DateTime VersionStartTime
         {
             get;

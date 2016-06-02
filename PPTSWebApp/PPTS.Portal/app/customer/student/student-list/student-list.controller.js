@@ -1,4 +1,5 @@
 ﻿define([ppts.config.modules.customer,
+    ppts.config.dataServiceConfig.customerDataService,
         ppts.config.dataServiceConfig.studentDataService],
         function (customer) {
             customer.registerController('studentListController', [
@@ -11,9 +12,12 @@
                 'studentAdvanceSearchItems',
                 'mcsDialogService',
                 'storage',
-                function ($scope, $state, util, dataSyncService, studentDataService, studentDataViewService, searchItems, mcsDialogService, storage) {
+                'customerDataViewService',
+                'customerRelationType',
+                function ($scope, $state, util, dataSyncService, studentDataService, studentDataViewService, searchItems, mcsDialogService, storage, customerDataViewService, relationType) {
                     var vm = this;
-
+                    // 获取学员与员工关系
+                    vm.relationType = relationType;
                     // 配置数据表头
                     studentDataViewService.configStudentListHeaders(vm);
 
@@ -51,10 +55,37 @@
                         }
                     };
 
+                    //分配教师/咨询师/学管师
+                    vm.assign = function (item) {
+                        if (util.selectMultiRows(vm)) {
+                            switch (item.text) {
+                                case '分配咨询师':
+                                    customerDataViewService.assignStaffRelation(vm.data.rowsSelected, vm.relationType.consultant, vm);
+                                    break;
+                                case '分配学管师':
+                                    customerDataViewService.assignStaffRelation(vm.data.rowsSelected, vm.relationType.educator, vm);
+                                    break;
+                                case '分配教师':
+                                    mcsDialogService.create('app/customer/student/student-assignTeacher/student-assignTeacher.html', {
+                                        controller: 'assignTeacherController',
+                                        params: { customers: vm.data.rowsSelected[0] },
+                                        settings: { size: 'lg' }
+                                    });
+                                    break;
+                            }
+                        }
+                    };
+
                     vm.products = [
                         { text: '常规订购', route: 'ppts.purchaseProduct', click: vm.purchase },
                         { text: '插班订购', route: 'ppts.purchaseClassGroupList', click: vm.purchase },
                         { text: '买赠订购', route: 'ppts.purchaseProduct', click: vm.purchase }
+                    ];
+
+                    vm.relations = [
+                        { text: '分配咨询师', click: vm.assign },
+                        { text: '分配学管师', click: vm.assign },
+                        { text: '分配教师', click: vm.assign }
                     ];
 
                     // 新增跟进记录
@@ -98,20 +129,5 @@
                             $state.go('ppts.customervisit-batch', { prev: 'ppts.student' });
                         }
                     };
-
-                    //分配教师
-                    vm.assignTeacher = function () {
-                        if (vm.data.rowsSelected.length > 0) {
-                            mcsDialogService.create('app/customer/student/student-assignTeacher/student-assignTeacher.html', {
-                                controller: 'assignTeacherController',
-                                params: { customers: vm.data.rowsSelected },
-                                settings: { size: 'lg'}
-                            }).result.then(function (data) {
-
-                            }, function () {
-
-                            });
-                        }
-                    }
                 }]);
         });

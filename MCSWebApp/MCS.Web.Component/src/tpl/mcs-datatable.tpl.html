@@ -24,18 +24,18 @@
                     </label>
                 </td>
             </tr>
-            <tr ng-show="data.pager.totalCount==0">
-                <td class="center well well-sm red bigger-110" colspan="{{data.headers.length+1}}">
-                    没有查询到任何记录，请重新设置条件查询。
-                </td>
-            </tr>
-            <tr ng-if="data.pagable || data.pager.totalCount>0">
-                <td colspan="{{data.headers.length+1}}" class="mcs-padding-0">
-                    <div class="well well-sm mcs-panel-pager">
-                        <tm-pagination conf="data.pager" page-change="pageChange(data.pager.pageChange)"></tm-pagination>
-                    </div>
-                </td>
-            </tr>
         </tbody>
     </table>
+    <div ng-show="data.pager.totalCount==0">
+        <div class="center well well-sm red bigger-110">
+            没有查询到任何记录，请重新设置条件查询。
+        </div>
+    </div>
+    <div ng-if="data.pagable || data.pager.totalCount>0">
+        <div class="mcs-padding-0">
+            <div class="well well-sm mcs-panel-pager">
+                <tm-pagination conf="data.pager" page-change="pageChange(data.pager.pageChange)"></tm-pagination>
+            </div>
+        </div>
+    </div>
 </div>

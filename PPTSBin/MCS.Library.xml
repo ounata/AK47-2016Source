@@ -5489,9 +5489,23 @@
             </summary>
             <remarks>改属性只读。域的长名称如oa.hgzs.ain.cn。如果没有加入域，则返回空串</remarks>
         </member>
+        <member name="M:MCS.Library.Core.EnvironmentHelper.ReplaceVariablesInString(System.String)">
+            <summary>
+            替代字符串中的环境变量（先从注册表中查找，然后再从系统环境变量中查找
+            </summary>
+            <param name="filePath"></param>
+            <returns></returns>
+        </member>
         <member name="M:MCS.Library.Core.EnvironmentHelper.ReplaceEnvironmentVariablesInString(System.String)">
             <summary>
-            替代字符串中的环境变量
+            替代字符串中的环境变量（从系统环境变量获取值）
+            </summary>
+            <param name="filePath"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MCS.Library.Core.EnvironmentHelper.ReplaceRegistryVariablesInString(System.String)">
+            <summary>
+            替代字符串中的环境变量（从注册表中获取值）
             </summary>
             <param name="filePath"></param>
             <returns></returns>

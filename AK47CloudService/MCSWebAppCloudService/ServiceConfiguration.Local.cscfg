@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ServiceConfiguration serviceName="MCSWebAppCloudService" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="4" osVersion="*" schemaVersion="2015-04.2.6">
+  <Role name="MCSWebApp">
+    <Instances count="5" />
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.Enabled" value="true" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountUsername" value="jimzhang" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountEncryptedPassword" value="MIIBnQYJKoZIhvcNAQcDoIIBjjCCAYoCAQAxggFOMIIBSgIBADAyMB4xHDAaBgNVBAMME1dpbmRvd3MgQXp1cmUgVG9vbHMCEDC9gWUFEPyaRRwURUp0j/MwDQYJKoZIhvcNAQEBBQAEggEAi9+a5ow/EyH1aRNoEdBKeRt310V1K5L5kcz7mzjagfZ4kOG7qVSBkenLzI9qe6+x9dqcPi7jglxCzm95dHfyuXm82mSKhj2GqsVVBKrTDFdNMWHS6wU0TLJmoLVeVYCaS81QDvBhgyzj3JoGc28LgX4TC9x9BDFx7O/RAUG9AQnsxNVWESwVz78umgdOtNHTBsuAL15A+pxXPaGlxnuriXZhpJslbDmtc1q79lZyBteTQrGWNYB2Ti/bTBYBdiMXL8HkgI8HZK3MehU/bnssCLkR49gQzCEix3ImYpU++9ktXaQUCP8OmyhPVOTeRIMOdPzFpRlDnd5y0nya/134fDAzBgkqhkiG9w0BBwEwFAYIKoZIhvcNAwcECGY2SEEb44YNgBDZsW7G/ITw63xnJ9CCOiHp" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountExpiration" value="2017-05-15T23:59:59.0000000+08:00" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteForwarder.Enabled" value="true" />
+    </ConfigurationSettings>
+    <Certificates>
+      <Certificate name="Microsoft.WindowsAzure.Plugins.RemoteAccess.PasswordEncryption" thumbprint="4D6055FE0E8A1FE234B7C3BBA8889F4B0FC88534" thumbprintAlgorithm="sha1" />
+    </Certificates>
+  </Role>
+</ServiceConfiguration>

@@ -79,8 +79,8 @@
                 </a>
                 <b class="arrow"></b>
             </li>
-            <li ng-class="{'active': $state.includes('ppts.confirmdoor')}" ppts-functions="上门管理">
-                <a ui-sref="ppts.confirmdoor">
+            <li ng-class="{'active': $state.includes('ppts.customerverify')}" ppts-functions="上门管理">
+                <a ui-sref="ppts.customerverify">
                     <i class="menu-icon fa fa-caret-right"></i>上门管理
                 </a>
                 <b class="arrow"></b>
@@ -109,14 +109,8 @@
                 </a>
                 <b class="arrow"></b>
             </li>
-            <li ng-class="{'active': $state.includes('ppts.customer-feedbacks-list')}" ppts-functions="客户反馈管理">
-                <a ui-sref="ppts.customer-feedbacks-list">
-                    <i class="menu-icon fa fa-caret-right"></i>客户反馈
-                </a>
-                <b class="arrow"></b>
-            </li>
-            <li ng-class="{'active': $state.includes('ppts.feedback-list')}" ppts-functions="学大反馈管理">
-                <a ui-sref="ppts.feedback-list">
+            <li ng-class="{'active': $state.includes('ppts.feedback')}" ppts-functions="学大反馈管理">
+                <a ui-sref="ppts.feedback">
                     <i class="menu-icon fa fa-caret-right"></i>学大反馈
                 </a>
                 <b class="arrow"></b>
@@ -266,9 +260,9 @@
                 </a>
                 <b class="arrow"></b>
             </li>
-            <li ng-class="{'active': $state.includes('ppts.discount')}" ppts-functions="拓路表管理">
+            <li ng-class="{'active': $state.includes('ppts.discount')}" ppts-functions="折扣表管理">
                 <a ui-sref="ppts.discount">
-                    <i class="menu-icon fa fa-caret-right"></i>拓路表管理
+                    <i class="menu-icon fa fa-caret-right"></i>折扣表管理
                 </a>
                 <b class="arrow"></b>
             </li>
@@ -278,8 +272,8 @@
                 </a>
                 <b class="arrow"></b>
             </li>
-            <li ng-class="{'active': $state.includes('ppts.extragift')}" ppts-functions="买赠表管理">
-                <a ui-sref="ppts.extragift">
+            <li ng-class="{'active': $state.includes('ppts.present')}" ppts-functions="买赠表管理">
+                <a ui-sref="ppts.present">
                     <i class="menu-icon fa fa-caret-right"></i>买赠表管理
                 </a>
                 <b class="arrow"></b>
@@ -358,8 +352,9 @@
         {
             document.getElementById('sidebar').style.display = 'none';
             document.getElementById('mainContent').style.marginLeft = '0px';
-            document.getElementById('breadcrumbs').style.display = "none";
-            document.getElementById('pageContent').style.paddingTop = "0px";
+            document.getElementById('breadcrumbs').style.left = "0px";
+            document.getElementById('home').style.display = 'none';
+          
         }
     });
     

@@ -70,6 +70,7 @@
     <Compile Include="DataObjects\Vendor.cs" />
     <Compile Include="Dynamic\DynamicMemberAccessorTest.cs" />
     <Compile Include="Environment\IPCheckTest.cs" />
+    <Compile Include="Environment\RegistryTest.cs" />
     <Compile Include="Expressions\BuiltInFuncWrapper.cs" />
     <Compile Include="Caching\CacheNotifyDataMapTest.cs" />
     <Compile Include="CoreTest\DynamicFieldTest.cs" />

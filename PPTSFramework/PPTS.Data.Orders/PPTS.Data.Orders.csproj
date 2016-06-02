@@ -84,8 +84,8 @@
     <Compile Include="Adapters\AssetAdapter.cs" />
     <Compile Include="Adapters\AssignConditionAdapter.cs" />
     <Compile Include="Adapters\AssignsAdapter.cs" />
-    <Compile Include="Adapters\AssignAdapterBase.cs" />
     <Compile Include="Adapters\AssignsOperationLogAdapter.cs" />
+    <Compile Include="Adapters\AccompanyAssignsAdapter.cs" />
     <Compile Include="Adapters\DebookOrderAdapter.cs" />
     <Compile Include="Adapters\DebookOrderAdapterBase.cs" />
     <Compile Include="Adapters\DebookOrderItemAdapter.cs" />

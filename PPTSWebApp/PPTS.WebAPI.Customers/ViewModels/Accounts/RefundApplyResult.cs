@@ -40,16 +40,6 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
         }
 
         /// <summary>
-        /// 折扣信息
-        /// </summary>
-        [DataMember]
-        public DiscountModel Discount
-        {
-            set;
-            get;
-        }
-
-        /// <summary>
         /// 账户列表
         /// </summary>
         [DataMember]
@@ -85,8 +75,7 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
         {
             RefundApplyResult result = new RefundApplyResult();
             result.Customer = CustomerModel.Load(customerID, false);
-            result.Discount = DiscountModel.LoadByCampusID(result.Customer.CampusID);
-            result.Accounts = AccountModel.LoadByCustomerID(result.Customer.CustomerID, true);
+            result.Accounts = AccountModel.LoadByCustomerID(result.Customer.CustomerID, true, true);
             result.Apply = RefundApplyModel.LoadByCustomerID(result.Customer);
             result.Assert = Validate(result.Customer, user);
 

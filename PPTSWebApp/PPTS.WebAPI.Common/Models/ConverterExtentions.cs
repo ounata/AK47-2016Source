@@ -42,6 +42,19 @@ namespace PPTS.WebAPI.Common.Models
             return items;
         }
 
+        public static SelectionItemCollection ToSelectionItems(this IEnumerable<UserAndJob> objs)
+        {
+            SelectionItemCollection items = new SelectionItemCollection();
+
+            foreach (UserAndJob obj in objs)
+            {
+                if(!items.ContainsKey(obj.UserID))
+                    items.Add(obj.ToSelectionItem());
+            }
+
+            return items;
+        }
+
         public static SelectionItem ToSelectionItem(this BaseConstantEntity obj)
         {
             obj.NullCheck("obj");
@@ -51,6 +64,19 @@ namespace PPTS.WebAPI.Common.Models
             item.Key = obj.Key;
             item.ParentKey = obj.ParentKey;
             item.Value = obj.Value;
+
+            return item;
+        }
+
+        public static SelectionItem ToSelectionItem(this UserAndJob obj)
+        {
+            obj.NullCheck("obj");
+
+            SelectionItem item = new SelectionItem();
+
+            item.Key = obj.UserID;
+            item.Value = obj.UserName;
+            item.SelectItem = obj;
 
             return item;
         }

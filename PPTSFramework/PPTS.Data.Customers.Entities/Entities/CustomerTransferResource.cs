@@ -13,9 +13,9 @@ namespace PPTS.Data.Customers.Entities
     /// 客户划转资源表
     /// </summary>
     [Serializable]
-    [ORTableMapping("CustomerTransferResources")]
+    [ORTableMapping("CM.CustomerTransferResources")]
     [DataContract]
-    public class CustomerTransferResource
+    public class CustomerTransferResource : Common.Entities.IEntityWithCreator
     {
         public CustomerTransferResource()
         {
@@ -145,9 +145,9 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 转至校区ID
         /// </summary>
-        [ORFieldMapping("ToCampusID")]
+        [ORFieldMapping("ToOrgID")]
         [DataMember]
-        public string ToCampusID
+        public string ToOrgID
         {
             get;
             set;
@@ -156,9 +156,9 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 转至校区名称
         /// </summary>
-        [ORFieldMapping("ToCampusName")]
+        [ORFieldMapping("ToOrgName")]
         [DataMember]
-        public string ToCampusName
+        public string ToOrgName
         {
             get;
             set;
@@ -196,6 +196,8 @@ namespace PPTS.Data.Customers.Entities
             get;
             set;
         }
+
+      
     }
 
     [Serializable]

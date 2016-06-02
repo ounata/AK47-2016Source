@@ -77,11 +77,10 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
             }
             else
             {
-                AccountModel account = AccountModel.LoadCurrentByAccountID(this.BizCustomerID);
-                if (account != null)
-                {
-                    this.BuildOldBizAccount(account);
-                }
+                //如果转入方没有可充值的账户，则新建账户
+                AccountModel bizAccount = AccountModel.LoadChargableByCustomerID(this.BizCustomerID);
+                if (bizAccount != null)
+                    this.BuildOldBizAccount(bizAccount);
             }
         }
 
@@ -142,11 +141,9 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
         /// <summary>
         /// 根据学员ID获取缴费单模型
         /// </summary>
-        /// <param name="campusID">校区ID</param>
-        /// <param name="customerID">学员ID</param>
-        /// <param name="jobType">申请人岗位类型</param>
+        /// <param name="customer">学员</param>
         /// <returns></returns>
-        public static TransferApplyModel LoadByCustomerID(CustomerModel customer)
+        public static TransferApplyModel LoadByCustomer(CustomerModel customer)
         {
             TransferApplyModel model = new TransferApplyModel();
             model.ApplyID = Guid.NewGuid().ToString().ToUpper();

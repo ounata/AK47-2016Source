@@ -11,13 +11,14 @@ using System.Linq;
 using System.Web;
 using PPTS.Data.Common.Security;
 using MCS.Library.Principal;
+using PPTS.Data.Common;
 
 namespace PPTS.WebAPI.Customers.Executors
 {
     [DataExecutorDescription("学大反馈")]
     public class CustomerRepliesExecutor : PPTSEditCustomerExecutorBase<EditCustomerRepliesModel>
     {
-       
+
         public CustomerRepliesExecutor(EditCustomerRepliesModel model) : base(model, null)
         {
             model.CustomerId.NullCheck("model");
@@ -26,17 +27,37 @@ namespace PPTS.WebAPI.Customers.Executors
         protected override void PrepareData(DataExecutionContext<UserOperationLogCollection> context)
         {
             base.PrepareData(context);
-            var cDateTime= DateTime.Now;
+            var cDateTime = DateTime.Now;
             var customer = CustomerAdapter.Instance.Load(Model.CustomerId);
-            var parentRelation = CustomerParentRelationAdapter.Instance.Load(Model.CustomerId).Find(a=>a.IsPrimary==true);
+            var parentRelation = CustomerParentRelationAdapter.Instance.Load(Model.CustomerId).Find(a => a.IsPrimary == true);
             var parent = ParentAdapter.Instance.Load(parentRelation.ParentID);
-            var parentPhones = PhoneAdapter.Instance.LoadByOwnerID(parentRelation.ParentID).Find(a=>a.IsPrimary==true);
+            var parentPhones = PhoneAdapter.Instance.LoadByOwnerID(parentRelation.ParentID).Find(a => a.IsPrimary == true);
+            var currentjobType = DeluxeIdentity.CurrentUser.GetCurrentJob().JobType;
+            int replyObjectType = 0;
+            switch (currentjobType)
+            {
+                case JobTypeDefine.Consultant://咨询师--回复家长
+                    replyObjectType = (int)ReplyObject.Consultant;
+                    break;
+                case JobTypeDefine.Teacher://教师--回复家长
+                    replyObjectType = (int)ReplyObject.Teacher;
+                    break;
+                case JobTypeDefine.CampusDirector://校区总监--回复家长
+                    replyObjectType = (int)ReplyObject.Campus;
+                    break;
+            }
             foreach (CustomerReply item in Model.Items)
             {
+                //非学管师只能操作回复家长
+                if (currentjobType!= JobTypeDefine.Educator 
+                    && Convert.ToUInt32(item.ReplyObject) == (int)ReplyObject.WeekReply)
+                {
+                    continue;
+                }
                 item.CampusID = customer.CampusID;
                 item.CampusName = customer.CampusName;
                 item.CustomerName = customer.CustomerName;
-               
+
                 item.ReplyFrom = Convert.ToString((int)ReplyFrom.PPTSWEB);
                 item.Poster = Convert.ToString((int)Poster.XUEDA);
                 item.CreateTime = cDateTime;
@@ -45,15 +66,20 @@ namespace PPTS.WebAPI.Customers.Executors
                 item.ReplyID = UuidHelper.NewUuidString();
                 item.ReplyTime = cDateTime;
                 item.PhoneNumber = parentPhones.PhoneNumber;
-                item.CreatorID= DeluxeIdentity.CurrentUser.ID;
+                item.CreatorID = DeluxeIdentity.CurrentUser.ID;
                 item.CreatorName = DeluxeIdentity.CurrentUser.Name;
                 item.ReplierID = DeluxeIdentity.CurrentUser.ID;
                 item.ReplierJobID = DeluxeIdentity.CurrentUser.GetCurrentJob().ID;
                 item.ReplierName = DeluxeIdentity.CurrentUser.Name;
-                //item.ReplyObject = DeluxeIdentity.CurrentUser.GetCurrentJob().Name;
-                var organ = DeluxeIdentity.CurrentUser.GetCurrentJob().GetParentOrganizationByType(DepartmentType.Branch);
-                item.BranchID = null!= organ? organ.ID:null;
-                item.BranchName = null != organ ? organ.Name : null; ;
+
+                var currJob = DeluxeIdentity.CurrentUser.GetCurrentJob();
+                var organ = currJob.GetParentOrganizationByType(DepartmentType.Branch);
+                item.BranchID = null != organ ? organ.ID : null;
+                item.BranchName = null != organ ? organ.Name : null; 
+                if (0 != replyObjectType)//非学管师时
+                {
+                    item.ReplyObject = replyObjectType.ToString();
+                }
                 CustomerReplyAdapter.Instance.UpdateInContext(item);
             }
         }

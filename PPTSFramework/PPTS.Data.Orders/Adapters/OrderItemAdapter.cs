@@ -66,5 +66,28 @@ namespace PPTS.Data.Orders.Adapters
                 this.InnerInsertInContext(item, sqlContext, context, StringExtension.EmptyStringArray);
             }
         }
+
+
+        /// <summary>
+        /// 获取未结算的金额
+        /// </summary>
+        /// <param name="customerId"></param>
+        /// <returns></returns>
+        public decimal GetFrozenMoneyByCustomerId(string customerId,string accountId)
+        {
+            var whereBuilder = new WhereSqlClauseBuilder();
+
+            whereBuilder.AppendItem("a.orderid", "orderid","=",true);
+            whereBuilder.AppendItem("CustomerID", customerId);
+            whereBuilder.AppendItem("AccountID", accountId);
+
+            var sql = string.Format("select SUM( RealAmount*RealPrice ) from {0} as a where  exists( select * from {1} where OrderStatus in (0,2) and ProcessStatus=2 and {2})", 
+                GetTableName(),
+                OrdersAdapter.Instance.TableName,
+                whereBuilder.ToSqlString(TSqlBuilder.Instance));
+            var returnValue = DbHelper.RunSqlReturnScalar(sql, GetConnectionName());
+            
+           return returnValue is DBNull ?0:Convert.ToDecimal(returnValue);
+        }
     }
 }

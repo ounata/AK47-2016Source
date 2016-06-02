@@ -18,7 +18,7 @@ namespace PPTS.WebAPI.Common.Test
             MetadataController controller = new MetadataController();
             QueryMetadataParams queryParams = new QueryMetadataParams()
             {
-                Category = "C_CODE_ABBR_LOCATION",
+                Category = "c_codE_ABBR_LOCATION",
                 ParentKey = "0"
             };
             var items = controller.GetData(queryParams);

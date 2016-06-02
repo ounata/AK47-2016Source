@@ -1,0 +1,47 @@
+﻿<div class="portlet light bordered">
+    <div class="portlet-title">
+        <div class="caption">
+            <span class="caption-subject bold"><i class="ace-icon fa fa-plus"></i>  新增上门记录</span>
+            <span class="caption-helper">(<span class="required"> * </span>表示必填字段)</span>
+        </div>
+    </div>
+    <div class="portlet-body form">
+        <form class="form-horizontal" action="#" role="form" novalidate>
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <mcs-button category="save" click="vm.save()"></mcs-button>
+                        <mcs-button category="cancel" click="vm.cancel()"></mcs-button>
+                    </div>
+                </div>
+            </div>
+            <div class="form-body">
+                <h4 class="form-section"><i class="ace-icon fa fa-th"></i> 上门记录信息</h4>
+                <div class="row">
+                    <div class="form-group horizontal">
+                        <mcs-label required="true" text="潜在客户" css="col-sm-3" />
+                        <div class="col-sm-4">
+                            <ppts-select-customer model="vm.customer" required />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group horizontal">
+                        <mcs-label required="true" text="实际上门人数" css="col-md-3" />
+                        <div class="col-md-4">
+                            <ppts-select category="verifyPeople" model="vm.customerVerify.verifyPeoples" class="ppts-select-lg" required />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group horizontal">
+                        <mcs-label required="true" text="上门人员关系" css="col-md-3" />
+                        <div class="col-md-4">
+                            <ppts-select category="verifyRelation" model="vm.customerVerify.verifyRelations" class="ppts-select-lg" required />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

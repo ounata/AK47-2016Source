@@ -26,7 +26,7 @@ namespace PPTS.WebAPI.Customers.Executors
             CustomerTeacherRelationAdapter.Instance.InsertCollection(Model);
             foreach (var item in Model)
             {
-                CustomerTeacherAssignApplie ctaa = new CustomerTeacherAssignApplie() {
+                CustomerTeacherAssignApply ctaa = new CustomerTeacherAssignApply() {
                       ID= UuidHelper.NewUuidString(),
                       CustomerTeacherRelationID = item.ID,
                       CustomerID = item.CustomerID,
@@ -34,12 +34,11 @@ namespace PPTS.WebAPI.Customers.Executors
                       NewTeacherJobID = item.TeacherJobID,
                       NewTeacherName = item.TeacherName,
                       NewTeacherOACode = item.TeacherOACode,
-                      NewTeacherOrgID = item.TeacherJobOrgID,
-                      NewTeacherOrgName = item.TeacherJobOrgName,
-                      NewTeacherOrgShortName = item.TeacherJobOrgShortName
+                      NewTeacherJobOrgID = item.TeacherJobOrgID,
+                      NewTeacherJobOrgName = item.TeacherJobOrgName
                 };
                 ctaa.FillCreator();
-                CustomerTeacherAssignApplieAdapter.Instance.UpdateInContext(ctaa);
+                CustomerTeacherAssignApplyAdapter.Instance.UpdateInContext(ctaa);
             }
         }
     }

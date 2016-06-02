@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using PPTS.Data.Customers.Entities;
 using MCS.Library.Validation;
+using MCS.Library.Core;
 
 namespace PPTS.WebAPI.Customers.ViewModels.Feedback
 {
@@ -41,5 +42,35 @@ namespace PPTS.WebAPI.Customers.ViewModels.Feedback
     {
         XUEDA=1,
         CUSTOMER=2
+    }
+    public enum ReplyObject
+    {
+        /// <summary>
+        /// 咨询师
+        /// </summary>
+        
+        Consultant = 1,
+
+        /// <summary>
+        /// 学管师
+        /// </summary>
+        
+        Educator = 2,
+
+        /// <summary>
+        /// 教师
+        /// </summary>
+        
+        Teacher = 3,
+
+        /// <summary>
+        /// 校区
+        /// </summary>
+        
+        Campus = 4,
+        /// <summary>
+        /// 周反馈
+        /// </summary>
+        WeekReply=6
     }
 }

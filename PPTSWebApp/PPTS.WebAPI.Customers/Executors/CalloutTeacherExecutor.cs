@@ -13,9 +13,9 @@ using System.Web;
 namespace PPTS.WebAPI.Customers.Executors
 {
     [DataExecutorDescription("调出教师")]
-    public class CalloutTeacherExecutor : PPTSEditCustomerExecutorBase<CustomerTeacherAssignApplie>
+    public class CalloutTeacherExecutor : PPTSEditCustomerExecutorBase<CustomerTeacherAssignApply>
     {
-        public CalloutTeacherExecutor(CustomerTeacherAssignApplie Model)
+        public CalloutTeacherExecutor(CustomerTeacherAssignApply Model)
             : base(Model,null)
         {
            
@@ -30,7 +30,7 @@ namespace PPTS.WebAPI.Customers.Executors
             Model.ID = UuidHelper.NewUuidString();
             Model.CustomerTeacherRelationID = ctr.ID;
             Model.FillCreator();
-            CustomerTeacherAssignApplieAdapter.Instance.UpdateInContext(Model);
+            CustomerTeacherAssignApplyAdapter.Instance.UpdateInContext(Model);
         }
     }
 }

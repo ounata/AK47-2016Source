@@ -31,13 +31,19 @@
                     // 录入成绩
                     vm.add = function () {
                         if (util.selectOneRow(vm)) {
-                            $state.go('ppts.score-add', { id: vm.data.rowsSelected[0].customerID, prev: 'ppts.score' });
-                            //mcsDialogService.confirm({
-                            //    title: '确认',
-                            //    message: '因绩效统计需要，跨月不允许编辑，请准确录入'
-                            //}, function () {
-                            //    $state.go('ppts.score-add', { id: vm.data.rowsSelected[0].customerID });
-                            //});
+                            var transfer = function () {
+                                $state.go('ppts.score-add', { id: vm.data.rowsSelected[0].customerID, prev: 'ppts.score' });
+                            };
+                            if (vm.isLastDayOfMonth) {
+                                mcsDialogService.confirm({
+                                    title: '确认',
+                                    message: '因绩效统计需要，跨月不允许编辑，请准确录入'
+                                }).result.then(function () {
+                                    transfer();
+                                });
+                            } else {
+                                transfer();
+                            }
                         }
                     }
 
@@ -58,6 +64,11 @@
                     // 批量添加成绩
                     vm.batchAdd = function () {
                         $state.go('ppts.score-batch-add');
+                    };
+
+                    // 导出
+                    vm.export = function () {
+                        mcs.util.postMockForm('http://localhost/PPTSWebApp/PPTS.WebAPI.Customers/api/customerscores/exportallScores', vm.criteria);
                     };
 
                 }]);

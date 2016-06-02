@@ -19,7 +19,10 @@ namespace MCS.Library.SOA.DataObjects.Workflow
     {
         private string _ParamJsonValue = null;
         private string _Name = null;
+
+        [XElementFieldSerialize(IgnoreDeserializeError = true)]
         private object _Value = null;
+
         private WfSvcOperationParameterType _Type = WfSvcOperationParameterType.String;
 
         /// <summary>

@@ -27,12 +27,13 @@
                     <button class="btn btn-sm mcs-width-100 btn-white btn-bold btn-round" ng-click="vm.copyCourseClick()">复制课表</button>
                     <button class="btn btn-sm mcs-width-100 btn-white btn-bold btn-round" ng-disabled="!vm.selectedEvents.length" ng-click=" vm.resetCourseClick()" >调整课表</button>     
                     <button class="btn btn-sm mcs-width-100 btn-white btn-bold btn-round" ng-click="vm.gotoCourseList()" >列表视图</button>
-                    <button class="btn btn-sm mcs-width-100 btn-white btn-bold btn-round">打印课表</button>
+                    <button class="btn btn-sm mcs-width-100 btn-white btn-bold btn-round" ng-click="vm.print()">打印课表</button>
+                    <button class="btn btn-sm mcs-width-100 btn-white btn-bold btn-round" ng-click="vm.gotoAssignList()">返回</button>
                 </div>
                 <!-- /结束：排课计划.工具条 -->              
                 <!-- #开始：排课计划.日程表 -->
                 <div>
-                    <div ui-calendar="vm.uiConfig.calendar" calendar="courseCalendar" ng-model="vm.eventSources"></div>
+                    <div id="printArea" ui-calendar="vm.uiConfig.calendar" calendar="courseCalendar" ng-model="vm.eventSources"></div>
                 </div>
                 <!-- /结束：排课计划.日程表 -->
             </div><!-- /.col -->

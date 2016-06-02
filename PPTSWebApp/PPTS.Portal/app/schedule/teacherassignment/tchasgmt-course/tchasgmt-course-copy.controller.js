@@ -102,7 +102,11 @@
                     vm.watchLogOff = $scope.$watchCollection('vm.aCM', function (newValue, oldValue) {
                         if (vm.copyType == 0)
                             return;
-                        if (!newValue.srcDateStart || !newValue.srcDateEnd || !newValue.destDateStart || newValue.srcDateEnd <= newValue.srcDateStart || newValue.destDateStart <= newValue.srcDateEnd) {
+                        if (!newValue.srcDateStart || newValue.srcDateStart == 'Invalid Date'
+                            || !newValue.srcDateEnd || newValue.srcDateEnd == 'Invalid Date'
+                            || !newValue.destDateStart || newValue.destDateStart == 'Invalid Date'
+                            || newValue.srcDateEnd <= newValue.srcDateStart
+                            || newValue.destDateStart <= newValue.srcDateEnd) {
                             return;
                         }
                         var millTime = newValue.srcDateEnd.getTime() - newValue.srcDateStart.getTime();

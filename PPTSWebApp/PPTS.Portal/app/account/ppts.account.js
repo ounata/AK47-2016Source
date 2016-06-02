@@ -121,6 +121,15 @@
                 label: '转让审批',
             },
             dependencies: ['app/account/transfer/transfer-page/transfer-approve.controller']
+        }).loadRoute($stateProvider, {
+            name: 'ppts.accountReturn-edit',
+            url: '/account/return/edit/:id',
+            templateUrl: 'app/account/return/return-page/return-edit.html',
+            controller: 'accountReturnEditController',
+            //breadcrumb: {
+            //    label: '返还综合服务费',
+            //},
+            dependencies: ['app/account/return/return-page/return-edit.controller']
         });
     });
 

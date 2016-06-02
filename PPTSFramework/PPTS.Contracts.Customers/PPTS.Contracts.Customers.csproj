@@ -76,6 +76,8 @@
     <Compile Include="Models\CustomerCollectionQueryResult.cs" />
     <Compile Include="Models\CustomerQueryResult.cs" />
     <Compile Include="Operations\ICustomerQueryService.cs" />
+    <Compile Include="Operations\IAccountTransactionService.cs" />
+    <Compile Include="Operations\ICustomerUpdateService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,4 +1,5 @@
-﻿define([ppts.config.modules.schedule,
+﻿/*教师课表*/
+define([ppts.config.modules.schedule,
         ppts.config.dataServiceConfig.teacherCourseDataService],
         function (schedule) {
             schedule.registerController('tchCourseListController', [

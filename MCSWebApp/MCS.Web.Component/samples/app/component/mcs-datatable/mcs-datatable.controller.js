@@ -1,13 +1,33 @@
 ﻿(function() {
     angular.module('app.component').controller('MCSDatatableController', [
-        '$scope', '$q', '$timeout', 'printService',
-        function($scope, $q, $timeout, printService) {
+        '$scope', '$q', '$timeout', 'printService', '$http', 'excelImportService',
+        function($scope, $q, $timeout, printService, $http, excelImportService) {
             var vm = this;
 
             vm.reorder = function(field, direction) {
                 var a = direction;
 
             };
+
+            vm.importExcel = function() {
+                excelImportService.import({
+                    id: 2,
+                    name: 'tom',
+                    birthday: 29
+                });
+            };
+
+
+
+            vm.exportExcel = function() {
+
+                mcs.util.postMockForm('http://localhost/MCSWebApp/MCS.Web.API/api/Sample/ExportAllBooksPost', {
+
+                    name: 'tom',
+                    birthday: new Date(2011, 12, 23, 12, 14, 15, 33)
+
+                });
+            }
 
             vm.print = function() {
                 printService.print();

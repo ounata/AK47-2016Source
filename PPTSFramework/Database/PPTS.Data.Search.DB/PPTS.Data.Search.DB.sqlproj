@@ -23,7 +23,7 @@
     <SqlServerVerification>False</SqlServerVerification>
     <IncludeCompositeObjects>True</IncludeCompositeObjects>
     <TargetDatabaseSet>True</TargetDatabaseSet>
-    <DefaultSchema>MT</DefaultSchema>
+    <DefaultSchema>SM</DefaultSchema>
     <SccProjectName>SAK</SccProjectName>
     <SccProvider>SAK</SccProvider>
     <SccAuxPath>SAK</SccAuxPath>
@@ -67,10 +67,39 @@
     <Folder Include="SM" />
     <Folder Include="SM\Stored Procedures" />
     <Folder Include="SM\Tables" />
+    <Folder Include="MT" />
+    <Folder Include="MT\Tables" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Security\SM.sql" />
     <Build Include="SM\Tables\CustomerSearch.sql" />
+    <Build Include="SM\Tables\TeacherSearch.sql" />
+    <Build Include="MT\Tables\CourseOrgAuthorizations.sql" />
+    <Build Include="MT\Tables\CustomerOrgAuthorizations.sql" />
+    <Build Include="MT\Tables\CustomerRelationAuthorizations.sql" />
+    <Build Include="MT\Tables\OwnerRelationAuthorizations.sql" />
+    <Build Include="MT\Tables\RecordOrgAuthorizations.sql" />
+    <Build Include="Security\MT.sql" />
+    <Build Include="SM\Tables\ConsultStaffPerfDaySum.sql" />
+    <Build Include="SM\Tables\ConsultStaffPerfMonthSum.sql" />
+    <Build Include="SM\Tables\ConsultCampusPerfDaySum.sql" />
+    <Build Include="SM\Tables\ConsultCampusPerfMonthSum.sql" />
+    <Build Include="SM\Tables\ConsultBranchPerfDaySum.sql" />
+    <Build Include="SM\Tables\ConsultBranchPerfMonthSum.sql" />
+    <Build Include="SM\Tables\ConsultCountryPerfDaySum.sql" />
+    <Build Include="SM\Tables\ConsultCountryPerfMonthSum.sql" />
+    <Build Include="SM\Tables\ConsultStaffCrmDaySum.sql" />
+    <Build Include="SM\Tables\ConsultStaffCrmMonthSum.sql" />
+    <Build Include="SM\Tables\ConsultCampusCrmDaySum.sql" />
+    <Build Include="SM\Tables\ConsultCampusCrmMonthSum.sql" />
+    <Build Include="SM\Tables\ConsultBranchCrmDaySum.sql" />
+    <Build Include="SM\Tables\ConsultBranchCrmMonthSum.sql" />
+    <Build Include="SM\Tables\ConsultCountryCrmDaySum.sql" />
+    <Build Include="SM\Tables\ConsultCountryCrmMonthSum.sql" />
+    <Build Include="SM\Tables\OrgBranches.sql" />
+    <Build Include="SM\Tables\OrgRegions.sql" />
+    <Build Include="SM\Tables\OrgCampuses.sql" />
+    <Build Include="SM\Tables\OrgStaffJobs.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PPTS.Data.Search.DB.refactorlog" />
@@ -80,5 +109,6 @@
     <None Include="PPTS.Data.Search.Local.Dev.DB.publish.xml" />
     <None Include="PPTS.Data.Search.XueDa.Dev.DB.publish.xml" />
     <None Include="PPTS.Data.Search.XueDa.Dev.Test.DB.publish.xml" />
+    <None Include="PPTS.Data.Search.XueDa.Alpha.DB.publish.xml" />
   </ItemGroup>
 </Project>

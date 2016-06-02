@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCS.Web.API.Test", "MCS.Web.API.Test.csproj", "{11C22399-7A1A-4D99-B17F-DFAC7B6B2988}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A9962EDB-8271-4D6B-8513-BEF4000DC7B1} = {A9962EDB-8271-4D6B-8513-BEF4000DC7B1}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCS.Web.API", "..\..\MCSWebApp\MCS.Web.API\MCS.Web.API.csproj", "{397DCDC5-C05F-4A4B-B7F1-821414069940}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -38,12 +41,12 @@ Global
 		SccNumberOfProjects = 4
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://10.1.56.70:8080/tfs/pptsv2.0
-		SccProjectUniqueName0 = MCS.Web.API.Test.csproj
 		SccLocalPath0 = .
-		SccProjectUniqueName1 = ..\\..\\MCSWebApp\\MCS.Web.API\\MCS.Web.API.csproj
-		SccProjectName1 = ../../MCSWebApp/MCS.Web.API
-		SccLocalPath1 = ..\\..\\MCSWebApp\\MCS.Web.API
-		SccLocalPath2 = .
+		SccProjectUniqueName1 = MCS.Web.API.Test.csproj
+		SccLocalPath1 = .
+		SccProjectUniqueName2 = ..\\..\\MCSWebApp\\MCS.Web.API\\MCS.Web.API.csproj
+		SccProjectName2 = ../../MCSWebApp/MCS.Web.API
+		SccLocalPath2 = ..\\..\\MCSWebApp\\MCS.Web.API
 		SccProjectUniqueName3 = ..\\..\\Framework\\MCS.Web.MVC.Library\\MCS.Web.MVC.Library.csproj
 		SccProjectName3 = ../../Framework/MCS.Web.MVC.Library
 		SccLocalPath3 = ..\\..\\Framework\\MCS.Web.MVC.Library

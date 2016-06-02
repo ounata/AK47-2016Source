@@ -1,0 +1,50 @@
+﻿<form class="form-horizontal" role="form">
+    <div class="widget-box">
+        <div class="widget-header">
+            <h4>
+                查看折扣表记录
+                <small>
+                    <i class="icon-double-angle-right"></i>
+                    (<span class="required"> * </span>表示必填字段)
+                </small>
+            </h4>
+        </div>
+        <div class="widget-body">
+            <div class="widget-main no-padding">
+                <div class="clearfix form-actions mcs-form-actions">
+                    <div class="col-md-offset-3 col-md-9">
+                        <!--<mcs-button type="submit" category="edit" text="编辑" ng-show="vm.criteria.discountStatus == 3" click="vm.edit()"></mcs-button>
+                        <mcs-button type="submit" category="approve" text="提交审批" ng-show="vm.criteria.discountStatus == 3" click="vm.approve()"></mcs-button>
+                        <mcs-button category="cancel" text="返回" click="$state.go('ppts.discount')"></mcs-button>-->
+                    </div>
+                </div>
+                <div class="profile-user-info profile-user-info-striped mcs-user-profile">
+                    <div class="profile-info-row">
+                        <div class="profile-info-name"> 启用日期 </div>
+                        <div class="profile-info-value">
+                            <span>{{vm.criteria.startDate | date:"yyyy-MM-dd"}}</span>
+                        </div>
+                    </div>
+                    <div class="profile-info-row">
+                        <div class="profile-info-name"> 选择校区 </div>
+                        <div class="profile-info-value">
+                            <span>{{vm.criteria.campusNames}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6 col-md-6">
+                        <div style="text-align:center; background-color:#ccc; padding:10px 0 10px 0; font-size:14px;">
+                            充值折扣关系
+                        </div>
+                        <mcs-datatable data="vm.relationData" />
+                    </div>
+                    <div class="col-sm-6 col-md-6">
+                        <div style="text-align:center; background-color:#ccc; padding:10px 0 10px 0; font-size:14px;">校区及使用状态</div>
+                        <mcs-datatable data="vm.campusData" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

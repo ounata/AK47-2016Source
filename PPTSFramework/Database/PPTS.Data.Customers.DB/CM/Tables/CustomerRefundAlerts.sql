@@ -10,6 +10,7 @@
     [OperatorJobID] NVARCHAR(36) NULL, 
     [OperatorJobName] NVARCHAR(64) NULL, 
     [CustomerID] NVARCHAR(32) NULL, 
+	[TenantCode] NVARCHAR(36) NULL, 
     CONSTRAINT [PK_CustomerRefundAlerts] PRIMARY KEY NONCLUSTERED ([AlertID])
 )
 

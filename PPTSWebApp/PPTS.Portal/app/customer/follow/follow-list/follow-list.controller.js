@@ -8,8 +8,6 @@
                     // 配置跟列表数据表头
                     followDataViewService.configFollowListHeaders(vm, followListDataHeader);
 
-
-
                     // 页面初始化加载或重新搜索时查询
                     vm.search = function () {
                         followDataViewService.initFollowList(vm, function () {

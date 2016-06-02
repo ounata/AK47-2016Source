@@ -8,6 +8,7 @@
 // 1.0		    沈峥	    20070430		创建
 // -------------------------------------------------
 #endregion
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -65,6 +66,8 @@ namespace MCS.Library.Core
     /// </remarks>
     public static class EnvironmentHelper
     {
+        private const string RegistryRoot = "SOFTWARE\\AK47\\Variables";
+
         #region Private field
 
         private static string shortDomainName;
@@ -234,7 +237,20 @@ namespace MCS.Library.Core
         }
 
         /// <summary>
-        /// 替代字符串中的环境变量
+        /// 替代字符串中的环境变量（先从注册表中查找，然后再从系统环境变量中查找
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        public static string ReplaceVariablesInString(string filePath)
+        {
+            string result = ExceptionHelper.DoSilentFunc(() => ReplaceRegistryVariablesInString(filePath), filePath);
+            result = ExceptionHelper.DoSilentFunc(() => ReplaceEnvironmentVariablesInString(result), result);
+
+            return result;
+        }
+
+        /// <summary>
+        /// 替代字符串中的环境变量（从系统环境变量获取值）
         /// </summary>
         /// <param name="filePath"></param>
         /// <returns></returns>
@@ -242,16 +258,45 @@ namespace MCS.Library.Core
         {
             string result = filePath;
 
-            Regex r = new Regex(@"%\S+?%");
-
-            foreach (Match m in r.Matches(filePath))
+            EnumerationVariables(filePath, (sourceValue, variableName) =>
             {
-                string variableName = m.Value.Trim('%');
                 string variableValue = Environment.GetEnvironmentVariable(variableName);
 
                 if (variableValue != null)
-                    result = result.Replace(m.Value, variableValue);
-            }
+                    result = result.Replace(sourceValue, variableValue);
+
+                return true;
+            });
+
+            return result;
+        }
+
+        /// <summary>
+        /// 替代字符串中的环境变量（从注册表中获取值）
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        public static string ReplaceRegistryVariablesInString(string filePath)
+        {
+            string result = filePath;
+
+            EnumerationVariables(filePath, (sourceValue, variableName) =>
+            {
+                using (RegistryKey subKey = Registry.LocalMachine.OpenSubKey(RegistryRoot))
+                {
+                    object regValue = subKey.GetValue(variableName, string.Empty);
+
+                    if (regValue is string)
+                    {
+                        string variableValue = (string)regValue;
+
+                        if (variableValue.IsNotEmpty())
+                            result = result.Replace(sourceValue, variableValue);
+                    }
+                }
+
+                return true;
+            });
 
             return result;
         }
@@ -304,6 +349,21 @@ namespace MCS.Library.Core
         #endregion Public
 
         #region Private helper method
+        private static void EnumerationVariables(string filePath, Func<string, string, bool> func)
+        {
+            func.NullCheck("func");
+
+            Regex r = new Regex(@"%\S+?%");
+
+            foreach (Match m in r.Matches(filePath))
+            {
+                string variableName = m.Value.Trim('%');
+
+                if (func(m.Value, variableName) == false)
+                    break;
+            }
+        }
+
         private static void WriteProcessInfo(TextWriter writer)
         {
             try

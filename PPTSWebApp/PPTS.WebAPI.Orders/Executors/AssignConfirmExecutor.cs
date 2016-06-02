@@ -28,7 +28,7 @@ namespace PPTS.WebAPI.Orders.Executors
         {
             ///异常状态的课时可以确认
             ///未过结账日可以确认上月以及本月异常课时，否则只能确认本月异常课时
-            ///确认后，资产表中已排课时数量减对应数量，已上数量增加对应数量。
+            ///确认后，资产表中已排课时数量减对应数量，已上数量增加对应数量  剩余课时数量减对应数量
             base.PrepareData(context);
 
             if (this.Model.Count == 0)
@@ -58,8 +58,9 @@ namespace PPTS.WebAPI.Orders.Executors
                 Asset at = GenericAssetAdapter<Asset, AssetCollection>.Instance.Load(g.Key);
                 if (at == null)
                     continue;
-                //资产表中已排课时数量减对应数量，已上数量增加对应数量
+                //资产表中已排课时数量/剩余课时数量 减对应数量，已上数量增加对应数量
                 at.AssignedAmount -= assignedAmount;
+                at.Amount -= assignedAmount;
                 at.ConfirmedAmount += assignedAmount;
                 aIDs = assigns.Select(p => p.AssignID).ToList();
                 AssignsAdapter.Instance.UpdateAssignStatusInContext(aIDs, this.Model[0].ModifierID, this.Model[0].ModifierName,Data.Orders.AssignStatusDefine.Finished);

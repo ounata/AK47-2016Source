@@ -14,7 +14,7 @@ namespace PPTS.Data.Customers.Entities
     /// 家长反馈表
     /// </summary>
     [Serializable]
-    [ORTableMapping("CustomerFeedbacks")]
+    [ORTableMapping("CM.CustomerFeedbacks")]
     [DataContract]
     public class CustomerFeedback
     {

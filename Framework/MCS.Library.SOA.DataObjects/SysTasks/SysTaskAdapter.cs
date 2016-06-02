@@ -42,7 +42,7 @@ namespace MCS.Library.SOA.DataObjects
         }
 
         /// <summary>
-        /// 移动到已经完成系统任务中
+        /// 移动到已经完成系统任务中。如果已经有了已经存在任务，则先删除后插入已完成的任务。最后是删除待完成的任务
         /// </summary>
         /// <param name="taskID">被移动的任务的ID</param>
         /// <param name="status">重置任务的状态</param>

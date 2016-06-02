@@ -9,6 +9,7 @@
         <div class="mcs-panel-toolbar col-sm-offset-3">
             <mcs-button category="edit" ppts-job-functions="编辑客服信息" ng-hide="vm.customerService.serviceStatus == 2 || vm.customerService.handlerJobType !=''" click="$state.go('ppts.custservice-edit',{id:vm.customerService.serviceID})"></mcs-button>
             <mcs-button icon="female" css="btn-success" text="转下一受理人" ppts-job-functions="转下一受理人" ng-hide="vm.customerService.serviceStatus == 2 || vm.customerService.handlerJobType !=''" click="$state.go('ppts.custservice-nextProcess',{id:vm.customerService.serviceID})"></mcs-button>
+            <mcs-button category="submit" text="解决受理" click="vm.overProcess()"></mcs-button>
             <mcs-button category="submit" text="结束流程" click="vm.overProcess()"></mcs-button>
         </div>
     </div>

@@ -61,6 +61,10 @@
             resource.post({ operation: 'getPagedScoresForStudent' }, criteria, success, error);
         }
 
+        resource.exportAllScores = function (criteria, success, error) {
+            resource.post({ operation: 'exportAllScores' }, criteria, success, error);
+        }
+
         return resource;
     }]);
 
@@ -82,12 +86,6 @@
         rowsSelected: [],
         keyFields: ['itemID', 'scoreID', 'customerID'],
         headers: [{
-            field: "customerID",
-            name: "大区"
-        }, {
-            field: "customerID",
-            name: "分公司"
-        }, {
             field: "campusName",
             name: "校区"
         }, {
@@ -116,8 +114,7 @@
         }, {
             field: "examineMonth",
             name: "考试月份",
-            // template: '<span>{{ row.examineMonth | examMonth }}</span>'
-            template: '<span>{{ row.examineMonth }}</span>'
+            template: '<span>{{ row.examineMonth | examMonth }}</span>'
         }, {
             field: "subject",
             name: "科目",
@@ -158,7 +155,7 @@
             field: "constantStaffName",
             name: "咨询师"
         }, {
-            field: "studentType",
+            field: "customerStatus",
             name: "当前状态"
         }, {
             field: "studentType",
@@ -179,7 +176,7 @@
             totalCount: -1
         },
         orderBy: [{
-            dataField: 'CustomerScores.CreateTime', sortDirection: 1
+            dataField: 'CustomerScores.modifyTime', sortDirection: 1
         }]
     });
 
@@ -191,22 +188,22 @@
         }, {
             field: "teacherName",
             name: "任课教师",
-            template: '<span ng-if="row.canEdit"><ppts-select category="teacher" filter="{{row.subject}}" prop="subjectMemo" model="row.teacherID" ng-show="row.subject != \'60\'" async="false" custom-style="width:150px;"/></span>'
+            template: '<span ng-if="row.canEdit"><ppts-select category="scoreTeacher" filter="{{row.subject}}" prop="subject" model="row.teacherID" value="row.teacherName" ng-show="row.subject != \'60\'" callback=" row.teacherOrgID=\'\';row.teacherOrgName=\'\'; " async="false" custom-style="width:150px;"/></span>'
                     + '<span ng-if="!row.canEdit">{{row.teacherName}}</span>'
                     + '<small><span ng-show="row.subject == \'60\'">总得分={{vm.totalRealScore()}}</span><br /><span ng-show="row.subject == \'60\'">总卷面分={{vm.totalPaperScore()}}</span></small>'
-        }, /*{
+        },{
             field: "jobOrgShortName",
             name: "学科组",
-            template: '<span ng-if="row.canEdit"><ppts-select category="teacher" filter="{{row.teacherID}}" prop="teacherID" model="row.jobOrgShortName" ng-show="row.subject != \'60\'" async="false" style="width:150px;"/></span>'
-                    + '<span ng-if="!row.canEdit">{{row.jobOrgShortName}}</span>'
-        },*/ {
+            template: '<span ng-if="row.canEdit"><ppts-select category="scoreTeacherOrgName" filter="{{row.teacherID}}" prop="teacherID" show-all="false" model="row.teacherOrgID" value="row.teacherOrgName" ng-show="row.subject != \'60\'" async="false" style="width:150px;"/></span>'
+                    + '<span ng-if="!row.canEdit">{{row.teacherOrgName}}</span>'
+        }, {
             field: 'realScore',
             name: '得分',
             template: '<span ng-if="row.canEdit"><input type="text" ng-model="row.realScore" onafterpaste="mcs.util.limit(this)" onkeyup="mcs.util.limit(this)" class="mcs-input-small"/></span>'
                     + '<span ng-if="!row.canEdit">'
                         + '<span ng-if="row.subject ==\'60\'">'
-                            + '<span ng-if="vm.canEidt_totalScore"><input type="text" ng-model="row.realScore" onafterpaste="mcs.util.limit(this)" onkeyup="mcs.util.limit(this)" class="mcs-input-small"/></span>'
-                            + '<span ng-if="!vm.canEidt_totalScore">{{row.realScore}}</span>'
+                            + '<span ng-if="row.canEidt_totalScore"><input type="text" ng-model="row.realScore" onafterpaste="mcs.util.limit(this)" onkeyup="mcs.util.limit(this)" class="mcs-input-small"/></span>'
+                            + '<span ng-if="!row.canEidt_totalScore">{{row.realScore}}</span>'
                         + '</span>'
                         + '<span ng-if="row.subject !=\'60\'">{{row.realScore}}</span>'
                     + '</span>'
@@ -216,8 +213,8 @@
             template: '<span ng-if="row.canEdit"><input type="text" ng-model="row.paperScore" onafterpaste="mcs.util.limit(this)" onkeyup="mcs.util.limit(this)" class="mcs-input-small"/></span>'
                     + '<span ng-if="!row.canEdit">'
                         + '<span ng-if="row.subject ==\'60\'">'
-                            + '<span ng-if="vm.canEidt_totalScore"><input type="text" ng-model="row.paperScore" onafterpaste="mcs.util.limit(this)" onkeyup="mcs.util.limit(this)" class="mcs-input-small"/></span>'
-                            + '<span ng-if="!vm.canEidt_totalScore">{{row.paperScore}}</span>'
+                            + '<span ng-if="row.canEidt_totalScore"><input type="text" ng-model="row.paperScore" onafterpaste="mcs.util.limit(this)" onkeyup="mcs.util.limit(this)" class="mcs-input-small"/></span>'
+                            + '<span ng-if="!row.canEidt_totalScore">{{row.paperScore}}</span>'
                         + '</span>'
                         + '<span ng-if="row.subject !=\'60\'">{{row.paperScore}}</span>'
                     + '</span>'
@@ -246,7 +243,7 @@
             name: '是否在学大辅导',
             template: '<span ng-if="row.canEdit">'
                         + '<span ng-if="row.subject !=\'60\'"><ppts-select category="ifElse" model="row.isStudyHere" async="false" custom-style="width:150px;"/></span>'
-                        + '<span ng-if="row.subject ==\'60\'"><input type="text" ng-model="vm.score.classPeoples | normalize" placeholder="班级人数"/></span>'
+                        + '<span ng-if="row.subject ==\'60\'"><input type="text" ng-model="vm.score.classPeoples | normalize" placeholder="班级人数" onafterpaste="mcs.util.limit(this)" onkeyup="mcs.util.limit(this)"/></span>'
                     + '</span>'
                     + '<span ng-if="!row.canEdit">'
                         + '<span ng-if="row.subject !=\'60\'">{{row.isStudyHere | ifElse}}</span>'
@@ -268,6 +265,9 @@
             field: "teacherName",
             name: "任课教师"
         }, {
+            field: "teacherOrgName",
+            name: "学科组"
+        }, {
             field: 'realScore',
             name: '得分'
         }, {
@@ -282,6 +282,10 @@
         }, {
             field: 'gradeRank',
             name: '年级名次'
+        }, {
+            field: 'scoreChangeType',
+            name: '成绩升降',
+            template: '<span>{{ row.scoreChangeType | scoreChangeType }}</span>'
         }, {
             field: 'satisficing',
             name: '家长满意度',
@@ -321,6 +325,7 @@
             service.initCustomerScoresList = function (vm, callback) {
                 dataSyncService.initCriteria(vm);
                 scoreDataService.getAllScores(vm.criteria, function (result) {
+                    vm.isLastDayOfMonth = result.isLastDayOfMonth;
                     vm.data.rows = result.queryResult.pagedData;
                     dataSyncService.injectDictData({
                         c_codE_ABBR_Score_Satisficing: [{ key: '1', value: '对成绩满意' }, { key: '0', value: '对成绩不满意' }]
@@ -331,6 +336,23 @@
                         callback();
                     }
                 });
+            };
+
+            service.handleTeachers = function () {
+                var teachers = ppts.dict[ppts.config.dictMappingConfig.scoreTeacher];
+                var result = [];
+                for (var i in teachers) {
+                    var flag = false;
+                    for (var j in result) {
+                        if (teachers[i].key == result[j].key) {
+                            flag = true;
+                            break;
+                        }
+                    }
+                    if (!flag)
+                        result.push(teachers[i]);
+                }
+                ppts.dict[ppts.config.dictMappingConfig.scoreTeacher] = result;
             };
 
             // 考试年级添加parentKey
@@ -377,7 +399,7 @@
                     if (mcs.util.containsElement(examSubject[index].parentKey, studyStage)) {
                         var subject = examSubject[index];
                         if (vm.isTeacher) {
-                            if (mcs.util.containsElement(vm.teachers[0].subjectMemo, subject.key)) {
+                            if (vm.teachers[0].subject == subject.key) {
                                 subject.sortNo = index;
                                 subjects.push(subject);
                                 break;
@@ -394,11 +416,11 @@
             };
 
             var addRow = function (vm) {
-                for (var index in vm.subjects) { 
+                for (var index in vm.subjects) {
                     vm.data.rows.push({
-                            subject: vm.subjects[index].key,
-                            sortNo: vm.subjects[index].sortNo,
-                            canEdit: true
+                        subject: vm.subjects[index].key,
+                        sortNo: vm.subjects[index].sortNo,
+                        canEdit: true
                     });
                 }
             };
@@ -409,7 +431,7 @@
                 for (var index in vm.scoreItems) {
                     item = vm.scoreItems[index];
                     item.canEdit = true;
-                    if (item.createTime.getMonth() < new Date().getMonth() || item.createTime > vm.closingAccountDate) {
+                    if (item.createTime.getMonth() < new Date().getMonth() /*item.createTime > vm.closingAccountDate*/ ) {
                         item.canEdit = false;
                     }
                 }

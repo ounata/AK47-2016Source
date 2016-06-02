@@ -119,7 +119,7 @@ angular.module('app', [
 
         .state('validation', {
                 url: '/validation',
-                templateUrl: 'app/component/mcs-validation/main.html',
+                templateUrl: 'app/component/mcs-validation/main-new.html',
                 controller: 'MCSValidationController',
                 controllerAs: 'vm'
             })

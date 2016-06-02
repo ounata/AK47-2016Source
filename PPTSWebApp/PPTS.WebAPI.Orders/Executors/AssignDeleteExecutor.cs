@@ -40,11 +40,12 @@ namespace PPTS.WebAPI.Orders.Executors
             IList<string> aIDs = new List<string>();
 
             //判断结账日接口调用，过了为true,没有过false
-            bool closingDate = ValidateClosingDate(DateTime.Now.Month);
+            PPTS.Data.Common.ConfigArgs ca = new Data.Common.ConfigArgs();
             foreach (var v in this.Model)
             {
-                if ((v.AssignStatus != Data.Orders.AssignStatusDefine.Finished || v.StartTime.Month < DateTime.Now.Month && closingDate))
+                if ((v.AssignStatus != Data.Orders.AssignStatusDefine.Finished || ca.IsClosedToAcccount(v.StartTime)))
                     continue;
+
                 aIDs.Add(v.AssignID);
             }
             if (aIDs.Count() == 0)
@@ -66,11 +67,6 @@ namespace PPTS.WebAPI.Orders.Executors
                 AssignsAdapter.Instance.UpdateAssignStatusInContext(aIDs, this.Model[0].ModifierID, this.Model[0].ModifierName, Data.Orders.AssignStatusDefine.Invalid);
                 GenericAssetAdapter<Asset, AssetCollection>.Instance.UpdateInContext(at);
             }
-        }
-
-        private bool ValidateClosingDate(int month)
-        {
-            return false;
         }
 
         protected override void ExecuteNonQuerySqlInContext(DbContext dbContext)

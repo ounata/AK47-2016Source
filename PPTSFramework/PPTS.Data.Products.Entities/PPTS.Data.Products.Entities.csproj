@@ -58,11 +58,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\DiscountPermissionView.cs" />
     <Compile Include="Entities\CategoryCatalog.cs" />
     <Compile Include="Entities\Discount.cs" />
     <Compile Include="Entities\DiscountItem.cs" />
     <Compile Include="Entities\DiscountPermission.cs" />
-    <Compile Include="Entities\DiscountPermissionView.cs" />
+    <Compile Include="Entities\DiscountPermissionsApply.cs" />
     <Compile Include="Entities\Enumerations.cs" />
     <Compile Include="Entities\Expense.cs" />
     <Compile Include="Entities\ExpensePermission.cs" />
@@ -72,6 +73,8 @@
     <Compile Include="Entities\Present.cs" />
     <Compile Include="Entities\PresentItem.cs" />
     <Compile Include="Entities\PresentPermission.cs" />
+    <Compile Include="Entities\PresentPermissionsApply.cs" />
+    <Compile Include="Entities\PresentPermissionView.cs" />
     <Compile Include="Entities\Product.cs" />
     <Compile Include="Entities\ProductExOfCourse.cs" />
     <Compile Include="Entities\ProductPermission.cs" />

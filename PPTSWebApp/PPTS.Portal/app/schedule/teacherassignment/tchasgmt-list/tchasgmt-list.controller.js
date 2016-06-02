@@ -1,4 +1,5 @@
-﻿define([ppts.config.modules.schedule,
+﻿/*教师列表*/
+define([ppts.config.modules.schedule,
         ppts.config.dataServiceConfig.teacherAssignmentDataService],
         function (schedule) {
             schedule.registerController('tchAsgmtListController', [
@@ -12,8 +13,6 @@
                     vm.criteria.gender = '';
                     vm.criteria.teacherName = '';
                    
-                    
-
                     vm.data = {
                         selection: 'radio',
                         rowsSelected: [],
@@ -21,8 +20,7 @@
                         headers: [{
                             field: "teacherName",
                             name: "教师姓名",
-                            template: '<span>{{row.teacherName}}</span>',
-                            sortable: true
+                            template: '<span>{{row.teacherName}}</span>'
                         }, {
                             field: "teacherCode",
                             name: "员工编号",
@@ -56,7 +54,7 @@
                         }],
                         pager: {
                             pageIndex: 1,
-                            pageSize: 10,
+                            pageSize: 20,
                             totalCount: -1,
                             pageChange: function () {
                                 dataSyncService.initCriteria(vm);

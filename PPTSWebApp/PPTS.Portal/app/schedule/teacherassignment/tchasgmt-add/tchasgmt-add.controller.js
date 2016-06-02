@@ -4,13 +4,37 @@
                '$scope', '$uibModalInstance', '$state', '$stateParams', '$filter', 'dataSyncService', 'teacherAssignmentDataService', 'mcsDialogService',
                 function ($scope, $uibModalInstance, $state, $stateParams, $filter, dataSyncService, teacherAssignmentDataService, mcsDialogService) {
                     var vm = this;
-                    //存储时间
+                    /*存储时间*/
                     vm.beginDate = ''; vm.beginHour = ''; vm.beginMinute = ''; vm.endHour = ''; vm.endMinute = '';
                     vm.assignDuration = 0;
                     vm.showStudentSelect = false; vm.showOrderSelect = false; vm.showGradeSelect = false; vm.showSubjectSelect = false;
+
                     vm.CID = $stateParams.cID;
                     vm.tji = $stateParams.tji;
-                    // 页面初始化加载或重新搜索时查询
+
+                    /*格式化数字*/
+                    vm.getDoubleStr = function (curValue) {
+                        if (parseInt(curValue) < 10)
+                            return '0' + curValue;
+                        return curValue;
+                    };
+
+                    /*小时*/
+                    vm.courseHour = new Array();
+                    for (i = 6; i <= 23; i += 1) {
+                        var t = vm.getDoubleStr(i)
+                        vm.courseHour.push({ key: t, value: t })
+                    };
+
+                    /*分钟*/
+                    vm.courseMinute = new Array();
+                    for (i = 0; i <= 55; i += 5) {
+                        var t = vm.getDoubleStr(i)
+                        vm.courseMinute.push({ key: t, value: t })
+                    };
+
+
+                    /*页面初始化加载或重新搜索时查询*/
                     vm.init = function () {
                         vm.criteria = vm.criteria || {};
                         vm.criteria.teacherID = $stateParams.cID;
@@ -21,6 +45,8 @@
                             dataSyncService.injectDictData(mcs.util.mapping(vm.result.assignCondition, { key: 'conditionID', value: 'conditionName4Teacher' }, 'AssignCondition'));
                             dataSyncService.injectDictData(mcs.util.mapping(vm.result.student.student, { key: 'key', value: 'value' }, 'Student'));
                             dataSyncService.injectDictData(mcs.util.mapping(vm.result.student.grade, { key: 'key', value: 'value' }, 'SubGrade'));
+                            dataSyncService.injectDictData(mcs.util.mapping(vm.courseHour, { key: 'key', value: 'value' }, 'Hour'));
+                            dataSyncService.injectDictData(mcs.util.mapping(vm.courseMinute, { key: 'key', value: 'value' }, 'Minute'));
                             dataSyncService.injectPageDict(['ifElse']);
                             $scope.$broadcast('dictionaryReady');
                         });
@@ -28,15 +54,29 @@
 
                     vm.init();
 
+                    /*
                     vm.filedName = ['assetID', 'assetCode', 'assetName', 'customerID', 'customerCode', 'customerName', 'productID', 'productCode', 'productName',
-                        'teacherID', 'teacherName', 'teacherJobID', 'consultantID', 'consultantJobID', 'consultantName', 'educatorID', 'educatorJobID', 'educatorName',
-                        'grade', 'gradeName', 'subject', 'subjectName', 'campusID', 'campusName','OrderNo'];
+                        'consultantID', 'consultantJobID', 'consultantName', 'educatorID', 'educatorJobID', 'educatorName', 'grade', 'gradeName', 'subject'
+                        , 'subjectName', 'accountID']; // 'campusID', 'campusName'  'teacherID', 'teacherName', 'teacherJobID',
+                    vm.filedNameAC = ['conditionID', 'conditionName4Customer', 'conditionName4Teacher', 'assetID', 'assetCode', 'productID', 'productCode'
+                        , 'productName', 'grade', 'gradeName', 'subject', 'subjectName', 'courseLevel', 'courseLevelName', 'lessonDuration', 'lessonDurationValue'
+                        , 'accountID', 'customerID', 'customerCode', 'customerName']; // 'teacherID', 'teacherName', 'teacherJobID',
+                        */
 
-                    vm.filedNameAC = ['conditionID', 'conditionName4Customer', 'conditionName4Teacher', 'customerID', 'assetID', 'assetCode'
-                        , 'productID', 'productCode', 'productName', 'grade', 'gradeName', 'subject', 'subjectName',
-                        'teacherID', 'teacherName', 'teacherJobID', 'courseLevel', 'courseLevelName', 'lessonDuration', 'lessonDurationValue'];
+                    vm.shareFieldName = ['assetID', 'assetCode', 'customerID', 'customerCode', 'customerName', 'productID', 'productCode', 'productName', 'accountID'
+                   , 'grade', 'gradeName', 'subject', 'subjectName'];
 
-                    ////选择排课条件
+                    vm.initAssignFieldFromAsset = ['assetID', 'assetCode', 'customerID', 'customerCode', 'customerName', 'productID', 'productCode', 'productName', 'accountID'
+                , 'grade', 'gradeName', 'subject', 'subjectName', 'courseLevel', 'courseLevelName', 'lessonDuration', 'lessonDurationValue'];
+
+                    vm.fieldToAssign = [];
+
+                    vm.fieldToAC = ['conditionID', 'conditionName4Customer', 'conditionName4Teacher', 'courseLevel', 'courseLevelName', 'lessonDuration'
+                        , 'lessonDurationValue'];
+
+                    vm.subjectInfo = ['subject', 'subjectName'];
+
+                    /*选择排课条件*/
                     vm.selectAssignConditionClick = function (item) {
                         //不等-1，选择了一个已经存在的排课条件
                         if (item.key != '-1') {
@@ -51,42 +91,46 @@
                             teacherAssignmentDataService.getAssetByAssetID(data, function (retValue) {
                                 //将资产对象的字段值赋值给排课对象
                                 var ae = retValue.result;
-                                for (var fn in vm.filedName) {
-                                    vm.result.assign[vm.filedName[fn]] = ae[vm.filedName[fn]];
+                                for (var fn in vm.initAssignFieldFromAsset) {
+                                    vm.result.assign[vm.initAssignFieldFromAsset[fn]] = ae[vm.initAssignFieldFromAsset[fn]];
                                 }
+                                vm.result.assign["assetName"] = ae["assetName"];
                                 vm.result.assign['assignPrice'] = ae["price"];
-                                vm.result.assign["campusID"] = ae["customerCampusID"];
-                                vm.result.assign["campusName"] = ae["customerCampusName"];
                                 //将排课条件对象的字段值赋值给排课对象
-                                for (var fn in vm.filedNameAC) {
-                                    vm.result.assign[vm.filedNameAC[fn]] = ac[vm.filedNameAC[fn]];
+                                for (var fn in vm.fieldToAC) {
+                                    vm.result.assign[vm.fieldToAC[fn]] = ac[vm.fieldToAC[fn]];
+                                }
+                                for (var fn in vm.shareFieldName) {
+                                    vm.result.assign[vm.shareFieldName[fn]] = ac[vm.shareFieldName[fn]];
                                 }
                             }, function (error) {
                             });
                         }
                         else {
-                            //新建
-                            ///教师对象的学员下拉框要显示出来，资产清空
-                            vm.showStudentSelect = true; vm.showOrderSelect = false;
-                            vm.showGradeSelect = false; vm.showSubjectSelect = false;
+                            //新建 教师对象的学员下拉框要显示出来，资产清空
+                            vm.showStudentSelect = true;
+                            vm.showOrderSelect = false;
+                            vm.showGradeSelect = false;
+                            vm.showSubjectSelect = false;
                             //重新初始化排课对象
                             vm.resetAssignExtension();
                         }
                     };
 
                     vm.resetAssignExtension = function () {
-                        for (var fn in vm.filedName) {
-                            vm.result.assign[vm.filedName[fn]] = "";
+                        for (var fn in vm.shareFieldName) {
+                            vm.result.assign[vm.shareFieldName[fn]] = "";
+                        };
+                        for (var fn in vm.fieldToAC) {
+                            vm.result.assign[vm.fieldToAC[fn]] = "";
                         };
                         //对应资产表中的Price
-                        vm.result.assign['assignPrice'] = ""; 
-
-                        for (var fn in vm.filedNameAC) {
-                            vm.result.assign[vm.filedNameAC[fn]] = "";
-                        };
+                        vm.result.assign['assignPrice'] = "";
+                        vm.result.assign["assetName"] = "";
                         vm.result.assign.conditionID = '-1';
                     };
-                    //获取指定排课条件对象
+
+                    /*获取指定排课条件对象*/
                     vm.getAssignCondition = function (conditionID) {
                         var result = null;
                         for (var i in vm.result.assignCondition) {
@@ -97,7 +141,8 @@
                         };
                         return result;
                     };
-                    ///获取指定的资产对象
+
+                    /*获取指定的资产对象*/
                     vm.getAssignExtension = function (assetID) {
                         var result = null;
                         for (var i in vm.result.assignExtension) {
@@ -108,7 +153,8 @@
                         };
                         return result;
                     };
-                    ///选择学员，加载学员的资产
+
+                    /*选择学员，加载学员的资产*/
                     var currStudent = null;
                     vm.selectStudentClick = function (item) {
                         //重新初始化排课对象
@@ -135,25 +181,23 @@
                         });
                     };
 
-                    ///选择资产，新建排课条件及排课
+                    /*选择资产，新建排课条件及排课*/
                     var aeSubject = '';
                     vm.selectAssetClick = function (item) {
                         //重新初始化排课对象
                         vm.resetAssignExtension();
+
                         //根据选择的资产ID，从资产集合中选择资产实体
                         var ae = vm.getAssignExtension(item.key);
+
                         //把资产中的字段值赋值给排课实体属性
-                        for (var fn in vm.filedName) {
-                            vm.result.assign[vm.filedName[fn]] = ae[vm.filedName[fn]]; 
-                        };
-                        for (var fn in vm.filedNameAC) {
-                            vm.result.assign[vm.filedNameAC[fn]] = ae[vm.filedNameAC[fn]];
+                        for (var fn in vm.initAssignFieldFromAsset) {
+                            vm.result.assign[vm.initAssignFieldFromAsset[fn]] = ae[vm.initAssignFieldFromAsset[fn]];
                         }
-                        aeSubject = vm.result.assign.subject;
                         //将资产对象的字段值赋值给排课对象,名称不一样了
                         vm.result.assign['assignPrice'] = ae['price'];
-                        vm.result.assign["campusID"] = ae["customerCampusID"];
-                        vm.result.assign["campusName"] = ae["customerCampusName"];
+
+                        aeSubject = vm.result.assign.subject;
 
                         if (ae.grade != '' && ae.grade != '0' && ae.subject != '' && ae.subject != '0') {
                             vm.showGradeSelect = false; vm.showSubjectSelect = false;
@@ -166,13 +210,13 @@
                         }
                     };
 
+                    /*选择年级事件*/
                     var curGrade = "";
-                    ///选择年级事件
                     vm.selectGradeClick = function (item) {
                         curGrade = item.key;
                         ///设置排课对象年级的值
                         vm.result.assign.grade = item.key;
-                        vm.result.assign.gradeName = item.value;                    
+                        vm.result.assign.gradeName = item.value;
                         //根据选择的年级加载科目，从教师信息中加载对应的科目信息
                         for (var index in vm.result.student.gradeSubjectRela) {
                             var cSubject = vm.result.student.gradeSubjectRela[index];
@@ -192,28 +236,33 @@
                         }
                     };
 
-                    ///选择科目
+                    /*选择科目*/
                     vm.selectSubjectClick = function (item) {
                         vm.result.assign['subject'] = item.key;
                         vm.result.assign['subjectName'] = item.value;
                     };
 
+                    /*计算排课时间*/
                     vm.calcDurationValueBHClick = function (item) {
                         vm.beginHour = item.value;
                         calcDurationValue();
                     };
+                    /*计算排课时间*/
                     vm.calcDurationValueBMClick = function (item) {
                         vm.beginMinute = item.value;
                         calcDurationValue();
                     };
+                    /*计算排课时间*/
                     vm.calcDurationValueEHClick = function (item) {
                         vm.endHour = item.value;
                         calcDurationValue();
                     };
+                    /*计算排课时间*/
                     vm.calcDurationValueEMClick = function (item) {
                         vm.endMinute = item.value;
                         calcDurationValue();
                     };
+                    /*计算排课时间*/
                     calcDurationValue = function () {
                         if (vm.beginHour == '' || vm.beginMinute == '' || vm.endHour == '' || vm.endMinute == '' ||
                         vm.beginHour == null || vm.beginMinute == null || vm.endHour == null || vm.endMinute == null)
@@ -230,7 +279,7 @@
 
                         if (vm.result.assign.lessonDurationValue != '' && vm.result.assign.lessonDurationValue != 0) {
 
-                            vm.result.assign.realAmount = (vm.assignDuration / 60).toFixed(2);
+                            // vm.result.assign.realAmount = (vm.assignDuration / 60).toFixed(2);
 
                             var realValue = vm.assignDuration / vm.result.assign.lessonDurationValue;
 
@@ -244,6 +293,7 @@
                         }
                     };
 
+                    /*保存排课*/
                     vm.save = function () {
                         if (!vm.beginDate) {
                             vm.showMsg('请设置上课日期');
@@ -260,10 +310,6 @@
                             vm.showMsg("上课结束时间不能小于开始时间，请重新设置");
                             return false;
                         };
-
-                        vm.result.assign['teacherID'] = $stateParams.cID;
-                        vm.result.assign['teacherName'] = $stateParams.tn;
-                        vm.result.assign['teacherJobID'] = $stateParams.tji;
 
                         if (vm.result.assign.teacherID == '' || vm.result.assign.teacherID == null) {
                             vm.showMsg("请选择上课教师，如没有待选项，请联系管理员！");

@@ -11,7 +11,7 @@ namespace PPTS.Data.Customers.Entities
 {
     /// <summary>
     /// This object represents the properties and methods of a CustomerTeacherRelation.
-    /// 
+    /// 学员教师关系表
     /// </summary>
     [Serializable]
     [ORTableMapping("CM.CustomerTeacherRelations", "CM.CustomerTeacherRelations_Current")]
@@ -28,7 +28,7 @@ namespace PPTS.Data.Customers.Entities
 
 
         /// <summary>
-        /// 
+        /// 学员ID
         /// </summary>        
         [ORFieldMapping("CustomerID")]
         [DataMember]
@@ -39,7 +39,7 @@ namespace PPTS.Data.Customers.Entities
         }
 
         /// <summary>
-        /// 
+        /// 教师ID
         /// </summary>
         [ORFieldMapping("TeacherID")]
         [DataMember]
@@ -50,7 +50,7 @@ namespace PPTS.Data.Customers.Entities
         }
 
         /// <summary>
-        /// 
+        /// 教师OA编码
         /// </summary>
         [ORFieldMapping("TeacherOACode")]
         [DataMember]
@@ -61,7 +61,7 @@ namespace PPTS.Data.Customers.Entities
         }
 
         /// <summary>
-        /// 
+        /// 教师姓名
         /// </summary>
         [ORFieldMapping("TeacherName")]
         [DataMember]
@@ -71,6 +71,9 @@ namespace PPTS.Data.Customers.Entities
             set;
         }
 
+        /// <summary>
+        /// 教师岗位ID
+        /// </summary>
         [ORFieldMapping("TeacherJobID")]
         [DataMember]
         public string TeacherJobID
@@ -79,6 +82,9 @@ namespace PPTS.Data.Customers.Entities
             set;
         }
 
+        /// <summary>
+        /// 教师岗位学科组ID
+        /// </summary>
         [ORFieldMapping("TeacherJobOrgID")]
         [DataMember]
         public string TeacherJobOrgID
@@ -87,10 +93,9 @@ namespace PPTS.Data.Customers.Entities
             set;
         }
 
-        [ORFieldMapping("TeacherJobOrgShortName")]
-        [DataMember]
-        public string TeacherJobOrgShortName { get; set; }
-
+        /// <summary>
+        /// 教师岗位学科组姓名
+        /// </summary>
         [ORFieldMapping("TeacherJobOrgName")]
         [DataMember]
         public string TeacherJobOrgName
@@ -100,7 +105,18 @@ namespace PPTS.Data.Customers.Entities
         }
 
         /// <summary>
-        /// 
+        /// 是否全职教师
+        /// </summary>
+        [ORFieldMapping("IsFullTimeTeacher")]
+        [DataMember]
+        public bool IsFullTimeTeacher
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 创建人ID
         /// </summary>
         [ORFieldMapping("CreatorID")]
         [SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update)]
@@ -112,7 +128,7 @@ namespace PPTS.Data.Customers.Entities
         }
 
         /// <summary>
-        /// 
+        /// 创建人姓名
         /// </summary>
         [ORFieldMapping("CreatorName")]
         [SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update)]
@@ -124,7 +140,7 @@ namespace PPTS.Data.Customers.Entities
         }
 
         /// <summary>
-        /// 
+        /// 创建时间
         /// </summary>
         [ORFieldMapping("CreateTime")]
         [SqlBehavior(BindingFlags = ClauseBindingFlags.Select | ClauseBindingFlags.Where)]

@@ -75,6 +75,7 @@
   <ItemGroup>
     <Compile Include="Adapters\CustomerTeacherRelationAdapterTest.cs" />
     <Compile Include="Controllers\FeedbackControllerTests.cs" />
+    <Compile Include="Controllers\PotentialCustomersControllerTests.cs" />
     <Compile Include="DataSources\CustomerFeedbacksDataSourceTests.cs" />
     <Compile Include="Controllers\StudentsControllerTests.cs" />
     <Compile Include="DataSources\CustomerRepliesDataSourceTests.cs" />

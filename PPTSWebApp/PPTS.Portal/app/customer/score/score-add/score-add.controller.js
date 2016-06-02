@@ -22,12 +22,14 @@
                         vm.customer = result.customer;
                         vm.score = result.score;
                         vm.teachers = result.teachers;
-                        dataSyncService.injectDictData(mcs.util.mapping(vm.teachers, { key: 'teacherID', value: 'teacherName', props: 'subjectMemo' }, 'Teacher'));
+                        dataSyncService.injectDictData(mcs.util.mapping(vm.teachers, { key: 'teacherID', value: 'teacherName', props: 'subject' }, 'scoreTeacher'));
+                        dataSyncService.injectDictData(mcs.util.mapping(vm.teachers, { key: 'teacherJobOrgID', value: 'teacherJobOrgName', props: 'teacherID' }, 'scoreTeacherOrgName'));
                         dataSyncService.injectDictData({
                             c_codE_ABBR_Score_Satisficing: [{ key: '1', value: '对成绩满意' }, { key: '0', value: '对成绩不满意' }]
                         });
                         dataSyncService.injectPageDict(['ifElse']);
                         scoresDataViewService.fillGradeParentKey();
+                        scoresDataViewService.handleTeachers();
                         $scope.$broadcast('dictionaryReady');
                     })
                 })();
@@ -41,11 +43,6 @@
                     for (var index in rows) {
                         var row = rows[index];
                         if (row.realScore) {
-                            vm.teachers.forEach(function (t) {
-                                if (t.teacherID == row.teacherID) {
-                                    row.teacherName = t.teacherName;
-                                }
-                            });
                             row.isStudyHere = mcs.util.bool(row.isStudyHere);
                             scoreItems.push(row);
                         }
@@ -67,6 +64,14 @@
                 vm.selectStage = function (item) {
                     vm.score.studyStage = item.parentKey;
                     scoresDataViewService.showRowItems(vm, vm.score.studyStage);
+                };
+
+                // 考试类型
+                vm.scoreTypeChange = function () {
+                    vm.score.admissionType = "";
+                    vm.score.admissionSchool = "";
+                    vm.score.isKeyCollege = 0;
+                    vm.score.examineMonth = "";
                 };
 
                 // 总分-得分

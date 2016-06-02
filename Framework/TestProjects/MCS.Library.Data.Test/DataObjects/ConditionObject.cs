@@ -36,6 +36,13 @@ namespace MCS.Library.Data.Test.DataObjects
             set;
         }
 
+        [ConditionMapping("GENDER_WITH_DEFAULT")]
+        public GenderType GenderWithDefault
+        {
+            get;
+            set;
+        }
+
         [ConditionMapping("CREATE_TIME", Operation = ">=")]
         public DateTime StartTime
         {

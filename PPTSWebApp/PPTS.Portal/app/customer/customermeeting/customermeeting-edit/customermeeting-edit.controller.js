@@ -9,10 +9,11 @@
 define([ppts.config.modules.customer, ppts.config.dataServiceConfig.customerMeetingDataService],
         function (customer) {
             customer.registerController('customerMeetingEditController',
-                ['$scope', "$state", '$stateParams', "customerMeetingEditDataViewService",
-                function ($scope, $state, $stateParams, customerMeetingEditDataViewService) {
+                ['$scope', "$state", '$stateParams', "customerMeetingEditDataViewService", "mcsValidationService",
+                function ($scope, $state, $stateParams, customerMeetingEditDataViewService, mcsValidationService) {
                     var vm = this;
-                    
+
+                    mcsValidationService.init($scope);
                     ////初始化数据
                     (function () {
                         customerMeetingEditDataViewService.initData($stateParams.id, vm,function () {
@@ -29,10 +30,12 @@ define([ppts.config.modules.customer, ppts.config.dataServiceConfig.customerMeet
 
                     //编辑会议
                     vm.editCustomerMeeting = function () {
-                        customerMeetingEditDataViewService.saveCustomerMeetings(vm, function () {
-                            alert("保存成功!");
-                            $scope.$broadcast('dictionaryReady');
-                        });
+                        if (mcsValidationService.run($scope)) {
+                            customerMeetingEditDataViewService.saveCustomerMeetings(vm, function () {
+                                alert("保存成功!");
+                                $scope.$broadcast('dictionaryReady');
+                            });
+                        }
                     }
                     vm.addItem = function () {
                         vm.items.push({

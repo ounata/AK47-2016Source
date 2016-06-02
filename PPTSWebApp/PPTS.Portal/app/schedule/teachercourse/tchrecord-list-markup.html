@@ -1,0 +1,141 @@
+﻿<div class="page-content">
+    <!-- #开始：添加排课Form -->
+    <div class="page-content-area">
+        <div class="row">
+            <div class="col-sm-12">
+                <form class="form-horizontal" role="form">
+                    <div class="widget-box">
+                        <div class="widget-header">
+                            <h4>
+                                补录课时操作
+                                <small>
+                                    <i class="icon-double-angle-right"></i>
+                                </small>
+                            </h4>
+                        </div>
+                        <div class="widget-body">
+                            <div class="widget-main no-padding">
+                                <form class="form-horizontal" role="form">
+                                    <div class="clearfix form-actions mcs-form-actions">
+                                        <div class="col-md-offset-3 col-md-9">
+                                            <mcs-button category="save" click="vm.save()"></mcs-button>
+                                            <mcs-button category="close" click="vm.cancel()"></mcs-button>
+                                        </div>
+                                    </div>
+
+                                    <div class="page-header">
+                                        <span>补录教师课时信息  (<span class="required"> * </span>表示必填字段)</span>
+                                    </div>
+                                    <div class="profile-user-info profile-user-info-striped mcs-user-profile">
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name"> 校区 </div>
+                                            <div class="profile-info-value">
+                                                {{ vm.currCampusName }}
+                                            </div>
+                                        </div>
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name"> 上课教师 </div>
+                                            <div class="profile-info-value">
+                                                <tags-input  class="mcs-tags-input-lg noplaceholder noshow" ng-disable="true" ng-model="vm.teachers" add-on-space="true" add-from-autocomplete-only="true" add-on-enter="true" key-property="teacherId" display-property="name" placeholder="">
+                                                    <auto-complete min-length="1" source="vm.queryTeacherList($query)"></auto-complete>
+                                                </tags-input>
+                                            </div>
+                                        </div>
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name"> 排课条件 </div>
+                                            <div class="profile-info-value">
+                                                <span class="editable editable-click">
+                                                    <ppts-select category="assignCondition" caption="" model="vm.result.assign.conditionID" callback="vm.selectAssignConditionClick(item)" css="col-xs-7 col-sm-7" />
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name"> 学员姓名 </div>
+                                            <div class="profile-info-value">
+                                                <ppts-select category="student" ng-show="vm.showStudentSelect" model="vm.result.assign.customerID" callback="vm.selectStudentClick(item)" css="col-xs-7 col-sm-7" />
+                                                <span ng-show="!vm.showStudentSelect">{{ vm.result.assign.customerName }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name"> 订单编号 </div>
+                                            <div class="profile-info-value">
+                                                <ppts-select category="asset" ng-show="vm.showOrderSelect" caption="请选择" model="vm.result.assign.assetID" callback="vm.selectAssetClick(item)" css="col-xs-7 col-sm-7" />
+                                                <span ng-show="!vm.showOrderSelect">{{ vm.result.assign.assetName }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name"> 上课年级 </div>
+                                            <div class="profile-info-value">
+                                                <ppts-select ng-show="vm.showGradeSelect" caption="上课年级" category="subGrade" callback="vm.selectGradeClick(item)" model="vm.result.assign.grade" css="col-xs-7 col-sm-7" />
+                                                <span ng-show="!vm.showGradeSelect">
+                                                    {{vm.result.assign.gradeName}}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name"> 上课科目 </div>
+                                            <div class="profile-info-value">
+                                                <ppts-select category="subSubject" model="vm.result.assign.subject" ng-show="vm.showSubjectSelect" callback="vm.selectSubjectClick(item)" css="col-xs-7 col-sm-7" />
+                                                <span ng-show="!vm.showSubjectSelect">{{ vm.result.assign.subjectName }}</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name"> 课时时长 </div>
+                                            <div class="profile-info-value">
+                                                <span>{{ vm.result.assign.lessonDurationValue }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name"> 课程级别 </div>
+                                            <div class="profile-info-value">
+                                                <span>{{ vm.result.assign.courseLevelName }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name"> 上课日期 </div>
+                                            <div class="profile-info-value">
+                                                <ppts-datepicker model="vm.beginDate" />
+                                            </div>
+                                        </div>
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name"> 上课时间 </div>
+                                            <div class="profile-info-value">
+                                                <ppts-select caption="" category="hour" model="vm.beginHour" callback="vm.calcDurationValueBHClick(item)" css="col-xs-2 col-sm-2" />
+                                                <ppts-select caption="" category="minute" model="vm.beginMinute" callback="vm.calcDurationValueBMClick(item)" css="col-xs-2 col-sm-2" />
+                                            </div>
+                                        </div>
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name"> 课时数 </div>
+                                            <div class="profile-info-value">
+                                                <span>
+                                                    <ppts-select caption="" category="courseAmount" model="vm.result.assign.amount" callback="vm.calcDurationValueCAClick(item)" css="col-xs-7 col-sm-7" />
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name"> 该课表是否可被复制 </div>
+                                            <div class="profile-info-value">
+                                                <span>
+                                                    <ppts-radiobutton-group category="ifElse" model="vm.result.assign.copyAllowed" />
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+

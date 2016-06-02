@@ -319,6 +319,8 @@ namespace MCS.Library.Data.Mapping
 
                     if (type == typeof(BooleanState))
                         result = ((BooleanState)data) == BooleanState.Unknown;
+                    else
+                        result = data.Equals((int)TypeCreator.GetTypeDefaultValue(type));
                 }
                 else
                 {

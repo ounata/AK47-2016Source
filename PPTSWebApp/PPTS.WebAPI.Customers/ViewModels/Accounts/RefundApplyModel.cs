@@ -1,5 +1,8 @@
 ﻿using MCS.Library.Net.SNTP;
 using MCS.Library.OGUPermission;
+using PPTS.Contracts.Orders.Models;
+using PPTS.Contracts.Proxies;
+using PPTS.Data.Common;
 using PPTS.Data.Common.Security;
 using PPTS.Data.Customers;
 using PPTS.Data.Customers.Adapters;
@@ -101,8 +104,6 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
         public void Prepare4SaveApply()
         {
             this.BuildRefundType();
-            //是否是制度外退费
-            this.IsExtraRefund = (this.ExtraRefundMoney != 0);
 
             //保存当时的实退费金额，以便验证后面规则是否正确
             decimal clientRealRefundMoney = this.RealRefundMoney;
@@ -110,52 +111,44 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
             AccountModel account = AccountModel.LoadByAccountID(this.AccountID, true);
             if (account == null)
                 throw new Exception(string.Format("账户ID为[{0}]的信息不存在", this.AccountID));
-            DiscountModel discount = DiscountModel.LoadByCampusID(this.CampusID);
+            if (account.AssetMoney != 0)
+                throw new Exception("订购资金余额不为0，无法退费");
 
+            this.AccountID = account.AccountID;
+            this.AccountCode = account.AccountCode;
+            this.ThatDiscountID = account.DiscountID;
+            this.ThatDiscountCode = account.DiscountCode;
+            this.ThatDiscountBase = account.DiscountBase;
+            this.ThatDiscountRate = account.DiscountRate;
+            this.ThatAccountValue = account.AccountValue;
+            this.ThatAccountMoney = account.AccountMoney;
+
+            //课时消耗价值
+            this.ConsumptionValue = account.ConsumptionValue;            
             //新的账户余额=以前的账户余额-申退金额
             this.ThisAccountMoney = this.ThatAccountMoney - this.ApplyRefundMoney;
             //新的账户价值=以前的账户价值-申退金额
             this.ThisAccountValue = this.ThatAccountValue - this.ApplyRefundMoney;
 
-            //当前发生的课时价值(confirmedValue>=thatDiscountBase)当前折扣基数
-            if (account.OccurenceValue >= this.ThatDiscountBase)
+            //消耗的课时价值(consumptionValue>=thatDiscountBase)当前折扣基数
+            if (this.ConsumptionValue >= this.ThatDiscountBase)
             {
-                this.ConsumptionValue = 0;
-                this.ReallowanceMoney = 0;
-
                 this.ThisDiscountID = this.ThatDiscountID;
                 this.ThisDiscountCode = this.ThatDiscountCode;
                 this.ThisDiscountBase = this.ThatDiscountBase;
                 this.ThisDiscountRate = this.ThatDiscountRate;
+                this.ReallowanceMoney = 0;
             }
-            else {
-                //计算折扣相关数值
-                //新的账户价值=以前的账户价值                            
-                this.ThisDiscountBase = this.ThatDiscountBase - this.ApplyRefundMoney;
-                //新的折扣率计算
-                this.ThisDiscountRate = 1;
-                if (discount != null && discount.Items.Count != 0)
-                {
-                    this.ThisDiscountID = discount.DiscountID;
-                    this.ThisDiscountCode = discount.DiscountCode;
-                    this.ThisDiscountRate = discount.Items[0].DiscountValue;
-                    for (var i = 0; i < discount.Items.Count; i++)
-                    {
-                        var item = discount.Items[i];
-                        if (this.ThisDiscountBase >= item.DiscountStandard * 10000)
-                        {
-                            this.ThisDiscountRate = item.DiscountValue;
-                            break;
-                        }
-                    }
-                }
+            else
+            {
+                decimal discountBase = this.ThatDiscountBase - this.ApplyRefundMoney;
+                RefundReallowanceResult result = RefundReallowanceResult.GetReallowance(account.AccountID, account.RefundDiscountID, discountBase,  account.ReallowanceStartTime);
 
-                //已消耗课时价值不变
-                //折扣返还金额 = 已消耗课时价值/退费前折扣率*（退费后折扣率-退费前折扣率）
-                if (this.ThatDiscountRate > 0)
-                {
-                    this.ReallowanceMoney = this.ConsumptionValue / this.ThatDiscountRate * (this.ThisDiscountRate - this.ThatDiscountRate);
-                }
+                this.ThisDiscountID = result.DiscountID;
+                this.ThisDiscountCode = result.DiscountCode;
+                this.ThisDiscountBase = discountBase;
+                this.ThisDiscountRate = result.DiscountRate;
+                this.ReallowanceMoney = result.ReallowanceMoney;
             }
             //应退金额 = 申退金额-折扣返还
             this.OughtRefundMoney = this.ApplyRefundMoney - this.ReallowanceMoney;
@@ -168,8 +161,23 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
 
         private void BuildRefundType()
         {
-            this.RefundType = RefundTypeDefine.Regular;
-            this.IsPeriodRefund = false;
+            ConfigArgs args = ConfigsCache.GetArgs(this.CampusID);
+            AccountChargeApply charge = AccountChargeApplyAdapter.Instance.LoadNewSignByCustomerID(this.CustomerID);
+            if (charge == null)
+                throw new Exception("尚未找到新签记录，无法执行退费");
+            DateTime currentDate = SNTPClient.AdjustedTime.Date; //当前日期
+            DateTime newSignDate = charge.PayTime.Date;          //新签日期
+            //查找到当前有无上课记录
+            AssetStatisticQueryResult result = PPTSAssetQueryServiceProxy.Instance.QueryAssetStatisticByCustomerID(this.CustomerID);
+            //新签后?天内未上课是坏账退费
+            if (newSignDate.AddDays(args.AccountRefundTypeJudgeDays) >= currentDate && result.ConfirmedAmount == 0)
+                this.RefundType = RefundTypeDefine.Irregular;
+            else
+                this.RefundType = RefundTypeDefine.Regular;
+            //是否有课时
+            this.IsPeriodRefund = (result.ConfirmedAmount != 0);
+            //是否是制度外退费
+            this.IsExtraRefund = (this.ExtraRefundMoney != 0);
         }
 
         /// <summary>

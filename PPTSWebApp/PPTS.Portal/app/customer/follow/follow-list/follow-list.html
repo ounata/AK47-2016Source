@@ -55,8 +55,7 @@
                         <div class="profile-info-value">
                             <ppts-radiobutton-group category="dateRange" model="vm.followTimeValue" />
                             <div ng-show="vm.followTimeValue == 5" style="display:inline;">
-                                <ppts-datepicker model="vm.criteria.followStartTime" class="inline-ppts-datepicker" /> 到
-                                <ppts-datepicker model="vm.criteria.followEndTime" class="inline-ppts-datepicker" />
+                                <ppts-daterangepicker class="search" start-date="vm.criteria.followStartTime" end-date="vm.criteria.followEndTime"></ppts-daterangepicker>
                             </div>
                         </div>
                     </div>
@@ -65,8 +64,7 @@
                         <div class="profile-info-value">
                             <ppts-radiobutton-group category="dateRange" model="vm.nextFollowTimeValue" />
                             <div ng-show="vm.nextFollowTimeValue == 5" style="display:inline;">
-                                <ppts-datepicker model="vm.criteria.nextTalkStartTime" class="inline-ppts-datepicker" /> 到
-                                <ppts-datepicker model="vm.criteria.nextTalkEndTime" class="inline-ppts-datepicker" />
+                                <ppts-daterangepicker class="search" start-date="vm.criteria.nextTalkStartTime" end-date="vm.criteria.nextTalkEndTime"></ppts-daterangepicker>
                             </div>
                         </div>
                     </div>
@@ -81,8 +79,7 @@
                         <div class="profile-info-value">
                             <ppts-radiobutton-group category="dateRange" model="vm.planVerifyTimeValue" />
                             <div ng-show="vm.planVerifyTimeValue == 5" style="display:inline;">
-                                <ppts-datepicker model="vm.criteria.planVerifyStartTime" class="inline-ppts-datepicker" /> 到
-                                <ppts-datepicker model="vm.criteria.planVerifyEndTime" class="inline-ppts-datepicker" />
+                                <ppts-daterangepicker class="search" start-date="vm.criteria.planVerifyStartTime" end-date="vm.criteria.planVerifyEndTime"></ppts-daterangepicker>
                             </div>
                         </div>
                     </div>
@@ -91,8 +88,7 @@
                         <div class="profile-info-value">
                             <ppts-radiobutton-group category="dateRange" model="vm.planSignDateValue" />
                             <div ng-show="vm.planSignDateValue == 5" style="display:inline;">
-                                <ppts-datepicker model="vm.criteria.planSignStartTime" class="inline-ppts-datepicker" /> 到
-                                <ppts-datepicker model="vm.criteria.planSignEndTime" class="inline-ppts-datepicker" />
+                                <ppts-daterangepicker class="search" start-date="vm.criteria.planSignStartTime" end-date="vm.criteria.planSignEndTime"></ppts-daterangepicker>
                             </div>
                         </div>
                     </div>

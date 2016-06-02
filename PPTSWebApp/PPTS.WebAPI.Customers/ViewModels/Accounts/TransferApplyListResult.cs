@@ -23,8 +23,8 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
         [DataMember]
         public CustomerModel Customer
         {
-            set;
             get;
+            private set;
         }
 
         private List<TransferApplyModel> _items = new List<TransferApplyModel>();
@@ -51,7 +51,7 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
         /// <summary>
         /// 根据学员获取
         /// </summary>
-        /// <param name="customerID"></param>
+        /// <param name="customerID">学员ID</param>
         /// <returns></returns>
         public static TransferApplyListResult Load(string customerID)
         {

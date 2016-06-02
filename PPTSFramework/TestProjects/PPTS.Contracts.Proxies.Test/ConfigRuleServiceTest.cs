@@ -18,14 +18,14 @@ namespace PPTS.Contracts.Proxies.Test
         {
             PPTS.Contracts.Products.Models.ExpenseQueryResult queryResult = PPTSConfigRuleQueryServiceProxy.Instance.QueryExpenseByCampusID("2121-Org");
             Assert.IsNotNull(queryResult);
-            Assert.IsNotNull(queryResult.Expense);
+            Assert.IsNotNull(queryResult.ExpenseCollection);
 
         }
 
         [TestMethod]
         public void QueryPresentByCampusIDTest()
         {
-            PPTS.Contracts.Products.Models.PresentQueryResult queryResult = PPTSConfigRuleQueryServiceProxy.Instance.QueryPresentByCampusID("18-Org");
+            PPTS.Contracts.Products.Models.PresentQueryResult queryResult = PPTSConfigRuleQueryServiceProxy.Instance.QueryPresentByCampusID("8-Org");
             Assert.IsNotNull(queryResult);
             Assert.IsNotNull(queryResult.Present);
             Assert.IsNotNull(queryResult.PresentItemCollection);

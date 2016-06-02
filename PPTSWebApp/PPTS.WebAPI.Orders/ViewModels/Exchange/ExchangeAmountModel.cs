@@ -141,15 +141,16 @@ namespace PPTS.WebAPI.Orders.ViewModels.Exchange
 
             var asset = (Asset)Asset.CloneObject();
             asset.ProductID = Item.ProductID;
-            asset.ProductCampusID = Item.ProductCampusID;
             asset.Amount = Item.RealAmount;
             asset.AssetRefID = Item.ItemID;
-
-            asset.AssetID = Guid.NewGuid().ToString();
+            
+            asset.AssetID = UuidHelper.NewUuidString();
             asset.AssetCode = null;
 
             return asset;
         }
+
+        public void Validate() { }
 
     }
 

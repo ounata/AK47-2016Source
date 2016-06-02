@@ -7,6 +7,11 @@ using MCS.Library.SOA.DataObjects;
 using PPTS.Data.Orders.Adapters;
 using PPTS.WebAPI.Orders.ViewModels.Purchase;
 using MCS.Library.Data;
+using MCS.Library.Validation;
+using System.Transactions;
+using MCS.Library.SOA.DataObjects.AsyncTransactional;
+using PPTS.Data.Common.Security;
+using MCS.Library.Principal;
 
 namespace PPTS.WebAPI.Orders.Executors
 {
@@ -18,36 +23,50 @@ namespace PPTS.WebAPI.Orders.Executors
         public AddOrderExecutor(SubmitOrderModel model) : base(model, null)
         {
             model.NullCheck("model");
-            model.Account.NullCheck("Account");
-            model.ProductViews.NullCheck("ProductViews");
         }
 
         protected override void PrepareData(DataExecutionContext<UserOperationLogCollection> context)
         {
-            base.PrepareData(context);
-
-            var orderItems = Model.ToOrderItemCollection();
-            var order = Model.ToOrder();
-
+            Model.FillOrder()
+                 .FillOrderItemCollection()
+                 .FillAssets();
+            
             if (new int[] { 1, 2 }.Contains(Model.ListType))
             {
-                Data.Orders.Adapters.DebookOrderAdapter.Instance.ExistsPendingApprovalInContext(Model.CustomerID);
+                DebookOrderAdapter.Instance.ExistsPendingApprovalInContext(Model.CustomerID);
             }
-
-            OrdersAdapter.Instance.UpdateInContext(order);
-            OrderItemAdapter.Instance.UpdateByOrderInContext(order, orderItems);
+            
+            OrdersAdapter.Instance.UpdateInContext(Model.Order);
+            OrderItemAdapter.Instance.UpdateByOrderInContext(Model.Order, Model.OrderItems);
             Model.item.ForEach(m => ShoppingCartAdapter.Instance.DeleteInContext(builder => builder.AppendItem("CartID", m.CartID)));
 
-            OrdersAdapter.Instance.ExecSuccessInContext();
+            base.PrepareData(context);
+        }
+
+        protected override void DoValidate(ValidationResults validationResults)
+        {
+            Model.Validate();
+            base.DoValidate(validationResults);
         }
 
         protected override object DoOperation(DataExecutionContext<UserOperationLogCollection> context)
         {
-            using (DbContext dbContext = PPTS.Data.Orders.ConnectionDefine.GetDbContext())
+            base.DoOperation(context);
+
+            using (TransactionScope scope = TransactionScopeFactory.Create())
             {
-                return dbContext.ExecuteScalarSqlInContext();
+
+                TxProcess process = Model.PrepareProcess();
+                TxProcessAdapter.GetInstance(MCS.Library.SOA.DataObjects.ConnectionDefine.DBConnectionName).Update(process);
+                InvokeServiceTaskAdapter.Instance.Push(process.ToStartWorkflowTask());
+                
+                scope.Complete();
             }
-            
+
+            return null;
+
+
+
         }
 
     }

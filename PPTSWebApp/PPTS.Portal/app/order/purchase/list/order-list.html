@@ -41,6 +41,12 @@
                             </div>
                         </div>
                         <div class="profile-info-row">
+                            <div class="profile-info-name"> 产品年级</div>
+                            <div class="profile-info-value">
+                                <ppts-checkbox-group category="grade" model="vm.criteria.selectedProductGrades" clear="vm.criteria.selectedProductGrades=[]" />
+                            </div>
+                        </div>
+                        <div class="profile-info-row">
                             <div class="profile-info-name"> 产品颗粒度</div>
                             <div class="profile-info-value">
                                 <ppts-checkbox-group category="unit" model="vm.criteria.selectedUnits" clear="vm.criteria.selectedUnits=[]" />
@@ -106,7 +112,7 @@
     <mcs-button category="edit" text="退订" ng-disabled="vm.data.rowsSelected.length!=1" click="vm.unsubscribe()"></mcs-button>
     <mcs-button category="edit" text="编辑关联缴费单" ng-disabled="vm.data.rowsSelected.length!=1" click="vm.editchargepay()"></mcs-button>
     <mcs-button category="print" text="打印订单" ng-disabled="vm.data.rowsSelected.length!=1 && vm.data.rowsSelected[0].categoryType!=1 && vm.data.rowsSelected[0].categoryType!=2" click="vm.print()" ></mcs-button>
-    <mcs-button category="export" text="导出"></mcs-button>
+    <mcs-button category="export" click="vm.export()"></mcs-button>
 </div>
 <!-- /结束：订购列表.工具条 -->
 <!-- #开始：订购列表.数据表格 -->

@@ -1,7 +1,7 @@
 ﻿define([ppts.config.modules.order,
         ppts.config.dataServiceConfig.purchaseCourseDataService],
-        function (product) {
-            product.registerController('orderListController', [
+        function (helper) {
+            helper.registerController('orderListController', [
                 '$scope', '$state', '$stateParams', '$window', 'mcsDialogService', 'dataSyncService', 'purchaseCourseDataService',
                 function ($scope, $state, $stateParams, $window, mcsDialogService, dataSyncService, purchaseCourseDataService) {
                     var vm = this;
@@ -41,6 +41,7 @@
                         template: '<span>{{row.periodDuration | period }}</span>'
                     }, ];
 
+                    vm.account = {};
 
 
                     if (listType == 1) {
@@ -129,14 +130,11 @@
                     } else if (listType == 2) {
                         //买赠清单
 
-                        
-
                         //订购金额
                         vm.calcOrderPrice = function (row) {
                             row.orderPrice = row.item.orderAmount * row.productPrice;
                             return row.orderPrice;
                         };
-
 
                         headers = headers.concat([{
                             field: "productUnit",
@@ -146,7 +144,7 @@
                             field: "productPrice",
                             name: "产品单价（元）",
                             template: '<span>{{row.productPrice | currency }}</span>',
-                        },{
+                        }, {
                             name: "订购数量",
                             template: '<input type="number" ng-model="row.item.orderAmount" ng-keyup="vm.reCalcPreset(row);" />',
                         }, {
@@ -218,8 +216,6 @@
                     }
 
 
-                    vm.account = {};
-
                     vm.totalOriginalMoney = function () {
                         var total = 0;
                         $(vm.data.rows).each(function (i, v) {
@@ -227,7 +223,6 @@
                         });
                         return total;
                     }
-
                     vm.totalMoney = function () {
                         var total = 0;
                         $(vm.data.rows).each(function (i, v) { if (v.selected) { total += v.orderPrice; } });
@@ -252,11 +247,10 @@
                             pageable: false
                         },
                     };
-
                     vm.data = {
                         selection: 'checkbox',
                         rowsSelected: [],
-                        keyFields: ['cartID', 'item'],
+                        keyFields: ['cartID', 'item', 'categoryType'],
                         headers: headers,
                         pager: {
                             pageable: false
@@ -268,8 +262,6 @@
                     vm.showPursueReason = function () {
                         return $(vm.data.rowsSelected).map(function (i, v) { if (v.item.specialRate == 0) return v.cartID; }).length > 0;
                     };
-
-
                     vm.goBuy = function () {
                         $window.history.back();
                         //1 - 常规订购
@@ -284,27 +276,36 @@
                         //}
 
                     };
-
                     vm.delete = function () {
                         var cartIDs = $(vm.data.rowsSelected).map(function (i, v) { return v.cartID }).toArray();
                         purchaseCourseDataService.deleteShoppingCart(cartIDs, function (state) { mcs.util.removeByObjectsWithKeys(vm.data.rows, vm.data.rowsSelected); });
                     };
-
                     vm.submit = function () {
 
                         var selectedRow = vm.account.data.rowsSelected[0];
 
-
                         purchaseCourseDataService.getServiceCharge({ customerId: customerId, campusId: campusId }, function (entity) {
                             var messageServiceMoney = '';
                             var totalMoney = vm.totalMoney();
-                            if (!entity.serviceCharge) {
+                            if (entity.serviceCharge.length < 1) {
                                 mcsDialogService.error({ title: 'Error', message: '没有创建综合服务费，请先创建综合服务费。' });
                                 return;
                             } else {
-                                if (!entity.isDeduct) {
-                                    totalMoney += entity.serviceCharge.expenseValue;
-                                    messageServiceMoney = '+¥' + entity.serviceCharge.expenseValue + '(综合服务费)';
+                                var serviceMoney = 0;
+
+                                var categoryTypes = $(vm.data.rowsSelected).map(function (i, v) { if (v.categoryType == 1 || v.categoryType == 2) { return v.categoryType }; }).toArray();
+                                for (var index in entity.deductList) {
+                                    var categoryType = entity.deductList[index].key;
+                                    if ($.inArray(categoryType, [1, 2])) {
+                                        if ($.inArray(categoryType, categoryTypes) > -1) {
+                                            serviceMoney += entity.serviceCharge.expenseValue;
+                                        }
+                                    }
+                                }
+
+                                if (categoryTypes.length > 0 && serviceMoney>0) {
+                                    totalMoney += serviceMoney;
+                                    messageServiceMoney = '+¥' + serviceMoney + '(综合服务费)';
                                 }
                             }
 
@@ -340,10 +341,6 @@
                         });
 
                     };
-
-
-
-
 
 
                     purchaseCourseDataService.getShoppingCart({ customerId: customerId, listType: listType, campusId: campusId }, function (result) {
@@ -390,19 +387,17 @@
                             };
                         }
 
-                        //初始化缴费单下拉列表
-                        dataSyncService.injectDictData(mcs.util.mapping(result.chargePayments, { key: 'applyID', value: 'payMemo' }, 'ChargePayment'));
-                        ppts.config.dictMappingConfig["chargePayment"] = "c_codE_ABBR_ChargePayment";
 
-                        console.log(ppts.dict)
+                        //初始化缴费单下拉列表
+                        var chargePays = $(result.chargePays).map(function (i, v) { return { applyID: v.applyID, payMemo: v.applyNo + ' 付款日期：' + mcs.date.format(v.payTime) + ' 缴费金额：' + v.paidMoney + '元' }; }).toArray();
+                        dataSyncService.injectDictData(mcs.util.mapping(chargePays, { key: 'applyID', value: 'payMemo' }, 'ChargePayment'));
+                        ppts.config.dictMappingConfig["chargePayment"] = "c_codE_ABBR_ChargePayment";
 
 
                         //选中0折
                         vm.specialType = "1";
                         $scope.$broadcast('dictionaryReady');
                     });
-
-
 
                 }]);
         });

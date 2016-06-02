@@ -4,7 +4,6 @@
     [JobName] NVARCHAR(64) NULL, 
     [JobOrgID] NVARCHAR(36) NULL, 
     [JobOrgName] NVARCHAR(128) NULL, 
-	[JobOrgShortName]  NVARCHAR(64) NULL, 
     [JobOrgType] NVARCHAR(32) NULL, 
     [JobStatus] NVARCHAR(32) NULL, 
     [TeacherID] NVARCHAR(36) NULL, 
@@ -124,11 +123,3 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level2type = N'COLUMN',
     @level2name = N'JobOrgType'
 GO
-EXEC sp_addextendedproperty @name = N'MS_Description',
-    @value = N'岗位组织机构名称简称（一般指学科组名称简称）',
-    @level0type = N'SCHEMA',
-    @level0name = N'MT',
-    @level1type = N'TABLE',
-    @level1name = N'TeacherJobs',
-    @level2type = N'COLUMN',
-    @level2name = 'JobOrgShortName'

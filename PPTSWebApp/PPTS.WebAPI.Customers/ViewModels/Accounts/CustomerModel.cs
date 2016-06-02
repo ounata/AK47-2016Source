@@ -68,6 +68,7 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
         /// <summary>
         /// 客户状态
         /// </summary>
+        [DataMember]
         public CustomerStatus Status
         {
             set;
@@ -77,6 +78,7 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
         /// <summary>
         /// 出生年月
         /// </summary>
+        [DataMember]
         public DateTime Birthday
         {
             set;
@@ -86,6 +88,7 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
         /// <summary>
         /// 性别
         /// </summary>
+        [DataMember]
         [ConstantCategory("C_CODE_ABBR_GENDER")]
         public GenderType Gender
         {
@@ -107,6 +110,7 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
         /// <summary>
         /// 家长姓名
         /// </summary>
+        [DataMember]
         public string ParentName
         {
             set;
@@ -116,6 +120,7 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
         /// <summary>
         /// 家长与学员关系
         /// </summary>
+        [DataMember]
         [ConstantCategory("C_CODE_ABBR_PARENTDICTIONARY")]
         public string ParentRole
         {
@@ -126,6 +131,7 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
         /// <summary>
         /// 电话号码
         /// </summary>
+        [DataMember]
         public string PhoneNumber
         {
             set;
@@ -135,6 +141,7 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
         /// <summary>
         /// 在读学校ID
         /// </summary>
+        [DataMember]
         public string SchoolID
         {
             set;
@@ -144,6 +151,7 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
         /// <summary>
         /// 在读学校
         /// </summary>
+        [DataMember]
         public string SchoolName
         {
             set;
@@ -153,6 +161,7 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
         /// <summary>
         /// 是否潜客
         /// </summary>
+        [DataMember]
         public bool IsPotential
         {
             set;

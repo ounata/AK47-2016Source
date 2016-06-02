@@ -191,7 +191,7 @@ namespace MCS.Library.SOA.DataObjects
 		{
 			ExceptionHelper.FalseThrow<ArgumentNullException>(value != null, "value");
 			ExceptionHelper.FalseThrow(
-				value.GetType() == typeof(Material),
+                value.GetType() == typeof(Material) || value.GetType().IsSubclassOf(typeof(Material)),
 				string.Format(Resources.CollectionValidateError, typeof(Material)));
 
 			ExceptionHelper.CheckStringIsNullOrEmpty(((Material)value).ID, "ID");

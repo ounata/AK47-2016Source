@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCSWebApp", "AK47CloudService\MCSWebApp\MCSWebApp.csproj", "{E63BB353-056C-4B4A-8B44-0061FEAD3329}"
+EndProject
+Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "MCSWebAppCloudService", "AK47CloudService\MCSWebAppCloudService\MCSWebAppCloudService.ccproj", "{7709BAF5-D00C-4921-AE7E-9A721B8ABF83}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E63BB353-056C-4B4A-8B44-0061FEAD3329}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E63BB353-056C-4B4A-8B44-0061FEAD3329}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E63BB353-056C-4B4A-8B44-0061FEAD3329}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E63BB353-056C-4B4A-8B44-0061FEAD3329}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7709BAF5-D00C-4921-AE7E-9A721B8ABF83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7709BAF5-D00C-4921-AE7E-9A721B8ABF83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7709BAF5-D00C-4921-AE7E-9A721B8ABF83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7709BAF5-D00C-4921-AE7E-9A721B8ABF83}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 3
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://10.1.56.70:8080/tfs/pptsv2.0
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = AK47CloudService\\MCSWebApp\\MCSWebApp.csproj
+		SccProjectName1 = AK47CloudService/MCSWebApp
+		SccLocalPath1 = AK47CloudService\\MCSWebApp
+		SccProjectUniqueName2 = AK47CloudService\\MCSWebAppCloudService\\MCSWebAppCloudService.ccproj
+		SccProjectName2 = AK47CloudService/MCSWebAppCloudService
+		SccLocalPath2 = AK47CloudService\\MCSWebAppCloudService
+	EndGlobalSection
+EndGlobal

@@ -1,4 +1,5 @@
-﻿using MCS.Library.Data;
+﻿using MCS.Library.Core;
+using MCS.Library.Data;
 using MCS.Web.MVC.Library.Filters;
 using PPTS.Data.Common.Adapters;
 using PPTS.Data.Orders.DataSources;
@@ -14,6 +15,12 @@ using System.Web.Http;
 using PPTS.Data.Common.Security;
 using MCS.Library.Principal;
 using System.Web.Http.Results;
+using PPTS.WebAPI.Orders.ViewModels.Purchase;
+using MCS.Web.MVC.Library.ModelBinder;
+using System.Web.Http.ModelBinding;
+using MCS.Library.Office.OpenXml.Excel;
+using System.Data;
+using MCS.Web.MVC.Library.ApiCore;
 
 namespace PPTS.WebAPI.Orders.Controllers
 {
@@ -34,8 +41,8 @@ namespace PPTS.WebAPI.Orders.Controllers
 
             return new DebookOrderQueryResult
             {
-                QueryResult = GenericPurchaseSource<DebookOrder, DebookOrderCollection>.Instance.Query(criteria.PageParams, criteria, criteria.OrderBy),
-                Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(DebookOrder), typeof(OrderItemView)),
+                QueryResult = GenericPurchaseSource<DebookOrderItemView, DebookOrderItemViewCollection>.Instance.Query(criteria.PageParams, criteria, criteria.OrderBy),
+                Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(DebookOrder), typeof(OrderItemView), typeof(DebookOrderItemView)),
             };
         }
 
@@ -45,43 +52,100 @@ namespace PPTS.WebAPI.Orders.Controllers
         /// <param name="criteria">查询条件</param>
         /// <returns>返回不带字典的潜客数据列表</returns>
         [HttpPost]
-        public PagedQueryResult<DebookOrder, DebookOrderCollection> GetPagedDebookOrders(DebookOrderCriteriaModel criteria)
+        public PagedQueryResult<DebookOrderItemView, DebookOrderItemViewCollection> GetPagedDebookOrders(DebookOrderCriteriaModel criteria)
         {
-            return GenericPurchaseSource<DebookOrder, DebookOrderCollection>.Instance.Query(criteria.PageParams, criteria, criteria.OrderBy);
+            return GenericPurchaseSource<DebookOrderItemView, DebookOrderItemViewCollection>.Instance.Query(criteria.PageParams, criteria, criteria.OrderBy);
         }
 
         #endregion
 
         [HttpPost]
-        public HttpResponseMessage Unsubscribe(DebookOrderModel model)
+        public void Unsubscribe(DebookOrderModel model)
         {
+            model.OrderItemID.CheckStringIsNullOrEmpty("OrderItemID");
 
-            model.Order.CreatorID = DeluxeIdentity.CurrentUser.ID;
-            model.Order.CreatorName = DeluxeIdentity.CurrentUser.DisplayName;
-            model.Order.SubmitterID = DeluxeIdentity.CurrentUser.ID;
-            model.Order.SubmitterJobID = DeluxeIdentity.CurrentUser.GetCurrentJob().ID;
-            model.Order.SubmitterJobName = DeluxeIdentity.CurrentUser.GetCurrentJob().Name;
-            model.Order.SubmitterName = DeluxeIdentity.CurrentUser.DisplayName;
-
-            string message = string.Empty;
-            var returnValue = (int)new DebookOrderExecutor(model).Execute();
-            switch (returnValue)
-            {
-                case -1: message = "有未完成订购操作的，不能退订"; break;
-            }
-            //跨库操作
-            //case -2: message = "有未完成退费操作的，不能退订"; break;
-            //case -3: message = "有未完成转学操作的，不能退订"; break;
-
-            var statusCode = HttpStatusCode.OK;
-            if (!string.IsNullOrWhiteSpace(message))
-            {
-                statusCode = HttpStatusCode.PreconditionFailed;
-            }
-            return Request.CreateErrorResponse(statusCode, message);
-
+            model.CurrentUser = DeluxeIdentity.CurrentUser;
+            new DebookOrderExecutor(model) { NeedValidation=true }.Execute();
         }
 
+
+        //
+
+        #region 导出
+
+        [HttpPost]
+        public HttpResponseMessage ExportDebookItemList([ModelBinder(typeof(FormBinder))]DebookOrderCriteriaModel criteria)
+        {
+
+            var wb = WorkBook.CreateNew();
+            var sheet = wb.Sheets["sheet1"];
+            var tableDesp = new TableDescription("退订列表");
+            criteria.PageParams.PageIndex = 0;
+            criteria.PageParams.PageSize = 0;
+            var pageData = GenericPurchaseSource<DebookOrderItemView, DebookOrderItemViewCollection>.Instance.Query(criteria.PageParams, criteria, criteria.OrderBy);
+
+            var columns = new Dictionary<string, string>() {
+{ "校区", "CampusName"},
+{"学生姓名", "CustomerName"},
+{"学生编号", "CustomerCode"},
+{"家长姓名", "ParentName"},
+{"订购单编号", "OrderNo"},
+//{"订购日期", "OrderTime"},
+//{"产品类型", "CatalogName"},
+//{"年级", "Grade"},
+//{"科目", "Subject"},
+//{"课程级别", "CourseLevel"},
+//{"实际单价(元)", "RealPrice"},
+//{"客户折扣率", "DiscountRate"},
+//{"订购数量", "OrderAmount"},
+//{"订购金额(元)", "BookMoney"},
+//{"赠送数量", "PresentAmount"},
+//{"已退数量", "DebookedAmount"},
+//{"已排数量", "AssignedAmount"},
+//{"已上数量", "ConfirmedAmount"},
+//{"剩余数量", "RemainCount"},
+//{"订单状态", "OrderStatus"},
+//{"订购操作人", "SubmitterName"},
+//{"操作人岗位", "SubmitterJobName"},
+ };
+            columns.ToList().ForEach(kv =>
+            {
+                tableDesp.AllColumns.Add(new TableColumnDescription(new DataColumn(kv.Key, typeof(string))) { PropertyName = kv.Value });
+            });
+
+            var dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(DebookOrderItemView));
+            sheet.LoadFromCollection(pageData.PagedData, tableDesp, (cell, param) =>
+            {
+
+                switch (param.ColumnDescription.PropertyName)
+                {
+                    case "CourseLevel":
+                        var cl = dictionaries["c_codE_ABBR_Product_CourseLevel"].Where(c => c.Key == Convert.ToString(param.PropertyValue));
+                        cell.Value = null != cl ? (null == cl.FirstOrDefault() ? null : cl.FirstOrDefault().Value) : null;
+                        break;
+                    case "Grade":
+                        var g = dictionaries["c_codE_ABBR_CUSTOMER_GRADE"].Where(c => c.Key == Convert.ToString(param.PropertyValue));
+                        cell.Value = null != g ? (null == g.FirstOrDefault() ? null : g.FirstOrDefault().Value) : null;
+                        break;
+                    case "Subject":
+                        var rt = dictionaries["C_CODE_ABBR_BO_Product_TeacherSubject"].Where(c => c.Key == Convert.ToString(param.PropertyValue));
+                        cell.Value = null != rt ? (null == rt.FirstOrDefault() ? null : rt.FirstOrDefault().Value) : null;
+                        break;
+                    case "OrderStatus":
+                        var ro = dictionaries["c_codE_ABBR_Order_OrderStatus"].Where(c => c.Key == Convert.ToString(param.PropertyValue));
+                        cell.Value = null != ro ? (null == ro.FirstOrDefault() ? null : ro.FirstOrDefault().Value) : null;
+                        break;
+                    default:
+                        cell.Value = param.PropertyValue;
+                        break;
+                }
+            });
+
+            return wb.ToResponseMessage("退订列表.xlsx");
+        }
+
+
+        #endregion
 
     }
 }

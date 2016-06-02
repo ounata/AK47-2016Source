@@ -124,6 +124,17 @@ namespace MCS.Library.Office.OpenXml.Excel
             }
         }
 
+        /// <summary>
+        /// 得到任意一个成员
+        /// </summary>
+        public TItem Any
+        {
+            get
+            {
+                return this.InnerDict.Values.FirstOrDefault();
+            }
+        }
+
         public bool IsReadOnly
         {
             get

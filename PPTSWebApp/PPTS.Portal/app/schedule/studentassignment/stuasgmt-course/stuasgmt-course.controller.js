@@ -2,23 +2,25 @@
         ppts.config.dataServiceConfig.studentAssignmentDataService], function (schedule) {
             schedule.registerController("stuAsgmtCourseController", [
                  '$scope', '$state', '$stateParams', '$filter', 'dataSyncService', '$compile'
-                 , '$uibModal', 'blockUI', '$http', 'studentassignmentDataService', 'mcsDialogService', 'uiCalendarConfig',
+                 , '$uibModal', 'blockUI', '$http', 'studentassignmentDataService', 'mcsDialogService', 'uiCalendarConfig', 'printService',
             function ($scope, $state, $stateParams, $filter, dataSyncService, $compile
-                , $uibModal, blockUI, $http, studentassignmentDataService, mcsDialogService, uiCalendarConfig) {
+                , $uibModal, blockUI, $http, studentassignmentDataService, mcsDialogService, uiCalendarConfig, printService) {
+
                 var vm = this;
+
                 vm.CID = $stateParams.cID, vm.stuName = $stateParams.tn, vm.selectedEvents = [], vm.events = [];
                 vm.weekText = new Array("星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六");
                 vm.acQM = { customerID: vm.CID, startTime: '2016-04-18', endTime: '2016-05-09', isUTCTime: false, grade: '', assignStatus: '', teacherName: '' };
                 
-                //配置日程组件
+                /*配置日程组件*/
                 vm.uiConfig = {
                     calendar: {
                         lang: 'zh-cn',
                         allDaySlot: false,
-                        height: 730,
+                        height: 800,
                         slotLabelFormat: 'HH:mm',
                         minTime: '06:00:00',
-                        maxTime: '22:00:00',
+                        maxTime: '24:00:00',
                         timeFormat: 'HH:mm',
                         editable: false,
                         selectable: true,
@@ -64,6 +66,7 @@
 
                 var firstExec = true;
                 vm.result = {};
+                /*日程组件回调方法，加载周课表数据*/
                 vm.schedules = function (start, end, timezone, callback) {
                     blockUI.start();
                     vm.acQM.startTime = start;
@@ -86,6 +89,7 @@
                 };
                 vm.eventSources = [vm.events, vm.schedules];
 
+                /*刷新周视图数据*/
                 vm.reLoadCourse = function () {
                     blockUI.start();
                     vm.events.splice(0, vm.events.length);
@@ -103,6 +107,7 @@
                     });
                 };
 
+                /*将排课对象转为视图对象*/
                 vm.getViewModel = function (event) {
                     var evt = {
                         id: event.assignID,
@@ -116,6 +121,7 @@
                         status: event.assignStatus,
                         coursessource: event.assignSource,
                         customerName: event.customerName,
+                        customerID:event.customerID,
                         subjectName: event.subjectName,
                         curDate: event.startTime.getFullYear() + '-' + vm.getDoubleStr((event.startTime.getMonth() + 1)) + '-' + vm.getDoubleStr(event.startTime.getDate()),
                         curWeek: vm.weekText[event.startTime.getDay()],
@@ -144,7 +150,6 @@
                     }
                     return evt;
                 };
-
 
                 /*查询*/
                 vm.simpleSearch = function () {
@@ -182,7 +187,7 @@
                             };
                             uiCalendarConfig.calendars.courseCalendar.fullCalendar('rerenderEvents');
                             vm.selectedEvents.splice(0, vm.selectedEvents.length);
-                            alert("取消成功");
+                            vm.showMsg("取消成功");
                             vm.getCustomerStatCurMonth();
                         },
                         function (error) {
@@ -205,7 +210,6 @@
                             vm.events.push(evt);                         
                             uiCalendarConfig.calendars.courseCalendar.fullCalendar('rerenderEvents');
                             vm.getCustomerStatCurMonth();
-
                         };
                     });
                 };
@@ -240,7 +244,8 @@
                                 reMinute: '',
                                 startTime: vm.selectedEvents[i].sTime,
                                 endTime: vm.selectedEvents[i].eTime,
-                                allowResetDateTime: new Date()
+                                allowResetDateTime: new Date(),
+                                customerID:vm.selectedEvents[i].customerID
                             };
                             var sdate = vm.selectedEvents[i].startText.split(':');
                             if (sdate.length == 2) {
@@ -271,6 +276,7 @@
                         return '0' + curValue;
                     return curValue;
                 };
+
                 vm.cSCM = {};
                 vm.getCustomerStatCurMonth = function () {
                     studentassignmentDataService.getCurMonthStat(vm.acQM, function (data) {
@@ -285,6 +291,20 @@
                 vm.gotoCourseList = function () {
                     $state.go('ppts.stuasgmt-course-list', { cID: vm.CID });
                 };
+
+                /*跳转学生排课列表*/
+                vm.gotoAssignList = function () {
+                    $state.go('ppts.schedule');
+                };
+
+                vm.showMsg = function (msg) {
+                    mcsDialogService.error({ title: '提示信息', message: msg });
+                };
+
+                vm.print = function () {
+                    printService.print();
+                }
+
 
             }]);
         });

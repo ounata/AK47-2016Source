@@ -70,16 +70,26 @@ namespace MCS.Library.SOA.DataObjects
 
 		public override Stream GetMaterialContent(string contentID)
 		{
-			MaterialContentCollection contents = MaterialContentAdapter.Instance.Load(builder => builder.AppendItem("CONTENT_ID", contentID));
+			MaterialContent content = MaterialContentAdapter.Instance.Load(builder => builder.AppendItem("CONTENT_ID", contentID)).SingleOrDefault();
+            Stream result = null;
 
-			(contents.Count > 0).FalseThrow("不能找到ContentID为'{0}'的附件内容", contentID);
+            if (content != null)
+            {
+                if (content.ContentData == null)
+                    content.ContentData = new byte[0];
 
-			if (contents[0].ContentData == null)
-			{
-				contents[0].ContentData = new byte[0];
-			}
+                result = new MemoryStream(content.ContentData);
+            }
+            else
+            {
+                //数据库里如果没有附件，则从文件系统获取（基类实现）
+                if (this.DestFileInfo != null)
+                    result = base.GetMaterialContent(contentID);
+                else
+                    throw new SystemSupportException(string.Format("不能找到ContentID为'{0}'的附件内容", contentID));
+            }
 
-			return new MemoryStream(contents[0].ContentData);
+			return result;
 		}
 
 		public override bool ExistsContent(string contentID)

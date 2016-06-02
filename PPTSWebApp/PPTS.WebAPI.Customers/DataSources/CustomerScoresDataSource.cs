@@ -38,6 +38,7 @@ namespace PPTS.WebAPI.Customers.DataSources
                     customer = customers.Find(c => c.CustomerID == item.CustomerID);
                     item.CustomerName = customer == null ? "" : customer.CustomerName;
                     item.CustomerCode = customer == null ? "" : customer.CustomerCode;
+                    item.CustomerStatus = customer == null ? "" : ((byte)customer.Status).ToString();
                 }
                 if (relations != null && relations.Count > 0)
                 {

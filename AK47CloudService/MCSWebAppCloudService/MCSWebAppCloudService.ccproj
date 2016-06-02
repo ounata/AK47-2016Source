@@ -1,0 +1,271 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>2.9</ProductVersion>
+    <ProjectGuid>7709baf5-d00c-4921-ae7e-9a721b8abf83</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MCSWebAppCloudService</RootNamespace>
+    <AssemblyName>MCSWebAppCloudService</AssemblyName>
+    <StartDevelopmentStorage>True</StartDevelopmentStorage>
+    <Name>MCSWebAppCloudService</Name>
+    <PackageEnableRemoteDebugger>False</PackageEnableRemoteDebugger>
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <!-- Items for the project -->
+  <ItemGroup>
+    <ServiceDefinition Include="ServiceDefinition.csdef" />
+    <ServiceConfiguration Include="ServiceConfiguration.Local.cscfg" />
+    <ServiceConfiguration Include="ServiceConfiguration.Cloud.cscfg" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MCSWebApp\MCSWebApp.csproj">
+      <Name>MCSWebApp</Name>
+      <Project>{e63bb353-056c-4b4a-8b44-0061fead3329}</Project>
+      <Private>True</Private>
+      <RoleType>Web</RoleType>
+      <RoleName>MCSWebApp</RoleName>
+      <UpdateDiagnosticsConnectionStringOnPublish>True</UpdateDiagnosticsConnectionStringOnPublish>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="MCSWebAppContent\" />
+    <Folder Include="MCSWebAppContent\bin" />
+    <Folder Include="MCSWebAppContent\bin\MCS2016ConfigDir" />
+    <Folder Include="MCSWebAppContent\bin\MCS2016ConfigDir\Local" />
+    <Folder Include="MCSWebAppContent\bin\MCS2016ConfigDir\ProduceCircumstanceConfig" />
+    <Folder Include="Profiles" />
+  </ItemGroup>
+  <ItemGroup>
+    <DiagnosticsConfiguration Include="MCSWebAppContent\diagnostics.wadcfgx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\accessTicketSettings.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\aclSettings.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\adToDBConfigSettings.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\appCommonInfoSettings.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\appPathSettings.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\archiveSettings.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\auServiceClientSettings.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\au_Settings.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\cfcaControlConfigSetting.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\commonInfoMappingSettings.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\componentHelperWrapperSettings.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\connectionManager - server.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\connectionManager-243.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\connectionManager-244.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\connectionManager.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\connectionNameMappingSettings.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\dialogHelperWrapperSettings.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\emailMessageSettings.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\HBWebHelperControlSettings.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\httpModules.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\identityConfigSettings-vm.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\identityConfigSettings.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\imagePathSettings.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\impersonateSettings.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\Local\passportClientSettings.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\Local\resourceUriSettings.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\Local\rolesDefineConfig.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\Local\soaUserTaskOperationSettings.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\Local\wfActionSettings.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\Local\wfActivitySettings.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\materialFileOperationSettings.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\MCS.ConfigMapping.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\MCS.Framework.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\mossServerInfoConfigSettings.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\officeViewerWrapperSettings.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\oguPermissionSettings.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\passportClientSettings.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\pcServiceClientSettings.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\pc_objectSchemaSettings.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\pc_schemaPropertyGroupSettings.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\ProduceCircumstanceConfig\appCommonInfoSettings.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\ProduceCircumstanceConfig\connectionNameMappingSettings.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\ProduceCircumstanceConfig\resourceUriSettings.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\ProduceCircumstanceConfig\soaUserTaskOperationSettings.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\ProduceCircumstanceConfig\wfDelegationSettings.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\relativeLinkControlConfigSetting.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\resHttpModules.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\resourceUriSettings.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\rolesDefineConfig.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\serverInfoConfigSettings-vm.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\serverInfoConfigSettings.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\serviceMainConfig.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\serviceStatusConfig.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\soaUserTaskOperationSettings.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\udpCacheClientSettings.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\udpCacheNotifierSettings.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\uriSettings.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\wfActionSettings.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\wfActivitySettings.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\wfControlSettings.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\wfDelegationSettings.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\MCS2016ConfigDir\wfRuntimeViewerSettings.config">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\install.cmd">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\install.ps1">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MCSWebAppContent\bin\NDP461-KB3102438-Web.exe">
+      <SubType>Content</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <PublishProfile Include="Profiles\platformProduction.azurePubxml" />
+  </ItemGroup>
+  <!-- Import the target files for this project template -->
+  <PropertyGroup>
+    <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">10.0</VisualStudioVersion>
+    <CloudExtensionsDir Condition=" '$(CloudExtensionsDir)' == '' ">$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Windows Azure Tools\2.9\</CloudExtensionsDir>
+  </PropertyGroup>
+  <Import Project="$(CloudExtensionsDir)Microsoft.WindowsAzure.targets" />
+</Project>

@@ -47,10 +47,7 @@ namespace PPTS.WebAPI.Orders.Executors
                     }
                 }
             }
-
-
-            c.ClassPeoples = c.ClassPeoples - Model.CustomerIDs.Length;
-            ClassesAdapter.Instance.UpdateInContext(c);
+                        
             foreach (var cli in clic)
             {
                 if (Model.CustomerIDs.Contains(cli.CustomerID))
@@ -65,9 +62,15 @@ namespace PPTS.WebAPI.Orders.Executors
                 {
                     a.AssignStatus = AssignStatusDefine.Invalid;
                     AssignsAdapter.Instance.UpdateInContext(a);
-                    AssetAdapter.Instance.IncreaseAssignedAmountInContext(a.AssetID, 1, a.CreatorID, a.CreatorName);
+                    Data.Orders.Entities.Asset at = GenericAssetAdapter<Data.Orders.Entities.Asset, AssetCollection>.Instance.Load(a.AssetID);
+                    at.AssignedAmount -= 1;
+                    GenericAssetAdapter<Data.Orders.Entities.Asset, AssetCollection>.Instance.UpdateInContext(at);
                 }
             }
+
+            var clics = ClassLessonItemsAdapter.Instance.LoadStudentCountCollection(Model.ClassID);
+            c.ClassPeoples = clics != null ? clics.Count : 0;
+            ClassesAdapter.Instance.UpdateInContext(c);
         }
 
         /// <summary>

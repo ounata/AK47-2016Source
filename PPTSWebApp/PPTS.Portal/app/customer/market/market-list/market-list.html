@@ -31,8 +31,14 @@
             </div>
         </div>
         <div class="portlet-body">
-            <ppts-select-branch model="vm.criteria.orgIds" />
-            <ppts-search placeholder="输入学员、家长姓名，学员编号，联系方式进行查询" click="vm.search()" model="vm.criteria.keyword" />
+            <div class="row">
+                <div class="col-md-4">
+                    <ppts-select-branch model="vm.criteria.orgIds" />
+                </div>
+                <div class="col-md-8">
+                    <ppts-search placeholder="输入学员、家长姓名，学员编号，联系方式进行查询" click="vm.search()" model="vm.criteria.keyword" />
+                </div>
+            </div>
         </div>
     </div>
     <div class="tags mcs-search-tags hide">

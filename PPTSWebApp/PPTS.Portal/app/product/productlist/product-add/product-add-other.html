@@ -18,7 +18,7 @@
                         选择产品分类：
                     </label>
                     <div class="col-sm-4">
-                        <ppts-select category="categoryCustom" model="vm.m[loadtype].product.catalog" caption="产品分类" />
+                        <ppts-select category="categoryCustom" model="vm.m[loadtype].product.catalog" caption="产品分类" required/>
                     </div>
                 </div>
                 <div class="col-sm-offset-2">
@@ -33,7 +33,7 @@
                             <span>合作方：</span>
                         </label>
                         <div class="col-sm-2">
-                            <mcs-input model="vm.m[loadtype].product.partnerName" css="col-sm-10" />
+                            <mcs-input model="vm.m[loadtype].product.partnerName" css="col-sm-10" required/>
                         </div>
                     </div>
                     <div class="span4">
@@ -41,7 +41,7 @@
                             <span>分成比例：</span>
                         </label>
                         <div class="col-sm-2">
-                            <mcs-input type="number" min="0.01" max="0.99" model="vm.m[loadtype].product.partnerRatio" css="col-sm-10" />
+                            <mcs-input type="number" min="0.01" max="0.99" model="vm.m[loadtype].product.partnerRatio" css="col-sm-10" required/>
                         </div>
                     </div>
                 </div>
@@ -51,7 +51,7 @@
                         <span>产品简介：</span>
                     </label>
                     <div class="col-sm-6">
-                        <textarea class="form-control" rows="5" id="textArea" ng-model="vm.m[loadtype].product.productMemo" maxlength="400"></textarea>
+                        <textarea class="form-control" rows="5" id="textArea" ng-model="vm.m[loadtype].product.productMemo" maxlength="400" required></textarea>
                         <span class="help-block text-right">不允许输入400个字符，已经输入{{ vm.calcCharCount() }}个</span>
                     </div>
                 </div>
@@ -61,7 +61,7 @@
                             <span>产品单价：</span>
                         </label>
                         <div class="col-sm-3">
-                            <mcs-input type="number" min="0" model="vm.m[loadtype].product.productPrice" />
+                            <mcs-input type="number" min="0" model="vm.m[loadtype].product.productPrice" required/>
                             <label>元/课时</label>
                         </div>
                     </div>
@@ -70,7 +70,7 @@
                             <span>目标单价：</span>
                         </label>
                         <div class="col-sm-3">
-                            <mcs-input type="number" min="0" model="vm.m[loadtype].product.targetPrice" />
+                            <mcs-input type="number" min="0" model="vm.m[loadtype].product.targetPrice" required/>
                             <label>元/课时</label>
                         </div>
                     </div>
@@ -107,7 +107,7 @@
                             <span>产品启/止售时间：</span>
                         </label>
                         <div class="col-sm-2">
-                            <ppts-daterangepicker start-date="vm.m[loadtype].product.startDate" end-date="vm.m[loadtype].product.endDate" />
+                            <ppts-daterangepicker start-date="vm.m[loadtype].product.startDate" end-date="vm.m[loadtype].product.endDate" required/>
 
                         </div>
                     </div>
@@ -118,7 +118,7 @@
                             <span>收入确认启/止时间：</span>
                         </label>
                         <div class="col-sm-2">
-                            <ppts-daterangepicker start-date="vm.m[loadtype].product.confirmStartDate" end-date="vm.m[loadtype].product.confirmEndDate" />
+                            <ppts-daterangepicker start-date="vm.m[loadtype].product.confirmStartDate" end-date="vm.m[loadtype].product.confirmEndDate" required/>
                         </div>
                     </div>
                     
@@ -143,7 +143,7 @@
                 <div class="form-group row" ng-show=" vm.m[loadtype].product.promotionAllowed ==1 && vm.m[loadtype].product.tunlandAllowed ==1">
                     <label class="control-label col-sm-2">实际订购金额比原订购金额少</label>
                     <div class="col-sm-8">
-                        <mcs-input type="number" min="0" model="vm.m[loadtype].product.promotionQuota" css="col-sm-2" /><label>元以下（包括此金额），可直接订购，无需审批</label>
+                        <mcs-input type="number" min="0" model="vm.m[loadtype].product.promotionQuota" css="col-sm-2" required/><label>元以下（包括此金额），可直接订购，无需审批</label>
                     </div>
                 </div>
             </form>

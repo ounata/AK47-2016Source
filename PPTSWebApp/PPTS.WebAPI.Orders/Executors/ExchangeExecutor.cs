@@ -22,24 +22,27 @@ namespace PPTS.WebAPI.Orders.Executors
         public ExchangeExecutor(ExchangeOrderModel model) : base(model, null)
         {
             model.NullCheck("model");
-
         }
 
         protected override void PrepareData(DataExecutionContext<UserOperationLogCollection> context)
         {
-            base.PrepareData(context);
-
             var order = Model.ToOrder();
             var orderItem = Model.ToOrderItem();
 
             Data.Orders.Adapters.OrdersAdapter.Instance.UpdateInContext(order);
             Data.Orders.Adapters.OrderItemAdapter.Instance.UpdateInContext(orderItem);
-            Data.Orders.Adapters.GenericAssetAdapter<Asset,AssetCollection>.Instance.ExchangeInContext(Model.ToExchangeAsset(), Model.ToAsset());
-            
+            Data.Orders.Adapters.GenericAssetAdapter<Asset, AssetCollection>.Instance.UpdateInContext(Model.ToExchangeAsset());
+            Data.Orders.Adapters.GenericAssetAdapter<Asset, AssetCollection>.Instance.UpdateInContext(Model.ToAsset());
+
+            base.PrepareData(context);
 
         }
-        
 
+        protected override void DoValidate(ValidationResults validationResults)
+        {
+            Model.Validate();
+            base.DoValidate(validationResults);
+        }
 
     }
 }

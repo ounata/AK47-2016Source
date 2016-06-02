@@ -20,24 +20,13 @@ namespace PPTS.Data.Products.Entities
         public ProductPermission()
         {
         }
-        
-        /// <summary>
-        /// 使用者组织ID
-        /// </summary>
-        [ORFieldMapping("UseOrgID", PrimaryKey = true)]
-        [DataMember]
-        public string UseOrgID
-        {
-            get;
-            set;
-        }
 
         /// <summary>
-        /// 使用者组织类型
+        /// 校区ID
         /// </summary>
-        [ORFieldMapping("UseOrgType")]
+        [ORFieldMapping("CampusID", PrimaryKey = true)]
         [DataMember]
-        public int UseOrgType
+        public string CampusID
         {
             get;
             set;

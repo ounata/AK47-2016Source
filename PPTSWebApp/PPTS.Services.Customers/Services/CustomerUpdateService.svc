@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="PPTS.Services.Customers.Services.CustomerQueryService" CodeBehind="CustomerUpdateService.svc.cs" Factory="MCS.Library.WcfExtensions.WfServiceHostFactory" %>

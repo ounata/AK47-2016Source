@@ -5,6 +5,7 @@ using PPTS.Data.Customers.Entities;
 using PPTS.WebAPI.Customers.ViewModels.PotentialCustomers;
 using PPTS.Data.Customers.Adapters;
 using PPTS.Data.Customers;
+using MCS.Library.Data.DataObjects;
 
 namespace PPTS.WebAPI.Customers.DataSources
 {
@@ -31,12 +32,18 @@ namespace PPTS.WebAPI.Customers.DataSources
         public PagedQueryResult<PotentialCustomerSearchModel, PotentialCustomerSearchModelCollection> LoadPotentialCustomers(IPageRequestParams prp, object condition, IEnumerable<IOrderByRequestItem> orderByBuilder)
         {
             var select = " pcc.*, pc.ParentName ";
-            var from = @" [CM].[PotentialCustomers_Current] pcc
+            var from = @" [CM].[PotentialCustomers_Current]  pcc
                           inner join [CM].[CustomerParentRelations_Current] cprc on pcc.CustomerID = cprc.CustomerID and cprc.IsPrimary = 1
                           inner join [CM].[Parents_Current] pc on cprc.ParentID = pc.ParentID
                           left join [CM].[PotentialCustomersFulltext] pcf on pcc.CustomerID = pcf.OwnerID ";
             var result = Query(prp, select, from, condition, orderByBuilder);
             return result;
+        }
+
+        protected override void OnBuildQueryCondition(QueryCondition qc)
+        {
+            //qc.WhereClause=PPTS.Data.Customers.Authorization.ScopeAuthorization<PotentialCustomer>.Instance.ReadAuthExistsBuider("pcc", qc.WhereClause).ToSqlString(MCS.Library.Data.Builder.TSqlBuilder.Instance);
+            base.OnBuildQueryCondition(qc);
         }
     }
 }

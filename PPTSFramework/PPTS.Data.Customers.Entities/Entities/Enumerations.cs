@@ -280,12 +280,6 @@ namespace PPTS.Data.Customers
     public enum ChargeTypeDefine
     {
         /// <summary>
-        /// 不支持
-        /// </summary>
-        [EnumItemDescription("无")]
-        NaN = 0,
-
-        /// <summary>
         /// 新签
         /// </summary>
         [EnumItemDescription("新签")]
@@ -395,36 +389,6 @@ namespace PPTS.Data.Customers
     }
 
     /// <summary>
-    /// 处理状态
-    /// </summary>
-    public enum ProcessStatusDefine
-    {
-        /// <summary>
-        /// 待处理
-        /// </summary>
-        [EnumItemDescription("待处理")]
-        Waiting,
-
-        /// <summary>
-        /// 处理中
-        /// </summary>
-        [EnumItemDescription("处理中")]
-        Processing,
-
-        /// <summary>
-        /// 处理完
-        /// </summary>
-        [EnumItemDescription("处理完")]
-        Processed,
-
-        /// <summary>
-        /// 错误
-        /// </summary>
-        [EnumItemDescription("错误")]
-        Error
-    }
-
-    /// <summary>
     /// 账户类型
     /// </summary>
     public enum AccountTypeDefine
@@ -448,16 +412,16 @@ namespace PPTS.Data.Customers
     public enum AccountStatusDefine
     {
         /// <summary>
-        /// 正常
+        /// 不可充值
         /// </summary>
-        [EnumItemDescription("正常")]
-        Enabled,
+        [EnumItemDescription("不可充值")]
+        Uncharged,
 
         /// <summary>
-        /// 停用
+        /// 可充值
         /// </summary>
-        [EnumItemDescription("停用")]
-        Disabled
+        [EnumItemDescription("可充值")]
+        Chargable
     }
 
     /// <summary>
@@ -476,6 +440,25 @@ namespace PPTS.Data.Customers
         /// </summary>
         [EnumItemDescription("转入")]
         TransferIn = 2
+    }
+
+    /// <summary>
+    /// 学员转学类型
+    /// </summary>
+    public enum StudentTransferType
+    {
+        /// <summary>
+        /// 同分公司转学
+        /// </summary>
+        [EnumItemDescription("同分公司转学")]
+        SameBranch = 1,
+
+        /// <summary>
+        /// 跨分公司转学
+        /// </summary>
+        [EnumItemDescription("跨分公司转学")]
+        CrossBranch = 2,
+
     }
 
     /// <summary>

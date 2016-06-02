@@ -1,4 +1,4 @@
-﻿<!-- #开始：潜客列表.快速查询条件 -->
+﻿<!-- #开始：折扣表管理列表.快速查询条件 -->
 <div class="mcs-panel-search well well-sm">
     <div class="portlet">
         <div class="portlet-title line">
@@ -8,28 +8,31 @@
         </div>
         <div class="portlet-body">
             <div>
-               
-                    <ppts-select-branch  model="vm.criteria.orgIds" />
-              
-             
-                    <ppts-daterangepicker  class="search"></ppts-daterangepicker>
-                    <ppts-select category="refundAlertStatus" class="ppts-select-search" model="vm.criteria.alertStatus" async="false" />
-
-
-                    <mcs-button category="search" click="vm.search()" class="search-btn" size="medium" />
-              
+                <ppts-select-branch model="vm.criteria.campusIDs" />
+                <ppts-daterangepicker  class="search" start-text="启用开始时间" end-text="启用结束时间" start-date="vm.criteria.startDate" end-date="vm.criteria.endDate"></ppts-daterangepicker>
+                <ppts-select category="discountStatus" class="ppts-select-search" model="vm.criteria.discountStatus" async="true" />
             </div>
-
-           
-
-
-
+            <div>
+                <ppts-select category="campusUseInfo" class="ppts-select-search" model="vm.criteria.campusStatus" async="true" />
+                <mcs-button category="search" click="vm.search()" class="search-btn" size="medium" />
+            </div>
         </div>
     </div>
 </div>
 <div class="mcs-panel-toolbar">
-    <mcs-button category="add" text="新增折扣表" ppts-job-functions="新增折扣表" click="$state.go('ppts.confirmdoor-add')"></mcs-button>
-    <mcs-button category="add" text="删除折扣表" ppts-job-functions="删除折扣表" click="$state.go('ppts.confirmdoor-add')"></mcs-button>
-    <mcs-button category="add" text="导出买赠表" ppts-job-functions="导出买赠表" click="$state.go('ppts.confirmdoor-add')"></mcs-button>
+    <mcs-button category="add" text="新增折扣表" ppts-job-functions="新增折扣表" click="$state.go('ppts.discount-add')"></mcs-button>
+    <mcs-button category="delete" text="删除折扣表" ppts-job-functions="删除折扣表" click="vm.delete()"></mcs-button>
+    <mcs-button category="export" text="导出折扣表" ppts-job-functions="导出折扣表" click="vm.export()"></mcs-button>
+    <mcs-button category="disable" text="停用折扣表" ppts-job-functions="停用折扣表" click="vm.disable()"></mcs-button>
 </div>
-<!-- /结束：潜客列表.快速查询条件 -->
+<!-- /结束：折扣表管理列表.快速查询条件 -->
+<div class="alert alert-block alert-danger" ng-show="vm.errorMessage">
+    <button type="button" class="close" data-dismiss="alert">
+        <i class="ace-icon fa fa-times"></i>
+    </button>
+    <i class="ace-icon fa fa-warning"></i>
+    {{vm.errorMessage}}
+</div>
+<!-- #开始：折扣表管理列表.数据表格 -->
+<mcs-datatable data="vm.data" />
+<!-- /结束：折扣表管理列表.数据表格 -->

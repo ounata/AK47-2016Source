@@ -91,7 +91,7 @@
     <Compile Include="Entities\CustomerServiceItem.cs" />
     <Compile Include="Entities\CustomerStaffRelation.cs" />
     <Compile Include="Entities\CustomerStopAlerts.cs" />
-    <Compile Include="Entities\CustomerTeacherAssignApplie.cs" />
+    <Compile Include="Entities\CustomerTeacherAssignApply.cs" />
     <Compile Include="Entities\CustomerTeacherRelation.cs" />
     <Compile Include="Entities\CustomerTransferApply.cs" />
     <Compile Include="Entities\CustomerTransferResource.cs" />
@@ -106,6 +106,8 @@
     <Compile Include="Entities\POSRecord.cs" />
     <Compile Include="Entities\PotentialCustomer.cs" />
     <Compile Include="Entities\School.cs" />
+    <Compile Include="Entities\TeacherSearch.cs" />
+    <Compile Include="Entities\TransferTypeDefine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -62,11 +62,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\AssetStatisticQueryResult.cs" />
-    <Compile Include="Models\HasPeriodCourseQueryResult.cs" />
-    <Compile Include="Models\OrderInfoForRefundQueryModel.cs" />
-    <Compile Include="Models\OrderInfoForRefundQueryResult.cs" />
+    <Compile Include="Models\RefundReallowanceMoneyQueryCriteriaModel.cs" />
+    <Compile Include="Models\RefundConsumptionValueQueryCriteriaModel.cs" />
+    <Compile Include="Models\RefundReallowanceMoneyQueryResult.cs" />
+    <Compile Include="Models\RefundConsumptionValueQueryResult.cs" />
     <Compile Include="Operations\IAssetQueryService.cs" />
-    <Compile Include="Operations\ICourseQueryService.cs" />
+    <Compile Include="Operations\IOrderTransactionService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

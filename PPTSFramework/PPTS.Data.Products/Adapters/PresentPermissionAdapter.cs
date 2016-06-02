@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PPTS.Data.Products.Adapters
 {
-    class PresentPermissionAdapter : ProductAdapterBase<PresentPermission, PresentPermissionCollection>
+    public class PresentPermissionAdapter : ProductAdapterBase<PresentPermission, PresentPermissionCollection>
     {
         public static PresentPermissionAdapter Instance = new PresentPermissionAdapter();
     }

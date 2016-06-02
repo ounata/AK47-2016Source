@@ -27,6 +27,13 @@ namespace PPTS.Data.Customers.Adapters
             return this.Load(builder => builder.AppendItem("ApplyID", applyID)).SingleOrDefault();
 		}
 
+        public AccountRefundApplyCollection LoadVerifiedCollectionByAccountID(string accountID)
+        {
+            return this.Load(builder => builder
+                                        .AppendItem("AccountID", accountID)
+                                        .AppendItem("VerifyStatus", (int)RefundVerifyStatus.Refunded));
+        }
+
         protected override void BeforeInnerUpdateInContext(AccountRefundApply data, SqlContextItem sqlContext, Dictionary<string, object> context)
         {
             base.BeforeInnerUpdateInContext(data, sqlContext, context);

@@ -1,6 +1,7 @@
 using MCS.Library.Core;
 using MCS.Library.Data.DataObjects;
 using MCS.Library.Data.Mapping;
+using PPTS.Data.Common.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,9 +14,9 @@ namespace PPTS.Data.Products.Entities
     /// 折扣表
     /// </summary>
     [Serializable]
-    [ORTableMapping("Discounts")]
+    [ORTableMapping("[PM].[Discounts]")]
     [DataContract]
-    public class Discount
+    public class Discount : IEntityWithCreator, IEntityWithModifier
     {
         public Discount()
         {
@@ -57,6 +58,7 @@ namespace PPTS.Data.Products.Entities
         /// <summary>
         /// 状态（审批中，已完成，已拒绝）
         /// </summary>
+        [ConstantCategory(Category = "C_CODE_ABBR_BO_Infra_DiscountStatus")]
         [ORFieldMapping("DiscountStatus")]
         [DataMember]
         public DiscountStatusDefine DiscountStatus
@@ -64,6 +66,10 @@ namespace PPTS.Data.Products.Entities
             get;
             set;
         }
+
+        [NoMapping]
+        [ConstantCategory(Category = "C_CODE_ABBR_BO_Infra_CampusUseInfo")]
+        public CampusUseInfoDefine CampusStatus { get; set; }
 
         /// <summary>
         /// 生效日期
@@ -77,42 +83,31 @@ namespace PPTS.Data.Products.Entities
         }
 
         /// <summary>
-        /// 所有者组织ID
+        /// 分工司ID
         /// </summary>
-        [ORFieldMapping("OwnOrgID")]
+        [ORFieldMapping("BranchID")]
         [DataMember]
-        public string OwnOrgID
+        public string BranchID
         {
             get;
             set;
         }
 
         /// <summary>
-        /// 所有者组织类型
+        /// 分公司名称
         /// </summary>
-        [ORFieldMapping("OwnOrgType")]
+        [ORFieldMapping("BranchName")]
         [DataMember]
-        public string OwnOrgType
+        public string BranchName
         {
             get;
             set;
         }
-
-        /// <summary>
-        /// 使用者组织类型
-        /// </summary>
-        [ORFieldMapping("UseOrgType")]
-        [DataMember]
-        public string UseOrgType
-        {
-            get;
-            set;
-        }
-
+        
         /// <summary>
         /// 提交时间
         /// </summary>
-        [ORFieldMapping("SubmitTime")]
+        [ORFieldMapping("SubmitTime", UtcTimeToLocal = true)]
         [DataMember]
         public DateTime SubmitTime
         {
@@ -211,7 +206,7 @@ namespace PPTS.Data.Products.Entities
         /// <summary>
         /// 最后审批时间
         /// </summary>
-        [ORFieldMapping("ApproveTime")]
+        [ORFieldMapping("ApproveTime", UtcTimeToLocal = true)]
         [DataMember]
         public DateTime ApproveTime
         {
@@ -223,6 +218,7 @@ namespace PPTS.Data.Products.Entities
         /// 创建人ID
         /// </summary>
         [ORFieldMapping("CreatorID")]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update)]
         [DataMember]
         public string CreatorID
         {
@@ -234,6 +230,7 @@ namespace PPTS.Data.Products.Entities
         /// 创建人姓名
         /// </summary>
         [ORFieldMapping("CreatorName")]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update)]
         [DataMember]
         public string CreatorName
         {
@@ -245,6 +242,7 @@ namespace PPTS.Data.Products.Entities
         /// 创建时间
         /// </summary>
         [ORFieldMapping("CreateTime")]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.Select | ClauseBindingFlags.Where)]
         [DataMember]
         public DateTime CreateTime
         {
@@ -278,6 +276,7 @@ namespace PPTS.Data.Products.Entities
         /// 最后修改时间
         /// </summary>
         [ORFieldMapping("ModifyTime")]
+        [SqlBehavior(DefaultExpression = "GETUTCDATE()", ForceUseDefaultExpression = true)]
         [DataMember]
         public DateTime ModifyTime
         {

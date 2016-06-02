@@ -1,4 +1,5 @@
-﻿define([ppts.config.modules.account,
+﻿
+define([ppts.config.modules.account,
         ppts.config.dataServiceConfig.accountReturnDataService],
         function (account) {
             account.registerController('accountReturnEditController', [
@@ -25,7 +26,7 @@
                         }, {
                             field: "memo",
                             name: "描述",
-                            headerCss: "col-sm-2",
+                            headerCss: "col-sm-8",
                             template: '<span>{{row.memo}}</span>'
                         }],
                         pager: {
@@ -36,9 +37,10 @@
 
                     // 页面初始化加载或重新搜索时查询
                     vm.init = function () {
-                        accountDataService.getCustomerExpenses(vm.customerID, function (result) {
+                        accountDataService.getReturnApplyByCustomerID(vm.customerID, function (result) {
                             vm.customer = result.customer;
-                            vm.items = result.items
+                            vm.data.rows = result.expenses;
+                            vm.apply = result.apply;
                             
                             $scope.$broadcast('dictionaryReady');
                         });
@@ -62,19 +64,24 @@
 
                         var currentRow = vm.getCurrentRow();
                         if (currentRow == null) {
-
                             mcsDialogService.error({ title: '警告', message: '请选择要返还的项目' });
                             return;
                         }
                         if (!currentRow.canReturn) {
-
                             mcsDialogService.error({ title: '警告', message: '该项服务费不可返还' });
                             return;
                         }
                         mcsDialogService.confirm({ title: '确认', message: '是否确认要返还该服务费项目？' })
                            .result.then(function () {
-                               accountDataService.returnCustomerExpense(vm.customerID, currentRow.expenseID, function () {
-                                   $state.go(vm.page);
+
+                               var apply = vm.apply;
+                               apply.accountID = currentRow.accountID;
+                               apply.expenseID = currentRow.expenseID;
+                               apply.expenseType = currentRow.expenseType;
+                               apply.expenseMoney = currentRow.expenseMoney;
+
+                               accountDataService.saveReturnApply(apply, function () {
+                                   vm.init();
                                });
                            });
                     }

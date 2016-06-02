@@ -18,7 +18,7 @@ namespace PPTS.Contracts.Products.Models
         /// 服务费头信息
         /// </summary>
         [DataMember]
-        public Expense Expense { get; set; }
+        public List<Expense> ExpenseCollection { get; set; }
 
     }
 }

@@ -1,4 +1,5 @@
-﻿using MCS.Library.Data;
+﻿using MCS.Library.Core;
+using MCS.Library.Data;
 using MCS.Library.Data.Adapters;
 using MCS.Library.OGUPermission;
 using MCS.Library.Principal;
@@ -137,6 +138,26 @@ namespace PPTS.WebAPI.Customers.Controllers
         public PagedQueryResult<CustomerStaffRelation, CustomerStaffRelationCollection> GetPagedStaffRelations(CustomerStaffRelationQueryCriteriaModel criteria)
         {
             return GenericCustomerDataSource<CustomerStaffRelation, CustomerStaffRelationCollection>.Instance.Query(criteria.PageParams, criteria, criteria.OrderBy);
+        }
+
+        #endregion
+
+        #region api/potentialcustomers/getteacherrelations
+
+        [HttpPost]
+        public CustomerTeacherRelationsQueryResult GetTeacherRelations(CustomerTeacherRelationsQueryCriteriaModel criteria)
+        {
+            return new CustomerTeacherRelationsQueryResult
+            {
+                QueryResult = GenericCustomerDataSource<CustomerTeacherAssignApply, CustomerTeacherAssignApplyCollection>.Instance.Query(criteria.PageParams, criteria, criteria.OrderBy),
+                Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(CustomerTeacherAssignApply))
+            };
+        }
+
+        [HttpPost]
+        public PagedQueryResult<CustomerTeacherAssignApply, CustomerTeacherAssignApplyCollection> GetPagedStaffRelations(CustomerTeacherRelationsQueryCriteriaModel criteria)
+        {
+            return GenericCustomerDataSource<CustomerTeacherAssignApply, CustomerTeacherAssignApplyCollection>.Instance.Query(criteria.PageParams, criteria, criteria.OrderBy);
         }
 
         #endregion
@@ -302,6 +323,31 @@ namespace PPTS.WebAPI.Customers.Controllers
         {
             AddCustomerTranferResourceExecutor executor = new AddCustomerTranferResourceExecutor(model);
 
+            executor.Execute();
+        }
+
+        #endregion
+
+
+        #region api/potentialcustomers/createCustomerStaffRelations
+
+        [HttpPost]
+        public void CreateCustomerStaffRelations(EditCustomerStaffRelationsModel model)
+        {
+            model.CustomerStaffRelations.NullCheck("model");
+            model.InitCustomerStaffRelation();
+            EditCustomerStaffRelationsExecutor executor = new EditCustomerStaffRelationsExecutor(model);
+            executor.Execute();
+        }
+
+        #endregion
+
+        #region api/potentialcustomers/transferCustomerTransferResources
+
+        [HttpPost]
+        public void TransferCustomerTransferResources(EditCustomerTransferResourcesModel model)
+        {
+            EditCustomerTransferResourcesExecutor executor = new EditCustomerTransferResourcesExecutor(model);
             executor.Execute();
         }
 

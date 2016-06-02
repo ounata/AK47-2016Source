@@ -1,0 +1,73 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPTS.Services.Search", "PPTS.Services.Search.csproj", "{89917029-93CC-465F-B305-2EA5D1DB04F4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Contracts", "Contracts", "{D9B718F5-F00B-4462-BE08-68309D7A82A4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{F0972173-0486-4DC4-9A31-B481EF7318A3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MCS", "MCS", "{53798F6D-6846-4DF7-A8A2-3D8107897518}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Service.Test", "Service.Test", "{7224F2C0-DD47-46BF-A516-1F0BE0EE1FEB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPTS.Contracts.Search", "..\..\PPTSFramework\PPTS.Contracts.Search\PPTS.Contracts.Search.csproj", "{F8DA2F62-D315-4B69-AC48-D359129408CA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPTS.Contracts.Proxies", "..\..\PPTSFramework\PPTS.Contracts.Proxies\PPTS.Contracts.Proxies.csproj", "{BBA0226B-81A6-4684-AA60-14133456E9CC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPTS.Contracts.Proxies.Test", "..\..\PPTSFramework\TestProjects\PPTS.Contracts.Proxies.Test\PPTS.Contracts.Proxies.Test.csproj", "{202258C1-7ACA-46D3-ACB8-831F949A4ECC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{89917029-93CC-465F-B305-2EA5D1DB04F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89917029-93CC-465F-B305-2EA5D1DB04F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89917029-93CC-465F-B305-2EA5D1DB04F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89917029-93CC-465F-B305-2EA5D1DB04F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8DA2F62-D315-4B69-AC48-D359129408CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8DA2F62-D315-4B69-AC48-D359129408CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8DA2F62-D315-4B69-AC48-D359129408CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8DA2F62-D315-4B69-AC48-D359129408CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBA0226B-81A6-4684-AA60-14133456E9CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBA0226B-81A6-4684-AA60-14133456E9CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBA0226B-81A6-4684-AA60-14133456E9CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBA0226B-81A6-4684-AA60-14133456E9CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{202258C1-7ACA-46D3-ACB8-831F949A4ECC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{202258C1-7ACA-46D3-ACB8-831F949A4ECC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{202258C1-7ACA-46D3-ACB8-831F949A4ECC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{202258C1-7ACA-46D3-ACB8-831F949A4ECC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F8DA2F62-D315-4B69-AC48-D359129408CA} = {D9B718F5-F00B-4462-BE08-68309D7A82A4}
+		{BBA0226B-81A6-4684-AA60-14133456E9CC} = {D9B718F5-F00B-4462-BE08-68309D7A82A4}
+		{202258C1-7ACA-46D3-ACB8-831F949A4ECC} = {7224F2C0-DD47-46BF-A516-1F0BE0EE1FEB}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 5
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://10.1.56.70:8080/tfs/pptsv2.0
+		SccProjectUniqueName0 = ..\\..\\PPTSFramework\\PPTS.Contracts.Proxies\\PPTS.Contracts.Proxies.csproj
+		SccProjectTopLevelParentUniqueName0 = PPTS.Services.Search.sln
+		SccProjectName0 = ../../PPTSFramework/PPTS.Contracts.Proxies
+		SccLocalPath0 = ..\\..\\PPTSFramework\\PPTS.Contracts.Proxies
+		SccProjectUniqueName1 = ..\\..\\PPTSFramework\\TestProjects\\PPTS.Contracts.Proxies.Test\\PPTS.Contracts.Proxies.Test.csproj
+		SccProjectTopLevelParentUniqueName1 = PPTS.Services.Search.sln
+		SccProjectName1 = ../../PPTSFramework/TestProjects/PPTS.Contracts.Proxies.Test
+		SccLocalPath1 = ..\\..\\PPTSFramework\\TestProjects\\PPTS.Contracts.Proxies.Test
+		SccLocalPath2 = .
+		SccProjectUniqueName3 = ..\\..\\PPTSFramework\\PPTS.Contracts.Search\\PPTS.Contracts.Search.csproj
+		SccProjectTopLevelParentUniqueName3 = PPTS.Services.Search.sln
+		SccProjectName3 = ../../PPTSFramework/PPTS.Contracts.Search
+		SccLocalPath3 = ..\\..\\PPTSFramework\\PPTS.Contracts.Search
+		SccProjectUniqueName4 = PPTS.Services.Search.csproj
+		SccLocalPath4 = .
+	EndGlobalSection
+EndGlobal

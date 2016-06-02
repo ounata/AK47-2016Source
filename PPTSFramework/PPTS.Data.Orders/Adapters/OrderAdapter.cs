@@ -20,6 +20,8 @@ namespace PPTS.Data.Orders.Adapters
     {
         public static readonly OrdersAdapter Instance = new OrdersAdapter();
 
+        public string TableName { get { return GetTableName(); } }
+
         private OrdersAdapter()
         {
         }
@@ -69,7 +71,7 @@ namespace PPTS.Data.Orders.Adapters
 select * from {0} ROWLOCK where {1} and OrderStatus='1' 
 )
 begin 
-select -1;return;
+RAISERROR ('有未完成订购操作的，不能退订！', 16, 1) WITH NOWAIT;
 end", this.GetTableName(), whereCustomerId);
             
             var sqlContext = GetSqlContext();
@@ -78,10 +80,10 @@ end", this.GetTableName(), whereCustomerId);
             sqlContext.AppendSqlInContext(TSqlBuilder.Instance, TSqlBuilder.Instance.DBStatementSeperator);
         }
 
-        public void ExecSuccessInContext()
-        {
-            GetSqlContext().AppendSqlWithSperatorInContext(TSqlBuilder.Instance, "select 1");
-        }
+        //public void ExecSuccessInContext()
+        //{
+        //    GetSqlContext().AppendSqlWithSperatorInContext(TSqlBuilder.Instance, "select 1");
+        //}
         
         public void Update(string orderId,Dictionary<string,object> param)
         {

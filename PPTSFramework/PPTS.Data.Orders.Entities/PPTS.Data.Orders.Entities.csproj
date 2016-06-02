@@ -59,7 +59,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Entities\DebookOrderView.cs" />
+    <Compile Include="Entities\DebookOrderItemView.cs" />
     <Compile Include="Entities\AccompanyAssign.cs" />
     <Compile Include="Entities\AssetView.cs" />
     <Compile Include="Entities\Asset.cs" />

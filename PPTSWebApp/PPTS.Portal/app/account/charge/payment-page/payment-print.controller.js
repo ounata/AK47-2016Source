@@ -2,8 +2,8 @@
         ppts.config.dataServiceConfig.accountChargeDataService],
         function (account) {
             account.registerController('accountChargePaymentPrintController', [
-                '$scope', '$state', '$stateParams', '$uibModalInstance', 'accountChargeDataService', 'data',
-                function ($scope, $state, $stateParams, $uibModalInstance, accountDataService, data) {
+                '$scope', '$state', '$stateParams', '$uibModalInstance','printService', 'accountChargeDataService', 'data',
+                function ($scope, $state, $stateParams, $uibModalInstance, printService, accountDataService, data) {
                     var vm = this;
                     vm.payID = data.payID;
 
@@ -24,6 +24,7 @@
 
                     //保存打印状态
                     vm.save = function () {
+                        printService.print();
                         $uibModalInstance.close();
                     }
 

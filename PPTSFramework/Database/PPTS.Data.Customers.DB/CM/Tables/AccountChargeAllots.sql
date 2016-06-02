@@ -11,6 +11,7 @@
     [CategoryType] NVARCHAR(32) NULL, 
     [AllotAmount] DECIMAL(18, 2) NULL DEFAULT 0, 
     [AllotMoney] DECIMAL(18, 4) NULL DEFAULT 0, 
+    [TenantCode] NVARCHAR(36) NULL, 
     CONSTRAINT [PK_AccountChargeAllots] PRIMARY KEY NONCLUSTERED ([AllotID]) 
 )
 

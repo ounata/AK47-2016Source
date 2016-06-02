@@ -448,4 +448,102 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="[CK_DiscountPermissionsApplies_Discounts]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="573915df-b600-44c1-a1a0-3db1fbdaf4d2" ChangeDateTime="05/23/2016 07:32:48">
+    <Property Name="ElementName" Value="[PM].[DiscountPermissions].[UseOrgID]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[PM].[DiscountPermissions]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="CampusID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="0f7325eb-d5db-4349-9b71-b2bb20e1e126" ChangeDateTime="05/23/2016 07:33:16">
+    <Property Name="ElementName" Value="[PM].[DiscountPermissionsApplies].[UseOrgID]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[PM].[DiscountPermissionsApplies]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="校区ID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="f218a413-5771-4d36-ac3b-48d3a2b94bc9" ChangeDateTime="05/23/2016 07:33:23">
+    <Property Name="ElementName" Value="[PM].[DiscountPermissionsApplies].[校区ID]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[PM].[DiscountPermissionsApplies]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="CampusID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="309fe916-63dc-4be1-8468-f7e569f9507e" ChangeDateTime="05/23/2016 07:33:45">
+    <Property Name="ElementName" Value="[PM].[Discounts].[UseOrgID]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[PM].[Discounts]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="BranchID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="a527fe56-2198-4451-8f3c-59996b27a12c" ChangeDateTime="05/23/2016 07:33:52">
+    <Property Name="ElementName" Value="[PM].[Discounts].[UseOrgName]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[PM].[Discounts]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="BranchName" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="3f2c852d-251f-4571-ae9f-dce24c13d326" ChangeDateTime="05/23/2016 07:34:34">
+    <Property Name="ElementName" Value="[PM].[ExpensePermissions].[UseOrgID]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[PM].[ExpensePermissions]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="CampusID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="f9108d93-24d7-4575-93a6-d06e626538df" ChangeDateTime="05/23/2016 07:35:00">
+    <Property Name="ElementName" Value="[PM].[Expenses].[UseOrgID]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[PM].[Expenses]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="BranchID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="db478b50-8f3f-42de-8992-e6750b8b3bc6" ChangeDateTime="05/23/2016 07:35:04">
+    <Property Name="ElementName" Value="[PM].[Expenses].[UseOrgName]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[PM].[Expenses]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="BranchName" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="acf18d6c-8454-4b61-841f-8a95241b563f" ChangeDateTime="05/23/2016 07:35:24">
+    <Property Name="ElementName" Value="[PM].[Expenses].[UseOrgType]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[PM].[Expenses]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="CampusNames" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="e0058a30-45ee-4fa0-99d7-e57b63c04e88" ChangeDateTime="05/23/2016 07:36:14">
+    <Property Name="ElementName" Value="[PM].[PresentPermissionApplies].[UseOrgID]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[PM].[PresentPermissionApplies]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="CampusID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="906c956e-cd8c-493f-babd-1729814b385a" ChangeDateTime="05/23/2016 07:36:34">
+    <Property Name="ElementName" Value="[PM].[PresentPermissions].[UseOrgID]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[PM].[PresentPermissions]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="CapmusID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="e28cd69c-c010-42e8-812c-8e2e6aa3b9dc" ChangeDateTime="05/23/2016 07:37:00">
+    <Property Name="ElementName" Value="[PM].[Presents].[UseOrgID]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[PM].[Presents]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="BranchID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="5ad0ce57-0e44-4912-8b87-541da36b2a96" ChangeDateTime="05/23/2016 07:37:06">
+    <Property Name="ElementName" Value="[PM].[Presents].[UseOrgName]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[PM].[Presents]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="BranchName" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="eb7aee0c-c7f6-4e38-ba2b-f3db951a4828" ChangeDateTime="05/23/2016 07:41:46">
+    <Property Name="ElementName" Value="[PM].[ProductPermissions].[UseOrgID]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[PM].[ProductPermissions]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="CampusID" />
+  </Operation>
 </Operations>

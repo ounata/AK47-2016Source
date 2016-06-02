@@ -28,6 +28,17 @@ namespace PPTS.Data.Orders.Adapters
         {
             return this.LoadByInBuilder(new InLoadingCondition(builder => builder.AppendItem(assetid), "AssetID"), DateTime.MinValue).SingleOrDefault();
         }
+
+        /// <summary>
+        /// 查找 关联订单资产
+        /// </summary>
+        /// <param name="itemId"></param>
+        /// <returns></returns>
+        public T LoadByItemId(string itemId)
+        {
+            return Load(b => b.AppendItem("AssetRefID", itemId), DateTime.MinValue).SingleOrDefault();
+        }
+
         /// <summary>
         /// 检查未排课时数量，如果未排课时数量已经不够排课需要数量时，引发异常，需要事务回滚
         /// </summary>
@@ -61,57 +72,15 @@ namespace PPTS.Data.Orders.Adapters
                 collection => action(collection.SingleOrDefault()), DateTime.MinValue);
         }
 
-        public void ExchangeInContext(T exchangeAsset, T asset)
+        protected override void BeforeInnerUpdateCollection(IEnumerable<T> data, Dictionary<string, object> context)
         {
-
-            
-            
-            VersionStrategyUpdateSqlHelper.ConstructUpdateSql(GetSqlContext(), (strB, context) =>
+            base.BeforeInnerUpdateCollection(data, context);
+            data.ForEach(i =>
             {
-                var sqlContext = ((SqlContextItem)context);
-
-                //ConnectiveSqlClauseCollection connectiveBuilder = VersionStrategyQuerySqlBuilder.Instance.TimePointToBuilder();
-                //WhereSqlClauseBuilder keyBuilder = new WhereSqlClauseBuilder();
-                //keyBuilder.AppendItem("AssetRefID", itemId);
-                //connectiveBuilder.Add(keyBuilder);
-
-                //UpdateSqlClauseBuilder updateSqlBuilder = new UpdateSqlClauseBuilder();
-                //updateSqlBuilder.AppendItem("ExchangedAmount", "Amount", "=", true);
-                //updateSqlBuilder.AppendItem("VersionStartTime", "@currentTime", "=", true);
-
-                //var whereSQL = connectiveBuilder.ToSqlString(TSqlBuilder.Instance);
-                //var sql = string.Format("\n update {0} set {1} where {2} \n ", GetTableName(), updateSqlBuilder.ToSqlString(TSqlBuilder.Instance),whereSQL);
-
-                //strB.AppendFormat(
-                //    "UPDATE {0} SET VersionEndTime = {1} WHERE {2}",
-                //    GetMappingInfo().TableName,
-                //    "@currentTime",
-                //    connectiveBuilder.ToSqlString(TSqlBuilder.Instance));
-                //strB.Append(TSqlBuilder.Instance.DBStatementSeperator);
-                //strB.AppendFormat("IF @@ROWCOUNT > 0\n");
-                //strB.AppendFormat("\t{0}\n", sql);
-                //strB.AppendFormat("ELSE\n");
-                //strB.AppendFormat("\tRAISERROR ({0}, 16, 1)",
-                //TSqlBuilder.Instance.CheckUnicodeQuotationMark(string.Format("对象\"{0}\"的版本不是最新的，不能更新", itemId)));
-
-                //var sql = "insert into {0}{1}";
-
-
-
-                sqlContext.AppendSqlWithSperatorInContext(TSqlBuilder.Instance, strB.ToString());
-                UpdateInContext(exchangeAsset);
-
-                asset.AssetCode = Helper.GetAssetCode("AS");
-                var sql = string.Format("insert into {0}{1}" ,GetTableName(), VersionStrategyUpdateSqlBuilder<T>.DefaultInstance.PrepareInsertSqlBuilder(asset, GetMappingInfo(), StringExtension.EmptyStringArray).ToSqlString(TSqlBuilder.Instance));
-                sqlContext.AppendSqlWithSperatorInContext(TSqlBuilder.Instance, sql);
-
-
+                if (i.AssetCode.IsNullOrWhiteSpace()) { i.AssetCode = Helper.GetAssetCode("OD"); }
+                if (i.AssetName.IsNullOrWhiteSpace()) { i.AssetName = i.AssetCode + i.ProductName; }
             });
-
-            
-
         }
-        
 
     }
 }

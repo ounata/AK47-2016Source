@@ -28,7 +28,6 @@
 
     <ProjectItem Include="MCS.Library.Passport\MCS.Library.Passport.csproj" />
     <ProjectItem Include="MCS.Library.Passport.Social\MCS.Library.Passport.Social.csproj" />
-    <ProjectItem Include="MCS.Web.MVC.Library\MCS.Web.MVC.Library.csproj" />
 
     <ProjectItem Include="MCS.Library.ServiceBase\MCS.Library.ServiceBase.csproj" />
     <ProjectItem Include="MCS.Library.WcfExtensions\MCS.Library.WcfExtensions.csproj" />
@@ -38,6 +37,8 @@
     <ProjectItem Include="MCS.Library.SOA.DataObjects.Security.Client\MCS.Library.SOA.DataObjects.Security.Client.csproj" />
     <ProjectItem Include="MCS.Library.SOA.DataObjects.Security.AUClient\MCS.Library.SOA.DataObjects.Security.AUClient.csproj" />
     <ProjectItem Include="MCS.Library.SOA.DataObjects\MCS.Library.SOA.DataObjects.csproj" />
+
+    <ProjectItem Include="MCS.Web.MVC.Library\MCS.Web.MVC.Library.csproj" />
     <ProjectItem Include="MCS.Library.SOA.DocServiceClient\MCS.Library.SOA.DocServiceClient.csproj" />
 
     <ProjectItem Include="MCS.Library.WF.Contracts\MCS.Library.WF.Contracts.csproj" />

@@ -9,196 +9,209 @@ using System.Runtime.Serialization;
 
 namespace PPTS.Data.Customers.Entities
 {
-	/// <summary>
-	/// This object represents the properties and methods of a Account.
-	/// 账户信息表
-	/// </summary>
-	[Serializable]
+    /// <summary>
+    /// This object represents the properties and methods of a Account.
+    /// 账户信息表
+    /// </summary>
+    [Serializable]
     [ORTableMapping("CM.Accounts", "CM.Accounts_Current")]
     [DataContract]
-	public class Account : IVersionDataObjectWithoutID, IEntityWithCreator, IEntityWithModifier
-    {		
-		public Account()
-		{
-		}		
+    public class Account : IVersionDataObjectWithoutID, IEntityWithCreator, IEntityWithModifier
+    {
+        public Account()
+        {
+        }
 
-		/// <summary>
-		/// 校区ID
-		/// </summary>
-		[ORFieldMapping("CampusID")]
+        /// <summary>
+        /// 学员ID
+        /// </summary>
+        [ORFieldMapping("CustomerID")]
         [DataMember]
-		public string CampusID
-		{
-			get;
+        public string CustomerID
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 校区名称
-		/// </summary>
-		[ORFieldMapping("CampusName")]
+        /// <summary>
+        /// 账户ID
+        /// </summary>
+        [ORFieldMapping("AccountID", PrimaryKey = true)]
         [DataMember]
-		public string CampusName
-		{
-			get;
+        public string AccountID
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 学员ID
-		/// </summary>
-		[ORFieldMapping("CustomerID")]
+        /// <summary>
+        /// 账户编码
+        /// </summary>
+        [ORFieldMapping("AccountCode")]
         [DataMember]
-		public string CustomerID
-		{
-			get;
+        public string AccountCode
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 账户ID
-		/// </summary>
-		[ORFieldMapping("AccountID", PrimaryKey=true)]
+        /// <summary>
+        /// 账户类型（合同账户，拓路账户）
+        /// </summary>
+        [ORFieldMapping("AccountType")]
+        [ConstantCategory(Category = "Account_AccountType")]
         [DataMember]
-		public string AccountID
-		{
-			get;
+        public AccountTypeDefine AccountType
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 账户编码
-		/// </summary>
-		[ORFieldMapping("AccountCode")]
+        /// <summary>
+        /// 账户说明
+        /// </summary>
+        [ORFieldMapping("AccountMemo")]
         [DataMember]
-		public string AccountCode
-		{
-			get;
+        public string AccountMemo
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 账户类型（合同账户，拓路账户）
-		/// </summary>
-		[ORFieldMapping("AccountType")]
+        /// <summary>
+        /// 账户状态（可充值，不可充值）
+        /// </summary>
+        [ORFieldMapping("AccountStatus")]
+        [ConstantCategory(Category = "Account_AccountStatus")]
         [DataMember]
-		public AccountTypeDefine AccountType
-		{
-			get;
+        public AccountStatusDefine AccountStatus
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 账户说明
-		/// </summary>
-		[ORFieldMapping("AccountMemo")]
+        /// <summary>
+        /// 账户余额
+        /// </summary>
+        [ORFieldMapping("AccountMoney")]
         [DataMember]
-		public string AccountMemo
-		{
-			get;
+        public decimal AccountMoney
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 账户状态（正常，休眠，停用）
-		/// </summary>
-		[ORFieldMapping("AccountStatus")]
+        /// <summary>
+        /// 折扣ID
+        /// </summary>
+        [ORFieldMapping("DiscountID")]
         [DataMember]
-		public AccountStatusDefine AccountStatus
-		{
-			get;
+        public string DiscountID
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 账户余额
-		/// </summary>
-		[ORFieldMapping("AccountMoney")]
+        /// <summary>
+        /// 折扣编码
+        /// </summary>
+        [ORFieldMapping("DiscountCode")]
         [DataMember]
-		public decimal AccountMoney
-		{
-			get;
+        public string DiscountCode
+        {
+            get;
             set;
-		}
-        
-		/// <summary>
-		/// 折扣ID
-		/// </summary>
-		[ORFieldMapping("DiscountID")]
-        [DataMember]
-		public string DiscountID
-		{
-			get;
-            set;
-		}
+        }
 
-		/// <summary>
-		/// 折扣编码
-		/// </summary>
-		[ORFieldMapping("DiscountCode")]
+        /// <summary>
+        /// 折扣率
+        /// </summary>
+        [ORFieldMapping("DiscountRate")]
         [DataMember]
-		public string DiscountCode
-		{
-			get;
+        public decimal DiscountRate
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 折扣率
-		/// </summary>
-		[ORFieldMapping("DiscountRate")]
+        /// <summary>
+        /// 折扣基数
+        /// </summary>
+        [ORFieldMapping("DiscountBase")]
         [DataMember]
-		public decimal DiscountRate
-		{
-			get;
+        public decimal DiscountBase
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 折扣基数
-		/// </summary>
-		[ORFieldMapping("DiscountBase")]
+        /// <summary>
+        /// 最近一笔缴费申请单ID
+        /// </summary>
+        [ORFieldMapping("ChargeApplyID")]
         [DataMember]
-		public decimal DiscountBase
-		{
-			get;
+        public string ChargeApplyID
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 最新缴费申请单ID
-		/// </summary>
-		[ORFieldMapping("ChargeApplyID")]
+        /// <summary>
+        /// 最近一笔缴费单支付时间
+        /// </summary>
+        [ORFieldMapping("ChargePayTime", UtcTimeToLocal = true)]
         [DataMember]
-		public string ChargeApplyID
-		{
-			get;
+        public DateTime ChargePayTime
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 创建人ID
-		/// </summary>
-		[ORFieldMapping("CreatorID")]
+        /// <summary>
+        /// 首笔缴费申请单ID
+        /// </summary>
+        [ORFieldMapping("FirstChargeApplyID")]
+        [DataMember]
+        public string FirstChargeApplyID
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 首笔缴费单支付时间
+        /// </summary>
+        [ORFieldMapping("FirstChargePayTime", UtcTimeToLocal = true)]
+        [DataMember]
+        public DateTime FirstChargePayTime
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 创建人ID
+        /// </summary>
+        [ORFieldMapping("CreatorID")]
         [SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update)]
         [DataMember]
-		public string CreatorID
-		{
-			get;
+        public string CreatorID
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 创建人姓名
-		/// </summary>
-		[ORFieldMapping("CreatorName")]
+        /// <summary>
+        /// 创建人姓名
+        /// </summary>
+        [ORFieldMapping("CreatorName")]
         [SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update)]
         [DataMember]
-		public string CreatorName
-		{
-			get;
+        public string CreatorName
+        {
+            get;
             set;
-		}
+        }
 
         /// <summary>
         /// 创建时间
@@ -206,35 +219,35 @@ namespace PPTS.Data.Customers.Entities
         [ORFieldMapping("CreateTime", UtcTimeToLocal = true)]
         [SqlBehavior(BindingFlags = ClauseBindingFlags.Select | ClauseBindingFlags.Where)]
         [DataMember]
-		public DateTime CreateTime
-		{
-			get;
+        public DateTime CreateTime
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 最后修改人ID
-		/// </summary>
-		[ORFieldMapping("ModifierID")]
+        /// <summary>
+        /// 最后修改人ID
+        /// </summary>
+        [ORFieldMapping("ModifierID")]
         [SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update)]
         [DataMember]
-		public string ModifierID
-		{
-			get;
+        public string ModifierID
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 最后修改人姓名
-		/// </summary>
-		[ORFieldMapping("ModifierName")]
+        /// <summary>
+        /// 最后修改人姓名
+        /// </summary>
+        [ORFieldMapping("ModifierName")]
         [SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update)]
         [DataMember]
-		public string ModifierName
-		{
-			get;
+        public string ModifierName
+        {
+            get;
             set;
-		}
+        }
 
         /// <summary>
         /// 最后修改时间
@@ -242,11 +255,11 @@ namespace PPTS.Data.Customers.Entities
         [ORFieldMapping("ModifyTime", UtcTimeToLocal = true)]
         [SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update, DefaultExpression = "GETUTCDATE()", ForceUseDefaultExpression = true)]
         [DataMember]
-		public DateTime ModifyTime
-		{
-			get;
+        public DateTime ModifyTime
+        {
+            get;
             set;
-		}
+        }
 
         /// <summary>
         /// 版本开始时间
@@ -271,17 +284,7 @@ namespace PPTS.Data.Customers.Entities
             get;
             set;
         }
-
-        /// <summary>
-        /// 是否是最新账户。
-        /// </summary>
-        [NoMapping]
-        public bool IsLatest
-        {
-            set;
-            get;
-        }
-	}
+    }
 
     [Serializable]
     [DataContract]

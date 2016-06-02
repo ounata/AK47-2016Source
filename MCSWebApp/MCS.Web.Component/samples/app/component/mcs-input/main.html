@@ -33,6 +33,8 @@ input.hightlight {
                         <mcs-input placeholder="家长姓名" model="vm.parentName" />
                         <span>家长姓名：{{vm.parentName}}</span>
                         <mcs-input placeholder="家长姓名" css="hightlight" model="vm.parentName" />
+                        <mcs-input placeholder="充值金额" model="vm.amount" datatype="float"/>
+                        <mcs-input placeholder="学员年龄" model="vm.age" datatype="int" />
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
@@ -53,6 +55,8 @@ input.hightlight {
                         &lt;mcs-input placeholder="家长姓名" model="vm.parentName" /&gt;
                         &lt;span&gt;家长姓名：{{vm.parentName}}&lt;/span&gt;
                         &lt;mcs-input placeholder="家长姓名" css="hightlight" model="vm.parentName" /&gt;
+                        &lt;mcs-input placeholder="充值金额" model="vm.amount" datatype="float" /&gt;
+                        &lt;mcs-input placeholder="学员年龄" model="vm.age" datatype="int" /&gt;
                         <code><b>Javascript</b></code><br />
                         angular.module('app.component').controller('MCSInputController', [
                             '$scope', function ($scope) {
@@ -107,6 +111,16 @@ input.hightlight {
                                 <td>
                                     input.hightlight { background-color: #11a9cc; }
                                     <br /> &lt;mcs-input placeholder="家长姓名" css="hightlight" model="vm.parentName" /&gt;
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>datatype</code></td>
+                                <td>设置文本框的<code>数据类型</code></td>
+                                <td>int,float,string</td>
+                                <td>string</td>
+                                <td>
+                                    &lt;mcs-input placeholder="充值金额" model="vm.amount" datatype="float" /&gt;
+                                    &lt;mcs-input placeholder="学员年龄" model="vm.age" datatype="int" /&gt;
                                 </td>
                             </tr>
                         </tbody>

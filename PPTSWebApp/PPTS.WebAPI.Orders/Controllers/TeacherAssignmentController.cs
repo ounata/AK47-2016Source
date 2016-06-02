@@ -25,11 +25,8 @@ namespace PPTS.WebAPI.Orders.Controllers
     {
 
         #region api/teacherassignment/getTeacherList
-        /// <summary>
+
         /// 按教师排课，获取选择教师的列表数据
-        /// </summary>
-        /// <param name="criteria"></param>
-        /// <returns></returns>
         [HttpPost]
         public TeacherQCR GetTeacherList(TeacherQCM criteria)
         {
@@ -43,7 +40,7 @@ namespace PPTS.WebAPI.Orders.Controllers
                 };
             }
             criteria.CampusID = organ.ID;
-            if (criteria.GradeMemo.Contains("41"))
+            if (!string.IsNullOrEmpty(criteria.GradeMemo) && criteria.GradeMemo.Contains("41"))
                 criteria.GradeMemo = string.Empty;
 
             return new TeacherQCR()
@@ -52,11 +49,8 @@ namespace PPTS.WebAPI.Orders.Controllers
                 Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(TeacherJobView))
             };
         }
-        /// <summary>
+
         /// 按教师排课，获取选择教师的列表数据（支持翻页事件）
-        /// </summary>
-        /// <param name="criteria"></param>
-        /// <returns></returns>
         [HttpPost]
         public PagedQueryResult<TeacherJobView, TeacherJobViewCollection> GetTeacherListPaged(TeacherQCM criteria)
         {
@@ -66,6 +60,8 @@ namespace PPTS.WebAPI.Orders.Controllers
                 return new PagedQueryResult<TeacherJobView, TeacherJobViewCollection>();
             }
             criteria.CampusID = organ.ID;
+            if (!string.IsNullOrEmpty(criteria.GradeMemo) && criteria.GradeMemo.Contains("41"))
+                criteria.GradeMemo = string.Empty;
             return GenericMetaDataSource<TeacherJobView, TeacherJobViewCollection>.Instance.Query(criteria.PageParams, criteria, criteria.OrderBy);
         }
         #endregion
@@ -75,19 +71,17 @@ namespace PPTS.WebAPI.Orders.Controllers
         [HttpPost]
         public dynamic GetTeacherWeekCourse(TeacherAssignQM qConditon)
         {
-            Dictionary<string, IEnumerable<BaseConstantEntity>> dic = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(Data.Orders.Entities.Assign));
-            ///处理查询条件   
-            dic = new OrderCommonHelper().GetWCAS(dic);
-
             qConditon.StartTime = qConditon.StartTime.Date;
             qConditon.EndTime = qConditon.EndTime.Date;
-            AssignCollection ac = AssignsAdapter.Instance.LoadCollection(qConditon.TeacherID, false, qConditon.StartTime, qConditon.EndTime, false);
+
+            AssignCollection ac = AssignsAdapter.Instance.LoadCollection(AssignTypeDefine.ByTeacher, qConditon.TeacherJobID, qConditon.StartTime, qConditon.EndTime, false);
 
             var acLst = from r in ac
                         where (r.AssignStatus == AssignStatusDefine.Assigned || r.AssignStatus == AssignStatusDefine.Finished ||
                         r.AssignStatus == AssignStatusDefine.Exception)
                         && (r.AssignSource == AssignSourceDefine.Automatic || r.AssignSource == AssignSourceDefine.Manual)
                         select r;
+
             if (acLst != null && !string.IsNullOrEmpty(qConditon.AssignStatus) && qConditon.AssignStatus != "-1")
                 acLst = acLst.Where(p => p.AssignStatus == (AssignStatusDefine)Convert.ToInt32(qConditon.AssignStatus));
             if (acLst != null && !string.IsNullOrEmpty(qConditon.AssignSource) && qConditon.AssignSource != "-1")
@@ -96,6 +90,9 @@ namespace PPTS.WebAPI.Orders.Controllers
                 acLst = acLst.Where(p => p.Grade == qConditon.Grade);
             if (acLst != null && !string.IsNullOrEmpty(qConditon.CustomerName))
                 acLst = acLst.Where(p => p.CustomerName.Contains(qConditon.CustomerName));
+
+            Dictionary<string, IEnumerable<BaseConstantEntity>> dic = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(Data.Orders.Entities.Assign));
+
             return new
             {
                 result = acLst,
@@ -108,7 +105,7 @@ namespace PPTS.WebAPI.Orders.Controllers
         {
             DateTime sdate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
             DateTime edate = new DateTime(DateTime.Now.Year, DateTime.Now.Month + 1, 1);
-            AssignCollection ac = AssignsAdapter.Instance.LoadCollection(qConditon.TeacherID, false, sdate, edate, false);
+            AssignCollection ac = AssignsAdapter.Instance.LoadCollection(AssignTypeDefine.ByTeacher, qConditon.TeacherJobID, sdate, edate, false);
             string teacherName = string.Empty;
             if (ac.Count > 0)
                 teacherName = ac[0].TeacherName;
@@ -126,7 +123,7 @@ namespace PPTS.WebAPI.Orders.Controllers
         {
             AssignConditionCollection acc = AssignConditionAdapter.Instance.LoadCollection(AssignTypeDefine.ByTeacher, queryModel.TeacherID, queryModel.TeacherJobID);
             acc.Insert(0, new AssignCondition() { ConditionID = "-1", ConditionName4Customer = "新建", ConditionName4Teacher = "新建" });
-            var dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(Data.Orders.Entities.Assign));
+
             IOrganization org = DeluxeIdentity.CurrentUser.GetCurrentJob().GetParentOrganizationByType(DepartmentType.Campus);
             if (org == null)
             {
@@ -134,17 +131,30 @@ namespace PPTS.WebAPI.Orders.Controllers
                 {
                     AssignCondition = acc,
                     Student = new StudentModel(),
-                    Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(Data.Orders.Entities.Assign))
                 };
             }
+
+            var dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(Data.Orders.Entities.Assign));
+
             ///从服务中获取教师指定的学员列表
             StudentModel cust = GetCustomerByTchID(queryModel.TeacherJobID, org.ID, dictionaries);
             InitDataByTchCAQR result = new InitDataByTchCAQR()
             {
                 AssignCondition = acc,
                 Student = cust,
-                Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(Data.Orders.Entities.Assign))
             };
+
+            TeacherJobView tjv = TeacherJobViewAdapter.Instance.Load(queryModel.TeacherJobID);
+            if (tjv == null)
+                throw new Exception(string.Format("未能查找到岗位ID：{0}的教师信息", queryModel.TeacherJobID));
+
+            result.Assign.TeacherID = tjv.TeacherID;
+            result.Assign.TeacherName = tjv.TeacherName;
+            result.Assign.TeacherJobID = tjv.JobID;
+            result.Assign.TeacherJobOrgID = tjv.JobOrgID;
+            result.Assign.TeacherJobOrgName = tjv.JobOrgName;
+            result.Assign.IsFullTimeTeacher = tjv.IsFullTime;
+
             result.Assign.CampusID = org.ID;
             result.Assign.CampusName = org.Name;
             return result;
@@ -156,69 +166,27 @@ namespace PPTS.WebAPI.Orders.Controllers
 
             var student = new OrderCommonHelper().GetStudent(teacherJobID, campusID, dic);
 
-            student.Student.Add(new KeyValue() { Key = "3797053", Value = "李泓辰", Field01 = "S131124000281" });
-            student.Student.Add(new KeyValue() { Key = "1723232", Value = "张启凡", Field01 = "S121014000179" });
-            student.Student.Add(new KeyValue() { Key = "3783587", Value = "孙磊", Field01 = "S131117000755" });
+            //student.TeacherJobOrgID = "6306-Org";
+            //student.TeacherJobOrgName = "北京分公司方庄校区校教学部文科组";
 
-            student.Grade = new List<KeyValue>();
-            student.Grade.Add(new KeyValue { Key = "21", Value = "初中一年级" });
-            student.Grade.Add(new KeyValue { Key = "22", Value = "初中二年级" });
-            student.Grade.Add(new KeyValue { Key = "16", Value = "小学六年级" });
+            //student.Student.Add(new KeyValue() { Key = "3797053", Value = "李泓辰", Field01 = "S131124000281" });
+            //student.Student.Add(new KeyValue() { Key = "1723232", Value = "张启凡", Field01 = "S121014000179" });
+            //student.Student.Add(new KeyValue() { Key = "3783587", Value = "孙磊", Field01 = "S131117000755" });
 
-            student.GradeSubjectRela = new Dictionary<string, IList<KeyValue>>();
-            student.GradeSubjectRela.Add("21",new List<KeyValue>());
-            student.GradeSubjectRela["21"].Add(new KeyValue() { Key="3",Value= "英语" });
+            //student.Grade = new List<KeyValue>();
+            //student.Grade.Add(new KeyValue { Key = "21", Value = "初中一年级" });
+            //student.Grade.Add(new KeyValue { Key = "22", Value = "初中二年级" });
+            //student.Grade.Add(new KeyValue { Key = "16", Value = "小学六年级" });
 
-            student.GradeSubjectRela.Add("22", new List<KeyValue>());
-            student.GradeSubjectRela["22"].Add(new KeyValue() { Key = "3", Value = "英语" });
+            //student.GradeSubjectRela = new Dictionary<string, IList<KeyValue>>();
+            //student.GradeSubjectRela.Add("21",new List<KeyValue>());
+            //student.GradeSubjectRela["21"].Add(new KeyValue() { Key="3",Value= "英语" });
 
-            student.GradeSubjectRela.Add("16", new List<KeyValue>());
-            student.GradeSubjectRela["16"].Add(new KeyValue() { Key = "3", Value = "英语" });
+            //student.GradeSubjectRela.Add("22", new List<KeyValue>());
+            //student.GradeSubjectRela["22"].Add(new KeyValue() { Key = "3", Value = "英语" });
 
-            //student.Add(new StudentModel()
-            //{
-            //    CustomerID = "3797053",
-            //    CustomerNameEx = "李泓辰（英语-初中一年级）",
-            //    CustomerName = "李泓辰",
-            //    CustomerCode = "S131124000281",
-            //    Subject = "3",
-            //    SubjectName = "英语",
-            //    Grade = "21",
-            //    GradeName = "初中一年级"
-            //});
-            //student.Add(new StudentModel()
-            //{
-            //    CustomerID = "3797053",
-            //    CustomerNameEx = "李泓辰（英语-初中二年级）",
-            //    CustomerName = "李泓辰",
-            //    CustomerCode = "S131124000281",
-            //    Subject = "3",
-            //    SubjectName = "英语",
-            //    Grade = "22",
-            //    GradeName = "初中二年级"
-            //});
-            //student.Add(new StudentModel()
-            //{
-            //    CustomerID = "1723232",
-            //    CustomerNameEx = "张启凡（英语-小学六年级）",
-            //    CustomerName = "张启凡",
-            //    CustomerCode = "S121014000179",
-            //    Subject = "3",
-            //    SubjectName = "英语",
-            //    Grade = "16",
-            //    GradeName = "小学六年级"
-            //});
-            //student.Add(new StudentModel()
-            //{
-            //    CustomerID = "3783587",
-            //    CustomerNameEx = "孙磊（英语-初中二年级）",
-            //    CustomerName = "孙磊",
-            //    CustomerCode = "S131117000755",
-            //    Subject = "3",
-            //    SubjectName = "英语",
-            //    Grade = "22",
-            //    GradeName = "初中二年级"
-            //});
+            //student.GradeSubjectRela.Add("16", new List<KeyValue>());
+            //student.GradeSubjectRela["16"].Add(new KeyValue() { Key = "3", Value = "英语" });
 
             return student;
         }
@@ -230,16 +198,7 @@ namespace PPTS.WebAPI.Orders.Controllers
         public SimpleAssetViewCollection GetAssetByCustomerID(CrumbsQM queryModel)
         {
             string customerID = queryModel.CustomerID;
-            //string grade = queryModel.Grade;
-            //string subject = queryModel.Subject;
-
-            IOrganization organ = DeluxeIdentity.CurrentUser.GetCurrentJob().GetParentOrganizationByType(DepartmentType.Campus);
-            if (organ == null)
-            {
-                return new SimpleAssetViewCollection { Result = new AssetViewCollection() };
-            }
-            string operaterCampusID = organ.ID;
-            AssetViewCollection avm = AssetViewAdapter.Instance.LoadCollection(operaterCampusID, customerID);
+            AssetViewCollection avm = AssetViewAdapter.Instance.LoadCollection(customerID);
             return new SimpleAssetViewCollection { Result = avm };
         }
 
@@ -249,13 +208,8 @@ namespace PPTS.WebAPI.Orders.Controllers
         {
             string customerID = queryModel.CustomerID;
             string assetID = queryModel.AssetID;
-            IOrganization organ = DeluxeIdentity.CurrentUser.GetCurrentJob().GetParentOrganizationByType(DepartmentType.Campus);
-            if (organ == null)
-            {
-                return new SimpleAssetView { Result = new AssetView() };
-            }
-            string operaterCampusID = organ.ID;
-            AssetView avm = AssetViewAdapter.Instance.Load(operaterCampusID, customerID, assetID);
+
+            AssetView avm = AssetViewAdapter.Instance.Load(customerID, assetID);
             return new SimpleAssetView { Result = avm };
         }
 
@@ -342,7 +296,8 @@ namespace PPTS.WebAPI.Orders.Controllers
 
             Dictionary<string, IEnumerable<BaseConstantEntity>> dic = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(Data.Orders.Entities.Assign));
             ///处理查询条件   
-            dic = new OrderCommonHelper().GetWCAS(dic);
+            //dic = new OrderCommonHelper().GetWCAS(dic);
+
             criteria.AssignStatus = new[] { (int)AssignStatusDefine.Assigned, (int)AssignStatusDefine.Finished, (int)AssignStatusDefine.Exception };
             AssignQCR result = new AssignQCR
             {

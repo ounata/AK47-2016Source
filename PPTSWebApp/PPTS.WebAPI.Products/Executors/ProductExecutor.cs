@@ -8,6 +8,7 @@ using PPTS.Data.Products.Entities;
 using PPTS.Data.Products.Executors;
 using PPTS.WebAPI.Products.ViewModels.Products;
 using PPTS.Data.Products;
+using MCS.Library.Validation;
 
 namespace PPTS.WebAPI.Products.Executors
 {
@@ -49,7 +50,7 @@ namespace PPTS.WebAPI.Products.Executors
 
 
         }
-
+        
         /// <summary>
         /// 准备日志信息
         /// </summary>

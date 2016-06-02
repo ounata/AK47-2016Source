@@ -10,14 +10,17 @@ namespace PPTS.Data.Products.Adapters
     {
         public new static ProductAdapter Instance = new ProductAdapter();
 
-        public bool StopSellProduct(string productId)
+        public DateTime StopSellProduct(string productId)
         {
             productId.CheckStringIsNullOrEmpty("productId");
 
             var builder = new WhereSqlClauseBuilder();
             builder.AppendItem("ProductId", productId);
-            string sql = string.Format("update {0} set enddate=Convert(varchar(10),getutcdate(),120) where {1}", this.GetTableName(), builder.ToSqlString(TSqlBuilder.Instance));
-            return DbHelper.RunSql(sql, this.GetConnectionName())>0;
+            
+            string sql = string.Format("declare @currentTime as datetime;set @currentTime=GETUTCDATE(); \n update {0} set enddate=Convert(varchar(10),@currentTime,120) where {1} ; \n select @currentTime", this.GetTableName(), builder.ToSqlString(TSqlBuilder.Instance));
+
+            return Convert.ToDateTime(DbHelper.RunSqlReturnScalar(sql, GetConnectionName()));
+            
 
         }
 

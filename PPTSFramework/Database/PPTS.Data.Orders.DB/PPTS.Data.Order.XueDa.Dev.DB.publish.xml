@@ -6,5 +6,7 @@
     <DeployScriptFileName>PPTS.Data.Orders.DB.sql</DeployScriptFileName>
     <TargetConnectionString>Data Source=10.1.56.213;Persist Security Info=True;User ID=msuser;Pooling=False</TargetConnectionString>
     <ProfileVersionNumber>1</ProfileVersionNumber>
+    <BlockOnPossibleDataLoss>True</BlockOnPossibleDataLoss>
+    <AllowIncompatiblePlatform>True</AllowIncompatiblePlatform>
   </PropertyGroup>
 </Project>

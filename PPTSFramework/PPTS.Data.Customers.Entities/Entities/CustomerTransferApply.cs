@@ -1,6 +1,7 @@
 using MCS.Library.Core;
 using MCS.Library.Data.DataObjects;
 using MCS.Library.Data.Mapping;
+using PPTS.Data.Common.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,9 +14,9 @@ namespace PPTS.Data.Customers.Entities
     /// 学员转学申请表
     /// </summary>
     [Serializable]
-    [ORTableMapping("CustomerTransferApplys")]
+    [ORTableMapping("CM.CustomerTransferApplies")]
     [DataContract]
-    public class CustomerTransferApply
+    public class CustomerTransferApply : IEntityWithCreator, IEntityWithModifier
     {
         public CustomerTransferApply()
         {
@@ -70,7 +71,7 @@ namespace PPTS.Data.Customers.Entities
         /// </summary>
         [ORFieldMapping("ApplyStatus")]
         [DataMember]
-        public string ApplyStatus
+        public ApplyStatusDefine ApplyStatus
         {
             get;
             set;
@@ -79,7 +80,7 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 申请时间
         /// </summary>
-        [ORFieldMapping("ApplyTime")]
+        [ORFieldMapping("ApplyTime", UtcTimeToLocal = true)]
         [DataMember]
         public DateTime ApplyTime
         {
@@ -88,11 +89,22 @@ namespace PPTS.Data.Customers.Entities
         }
 
         /// <summary>
+        /// 申请转学原因
+        /// </summary>
+        [ORFieldMapping("ApplyMemo")]
+        [DataMember]
+        public string ApplyMemo
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// 申请人ID
         /// </summary>
-        [ORFieldMapping("ApplyrID")]
+        [ORFieldMapping("ApplierID")]
         [DataMember]
-        public string ApplyrID
+        public string ApplierID
         {
             get;
             set;
@@ -101,9 +113,9 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 申请人姓名
         /// </summary>
-        [ORFieldMapping("ApplyrName")]
+        [ORFieldMapping("ApplierName")]
         [DataMember]
-        public string ApplyrName
+        public string ApplierName
         {
             get;
             set;
@@ -112,9 +124,9 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 申请人岗位ID
         /// </summary>
-        [ORFieldMapping("ApplyrJobID")]
+        [ORFieldMapping("ApplierJobID")]
         [DataMember]
-        public string ApplyrJobID
+        public string ApplierJobID
         {
             get;
             set;
@@ -123,9 +135,9 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 申请人岗位名称
         /// </summary>
-        [ORFieldMapping("ApplyrJobName")]
+        [ORFieldMapping("ApplierJobName")]
         [DataMember]
-        public string ApplyrJobName
+        public string ApplierJobName
         {
             get;
             set;
@@ -145,7 +157,7 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 异步处理时间
         /// </summary>
-        [ORFieldMapping("ProcessTime")]
+        [ORFieldMapping("ProcessTime", UtcTimeToLocal = true)]
         [DataMember]
         public DateTime ProcessTime
         {
@@ -165,11 +177,11 @@ namespace PPTS.Data.Customers.Entities
         }
 
         /// <summary>
-        /// 转学类型（跨校区转学，跨分公司转学）
+        /// 转学类型（同分公司转学，跨分公司转学）
         /// </summary>
         [ORFieldMapping("TransferType")]
         [DataMember]
-        public string TransferType
+        public StudentTransferType TransferType
         {
             get;
             set;
@@ -244,7 +256,7 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 提交时间
         /// </summary>
-        [ORFieldMapping("SubmitTime")]
+        [ORFieldMapping("SubmitTime", UtcTimeToLocal = true)]
         [DataMember]
         public DateTime SubmitTime
         {
@@ -299,7 +311,7 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 最后审批时间
         /// </summary>
-        [ORFieldMapping("ApproveTime")]
+        [ORFieldMapping("ApproveTime", UtcTimeToLocal = true)]
         [DataMember]
         public DateTime ApproveTime
         {
@@ -311,6 +323,7 @@ namespace PPTS.Data.Customers.Entities
         /// 创建人ID
         /// </summary>
         [ORFieldMapping("CreatorID")]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update)]
         [DataMember]
         public string CreatorID
         {
@@ -322,6 +335,7 @@ namespace PPTS.Data.Customers.Entities
         /// 创建人姓名
         /// </summary>
         [ORFieldMapping("CreatorName")]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update)]
         [DataMember]
         public string CreatorName
         {
@@ -332,7 +346,8 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 创建时间
         /// </summary>
-        [ORFieldMapping("CreateTime")]
+        [ORFieldMapping("CreateTime", UtcTimeToLocal = true)]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.Select | ClauseBindingFlags.Where)]
         [DataMember]
         public DateTime CreateTime
         {
@@ -344,6 +359,7 @@ namespace PPTS.Data.Customers.Entities
         /// 最后修改人ID
         /// </summary>
         [ORFieldMapping("ModifierID")]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update)]
         [DataMember]
         public string ModifierID
         {
@@ -355,6 +371,7 @@ namespace PPTS.Data.Customers.Entities
         /// 最后修改人姓名
         /// </summary>
         [ORFieldMapping("ModifierName")]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update)]
         [DataMember]
         public string ModifierName
         {
@@ -365,12 +382,24 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 最后修改时间
         /// </summary>
-        [ORFieldMapping("ModifyTime")]
+        [ORFieldMapping("ModifyTime", UtcTimeToLocal = true)]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update, DefaultExpression = "GETUTCDATE()", ForceUseDefaultExpression = true)]
         [DataMember]
         public DateTime ModifyTime
         {
             get;
             set;
+        }
+        
+        //是否能审批
+        [NoMapping]
+        [DataMember]
+        public bool CanApprove
+        {
+            get
+            {
+                return this.ApplyStatus == ApplyStatusDefine.Approving;
+            }
         }
     }
 

@@ -6,7 +6,9 @@
     [TASK_TYPE]		NVARCHAR (64)   NULL,
     [TASK_TITLE]	NVARCHAR (1024) NULL,
     [RESOURCE_ID]	NVARCHAR (36)   NULL,
-	[STATUS]		NVARCHAR(64)       NULL, 
+	[RETRIES]		INT				NULL DEFAULT 0,
+	[RETRY_LIMIT]	INT				NULL DEFAULT 1,
+	[STATUS]		NVARCHAR(64)    NULL, 
     [CREATE_TIME]	DATETIME NULL DEFAULT GETUTCDATE(), 
     [START_TIME]	DATETIME NULL, 
     [END_TIME]		DATETIME NULL,
@@ -184,3 +186,21 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level1name = N'SYS_TASK',
     @level2type = NULL,
     @level2name = NULL
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'重试次数',
+    @level0type = N'SCHEMA',
+    @level0name = N'WF',
+    @level1type = N'TABLE',
+    @level1name = N'SYS_TASK',
+    @level2type = N'COLUMN',
+    @level2name = N'RETRIES'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'重试限制',
+    @level0type = N'SCHEMA',
+    @level0name = N'WF',
+    @level1type = N'TABLE',
+    @level1name = N'SYS_TASK',
+    @level2type = N'COLUMN',
+    @level2name = N'RETRY_LIMIT'

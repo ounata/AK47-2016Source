@@ -5,26 +5,78 @@
         </button>
         <h4 class="modal-title">打印收据</h4>
     </div>
-    <div class="modal-body">
-         <table class="table table-bordered">
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td colspan="3"></td>
-                    <td colspan="4">学大教育专用收据</td>
-                    <td colspan="3">{{vm.item.payNo}}</td>
-                </tr>
+    <div class="modal-body" id="printArea">
+         <table class="table">
+             <tr>
+                 <td></td>
+                 <td>学大教育专用收据</td>
+                 <td>NO {{vm.item.payNo}}</td>
+             </tr>
          </table>
+        <table class="table">
+            <tr>
+                <td>学员姓名：{{vm.apply.customerName}}</td>
+                <td>充值单号：{{vm.apply.applyNo}}</td>
+                <td>充值类型：{{vm.apply.chargeType | chargeType}}</td>
+                <td>付款时间；{{vm.apply.payTime | date:"yyyyMMdd"}}</td>
+                <td></td>
+            </tr>
+        </table>
+         <table class="table table-bordered">
+            <tr>
+                <td rowspan="2" style="width:320px;">付款项目</td>
+                <td colspan="9">金额</td>
+            </tr>
+            <tr>
+                 <td>百</td>
+                 <td>十</td>
+                 <td>万</td>
+                 <td>千</td>
+                 <td>百</td>
+                 <td>十</td>
+                 <td>元</td>
+                 <td>角</td>
+                 <td>分</td>
+             </tr>
+             <tr>
+                 <td>预付款</td>
+                 <td>{{vm.item.million}}</td>
+                 <td>{{vm.item.hundredThousand}}</td>
+                 <td>{{vm.item.tenThousand}}</td>
+                 <td>{{vm.item.thousand}}</td>
+                 <td>{{vm.item.hundred}}</td>
+                 <td>{{vm.item.ten}}</td>
+                 <td>{{vm.item.yuan}}</td>
+                 <td>{{vm.item.jiao}}</td>
+                 <td>{{vm.item.cent}}</td>
+             </tr>
+             <tr>
+                 <td>合计人民币(大写)：{{vm.item.payMoneyText}}</td>
+                 <td></td>
+                 <td></td>
+                 <td></td>
+                 <td></td>
+                 <td></td>
+                 <td></td>
+                 <td></td>
+                 <td></td>
+                 <td></td>
+             </tr>
+         </table>
+        <table class="table">
+            <tr>
+                <td>收款类型：{{vm.item.payType | payType}}</td>
+                <td>收款人：{{vm.item.payeeName}}</td>
+                <td>收款单位：学大教育</td>
+            </tr>
+        </table>
+        <table class="table">
+            <tr>
+                <td>报读校区：{{vm.apply.campusName}}</td>
+                <td>付款人签字：____________</td>
+                <td>收款人签字：____________</td>
+            </tr>
+        </table>
     </div>
     <div class="modal-footer">
         <mcs-button category="print" click="vm.save()"></mcs-button>

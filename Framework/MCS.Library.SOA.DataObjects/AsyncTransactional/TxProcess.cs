@@ -42,6 +42,13 @@ namespace MCS.Library.SOA.DataObjects.AsyncTransactional
             set;
         }
 
+        [ORFieldMapping("RESOURCE_ID")]
+        public string ResourceID
+        {
+            get;
+            set;
+        }
+
         [ORFieldMapping("CURRENT_ACTIVITY_INDEX")]
         public int CurrentActivityIndex
         {

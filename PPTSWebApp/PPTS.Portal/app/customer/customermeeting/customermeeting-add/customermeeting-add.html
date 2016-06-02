@@ -1,4 +1,4 @@
-﻿<form class="form-horizontal" role="form">
+﻿<form class="form-horizontal" role="form" novalidate>
     <div class="widget-body">
         <div class="widget-main no-padding">
             <div class="clearfix form-actions mcs-form-actions" style="margin-bottom:15px">
@@ -21,7 +21,7 @@
                 <div class="col-sm-6">
                     <mcs-label required="true" text="会议日期" css="col-sm-3" />
                     <div class="col-sm-9">
-                        <ppts-daterangepicker start-date="vm.customerMeeting.meetingTime" end-date="vm.customerMeeting.meetingEndTime" css="mcs-padding-0" width="100%" />
+                        <ppts-daterangepicker start-date="vm.customerMeeting.meetingTime" end-date="vm.customerMeeting.meetingEndTime" css="mcs-padding-0" width="100%" required/>
                         <span class="label-260" style="color:red;margin-left:30px">
                             会议时间只能选择当前时间及前三天的任意一天
                         </span>
@@ -30,8 +30,8 @@
                 <div class="col-sm-6">
                     <mcs-label required="true" text="会议时长" css="col-sm-3" />
                     <div class="col-sm-9">
-                        <span><input type="text" ng-model="vm.customerMeeting.hours" class="mcs-input-small" onkeyup="mcs.util.limit(this)" onafterpaste="mcs.util.limit(this)" />小时</span>
-                        <span><input type="text" ng-model="vm.customerMeeting.minutes" class="mcs-input-small" onkeyup="mcs.util.limit(this)" onafterpaste="mcs.util.limit(this)" />分(如:1小时20分)</span>
+                        <span><input type="text" ng-model="vm.customerMeeting.hours" class="mcs-input-small" onkeyup="mcs.util.limit(this)" onafterpaste="mcs.util.limit(this)" required/>小时</span>
+                        <span><input type="text" ng-model="vm.customerMeeting.minutes" class="mcs-input-small" onkeyup="mcs.util.limit(this)" onafterpaste="mcs.util.limit(this)" required/>分(如:1小时20分)</span>
                     </div>
                 </div>
             </div>
@@ -39,7 +39,7 @@
                 <div class="col-sm-6">
                     <mcs-label required="true" text="下次开会时间" css="col-sm-3" />
                     <div class="col-sm-9">
-                        <ppts-datetimepicker model="vm.customerMeeting.nextMeetingTime" css="mcs-padding-0" width="100%" />
+                        <ppts-datetimepicker model="vm.customerMeeting.nextMeetingTime" css="mcs-padding-0" width="100%" required/>
                     </div>
                 </div>
                 <div class="col-sm-6">
@@ -49,7 +49,7 @@
                 <div class="col-sm-6">
                     <mcs-label required="true" text="会议主题" css="col-sm-3" />
                     <div class="col-sm-9">
-                        <ppts-select category="meetingTitle" model="vm.customerMeeting.meetingTitle" caption="请选择" class="ppts-select-md" />
+                        <ppts-select category="meetingTitle" model="vm.customerMeeting.meetingTitle" caption="请选择" class="ppts-select-md" required/>
                     </div>
                 </div>
                 <div class="col-sm-6">
@@ -59,7 +59,7 @@
                 <div class="col-sm-6">
                     <mcs-label required="true" text="会议类型" css="col-sm-3" />
                     <div class="col-sm-9">
-                        <ppts-select category="meetingType" model="vm.customerMeeting.meetingType" caption="请选择" class="ppts-select-md" />
+                        <ppts-select category="meetingType" model="vm.customerMeeting.meetingType" caption="请选择" class="ppts-select-md" required/>
                     </div>
                 </div>
                 <div class="col-sm-6">
@@ -69,7 +69,7 @@
                 <div class="col-sm-6">
                     <mcs-label required="true" text="会议参与人" css="col-sm-3" />
                     <div class="col-sm-9">
-                        <mcs-input model="vm.customerMeeting.participants" css="col-xs-10 col-sm-9" required="true" style="width:100%;" />
+                        <mcs-input model="vm.customerMeeting.participants" css="col-xs-10 col-sm-9" required="true" style="width:100%;" required/>
                         <span class="label-260" style="color:red;margin-left:30px">
                             如:爸爸、妈妈、学管师张林要、教师蔡明、学科组长陈乃科等
                         </span>
@@ -126,7 +126,7 @@
                         <table>
                             <tr>
                                 <td>
-                                    <input type="file" ngf-max-size="50MB" ngf-select ngf-allow-dir="allowDir" ngf-multiple="true" ng-model="vm.files" name="files" ngf-validate="{size: {max: '20MB'},pattern: 'image/*'}" required>
+                                    <input type="file" ngf-max-size="50MB" ngf-select ngf-allow-dir="allowDir" ngf-multiple="true" ng-model="vm.files" name="files" ngf-validate="{size: {max: '20MB'},pattern: 'image/*'}" >
                                 </td>
                                 <td>
                                     <i ng-show="form.files.$error.required">请选择文件</i>
@@ -136,7 +136,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <input type="file" ngf-max-size="50MB" ngf-select ngf-allow-dir="allowDir" ngf-multiple="true" ng-model="vm.files" name="files" ngf-validate="{size: {max: '20MB'},pattern: 'image/*'}" required>
+                                    <input type="file" ngf-max-size="50MB" ngf-select ngf-allow-dir="allowDir" ngf-multiple="true" ng-model="vm.files" name="files" ngf-validate="{size: {max: '20MB'},pattern: 'image/*'}" >
                                 </td>
                                 <td>
                                     <i ng-show="form.files.$error.required">请选择文件</i>
@@ -146,7 +146,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <input type="file" ngf-max-size="50MB" ngf-select ngf-allow-dir="allowDir" ngf-multiple="true" ng-model="vm.files" name="files" ngf-validate="{size: {max: '20MB'},pattern: 'image/*'}" required>
+                                    <input type="file" ngf-max-size="50MB" ngf-select ngf-allow-dir="allowDir" ngf-multiple="true" ng-model="vm.files" name="files" ngf-validate="{size: {max: '20MB'},pattern: 'image/*'}" >
                                 </td>
                                 <td>
                                     <i ng-show="form.files.$error.required">请选择文件</i>
@@ -180,7 +180,7 @@
                 <div class="col-sm-6">
                     <mcs-label required="true" text="家长满意度" css="col-sm-3" />
                     <div class="col-sm-9">
-                        <ppts-select category="satisfaction" model="vm.customerMeeting.satisficing" caption="请选择" class="ppts-select-md" />
+                        <ppts-select category="satisfaction" model="vm.customerMeeting.satisficing" caption="请选择" class="ppts-select-md" required/>
                     </div>
                 </div>
                 <div class="col-sm-6">

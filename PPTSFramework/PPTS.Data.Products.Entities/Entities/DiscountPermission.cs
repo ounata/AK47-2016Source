@@ -1,6 +1,7 @@
 using MCS.Library.Core;
 using MCS.Library.Data.DataObjects;
 using MCS.Library.Data.Mapping;
+using PPTS.Data.Common.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,31 +14,20 @@ namespace PPTS.Data.Products.Entities
     /// 折扣归属权限表
     /// </summary>
     [Serializable]
-    [ORTableMapping("DiscountPermissions")]
+    [ORTableMapping("[PM].DiscountPermissions")]
     [DataContract]
-    public class DiscountPermission
+    public class DiscountPermission : IEntityWithCreator
     {
         public DiscountPermission()
         {
         }
 
         /// <summary>
-        /// 使用者组织ID
+        /// 校区ID
         /// </summary>
-        [ORFieldMapping("UseOrgID", PrimaryKey = true)]
+        [ORFieldMapping("CampusID", PrimaryKey = true)]
         [DataMember]
-        public string UseOrgID
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 使用者组织类型
-        /// </summary>
-        [ORFieldMapping("UseOrgType")]
-        [DataMember]
-        public string UseOrgType
+        public string CampusID
         {
             get;
             set;
@@ -54,10 +44,21 @@ namespace PPTS.Data.Products.Entities
             set;
         }
 
+        [ORFieldMapping("StartDate", UtcTimeToLocal = true)]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update)]
+        [DataMember]
+        public DateTime StartDate { get; set; }
+
+        [ORFieldMapping("EndDate", UtcTimeToLocal = true)]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Insert)]
+        [DataMember]
+        public DateTime EndDate { get; set; }
+
         /// <summary>
         /// 创建人ID
         /// </summary>
         [ORFieldMapping("CreatorID")]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update)]
         [DataMember]
         public string CreatorID
         {
@@ -69,6 +70,7 @@ namespace PPTS.Data.Products.Entities
         /// 创建人姓名
         /// </summary>
         [ORFieldMapping("CreatorName")]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update)]
         [DataMember]
         public string CreatorName
         {
@@ -80,6 +82,7 @@ namespace PPTS.Data.Products.Entities
         /// 创建时间
         /// </summary>
         [ORFieldMapping("CreateTime")]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.Select | ClauseBindingFlags.Where)]
         [DataMember]
         public DateTime CreateTime
         {

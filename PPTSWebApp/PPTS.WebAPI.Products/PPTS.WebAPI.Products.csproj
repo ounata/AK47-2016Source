@@ -60,6 +60,17 @@
     <Reference Include="MCS.Library.Data">
       <HintPath>..\..\Bin\MCS.Library.Data.dll</HintPath>
     </Reference>
+    <Reference Include="MCS.Library.Office, Version=1.0.0.0, Culture=neutral, PublicKeyToken=62ea08f894871798, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Bin\MCS.Library.Office.dll</HintPath>
+    </Reference>
+    <Reference Include="MCS.Library.Office.OpenXml.Excel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=62ea08f894871798, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Bin\MCS.Library.Office.OpenXml.Excel.dll</HintPath>
+    </Reference>
+    <Reference Include="MCS.Library.Office.OpenXml.Word">
+      <HintPath>..\..\Bin\MCS.Library.Office.OpenXml.Word.dll</HintPath>
+    </Reference>
     <Reference Include="MCS.Library.OGUPermission">
       <HintPath>..\..\Bin\MCS.Library.OGUPermission.dll</HintPath>
     </Reference>
@@ -138,21 +149,48 @@
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Controllers\ExtraGiftController.cs" />
+    <Compile Include="Controllers\DiscountController.cs" />
+    <Compile Include="Controllers\PresentController.cs" />
     <Compile Include="Controllers\ProductsController.cs" />
+    <Compile Include="Controllers\ServiceFeesController.cs" />
+    <Compile Include="DataSources\DiscountDataSource.cs" />
+    <Compile Include="DataSources\ExpensesDataSource.cs" />
     <Compile Include="DataSources\PresentDataSource.cs" />
+    <Compile Include="Executors\ApprovedDiscountExecutor.cs" />
+    <Compile Include="Executors\ApprovedPresentExecutor.cs" />
+    <Compile Include="Executors\CreateDiscountExecutor.cs" />
+    <Compile Include="Executors\CreatePresentExecutor.cs" />
+    <Compile Include="Executors\DeleteExpensesExecutor.cs" />
+    <Compile Include="Executors\DeleteDiscountExecutor.cs" />
+    <Compile Include="Executors\DeletePresentExecutor.cs" />
+    <Compile Include="Executors\DisablePresentExecutor.cs" />
+    <Compile Include="Executors\ExpensesExecutor.cs" />
     <Compile Include="Executors\ProductExecutor.cs" />
+    <Compile Include="Executors\RefusedDiscountExecutor.cs" />
+    <Compile Include="Executors\RefusedPresentExecutor.cs" />
+    <Compile Include="Executors\DisableDiscountExecutor.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModels\ExtraGift\PresentsQueryCriteriaModel.cs" />
-    <Compile Include="ViewModels\ExtraGift\PresentsQueryResultModel.cs" />
+    <Compile Include="ViewModels\Discounts\CheckResultModel.cs" />
+    <Compile Include="ViewModels\Discounts\CreateDiscountModel.cs" />
+    <Compile Include="ViewModels\Discounts\DiscountDetialModel.cs" />
+    <Compile Include="ViewModels\Discounts\DiscountQueryCriteriaModel.cs" />
+    <Compile Include="ViewModels\Discounts\DiscountQueryResultModel.cs" />
+    <Compile Include="ViewModels\Presents\CreatePresentModel.cs" />
+    <Compile Include="ViewModels\Presents\PresentDetialModel.cs" />
+    <Compile Include="ViewModels\Presents\PresentsQueryCriteriaModel.cs" />
+    <Compile Include="ViewModels\Presents\PresentsQueryResultModel.cs" />
     <Compile Include="ViewModels\Products\ProductModel.cs" />
     <Compile Include="ViewModels\Products\ProductQueryCriteriaModel.cs" />
     <Compile Include="ViewModels\Products\ProductQueryResult.cs" />
     <Compile Include="ViewModels\Products\ProductViewModel.cs" />
     <Compile Include="ViewModels\Products\QueryClassGroupCriteriaModel.cs" />
+    <Compile Include="ViewModels\ServiceFees\EditExpensesModel.cs" />
+    <Compile Include="ViewModels\ServiceFees\ExpensesCriteriaModel.cs" />
+    <Compile Include="ViewModels\ServiceFees\ExpensesQueryModel.cs" />
+    <Compile Include="ViewModels\ServiceFees\ExpensesQueryResult.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />

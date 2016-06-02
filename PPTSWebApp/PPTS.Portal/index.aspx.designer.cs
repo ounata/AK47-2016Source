@@ -13,12 +13,12 @@ namespace PPTS.Portal {
     public partial class index {
         
         /// <summary>
-        /// portalParameters 控件。
+        /// configData 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputHidden portalParameters;
+        protected global::System.Web.UI.HtmlControls.HtmlInputHidden configData;
     }
 }

@@ -326,7 +326,7 @@ define(['angular', ppts.config.modules.customer], function (ng, customer) {
                         vm.customerMeeting = {};
                         vm.items = new Array();
                     }
-                    vm.dictionaries = result.dictionaries;
+                    //vm.dictionaries = result.dictionaries;
                     dataSyncService.injectDictData();
 
                     if (ng.isFunction(callback)) {

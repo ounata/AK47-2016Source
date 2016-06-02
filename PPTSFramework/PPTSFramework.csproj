@@ -8,23 +8,24 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectItem Include="PPTS.Data.Common.Entities\PPTS.Data.Common.Entities.csproj" />
-    <ProjectItem Include="PPTS.Data.Common\PPTS.Data.Common.csproj" />
-
     <ProjectItem Include="PPTS.Data.Customers.Entities\PPTS.Data.Customers.Entities.csproj" />
-    <ProjectItem Include="PPTS.Data.Customers\PPTS.Data.Customers.csproj" />
-    <ProjectItem Include="PPTS.Contracts.Customers\PPTS.Contracts.Customers.csproj" />
-
     <ProjectItem Include="PPTS.Data.Products.Entities\PPTS.Data.Products.Entities.csproj" />
-    <ProjectItem Include="PPTS.Data.Products\PPTS.Data.Products.csproj" />
-    <ProjectItem Include="PPTS.Contracts.Products\PPTS.Contracts.Products.csproj" />
-
-
     <ProjectItem Include="PPTS.Data.Orders.Entities\PPTS.Data.Orders.Entities.csproj" />
-    <ProjectItem Include="PPTS.Data.Orders\PPTS.Data.Orders.csproj" />
+
+    <ProjectItem Include="PPTS.Contracts.Customers\PPTS.Contracts.Customers.csproj" />
+    <ProjectItem Include="PPTS.Contracts.Products\PPTS.Contracts.Products.csproj" />
     <ProjectItem Include="PPTS.Contracts.Orders\PPTS.Contracts.Orders.csproj" />
+    <ProjectItem Include="PPTS.Contracts.Search\PPTS.Contracts.Search.csproj" />
+    <ProjectItem Include="PPTS.Contracts.UnionPay\PPTS.Contracts.UnionPay.csproj" />
 
     <ProjectItem Include="PPTS.Contracts.Proxies\PPTS.Contracts.Proxies.csproj" />
-    <ProjectItem Include="PPTS.Web.MVC.Library\PPTS.Web.MVC.Library.csproj" />
+
+    <ProjectItem Include="PPTS.Data.Common\PPTS.Data.Common.csproj" />
+    <ProjectItem Include="PPTS.Data.Customers\PPTS.Data.Customers.csproj" />
+    <ProjectItem Include="PPTS.Data.Products\PPTS.Data.Products.csproj" />
+    <ProjectItem Include="PPTS.Data.Orders\PPTS.Data.Orders.csproj" />
+
+    <ProjectItem Include="PPTS.Web.MVC.Library\PPTS.Web.MVC.Library.csproj" />    
   </ItemGroup>
   <Target Name="BuildOtherProjects">
     <MSBuild Projects="@(ProjectItem)" RebaseOutputs="True" />

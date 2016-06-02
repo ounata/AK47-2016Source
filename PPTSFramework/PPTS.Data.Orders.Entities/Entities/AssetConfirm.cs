@@ -120,10 +120,21 @@ namespace PPTS.Data.Orders.Entities
             set;
 		}
 
-		/// <summary>
-		/// 确认金额
-		/// </summary>
-		[ORFieldMapping("ConfirmMoney")]
+        /// <summary>
+        /// 确认类型（1-收入确认，-1-收入取消）
+        /// </summary>
+        [ORFieldMapping("ConfirmFlag")]
+        [DataMember]
+        public int ConfirmFlag
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 确认金额
+        /// </summary>
+        [ORFieldMapping("ConfirmMoney")]
         [DataMember]
 		public decimal ConfirmMoney
 		{

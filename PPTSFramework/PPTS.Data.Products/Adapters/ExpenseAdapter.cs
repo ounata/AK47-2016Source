@@ -1,5 +1,6 @@
 ﻿using MCS.Library.Data;
 using MCS.Library.Data.Builder;
+using PPTS.Data.Common.Security;
 using PPTS.Data.Products.Entities;
 using System;
 using System.Collections.Generic;
@@ -14,16 +15,15 @@ namespace PPTS.Data.Products.Adapters
         public static ExpenseAdapter Instance = new ExpenseAdapter();
 
         /// <summary>
-        /// 通过校区获得服务费信息
+        /// 通过校区获得服务费列表信息
         /// </summary>
         /// <param name="CampusID">校区ID</param>
         /// <returns></returns>
-        public Expense LoadByCampusID(string CampusID)
+        public ExpenseCollection LoadByCampusID(string CampusID)
         {
             ExpenseCollection dc = this.QueryData(PrepareLoadExpenseSqlByPermission(CampusID));
-            return dc.FirstOrDefault();
+            return dc;
         }
-
 
         /// <summary>
         /// 通过校区获得服务费信息
@@ -33,13 +33,11 @@ namespace PPTS.Data.Products.Adapters
         private string PrepareLoadExpenseSqlByPermission(string CampusID)
         {
             WhereSqlClauseBuilder expense_builder = new WhereSqlClauseBuilder();
-            expense_builder.AppendItem("ExpenseStatus", ExpenseStatusDefine.Enabled.GetHashCode());
             WhereSqlClauseBuilder expensepermission_builder = new WhereSqlClauseBuilder();
-            expensepermission_builder.AppendItem("UseOrgType", PPTS.Data.Common.Security.DepartmentType.Campus.GetHashCode());
-            expensepermission_builder.AppendItem("UseOrgID", CampusID);
+            expensepermission_builder.AppendItem("CampusID", CampusID);
             OrderBySqlClauseBuilder orderbuilder = new OrderBySqlClauseBuilder();
             orderbuilder.AppendItem("CreateTime", FieldSortDirection.Descending);
-            string sql = string.Format(@"select top 1 * from {0} where {1} and ExpenseID in 
+            string sql = string.Format(@"select * from {0} where {1} ExpenseID in 
                                     (
 	                                    select ExpenseID from {2}  where {3}
                                     ) 

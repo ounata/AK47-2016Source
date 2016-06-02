@@ -16,7 +16,7 @@ namespace PPTS.WebAPI.Customers.DataSources
         public PagedQueryResult<RefundAlertQueryModel, RefundAlertQueryCollection> LoadCustomerStopAlerts(IPageRequestParams prp, object condition, IEnumerable<IOrderByRequestItem> orderByBuilder)
         {
             string select = " * ";
-            string from = " CustomerRefundAlerts ";
+            string from = " CM.[CustomerRefundAlerts] ";
             PagedQueryResult<RefundAlertQueryModel, RefundAlertQueryCollection> result = Query(prp, select, from, condition, orderByBuilder);
             return result;
         }

@@ -6,6 +6,7 @@
     [Institude] NVARCHAR(128) NULL, 
     [StartDate] DATETIME NULL, 
     [EndDate] DATETIME NULL, 
+	[TenantCode] NVARCHAR(36) NULL, 
     CONSTRAINT [PK_CustomerFollowItems] PRIMARY KEY NONCLUSTERED ([ItemID]) 
 )
 

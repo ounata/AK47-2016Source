@@ -29,15 +29,6 @@ namespace MCS.Library.SOA.DataObjects
 			MoveFile(SourceFileInfo, DestFileInfo);
 		}
 
-		public override Stream GetMaterialContent(string contentID)
-		{
-			DestFileInfo.NullCheck("DestFileInfo");
-
-			ExceptionHelper.FalseThrow<FileNotFoundException>(File.Exists(DestFileInfo.FullName), Resources.FileNotFound, DestFileInfo.FullName);
-
-			return DestFileInfo.OpenRead();
-		}
-
 		public override bool ExistsContent(string contentID)
 		{
 			DestFileInfo.NullCheck("DestFileInfo");

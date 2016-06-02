@@ -292,30 +292,7 @@ namespace PPTS.Data.Customers.Entities
             get;
             set;
         }
-
-        /// <summary>
-        /// 实际上门人数代码
-        /// </summary>
-        [ORFieldMapping("VerifyPeoples")]
-        [DataMember]
-        [ConstantCategory("C_CODE_ABBR_Customer_CRM_RealCallPersonNum")]
-        public string VerifyPeoples
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 上门人员关系代码
-        /// </summary>
-        [ORFieldMapping("VerifyRelations")]
-        [DataMember]
-        public string VerifyRelations
-        {
-            get;
-            set;
-        }
-
+        
         /// <summary>
         /// 是否其它机构辅导
         /// </summary>

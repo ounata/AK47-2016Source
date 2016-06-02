@@ -1,4 +1,5 @@
 ﻿using MCS.Library.Configuration;
+using MCS.Library.Core;
 using MCS.Library.SOA.DataObjects.AsyncTransactional;
 using MCS.Library.Test.Data.Adapters;
 using MCS.Library.Test.Data.Entities;
@@ -23,6 +24,7 @@ namespace MCS.Library.SOA.SysTasks.Test
 
             process.Category = "Test";
             process.ConnectionName = TxProcessAdapter.DefaultInstance.ConnectionName;
+            process.ResourceID = UuidHelper.NewUuidString();
 
             process.Activities.AddActivity("扣减库存");
             process.Activities.AddActivity("改变状态");
@@ -37,6 +39,7 @@ namespace MCS.Library.SOA.SysTasks.Test
             process.ProcessName = "从订单到库存";
             process.Category = "Test";
             process.ConnectionName = RepertoryDB;
+            process.ResourceID = UuidHelper.NewUuidString();
 
             process.AddCompensationService<IOrderTransactionService>(UriSettings.GetConfig().CheckAndGet("mcs.soa.systask", "orderService").ToString(),
                 proxy => proxy.ResetOrderStatus(order.OrderID, OrderStatus.RolledBack));

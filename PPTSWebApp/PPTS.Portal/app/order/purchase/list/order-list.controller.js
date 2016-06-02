@@ -13,7 +13,7 @@
                         headers: [{
                             field: "customerName",
                             name: "学生姓名",
-                            //template: '<a ui-sref="ppts.productView({id:row.orderID})">{{row.customerName}}</a>',
+                            template: '<a ui-sref="ppts.student-view.profiles({id:row.customerID,prev:\'ppts.purchase\'})">{{row.customerName}}</a>',
                             //sortable: true
                         }, {
                             field: "customerCode",
@@ -51,7 +51,7 @@
                         }, {
                             //field: "realPrice",
                             name: "订购金额",
-                            template: '<span>{{ row.realPrice * row.realAmount  | courseLevel}}</span>'
+                            template: '<span>{{ row.realPrice * row.realAmount }}</span>'
                         }, {
                             field: "presentAmount",
                             name: "赠送数量",
@@ -93,7 +93,9 @@
                     }
 
 
-                    
+                    vm.export = function () {
+                        mcs.util.postMockForm(ppts.config.orderApiBaseUrl + '/api/Purchase/ExportOrderItemList', vm.criteria);
+                    }
                     vm.search = function () {
                        
                         if (vm.criteria.dateRange ) {
@@ -135,7 +137,7 @@
                     var init = (function () {
                         dataSyncService.initCriteria(vm);
 
-                        vm.criteria.dateRange = 0;
+                        vm.criteria.dateRange = "0";
                         dataSyncService.injectPageDict(['dateRange']);
 
                         vm.search();

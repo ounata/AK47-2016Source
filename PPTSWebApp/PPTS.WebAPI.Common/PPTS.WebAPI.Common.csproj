@@ -102,6 +102,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\UserGraphController.cs" />
     <Compile Include="Controllers\MetadataController.cs" />
     <Compile Include="Controllers\OrganizationController.cs" />
     <Compile Include="Global.asax.cs">
@@ -110,6 +111,7 @@
     <Compile Include="Models\ConverterExtentions.cs" />
     <Compile Include="Models\QueryChildrenParams.cs" />
     <Compile Include="Models\QueryMetadataParams.cs" />
+    <Compile Include="Models\QueryUserParams.cs" />
     <Compile Include="Models\SelectionItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

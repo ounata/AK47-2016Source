@@ -147,4 +147,35 @@ namespace PPTS.Data.Common
         /// </summary>
         XueKeZu = DepartmentType.XueKeZu
     }
+
+    /// <summary>
+    /// 处理状态
+    /// </summary>
+    public enum ProcessStatusDefine
+    {
+        /// <summary>
+        /// 待处理
+        /// </summary>
+        [EnumItemDescription("待处理")]
+        Waiting,
+
+        /// <summary>
+        /// 处理中
+        /// </summary>
+        [EnumItemDescription("处理中")]
+        Processing,
+
+        /// <summary>
+        /// 处理完
+        /// </summary>
+        [EnumItemDescription("处理完")]
+        Processed,
+
+        /// <summary>
+        /// 错误
+        /// </summary>
+        [EnumItemDescription("错误")]
+        Error
+    }
+
 }

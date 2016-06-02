@@ -60,6 +60,10 @@
     <Reference Include="MCS.Library.Data">
       <HintPath>..\..\Bin\MCS.Library.Data.dll</HintPath>
     </Reference>
+    <Reference Include="MCS.Library.Office.OpenXml.Excel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=62ea08f894871798, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Bin\MCS.Library.Office.OpenXml.Excel.dll</HintPath>
+    </Reference>
     <Reference Include="MCS.Library.OGUPermission">
       <HintPath>..\..\Bin\MCS.Library.OGUPermission.dll</HintPath>
     </Reference>
@@ -83,6 +87,10 @@
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\ThirdPartComponent\Bin\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="PPTS.Contracts.Orders, Version=1.0.0.0, Culture=neutral, PublicKeyToken=62ea08f894871798, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\PPTSBin\PPTS.Contracts.Orders.dll</HintPath>
     </Reference>
     <Reference Include="PPTS.Contracts.Products">
       <HintPath>..\..\PPTSBin\PPTS.Contracts.Products.dll</HintPath>
@@ -162,7 +170,7 @@
     <Compile Include="Controllers\CustomerScoresController.cs" />
     <Compile Include="Controllers\CustomerServicesController.cs" />
     <Compile Include="Controllers\CustomerMeetingsController.cs" />
-    <Compile Include="Controllers\ConfirmDoorsController.cs" />
+    <Compile Include="Controllers\CustomerVerifiesController.cs" />
     <Compile Include="Controllers\CustomerVisitsController.cs" />
     <Compile Include="Controllers\FeedbackController.cs" />
     <Compile Include="Controllers\PotentialCustomersController.cs" />
@@ -171,7 +179,7 @@
     <Compile Include="Controllers\WeeklyFeedbackController.cs" />
     <Compile Include="DataSources\AccountChargeApplyDataSource.cs" />
     <Compile Include="DataSources\AccountChargePaymentDataSource.cs" />
-    <Compile Include="DataSources\ConfirmDoorDataSource.cs" />
+    <Compile Include="DataSources\CustomerVerifiesDataSource.cs" />
     <Compile Include="DataSources\CustomerFeedbacksDataSource.cs" />
     <Compile Include="DataSources\CustomerRefundAlertDataSource.cs" />
     <Compile Include="DataSources\CustomerRepliesDataSource.cs" />
@@ -186,7 +194,11 @@
     <Compile Include="DataSources\ParentDataSource.cs" />
     <Compile Include="DataSources\PotentialCustomerDataSource.cs" />
     <Compile Include="DataSources\CustomerStopAlertDataSource.cs" />
-    <Compile Include="Executors\AddConfirmDoorExecutor.cs" />
+    <Compile Include="Executors\AccountEditReturnApplyExecutor.cs" />
+    <Compile Include="Executors\EditCustomerStaffRelationsExecutor.cs" />
+    <Compile Include="Executors\EditCustomerTransferResourcesExecutor.cs" />
+    <Compile Include="Executors\StudentEditTransferApplyExecutor.cs" />
+    <Compile Include="Executors\AddCustomerVerifyExecutor.cs" />
     <Compile Include="Executors\AccountEditRefundApplyExecutor.cs" />
     <Compile Include="Executors\AccountVerifyRefundApplyExecutor.cs" />
     <Compile Include="Executors\AccountCheckRefundApplyExecutor.cs" />
@@ -229,9 +241,10 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModels\Accounts\ExpenseResult.cs" />
     <Compile Include="ViewModels\Accounts\ExpenseModel.cs" />
     <Compile Include="ViewModels\Accounts\DiscountResult.cs" />
+    <Compile Include="ViewModels\Accounts\RefundReallowanceResult.cs" />
+    <Compile Include="ViewModels\Accounts\ReturnApplyResult.cs" />
     <Compile Include="ViewModels\Accounts\TransferApplyListResult.cs" />
     <Compile Include="ViewModels\Accounts\RefundAllotItemModel.cs" />
     <Compile Include="ViewModels\Accounts\ChargeAllotItemModel.cs" />
@@ -261,7 +274,6 @@
     <Compile Include="ViewModels\Accounts\RefundApplyQueryResult.cs" />
     <Compile Include="ViewModels\Accounts\RefundApplyQueryModel.cs" />
     <Compile Include="ViewModels\Accounts\ReturnApplyModel.cs" />
-    <Compile Include="ViewModels\Accounts\ReturnApplyResult.cs" />
     <Compile Include="ViewModels\Accounts\TeacherModel.cs" />
     <Compile Include="ViewModels\Accounts\TransferApplyModel.cs" />
     <Compile Include="ViewModels\CustomerFollows\CreatableFollowModel.cs" />
@@ -287,6 +299,11 @@
     <Compile Include="ViewModels\CustomerServices\CustomerServiceListMosel.cs" />
     <Compile Include="ViewModels\CustomerServices\CustomerServiceListResult.cs" />
     <Compile Include="ViewModels\CustomerServices\EditableCustomerServiceModel.cs" />
+    <Compile Include="ViewModels\CustomerVerifies\CustomerVerifyModel.cs" />
+    <Compile Include="ViewModels\PotentialCustomers\CustomerTeacherRelationsQueryResult.cs" />
+    <Compile Include="ViewModels\PotentialCustomers\CustomerTeacherRelationsQueryCriteriaModel.cs" />
+    <Compile Include="ViewModels\PotentialCustomers\EditCustomerStaffRelationsModel.cs" />
+    <Compile Include="ViewModels\PotentialCustomers\EditCustomerTransferResourcesModel.cs" />
     <Compile Include="ViewModels\RefundAlerts\RefundAlertCreateModel.cs" />
     <Compile Include="ViewModels\RefundAlerts\RefundAlertCrieriaModel.cs" />
     <Compile Include="ViewModels\RefundAlerts\RefundAlertEditModel.cs" />
@@ -296,10 +313,10 @@
     <Compile Include="ViewModels\StopAlerts\StopAlertCreateModel.cs" />
     <Compile Include="ViewModels\StopAlerts\StopAlertQueryModel.cs" />
     <Compile Include="ViewModels\StopAlerts\StopAlertQueryResult.cs" />
-    <Compile Include="ViewModels\CustomerVerifies\ConfirmDoorCreateModel.cs" />
-    <Compile Include="ViewModels\CustomerVerifies\ConfirmDoorCriteriaModel.cs" />
-    <Compile Include="ViewModels\CustomerVerifies\ConfirmDoorQueryModel.cs" />
-    <Compile Include="ViewModels\CustomerVerifies\ConfirmDoorQueryResult.cs" />
+    <Compile Include="ViewModels\CustomerVerifies\CustomerVerifyResult.cs" />
+    <Compile Include="ViewModels\CustomerVerifies\CustomerVerifyQueryCriteriaModel.cs" />
+    <Compile Include="ViewModels\CustomerVerifies\CustomerVerifyQueryModel.cs" />
+    <Compile Include="ViewModels\CustomerVerifies\CustomerVerifyQueryResult.cs" />
     <Compile Include="ViewModels\CustomerVisits\CreatableCustomerVisitModel.cs" />
     <Compile Include="ViewModels\CustomerVisits\CreatableVisitBatchModel.cs" />
     <Compile Include="ViewModels\CustomerVisits\CustomerVisitModel.cs" />
@@ -330,6 +347,8 @@
     <Compile Include="ViewModels\Students\EditableStudentModel.cs" />
     <Compile Include="ViewModels\Students\StudentModel.cs" />
     <Compile Include="ViewModels\Students\StudentQueryCriteriaModel.cs" />
+    <Compile Include="ViewModels\Students\StudentTransferApplyModel.cs" />
+    <Compile Include="ViewModels\Students\StudentTransferApplyResult.cs" />
     <Compile Include="ViewModels\WeeklyFeedback\CustomerFeedbacksCriteriaModel.cs" />
     <Compile Include="ViewModels\WeeklyFeedback\CustomerFeedbacksQueryResult.cs" />
     <Compile Include="ViewModels\WeeklyFeedback\CustomerFeedbacksQueryModel.cs" />

@@ -1,5 +1,4 @@
-﻿<!-- #开始：添加潜客Form -->
-<form class="form-horizontal" role="form">
+﻿<form class="form-horizontal" role="form">
     <div class="widget-box">
         <div class="widget-header">
             <h4>批量录入成绩<small><i class="icon-double-angle-right"></i>(<span class="required"> * </span>表示必填字段)</small></h4>
@@ -51,24 +50,24 @@
                         </div>
                     </div>
                 </div>
-            </div>  
-            <!--pageIndex={{vm.data.pager.pageIndex}}
-            totalCount={{vm.data.pager.totalCount}}
-            pageSize={{vm.data.pager.pageSize}}-->
+            </div> 
 
             <div ng-repeat="data in vm.dataList">
                 <mcs-datatable data="data" style="display: inline-block;border-left: 0px;margin-left: 0px;" />
             </div>
             <div class="mcs-panel-pager well well-sm" ng-show="vm.data.pager.totalCount>0">
                 <span class="bigger-110"></span>
-                <uib-pagination boundary-links="true" ng-change="vm.data.pager.pageChange()" 
+                <uib-pagination boundary-links="true" ng-change="vm.pageChange()" 
                                 total-items="vm.data.pager.totalCount" 
                                 ng-model="vm.data.pager.pageIndex" 
                                 items-per-page="vm.data.pager.pageSize" 
-                                class="pagination" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></uib-pagination>
+                                class="pagination" previous-text="&lsaquo;" 
+                                next-text="&rsaquo;" 
+                                first-text="&laquo;" 
+                                last-text="&raquo;">
+                </uib-pagination>
             </div>
 
         </div>
     </div>
 </form>
-<!-- /结束：添加潜客Form -->

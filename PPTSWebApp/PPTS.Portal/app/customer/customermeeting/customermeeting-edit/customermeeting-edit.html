@@ -1,5 +1,5 @@
 ﻿
-<form class="form-horizontal" role="form">
+<form class="form-horizontal" role="form" novalidate>
     <div class="widget-body">
         <div class="widget-main no-padding">
             <div class="clearfix form-actions mcs-form-actions" style="margin-bottom:15px">
@@ -22,7 +22,7 @@
                 <div class="col-sm-6">
                     <mcs-label required="true" text="会议日期" css="col-sm-3" />
                     <div class="col-sm-9">
-                        <ppts-daterangepicker start-date="vm.customerMeeting.meetingTime" end-date="vm.customerMeeting.meetingEndTime" css="mcs-padding-0" width="100%" />
+                        <ppts-daterangepicker start-date="vm.customerMeeting.meetingTime" end-date="vm.customerMeeting.meetingEndTime" css="mcs-padding-0" width="100%" required/>
                         <span class="label-260" style="color:red;margin-left:30px">
                             会议时间只能选择当前时间及前三天的任意一天
                         </span>
@@ -39,7 +39,7 @@
                 <div class="col-sm-6">
                     <mcs-label required="true" text="下次开会时间" css="col-sm-3" />
                     <div class="col-sm-9">
-                        <ppts-datetimepicker model="vm.customerMeeting.nextMeetingTime" css="mcs-padding-0" width="100%" />
+                        <ppts-datetimepicker model="vm.customerMeeting.nextMeetingTime" css="mcs-padding-0" width="100%" required/>
                     </div>
                 </div>
                 <div class="col-sm-6">
@@ -177,7 +177,7 @@
                 <div class="col-sm-6">
                     <mcs-label required="true" text="家长满意度" css="col-sm-3" />
                     <div class="col-sm-9">
-                        <ppts-select category="satisfaction" model="vm.customerMeeting.satisficing" caption="请选择" class="ppts-select-md" />
+                        <ppts-select category="satisfaction" model="vm.customerMeeting.satisficing" caption="请选择" class="ppts-select-md" required/>
                     </div>
                 </div>
                 <div class="col-sm-6">

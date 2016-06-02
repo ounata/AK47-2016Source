@@ -1,0 +1,29 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>测试上传文件</title>
+    <meta charset="utf-8" />
+    <script type="text/javascript">
+        function onPostButtonClick() {
+            var materialUploadModel = {
+                title: "附件示例",
+                sortID: 0,
+                resourceID: "abc123",
+                materialClass: "Attachments",
+                relativePath: "20160530"
+            };
+
+            document.getElementById("materialUploadModel").value = JSON.stringify(materialUploadModel);
+            document.getElementById('submitButton').click();
+        }
+    </script>
+</head>
+<body>
+    <form action="../api/Sample/UploadMaterial" enctype="multipart/form-data" method="post">
+        <input type="hidden" id="materialUploadModel" name="materialUploadModel" />
+        <input name="sourceFile" type="file" />
+        <input type="submit" id="submitButton" value="Post" style="display: none" />
+    </form>
+    <input type="button" id="postButton" value="提交..." onclick="onPostButtonClick();" />
+</body>
+</html>

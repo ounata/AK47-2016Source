@@ -14,120 +14,132 @@ using MCS.Library.Data.Adapters;
 
 namespace MCS.Library.SOA.DataObjects
 {
-	public class MaterialContentAdapter : UpdatableAndLoadableAdapterBase<MaterialContent, MaterialContentCollection>
-	{
-		public static readonly MaterialContentAdapter Instance = new MaterialContentAdapter();
+    public class MaterialContentAdapter : UpdatableAndLoadableAdapterBase<MaterialContent, MaterialContentCollection>
+    {
+        public static readonly MaterialContentAdapter Instance = new MaterialContentAdapter();
 
-		private MaterialContentAdapter()
-		{
-		}
+        private MaterialContentAdapter()
+        {
+        }
 
-		public void Update(MaterialContent data, Stream stream)
-		{
-			data.NullCheck("data");
-			stream.NullCheck("stream");
+        /// <summary>
+        /// 根据ContentID加载附件
+        /// </summary>
+        /// <param name="contentID"></param>
+        /// <returns></returns>
+        public MaterialContent Load(string contentID)
+        {
+            contentID.NullCheck("contentID");
 
-			Dictionary<string, object> context = new Dictionary<string, object>();
+            return this.Load(builder => builder.AppendItem("CONTENT_ID", contentID)).FirstOrDefault();
+        }
 
-			context["Stream"] = stream;
+        public void Update(MaterialContent data, Stream stream)
+        {
+            data.NullCheck("data");
+            stream.NullCheck("stream");
 
-			this.BeforeInnerUpdate(data, context);
+            Dictionary<string, object> context = new Dictionary<string, object>();
 
-			using (TransactionScope scope = TransactionScopeFactory.Create())
-			{
-				if (this.InnerUpdate(data, context, StringExtension.EmptyStringArray) == 0)
-					this.InnerInsert(data, context, StringExtension.EmptyStringArray);
+            context["Stream"] = stream;
 
-				AfterInnerUpdate(data, context);
+            this.BeforeInnerUpdate(data, context);
 
-				scope.Complete();
-			}
-		}
+            using (TransactionScope scope = TransactionScopeFactory.Create())
+            {
+                if (this.InnerUpdate(data, context, StringExtension.EmptyStringArray) == 0)
+                    this.InnerInsert(data, context, StringExtension.EmptyStringArray);
 
-		protected override int InnerUpdate(MaterialContent data, Dictionary<string, object> context, string[] ignoreProperties)
-		{
-			int result = 0;
+                AfterInnerUpdate(data, context);
 
-			ORMappingItemCollection mappings = GetMappingInfo(context);
+                scope.Complete();
+            }
+        }
 
-			string sql = string.Format("SELECT COUNT(*) FROM {0} WHERE {1}",
-				mappings.TableName,
-				ORMapping.GetWhereSqlClauseBuilderByPrimaryKey(data, mappings).ToSqlString(TSqlBuilder.Instance));
+        protected override int InnerUpdate(MaterialContent data, Dictionary<string, object> context, string[] ignoreProperties)
+        {
+            int result = 0;
 
-			result = (int)DbHelper.RunSqlReturnScalar(sql, GetConnectionName());
+            ORMappingItemCollection mappings = GetMappingInfo(context);
 
-			if (result > 0)
-			{
-				Stream stream = null;
+            string sql = string.Format("SELECT COUNT(*) FROM {0} WHERE {1}",
+                mappings.TableName,
+                ORMapping.GetWhereSqlClauseBuilderByPrimaryKey(data, mappings).ToSqlString(TSqlBuilder.Instance));
 
-				if (context.ContainsKey("Stream"))
-					stream = (Stream)context["Stream"];
+            result = (int)DbHelper.RunSqlReturnScalar(sql, GetConnectionName());
 
-				if (stream == null)
-					result = base.InnerUpdate(data, context, ignoreProperties);
-				else
-					result = InnerUpdateWithStream(data, stream, context);
-			}
+            if (result > 0)
+            {
+                Stream stream = null;
 
-			return result;
-		}
+                if (context.ContainsKey("Stream"))
+                    stream = (Stream)context["Stream"];
 
-		protected override void InnerInsert(MaterialContent data, Dictionary<string, object> context, string[] ignoreProperties)
-		{
-			Stream stream = null;
+                if (stream == null)
+                    result = base.InnerUpdate(data, context, ignoreProperties);
+                else
+                    result = InnerUpdateWithStream(data, stream, context);
+            }
 
-			if (context.ContainsKey("Stream"))
-				stream = (Stream)context["Stream"];
+            return result;
+        }
 
-			if (stream == null)
-				base.InnerInsert(data, context, ignoreProperties);
-			else
-				InnerInsertWithStream(data, stream, context);
-		}
+        protected override void InnerInsert(MaterialContent data, Dictionary<string, object> context, string[] ignoreProperties)
+        {
+            Stream stream = null;
 
-		protected override string GetConnectionName()
-		{
-			string connectionName = MaterialContentSettings.GetConfig().ConnectionName;
+            if (context.ContainsKey("Stream"))
+                stream = (Stream)context["Stream"];
 
-			if (connectionName.IsNullOrEmpty())
-				connectionName = WorkflowSettings.GetConfig().ConnectionName;
+            if (stream == null)
+                base.InnerInsert(data, context, ignoreProperties);
+            else
+                InnerInsertWithStream(data, stream, context);
+        }
 
-			return connectionName;
-		}
+        protected override string GetConnectionName()
+        {
+            string connectionName = MaterialContentSettings.GetConfig().ConnectionName;
 
-		private int InnerUpdateWithStream(MaterialContent data, Stream stream, Dictionary<string, object> context)
-		{
-			ORMappingItemCollection mappings = GetMappingInfo(context);
+            if (connectionName.IsNullOrEmpty())
+                connectionName = WorkflowSettings.GetConfig().ConnectionName;
 
-			UpdateSqlClauseBuilder uBuilder = ORMapping.GetUpdateSqlClauseBuilder(data, "ContentData");
+            return connectionName;
+        }
 
-			uBuilder.AppendItem("CONTENT_DATA", stream);
+        private int InnerUpdateWithStream(MaterialContent data, Stream stream, Dictionary<string, object> context)
+        {
+            ORMappingItemCollection mappings = GetMappingInfo(context);
 
-			WhereSqlClauseBuilder wBuilder = ORMapping.GetWhereSqlClauseBuilderByPrimaryKey(data);
+            UpdateSqlClauseBuilder uBuilder = ORMapping.GetUpdateSqlClauseBuilder(data, "ContentData");
 
-			string sql = string.Format("UPDATE {0} SET {1} WHERE {2}",
-				mappings.TableName,
-				uBuilder.ToSqlString(TSqlBuilder.Instance),
-				wBuilder.ToSqlString(TSqlBuilder.Instance));
+            uBuilder.AppendItem("CONTENT_DATA", stream);
 
-			DbHelper.RunSql(sql, GetConnectionName());
+            WhereSqlClauseBuilder wBuilder = ORMapping.GetWhereSqlClauseBuilderByPrimaryKey(data);
 
-			return 1;
-		}
+            string sql = string.Format("UPDATE {0} SET {1} WHERE {2}",
+                mappings.TableName,
+                uBuilder.ToSqlString(TSqlBuilder.Instance),
+                wBuilder.ToSqlString(TSqlBuilder.Instance));
 
-		private void InnerInsertWithStream(MaterialContent data, Stream stream, Dictionary<string, object> context)
-		{
-			ORMappingItemCollection mappings = GetMappingInfo(context);
+            DbHelper.RunSql(sql, GetConnectionName());
 
-			InsertSqlClauseBuilder builder = ORMapping.GetInsertSqlClauseBuilder(data, "ContentData");
+            return 1;
+        }
 
-			builder.AppendItem("CONTENT_DATA", stream);
+        private void InnerInsertWithStream(MaterialContent data, Stream stream, Dictionary<string, object> context)
+        {
+            ORMappingItemCollection mappings = GetMappingInfo(context);
 
-			string sql = string.Format("INSERT INTO {0}{1} ",
-				mappings.TableName,
-				builder.ToSqlString(TSqlBuilder.Instance));
+            InsertSqlClauseBuilder builder = ORMapping.GetInsertSqlClauseBuilder(data, "ContentData");
 
-			DbHelper.RunSql(sql, GetConnectionName());
-		}
-	}
+            builder.AppendItem("CONTENT_DATA", stream);
+
+            string sql = string.Format("INSERT INTO {0}{1} ",
+                mappings.TableName,
+                builder.ToSqlString(TSqlBuilder.Instance));
+
+            DbHelper.RunSql(sql, GetConnectionName());
+        }
+    }
 }

@@ -10,7 +10,7 @@ namespace PPTS.Data.Customers.Entities
     /// 跟进明细表
     /// </summary>
     [Serializable]
-    [ORTableMapping("CustomerFollowItems")]
+    [ORTableMapping("CM.CustomerFollowItems")]
     [DataContract]
 	public class CustomerFollowItem
 	{		

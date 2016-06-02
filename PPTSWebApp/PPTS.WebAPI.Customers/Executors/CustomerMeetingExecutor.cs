@@ -1,14 +1,7 @@
 ﻿using MCS.Library.Data.Executors;
-using PPTS.Data.Common.Executors;
 using PPTS.Data.Customers.Adapters;
 using PPTS.WebAPI.Customers.ViewModels.CustomerMeetings;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using MCS.Library.SOA.DataObjects;
-using PPTS.WebAPI.Customers.ViewModels.Students;
-using PPTS.Data.Customers.Entities;
 using MCS.Library.Core;
 using PPTS.Data.Common.Security;
 using PPTS.Data.Customers.Executors;
@@ -24,7 +17,8 @@ namespace PPTS.WebAPI.Customers.Executors
             model.CustomerMeeting.NullCheck("model");
 
             ////获取结账日期
-            //ConfigArgs args = ConfigsCache.GetArgs(model.CustomerMeeting.CampusID);
+            ConfigArgs args = ConfigsCache.GetArgs(model.CustomerMeeting.CampusID);
+            
             //DateTime dtAccount = args.GetCurrentClosingAccountDate();
             //if (model.CustomerMeeting.MeetingTime > dtAccount || model.CustomerMeeting.MeetingEndTime > dtAccount)
             //{

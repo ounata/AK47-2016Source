@@ -14,7 +14,7 @@ namespace PPTS.Data.Customers.Entities
 	/// 学情会明细表
 	/// </summary>
 	[Serializable]
-    [ORTableMapping("CustomerMeetingItems")]
+    [ORTableMapping("CM.CustomerMeetingItems")]
     [DataContract]
 	public class CustomerMeetingItem
 	{		

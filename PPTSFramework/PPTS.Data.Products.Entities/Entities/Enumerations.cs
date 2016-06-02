@@ -108,41 +108,48 @@ namespace PPTS.Data.Products
     public enum DiscountStatusDefine
     {
         /// <summary>
-        /// 草稿
+        /// 待审批
         /// </summary>
-        [EnumItemDescription("草稿")]
-        New = 1,
+        [EnumItemDescription("待审批")]
+        Approving = 1,
 
         /// <summary>
-        /// 审批中
+        /// 审批通过
         /// </summary>
-        [EnumItemDescription("审批中")]
-        Approving = 2,
+        [EnumItemDescription("审批通过")]
+        Approved = 2,
 
         /// <summary>
-        /// 已完成
+        /// 驳回
         /// </summary>
-        [EnumItemDescription("已完成")]
-        Approved = 3,
+        [EnumItemDescription("驳回")]
+        Refused = 3,
 
         /// <summary>
-        /// 已驳回
-        /// </summary>
-        [EnumItemDescription("已驳回")]
-        Refused = 4,
-
-        /// <summary>
-        /// 销售中
+        /// 执行中
         /// </summary>
         [EnumItemDescription("执行中")]
-        Enabled = 5,
+        Enabled = 4,
 
         /// <summary>
-        /// 禁售
+        /// 已停用
         /// </summary>
         [EnumItemDescription("已停用")]
-        Disabled = 6
+        Disabled = 5,
+        /// <summary>
+        /// 已删除
+        /// </summary>
+        [EnumItemDescription("已删除")]
+        Deleted =6
     }
+
+    public enum CampusUseInfoDefine {
+        [EnumItemDescription("当前使用")]
+        DQ =1,
+        [EnumItemDescription("历史使用")]
+        LS =2
+    }
+
 
     /// <summary>
     /// 服务费类型
@@ -153,7 +160,7 @@ namespace PPTS.Data.Products
         /// 一对一
         /// </summary>
         [EnumItemDescription("一对一")]
-        One2One,
+        One2One = 1,
 
         /// <summary>
         /// 班组
@@ -167,83 +174,46 @@ namespace PPTS.Data.Products
         [EnumItemDescription("所有")]
         All
     }
-
-    /// <summary>
-    /// 服务费状态
-    /// </summary>
-    public enum ExpenseStatusDefine
-    {
-        /// <summary>
-        /// 草稿
-        /// </summary>
-        [EnumItemDescription("草稿")]
-        New = 0,
-
-        /// <summary>
-        /// 审批中
-        /// </summary>
-        [EnumItemDescription("审批中")]
-        Approving = 1,
-
-        /// <summary>
-        /// 已完成
-        /// </summary>
-        [EnumItemDescription("已完成")]
-        Approved = 2,
-
-        /// <summary>
-        /// 已驳回
-        /// </summary>
-        [EnumItemDescription("已驳回")]
-        Refused = 3,
-
-        /// <summary>
-        /// 销售中
-        /// </summary>
-        [EnumItemDescription("执行中")]
-        Enabled = 4,
-
-        /// <summary>
-        /// 禁售
-        /// </summary>
-        [EnumItemDescription("已停用")]
-        Disabled = 5
-    }
-
+    
     /// <summary>
     /// 买赠状态
     /// </summary>
     public enum PresentStatusDefine
     {
         /// <summary>
-        /// 审批中
+        /// 待审批
         /// </summary>
-        [EnumItemDescription("审批中")]
-        Approving = 2,
+        [EnumItemDescription("待审批")]
+        Approving = 1,
 
         /// <summary>
-        /// 已完成
+        /// 审批通过
         /// </summary>
-        [EnumItemDescription("已完成")]
-        Approved = 3,
+        [EnumItemDescription("审批通过")]
+        Approved = 2,
 
         /// <summary>
-        /// 已驳回
+        /// 驳回
         /// </summary>
-        [EnumItemDescription("已驳回")]
-        Refused = 4,
+        [EnumItemDescription("驳回")]
+        Refused = 3,
 
         /// <summary>
-        /// 销售中
+        /// 执行中
         /// </summary>
         [EnumItemDescription("执行中")]
-        Enabled = 5,
+        Enabled = 4,
 
         /// <summary>
-        /// 禁售
+        /// 已停用
         /// </summary>
         [EnumItemDescription("已停用")]
-        Disabled = 6
+        Disabled = 5,
+        /// <summary>
+        /// 已删除
+        /// </summary>
+        [EnumItemDescription("已删除")]
+        Deleted = 6
     }
 
     /// <summary>

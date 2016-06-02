@@ -13,6 +13,7 @@ namespace PPTS.WebAPI.Customers.DataSources
         public static readonly new CustomerRepliesDataSource Instance = new CustomerRepliesDataSource();
         private CustomerRepliesDataSource() { }
 
+
         /// <summary>
         /// 学大反馈分页查询
         /// </summary>
@@ -22,7 +23,9 @@ namespace PPTS.WebAPI.Customers.DataSources
         /// <returns></returns>
         public PagedQueryResult<CustomerRepliesQueryModel, CustomerRepliesQueryCollection> GetCustomerRepliesList(IPageRequestParams prp, object condition, IEnumerable<IOrderByRequestItem> orderByBuilder)
         {
-            string select = @"cReplies.ReplyID,cReplies.CampusID, cReplies.ReplyTime,
+           
+            string select = "*";
+            string from = @"(SELECT   cReplies.ReplyID,cReplies.CampusID, cReplies.ReplyTime,
                             customer.CustomerId,cReplies.ReplyContent,cReplies.Poster,
                             cReplies.ParentName,cReplies.ReplyObject,cReplies.ReplierName,
                             (
@@ -34,8 +37,8 @@ namespace PPTS.WebAPI.Customers.DataSources
                             (CASE when  cReplies.Poster=1 Then 2--学管师
 							ELSE cReplies.ReplyObject END)ReplyObject1,
                             customer.CustomerCode,customer.CustomerName,customer.CampusName,
-                            customer.Grade";
-            string from = @"CustomerReplies cReplies LEFT JOIN Customers_Current customer on cReplies.CustomerId=customer.CustomerId";
+                            customer.Grade  
+            FROM CM.CustomerReplies cReplies LEFT JOIN CM.Customers_Current customer on cReplies.CustomerId=customer.CustomerId)Z";
             PagedQueryResult<CustomerRepliesQueryModel, CustomerRepliesQueryCollection> result = Query(prp, select, from, condition, orderByBuilder);
             return result;
         }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MCS.Library.OGUPermission;
 using PPTS.Data.Common.Security;
+using System.Diagnostics;
 
 namespace PPTS.Data.Common.Test
 {
@@ -16,9 +17,10 @@ namespace PPTS.Data.Common.Test
         [TestMethod]
         public void GetOrganizationByIDTest()
         {
-            IOrganization result = PPTS.Data.Common.OGUExtensions.GetOrganizationByID("1004-Org");//机构ID
+            IOrganization result = PPTS.Data.Common.OGUExtensions.GetOrganizationByID("2100-Org");//机构ID
             Assert.IsNotNull(result);
             Console.WriteLine(result.Name);
+            Console.WriteLine(result.DisplayName);
         }
 
         [TestMethod]
@@ -83,6 +85,21 @@ namespace PPTS.Data.Common.Test
             MCS.Library.Data.Builder.WhereSqlClauseBuilder builder = new MCS.Library.Data.Builder.WhereSqlClauseBuilder();
             builder.AppendItem("name", (string)null, "IS");
             Console.WriteLine(builder.ToSqlString(MCS.Library.Data.Builder.TSqlBuilder.Instance));
+        }
+
+        [TestMethod]
+        public void GetFirstEnglishCodeTest()
+        {
+            IOrganization result = PPTS.Data.Common.OGUExtensions.GetOrganizationByID("1004-Org");//机构ID
+           
+            Console.Write(result.GetFirstInitial());
+            Console.WriteLine(result.GetShowShortName());
+        }
+
+        [TestMethod]
+        public void TestEnum()
+        {
+            
         }
     }
 }

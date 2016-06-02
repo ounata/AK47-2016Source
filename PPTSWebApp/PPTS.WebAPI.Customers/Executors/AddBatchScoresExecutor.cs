@@ -31,7 +31,7 @@ namespace PPTS.WebAPI.Customers.Executors
                                                 .AppendItem("StudyTerm", customerScore.StudyTerm)
                                                 .AppendItem("ScoreType", customerScore.ScoreType)
                                                 .AppendItem("ScoreGrade", customerScore.ScoreGrade)
-                                                .AppendItem("IsAllAdded", ScoreIsAllAdded.Yes));
+                                                .AppendItem("IsAllAdded", (byte)ScoreIsAllAdded.Yes));
                 if (scores != null && scores.Count > 0)
                 {
                     Customer customer = CustomerAdapter.Instance.Load(customerScore.CustomerID);

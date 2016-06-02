@@ -116,6 +116,14 @@ namespace PPTS.Data.Customers.Entities
             get;
             set;
         }
+
+        [ORFieldMapping("TransactionTimeValue")]
+        [DataMember]
+        public string TransactionTimeValue
+        {
+            get;
+            set;
+        }
     }
     [Serializable]
     [DataContract]

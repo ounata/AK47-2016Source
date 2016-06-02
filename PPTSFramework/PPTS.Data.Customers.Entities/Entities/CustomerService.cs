@@ -14,7 +14,7 @@ namespace PPTS.Data.Customers.Entities
 	/// 客服信息表
 	/// </summary>
 	[Serializable]
-    [ORTableMapping("CustomerServices")]
+    [ORTableMapping("CM.CustomerServices")]
     [DataContract]
 	public class CustomerService:IEntityWithCreator, IEntityWithModifier
 	{		

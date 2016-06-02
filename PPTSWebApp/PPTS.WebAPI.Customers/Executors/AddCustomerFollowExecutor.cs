@@ -42,7 +42,6 @@ namespace PPTS.WebAPI.Customers.Executors
 
                 GenericPotentialCustomerAdapter<Customer, CustomerCollection>.Instance.UpdateFollowSummaryInContext(summary);
             }
-            //CustomerFollowItemAdapter.Instance.UpdateInContext(this.Model.FollowItems);
         }
 
         protected override void ExecuteNonQuerySqlInContext(DbContext dbContext)

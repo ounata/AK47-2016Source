@@ -7,27 +7,14 @@ define([ppts.config.modules.product,
                 function ($scope, $state, dataSyncService, mcsDialogService, productDataService, classgroupDataService) {
 
                     var vm = this;
-                    
-                    function getSelectedProductIds() {
-                        var productIds = $.map(vm.data.rowsSelected, function (obj, index) {
-                            return obj.productID;
-                        });
-                        return productIds;
-                    }
-                    function getSelectedIndexs(productId) {
-                        var productIds = [productId] || getSelectedProductIds();
-                        var selectedIndexs = $.map(vm.data.rows, function (obj, index) {
-                            if ($.inArray(obj.productID, productIds) > -1) { return index; } return null;
-                        });
-                        return selectedIndexs;
-                    }
+
 
                     vm.products = [
-                          { text: '一对一', route: 'ppts.productAdd.onetoone'},
-                          { text: '班组', route: 'ppts.productAdd.classgroup'},
+                          { text: '一对一', route: 'ppts.productAdd.onetoone' },
+                          { text: '班组', route: 'ppts.productAdd.classgroup' },
                           { text: '游学', route: 'ppts.productAdd.youxue' },
-                          { text: '其他', route: 'ppts.productAdd.other'},
-                          { text: '无课收合作', route: 'ppts.productAdd.wukeshou'}
+                          { text: '其他', route: 'ppts.productAdd.other' },
+                          { text: '无课收合作', route: 'ppts.productAdd.wukeshou' }
                     ];
                     vm.data = {
                         selection: 'checkbox',
@@ -176,11 +163,12 @@ define([ppts.config.modules.product,
                         var rowProduct = vm.data.rowsSelected[0];
                         if (rowProduct.productStatus == 1
                             && rowProduct.endDate >= new Date()
-                            ) {
-                            productDataService.stopProduct(rowProduct.productID, function (date) {
-                                if (date.length > 0)
-                                    vm.data.rows[getSelectedIndexs()].endDate = date;
-                            })
+                            )
+                        {
+                            productDataService.stopProduct(rowProduct.productID, function (entity) {
+                                var index = mcs.util.indexOf(vm.data.rows, "productID", rowProduct.productID);
+                                vm.data.rows[index].endDate = entity.endDate;
+                            });
                         }
                     };
                     vm.delayProduct = function () {
@@ -192,10 +180,10 @@ define([ppts.config.modules.product,
                             mcsDialogService.create('app/product/productlist/product-list/product-delay.html', { controller: 'delayController', params: rowProduct.endDate })
                                 .result.then(function (data) {
                                     productDataService.delayProduct({ id: rowProduct.productID, endDate: data.endDate }, function () {
-                                        var index = getSelectedIndexs(rowProduct.productID);
+                                        var index = mcs.util.indexOf(vm.data.rows, "productID", rowProduct.productID);
                                         vm.data.rows[index].endDate = data.endDate;
                                     });
-                                }, function () { });
+                                });
                         }
 
                     };
@@ -208,14 +196,14 @@ define([ppts.config.modules.product,
                         classgroupDataService.checkCreateClass_Product(vm.data.rowsSelected[0].productID, function (result) {
                             if (result.sucess) {
                                 $state.go('ppts.classAdd', { id: vm.data.rowsSelected[0].productID });
-                            }else
+                            } else
                                 mcsDialogService.error(
                                { title: 'Error', message: result.message }
                            );
                         }, function (result) {
-                            
-                        });                        
-                        
+
+                        });
+
                     }
 
                     var init = (function () {

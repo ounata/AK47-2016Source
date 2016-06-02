@@ -34,9 +34,21 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>MCS.Library.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="MCS.Library">
       <HintPath>..\..\Bin\MCS.Library.dll</HintPath>
+    </Reference>
+    <Reference Include="MCS.Library.Data">
+      <HintPath>..\..\Bin\MCS.Library.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="MCS.Library.SOA.DataObjects">
+      <HintPath>..\..\Bin\MCS.Library.SOA.DataObjects.dll</HintPath>
     </Reference>
     <Reference Include="MCS.Library.WcfExtensions">
       <HintPath>..\..\Bin\MCS.Library.WcfExtensions.dll</HintPath>
@@ -52,6 +64,12 @@
     </Reference>
     <Reference Include="PPTS.Contracts.Products">
       <HintPath>..\..\PPTSBin\PPTS.Contracts.Products.dll</HintPath>
+    </Reference>
+    <Reference Include="PPTS.Contracts.Search">
+      <HintPath>..\..\PPTSBin\PPTS.Contracts.Search.dll</HintPath>
+    </Reference>
+    <Reference Include="PPTS.Contracts.UnionPay">
+      <HintPath>..\..\PPTSBin\PPTS.Contracts.UnionPay.dll</HintPath>
     </Reference>
     <Reference Include="PPTS.Data.Common.Entities">
       <HintPath>..\..\PPTSBin\PPTS.Data.Common.Entities.dll</HintPath>
@@ -70,7 +88,6 @@
     <Reference Include="System.Core" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
@@ -80,10 +97,15 @@
     <Compile Include="PPTSAccountQueryServiceProxy.cs" />
     <Compile Include="PPTSAssetQueryServiceProxy.cs" />
     <Compile Include="PPTSConfigRuleQueryServiceProxy.cs" />
-    <Compile Include="PPTSCourseQueryServiceProxy.cs" />
+    <Compile Include="PPTSCustomerUpdateServiceProxy.cs" />
     <Compile Include="PPTSCustomerQueryServiceProxy.cs" />
+    <Compile Include="PPTSCustomerSearchUpdateServiceProxy.cs" />
+    <Compile Include="PPTSPOSRecordsUpdateServiceProxy.cs" />
     <Compile Include="PPTSProductQueryServiceProxy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="MCS.Library.snk" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

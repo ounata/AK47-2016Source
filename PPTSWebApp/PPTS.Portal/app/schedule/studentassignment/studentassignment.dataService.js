@@ -57,8 +57,27 @@
             resource.post({ operation: 'getPagedSCLV' }, criteria, success, error);
         }
 
-        
+        resource.getACC = function (criteria, success, error) {
+            resource.post({ operation: 'getACC' }, criteria, success, error);
+        }
 
+        resource.getACCPaged = function (criteria, success, error) {
+            resource.post({ operation: 'getACCPaged' }, criteria, success, error);
+        }
+
+        resource.initEditACC = function (criteria, success, error) {
+            resource.post({ operation: 'initEditACC' }, criteria, success, error);
+        }
+
+        resource.saveAssignConditon = function (criteria, success, error) {
+            resource.post({ operation: 'saveAssignConditon' }, criteria, success, error);
+        }
+
+        resource.deleteAssignCondition = function (criteria, success, error) {
+            resource.post({ operation: 'deleteAssignCondition' }, criteria, success, error);
+        }
+        
+        
         return resource;
     }]);
 });

@@ -845,6 +845,7 @@
     <Content Include="samples\app\component\mcs-upload\main.html" />
     <Content Include="samples\app\component\mcs-upload\mcs-upload.controller.js" />
     <Content Include="samples\app\component\mcs-upload\upload.tpl.html" />
+    <Content Include="samples\app\component\mcs-validation\main-new.html" />
     <Content Include="samples\app\component\mcs-validation\main.html" />
     <Content Include="samples\app\component\mcs-validation\mcs-validation.controller.js" />
     <Content Include="samples\app\widget\ppts-checkbox-group\main.html" />
@@ -1263,7 +1264,8 @@
     <Content Include="src\mcs-radiobuttongroup\mcs-radiobuttongroup.directive.js" />
     <Content Include="src\mcs-tree\mcs-tree.directive.js" />
     <Content Include="src\mcs-uicopy\mcs-uicopy.directive.js" />
-    <Content Include="src\mcs-validation\mcs-validation.directive.js" />
+    <Content Include="src\mcs-upload\mcs-excelImport.service.js" />
+    <Content Include="src\mcs-upload\mcs-filesUpload.directive.js" />
     <Content Include="src\mcs-validation\mcs-validation.js" />
     <Content Include="src\mcs\angular\mcs.bootstrap.js" />
     <Content Include="src\mcs\util\mcs.browser.js" />
@@ -1303,6 +1305,10 @@
     <Content Include="src\tpl\mcs-cascading-select.tpl.html" />
     <Content Include="samples\app\widget\ppts-select-branch\selectbranch.tpl.html" />
     <Content Include="samples\app\widget\ppts-select-branch\tree.tpl.html" />
+    <Content Include="src\tpl\mcs-excelImport.tpl.html" />
+    <Content Include="src\tpl\modal-dialog.tpl.html" />
+    <Content Include="src\tpl\upload.tpl.html" />
+    <Content Include="src\tpl\uploadStatus.html" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -1331,7 +1337,6 @@
     <Folder Include="samples\app\rule\" />
     <Folder Include="src\mcs-autocomplete\" />
     <Folder Include="src\mcs-datepicker\" />
-    <Folder Include="src\mcs-upload\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
@@ -1357,6 +1362,10 @@
       <ErrorText>此项目引用这台计算机上缺少的 NuGet 程序包。使用 NuGet 程序包还原可下载这些程序包。有关详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkID=322105。缺少的文件是 {0}。</ErrorText>
     </PropertyGroup>
   </Target>
+  <PropertyGroup>
+    <PostBuildEvent>xcopy $(ProjectDir)libs\mcs-jslib-1.0.0\global\mcs.js $(ProjectDir)..\..\PPTSWebApp\PPTS.Web.Component\src\startup\ /Y
+xcopy $(ProjectDir)libs\mcs-jslib-1.0.0\global\mcs.min.js $(ProjectDir)..\..\PPTSWebApp\PPTS.Web.Component\src\startup\ /Y</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

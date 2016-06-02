@@ -85,8 +85,8 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
         {
             TransferApplyResult result = new TransferApplyResult();
             result.Customer = CustomerModel.Load(customerID, false);
-            result.Accounts = AccountModel.LoadByCustomerID(result.Customer.CustomerID);
-            result.Apply = TransferApplyModel.LoadByCustomerID(result.Customer);
+            result.Accounts = AccountModel.LoadNonZeroByCustomerID(result.Customer.CustomerID);
+            result.Apply = TransferApplyModel.LoadByCustomer(result.Customer);
             result.Assert = Validate(result.Customer.CustomerID, user);
 
             result.Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(CustomerModel)
@@ -108,8 +108,6 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
 
         public static AssertResult Validate(string customerID, IUser user)
         {
-            return new AssertResult();
-
             PPTSJob job = user.GetCurrentJob();
             if (job.JobType != JobTypeDefine.Educator)
                 return new AssertResult(false, "只有学管师才可以提交转让申请");

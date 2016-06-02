@@ -76,11 +76,13 @@
     }]);
 
 
-    helper.registerFactory('productEditHelper', ['dataSyncService', '$state', function (dataSyncService, $state) {
+    helper.registerFactory('productEditHelper', ['dataSyncService', 'mcsValidationService', '$state', function (dataSyncService, mcsValidationService, $state) {
 
         var handler = {};
 
         handler.init = function ($scope, vm, loadtype, productDataService, loadHandler) {
+
+            mcsValidationService.init($scope);
 
             $scope.loadtype = loadtype;
             $scope.tag = '新增';
@@ -139,6 +141,8 @@
                 return (product.productMemo && product.productMemo.length) || 0;
             };
             vm.submit = function () {
+                if (!mcsValidationService.run()) { return; }
+
                 var productName = '';
                 switch (vm.m[loadtype].categoryType) {
                     case 1:
@@ -197,9 +201,9 @@
                     loadHandler();
                 }
 
-            })();
+                
 
-            
+            })();
 
         };
 

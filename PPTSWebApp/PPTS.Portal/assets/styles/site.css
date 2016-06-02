@@ -2,7 +2,6 @@
 body {
     font-family: "微软雅黑", Arial
 }
-
 /*顶部导航条背景色由ace.css里的浅蓝色#438eb9改成了白色*/
 #navbar {
     background-color: #EBF4FA;
@@ -19,6 +18,20 @@ body {
     color: #8089a0;
 }
 
+.dialog-title {
+    font-size:12px;
+    color: #8089a0;
+    margin-right:10px;
+}
+.dialog-button{
+    margin-top:15px;
+
+}
+
+tags-input.noplaceholder  input{
+    
+}
+
 /*nav-brand里的logo把padding-top, bottom从10px改成了0px*/
 #logo {
     padding: 0px;
@@ -30,6 +43,11 @@ body {
 }
 .mcs-user-profile.score-list .profile-info-name {
     width: 12%;
+}
+
+.user-menu .fa-caret-left {
+    float:none !important;
+    margin-left:50px;
 }
 
 /*页面布局*/
@@ -49,6 +67,17 @@ ppts-daterangepicker.search .datepicker {
     display: inline-block;
     width:180px;
     vertical-align: middle;
+}
+
+.ppts-datatable-solidlineheight{
+    height:30px;
+}
+
+.ppts-panel-pager {
+    height:45px;
+    text-align: right;
+    margin-top:25px;
+
 }
 ppts-select {
     padding: 0px;
@@ -117,4 +146,8 @@ ppts-search .input-group .form-control {
 /**已对帐显示红色*/
 .ppts-checked-color{
     color:red;
+}
+
+tags-input.lg  .tags{
+    width:500px !important;
 }

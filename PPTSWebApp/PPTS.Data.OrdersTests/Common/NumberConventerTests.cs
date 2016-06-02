@@ -12,22 +12,22 @@ namespace PPTS.Data.Products.Tests
     public class NumberConventerTests
     {
 
-        [TestMethod()]
-        public void ArabToChnTest()
-        {
+        //[TestMethod()]
+        //public void ArabToChnTest()
+        //{
             
-            NumberConventer n = new NumberConventer();
-            string test =  n.ArabToChn(113, out test);
-            Assert.AreEqual("一百一十三", test);
-        }
+        //    NumberConventer n = new NumberConventer();
+        //    string test =  n.ArabToChn(113, out test);
+        //    Assert.AreEqual("一百一十三", test);
+        //}
 
-        [TestMethod()]
-        public void ChnToArabTest()
-        {
-            NumberConventer n = new NumberConventer();
-            decimal test = n.ChnToArab("二十三");
-            Assert.AreEqual(23, test);
-        }
+        //[TestMethod()]
+        //public void ChnToArabTest()
+        //{
+        //    NumberConventer n = new NumberConventer();
+        //    decimal test = n.ChnToArab("二十三");
+        //    Assert.AreEqual(23, test);
+        //}
 
         
 

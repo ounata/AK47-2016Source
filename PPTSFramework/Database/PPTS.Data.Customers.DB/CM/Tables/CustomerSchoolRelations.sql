@@ -8,6 +8,7 @@
     [ModifierID] NVARCHAR(36) NULL, 
     [ModifierName] NVARCHAR(64) NULL, 
     [ModifyTime] DATETIME NULL DEFAULT GETUTCDATE(), 
+	[TenantCode] NVARCHAR(36) NULL, 
     CONSTRAINT [PK_CustomerSchoolRelations] PRIMARY KEY NONCLUSTERED ([SchoolID], [CustomerID]) 
 )
 

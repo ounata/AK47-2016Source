@@ -57,14 +57,28 @@
     <Reference Include="MCS.Library.SOA.DataObjects">
       <HintPath>..\..\Bin\MCS.Library.SOA.DataObjects.dll</HintPath>
     </Reference>
+    <Reference Include="MCS.Library.WcfExtensions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=62ea08f894871798, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\PPTSBin\MCS.Library.WcfExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="PPTS.Contracts.Products">
+      <HintPath>..\..\PPTSBin\PPTS.Contracts.Products.dll</HintPath>
+    </Reference>
+    <Reference Include="PPTS.Contracts.Proxies">
+      <HintPath>..\..\PPTSBin\PPTS.Contracts.Proxies.dll</HintPath>
+    </Reference>
     <Reference Include="PPTS.Data.Common">
       <HintPath>..\..\PPTSBin\PPTS.Data.Common.dll</HintPath>
     </Reference>
     <Reference Include="PPTS.Data.Common.Entities">
       <HintPath>..\..\PPTSBin\PPTS.Data.Common.Entities.dll</HintPath>
     </Reference>
-    <Reference Include="PPTS.Data.Customers.Entities">
+    <Reference Include="PPTS.Data.Customers.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=62ea08f894871798, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\PPTSBin\PPTS.Data.Customers.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="PPTS.Data.Products.Entities">
+      <HintPath>..\..\PPTSBin\PPTS.Data.Products.Entities.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -78,7 +92,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Adapters\ConfirmDoorAdapter.cs" />
+    <Compile Include="Adapters\CustomerTransferResourcesAdapter.cs" />
+    <Compile Include="Adapters\CustomerTransferResourcesAdapterBase.cs" />
+    <Compile Include="Adapters\TeacherSearchAdapter.cs" />
+    <Compile Include="Adapters\CustomerTransferApplyAdapter.cs" />
+    <Compile Include="Adapters\CustomerVerifyAdapter.cs" />
     <Compile Include="Adapters\CustomerInfoQueryAdapter.cs" />
     <Compile Include="Adapters\CustomerMeetingItemAdapter.cs" />
     <Compile Include="Adapters\CustomerMeetingAdapter.cs" />
@@ -91,10 +109,11 @@
     <Compile Include="Adapters\CustomerSchoolRelationAdapter.cs" />
     <Compile Include="Adapters\CustomerScoreAdapter.cs" />
     <Compile Include="Adapters\CustomerScoreItemAdapter.cs" />
+    <Compile Include="Adapters\CustomerSearchAdapter.cs" />
     <Compile Include="Adapters\CustomerServiceAdapter.cs" />
     <Compile Include="Adapters\CustomerServiceItemsAdapter.cs" />
     <Compile Include="Adapters\CustomerStopAlertAdapter.cs" />
-    <Compile Include="Adapters\CustomerTeacherAssignApplieAdapter.cs" />
+    <Compile Include="Adapters\CustomerTeacherAssignApplyAdapter.cs" />
     <Compile Include="Adapters\CustomerTeacherRelationAdapter.cs" />
     <Compile Include="Adapters\CustomerVisitAdapter.cs" />
     <Compile Include="Adapters\GenericAccountAdapter.cs" />
@@ -128,10 +147,20 @@
     <Compile Include="Adapters\CustomerStaffRelationAdapter.cs" />
     <Compile Include="Adapters\PotentialCustomerAdapter.cs" />
     <Compile Include="Adapters\VersionedCustomerAdapterBase.cs" />
+    <Compile Include="Authorization\CustomerOrgAuthorizationAdapter.cs" />
+    <Compile Include="Authorization\CustomerRelationAuthorizationAdaper.cs" />
+    <Compile Include="Authorization\ScopeAuthorization.cs" />
+    <Compile Include="Authorization\OwnerRelationAuthorizationAdapter.cs" />
+    <Compile Include="Authorization\RecordOrgAuthorizationAdapter.cs" />
     <Compile Include="Common\ConnectionDefine.cs" />
     <Compile Include="Common\Helper.cs" />
+    <Compile Include="DataSources\GenericCustomerAuthDataSourse.cs" />
     <Compile Include="DataSources\GenericCustomerDataSource.cs" />
     <Compile Include="Executors\AccountApproveRefundApplyExecutor.cs" />
+    <Compile Include="Executors\AccountDeductAppliesExecutor.cs" />
+    <Compile Include="Executors\AccountDeductAppliesModel.cs" />
+    <Compile Include="Executors\StudentApproveTransferApplyExecutor.cs" />
+    <Compile Include="Executors\StudentApproveTransferModel.cs" />
     <Compile Include="Executors\ApproveModelBase.cs" />
     <Compile Include="Executors\AccountApproveTransferApplyExecutor.cs" />
     <Compile Include="Executors\AccountApproveRefundModel.cs" />

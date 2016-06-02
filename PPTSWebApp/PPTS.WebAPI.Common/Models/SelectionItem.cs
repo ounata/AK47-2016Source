@@ -21,6 +21,11 @@ namespace PPTS.WebAPI.Common.Models
         /// 当前项显示的值
         /// </summary>
         public string Value { get; set; }
+
+        /// <summary>
+        /// 当前项
+        /// </summary>
+        public object SelectItem { get; set; }
     }
 
     [Serializable]

@@ -53,7 +53,7 @@ namespace PPTS.WebAPI.Orders.Executors
             c.ProductCode = Model.Product.ProductCode;
             c.LessonDurationValue = Model.Product.LessonDurationValue;
             c.LessonCount = Model.Product.LessonCount;
-            c.ClassName = Helper.GetClassName(Model.Product.ProductCode, Model.ShortCampusName);
+            c.ClassName = Data.Orders.Helper.GetClassName(Model.Product.ProductCode, Model.ShortCampusName);
             c.ClassID = UuidHelper.NewUuidString();
             c.ClassStatus = ClassStatusDefine.Createed;
             //RoomID  RoomCode  RoomName  暂时不处理
@@ -168,8 +168,10 @@ namespace PPTS.WebAPI.Orders.Executors
                     ClassLessonItemsAdapter.Instance.UpdateInContext(cli);
                     AssignsAdapter.Instance.UpdateInContext(a);
 
-                    //扣除资产
-                    AssetAdapter.Instance.IncreaseAssignedAmountInContext(asset.AssetID,1,a.CreatorID,a.CreatorName);
+                    //扣除资产                    
+                    Data.Orders.Entities.Asset at = GenericAssetAdapter<Data.Orders.Entities.Asset, AssetCollection>.Instance.Load(asset.AssetID);
+                    at.AssignedAmount += 1;
+                    GenericAssetAdapter<Data.Orders.Entities.Asset, AssetCollection>.Instance.UpdateInContext(at);
                 }
             }
             #endregion

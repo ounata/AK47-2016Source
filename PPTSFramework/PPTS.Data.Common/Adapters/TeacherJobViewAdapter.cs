@@ -25,5 +25,18 @@ namespace PPTS.Data.Common.Adapters
         {
             return ConnectionDefine.PPTSMetaDataConnectionName;
         }
-	}
+
+        public TeacherJobViewCollection LoadCollection(string campusID, string teacherName)
+        {
+            WhereLoadingCondition wLC = new WhereLoadingCondition(builder => builder
+           .AppendItem("TeacherName", string.Format(" like '%{0}%' ", teacherName), "", true)
+           .AppendItem("CampusID", campusID));
+            return this.Load(wLC);
+        }
+
+        public TeacherJobView Load(string teacherJobID)
+        {
+           return this.Load(p => p.AppendItem("JobID", teacherJobID, "=")).FirstOrDefault();
+        }
+    }
 }

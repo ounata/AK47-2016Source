@@ -9,10 +9,8 @@ using PPTS.Data.Common.Entities;
 
 namespace PPTS.Data.Orders.Entities
 {
-    /// <summary>
     /// This object represents the properties and methods of a AssignCondition.
     /// 排课条件表
-    /// </summary>
     [Serializable]
     [ORTableMapping("OM.AssignConditions")]
     [DataContract]
@@ -23,9 +21,8 @@ namespace PPTS.Data.Orders.Entities
         }
 
         #region  IAssignCondition
-        /// <summary>
+
         /// 排课条件ID
-        /// </summary>
         [ORFieldMapping("ConditionID", PrimaryKey = true)]
         [DataMember]
         public string ConditionID
@@ -34,21 +31,7 @@ namespace PPTS.Data.Orders.Entities
             set;
         }
 
-        /// <summary>
-        /// 排课条件名称（资产编码+科目+老师+年级）
-        /// </summary>
-        //      [ORFieldMapping("ConditionName")]
-        //      [DataMember]
-        //public string ConditionName
-        //{
-        //	get;
-        //          set;
-        //}
-
-
-        /// <summary>
         /// 排课条件名称（学员视图排课条件名称（资产编码+科目+老师+年级））
-        /// </summary>
         [ORFieldMapping("ConditionName4Customer")]
         [DataMember]
         public string ConditionName4Customer
@@ -57,9 +40,7 @@ namespace PPTS.Data.Orders.Entities
             set;
         }
 
-        /// <summary>
         /// 排课条件名称（教师视图排课条件名称（资产编码+科目+学员+年级））
-        /// </summary>
         [ORFieldMapping("ConditionName4Teacher")]
         [DataMember]
         public string ConditionName4Teacher
@@ -68,30 +49,7 @@ namespace PPTS.Data.Orders.Entities
             set;
         }
 
-
-        ///// <summary>
-        ///// 产品归属校区ID
-        ///// </summary>
-        //[ORFieldMapping("ProductCampusID")]
-        //[DataMember]
-        //public string ProductCampusID
-        //{
-        //    get; set;
-        //}
-
-        ///// <summary>
-        ///// 产品归属校区名称
-        ///// </summary>
-        //[ORFieldMapping("ProductCampusName")]
-        //[DataMember]
-        //public string ProductCampusName
-        //{
-        //    get; set;
-        //}
-
-        /// <summary>
 		/// 课程级别代码
-		/// </summary>
 		[ORFieldMapping("CourseLevel")]
         [DataMember]
         public string CourseLevel
@@ -100,10 +58,8 @@ namespace PPTS.Data.Orders.Entities
             set;
         }
 
-        /// <summary>
-		/// 课程级别名称
-		/// </summary>
-		[ORFieldMapping("CourseLevelName")]
+        /// 课程级别名称
+        [ORFieldMapping("CourseLevelName")]
         [DataMember]
         public string CourseLevelName
         {
@@ -111,10 +67,7 @@ namespace PPTS.Data.Orders.Entities
             set;
         }
 
-
-        /// <summary>
         /// 课次时长代码
-        /// </summary>
         [ORFieldMapping("LessonDuration")]
         [DataMember]
         public string LessonDuration
@@ -123,9 +76,7 @@ namespace PPTS.Data.Orders.Entities
             set;
         }
 
-        /// <summary>
         /// 课次时长名称
-        /// </summary>
         [ORFieldMapping("LessonDurationValue")]
         [DataMember]
         public decimal LessonDurationValue
@@ -134,35 +85,11 @@ namespace PPTS.Data.Orders.Entities
             set;
         }
 
-
-
-        /// <summary>
-        /// 每周课次（预留）
-        /// </summary>
-        [ORFieldMapping("LessonsOfWeek")]
-        [DataMember]
-        public decimal LessonsOfWeek
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 首次上课时间（预留）
-        /// </summary>
-        [ORFieldMapping("FirstLessonTime", UtcTimeToLocal = true)]
-        [DataMember]
-        public DateTime FirstLessonTime
-        {
-            get;
-            set;
-        }
         #endregion
 
         #region IAssignShareAttr
-        /// <summary>
+
         /// 学员ID
-        /// </summary>
         [ORFieldMapping("CustomerID")]
         [DataMember]
         public string CustomerID
@@ -171,9 +98,25 @@ namespace PPTS.Data.Orders.Entities
             set;
         }
 
-        /// <summary>
+        /// 学员编码
+        [ORFieldMapping("CustomerCode")]
+        [DataMember]
+       public string CustomerCode
+        {
+            get;
+            set;
+        }
+
+        /// 学员姓名
+        [ORFieldMapping("CustomerName")]
+        [DataMember]
+        public string CustomerName
+        {
+            get;
+            set;
+        }
+
         /// 资产ID
-        /// </summary>
         [ORFieldMapping("AssetID")]
         [DataMember]
         public string AssetID
@@ -182,9 +125,7 @@ namespace PPTS.Data.Orders.Entities
             set;
         }
 
-        /// <summary>
         /// 资产编码
-        /// </summary>
         [ORFieldMapping("AssetCode")]
         [DataMember]
         public string AssetCode
@@ -193,9 +134,7 @@ namespace PPTS.Data.Orders.Entities
             set;
         }
 
-        /// <summary>
         /// 产品ID
-        /// </summary>
         [ORFieldMapping("ProductID")]
         [DataMember]
         public string ProductID
@@ -204,9 +143,7 @@ namespace PPTS.Data.Orders.Entities
             set;
         }
 
-        /// <summary>
         /// 产品编码
-        /// </summary>
         [ORFieldMapping("ProductCode")]
         [DataMember]
         public string ProductCode
@@ -215,9 +152,7 @@ namespace PPTS.Data.Orders.Entities
             set;
         }
 
-        /// <summary>
         /// 产品名称
-        /// </summary>
         [ORFieldMapping("ProductName")]
         [DataMember]
         public string ProductName
@@ -226,9 +161,7 @@ namespace PPTS.Data.Orders.Entities
             set;
         }
 
-        /// <summary>
         /// 年级代码
-        /// </summary>
         [ORFieldMapping("Grade")]
         [DataMember]
         public string Grade
@@ -237,9 +170,7 @@ namespace PPTS.Data.Orders.Entities
             set;
         }
 
-        /// <summary>
         /// 年级名称
-        /// </summary>
         [ORFieldMapping("GradeName")]
         [DataMember]
         public string GradeName
@@ -248,13 +179,9 @@ namespace PPTS.Data.Orders.Entities
             set;
         }
 
-        /// <summary>
         /// 科目代码
-        /// </summary>
         [ORFieldMapping("Subject")]
         [DataMember]
-
-
         [ConstantCategory("C_CODE_ABBR_BO_Product_TeacherSubject")]
         public string Subject
         {
@@ -262,9 +189,7 @@ namespace PPTS.Data.Orders.Entities
             set;
         }
 
-        /// <summary>
         /// 科目名称
-        /// </summary>
         [ORFieldMapping("SubjectName")]
         [DataMember]
         public string SubjectName
@@ -348,9 +273,7 @@ namespace PPTS.Data.Orders.Entities
             set;
         }
 
-        /// <summary>
         /// 最后修改时间
-        /// </summary>
         [ORFieldMapping("ModifyTime", UtcTimeToLocal = true)]
         [SqlBehavior(DefaultExpression = "GETUTCDATE()", ForceUseDefaultExpression = true)]
         [DataMember]
@@ -360,9 +283,6 @@ namespace PPTS.Data.Orders.Entities
             set;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         [ORFieldMapping("TenantCode")]
         [DataMember]
         public string TenantCode
@@ -370,6 +290,34 @@ namespace PPTS.Data.Orders.Entities
             get;
             set;
         }
+
+        ///教师学科组名称
+        [ORFieldMapping("TeacherJobOrgName")]
+        [DataMember]
+        public string TeacherJobOrgName
+        {
+            get; set;
+        }
+
+        ///教师学科组ID
+        [ORFieldMapping("TeacherJobOrgID")]
+        [DataMember]
+        public string TeacherJobOrgID
+        {
+            get; set;
+        }
+
+        ///教师，全职还是兼职
+        [ConstantCategory("Common_TeacherType")]
+        [ORFieldMapping("IsFullTimeTeacher")]
+        [DataMember]
+        public int IsFullTimeTeacher { get; set; }
+
+        ///学员账户ID
+        [ORFieldMapping("AccountID")]
+        [DataMember]
+        public string AccountID { get; set; }
+
         #endregion
 
         #region IEntityWithModifier
@@ -433,91 +381,53 @@ namespace PPTS.Data.Orders.Entities
     public interface IAssignConditionAttr
     {
         #region
-        /// <summary>
+
         /// 排课条件ID
-        /// </summary>
         string ConditionID
         {
             get;
             set;
         }
 
-        /// <summary>
         /// 排课条件名称（学员视图排课条件名称（资产编码+科目+老师+年级））
-        /// </summary>
         string ConditionName4Customer
         {
             get;
             set;
         }
 
-        /// <summary>
         /// 排课条件名称（教师视图排课条件名称（资产编码+科目+学员+年级））
-        /// </summary>
         string ConditionName4Teacher
         {
             get;
             set;
         }
 
-        ///// <summary>
-        ///// 产品归属校区ID
-        ///// </summary>
-        //string ProductCampusID
-        //{
-        //    get; set;
-        //}
-
-        ///// <summary>
-        ///// 产品归属校区名称
-        ///// </summary>
-        //string ProductCampusName
-        //{
-        //    get; set;
-        //}
-
-        /// <summary>
 		/// 课程级别代码
-		/// </summary>
         string CourseLevel
         {
             get;
             set;
         }
 
-        /// <summary>
 		/// 课程级别名称
-		/// </summary>
         string CourseLevelName
         {
             get;
             set;
         }
-        /// <summary>
-        /// 课次时长代码
-        /// </summary>
-        string LessonDuration { get; set; }
-        /// <summary>
-        /// 课次时长名称
-        /// </summary>
-        decimal LessonDurationValue { get; set; }
-        /// <summary>
-        /// 每周课次（预留）
-        /// </summary>
-        decimal LessonsOfWeek
-        {
-            get;
-            set;
-        }
 
-        /// <summary>
-        /// 首次上课时间（预留）
-        /// </summary>
-        DateTime FirstLessonTime
-        {
-            get;
-            set;
-        }
+        /// 课次时长代码
+        string LessonDuration { get; set; }
+
+        /// 课次时长名称
+        decimal LessonDurationValue { get; set; }
+
+      
+
+      
+        
+
         #endregion
     }
 }

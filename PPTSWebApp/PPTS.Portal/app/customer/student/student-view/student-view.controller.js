@@ -3,7 +3,7 @@
         customer.registerController('studentViewController', ['$state', '$location',
             function ($state, $location) {
                 var vm = this;
-                vm.page = $location.$$search.prev;
+                vm.page = 'ppts.student';
 
                 vm.tabs = [{
                     title: '基础信息',
@@ -17,6 +17,9 @@
                     }, {
                         url: 'ppts.student-view.parent-new({prev:vm.page})',
                         title: '新建家长'
+                    }, {
+                        url: 'ppts.student-view.returnExpense({prev:vm.page})',
+                        title: '返还服务费'
                     }]
                 }, {
                     title: '接触信息',
@@ -34,7 +37,7 @@
                         url: 'ppts.student-view.studentmeetinglist({prev:vm.page})',
                         title: '教学服务会'
                     }, {
-                        url: 'ppts.student-view.feedback-view({prev:vm.page})',
+                        url: 'ppts.student-view.feedbacks({prev:vm.page})',
                         title: '家校互动'
                     }]
                 }, {
@@ -72,7 +75,7 @@
                         url: 'ppts.demo',
                         title: '课表'
                     }, {
-                        url: 'ppts.student-view.stuCourseList({prev:vm.page})',
+                        url: 'ppts.student-view.studentRecordList({prev:vm.page})',
                         title: '上课记录'
                     }, {
                         url: 'ppts.student-view.classList({prev:vm.page})',

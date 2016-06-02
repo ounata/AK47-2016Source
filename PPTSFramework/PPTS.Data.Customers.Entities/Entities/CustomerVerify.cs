@@ -1,6 +1,7 @@
 using MCS.Library.Core;
 using MCS.Library.Data.DataObjects;
 using MCS.Library.Data.Mapping;
+using PPTS.Data.Common.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,9 +14,9 @@ namespace PPTS.Data.Customers.Entities
     /// 客户上门确认表
     /// </summary>
     [Serializable]
-    [ORTableMapping("CustomerVerifies")]
+    [ORTableMapping("CM.CustomerVerifies")]
     [DataContract]
-    public class CustomerVerify
+    public class CustomerVerify : IEntityWithCreator
     {
         public CustomerVerify()
         {
@@ -125,6 +126,7 @@ namespace PPTS.Data.Customers.Entities
         /// </summary>
         [ORFieldMapping("VerifyPeoples")]
         [DataMember]
+        [ConstantCategory("c_codE_ABBR_Customer_CRM_RealCallPersonNum")]
         public string VerifyPeoples
         {
             get;
@@ -136,7 +138,31 @@ namespace PPTS.Data.Customers.Entities
         /// </summary>
         [ORFieldMapping("VerifyRelations")]
         [DataMember]
+        [ConstantCategory("c_codE_ABBR_RealCallPersonRelation")]
         public string VerifyRelations
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 是否邀约（根据是否存在跟进记录判定）
+        /// </summary>
+        [ORFieldMapping("IsInvited")]
+        [DataMember]
+        public int IsInvited
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 是否签约（缴费单收款后插入该记录）
+        /// </summary>
+        [ORFieldMapping("IsSigned")]
+        [DataMember]
+        public bool IsSigned
+
         {
             get;
             set;
@@ -170,17 +196,6 @@ namespace PPTS.Data.Customers.Entities
         [ORFieldMapping("CreateTime")]
         [DataMember]
         public DateTime CreateTime
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 是否邀约
-        /// </summary>
-        [ORFieldMapping("IsInvited")]
-        [DataMember]
-        public int IsInvited
         {
             get;
             set;

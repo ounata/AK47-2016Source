@@ -1,0 +1,4 @@
+"%windir%"\microsoft.net\framework\v4.0.30319\msbuild.exe .\MCSWebAppCloudService\MCSWebAppCloudService.ccproj /p:VisualStudioVersion=14.0 /target:Publish /p:TargetProfile=Cloud
+powershell -command "Set-ExecutionPolicy Unrestricted"
+PowerShell .\PublishCloudService.ps1 -environment Production -enableDeploymentUpgrade 1 -serviceName platform -storageAccountName cloudservice -packageLocation .\MCSWebAppCloudService\bin\Debug\app.publish\MCSWebAppCloudService.cspkg -cloudConfigLocation .\MCSWebAppCloudService\bin\Debug\app.publish\ServiceConfiguration.Cloud.cscfg -subscriptionDataFile .\PPTS_Dev-5-14-2016-credentials.publishsettings -selectedsubscription PPTS_Dev
+pause 

@@ -1,5 +1,6 @@
 ﻿using PPTS.Data.Common.Adapters;
 using PPTS.Data.Products;
+using PPTS.Data.Products.Adapters;
 using PPTS.Data.Products.Entities;
 using PPTS.Data.Products.Executors;
 using System;
@@ -12,9 +13,9 @@ namespace PPTS.WebAPI.Products.ViewModels.Products
 
     public class ProductViewModel
     {
-        public CategoryCatalogCollection Catalogs { set; get; }
+        public CategoryCatalogCollection Catalogs { private set; get; }
         public CategoryType CategoryType { set; get; }
-        public ProductView Product { set; get; }
+        public ProductView Product { private set; get; }
 
         public ProductSalaryRuleCollection SalaryRules { set; get; }
 
@@ -49,6 +50,16 @@ namespace PPTS.WebAPI.Products.ViewModels.Products
             return result;
         }
 
+        public ProductViewModel Empty()
+        {
+            Product.ProductID = Product.ProductCode = string.Empty;
+            return this;
+        }
+
+        public ProductViewModel FillCatalogs() {
+            Catalogs = CategoryCatalogAdapter.Instance.LoadByCategoryType((CategoryType)Convert.ToInt32(Product.CategoryType));
+            return this;
+        }
     }
 
 

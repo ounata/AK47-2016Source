@@ -138,8 +138,8 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
         [InConditionMapping("CampusID")]
         public string[] CampusID { get; set; }
 
-        [ConditionMapping("OrderNo", EscapeLikeString = true, Prefix = "%", Postfix = "%", Operation = "LIKE")]
-        public string OrderNo
+        [ConditionMapping("AssetCode", EscapeLikeString = true, Prefix = "%", Postfix = "%", Operation = "LIKE")]
+        public string AssetCode
         {
             get; set;
         }

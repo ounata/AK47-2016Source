@@ -1,6 +1,7 @@
 using MCS.Library.Core;
 using MCS.Library.Data.DataObjects;
 using MCS.Library.Data.Mapping;
+using PPTS.Data.Common.Authorization;
 using PPTS.Data.Common.Entities;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,23 @@ namespace PPTS.Data.Customers.Entities
     [Serializable]
     [ORTableMapping("CM.Customers", "CM.Customers_Current")]
     [DataContract]
+    [CustomerRelationScope(ActionType = ActionType.Read, Functions = "查看客户（不含联系方式）"
+        , RelationType = RelationType.Callcenter, RecordType = CustomerRecordType.Customer, Description = "电销关系读取客户权限分配")]
+
+    [CustomerRelationScope(ActionType = ActionType.Read, Functions = "学员列表查看"
+        , RelationType = RelationType.Consultant, RecordType = CustomerRecordType.Customer,Description ="咨询关系读取客户权限分配")]
+
+    [CustomerRelationScope(ActionType = ActionType.Read, Functions = "成绩汇总列表查看"
+        , RelationType = RelationType.Educator, RecordType = CustomerRecordType.Customer,Description ="学管关系读取客户权限分配")]
+
+    [OrgCustomerRelationScope(OrgType = OrgType.Branch, ActionType = ActionType.Read
+        , Functions = "上课记录（学员视图）", RelationType = RelationType.Marketing
+        , RecordType = CustomerRecordType.Customer)]
+
+    [OwnerRelationScope(ActionType = ActionType.Read, Functions = "技术支持", RecordType = RecordType.Customer)]
+
+    [RecordOrgScope(OrgType = OrgType.Branch, ActionType = ActionType.Read, Functions = "b,c", RecordType = RecordType.Customer)]
+    [RecordOrgScope(OrgType = OrgType.Campus, ActionType = ActionType.Read, Functions = "b,c", RecordType = RecordType.Customer)]
     public class Customer : CustomerBase
     {
         public Customer()
@@ -133,9 +151,9 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 当前回访时间(学员属性)
         /// </summary>
-        [ORFieldMapping("VistTime", UtcTimeToLocal = true)]
+        [ORFieldMapping("VisitTime", UtcTimeToLocal = true)]
         [DataMember]
-        public DateTime VistTime
+        public DateTime VisitTime
         {
             get;
             set;
@@ -155,9 +173,9 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 下次回访时间(学员属性)
         /// </summary>
-        [ORFieldMapping("NextVistTime", UtcTimeToLocal = true)]
+        [ORFieldMapping("NextVisitTime", UtcTimeToLocal = true)]
         [DataMember]
-        public DateTime NextVistTime
+        public DateTime NextVisitTime
         {
             get;
             set;

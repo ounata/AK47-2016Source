@@ -1,47 +1,36 @@
-(function () {
+(function() {
     angular.module('app.component')
 
-    .controller('MCSUploadController', ['$scope', 'Upload', function ($scope, Upload) {
+    .controller('MCSUploadController', ['$scope', 'Upload', '$http', function($scope, Upload, $http) {
         var vm = this;
 
-        vm.submit = function () {
+        vm.submit = function() {
             if ($scope.form.files.$valid && vm.files) {
                 vm.uploadFiles(vm.files);
             }
         };
 
-
-        // for multiple files:
-        vm.uploadFiles = function (files) {
-
-            if (files && files.length) {
-                for (var i = 0; i < files.length; i++) {
-                    Upload.upload({
-                        url: 'upload',
-                        data: {
-                            file: files[i]
-                        }
-
-                    })
-
-                    .then(function (resp) {
-                            vm.msg = 'Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data;
-                        }, function (resp) {
-                            vm.msg = 'Error status: ' + resp.status;
-                        }, function (evt) {
-                            vm.files.progress = parseInt(100.0 * evt.loaded / evt.total);
-
-                        })
-                        .catch(function () {
-
-
-                        });
+        vm.userInfo = {
+            userName: 'tom',
+            userAge: 18,
+            files: [{
+                originalName: 'azure.PNG',
+                title: 'hello',
+                method: 'edit',
+                moduleName: 'liucy',
+                resourceId: 'abc123'
+            }]
+        };
 
 
 
-                }
+        vm.submit = function() {
+            $http.post('http://localhost/MCSWebApp/MCS.Web.API/api/sample/UploadMaterial', vm.userInfo).then(function(result) {
+                alert(result);
+            });
+        };
 
-            }
-        }
+
+
     }]);
 })();

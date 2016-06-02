@@ -7,8 +7,10 @@ using System.Linq;
 using System.Web;
 using MCS.Library.SOA.DataObjects;
 using PPTS.WebAPI.Orders.ViewModels.Unsubscribe;
+using MCS.Library.Core;
 using MCS.Library.Data;
 using PPTS.Data.Orders.Adapters;
+using MCS.Library.Validation;
 
 namespace PPTS.WebAPI.Orders.Executors
 {
@@ -19,33 +21,38 @@ namespace PPTS.WebAPI.Orders.Executors
 
         public DebookOrderExecutor(DebookOrderModel model) : base(model, null)
         {
+            model.NullCheck("model");
         }
         
 
         protected override void PrepareData(DataExecutionContext<UserOperationLogCollection> context)
         {
-            base.PrepareData(context);
-
+            
             Model.FillOrder()
-                 .FillOrderItem();
+                 .FillOrderItem()
+                 .FillUser();
 
             var debookorder = Model.Order;
             var debookorderitem = Model.Item;
-            debookorder.DebookID = debookorderitem.DebookID = Guid.NewGuid().ToString();
 
-            //OrdersAdapter.Instance.ExistsPendingApprovalInContext(debookorder.CustomerID);
+            debookorder.DebookID = debookorderitem.DebookID = UuidHelper.NewUuidString();
+
+            OrdersAdapter.Instance.ExistsPendingApprovalInContext(debookorder.CustomerID);
             DebookOrderAdapter.Instance.UpdateInContext(debookorder);
             DebookOrderItemAdapter.Instance.AddOrderItemInContext(debookorder.DebookID,debookorderitem);
-            DebookOrderAdapter.Instance.ReturnSuccessResultInContext();
+            
+            GenericAssetAdapter<Asset, AssetCollection>.Instance.UpdateInContext(Model.ToAsset());
+
+            base.PrepareData(context);
+
         }
 
-        protected override object DoOperation(DataExecutionContext<UserOperationLogCollection> context)
+        protected override void DoValidate(ValidationResults validationResults)
         {
-            using (DbContext dbContext = PPTS.Data.Orders.ConnectionDefine.GetDbContext())
-            {
-                return dbContext.ExecuteScalarSqlInContext();
-            }
+            Model.Validate();
+            base.DoValidate(validationResults);
         }
+
 
 
     }

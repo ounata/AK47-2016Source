@@ -10,22 +10,21 @@
     [OldTeacherJobID] NVARCHAR(36) NULL, 
     [OldTeacherOACode] NVARCHAR(128) NULL, 
     [OldTeacherName] NVARCHAR(64) NULL, 
-    [OldTeacherOrgID] NVARCHAR(36) NULL, 
-    [OldTeacherOrgShortName] NVARCHAR(64) NULL, 
-    [OldTeacherOrgName] NVARCHAR(128) NULL, 
+    [OldTeacherJobOrgID] NVARCHAR(36) NULL, 
+    [OldTeacherJobOrgName] NVARCHAR(128) NULL, 
     [NewTeacherID] NVARCHAR(36) NULL, 
     [NewTeacherJobID] NVARCHAR(36) NULL, 
     [NewTeacherOACode] NVARCHAR(128) NULL, 
     [NewTeacherName] NVARCHAR(64) NULL, 
-    [NewTeacherOrgID] NVARCHAR(36) NULL, 
-    [NewTeacherOrgShortName] NVARCHAR(64) NULL, 
-    [NewTeacherOrgName] NVARCHAR(128) NULL, 
+    [NewTeacherJobOrgID] NVARCHAR(36) NULL, 
+    [NewTeacherJobOrgName] NVARCHAR(128) NULL, 
     [Reason] NVARCHAR(32) NULL, 
     [ReasonDescription ] NVARCHAR(MAX) NULL, 
     [Status] NVARCHAR(32) NULL DEFAULT (2), 
     [CreatorID] NVARCHAR(36) NULL, 
     [CreatorName] NVARCHAR(64) NULL, 
-    [CreateTime] DATETIME NULL 
+    [CreateTime] DATETIME NULL, 
+    [TenantCode] NVARCHAR(36) NULL 
 )
 
 GO
@@ -126,16 +125,9 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level1type = N'TABLE',
     @level1name = N'CustomerTeacherAssignApplies',
     @level2type = N'COLUMN',
-    @level2name = N'OldTeacherOrgID'
+    @level2name = 'OldTeacherJobOrgID'
 GO
-EXEC sp_addextendedproperty @name = N'MS_Description',
-    @value = N'原有教师所属机构简称',
-    @level0type = N'SCHEMA',
-    @level0name = N'CM',
-    @level1type = N'TABLE',
-    @level1name = N'CustomerTeacherAssignApplies',
-    @level2type = N'COLUMN',
-    @level2name = N'OldTeacherOrgShortName'
+
 GO
 EXEC sp_addextendedproperty @name = N'MS_Description',
     @value = N'原有教师所属机构名称',
@@ -144,7 +136,7 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level1type = N'TABLE',
     @level1name = N'CustomerTeacherAssignApplies',
     @level2type = N'COLUMN',
-    @level2name = N'OldTeacherOrgName'
+    @level2name = 'OldTeacherJobOrgName'
 GO
 EXEC sp_addextendedproperty @name = N'MS_Description',
     @value = N'新教师ID',
@@ -189,16 +181,9 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level1type = N'TABLE',
     @level1name = N'CustomerTeacherAssignApplies',
     @level2type = N'COLUMN',
-    @level2name = N'NewTeacherOrgID'
+    @level2name = 'NewTeacherJobOrgID'
 GO
-EXEC sp_addextendedproperty @name = N'MS_Description',
-    @value = N'新教师所属机构简称',
-    @level0type = N'SCHEMA',
-    @level0name = N'CM',
-    @level1type = N'TABLE',
-    @level1name = N'CustomerTeacherAssignApplies',
-    @level2type = N'COLUMN',
-    @level2name = N'NewTeacherOrgShortName'
+
 GO
 EXEC sp_addextendedproperty @name = N'MS_Description',
     @value = N'新教师所属机构名称',
@@ -207,7 +192,7 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level1type = N'TABLE',
     @level1name = N'CustomerTeacherAssignApplies',
     @level2type = N'COLUMN',
-    @level2name = N'NewTeacherOrgName'
+    @level2name = 'NewTeacherJobOrgName'
 GO
 EXEC sp_addextendedproperty @name = N'MS_Description',
     @value = N'调换、调出原因',
@@ -275,3 +260,12 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level1name = N'CustomerTeacherAssignApplies',
     @level2type = N'COLUMN',
     @level2name = N'ApplyType'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'租户的ID',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'CustomerTeacherAssignApplies',
+    @level2type = N'COLUMN',
+    @level2name = N'TenantCode'

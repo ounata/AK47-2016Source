@@ -14,14 +14,7 @@ namespace PPTS.Data.Orders.Adapters
         {
             return ConnectionDefine.PPTSOrderConnectionName;
         }
-
-
-        public void ReturnSuccessResultInContext() {
-            var sqlContext = GetSqlContext();
-            sqlContext.AppendSqlInContext(TSqlBuilder.Instance, TSqlBuilder.Instance.DBStatementSeperator);
-            sqlContext.AppendSqlInContext(TSqlBuilder.Instance, "select 1;");
-            sqlContext.AppendSqlInContext(TSqlBuilder.Instance, TSqlBuilder.Instance.DBStatementSeperator);
-        }
+        
 
     }
 }

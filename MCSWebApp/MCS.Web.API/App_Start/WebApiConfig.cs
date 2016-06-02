@@ -25,6 +25,7 @@ namespace MCS.Web.API
 
             config.Formatters.Clear();
             config.Formatters.Add(new JsonMediaTypeFormatter());
+
             config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
 
             JsonDotNetConvertersSettings.GetConfig().GetConverters().ForEach(converter => config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(converter));

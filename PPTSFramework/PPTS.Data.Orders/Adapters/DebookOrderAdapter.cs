@@ -26,13 +26,13 @@ namespace PPTS.Data.Orders.Adapters
         public void ExistsPendingApprovalInContext(string customerId)
         {
 
-            var whereCustomerId = new WhereSqlClauseBuilder().AppendItem("CustomerID", customerId).ToSqlString(TSqlBuilder.Instance);
+            var whereSqlBuilder = new WhereSqlClauseBuilder().AppendItem("CustomerID", customerId).ToSqlString(TSqlBuilder.Instance);
             var sql = string.Format(@"if exists (
 select * from {0} ROWLOCK where {1} and DebookStatus='1' 
 )
 begin 
-select -1;return;
-end", this.GetTableName(), whereCustomerId);
+RAISERROR ('有未完成的退费操作不允许订购！', 16, 1) WITH NOWAIT;
+end", this.GetTableName(), whereSqlBuilder);
 
             var sqlContext = GetSqlContext();
             sqlContext.AppendSqlInContext(TSqlBuilder.Instance, TSqlBuilder.Instance.DBStatementSeperator);

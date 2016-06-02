@@ -1,6 +1,16 @@
 ﻿<div class="mcs-cascading-select-container">
-    <select class="col-sm-{{portion}} mcs-padding-0 {{percentage}}" ng-class="{'mcs-rmargin-5':level>1}" ng-style="customeStyle"></select>
-    <select ng-show="level>1" class="col-sm-{{portion}} mcs-padding-0 {{percentage}}" ng-class="{'mcs-lmargin-5':level==2,'mcs-lrmargin-5':level>2}" ng-style="customeStyle"></select>
-    <select ng-show="level>2" class="col-sm-{{portion}} mcs-padding-0 {{percentage}}" ng-class="{'mcs-lmargin-5':level==3,'mcs-lrmargin-5':level>3}" ng-style="customeStyle"></select>
-    <select ng-show="level>3" class="col-sm-{{portion}} mcs-padding-0 {{percentage}} mcs-lmargin-5"></select>
+    <ul>
+        <li>
+            <select class="mcs-padding-0" ng-style="customStyle" submit-validate="true"></select>
+        </li>
+        <li ng-show="level>1" ng-class="{'last':level==2}">
+            <select class="mcs-padding-0" ng-style="customStyle" submit-validate="true"></select>
+        </li>
+        <li ng-show="level>2" ng-class="{'last':level==3}">
+            <select class="mcs-padding-0" ng-style="customStyle" submit-validate="true"></select>
+        </li>
+        <li ng-show="level>3" ng-class="{'last':level==4}">
+            <select class="mcs-padding-0" ng-style="customStyle" submit-validate="true"></select>
+        </li>
+    </ul>
 </div>

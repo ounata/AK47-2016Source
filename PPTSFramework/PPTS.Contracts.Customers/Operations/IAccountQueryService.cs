@@ -18,7 +18,7 @@ namespace PPTS.Contracts.Customers.Operations
         AccountCollectionQueryResult QueryAccountCollectionByCustomerID(String customerID);
 
         [OperationContract]
-        AccountChargeCollectionQueryResult QueryAccountChargeCollectionByCustomerID(string customerID, DateTime startTime);
+        AccountChargeCollectionQueryResult QueryAccountChargeCollectionByCustomerID(string customerID);
     }
 
 }

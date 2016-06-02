@@ -19,10 +19,14 @@
 <body>
    
     <div class="container">
-        <iframe id="ppts" onload="hideSidebar()" width="100%"  frameborder="0" src="http://localhost/PPTSWebApp/PPTS.Portal/index.aspx#/ppts/dashboard"></iframe>
+        <iframe id="ppts"  width="100%"  frameborder="0" ></iframe>
     </div>
 <script>
+    
     var ppts = document.getElementById('ppts');
+    var locationStr = window.location.toString();
+
+    ppts.src = "http://localhost/PPTSWebApp/PPTS.Portal/index.aspx" + locationStr.substring(locationStr.indexOf('#'));
 
     ppts.height = window.screen.availHeight +200;
 

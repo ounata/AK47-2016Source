@@ -1,5 +1,4 @@
-﻿<!-- #开始：添加潜客Form -->
-<form class="form-horizontal" role="form">
+﻿<form class="form-horizontal" role="form">
     <div class="widget-box">
         <div class="widget-header">
             <h4>查看成绩</h4>
@@ -48,10 +47,22 @@
                             <span ng-if="vm.score.otherScoreTypeName">-</span> {{vm.score.otherScoreTypeName}}
                         </div>
                     </div>
-                    <div class="col-sm-3" ng-show="vm.score.scoreType=='14'">
-                        <mcs-label text="学员类别：" css="col-sm-6" />
+                    <div class="col-sm-3" ng-if="vm.score.admissionType">
+                        <mcs-label text="录入院校类别：" css="col-sm-6" />
                         <div class="col-sm-6 mcs-padding-0">
-                            {{vm.score.studentType | examCustomerType}}
+                            <mcs-label text="{{vm.score.admissionType | admissionType}}" model="vm.score.admissionType" />
+                        </div>
+                    </div>
+                    <div class="col-sm-3" ng-if="vm.score.admissionSchool">
+                        <mcs-label text="录入院校：" css="col-sm-6" />
+                        <div class="col-sm-6 mcs-padding-0">
+                            <mcs-label text="{{vm.score.admissionSchool}}" model="vm.score.admissionSchool" />
+                        </div>
+                    </div>
+                    <div class="col-sm-3" ng-if="vm.score.scoreType == '14'">
+                        <mcs-label text="属985/211院校：" css="col-sm-6" />
+                        <div class="col-sm-6 mcs-padding-0">
+                            <mcs-label text="{{vm.score.isKeyCollege | ifElse}}" model="vm.score.isKeyCollege" />
                         </div>
                     </div>
                     <div class="col-sm-3" ng-show="vm.score.scoreType=='15'">
@@ -61,16 +72,25 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="form-group" ng-show="vm.score.scoreType == '14'">
+                    <div class="col-sm-3" ng-show="vm.score.studentType">
+                        <mcs-label text="学员类型：" css="col-sm-6" />
+                        <div class="col-sm-6 mcs-padding-0">
+                            <mcs-label text="{{vm.score.studentType | examCustomerType}}" model="vm.score.studentType" />
+                        </div>
+                    </div>
+                </div>
+
                 <div class="form-group">
                     <div class="col-sm-3">
-                        <mcs-label required="true" text="成绩：" css="col-sm-4" />
+                        <mcs-label text="成绩：" css="col-sm-6" />
                     </div>
                 </div>
             </div>
 
             <mcs-datatable data="vm.data" style="padding:0 20px" />
-            
+
         </div>
     </div>
 </form>
-<!-- /结束：添加潜客Form -->

@@ -1,33 +1,41 @@
-﻿<div class="modal-header">
-    <button type="button" class="close" data-dismiss="alert" ng-click="vm.close()">
-        <i class="ace-icon fa fa-times"></i>
-    </button>
-    <h4 class="modal-title">选择上课学生</h4>
-</div>
-<div class="modal-body">
+﻿<form class="form-horizontal" role="form">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="alert" ng-click="vm.close()">
+            <i class="ace-icon fa fa-times"></i>
+        </button>
+        <h4 class="modal-title">分配教师</h4>
+    </div>
     <uib-tabset>
-        <uib-tab    heading="分配教师">
-            <div >
+        <uib-tab heading="分配教师">
+            <div class="modal-body">
                 <div class="from-group">
-                    <span>我申请将{{}}分配给：</span>                    
-                    <tags-input  ng-disable="true" ng-model="vm.teachers" key-property="teacherID" display-property="viewName" placeholder="教师姓名">
-                        <auto-complete min-length="1" source="vm.queryTeacherList($query)"></auto-complete>
-                    </tags-input>
+                    <span class="col-sm-3 control-label no-padding-right">我申请将 [{{vm.customerName}}] 分配给：</span>
+                    <div class="col-sm-9">
+                        <tags-input class="lg" ng-disable="true" ng-model="vm.teachers" key-property="teacherID" display-property="viewName" placeholder="教师姓名">
+                            <auto-complete min-length="1" source="vm.queryTeacherList($query)"></auto-complete>
+                        </tags-input>
+                    </div>
                 </div>
                 <div class="from-group">
-                    <span>通知处理人：</span><ppts-checkbox-group category="sendEmailSMS" model="vm.sendEmailSMS" async="false" />
+                    <span class="col-sm-3 control-label no-padding-right">通知处理人：</span>
+                    <div class="col-sm-9">
+                        <ppts-checkbox-group category="sendEmailSMS" model="vm.sendEmailSMS" async="false" />
+                    </div>
                 </div>
-                <div class="modal-footer">
-                    <mcs-button category="save" click="vm.assignTeacher()" />
-                    <mcs-button category="close" click="vm.close()" />
+                <div  class="from-group">
+                    <mcs-button class="dialog-button" category="save" click="vm.assignTeacher()" />
+                    <mcs-button class="dialog-button" category="close" click="vm.close()" />
                 </div>
             </div>
+            
         </uib-tab>
-        <uib-tab   heading="调换/调出">
-            <div >
-                <mcs-datatable data="vm.data" />
+        <uib-tab heading="调换/调出">
+            <div class="modal-body">
+                <div>
+                    <mcs-datatable data="vm.data" />
+                </div>
             </div>
         </uib-tab>
     </uib-tabset>
 
-</div>
+</form>

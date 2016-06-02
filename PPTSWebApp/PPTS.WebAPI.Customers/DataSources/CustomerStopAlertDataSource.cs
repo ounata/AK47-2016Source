@@ -16,7 +16,7 @@ namespace PPTS.WebAPI.Customers.DataSources
         public PagedQueryResult<StopAlertQueryModel, StopAlertQueryCollection> LoadCustomerStopAlerts(IPageRequestParams prp, object condition, IEnumerable<IOrderByRequestItem> orderByBuilder)
         {
             string select = " * ";
-            string from = " CustomerStopAlerts ";
+            string from = " CM.[CustomerStopAlerts] ";
             PagedQueryResult<StopAlertQueryModel, StopAlertQueryCollection> result = Query(prp, select, from, condition, orderByBuilder);
             return result;
         }

@@ -30,10 +30,10 @@ namespace PPTS.Services.Customers.Services
         [WfJsonFormatter]
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
 
-        public AccountChargeCollectionQueryResult QueryAccountChargeCollectionByCustomerID(string customerID, DateTime startTime)
+        public AccountChargeCollectionQueryResult QueryAccountChargeCollectionByCustomerID(string customerID)
         {
             AccountChargeCollectionQueryResult queryResult = new AccountChargeCollectionQueryResult();
-            queryResult.AccountChargeCollection = AccountChargeApplyAdapter.Instance.LoadValidChargeByCustomerID(customerID, startTime).ToList();
+            queryResult.AccountChargeCollection = AccountChargeApplyAdapter.Instance.LoadValidChargeByCustomerID(customerID).ToList();
             return queryResult;
         }
     }

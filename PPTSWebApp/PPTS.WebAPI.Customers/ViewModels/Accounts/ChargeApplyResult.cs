@@ -76,7 +76,7 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
             ChargeApplyResult result = new ChargeApplyResult();
             result.Customer = CustomerModel.Load(customerID);
             result.Discount = DiscountModel.LoadByCampusID(result.Customer.CampusID);
-            result.Apply = ChargeApplyModel.LoadByCustomerID(result.Customer);
+            result.Apply = ChargeApplyModel.LoadByCustomer(result.Customer);
             result.Apply.Init(result.Customer, result.Discount, user.GetCurrentJob().JobType);
             result.Assert = Validate(result.Customer, user);
 
@@ -126,13 +126,17 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
 
         public static AssertResult Validate(string customerID, IUser user)
         {
-            return Validate(CustomerModel.Load(customerID), user);
+            CustomerModel customer = CustomerModel.Load(customerID);
+            if (customer == null)
+                return new AssertResult(false, "不存在该记录");
+            if (string.IsNullOrEmpty(customer.CampusID))
+                return new AssertResult(false, "潜客必须分配校区才能充值");
+
+            return Validate(customer, user);
         }
 
         public static AssertResult Validate(CustomerModel customer, IUser user)
         {
-            return new AssertResult();
-
             PPTSJob job = user.GetCurrentJob();
             if (customer.IsPotential)
             {

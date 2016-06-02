@@ -21,7 +21,7 @@ namespace PPTS.WebAPI.Customers.ViewModels.CustomerScores
         [ObjectValidator]
         public CustomerScoreItemCollection ScoreItems { get; set; }
 
-        public TeacherJobViewCollection Teachers { get; set; }
+        public TeacherSearchCollection Teachers { get; set; }
 
         public Customer Customer { get; set; }
 
@@ -37,7 +37,6 @@ namespace PPTS.WebAPI.Customers.ViewModels.CustomerScores
         public bool isTeacher { get; set; }
         public PagedQueryResult<CustomerScoresBatchSearchModel, CustomerScoresBatchSearchModelCollection> QueryResult { get; set; }
         public IDictionary<string, IEnumerable<BaseConstantEntity>> Dictionaries { get; set; }
-        public TeacherJobViewCollection Teachers { get; set; }
     }
     #endregion 
 
@@ -49,7 +48,8 @@ namespace PPTS.WebAPI.Customers.ViewModels.CustomerScores
         public CustomerScore Scores { get; set; }
         [DataMember]
         public CustomerScoreItemCollection ScoreItems { get; set; }
-        
+        [DataMember]
+        public TeacherSearchCollection Teachers { get; set; }
     }
 
     [Serializable]
@@ -57,22 +57,5 @@ namespace PPTS.WebAPI.Customers.ViewModels.CustomerScores
     {
     }
     #endregion 
-
-
-    //public class CustomerScoresBatchModel : CustomerCollection
-    //{
-    //    [ObjectValidator]
-    //    public bool isTeacher { get; set; }
-
-    //    [ObjectValidator]
-    //    public CustomerScore Score { get; set; }
-
-    //    [ObjectValidator]
-    //    public CustomerScoreItemCollection ScoreItems { get; set; }
-
-    //    public TeacherJobViewCollection Teachers { get; set; }
-
-    //    public IDictionary<string, IEnumerable<BaseConstantEntity>> Dictionaries { get; set; }
-
-    //}
+    
 }

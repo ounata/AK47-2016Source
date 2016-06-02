@@ -131,7 +131,7 @@ namespace PPTS.Data.Orders.Adapters
             accountID.NullCheck("accountID");
             WhereSqlClauseBuilder whereBuilder = new WhereSqlClauseBuilder();
             whereBuilder.AppendItem("AccountID", accountID).AppendItem("Amount", 0, ">");
-            string sql = string.Format(@"select isnull(sum(isnull(Price,0)*(isnull(Amount,0)+isnull(AssignedAmount,0))),0) AssetsValue from {0} where {1}"
+            string sql = string.Format(@"select isnull(sum(isnull(Price,0)*isnull(Amount,0)),0) AssetsValue from {0} where {1}"
             , this.GetQueryMappingInfo().GetQueryTableName()
             , whereBuilder.ToSqlString(TSqlBuilder.Instance));
             return sql;

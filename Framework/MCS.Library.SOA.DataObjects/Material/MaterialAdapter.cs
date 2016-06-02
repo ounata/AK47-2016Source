@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Transactions;
 
@@ -32,19 +33,23 @@ namespace MCS.Library.SOA.DataObjects
     {
         internal const string DefaultUploadPathName = "UploadRootPath";
 
-        private static MaterialAdapter instance = new MaterialAdapter();
+        public static readonly MaterialAdapter Instance = new MaterialAdapter();
+
+        private string connectionName = string.Empty;
 
         private MaterialAdapter()
         {
 
         }
 
-        public static MaterialAdapter Instance
+        private MaterialAdapter(string connName)
         {
-            get
-            {
-                return instance;
-            }
+            this.connectionName = connName;
+        }
+
+        public static MaterialAdapter GetInstance(string connName)
+        {
+            return new MaterialAdapter(connName);
         }
 
         /// <summary>
@@ -259,7 +264,7 @@ namespace MCS.Library.SOA.DataObjects
         /// </summary>
         /// <param name="materialID">指定ID</param>
         /// <returns>MaterialList</returns>
-        public MaterialList LoadMaterialByMaterialID(string materialID)
+        public Material LoadMaterialByMaterialID(string materialID)
         {
             ExceptionHelper.CheckStringIsNullOrEmpty(materialID, "materialID");
 
@@ -289,7 +294,7 @@ namespace MCS.Library.SOA.DataObjects
 
             DecorateMaterials(materials);
 
-            return materials;
+            return materials.FirstOrDefault();
         }
 
         private static void DecorateMaterials(MaterialList materials)
@@ -657,7 +662,12 @@ namespace MCS.Library.SOA.DataObjects
         /// <returns></returns>
         public string GetConnectionName()
         {
-            return ConnectionDefine.DBConnectionName;
+            string result = this.connectionName;
+
+            if (result.IsNullOrEmpty())
+                result = ConnectionDefine.DBConnectionName;
+
+            return result;
         }
         #endregion
 

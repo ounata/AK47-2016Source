@@ -11,7 +11,8 @@
                 function ($scope, data, dataSyncService, studentDataService, $uibModalInstance, mcsDialogService) {
                     var vm = this;
                     vm.tags = [];
-
+                    if (data.customers)
+                        vm.customerName = data.customers.customerName;
                     dataSyncService.injectDictData({
                         c_codE_ABBR_Student_SendEmailSMS: [{ key: '1', value: '发送邮件' }, { key: '2', value: '发送短信' }]
                     });
@@ -43,9 +44,9 @@
                     };
 
                     //列表
-                    vm.data = {                       
+                    vm.data = {
                         rowsSelected: [],
-                        keyFields: ['teacherID'],                        
+                        keyFields: ['teacherID'],
                         orderBy: [{ dataField: 'teacherID', sortDirection: 1 }],
                         headers: [{
                             field: "viewName",
@@ -58,7 +59,7 @@
                             name: "目标教师姓名",
                             headerCss: 'datatable-header-align-right',
                             sortable: false,
-                            template:'<tags-input class="mcs-tags-input-lg" ng-disable="true" ng-model="row.newTeacher" key-property="teacherID" display-property="viewName" placeholder="教师姓名"><auto-complete min-length="1" source="vm.queryTeacherList($query)"></auto-complete> </tags-input>',
+                            template: '<tags-input class="mcs-tags-input-lg" ng-disable="true" ng-model="row.newTeacher" key-property="teacherID" display-property="viewName" placeholder="教师姓名"><auto-complete min-length="1" source="vm.queryTeacherList($query)"></auto-complete> </tags-input>',
                             description: ''
                         }, {
                             field: "teacherName",
@@ -85,18 +86,18 @@
                         ]
                     }
 
-                    vm.searchCustomerTeacherRelations=function(){
-                        if(data.customers.length==1){
+                    vm.searchCustomerTeacherRelations = function () {
+                        if (data.customers.length == 1) {
                             studentDataService.getAllCustomerTeacherRelations(data.customers[0], function (result) {
                                 vm.data.rows = result.customerTeachers;
                             }, function () { });
                         }
                     }
-                    vm.searchCustomerTeacherRelations();                 
+                    vm.searchCustomerTeacherRelations();
 
                     //关闭窗口
                     vm.close = function () {
-                        $uibModalInstance.dismiss('Canceled');                        
+                        $uibModalInstance.dismiss('Canceled');
                     };
 
                     //分配教师
@@ -113,16 +114,17 @@
                             studentDataService.assignTeacher(tc, function () {
                                 $uibModalInstance.dismiss('Canceled');
                             }, function () { });
-                        }else{
+                        } else {
                             mcsDialogService.error({ title: 'Error', message: "请选择一个教师！" });
                         }
                     }
 
                     //调出教师
                     vm.calloutTeacher = function (item) {
-                        if (data.customers.length == 1) {                            
-                            var model = { applyType:1,customerID:data.customers[0].customerID,CampusID:data.customers[0].campusID,
-                                oldTeacherID: item.teacherID, oldTeacherJobID: item.teacherJobID, oldTeacherOACode: item.viewName, oldTeacherName: item.teacherName, oldTeacherOrgID: item.teacherJobOrgID, oldTeacherOrgShortName: "", oldTeacherOrgName: item.teacherJobOrgName,                                
+                        if (data.customers.length == 1) {
+                            var model = {
+                                applyType: 1, customerID: data.customers[0].customerID, CampusID: data.customers[0].campusID,
+                                oldTeacherID: item.teacherID, oldTeacherJobID: item.teacherJobID, oldTeacherOACode: item.viewName, oldTeacherName: item.teacherName, oldTeacherJobOrgID: item.teacherJobOrgID, oldTeacherJobOrgName: item.teacherJobOrgName,
                                 reason: item.changeTeacherReason, reasonDescription: item.qtReason
                             };
                             studentDataService.calloutTeacher(model, function () {
@@ -141,8 +143,8 @@
                             }
                             var model = {
                                 applyType: 2, customerID: data.customers[0].customerID, CampusID: data.customers[0].campusID,
-                                oldTeacherID: item.teacherID, oldTeacherJobID: item.teacherJobID, oldTeacherOACode: item.viewName, oldTeacherName: item.teacherName, oldTeacherOrgID: item.teacherJobOrgID, oldTeacherOrgShortName: "", oldTeacherOrgName: item.teacherJobOrgName,
-                                newTeacherID: newTeacher.teacherID, newTeacherJobID: newTeacher.jobID, newTeacherOACode: newTeacher.teacherOACode, newTeacherName: newTeacher.teacherName, newTeacherOrgID: newTeacher.jobOrgID, newTeacherOrgShortName: newTeacher.jobOrgShortName, newTeacherOrgName: newTeacher.jobOrgName,
+                                oldTeacherID: item.teacherID, oldTeacherJobID: item.teacherJobID, oldTeacherOACode: item.viewName, oldTeacherName: item.teacherName, oldTeacherJobOrgID: item.teacherJobOrgID, oldTeacherJobOrgName: item.teacherJobOrgName,
+                                newTeacherID: newTeacher.teacherID, newTeacherJobID: newTeacher.jobID, newTeacherOACode: newTeacher.teacherOACode, newTeacherName: newTeacher.teacherName, newTeacherJobOrgID: newTeacher.jobOrgID, newTeacherJobOrgName: newTeacher.jobOrgName,
                                 reason: item.changeTeacherReason, reasonDescription: item.qtReason
                             };
                             studentDataService.changeTeacher(model, function () {

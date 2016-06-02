@@ -233,6 +233,20 @@ namespace PPTS.WebAPI.Customers.Controllers
             return result;
         }
 
+        /// <summary>
+        /// 获取退费折扣返还数据
+        /// </summary>
+        /// <param name="accountID">账户ID</param>
+        /// <param name="discountID">折扣ID</param>
+        /// <param name="discountBase">折扣基数</param>
+        /// <param name="reallowanceStartTime">折扣返还时间计算时间点</param>
+        /// <returns></returns>
+        [HttpGet]
+        public RefundReallowanceResult GetRefundReallowance(string accountID, string discountID, decimal discountBase, DateTime reallowanceStartTime)
+        {
+            return RefundReallowanceResult.GetReallowance(accountID, discountID, discountBase, reallowanceStartTime);
+        }
+
         #endregion
 
         #region 转让相关查询
@@ -278,15 +292,6 @@ namespace PPTS.WebAPI.Customers.Controllers
         }
         #endregion
 
-        #region 返还相关查询
-        [HttpGet]
-        public ExpenseResult GetCustomerExpenses(string customerID)
-        {
-            return ExpenseResult.Load(customerID);
-        }
-
-        #endregion
-
         #region 缴费相关操作
         /// <summary>
         /// 保存（新增/修改）缴费申请单。
@@ -317,7 +322,7 @@ namespace PPTS.WebAPI.Customers.Controllers
         [HttpPost]
         public void SaveChargePayment(ChargeApplyModel apply)
         {
-            apply.Prepare4SavePayment(DeluxeIdentity.CurrentUser.GetCurrentJob().JobType);
+            apply.Prepare4SavePayment(DeluxeIdentity.CurrentUser);
             new AccountEditChargePaymentExecutor(apply).Execute();
         }
 
@@ -464,5 +469,37 @@ namespace PPTS.WebAPI.Customers.Controllers
             return null;
         }
         #endregion
+
+        #region 返还相关操作
+
+        /// <summary>
+        /// 根据学员ID获取当前服务费返还信息
+        /// </summary>
+        /// <param name="id">学员ID</param>
+        /// <returns></returns>
+        [HttpGet]
+        public ReturnApplyResult GetReturnApplyByCustomerID(string id)
+        {
+            IUser user = DeluxeIdentity.CurrentUser;
+            ReturnApplyResult result = ReturnApplyResult.LoadByCustomerID(id, user);
+            if (result != null)
+            {
+                result.Apply.InitApplier(DeluxeIdentity.CurrentUser); //初始当前申请人信息
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 保存服务费返还。
+        /// </summary>
+        /// <param name="apply">申请信息</param>
+        [HttpPost]
+        public void SaveReturnApply(ReturnApplyModel apply)
+        {
+            apply.Prepare(DeluxeIdentity.CurrentUser);
+            new AccountEditReturnApplyExecutor(apply).Execute();
+        }
+        #endregion
+
     }
 }

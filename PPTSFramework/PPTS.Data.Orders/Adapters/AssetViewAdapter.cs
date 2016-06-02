@@ -22,19 +22,13 @@ namespace PPTS.Data.Orders.Adapters
 		{
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="OperaterCampusID"></param>
-        /// <param name="CustomerID"></param>
-        /// <returns></returns>
-        public AssetViewCollection LoadCollection(string operaterCampusID, string customerID)
+        ///
+        public AssetViewCollection LoadCollection(string customerID)
         {
             WhereLoadingCondition wLC = new WhereLoadingCondition(builder => builder
             .AppendItem("Amount", 0, ">")
             .AppendItem("CategoryType",1)
-            .AppendItem("CustomerID", customerID)
-            .AppendItem("CustomerCampusID", operaterCampusID));
+            .AppendItem("CustomerID", customerID));
 
             return this.Load(wLC);
         }
@@ -52,13 +46,13 @@ namespace PPTS.Data.Orders.Adapters
             return this.Load(wLC);
         }
 
-        public AssetView Load(string operaterCampusID, string customerID, string assetID)
+        public AssetView Load(string customerID, string assetID)
         {
             WhereLoadingCondition wLC = new WhereLoadingCondition(builder => builder
            .AppendItem("Amount", 0, ">").AppendItem("AssetID", assetID)
            .AppendItem("CategoryType", 1)
-           .AppendItem("CustomerID", customerID)
-           .AppendItem("CustomerCampusID", operaterCampusID));
+           .AppendItem("CustomerID", customerID));
+           //.AppendItem("CustomerCampusID", operaterCampusID)
 
             return this.Load(wLC).FirstOrDefault();
         }

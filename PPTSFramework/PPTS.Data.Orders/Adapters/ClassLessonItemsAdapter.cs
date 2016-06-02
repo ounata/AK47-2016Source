@@ -26,5 +26,18 @@ namespace PPTS.Data.Orders.Adapters
             lessonIDs = string.Format("({0})", sb.ToString().Substring(1));
             return this.Load(builder => builder.AppendItem("LessonID", lessonIDs, "in", true));            
         }
+
+        public ClassLessonItemCollection LoadStudentCountCollection(string classID) {           
+
+            //将要上课的那一节课的学生人数
+            string sql =string.Format( @" select * 
+                            from [OM].[ClassLessonItems] where AssignStatus = 1 and LessonID = (
+                            select top 1 LessonID
+                            from [OM].[ClassLessons]
+                            where ClassID = '{0}' and LessonStatus = 1 
+                            order by StartTime desc)",classID);
+
+            return this.QueryData(sql);
+        }
     }
 }

@@ -28,9 +28,7 @@ namespace PPTS.WebAPI.Orders.Executors
         {
             base.PrepareData(context);
             Class c = ClassesAdapter.Instance.LoadByClassID(Model.ClassID);            
-            IList<ClassLesson> clc = ClassLessonsAdapter.Instance.LoadCollectionByClassID(Model.ClassID).Where(cl=>cl.LessonStatus == LessonStatus.Assigned).ToList();
-            c.ClassPeoples = c.ClassPeoples + Model.Assets.Count();
-            ClassesAdapter.Instance.UpdateInContext(c);
+            IList<ClassLesson> clc = ClassLessonsAdapter.Instance.LoadCollectionByClassID(Model.ClassID).Where(cl=>cl.LessonStatus == LessonStatus.Assigned).ToList();            
             foreach (var item in clc)
             {
                 foreach (var asset in Model.Assets)
@@ -100,10 +98,15 @@ namespace PPTS.WebAPI.Orders.Executors
                     AssignsAdapter.Instance.UpdateInContext(a);
 
                     //扣除资产
-                    AssetAdapter.Instance.IncreaseAssignedAmountInContext(asset.AssetID, 1, a.CreatorID, a.CreatorName);
+                    Data.Orders.Entities.Asset at = GenericAssetAdapter<Data.Orders.Entities.Asset, AssetCollection>.Instance.Load(asset.AssetID);
+                    at.AssignedAmount += 1;
+                    GenericAssetAdapter<Data.Orders.Entities.Asset, AssetCollection>.Instance.UpdateInContext(at);
                 }
             }
-            
+            var clic = ClassLessonItemsAdapter.Instance.LoadStudentCountCollection(Model.ClassID);
+            c.ClassPeoples = clic != null ? clic.Count : 0;
+            ClassesAdapter.Instance.UpdateInContext(c);
+
         }
 
         /// <summary>

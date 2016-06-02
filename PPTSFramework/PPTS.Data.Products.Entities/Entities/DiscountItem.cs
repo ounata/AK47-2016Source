@@ -13,7 +13,7 @@ namespace PPTS.Data.Products.Entities
     /// 折扣明细表
     /// </summary>
     [Serializable]
-    [ORTableMapping("DiscountItems")]
+    [ORTableMapping("[PM].DiscountItems")]
     [DataContract]
     public class DiscountItem
     {

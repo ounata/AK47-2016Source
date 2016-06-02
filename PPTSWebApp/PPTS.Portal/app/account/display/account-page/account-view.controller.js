@@ -19,6 +19,10 @@
                             name: "账户编码",
                             template: '<span>{{row.accountCode}}</span>'
                         }, {
+                            field: "accountType",
+                            name: "账户类型",
+                            template: '<span>{{row.accountType|accountType}}</span>'
+                        }, {
                             field: "discountBase",
                             name: "折扣基数",
                             template: '<span>{{row.discountBase|currency:"￥"}}</span>'
@@ -38,6 +42,10 @@
                             field: "assetMoney",
                             name: "订购资金余额",
                             template: '<span>{{row.assetMoney|currency:"￥"}}</span>'
+                        }, {
+                            field: "accountStatus",
+                            name: "状态",
+                            template: '<span>{{row.accountStatus|accountStatus}}</span>'
                         }],
                         pager: {
                             pagable: false

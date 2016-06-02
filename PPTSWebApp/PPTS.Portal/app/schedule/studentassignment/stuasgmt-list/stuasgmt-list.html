@@ -1,10 +1,9 @@
-﻿
-<div class="page-content">
+﻿<div class="page-content">
     <div class="page-content-area">
-        <!-- #开始：潜客列表 -->
+        <!-- #开始：学员排课 -->
         <div class="row">
             <div class="col-sm-12">
-                <!-- #开始：潜客列表.快速查询条件 -->
+                <!-- #开始：学员排课.快速查询条件 -->
                 <div class="mcs-panel-search well well-sm">
                     <div class="portlet">
                         <div class="portlet-title line">
@@ -12,25 +11,25 @@
                                 <label class="quick-search"><i class="ace-icon fa fa-search bigger-125"></i> 快速查询</label>
                             </div>
                         </div>
-                        <div class="portlet-body">                        
-                            <ppts-select caption="上课班级" class="ppts-select-search-nopadding" category="grade" model="vm.criteria.grade" />                 
+                        <div class="portlet-body">
+                            <ppts-select caption="上课班级" class="ppts-select-search-nopadding" category="grade" model="vm.criteria.grade" />
                             <mcs-input class="search-input" placeholder="学员姓名" model="vm.criteria.customerName" />
                             <mcs-input class="search-input" placeholder="学员编号" model="vm.criteria.customerCode" />
                             <mcs-input class="search-input" placeholder="在读学校" model="vm.criteria.schoolName" />
                             <mcs-input class="search-input" placeholder="学管师" model="vm.criteria.educatorName" />
-                            <mcs-button class="search-input" category="search" click="vm.init()" class="search-btn"/>
+                            <mcs-button class="search-input" category="search" click="vm.init()" class="search-btn" />
                         </div>
                     </div>
                 </div>
-                <!-- /结束：潜客列表.快速查询条件 -->
-                <!-- #开始：潜客列表.工具栏 -->
+                <!-- /结束：学员排课.快速查询条件 -->
+                <!-- #开始：学员排课.工具栏 -->
                 <div class="mcs-panel-toolbar">
                     <mcs-button icon="user-plus" css="btn-success" text="排课" click="vm.stuAssignClick()"></mcs-button>
                 </div>
-                <!-- /结束：潜客列表.工具栏 -->
-                <!-- #开始：潜客列表.数据表格 -->
+                <!-- /结束：学员排课.工具栏 -->
+                <!-- #开始：学员排课.数据表格 -->
                 <mcs-datatable data="vm.data" />
-                <!-- /结束：潜客列表.数据表格 -->
+                <!-- /结束：学员排课.数据表格 -->
             </div>
         </div>
     </div>

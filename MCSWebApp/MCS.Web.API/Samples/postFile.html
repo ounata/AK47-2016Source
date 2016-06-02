@@ -1,0 +1,35 @@
+﻿<!--<!DOCTYPE html>-->
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=5" />
+    <title>测试提交</title>
+    <meta charset="utf-8" />
+    <script type="text/javascript">
+        function progressUpdate(statusJson) {
+            var textObj = document.getElementById("statusText");
+
+            textObj.innerText += statusJson;
+        }
+
+        function processComplete(resultJson) {
+            alert(resultJson);
+        }
+    </script>
+</head>
+<body>
+    <form action="../api/Sample/UploadExcel" enctype="multipart/form-data" method="post" target="responseFrame">
+        <input name="sourceFile" type="file" />
+        <input name="operatorID" type="text" value="shenzheng" />
+        <input name="operatorName" type="text" value="沈峥" />
+        <input type="submit" value="提交..." />
+        <a href="books.xlsx">点击此处可以下载模板</a>
+    </form>
+    <div>
+        <iframe name="responseFrame" style="width:800px;height:400px"></iframe>
+    </div>
+    <div>
+        <textarea style="width:800px;height:400px" id="statusText"></textarea>
+    </div>
+</body>
+
+</html>

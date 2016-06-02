@@ -45,6 +45,10 @@
             resource.post({ operation: 'getStaffRelations' }, criteria, success, error);
         };
 
+        resource.getTeacherRelations = function (criteria, success, error) {
+            resource.post({ operation: 'getTeacherRelations' }, criteria, success, error);
+        };
+
         resource.getPagedStaffRelations = function (criteria, success, error) {
             resource.post({ operation: 'getPagedStaffRelations' }, criteria, success, error);
         }
@@ -93,10 +97,15 @@
             resource.post({ operation: 'getTransferResources' }, customerIds, success, error);
         }
 
-        resource.transferCustomers = function (model) {
+        resource.transferCustomers = function (model, success, error) {
             resource.post({ operation: 'transferCustomers' }, model, success, error);
         };
-
+        resource.transferCustomerTransferResources = function (model, success, error) {
+            resource.post({ operation: 'transferCustomerTransferResources' }, model, success, error);
+        };
+        resource.createCustomerStaffRelations = function (model, success, error) {
+            resource.post({ operation: 'createCustomerStaffRelations' }, model, success, error);
+        };
         return resource;
     }]);
 
@@ -110,17 +119,17 @@
 
     customer.registerValue('customerAdvanceSearchItems', [
         { name: '入学年级：', template: '<ppts-checkbox-group category="grade" model="vm.criteria.entranceGrades" clear="vm.criteria.entranceGrades=[]" async="false"/>' },
-        { name: '建档日期：', template: '<ppts-daterangepicker start-date="vm.criteria.createTimeStart" end-date="vm.criteria.createTimeEnd"/>' },
+        { name: '建档日期：', template: '<ppts-daterangepicker start-date="vm.criteria.createTimeStart" end-date="vm.criteria.createTimeEnd" width="41.5%"/>' },
         { name: '跟进阶段：', template: '<ppts-checkbox-group category="followStage" model="vm.criteria.followStages" clear="vm.criteria.followStages=[]" async="false"/>' },
         { name: '客户级别：', template: '<ppts-checkbox-group category="vipLevel" model="vm.criteria.customerLevels" clear="vm.criteria.customerLevels=[]" async="false"/>' },
-        { name: '未跟进时长：', template: '<ppts-radiobutton-group category="period" model="vm.followPeriodValue" async="false"/> <span ng-show="vm.followPeriodValue == 5"><input type="text" ng-model="vm.followDays" class="mcs-input-small" onkeyup="mcs.util.limit(this)" onafterpaste="mcs.util.limit(this)"/>天未跟进</span>' },
-        { name: '在读学校：', template: '<mcs-input model="vm.criteria.schoolName" css="col-xs-4 col-sm-4" />' },
-        { name: '家庭住址：', template: '<mcs-input model="vm.criteria.address" css="col-xs-4 col-sm-4" />' },
-        //{ name: '信息来源：', template: '<ppts-source main="vm.criteria.test" sub="vm.criteria.test" css="col-xs-4 col-sm-4" />' },
-        { name: '归属坐席：', template: '<ppts-checkbox-group category="assignment" model="vm.criteria.isAssignSeat" clear="vm.criteria.isAssignSeat=[]" async="false"/> <mcs-input placeholder="坐席姓名" model="vm.criteria.callcenterName"/>' },
-        { name: '归属咨询师：', template: '<ppts-checkbox-group category="assignment" model="vm.criteria.isAssignConsultant" clear="vm.criteria.isAssignConsultant=[]" async="false"/> <mcs-input placeholder="咨询师姓名" model="vm.criteria.consultantName"/>' },
-        { name: '归属市场专员：', template: '<ppts-checkbox-group category="assignment" model="vm.criteria.isAssignMarket" clear="vm.criteria.isAssignMarket=[]" async="false"/> <mcs-input placeholder="市场专员姓名" model="vm.criteria.marketName"/>' },
-        { name: '建档人：', template: '<ppts-checkbox-group category="people" model="vm.criteria.creatorJobs" clear="vm.criteria.creatorJobs=[]" async="false"/> <mcs-input placeholder="建档人姓名" model="vm.criteria.creatorName"/>' },
+        { name: '未跟进时长：', template: '<ppts-radiobutton-group category="period" model="vm.followPeriodValue" async="false" css="mcs-padding-left-15"/> <span ng-show="vm.followPeriodValue == 5"><input type="text" ng-model="vm.followDays" class="mcs-input-small" onkeyup="mcs.util.limit(this)" onafterpaste="mcs.util.limit(this)"/>天未跟进</span>' },
+        { name: '在读学校：', template: '<mcs-input model="vm.criteria.schoolName" css="mcs-margin-left-15" custom-style="width:40%"/>' },
+        { name: '家庭住址：', template: '<mcs-input model="vm.criteria.address" css="mcs-margin-left-15" custom-style="width:40%"/>' },
+        //{ name: '信息来源：', template: '<ppts-source main="vm.criteria.test" sub="vm.criteria.test" />' },
+        { name: '归属坐席：', template: '<ppts-checkbox-group category="assignment" model="vm.criteria.isAssignSeat" clear="vm.criteria.isAssignSeat=[]" async="false"/> <mcs-input placeholder="坐席姓名" model="vm.criteria.callcenterName" custom-style="width:28%"/>' },
+        { name: '归属咨询师：', template: '<ppts-checkbox-group category="assignment" model="vm.criteria.isAssignConsultant" clear="vm.criteria.isAssignConsultant=[]" async="false"/> <mcs-input placeholder="咨询师姓名" model="vm.criteria.consultantName" custom-style="width:28%"/>' },
+        { name: '归属市场专员：', template: '<ppts-checkbox-group category="assignment" model="vm.criteria.isAssignMarket" clear="vm.criteria.isAssignMarket=[]" async="false"/> <mcs-input placeholder="市场专员姓名" model="vm.criteria.marketName" custom-style="width:28%"/>' },
+        { name: '建档人：', template: '<ppts-checkbox-group category="people" model="vm.criteria.creatorJobs" clear="vm.criteria.creatorJobs=[]" async="false"/> <mcs-input placeholder="建档人姓名" model="vm.criteria.creatorName" />' },
         { name: '有效/无效客户：', template: '<ppts-checkbox-group category="valid" model="vm.criteria.isValids" clear="vm.criteria.isValids=[]" async="false"/>' }
     ]);
 
@@ -321,7 +330,7 @@
             };
 
             // 分配咨询师/学管师/坐席/市场专员
-            service.assignStaffRelation = function (customers, relationType) {
+            service.assignStaffRelation = function (customers, relationType, vm) {
                 mcsDialogService.create('app/customer/potentialcustomer/customer-staff-relations/assign-staff-relation.tpl.html', {
                     controller: 'customerStaffRelationController',
                     params: {
@@ -354,7 +363,8 @@
                         customerId: id,
                         relationType: relationType,
                         type: 'viewHistory'
-                    }
+                    },
+                    settings: { size: 'lg' }
                 });
             };
 
@@ -459,6 +469,70 @@
 
                 customerDataService.getTransferResources(vm.customerIds, function (result) {
                     // 初始化分公司和校区下拉框
+                });
+            };
+
+            // 归属教师
+            service.viewHistoryTeachers = function (customerID) {
+                mcsDialogService.create('app/customer/potentialcustomer/customer-teacher-relations/customer-teacher-relations.tpl.html', {
+                    controller: 'customerTeacherRelationController',
+                    params: {
+                        customerID: customerID
+                    },
+                    settings: { size: 'lg' }
+                });
+            };
+
+            // 配置归属教师Table表头
+            service.configTeacherRelationsHeaders = function (vm) {
+                vm.data = {
+                    headers: [{
+                        field: "applyType",
+                        name: "操作类型" 
+                        // template: '<span>{{ row.applyType | teacherApplyType }}</span>'
+                    }, {
+                        field: "createTime",
+                        name: "操作日期",
+                        template: '<span>{{ row.createTime | date:"yyyy-MM-dd" }}</span>'
+                    }, {
+                        field: "orgName",
+                        name: "所属机构",
+                        template: '<span ng-if="row.applyType==0 || row.applyType==1">{{ row.newTeacherJobOrgName }}</span>'
+                                + '<span ng-if="row.applyType==2">{{ row.oldTeacherJobOrgName }}</span>'
+                    }, /*{
+                        field: "orgName",
+                        name: "岗位性质"
+                    },*/ {
+                        field: "staffJobName",
+                        name: "教师姓名",
+                        template: '<span ng-if="row.applyType==0">{{ row.newTeacherName }}</span>'
+                                + '<span ng-if="row.applyType==1">{{ row.oldTeacherName }}>{{ row.newTeacherName }}</span>'
+                                + '<span ng-if="row.applyType==2">{{ row.oldTeacherName }}</span>'
+                    }],
+                    pager: {
+                        pageIndex: 1,
+                        pageSize: 10,
+                        totalCount: -1,
+                        pageChange: function () {
+                            dataSyncService.initCriteria(vm);
+                            customerDataService.getPagedStaffRelations(vm.criteria, function (result) {
+                                vm.data.rows = result.pagedData;
+                            });
+                        }
+                    },
+                    orderBy: [{
+                        dataField: 'CreateTime', sortDirection: 1
+                    }]
+                }
+            };
+
+            // 加载归属教师弹出框
+            service.getTeacherRelationsInfo = function (vm, data) {
+                dataSyncService.initCriteria(vm);
+                vm.criteria.customerID = vm.customerID;
+                customerDataService.getTeacherRelations(vm.criteria, function (result) {
+                    vm.data.rows = result.queryResult.pagedData;
+                    dataSyncService.updateTotalCount(vm, result.queryResult);
                 });
             };
 

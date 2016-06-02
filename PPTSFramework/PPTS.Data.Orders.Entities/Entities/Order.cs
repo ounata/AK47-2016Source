@@ -19,8 +19,8 @@ namespace PPTS.Data.Orders.Entities
 	[Serializable]
     [ORTableMapping("OM.Orders")]
     [DataContract]    
-    public class Order
-	{		
+    public class Order: IEntityWithCreator, IEntityWithModifier
+    {		
 		public Order()
 		{
 		}		
@@ -47,6 +47,9 @@ namespace PPTS.Data.Orders.Entities
             set;
 		}
 
+        /// <summary>
+        /// 家长ID
+        /// </summary>
         [ORFieldMapping("ParentID")]
         [DataMember]
         public string ParentID
@@ -55,6 +58,9 @@ namespace PPTS.Data.Orders.Entities
             set;
         }
 
+        /// <summary>
+        /// 家长姓名
+        /// </summary>
         [ORFieldMapping("ParentName")]
         [DataMember]
         public string ParentName
@@ -227,7 +233,7 @@ namespace PPTS.Data.Orders.Entities
         /// </summary>
         [ORFieldMapping("ProcessStatus")]
         [DataMember]
-		public string ProcessStatus
+		public int ProcessStatus
 		{
 			get;
             set;

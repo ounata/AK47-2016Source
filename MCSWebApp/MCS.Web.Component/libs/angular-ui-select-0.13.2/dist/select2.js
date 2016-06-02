@@ -731,7 +731,7 @@ the specific language governing permissions and limitations under the Apache Lic
             this.opts.element
                 .data("select2", this)
                 .attr("tabindex", "-1")
-                .before(this.container)
+                .after(this.container)
                 .on("click.select2", killEvent); // do not leak click events
 
             this.container.data("select2", this);

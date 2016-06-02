@@ -1,6 +1,7 @@
 using MCS.Library.Core;
 using MCS.Library.Data.DataObjects;
 using MCS.Library.Data.Mapping;
+using PPTS.Data.Common.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,8 +16,8 @@ namespace PPTS.Data.Orders.Entities
 	[Serializable]
     [ORTableMapping("OM.DebookOrders")]
     [DataContract]
-	public class DebookOrder
-	{		
+	public class DebookOrder : IEntityWithCreator, IEntityWithModifier
+    {		
 		public DebookOrder()
 		{
 		}		
@@ -43,10 +44,32 @@ namespace PPTS.Data.Orders.Entities
             set;
 		}
 
-		/// <summary>
-		/// 学员ID
-		/// </summary>
-		[ORFieldMapping("CustomerID")]
+        /// <summary>
+        /// 家长ID
+        /// </summary>
+        [ORFieldMapping("ParentID")]
+        [DataMember]
+        public string ParentID
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 家长姓名
+        /// </summary>
+        [ORFieldMapping("ParentName")]
+        [DataMember]
+        public string ParentName
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 学员ID
+        /// </summary>
+        [ORFieldMapping("CustomerID")]
         [DataMember]
 		public string CustomerID
 		{

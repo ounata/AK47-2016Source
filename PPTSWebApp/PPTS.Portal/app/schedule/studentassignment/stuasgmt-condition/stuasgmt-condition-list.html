@@ -1,17 +1,16 @@
-﻿<div class="page-content">
-    <div class="page-content-area">
-        <!-- #开始：排课条件列表 -->
-        <div class="row">
-            <div class="col-sm-12">
-                <!-- #开始：排课条件列表.工具栏 -->
-                <div class="mcs-panel-toolbar">
-                    <mcs-button icon="user-plus" css="btn-success" text="排课" click="vm.stuAssignClick()"></mcs-button>
-                </div>
-                <!-- /结束：排课条件列表.工具栏 -->
-                <!-- #开始：排课条件列表.数据表格 -->
-                <mcs-datatable data="vm.data" />
-                <!-- /结束：排课条件列表.数据表格 -->
-            </div>
-        </div>
-    </div>
+﻿<!-- #开始：修改排课条件.工具栏 -->
+<div class="mcs-panel-toolbar">
+    <mcs-button category="edit" text="修改排课条件" click="vm.editAcc()"></mcs-button>
+    <mcs-button category="delete" text="删除排课条件" click="vm.deleteAcc()"></mcs-button>
 </div>
+<div class="alert alert-block alert-danger" ng-show="vm.errorMessage">
+    <button type="button" class="close" data-dismiss="alert">
+        <i class="ace-icon fa fa-times"></i>
+    </button>
+    <i class="ace-icon fa fa-warning"></i>
+    {{vm.errorMessage}}
+</div>
+<!-- /结束：修改排课条件.工具栏 -->
+<!-- #开始：修改排课条件.数据表格 -->
+<mcs-datatable data="vm.data" />
+<!-- /结束：修改排课条件.数据表格 -->

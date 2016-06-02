@@ -2,24 +2,36 @@
         ppts.config.dataServiceConfig.teacherAssignmentDataService], function (schedule) {
             schedule.registerController("tchAsgmtCourseController", [
                 '$scope', '$state', '$stateParams', '$filter', 'dataSyncService', '$compile'
-                 , '$uibModal', 'blockUI', '$http', 'teacherAssignmentDataService', 'mcsDialogService', 'uiCalendarConfig',
+                 , '$uibModal', 'blockUI', '$http', 'teacherAssignmentDataService', 'mcsDialogService', 'uiCalendarConfig', 'printService',
                 function ($scope, $state, $stateParams, $filter, dataSyncService, $compile
-                , $uibModal, blockUI, $http, teacherAssignmentDataService, mcsDialogService, uiCalendarConfig) {
+                , $uibModal, blockUI, $http, teacherAssignmentDataService, mcsDialogService, uiCalendarConfig, printService) {
                     var vm = this;
 
-                    vm.CID = $stateParams.cID, vm.tchName = $stateParams.tn, vm.selectedEvents = [], vm.events = [];
-                    vm.weekText = new Array("星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六");
-                    vm.acQM = { teacherID: vm.CID, startTime: '2016-04-18', endTime: '2016-05-09', isUTCTime: false, grade: '', assignStatus: '', customerName: '' };
+                    vm.print = function () {
+                        printService.print();
+                    }
 
-                    //配置日程组件
+                    vm.CID = $stateParams.cID;
+                    vm.tchJobID = $stateParams.tji;
+                    vm.tchName = $stateParams.tn;
+                    vm.selectedEvents = [];
+                    vm.events = [];
+
+                    vm.weekText = new Array("星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六");
+                    vm.acQM = {
+                        teacherID: vm.CID, startTime: '2016-04-18', endTime: '2016-05-09',
+                        isUTCTime: false, grade: '', assignStatus: '', customerName: '', teacherJobID:vm.tchJobID
+                    };
+                    
+                    /*配置日程组件*/
                     vm.uiConfig = {
                         calendar: {
                             lang: 'zh-cn',
                             allDaySlot: false,
-                            height: 730,
+                            height: 800,
                             slotLabelFormat: 'HH:mm',
                             minTime: '06:00:00',
-                            maxTime: '22:00:00',
+                            maxTime: '24:00:00',
                             timeFormat: 'HH:mm',
                             editable: false,
                             selectable: true,
@@ -74,7 +86,6 @@
                             var assignCollection = data.result;
                             angular.forEach(assignCollection, function (event, index, array) {
                                 var evt = vm.getViewModel(event);
-                                //vm.initEvent(evt);
                                 vm.events.push(evt);
                             });
                             blockUI.stop();
@@ -89,13 +100,6 @@
                     };
                     vm.eventSources = [vm.events, vm.schedules];
 
-                    //vm.initEvent = function (event) {
-                    //    event.className = "mcs-calendar-event";
-                    //    if (event.status == 1) event.color = '#0000FF';  /*排定*/
-                    //    else if (event.status == 8) event.color = '#FF0000'; /*异常*/
-                    //    else if (event.status == 3) event.color = '#C0C0C0'; /*已上*/
-                    //};
-
                     vm.reLoadCourse = function () {
                         blockUI.start();
                         vm.events.splice(0, vm.events.length);
@@ -103,7 +107,6 @@
                             var assignCollection = data.result;
                             angular.forEach(assignCollection, function (event, index, array) {
                                 var evt = vm.getViewModel(event);
-                                //vm.initEvent(evt);
                                 vm.events.push(evt);
                             });
                             uiCalendarConfig.calendars.courseCalendar.fullCalendar('rerenderEvents');
@@ -125,7 +128,7 @@
                             endText: vm.getDoubleStr(event.endTime.getHours()) + ':' + vm.getDoubleStr(event.endTime.getMinutes()),
                             color: '#000000',
                             status: event.assignStatus,
-                            coursessource :event.assignSource,
+                            coursessource: event.assignSource,
                             customerName: event.customerName,
                             subjectName: event.subjectName,
                             curDate: event.startTime.getFullYear() + '-' + vm.getDoubleStr((event.startTime.getMonth() + 1)) + '-' + vm.getDoubleStr(event.startTime.getDate()),
@@ -158,7 +161,6 @@
                     vm.simpleSearch = function () {
                         vm.reLoadCourse();
                     };
-
 
                     /*新增课表*/
                     vm.createSchedule = function () {
@@ -250,7 +252,8 @@
                                     reMinute: '',
                                     startTime: vm.selectedEvents[i].sTime,
                                     endTime: vm.selectedEvents[i].eTime,
-                                    allowResetDateTime: new Date()
+                                    allowResetDateTime: new Date(),
+                                    customerID: vm.selectedEvents[i].customerID
                                 };
                                 var sdate = vm.selectedEvents[i].startText.split(':');
                                 if (sdate.length == 2) {
@@ -276,7 +279,6 @@
                         });
                     };
 
-
                     vm.getDoubleStr = function (curValue) {
                         if (parseInt(curValue) < 10)
                             return '0' + curValue;
@@ -294,8 +296,12 @@
 
                     /*跳转列表视图*/
                     vm.gotoCourseList = function () {
-                        $state.go('ppts.tchasgmt-course-list', { cID: vm.CID,tn:vm.tchName,tji: $stateParams.tji });
+                        $state.go('ppts.tchasgmt-course-list', { cID: vm.CID, tn: vm.tchName, tji: $stateParams.tji });
                     };
 
+                    /*跳转教师排课列表*/
+                    vm.gotoAssignList = function () {
+                        $state.go('ppts.schedule-tchasgmt');
+                    };
                 }]);
         });

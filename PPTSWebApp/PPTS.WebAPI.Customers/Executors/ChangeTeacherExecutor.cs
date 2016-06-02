@@ -14,9 +14,9 @@ using System.Web;
 namespace PPTS.WebAPI.Customers.Executors
 {
     [DataExecutorDescription("调换教师")]
-    public class ChangeTeacherExecutor : PPTSEditCustomerExecutorBase<CustomerTeacherAssignApplie>
+    public class ChangeTeacherExecutor : PPTSEditCustomerExecutorBase<CustomerTeacherAssignApply>
     {
-        public ChangeTeacherExecutor(CustomerTeacherAssignApplie Model)
+        public ChangeTeacherExecutor(CustomerTeacherAssignApply Model)
             : base(Model,null)
         {
 
@@ -27,15 +27,15 @@ namespace PPTS.WebAPI.Customers.Executors
             CustomerTeacherRelation ctr = CustomerTeacherRelationAdapter.Instance.Load(builder => builder.AppendItem("CustomerID", Model.CustomerID).AppendItem("TeacherJobID", Model.OldTeacherJobID), DateTime.MinValue).FirstOrDefault();//查询
             ctr.TeacherID = Model.NewTeacherID;
             ctr.TeacherJobID = Model.NewTeacherJobID;
-            ctr.TeacherJobOrgID = Model.NewTeacherOrgID;
-            ctr.TeacherJobOrgName = Model.NewTeacherOrgName;
+            ctr.TeacherJobOrgID = Model.NewTeacherJobOrgID;
+            ctr.TeacherJobOrgName = Model.NewTeacherJobOrgName;
             ctr.TeacherName = Model.NewTeacherName;
             CustomerTeacherRelationAdapter.Instance.Update(ctr);
 
             Model.ID = UuidHelper.NewUuidString();
             Model.CustomerTeacherRelationID = ctr.ID;
             Model.FillCreator();
-            CustomerTeacherAssignApplieAdapter.Instance.UpdateInContext(Model);
+            CustomerTeacherAssignApplyAdapter.Instance.UpdateInContext(Model);
         }
     }
 }

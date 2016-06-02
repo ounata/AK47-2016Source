@@ -1,4 +1,7 @@
 ﻿using MCS.Library.Data.Mapping;
+using PPTS.Contracts.Orders.Models;
+using PPTS.Contracts.Proxies;
+using PPTS.Data.Customers;
 using PPTS.Data.Customers.Adapters;
 using PPTS.Data.Customers.Entities;
 using System;
@@ -37,20 +40,29 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
                 return this.AccountMoney + this.AssetMoney;
             }
         }
-
+        
         /// <summary>
-        /// 针对退费用，当前已发生资产价值（从最近一次签约充值开始计算）
+        /// 当前已排定课时数量
         /// </summary>
         [DataMember]
-        public decimal OccurenceValue
+        public decimal AssignedAmount
         {
-            set;
             get;
+            set;
         }
 
         /// <summary>
-        /// 针对退费用，已消耗资产价值（最近一次充值或退费之后订购的产品截止当前消耗的课时价值，
-        /// （系统判断订购单保存时间晚于该客户最近一次充值的充值日期、制度内退费、制度外退费都以分区域财务经理确认时间）
+        /// 当前已确认课时数量
+        /// </summary>
+        [DataMember]
+        public decimal ConfirmedAmount
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 课时消耗价值
         /// </summary>
         [DataMember]
         public decimal ConsumptionValue
@@ -59,59 +71,138 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
             get;
         }
 
+        /// <summary>
+        /// 计算折扣返还开始时间点
+        /// </summary>
+        [DataMember]
+        public DateTime ReallowanceStartTime
+        {
+            set;
+            get;
+        }
+
+        /// <summary>
+        /// 退费使用的折扣ID
+        /// </summary>
+        [DataMember]
+        public string RefundDiscountID
+        {
+            set;
+            get;
+        }
+
+        /// <summary>
+        /// 根据账户ID获取账户模型
+        /// </summary>
+        /// <param name="accountID"></param>
+        /// <returns></returns>
         public static AccountModel LoadByAccountID(string accountID)
         {
             return LoadByAccountID(accountID, false);
         }
-
         public static AccountModel LoadByAccountID(string accountID, bool isRefund)
         {
             Account account = AccountAdapter.Instance.LoadByAccountID(accountID);
             if (account == null)
                 return null;
 
-            AccountModel model = Load(account, isRefund);
-            return model;
+            return BuildAssetMoney(account, isRefund);
         }
 
-        public static AccountModel LoadCurrentByAccountID(string customerID)
+        /// <summary>
+        /// 根据学员ID获取可充值的账户
+        /// </summary>
+        /// <param name="customerID"></param>
+        /// <returns></returns>
+        public static AccountModel LoadChargableByCustomerID(string customerID)
         {
-            Account account = AccountAdapter.Instance.LoadCurrentByCustomerID(customerID);
-            if (account != null)
-                return Load(account, false);
-            return null;
+            decimal totalAccountValue;
+            return LoadChargableByCustomerID(customerID, out totalAccountValue);
         }
-
-        public static AccountModel LoadCurrentByCustomerID(string customerID, out decimal totalAccountValue)
+        public static AccountModel LoadChargableByCustomerID(string customerID, out decimal totalAccountValue)
         {
             List<AccountModel> models = LoadByCustomerID(customerID);
             totalAccountValue = models.Sum(x => x.AccountValue);
-            return models.Where(x => x.IsLatest == true).SingleOrDefault();
+            return models.Where(x => x.AccountStatus == AccountStatusDefine.Chargable).SingleOrDefault();
         }
 
+        /// <summary>
+        /// 根据学员ID获取非零账户
+        /// </summary>
+        /// <param name="customerID"></param>
+        /// <returns></returns>
+        public static List<AccountModel> LoadNonZeroByCustomerID(string customerID)
+        {
+            return LoadByCustomerID(customerID, false, false);
+        }
+
+        /// <summary>
+        /// 根据学员ID获取所有账户
+        /// </summary>
+        /// <param name="customerID"></param>
+        /// <returns></returns>
         public static List<AccountModel> LoadByCustomerID(string customerID)
         {
             return LoadByCustomerID(customerID, false);
         }
         public static List<AccountModel> LoadByCustomerID(string customerID, bool isRefund)
         {
+            return LoadByCustomerID(customerID, isRefund, true);
+        }
+        public static List<AccountModel> LoadByCustomerID(string customerID, bool isRefund, bool nonZero)
+        {
             List<AccountModel> models = new List<AccountModel>();
-            foreach (Account account in AccountAdapter.Instance.LoadCollectionByCustomerID(customerID))
+            AccountCollection accounts = AccountAdapter.Instance.LoadCollectionByCustomerID(customerID);
+            foreach (Account account in accounts)
             {
-                AccountModel model = Load(account, isRefund);
-                models.Add(model);
+                if (!nonZero || account.AccountMoney != 0)
+                {
+                    AccountModel model = BuildAssetMoney(account, isRefund);
+                    models.Add(model);
+                }
             }
             return models;
         }
 
-        private static AccountModel Load(Account account, bool isRefund)
+        private static AccountModel BuildAssetMoney(Account account, bool isRefund)
         {
             AccountModel model = AutoMapper.Mapper.DynamicMap<AccountModel>(account);
-            model.AssetMoney = 0;
-            if(isRefund)
+            AssetStatisticQueryResult asset = PPTSAssetQueryServiceProxy.Instance.QueryAssetStatisticByAccountID(account.AccountID);
+            if (asset != null)
             {
-                model.OccurenceValue = 0;
-                model.ConsumptionValue = 0;
+                model.AssetMoney = asset.AssetMoney;
+                model.AssignedAmount = asset.AssignedAmount;
+                model.ConfirmedAmount = asset.ConfirmedAmount;
+            }
+            if (isRefund)
+            {
+                model.RefundDiscountID = model.DiscountID;
+                RefundConsumptionValueQueryCriteriaModel criteria = new RefundConsumptionValueQueryCriteriaModel();
+                criteria.AccountID = account.AccountID;
+
+                //获取最后退费审批时间
+                List<AccountRefundApply> refunds = AccountRefundApplyAdapter.Instance.LoadVerifiedCollectionByAccountID(account.AccountID)
+                    .OrderByDescending(x => x.ApproveTime).ToList();
+                if (refunds.Count != 0)
+                    criteria.LastestRefundDate = refunds[0].ApproveTime;
+
+                //获取折扣率发生变法的缴费单支付时间（最新的和次新的）
+                List<AccountChargeApply> charges = AccountChargeApplyAdapter.Instance.LoadPaidCollectionByAccountID(account.AccountID)
+                    .Where(x => x.ThatDiscountRate != x.ThisDiscountRate).OrderByDescending(x => x.PayTime).ToList();
+                if (charges.Count > 0)
+                {
+                    criteria.LastestChargeDate = charges[0].PayTime;
+                    model.RefundDiscountID = charges[0].ThisDiscountID;
+                }
+                if (charges.Count > 1)
+                    criteria.LastChargeDate = charges[1].PayTime;
+
+                RefundConsumptionValueQueryResult result = PPTSAssetQueryServiceProxy.Instance.QueryConsumptionValue(criteria);
+                if (result != null)
+                {
+                    model.ConsumptionValue = result.ConsumptionValue;
+                    model.ReallowanceStartTime = result.ReallowanceStartTime;
+                }
             }
             return model;
         }

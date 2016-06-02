@@ -9,6 +9,7 @@
     [HandlerName] NVARCHAR(64) NULL, 
     [HandlerJobID] NVARCHAR(36) NULL, 
     [HandlerJobName] NVARCHAR(64) NULL, 
+	[TenantCode] NVARCHAR(36) NULL, 
     CONSTRAINT [PK_CustomerServiceItems] PRIMARY KEY NONCLUSTERED ([ItemID]) 
 )
 

@@ -8,10 +8,9 @@
             scope: {
                 required: '@',
                 text: '@',
-                forInput: '@',
                 css: '@'
             },
-            template: '<label class="control-label {{css}}" for="{{forInput}}"> {{text}}</label>',
+            template: '<label class="control-label {{css}}"> {{text}}</label>',
             link: function ($scope, $elem, $attrs) {
                 if ($scope.required) {
                     $elem.prepend('<span class="required">*</span>');

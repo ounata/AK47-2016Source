@@ -1,4 +1,11 @@
-﻿using System;
+﻿using MCS.Library.Validation;
+using PPTS.Data.Orders.Adapters;
+using PPTS.Data.Orders.Entities;
+using MCS.Library.Core;
+using PPTS.Data.Common.Security;
+using MCS.Library.Principal;
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -8,16 +15,25 @@ namespace PPTS.WebAPI.Orders.ViewModels.Unsubscribe
 {
     public class DebookOrderModel
     {
-        
-        public Data.Orders.Entities.DebookOrder Order { set; get; }
+        /// <summary>
+        /// 订单明细ID
+        /// </summary>
+        public string OrderItemID { set; get; }
 
-        public Data.Orders.Entities.DebookOrderItem Item { set; get; }
-        
+        [ObjectValidator]
+        public DebookOrder Order { set; get; }
 
+        [ObjectValidator]
+        public DebookOrderItem Item { set; get; }
+
+        [ObjectValidator]
+        public Asset Asset { set; get; }
+
+        public MCS.Library.OGUPermission.IUser CurrentUser { set; get; }
 
         public DebookOrderModel FillOrder()
         {
-            
+
             Order.CustomerID = OrderItemView.CustomerID;
             Order.CustomerCode = OrderItemView.CustomerCode;
             Order.CustomerName = OrderItemView.CustomerName;
@@ -28,9 +44,10 @@ namespace PPTS.WebAPI.Orders.ViewModels.Unsubscribe
             return this;
         }
 
-        public DebookOrderModel FillOrderItem() {
+        public DebookOrderModel FillOrderItem()
+        {
 
-            var currentAmount = OrderItemView.RealAmount - OrderItemView.DebookedAmount;
+            var currentAmount = OrderItemView.RealAmount - OrderItemView.DebookedAmount - OrderItemView.ConfirmedAmount;
             Item.DebookAmount = Item.DebookAmount < currentAmount ? Item.DebookAmount : currentAmount;
 
             Item.AccountCode = OrderItemView.AccountCode;
@@ -38,53 +55,49 @@ namespace PPTS.WebAPI.Orders.ViewModels.Unsubscribe
             Item.AssetID = OrderItemView.AssetID;
             Item.SortNo = 1;
 
-            //买赠退订 全部退
-            if(OrderItemView.PresentAmount>0)
+            //买赠退订
+            if (OrderItemView.PresentAmount > 0)
             {
-                //买赠退订 全部退
-                Item.DebookAmount = currentAmount- OrderItemView.UsedOrderAmount - OrderItemView.UsedPresentAmount;
+                //课时单价
+                var lessonPricce = OrderItemView.OrderPrice * OrderItemView.OrderAmount / OrderItemView.RealAmount;
 
-                //订购数量=已上购买数量+剩余购买数量
-                var orderAmount = OrderItemView.UsedOrderAmount + (OrderItemView.OrderAmount - OrderItemView.UsedOrderAmount);
-
-                //赠送数量=已上赠送数量+剩余赠送数量
-                var presetAmount = OrderItemView.UsedPresentAmount + (OrderItemView.PresentAmount - OrderItemView.UsedPresentAmount);
-
-                //退订前的平均单价=（订购数量*实际单价）/（订购数量+赠送数量）
-                var unsubscribeBeforeAveragePrice = orderAmount * OrderItemView.RealPrice / orderAmount + presetAmount;
-
-                //退订后的赠送数量
-                var unsubscribeAfterCount = 0;
-
-                if( OrderItemView.UsedOrderAmount == OrderItemView.OrderAmount )
-                {
-                    unsubscribeAfterCount = (int)( OrderItemView.PresentAmount - Item.DebookAmount );
-                }else if(OrderItemView.OrderAmount> OrderItemView.UsedOrderAmount)
-                {
-                    unsubscribeAfterCount = (int)(OrderItemView.PresentAmount - Item.DebookAmount - OrderItemView.OrderAmount - OrderItemView.UsedOrderAmount);
-                }
-                
-                
-                //退订后的平均单价=（退订后的订购数量*实际单价）/（退订后的订购数量+退订后的赠送数量）
-                var unsubscribeAfterAveragePrice = (OrderItemView.OrderAmount - Item.DebookAmount) * OrderItemView.RealPrice / ((OrderItemView.OrderAmount - Item.DebookAmount) +  unsubscribeAfterCount);
-
-                //总消耗的数量*（退订后的平均单价-退订前平均单价）
-                Item.ReturnMoney = (OrderItemView.UsedOrderAmount + OrderItemView.UsedPresentAmount) * (unsubscribeAfterAveragePrice - unsubscribeBeforeAveragePrice);
+                Item.ReturnMoney = OrderItemView.ConfirmedAmount * (OrderItemView.OrderPrice - lessonPricce) - OrderItemView.ReturnedMoney;
             }
 
             Item.DebookMoney = Item.DebookAmount * OrderItemView.RealPrice;
-
 
             Item.AssetID = "test";
 
             return this;
         }
 
-        private Data.Orders.Entities.OrderItemView _orderItemView = null;
-        private Data.Orders.Entities.OrderItemView OrderItemView
+        public DebookOrderModel FillUser()
         {
-            get{
-                if(_orderItemView == null)
+            if (CurrentUser != CurrentUser)
+            {
+                CurrentUser.FillCreatorInfo(Order);
+                CurrentUser.FillModifierInfo(Order);
+            }
+            return this;
+        }
+
+        public Asset ToAsset()
+        {
+            if (null != Asset) { return Asset; }
+            Asset = GenericAssetAdapter<Asset, AssetCollection>.Instance.LoadByItemId(Item.ItemID);
+            Asset.NullCheck("Asset");
+
+            Asset.ReturnedMoney = Item.ReturnMoney;
+            Asset.DebookedAmount += Item.DebookAmount;
+            return Asset;
+        }
+
+        private OrderItemView _orderItemView = null;
+        private OrderItemView OrderItemView
+        {
+            get
+            {
+                if (_orderItemView == null)
                 {
                     _orderItemView = Data.Orders.Adapters.OrderItemViewAdapter.Instance.Load(OrderItemID);
                 }
@@ -92,10 +105,16 @@ namespace PPTS.WebAPI.Orders.ViewModels.Unsubscribe
             }
         }
 
-        /// <summary>
-        /// 订单明细ID
-        /// </summary>
-        public string OrderItemID { set; get; }
+
+
+        public void Validate()
+        {
+            Order.NullCheck("Order");
+            Item.NullCheck("Item");
+            (Asset.ConfirmedAmount == Asset.RealAmount).TrueThrow("无剩余数量可退");
+            
+        }
+
     }
 
 }

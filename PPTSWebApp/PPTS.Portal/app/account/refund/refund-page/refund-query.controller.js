@@ -49,11 +49,11 @@
                         }, {
                             field: "approveTime",
                             name: "业务终审日期",
-                            template: '<span>{{row.approveTime | date:"yyyy-MM-dd"}}</span>'
+                            template: '<span>{{row.approveTime | date:"yyyy-MM-dd" | normalize }}</span>'
                         }, {
                             field: "verifyTime",
                             name: "财务终审日期",
-                            template: '<span>{{row.verifyTime | date:"yyyy-MM-dd"}}</span>'
+                            template: '<span>{{row.verifyTime | date:"yyyy-MM-dd" | normalize }}</span>'
                         }, {
                             field: "checkStatus",
                             name: "对账状态",
@@ -195,6 +195,7 @@
                         vm.errorMessage = null;
                         var currentRow = vm.getCurrentRow();
                         if (currentRow == null) {
+                            vm.errorMessage = "请选择一条要打印的记录";
                             return;
                         }
                         if (!currentRow.canPrint) {

@@ -7,8 +7,8 @@
 	[TeacherJobID] NVARCHAR(32) NOT NULL, 
     [TeacherOACode] NVARCHAR(128) NULL, 
     [TeacherJobOrgID] NVARCHAR(36) NULL, 
-    [TeacherJobOrgShortName] NVARCHAR(64) NULL, 
 	[TeacherJobOrgName] NVARCHAR(128) NULL, 
+    [IsFullTimeTeacher] INT NULL, 
     [CreatorID] NVARCHAR(36) NULL, 
     [CreatorName] NVARCHAR(64) NULL, 
     [CreateTime] DATETIME NULL DEFAULT GETUTCDATE(), 
@@ -149,14 +149,7 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level2type = N'COLUMN',
     @level2name = N'TeacherOACode'
 GO
-EXEC sp_addextendedproperty @name = N'MS_Description',
-    @value = N'教师岗位归属组织机构简称',
-    @level0type = N'SCHEMA',
-    @level0name = N'CM',
-    @level1type = N'TABLE',
-    @level1name = N'CustomerTeacherRelations',
-    @level2type = N'COLUMN',
-    @level2name = N'TeacherJobOrgShortName'
+
 GO
 EXEC sp_addextendedproperty @name = N'MS_Description',
     @value = N'学员教师分配关系表',
@@ -166,3 +159,12 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level1name = N'CustomerTeacherRelations',
     @level2type = NULL,
     @level2name = NULL
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'是否全职教师',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'CustomerTeacherRelations',
+    @level2type = N'COLUMN',
+    @level2name = N'IsFullTimeTeacher'

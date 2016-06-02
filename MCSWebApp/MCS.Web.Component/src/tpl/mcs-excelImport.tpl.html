@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=5" />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>文件导入</title>
+    <link href="../../libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../../libs/bootstrap-3.3.5/css/style.css" rel="stylesheet" />
+    <style type="text/css">
+    #indicatorArea {
+        width: 600px;
+        height: 400px;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+    
+    #file {
+        width: 400px;
+    }
+    
+    #progress {
+        width: 0px;
+        height: 20px;
+        margin-top: 5px;
+        background-color: orange;
+    }
+    </style>
+</head>
+
+<body>
+    <form id="uploadForm" name="uploadForm" target="statusFrame" action="http://localhost/MCSWebApp/MCS.Web.API/api/Sample/UploadExcel" method="post" enctype="multipart/form-data">
+        <h3 class="helper-classes-colors">Excel文件导入</h3>
+        <input id="file" title="选择要上传的文件" type="file" name="excel">
+        <div id="fields">
+        </div>
+        <div id="tool">
+            <input type="submit" class="btn btn-primary" value="上传">
+            <input type="button" class="btn btn-primary" name="" value="关闭" onclick="window.close()">
+        </div>
+    </form>
+    <div id="log">
+        <iframe id="statusFrame" name="statusFrame" width="100%" height="0px" frameborder="0"></iframe>
+        <div id="indicatorArea">
+            <p>
+                当前进度：<span id="progressTxt"></span>
+            </p>
+            <div id="progress">
+            </div>
+            <div id="logArea">
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+    var logArea = document.getElementById('logArea');
+    var progress = document.getElementById('progress');
+    var progressTxt = document.getElementById('progressTxt');
+    var fields = document.getElementById('fields');
+
+
+
+    function setParam(param) {
+        for (var prop in param) {
+
+            var input = document.createElement('input');
+            input.type = 'text';
+            input.name = prop;
+            input.value = param[prop];
+
+            fields.appendChild(input);
+
+        }
+    }
+
+    function progressUpdate(msgJson) {
+
+        var msg = JSON.parse(msgJson);
+        update(msg.currentStep, msg.statusText);
+    }
+
+
+
+    function processComplete(msgJson) {
+        var msg = JSON.parse(msgJson);
+
+
+        if (msg.error) {
+            var p = document.createElement('p');
+            p.innerHTML = msg.error;
+            logArea.appendChild(p);
+        }
+
+        if (msg.processLog) {
+            var p = document.createElement('p');
+            p.innerHTML = msg.processLog;
+
+            logArea.appendChild(p);
+
+        }
+
+        if (msg.closeWindow == true) {
+            window.close();
+        }
+    }
+
+    function update(progressNum, log) {
+
+
+        progress.style.width = progressNum * 4 + 'px';
+        var p = document.createElement('p');
+        p.innerHTML = log;
+        logArea.appendChild(p);
+        progressTxt.innerText = progressNum + '%';
+    }
+    </script>
+</body>
+
+</html>

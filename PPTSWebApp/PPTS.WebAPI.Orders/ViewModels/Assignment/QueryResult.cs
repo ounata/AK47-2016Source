@@ -1,4 +1,5 @@
-﻿using PPTS.Data.Orders.Entities;
+﻿using PPTS.Data.Common.Entities;
+using PPTS.Data.Orders.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,8 +40,42 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
         [DataMember]
         public string Subject { get; set; }
         [DataMember]
-        public IList<KeyValue> Teachers { get; set; }
+        public IList<TeacherInfo> Teachers { get; set; }
     }
+
+    public class TeacherInfo
+    {
+        [DataMember]
+        public string Key { get; set; }
+        [DataMember]
+        public string Value { get; set; }
+        [DataMember]
+        public string Field01 { get; set; }
+
+        ///教师学科组名称
+        [DataMember]
+        public string TeacherJobOrgName
+        {
+            get; set;
+        }
+
+        ///教师学科组ID
+        [DataMember]
+        public string TeacherJobOrgID
+        {
+            get; set;
+        }
+        
+        ///是否全职
+        [DataMember]
+        public int IsFullTimeTeacher
+        {
+            get;set;
+        }
+
+    }
+
+
 
     [Serializable]
     [DataContract]
@@ -54,13 +89,22 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
         public string Field01 { get; set; }
     }
 
-
-
     [Serializable]
     [DataContract]
     public class StudentModel
     {
         #region
+
+        [DataMember]
+        public string TeacherJobOrgID
+        {
+            get;
+            set;
+        }
+        [DataMember]
+        public string TeacherJobOrgName { get; set; }
+
+
         [DataMember]
         public IList<KeyValue> Student { get; set; }
         [DataMember]
@@ -122,5 +166,17 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
         public AssetView Result { get; set; }
     }
 
-   
+    public class SimpleTeacherJobViewCollection
+    {
+        public TeacherJobViewCollection Result { get; set; }
+    }
+
+    public class AssignConditionEx
+    {
+        public string CampusName { get; set; }
+       public  AssignCondition ACC { get; set; }
+       public AssetViewCollection AVC { get; set; }
+       public TeacherModel Teacher { get; set; }
+    }
+
 }

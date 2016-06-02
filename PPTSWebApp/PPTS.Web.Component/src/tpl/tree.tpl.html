@@ -5,7 +5,7 @@
     <h4 class="modal-title"><i class="ace-icon fa fa-check"></i> {{vm.title}}</h4>
 </div>
 <div class="modal-body" style="height:300px;overflow-y:auto;">
-    <ul mcs-tree="vm.treeSetting" id="orgTree" class="ztree" set-nodes="vm.loadData"></ul>
+    <ul mcs-tree="vm.treeSetting" id="orgTree" class="ztree" distinct-level="{{vm.distinctLevel}}" set-nodes="vm.loadData"></ul>
 </div>
 <div class="modal-footer">
     <mcs-button category="ok" click="vm.select()" />

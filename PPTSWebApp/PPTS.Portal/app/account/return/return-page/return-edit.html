@@ -6,7 +6,7 @@
         <div class="widget-body">
             <div class="clearfix form-actions mcs-form-actions">
                 <div>
-                    <mcs-button category="ok" click="vm.save()" text="返还" ></mcs-button>
+                    <mcs-button category="ok" click="vm.save()" ></mcs-button>
                 </div>
             </div>
             <div class="alert alert-block alert-danger" ng-show="vm.errorMessage">
@@ -23,7 +23,7 @@
                 <div class="col-sm-6">
                     <mcs-label text="当前校区：" css="col-sm-3" />
                     <div class="col-sm-9">
-                        {{ vm.apply.campusName }}
+                        {{ vm.customer.campusName }}
                     </div>
                 </div>
             </div>
@@ -31,7 +31,7 @@
                 <div class="col-sm-6">
                     <mcs-label text="学员姓名：" css="col-sm-3" />
                     <div class="col-sm-9">
-                        {{ vm.apply.customerName }}
+                        {{ vm.customer.customerName }}
                     </div>
                 </div>
             </div>
@@ -39,7 +39,7 @@
                 <div class="col-sm-6">
                     <mcs-label text="学员编号：" css="col-sm-3" />
                     <div class="col-sm-9">
-                        {{vm.apply.customerCode}}
+                        {{vm.customer.customerCode}}
                     </div>
                 </div>
             </div>

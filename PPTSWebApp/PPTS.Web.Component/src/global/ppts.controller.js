@@ -1,9 +1,14 @@
-﻿ppts.ng.controller('appController', ['$rootScope', '$scope', 'userService', 'utilService', function ($rootScope, $scope, user, util) {
+﻿ppts.ng.controller('appController', ['$rootScope', '$scope', 'userService', 'utilService', 'storage', function ($rootScope, $scope, user, util, storage) {
     var vm = this;
     user.initJob(vm);
 
     vm.switch = function (job) {
         user.switchJob(vm, job);
+    };
+
+    vm.logoff = function () {
+        storage.remove('vm.currentUser');
+        storage.remove('ppts.user.currentJobId');
     };
 }]);
 
@@ -11,6 +16,7 @@ ppts.ng.controller('treeController', ['$uibModalInstance', 'dataSyncService', 'd
     var vm = this;
 
     vm.title = data.title || '选择数据';
+    vm.distinctLevel = data.distinctLevel;
 
     vm.treeSetting = dataSyncService.loadTreeSetting(data);
     // 加载树数据

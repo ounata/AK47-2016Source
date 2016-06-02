@@ -4,6 +4,7 @@
     [ProductID] NVARCHAR(36) NOT NULL, 
     [ClassCount] INT NULL DEFAULT 0, 
     [ValidClasses] INT NULL DEFAULT 0, 
+	[TenantCode] [nvarchar](36) NULL,
     CONSTRAINT [PK_ProductClassStats] PRIMARY KEY NONCLUSTERED ([CampusID], [ProductID]) 
 )
 

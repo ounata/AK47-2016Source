@@ -2,6 +2,7 @@
 using MCS.Library.Data.Mapping;
 using MCS.Library.Validation;
 using PPTS.Data.Common;
+using PPTS.Data.Common.Authorization;
 using PPTS.Data.Common.Entities;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+
 
 namespace PPTS.Data.Customers.Entities
 {
@@ -23,6 +25,8 @@ namespace PPTS.Data.Customers.Entities
         /// 客户的ID
         /// </summary>
         [ORFieldMapping("CustomerID", PrimaryKey = true)]
+        [KeyFiledMapping("CustomerID")]
+        [CustomerFiledMapping("CustomerID")]
         [DataMember]
         public string CustomerID
         {
@@ -31,22 +35,22 @@ namespace PPTS.Data.Customers.Entities
         }
 
         /// <summary>
-        /// 归属组织机构ID
+        /// 校区ID
         /// </summary>
-        [ORFieldMapping("OrgID")]
+        [ORFieldMapping("CampusID")]
         [DataMember]
-        public string OrgID
+        public string CampusID
         {
             get;
             set;
         }
 
         /// <summary>
-        /// 组织机构名称
+        /// 校区名称
         /// </summary>
-        [ORFieldMapping("OrgName")]
+        [ORFieldMapping("CampusName")]
         [DataMember]
-        public string OrgName
+        public string CampusName
         {
             get;
             set;

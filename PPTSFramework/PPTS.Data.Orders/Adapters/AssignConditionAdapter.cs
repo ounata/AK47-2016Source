@@ -10,7 +10,7 @@ using MCS.Library.Core;
 
 namespace PPTS.Data.Orders.Adapters
 {
-    public class AssignConditionAdapter : AssignAdapterBase<AssignCondition, AssignConditionCollection>
+    public class AssignConditionAdapter : OrderAdapterBase<AssignCondition, AssignConditionCollection>
     {
         public static readonly AssignConditionAdapter Instance = new AssignConditionAdapter();
 
@@ -36,7 +36,7 @@ namespace PPTS.Data.Orders.Adapters
         /// <returns></returns>
         public AssignCondition Load(string conditionID)
         {
-            return this.Load(builder => builder.AppendItem("AssignCondition", conditionID)).SingleOrDefault();
+            return this.Load(builder => builder.AppendItem("ConditionID", conditionID)).SingleOrDefault();
         }
         /// <summary>
         /// 获取当前学员的排课条件
@@ -70,6 +70,21 @@ namespace PPTS.Data.Orders.Adapters
             WhereLoadingCondition wLC = new WhereLoadingCondition(p => { foreach (var v in wSCB) { p.Add(v); }});
 
             return this.Load(wLC);  
+        }
+
+        public void DeleteCollection(AssignConditionCollection acc)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (var v in acc)
+            {
+                sb.AppendFormat(",'{0}'",v.ConditionID);
+            }
+            string where = string.Empty;
+            if (sb.Length == 0)
+                return;
+
+            where = string.Format("({0})",sb.ToString().Substring(1));
+            this.Delete(p => p.AppendItem("ConditionID", where, "in",true));
         }
     }
 

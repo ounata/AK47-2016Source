@@ -54,12 +54,18 @@ namespace MCS.Library.SOA.DataObjects
 		/// <param name="content"></param>
 		void DeleteMaterialContent(MaterialContent content);
 
-
 		/// <summary>
 		/// 内容是否存在
 		/// </summary>
 		/// <param name="contentID"></param>
 		/// <returns></returns>
 		bool ExistsContent(string contentID);
+
+        /// <summary>
+        /// 保存临时文件内容
+        /// </summary>
+        /// <param name="materialID"></param>
+        /// <param name="contentStream"></param>
+        void SaveTempMaterialContent(string materialID, Stream contentStream);
 	}
 }

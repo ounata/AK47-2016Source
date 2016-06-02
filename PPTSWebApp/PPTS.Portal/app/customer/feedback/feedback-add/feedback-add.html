@@ -1,17 +1,19 @@
-﻿<form class="form-horizontal">
+﻿<form class="form-horizontal" novalidate>
     <div class="widget-body">
         <div class="widget-main no-padding">
             <div class="clearfix form-actions mcs-form-actions" style="margin-bottom:15px">
                 <div class="col-md-offset-3 col-md-9">
                     <mcs-button type="submit" category="save" click="vm.addCustomerreplies()"></mcs-button>
-                    <mcs-button category="cancel" click=""></mcs-button>
+                    <mcs-button category="cancel" click="vm.cancel()"></mcs-button>
                 </div>
             </div>
         </div>
-        <div class="form-control">
-            <mcs-label text="被访学员1:" css="float-left"/><mcs-label  model="vm.customerName"  css="float-left" />
-            <mcs-label text="学员家长1:" css="float-right" /><mcs-label  model="vm.parentName"  css="float-right" />
-           
+        <div class="form-control padding-4">
+            <span class="pull-left profile-info-name">被访学员:</span>
+            <span class="pull-left">{{vm.parentName}}</span>
+            
+            <span class="pull-right">{{vm.customerName}}</span>
+            <span class="pull-right profile-info-name">学员家长:</span>
         </div>
         <div class="tabbable">
             <ul class="nav nav-tabs padding-2 tab-color-blue background-blue padding-top-2" id="myTab4">
@@ -27,38 +29,15 @@
             <div class="tab-content padding-4">
                 <div id="weekFeedback" class="tab-pane active">
                     <textarea class="form-control" placeholder="请输入内容...." rows="5" id="textArea"
-                              ng-model="vm.weekFeedback" maxlength="500"></textarea>
+                              ng-model="vm.weekFeedback" maxlength="500" required></textarea>
                 </div>
 
                 <div id="replyParent" class="tab-pane">
                     <textarea class="form-control" placeholder="请输入内容...." rows="5" id="textArea"
-                              ng-model="vm.replyParent" maxlength="500"></textarea>
+                              ng-model="vm.replyParent" maxlength="500" required></textarea>
                 </div>
             </div>
         </div>
         <span class="span-memo">最多输入500字</span>
     </div>
-    <style>
-        .padding-4 {
-            padding: 4px;
-        }
-
-        .span-memo {
-            text-align: right;
-            margin-left: 900px;
-            color: red;
-        }
-
-        .nav-tabs.background-blue {
-            padding-top: 2px;
-        }
-
-        .float-left {
-            float: left;
-        }
-
-        .float-right {
-            float: right;
-        }
-    </style>
 </form>

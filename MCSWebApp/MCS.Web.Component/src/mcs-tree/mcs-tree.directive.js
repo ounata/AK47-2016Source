@@ -46,15 +46,67 @@
                 restrict: 'A',
                 scope: {
                     setting: '=mcsTree',
-                    setNodes: '&'
+                    setNodes: '&',
+                    distinctLevel: '@?'
                 },
 
                 link: function($scope, iElm, iAttrs, controller) {
+
+                    var parentNodeChecked = null;
+                    var distinctLevel = parseInt($scope.distinctLevel);
 
 
                     $scope.setting.getRawNodesChecked = function() {
                         return zTreeObj.getCheckedNodes(true);
                     };
+
+                    $scope.setting.clearChecked = function() {
+
+                        zTreeObj.checkAllNodes(false);
+
+                    }
+
+                    $scope.setting.justCheckWithinSameParent = function(treeId, treeNode) {
+
+                        if (treeNode.checked) {
+                            if ($scope.setting.getRawNodesChecked().length == 0) {
+                                parentNodeChecked = null;
+                            }
+                            return true;
+                        }
+
+                        if (treeNode.level > distinctLevel) {
+
+                            if (!parentNodeChecked) {
+                                parentNodeChecked = treeNode.getParentNode();
+
+                                return true;
+
+                            }
+
+                            if (parentNodeChecked != treeNode.getParentNode()) {
+                                $scope.setting.clearChecked();
+                                parentNodeChecked = treeNode.getParentNode();
+                            }
+
+
+
+                            return true;
+
+                        } else if (treeNode.level == distinctLevel) {
+                            if (parentNodeChecked) {
+                                $scope.setting.clearChecked();
+
+                            }
+                            parentNodeChecked = treeNode.getParentNode();
+                            return true;
+
+
+                        }
+
+                        return false;
+
+                    }
 
                     $scope.setting.getNodesChecked = function(includingParent) {
                         var nodes = [];
@@ -64,14 +116,16 @@
                                 if (!node.isParent) {
                                     nodes.push({
                                         id: node.id,
-                                        name: node.name
+                                        name: node.name,
+                                        level: node.level
                                     });
                                 }
 
                             } else {
                                 nodes.push({
                                     id: node.id,
-                                    name: node.name
+                                    name: node.name,
+                                    level: node.level
                                 });
                             }
 
@@ -79,6 +133,7 @@
 
                         return nodes;
                     };
+
 
 
                     $scope.setting.getNamesOfNodesChecked = function(includingParent) {

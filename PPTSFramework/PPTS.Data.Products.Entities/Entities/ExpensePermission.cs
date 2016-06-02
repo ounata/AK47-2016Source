@@ -22,22 +22,11 @@ namespace PPTS.Data.Products.Entities
         }
 
         /// <summary>
-        /// 使用者组织ID
+        /// 校区ID
         /// </summary>
-        [ORFieldMapping("UseOrgID", PrimaryKey = true)]
+        [ORFieldMapping("CampusID", PrimaryKey = true)]
         [DataMember]
-        public string UseOrgID
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 使用者组织类型
-        /// </summary>
-        [ORFieldMapping("UseOrgType")]
-        [DataMember]
-        public string UseOrgType
+        public string CampusID
         {
             get;
             set;
