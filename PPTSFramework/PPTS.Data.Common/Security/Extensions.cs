@@ -291,8 +291,8 @@ namespace PPTS.Data.Common.Security
                 ID = group.ID,
                 Name = group.Name,
                 JobType = group.GetJobType(),
-                IsPrimary= group.Properties.GetValue("IsPrimary", false),
-                JobName= group.Name,
+                IsPrimary = group.Properties.GetValue("IsPrimary", false),
+                JobName = group.Name,
                 ParentOrganizationID = group.Properties.GetValue("PARENT_GUID", string.Empty)
             };
 
@@ -301,9 +301,18 @@ namespace PPTS.Data.Common.Security
             if (abbr.IsNotEmpty())
                 job.Name = string.Format("{0} - {1}", job.Name, abbr);
 
-            string[] functions = group.Properties.GetValue("GroupFunctions", string.Empty).Split(',');
+            IApplication app = OguPermissionSettings.GetConfig().PermissionFactory.GetApplications(ConnectionDefine.PPTSApplicationName).SingleOrDefault();
 
-            job.Functions = new HashSet<string>(functions, StringComparer.OrdinalIgnoreCase);
+            if (app != null)
+            {
+                PermissionCollection permissions = OguPermissionSettings.GetConfig().PermissionObjectImpls.GetRolesPermissions(app, group.Name);
+
+                job.Functions = new HashSet<string>(permissions.Select(p => p.CodeName), StringComparer.OrdinalIgnoreCase);
+            }
+            else
+                job.Functions = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+            //string[] functions = group.Properties.GetValue("GroupFunctions", string.Empty).Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
 
             return job;
         }
@@ -642,7 +651,7 @@ namespace PPTS.Data.Common.Security
         /// <returns></returns>
         public static string GetFirstInitial(this IOrganization org)
         {
-           return org.Properties.GetValue("SimplePinyin","B");
+            return org.Properties.GetValue("SimplePinyin", "B");
         }
 
         public static string GetShortName(this IOrganization org)

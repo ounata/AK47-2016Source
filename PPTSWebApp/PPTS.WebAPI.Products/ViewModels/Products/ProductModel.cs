@@ -7,7 +7,9 @@ using PPTS.Data.Products.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using PPTS.Data.Common.Security;
+using MCS.Library.Core;
+
 
 namespace PPTS.WebAPI.Products.ViewModels.Products
 {
@@ -29,16 +31,66 @@ namespace PPTS.WebAPI.Products.ViewModels.Products
         [ObjectValidator]
         public ProductPermissionCollection Permissions { set; get; }
 
-        public string [] CampusIDs { set; get; }
+        public string[] CampusIDs { set; get; }
 
-        public string CreatorID { set; get; }
-        public string CreatorName { set; get; }
+        public IDictionary<string, IEnumerable<BaseConstantEntity>> Dictionaries { private set; get; }
 
 
-        public IDictionary<string, IEnumerable<BaseConstantEntity>> Dictionaries
+
+        public ProductModel FillProduct()
         {
-            get;
-            set;
+            if (Product.ProductID.IsNullOrWhiteSpace())
+            {
+                Product.ProductID = UuidHelper.NewUuidString();
+            }
+            if (CategoryType == CategoryType.OneToOne)
+            {
+                Product.StartDate = Product.EndDate = DateTime.Parse("3000-12-31");
+            }
+            Product.ProductStatus = ProductStatus.PendingApproval;
+
+            FillUser(Product);
+            return this;
+        }
+
+        public ProductModel FillExOfCourse()
+        {
+
+            return this;
+        }
+
+        public ProductModel FillSalaryRules()
+        {
+            if (SalaryRules != null && SalaryRules.Count > 0)
+            {
+                SalaryRules[0].RuleObject = Data.Products.RuleObject.Consultant;
+                SalaryRules[1].RuleObject = Data.Products.RuleObject.Educator;
+                SalaryRules[2].RuleObject = Data.Products.RuleObject.Teacher;
+            }
+
+            return this;
+        }
+
+        public ProductModel FillPermissions()
+        {
+            Permissions = new ProductPermissionCollection();
+            CampusIDs.IsNotNull(campusIds =>
+            {
+                campusIds.ToList()
+                .ForEach(s =>
+                            {
+                                var model = new ProductPermission() { ProductID = this.Product.ProductID, CampusID = s };
+                                FillUser(model);
+                                Permissions.Add(model);
+                            });
+            });
+            return this;
+        }
+
+
+        public void Validate()
+        {
+
         }
 
 
@@ -47,14 +99,17 @@ namespace PPTS.WebAPI.Products.ViewModels.Products
             var model = new ProductModel()
             {
                 CategoryType = categoryType,
-                Product = new Product(),
+                Product = new Product() { TunlandAllowed = 0 },
                 ExOfCourse = new ProductExOfCourse() { IncomeBelonging = "0", IsCrossCampus = 0 },
                 SalaryRules = new ProductSalaryRuleCollection()
             };
 
             switch (categoryType)
             {
-                case CategoryType.OneToOne: model.Product.ProductUnit = ProductUnit.Period; break;
+                case CategoryType.OneToOne:
+                    model.Product.ProductUnit = ProductUnit.Period;
+                    model.Product.TunlandAllowed = 1;
+                    break;
             }
 
             model.Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(
@@ -62,6 +117,7 @@ namespace PPTS.WebAPI.Products.ViewModels.Products
                     typeof(ProductExOfCourse),
                     typeof(ProductSalaryRule)
                 );
+
             model.Catalogs = CategoryCatalogAdapter.Instance.LoadByCategoryType(categoryType);
             model.Product.Catalog = model.Catalogs.First().Catalog;
 
@@ -70,49 +126,32 @@ namespace PPTS.WebAPI.Products.ViewModels.Products
         }
 
 
+        public MCS.Library.OGUPermission.IUser CurrentUser { set; get; }
 
-
-        public ProductModel FillProduct() {
-            if (string.IsNullOrWhiteSpace(Product.ProductID))
-            {
-                Product.ProductID = Guid.NewGuid().ToString();
-            }
-            if (CategoryType == CategoryType.OneToOne)
-            {
-                Product.StartDate = Product.EndDate = DateTime.Parse("3000-12-31");
-            }
-            Product.ProductStatus = ProductStatus.PendingApproval;
-
-            Product.CreatorID = CreatorID;
-            Product.CreatorName = CreatorName;
-
-            return this;
-        }
-
-        public ProductModel FillExOfCourse() {
-            
-            return this;
-        }
-
-        public ProductModel FillSalaryRules() {
-            if(SalaryRules !=null && SalaryRules.Count > 0)
-            {
-                SalaryRules[0].RuleObject = Data.Products.RuleObject.Consultant;
-                SalaryRules[1].RuleObject = Data.Products.RuleObject.Educator;
-                SalaryRules[2].RuleObject = Data.Products.RuleObject.Teacher;
-            }
-            
-            return this;
-        }
-
-        public ProductModel FillPermissions()
+        private void FillUser(object info)
         {
-            Permissions = new ProductPermissionCollection();
-            CampusIDs.ToList().ForEach(s => {
-                Permissions.Add(new ProductPermission() { ProductID=this.Product.ProductID, CampusID=s, CreatorID= CreatorID, CreatorName=CreatorName });
-            });
+            if (CurrentUser != null)
+            {
+                if (info is IEntityWithCreator)
+                {
+                    CurrentUser.FillCreatorInfo(info as IEntityWithCreator);
+                }
+                if (info is IEntityWithModifier)
+                {
+                    CurrentUser.FillModifierInfo(info as IEntityWithModifier);
+                }
+                if (info is Product)
+                {
+                    var model = info as Product;
+                    model.SubmitterID = model.CreatorID;
+                    model.SubmitterName = model.CreatorName;
+                    model.SubmitterJobID = CurrentUser.GetCurrentJob().ID;
+                    model.SubmitterJobName = CurrentUser.GetCurrentJob().Name;
+                }
+            }
 
-            return this;
         }
+
+
     }
 }

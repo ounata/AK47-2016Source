@@ -1,13 +1,20 @@
 ﻿using System.Web.Http;
 using MCS.Library.Data;
 using PPTS.Data.Common.Adapters;
-using PPTS.Data.Customers.DataSources;
 using PPTS.Data.Customers.Entities;
 using PPTS.WebAPI.Customers.ViewModels.CustomerServices;
 using PPTS.WebAPI.Customers.DataSources;
 using PPTS.WebAPI.Customers.Executors;
 using MCS.Web.MVC.Library.Filters;
 using PPTS.WebAPI.Customers.ViewModels.CustomerServiceItems;
+using System.Net.Http;
+using System.Web.Http.ModelBinding;
+using MCS.Web.MVC.Library.ModelBinder;
+using MCS.Library.Office.OpenXml.Excel;
+using MCS.Web.MVC.Library.ApiCore;
+using System.Data;
+using System.Linq;
+using System;
 
 namespace PPTS.WebAPI.Customers.Controllers
 {
@@ -117,5 +124,64 @@ namespace PPTS.WebAPI.Customers.Controllers
         {
             return this.UpdateCustomerService(id);
         }
+
+        #region api/Present/exportcustomerservice
+        [HttpPost]
+        public HttpResponseMessage ExportCustomerService([ModelBinder(typeof(FormBinder))]CustomerServiceQueryCriteriaModel criteria)
+        {
+            var wb = WorkBook.CreateNew();
+            var sheet = wb.Sheets["sheet1"];
+            var tableDesp = new TableDescription("学大客服");
+            criteria.PageParams.PageIndex = 0;
+            criteria.PageParams.PageSize = 0;
+            var pageData = CustomerServiceDataSource.Instance.LoadCustomerService(criteria.PageParams, criteria, criteria.OrderBy);
+            tableDesp.AllColumns.Add(new TableColumnDescription(new DataColumn("家长姓名", typeof(string))) { PropertyName = "ParentName" });
+            tableDesp.AllColumns.Add(new TableColumnDescription(new DataColumn("学员姓名", typeof(string))) { PropertyName = "CustomerName" });
+            tableDesp.AllColumns.Add(new TableColumnDescription(new DataColumn("当前年级", typeof(string))) { PropertyName = "Grade" });
+            tableDesp.AllColumns.Add(new TableColumnDescription(new DataColumn("受理时间", typeof(string))) { PropertyName = "AcceptTime", Format = "yyyy-MM-dd" });
+            tableDesp.AllColumns.Add(new TableColumnDescription(new DataColumn("服务类型", typeof(string))) { PropertyName = "ServiceType" });
+            tableDesp.AllColumns.Add(new TableColumnDescription(new DataColumn("客服受理人", typeof(string))) { PropertyName = "AccepterName" });
+            tableDesp.AllColumns.Add(new TableColumnDescription(new DataColumn("当前受理状态", typeof(string))) { PropertyName = "ServiceStatus" });
+            tableDesp.AllColumns.Add(new TableColumnDescription(new DataColumn("当前受理人", typeof(string))) { PropertyName = "HandlerName" });
+            tableDesp.AllColumns.Add(new TableColumnDescription(new DataColumn("投诉次数", typeof(string))) { PropertyName = "ComplaintTimes" });
+            tableDesp.AllColumns.Add(new TableColumnDescription(new DataColumn("校区反馈", typeof(string))) { PropertyName = "SchoolMemo" });
+            tableDesp.AllColumns.Add(new TableColumnDescription(new DataColumn("是否升级", typeof(string))) { PropertyName = "IsUpgradeHandle" });
+            tableDesp.AllColumns.Add(new TableColumnDescription(new DataColumn("通话录音", typeof(string))) { PropertyName = "VoiceID" });
+            tableDesp.AllColumns.Add(new TableColumnDescription(new DataColumn("录音状态", typeof(string))) { PropertyName = "VoiceStatus" });
+            var dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(CustomerServiceModel), typeof(PotentialCustomer));
+
+            sheet.LoadFromCollection(pageData.PagedData, tableDesp, (cell, param) =>
+            {
+                switch (param.ColumnDescription.PropertyName)
+                {
+                    case "Grade":
+                        var g = dictionaries["c_codE_ABBR_CUSTOMER_GRADE"].Where(c => c.Key == Convert.ToString(param.PropertyValue));
+                        cell.Value = null != g ? (null == g.FirstOrDefault() ? null : g.FirstOrDefault().Value) : null;
+                        break;
+                    case "ServiceType":
+                        var st = dictionaries["Customer_ServiceType"].Where(c => c.Key == Convert.ToString(param.PropertyValue));
+                        cell.Value = null != st ? (null == st.FirstOrDefault() ? null : st.FirstOrDefault().Value) : null;
+                        break;
+                    case "ServiceStatus":
+                        var ss = dictionaries["Customer_ServiceStatus"].Where(c => c.Key == Convert.ToString(param.PropertyValue));
+                        cell.Value = null != ss ? (null == ss.FirstOrDefault() ? null : ss.FirstOrDefault().Value) : null;
+                        break;
+                    case "ComplaintTimes":
+                        var ct = dictionaries["Customer_AcceptLimit"].Where(c => c.Key == Convert.ToString(param.PropertyValue));
+                        cell.Value = null != ct ? (null == ct.FirstOrDefault() ? null : ct.FirstOrDefault().Value) : null;
+                        break;
+                    case "IsUpgradeHandle":
+                        cell.Value = (int)param.PropertyValue == 1 ? "是" : "否";
+                        break;
+                    default:
+                        cell.Value = param.PropertyValue;
+                        break;
+                }
+            });
+
+            return wb.ToResponseMessage("学大客服.xlsx");
+        }
+
+        #endregion
     }
 }

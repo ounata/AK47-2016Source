@@ -50,7 +50,7 @@ namespace PPTS.Data.Common.Entities
         }
 
         [ORFieldMapping("IsValidate")]
-        public bool IsValidate
+        public override bool IsValidate
         {
             get;
             set;

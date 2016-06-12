@@ -104,6 +104,15 @@
                            'app/account/refund/refund-page/refund-print.controller',
                            'app/account/refund/refund-page/refund-verify.controller']
         }).loadRoute($stateProvider, {
+            name: 'ppts.accountRefund-info',
+            url: '/account/refund/info/:id?prev=:page',
+            templateUrl: 'app/account/refund/refund-page/refund-info.html',
+            controller: 'accountRefundInfoController',
+            breadcrumb: {
+                label: '退费申请详情',
+            },
+            dependencies: ['app/account/refund/refund-page/refund-info.controller']
+        }).loadRoute($stateProvider, {
             name: 'ppts.accountRefund-approve',
             url: '/account/refund/approve/:id',
             templateUrl: 'app/account/refund/refund-page/refund-approve.html',

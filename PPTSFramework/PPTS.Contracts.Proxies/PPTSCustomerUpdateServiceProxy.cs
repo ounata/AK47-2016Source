@@ -28,7 +28,7 @@ namespace PPTS.Contracts.Proxies
 
         protected override WfClientChannelFactory<ICustomerUpdateService> GetService()
         {
-            EndpointAddress endPoint = new EndpointAddress(UriSettings.GetConfig().GetUrl("pptsServices", "customerQueryService"));
+            EndpointAddress endPoint = new EndpointAddress(UriSettings.GetConfig().GetUrl("pptsServices", "customerUpdateService"));
 
             return new WfClientChannelFactory<ICustomerUpdateService>(endPoint);
         }

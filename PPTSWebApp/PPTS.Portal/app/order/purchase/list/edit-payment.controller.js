@@ -103,8 +103,12 @@
                             vm.order = result.order;
                             vm.data.rows = result.items;
 
-                            dataSyncService.injectDictData(mcs.util.mapping(result.payments, { key: 'applyID', value: 'payMemo' }, 'ChargePayment'));
+
+                            //初始化缴费单下拉列表
+                            var chargePays = $(result.payments).map(function (i, v) { return { applyID: v.applyID, payMemo: v.applyNo + ' 付款日期：' + mcs.date.format(v.payTime) + ' 缴费金额：' + v.paidMoney + '元' }; }).toArray();
+                            dataSyncService.injectDictData(mcs.util.mapping(chargePays, { key: 'applyID', value: 'payMemo' }, 'ChargePayment'));
                             ppts.config.dictMappingConfig["chargePayment"] = "c_codE_ABBR_ChargePayment";
+
 
                             vm.post.chargeApplyId = vm.order.chargeApplyID;
 

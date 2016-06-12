@@ -9,9 +9,19 @@
         <li><a href="ADSync.aspx">AD 同 步</a></li>
         <li><a href="ADReverseSync.aspx">AD 反 向 同 步</a></li>
     </ul>
+    <script type="text/javascript">
+        function onImportCompleted(e) {
+            if (e.dataChanged)
+                alert(e.dataChanged);
+        }
+    </script>
     <div class="pc-tabs-content3">
         <div class="pc-tabs-content pc-active" style="clear: none">
             <fieldset>
+                <legend>数据导入</legend>
+                <soa:UploadProgressControl runat="server" ID="ImportRolesAndPermissions" ControlIDToShowDialog="btnImportRolesAndPermissions" DialogTitle="通过Excel导入角色和权限" OnClientCompleted="onImportCompleted" OnDoUploadProgress="ImportRolesAndPermissions_DoUploadProgress" />
+                <button runat="server" type="button" class="pc-button" id="btnImportRolesAndPermissions" title="通过Excel导入角色和权限">
+                    导入角色和权限...</button>
                 <legend>缓存数据</legend>
                 <div style="display: none">
                     <asp:Button ID="btnClearServerCache" runat="server" OnClick="btnClearServerCache_Click" />

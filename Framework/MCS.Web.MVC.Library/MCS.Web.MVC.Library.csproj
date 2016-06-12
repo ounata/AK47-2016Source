@@ -123,8 +123,14 @@
     <Compile Include="Models\UserGraphSearchParams.cs" />
     <Compile Include="Models\UserGraphTreeNode.cs" />
     <Compile Include="Models\UserGraphTreeParams.cs" />
+    <Compile Include="Models\UserTask\UserTask.cs" />
+    <Compile Include="Models\UserTask\UserTaskSearchParams.cs" />
+    <Compile Include="Models\Workflow\WfClientActivityHistory.cs" />
+    <Compile Include="Models\Workflow\WfClientCancelParameters.cs" />
+    <Compile Include="Models\Workflow\WfClientSearchParameters.cs" />
     <Compile Include="Models\Workflow\WfClientActivity.cs" />
     <Compile Include="Models\Workflow\WFClientProcess.cs" />
+    <Compile Include="Models\Workflow\WfClientMovetoParameters.cs" />
     <Compile Include="Models\Workflow\WfClientStartupParameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\InMemoryMultipartFormDataStreamProvider.cs" />

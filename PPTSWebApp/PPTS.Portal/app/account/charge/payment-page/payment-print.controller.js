@@ -24,7 +24,7 @@
 
                     //保存打印状态
                     vm.save = function () {
-                        printService.print();
+                        printService.print(true);
                         $uibModalInstance.close();
                     }
 

@@ -22,7 +22,8 @@ define([ppts.config.modules.infra,
                     vm.save = function () {
                         if (mcsValidationService.run($scope)) {
                             servicefeeDataService.createExpenses(vm, function () {
-                                alert("添加成功!");
+                                //alert("添加成功!");
+                                $state.go("ppts.servicefee", { prev: 'ppts' });
                             });
                         }
                     }

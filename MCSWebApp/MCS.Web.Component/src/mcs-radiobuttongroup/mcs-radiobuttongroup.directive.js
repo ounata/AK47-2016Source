@@ -11,7 +11,7 @@
                 value: '='
             },
 
-            template: '<label class="radio-inline" ng-repeat="item in data" ng-show="item.state"><input name="{{groupName}}" type="radio" class="ace" ng-checked="item.key==model" ng-click="change(item, $event)"><span class="lbl"></span> {{item.value}}</label>',
+            template: '<label class="radio-inline" ng-repeat="item in data" ng-show="item.state"><span uib-tooltip="{{item.tooltip}}"><input name="{{groupName}}" type="radio" class="ace" ng-checked="item.key==model" ng-click="change(item, $event)"><span class="lbl"></span> {{item.value}}</span></label>',
             controller: function ($scope) {
                 $scope.groupName = mcs.util.newGuid();
                 $scope.change = function (item, event) {

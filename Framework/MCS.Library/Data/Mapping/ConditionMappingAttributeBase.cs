@@ -17,7 +17,9 @@ namespace MCS.Library.Data.Mapping
         private string postfix = string.Empty;
         private double adjustDays = 0;
         private bool isExpression = false;
+        private bool utcTimeToLocal = false;
         private DefaultValueUsageType defaultValueUsage = DefaultValueUsageType.ByCaller;
+        private string defaultExpression = string.Empty;
 
         /// <summary>
         /// 
@@ -96,6 +98,30 @@ namespace MCS.Library.Data.Mapping
         {
             get { return this.defaultValueUsage; }
             set { this.defaultValueUsage = value; }
+        }
+
+        /// <summary>
+        /// 假设数据库中存放的是UTC time，转换为TimeZoneContext中的时区
+        /// </summary>
+        public bool UtcTimeToLocal
+        {
+            get { return this.utcTimeToLocal; }
+            set { this.utcTimeToLocal = value; }
+        }
+
+        /// <summary>
+        /// 对应的属性为空时，所提供的缺省值表达式
+        /// </summary>
+        public string DefaultExpression
+        {
+            get
+            {
+                return this.defaultExpression;
+            }
+            set
+            {
+                this.defaultExpression = value;
+            }
         }
     }
 }

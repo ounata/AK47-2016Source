@@ -1,0 +1,7 @@
+﻿/*全局字体修改*/
+body{
+    font-family: "微软雅黑", Arial
+}
+.navbar {
+    height:45px;
+}

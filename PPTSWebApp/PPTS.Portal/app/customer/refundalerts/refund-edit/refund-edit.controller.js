@@ -2,9 +2,10 @@
         ppts.config.dataServiceConfig.refundAlertDataService],
         function (customer) {
             customer.registerController('refundAlertEditController', [
-                '$scope', '$stateParams', '$uibModalInstance', 'refundAlertDataViewService', 'mcsDialogService','data',
-                function ($scope, $stateParams, $uibModalInstance, refundAlertDataViewService, mcsDialogService, data) {
+                '$scope', '$stateParams', '$uibModalInstance', 'refundAlertDataViewService', 'mcsDialogService', 'data', 'mcsValidationService',
+                function ($scope, $stateParams, $uibModalInstance, refundAlertDataViewService, mcsDialogService, data, mcsValidationService) {
                     var vm = this;
+                    mcsValidationService.init($scope);
                     vm.alertID = data.alertID;
                     // 页面初始化加载
                     (function () {
@@ -18,10 +19,12 @@
                     };
 
                     vm.save = function () {
-                      //  vm.criteria.customerID = $stateParams.id;
-                        refundAlertDataViewService.createRefundAlertInfo(vm, function () {
-                            $uibModalInstance.close();
-                        });
+                        if (mcsValidationService.run($scope)) {
+                            refundAlertDataViewService.createRefundAlertInfo(vm, function () {
+                                $uibModalInstance.close();
+                            });
+                        }
+
                     };
                 }]);
         });

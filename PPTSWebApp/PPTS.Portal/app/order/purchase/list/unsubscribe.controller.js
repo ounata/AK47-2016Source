@@ -47,9 +47,11 @@
 
                     vm.submit = function () {
 
-                        console.log(vm.item);
 
-                        unsubscribeCourseDataService.unsubscribe(vm.item, function (entity) { console.log(entity); });
+
+                        unsubscribeCourseDataService.unsubscribe(vm.item, function (entity) {
+                            $state.go('ppts.purchase');
+                        });
 
                     };
 
@@ -95,7 +97,8 @@
                                     template: '{{row.orderAmount - row.confirmedAmount}}({{row.assignedAmount}})'
                                 }, {
                                     name: "申请退掉数量",
-                                    template: '<input type="number" ng-model="vm.item.item.debookAmount" />'
+                                    //template: '<input ng-model="vm.item.item.debookAmount" positive/>'
+                                    template: '<mcs-input model="vm.item.item.debookAmount" datatype="int"/>'
                                 }, {
                                     name: "已使用及保留数量对应的金额",
                                     template: '{{ (row.realAmount - row.confirmedAmount)*row.realPrice  | currency}}'

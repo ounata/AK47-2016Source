@@ -3,18 +3,28 @@ define([ppts.config.modules.product,
         ppts.config.dataServiceConfig.classgroupDataService],
         function (helper) {
             helper.registerController('productListController', [
-                '$scope', '$state', 'dataSyncService', 'mcsDialogService', 'productDataService', 'classgroupDataService',
-                function ($scope, $state, dataSyncService, mcsDialogService, productDataService, classgroupDataService) {
+                '$scope', '$state', 'dataSyncService', 'utilService', 'mcsDialogService', 'productDataService', 'classgroupDataService',
+                function ($scope, $state, dataSyncService, utilService, mcsDialogService, productDataService, classgroupDataService) {
 
                     var vm = this;
+                    var iswatch_categories_extend = false;
 
 
                     vm.products = [
-                          { text: '一对一', route: 'ppts.productAdd.onetoone' },
-                          { text: '班组', route: 'ppts.productAdd.classgroup' },
-                          { text: '游学', route: 'ppts.productAdd.youxue' },
-                          { text: '其他', route: 'ppts.productAdd.other' },
-                          { text: '无课收合作', route: 'ppts.productAdd.wukeshou' }
+                          { text: '一对一', route: 'ppts.productAdd.onetoone', loadtype: 'onetoone', typename: 'all' },
+                          { text: '班组', route: 'ppts.productAdd.classgroup', loadtype: 'classgroup', typename: 'all' },
+                          { text: '游学', route: 'ppts.productAdd.youxue', loadtype: 'youxue', typename: 'all' },
+                          {
+                              text: '更多', route: 'ppts.productAdd.other', loadtype: 'other', typename: 'all',
+                              children: [
+                                  { text: '实物产品', route: 'ppts.productAdd.other', loadtype: 'other', typename: '实物产品' },
+                                  { text: '虚拟产品', route: 'ppts.productAdd.other', loadtype: 'other', typename: '虚拟产品' },
+                                  { text: '费用产品', route: 'ppts.productAdd.other', loadtype: 'other', typename: '费用产品' },
+                                  { text: '留学', route: 'ppts.productAdd.other', loadtype: 'other', typename: '留学' },
+                                  { text: '其它', route: 'ppts.productAdd.other', loadtype: 'other', typename: '其它产品' },
+                              ]
+                          },
+                          { text: '代理招生', route: 'ppts.productAdd.wukeshou', loadtype: 'wukeshou', typename: 'all' }
                     ];
                     vm.data = {
                         selection: 'checkbox',
@@ -30,12 +40,13 @@ define([ppts.config.modules.product,
                             name: "产品名称",
                             template: '<a ui-sref="ppts.classgroup({productCode:row.productCode})">{{row.productName}}</a>'
                         }, {
-                            field: "catalogName",
-                            name: "产品类型"
-                        }, {
                             field: "categoryType",
-                            name: "产品分类",
+                            name: "产品类型",
                             template: '<span>{{row.categoryType | categoryType}}</span>',
+                        }, {
+                            field: "catalogName",
+                            name: "产品分类",
+
                         }, {
                             field: "grade",
                             name: "年级",
@@ -57,10 +68,10 @@ define([ppts.config.modules.product,
                             template: '<span>{{ row.coachType | coachType }}</span>'
                         }, {
                             name: "启售时间",
-                            template: '<span>{{row.startDate | date:"yyyy-MM-dd"}}</span>',
+                            template: '<span>{{row.startDate | date:"yyyy-MM-dd" | normalize}}</span>',
                         }, {
                             name: "止售时间",
-                            template: '<span>{{row.endDate | date:"yyyy-MM-dd"}}</span>',
+                            template: '<span>{{row.endDate | date:"yyyy-MM-dd" | normalize}}</span>',
                         }, {
                             field: "creatorName",
                             name: "创建人",
@@ -71,7 +82,7 @@ define([ppts.config.modules.product,
                         }],
                         pager: {
                             pageIndex: 1,
-                            pageSize: 10,
+                            pageSize: ppts.config.pageSizeItem,
                             totalCount: -1,
                             pageChange: function () {
                                 dataSyncService.initCriteria(vm);
@@ -83,8 +94,8 @@ define([ppts.config.modules.product,
                         orderBy: [{ dataField: 'CreateTime', sortDirection: 1 }]
                     }
 
-                    vm.purchase = function (item) {
-                        $state.go(item.route);
+                    vm.create = function (item) {
+                        $state.go(item.route, { ltype: item.loadtype, lname: item.typename });
                     };
                     vm.search = function () {
 
@@ -106,113 +117,161 @@ define([ppts.config.modules.product,
                             vm.criteria.endStartDate = vm.criteria.endTime;
                         }
                         if (vm.criteria.timeType == 2) {
-                            vm.criteria.starEndtDate = vm.criteria.begainTime;
+                            vm.criteria.starEndtDate = vm.criteria.beginTime;
                             vm.criteria.endEndtDate = vm.criteria.endTime;
                         }
                         if (vm.criteria.timeType == 3) {
-                            vm.criteria.startCreateDate = vm.criteria.begainTime;
+                            vm.criteria.startCreateDate = vm.criteria.beginTime;
                             vm.criteria.endCreateDate = vm.criteria.endTime;
+                        }
+                        if (vm.criteria.timeType == 4) {
+                            vm.criteria.startConfirmStartDate = vm.criteria.beginTime;
+                            vm.criteria.endConfirmEndDate = vm.criteria.endTime;
                         }
 
 
                         console.log(vm.criteria)
                         //return;
 
+
                         productDataService.getAllProducts(vm.criteria, function (result) {
+
                             console.log(result)
+
                             vm.data.rows = result.queryResult.pagedData;
                             dataSyncService.updateTotalCount(vm, result.queryResult);
+
+
+
+
+                            var categories = [];
+                            var iscontinue = true;
+                            $(result.categories).each(function (i, v) {
+                                if (v.categoryType == "3") {
+                                    if (iscontinue) {
+                                        iscontinue = false;
+                                        categories.push({ category: '30', categoryName: '游学' });
+                                    }
+                                } else {
+                                    categories.push(v);
+                                }
+                            });
+
+                            if (!iswatch_categories_extend) {
+                                $scope.$watch('vm.criteria.categories_extend', function (n, o) {
+                                    var selectedCategories = [n];
+                                    if (n == 30) { selectedCategories = $(result.categories).map(function (i, v) { if (v.categoryType == "3") { return v.category; } }).toArray(); }
+                                    vm.criteria.categories = selectedCategories;
+                                });
+                                iswatch_categories_extend = true;
+                            }
+
+                            dataSyncService.injectDictData(mcs.util.mapping(categories, { key: 'category', value: 'categoryName' }, 'Categories'));
+                            ppts.config.dictMappingConfig["categories"] = "c_codE_ABBR_Categories";
+
+
+
+
                             $scope.$broadcast('dictionaryReady');
                         });
 
                     };
                     vm.copyProduct = function () {
+                        if (utilService.selectOneRow(vm)) {
+                            var selectedData = vm.data.rowsSelected[0]
+                            var type = parseInt(selectedData.categoryType);
+                            var param = { id: selectedData.productID };
 
-                        var selectedData = vm.data.rowsSelected[0]
-                        var type = parseInt(selectedData.categoryType);
-                        var param = { id: selectedData.productID };
-
-                        var goName = '';
-                        switch (type) {
-                            case 1: goName = 'onetoone'; break;
-                            case 2: goName = 'classgroup'; break;
-                            case 3: goName = 'youxue'; break;
-                            case 4: goName = 'wukeshou'; break;
-                            case 5: goName = 'other'; break;
+                            var goName = '';
+                            switch (type) {
+                                case 1: goName = 'onetoone'; break;
+                                case 2: goName = 'classgroup'; break;
+                                case 3: goName = 'youxue'; break;
+                                case 4: goName = 'wukeshou'; break;
+                                case 5: goName = 'other'; break;
+                            }
+                            if (goName == '') { return; }
+                            $state.go('ppts.productCopy.' + goName, param);
                         }
-                        if (goName == '') { return; }
-                        $state.go('ppts.productCopy.' + goName, param);
                     };
                     vm.delete = function () {
-                        var failProduct = $.grep(vm.data.rowsSelected, function (obj, index) {
-                            if (obj.productStatus != 2) return obj;
-                        });
-                        if (failProduct.length > 0) {
-                            mcsDialogService.error({ title: '错误', message: '只允许删除 驳回状态 产品！' });
-                            return;
-                        }
+                        if (utilService.selectMultiRows(vm)) {
+                            var failProduct = $.grep(vm.data.rowsSelected, function (obj, index) {
+                                if (obj.productStatus != 2) return obj;
+                            });
 
-                        mcsDialogService.confirm({ title: '危险确认', message: '删除产品无法恢复，是否确认删除？' })
-                            .result.then(function () {
-                                productDataService.delProduct(productIds, function (isSuccess) {
-                                    mcs.util.removeByObjectsWithKeys(vm.data.rows, vm.data.rowsSelected);
-                                });
-                            });
-                    };
-                    vm.stopProduct = function () {
-                        var rowProduct = vm.data.rowsSelected[0];
-                        if (rowProduct.productStatus == 1
-                            && rowProduct.endDate >= new Date()
-                            )
-                        {
-                            productDataService.stopProduct(rowProduct.productID, function (entity) {
-                                var index = mcs.util.indexOf(vm.data.rows, "productID", rowProduct.productID);
-                                vm.data.rows[index].endDate = entity.endDate;
-                            });
-                        }
-                    };
-                    vm.delayProduct = function () {
-                        var rowProduct = vm.data.rowsSelected[0];
-                        if (rowProduct.productStatus == 1
-                            && rowProduct.endDate < new Date()
-                            )
-                        {
-                            mcsDialogService.create('app/product/productlist/product-list/product-delay.html', { controller: 'delayController', params: rowProduct.endDate })
-                                .result.then(function (data) {
-                                    productDataService.delayProduct({ id: rowProduct.productID, endDate: data.endDate }, function () {
-                                        var index = mcs.util.indexOf(vm.data.rows, "productID", rowProduct.productID);
-                                        vm.data.rows[index].endDate = data.endDate;
+                            if (utilService.showMessage(vm, failProduct.length > 0, '只允许删除驳回状态的产品！')) {
+                                return;
+                            }
+
+                            mcsDialogService.confirm({ title: '危险确认', message: '删除产品无法恢复，是否确认删除？' })
+                                .result.then(function () {
+                                    productDataService.delProduct(productIds, function (isSuccess) {
+                                        mcs.util.removeByObjectsWithKeys(vm.data.rows, vm.data.rowsSelected);
                                     });
                                 });
                         }
-
+                    };
+                    vm.stopProduct = function () {
+                        if (utilService.selectOneRow(vm)) {
+                            var rowProduct = vm.data.rowsSelected[0];
+                            if (rowProduct.productStatus == 1
+                                && rowProduct.endDate >= new Date()
+                                ) {
+                                productDataService.stopProduct(rowProduct.productID, function (entity) {
+                                    var index = mcs.util.indexOf(vm.data.rows, "productID", rowProduct.productID);
+                                    vm.data.rows[index].endDate = entity.endDate;
+                                });
+                            }
+                        }
+                    };
+                    vm.delayProduct = function () {
+                        if (utilService.selectOneRow(vm)) {
+                            var rowProduct = vm.data.rowsSelected[0];
+                            if (rowProduct.productStatus == 1
+                                && rowProduct.endDate < new Date()
+                                ) {
+                                mcsDialogService.create('app/product/productlist/product-list/product-delay.html', { controller: 'delayController', params: rowProduct.endDate })
+                                    .result.then(function (data) {
+                                        productDataService.delayProduct({ id: rowProduct.productID, endDate: data.endDate }, function () {
+                                            var index = mcs.util.indexOf(vm.data.rows, "productID", rowProduct.productID);
+                                            vm.data.rows[index].endDate = data.endDate;
+                                        });
+                                    });
+                            }
+                        }
                     };
                     vm.createClass = function () {
+                        if (utilService.selectOneRow(vm)) {
+                            classgroupDataService.checkCreateClass_Product(vm.data.rowsSelected[0].productID, function (result) {
+                                if (result.sucess) {
+                                    $state.go('ppts.classAdd', { id: vm.data.rowsSelected[0].productID });
+                                } else
+                                    mcsDialogService.error(
+                                   { title: 'Error', message: result.message }
+                               );
+                            }, function (result) {
 
-                        if (vm.data.rowsSelected.length != 1)
-                            mcsDialogService.error(
-                                { title: 'Error', message: "请选择一条班组产品！" }
-                            );
-                        classgroupDataService.checkCreateClass_Product(vm.data.rowsSelected[0].productID, function (result) {
-                            if (result.sucess) {
-                                $state.go('ppts.classAdd', { id: vm.data.rowsSelected[0].productID });
-                            } else
-                                mcsDialogService.error(
-                               { title: 'Error', message: result.message }
-                           );
-                        }, function (result) {
-
-                        });
-
+                            });
+                        }
                     }
 
                     var init = (function () {
 
-                        for (var index in vm.products) { vm.products[index].click = vm.purchase; }
+                        for (var index in vm.products) {
+                            if (vm.products[index].children) {
+                                for (var cindex in vm.products[index].children) {
+                                    vm.products[index].children[cindex].click = vm.create;
+                                }
+                            } else {
+                                vm.products[index].click = vm.create;
+                            }
+                        }
 
-                        var timeTypes = [{ key: '1', value: '启售时间' }, { key: '2', value: '止售时间' }, { key: '3', value: '创建时间' }, ];
+                        var timeTypes = [{ key: '1', value: '启售时间' }, { key: '2', value: '止售时间' }, { key: '3', value: '创建时间' }, { key: '4', value: '收入确认时间' }];
                         dataSyncService.injectDictData(mcs.util.mapping(timeTypes, { key: 'key', value: 'value' }, 'TimeType'));
                         ppts.config.dictMappingConfig["timeType"] = "c_codE_ABBR_TimeType";
+
 
                         dataSyncService.initCriteria(vm);
 

@@ -1,0 +1,9 @@
+﻿<div class="breadcrumbs breadcrumbs-fixed" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li><a id="home" ui-sref="ppts.dashboard"><i class="ace-icon fa fa-home"></i> 首页</a></li>
+        <li ng-repeat="step in steps" ng-class="{active: $last}" ng-switch="$last || !!step.abstract">
+            <a ng-switch-when="false" href="{{step.ncyBreadcrumbLink}}">{{step.ncyBreadcrumbLabel}}</a>
+            <span ng-switch-when="true">{{step.ncyBreadcrumbLabel}}</span>
+        </li>
+    </ul>
+</div>

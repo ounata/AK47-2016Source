@@ -49,6 +49,10 @@
     <Reference Include="MCS.Library.Data">
       <HintPath>..\..\Bin\MCS.Library.Data.dll</HintPath>
     </Reference>
+    <Reference Include="MCS.Library.Office.OpenXml.Excel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=62ea08f894871798, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Bin\MCS.Library.Office.OpenXml.Excel.dll</HintPath>
+    </Reference>
     <Reference Include="MCS.Library.OGUPermission">
       <HintPath>..\..\Bin\MCS.Library.OGUPermission.dll</HintPath>
     </Reference>
@@ -65,7 +69,8 @@
     <Reference Include="MCS.Library.SOA.DataObjects.Schemas">
       <HintPath>..\..\Bin\MCS.Library.SOA.DataObjects.Schemas.dll</HintPath>
     </Reference>
-    <Reference Include="MCS.Library.SOA.DataObjects.Security">
+    <Reference Include="MCS.Library.SOA.DataObjects.Security, Version=1.0.0.0, Culture=neutral, PublicKeyToken=62ea08f894871798, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Bin\MCS.Library.SOA.DataObjects.Security.dll</HintPath>
     </Reference>
     <Reference Include="MCS.Library.SOA.Web.WebControls">

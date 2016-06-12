@@ -29,8 +29,7 @@ namespace PPTS.WebAPI.Orders.Executors
         {
             
             Model.FillOrder()
-                 .FillOrderItem()
-                 .FillUser();
+                 .FillOrderItem();
 
             var debookorder = Model.Order;
             var debookorderitem = Model.Item;
@@ -53,6 +52,11 @@ namespace PPTS.WebAPI.Orders.Executors
             base.DoValidate(validationResults);
         }
 
+        protected override object DoOperation(DataExecutionContext<UserOperationLogCollection> context)
+        {
+            Data.Orders.ConnectionDefine.GetDbContext().DoAction(d => d.ExecuteTimePointSqlInContext());
+            return null;
+        }
 
 
     }

@@ -1,121 +1,21 @@
-﻿ <!-- #开始：跟进列表.高级查询条件 -->
-<div id="accordion" class="accordion-style1 panel-group">
-    <div class="panel panel-info">
-        <div class="panel-heading">
-            <h4 class="panel-title">
-                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#advance-search">
-                    <i class="ace-icon fa fa-angle-right bigger-110" data-icon-hide="fa-angle-down" data-icon-show="fa-angle-right"></i>
-                    &nbsp;高级查询
-                </a>
-            </h4>
+﻿ <!-- #开始：跟进记录列表.高级查询条件 -->
+<ppts-dynamic-content template="advance-search.tpl.html" />
+<!-- /结束：跟进记录列表.高级查询条件 -->
+<!-- #开始：跟进记录列表.快速查询条件 -->
+<ppts-dynamic-content template="quick-search.tpl.html">
+    <div class="row">
+        <div class="col-md-4">
+            <ppts-select-branch model="vm.criteria.orgIds" />
         </div>
-        <div class="panel-collapse collapse mcs-advance-search" id="advance-search">
-            <div class="panel-body">
-                <div class="profile-user-info mcs-user-profile follow-list">
-                    <div class="profile-info-row">
-                        <div class="profile-info-name">记录人：</div>
-                        <div class="profile-info-value">
-                            <ppts-checkbox-group category="people" model="vm.criteria.followerJobs" clear="vm.criteria.followerJobs=[]" />
-                            <mcs-input placeholder="记录人姓名" model="vm.criteria.followerName" />
-                        </div>
-                    </div>
-                    <div class="profile-info-row">
-                        <div class="profile-info-name">建档人：</div>
-                        <div class="profile-info-value">
-                            <ppts-checkbox-group category="people" model="vm.criteria.creatorJobs" clear="vm.criteria.creatorJobs=[]" />
-                            <mcs-input placeholder="建档人姓名" model="vm.criteria.creatorName" />
-                        </div>
-                    </div>
-                    <div class="profile-info-row">
-                        <div class="profile-info-name">跟进阶段：</div>
-                        <div class="profile-info-value">
-                            <ppts-checkbox-group category="followStage" model="vm.criteria.followStages" clear="vm.criteria.followStages=[]" />
-                        </div>
-                    </div>
-                    <div class="profile-info-row">
-                        <div class="profile-info-name">购买意愿：</div>
-                        <div class="profile-info-value">
-                            <ppts-checkbox-group category="purchaseIntention" model="vm.criteria.purchaseIntentions" clear="vm.criteria.purchaseIntentions=[]" />
-                        </div>
-                    </div>
-                    <div class="profile-info-row">
-                        <div class="profile-info-name">客户级别：</div>
-                        <div class="profile-info-value">
-                            <ppts-checkbox-group category="customerLevel" model="vm.criteria.customerLevels" clear="vm.criteria.customerLevels=[]" />
-                        </div>
-                    </div>
-                    <div class="profile-info-row">
-                        <div class="profile-info-name">跟进方式：</div>
-                        <div class="profile-info-value">
-                            <ppts-checkbox-group category="followType" model="vm.criteria.followTypes" clear="vm.criteria.followTypes=[]" />
-                        </div>
-                    </div>
-                    <div class="profile-info-row">
-                        <div class="profile-info-name">跟进时间：</div>
-                        <div class="profile-info-value">
-                            <ppts-radiobutton-group category="dateRange" model="vm.followTimeValue" />
-                            <div ng-show="vm.followTimeValue == 5" style="display:inline;">
-                                <ppts-daterangepicker class="search" start-date="vm.criteria.followStartTime" end-date="vm.criteria.followEndTime"></ppts-daterangepicker>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="profile-info-row">
-                        <div class="profile-info-name">下次沟通时间：</div>
-                        <div class="profile-info-value">
-                            <ppts-radiobutton-group category="dateRange" model="vm.nextFollowTimeValue" />
-                            <div ng-show="vm.nextFollowTimeValue == 5" style="display:inline;">
-                                <ppts-daterangepicker class="search" start-date="vm.criteria.nextTalkStartTime" end-date="vm.criteria.nextTalkEndTime"></ppts-daterangepicker>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="profile-info-row">
-                        <div class="profile-info-name">是否在其它机构辅导：</div>
-                        <div class="profile-info-value">
-                            <ppts-radiobutton-group category="ifElse" model="vm.criteria.isStudyThere" />
-                        </div>
-                    </div>
-                    <div class="profile-info-row">
-                        <div class="profile-info-name">预计上门时间：</div>
-                        <div class="profile-info-value">
-                            <ppts-radiobutton-group category="dateRange" model="vm.planVerifyTimeValue" />
-                            <div ng-show="vm.planVerifyTimeValue == 5" style="display:inline;">
-                                <ppts-daterangepicker class="search" start-date="vm.criteria.planVerifyStartTime" end-date="vm.criteria.planVerifyEndTime"></ppts-daterangepicker>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="profile-info-row">
-                        <div class="profile-info-name">预计签约时间：</div>
-                        <div class="profile-info-value">
-                            <ppts-radiobutton-group category="dateRange" model="vm.planSignDateValue" />
-                            <div ng-show="vm.planSignDateValue == 5" style="display:inline;">
-                                <ppts-daterangepicker class="search" start-date="vm.criteria.planSignStartTime" end-date="vm.criteria.planSignEndTime"></ppts-daterangepicker>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="col-md-4">
+            <mcs-input placeholder="咨询师姓名" uib-tooltip="咨询师姓名" model="vm.criteria.staffName" css="mcs-input-search mcs-width-full" />
+        </div>
+        <div class="col-md-4">
+            <mcs-input placeholder="输入学员、家长姓名，学员编号，联系方式进行查询" uib-tooltip="学员、家长姓名，学员编号，联系方式" model="vm.criteria.keyword" css="mcs-input-search mcs-width-full" />
         </div>
     </div>
-</div>
-<!-- /结束：潜客列表.高级查询条件 -->
-<!-- #开始：潜客列表.快速查询条件 -->
-<div class="mcs-panel-search well well-sm">
-    <div class="portlet portlet-height-50">
-        <div class="portlet-title line">
-            <div class="caption">
-                <label class="quick-search"><i class="ace-icon fa fa-search bigger-125"></i> 快速查询</label>
-            </div>
-        </div>
-        <div class="portlet-body">
-            <div class="input-group input-xlarge mcs-input-group pull-left">
-                <ppts-select-branch model="vm.criteria.orgIds" />
-            </div>
-            <mcs-input placeholder="咨询师姓名" class="input-width-160 search-input" model="vm.criteria.staffName" />
-            <ppts-search placeholder="输入学员、家长姓名，学员编号，联系方式进行查询" click="vm.search()" model="vm.criteria.keyword" />
-        </div>
-    </div>
-</div>
-<!-- /结束：潜客列表.快速查询条件 -->
-<!-- #开始：潜客列表.数据表格 -->
+</ppts-dynamic-content>
+<!-- /结束：跟进记录列表.快速查询条件 -->
+<!-- #开始：跟进记录列表.数据表格 -->
 <mcs-datatable data="vm.data" />
-<!-- /结束：潜客列表.数据表格 -->
+<!-- /结束：跟进记录列表.数据表格 -->

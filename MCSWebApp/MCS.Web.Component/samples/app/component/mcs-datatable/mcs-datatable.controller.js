@@ -30,7 +30,7 @@
             }
 
             vm.print = function() {
-                printService.print();
+                printService.print(true);
             }
 
             vm.removeRows = function() {
@@ -227,6 +227,57 @@
 
 
             ];
+
+            vm.teachersPrint = [{
+                    teacherName: '张小燕',
+                    weekCourse: {
+
+                        '星期一': [{
+                            customerName: 'tom',
+                            schedule: '9:00-11:30'
+                        }, {
+                            customerName: 'jack',
+                            schedule: '8:00-11:30'
+                        }],
+                        '星期二': [{
+                            customerName: 'tom',
+                            schedule: '9:00-11:30'
+                        }, {
+                            customerName: 'jack',
+                            schedule: '8:00-11:30'
+                        }]
+                    }
+
+
+
+                }, {
+                    teacherName: '李村东',
+                    weekCourse: {
+
+                        '星期一': [{
+                            customerName: 'tom',
+                            schedule: '9:00-11:30'
+                        }, {
+                            customerName: 'jack',
+                            schedule: '8:00-11:30'
+                        }],
+                        '星期二': [{
+                            customerName: 'tom',
+                            schedule: '9:00-11:30'
+                        }, {
+                            customerName: 'jack',
+                            schedule: '8:00-11:30'
+                        }]
+                    }
+
+
+
+                }
+
+
+            ];
+
+
 
             vm.dataNoPaging = {
                 selection: 'checkbox',

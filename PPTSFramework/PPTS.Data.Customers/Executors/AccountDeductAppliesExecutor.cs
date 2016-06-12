@@ -67,12 +67,12 @@ namespace PPTS.WebAPI.Customers.Executors
             base.PrepareData(context);
 
             this.Init(this.Model.Expenses, this.Model.Applies, this.Model.Accounts);
-            foreach (Account account in this.Model.Accounts)
-                AccountAdapter.Instance.UpdateInContext(account);
-            foreach (AccountDeductApply apply in this.Model.Applies)
-                AccountDeductApplyAdapter.Instance.UpdateInContext(apply);
             foreach (CustomerExpenseRelation expense in this.Model.Expenses)
                 CustomerExpenseRelationAdapter.Instance.UpdateInContext(expense);
+            foreach (AccountDeductApply apply in this.Model.Applies)
+                AccountDeductApplyAdapter.Instance.UpdateInContext(apply);
+            foreach (Account account in this.Model.Accounts)
+                AccountAdapter.Instance.UpdateInContext(account);
         }
 
         protected override void ExecuteNonQuerySqlInContext(DbContext dbContext)

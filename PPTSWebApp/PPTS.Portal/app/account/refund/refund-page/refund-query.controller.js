@@ -2,8 +2,8 @@
         ppts.config.dataServiceConfig.accountRefundDataService],
         function (account) {
             account.registerController('accountRefundQueryController', [
-                '$scope', '$state', 'mcsDialogService', 'dataSyncService', 'accountRefundDataService',
-                function ($scope, $state, mcsDialogService, dataSyncService, accountDataService) {
+                '$scope', '$state', 'mcsDialogService', 'dataSyncService', 'accountRefundDataService', 'refundQueryAdvanceSearchItems',
+                function ($scope, $state, mcsDialogService, dataSyncService, accountDataService, searchItems) {
                     var vm = this;
 
                     vm.data = {
@@ -57,11 +57,19 @@
                         }, {
                             field: "checkStatus",
                             name: "对账状态",
-                            template: '<span ng-class="{1: \'ppts-checked-color\', 0: \'\'}[{{row.checkStatus}}]">{{row.checkStatus | checkStatus}}</span>'
+                            template: '<span ng-class="{1: \'ppts-checked-color\', 0: \'ppts-unchecked-color\'}[{{row.checkStatus}}]">{{row.checkStatus | checkStatus}}</span>'
+                        }, {
+                            field: "verifyStatus",
+                            name: "退款状态",
+                            template: '{{row.verifyStatus | refundVerifyStatus}}</span>'
+                        }, {
+                            field: "applyNo",
+                            name: "退款申请详情",
+                            template: '<span><a ui-sref="ppts.accountRefund-info({id:row.applyID,prev:\'ppts.accountRefund-query\'})">退款申请详情</span>'
                         }],
                         pager: {
                             pageIndex: 1,
-                            pageSize: 10,
+                            pageSize: ppts.config.pageSizeItem,
                             totalCount: -1,
                             pageChange: function () {
                                 dataSyncService.initCriteria(vm);
@@ -79,7 +87,9 @@
                         dataSyncService.initCriteria(vm);
                         accountDataService.queryRefundApplyList(vm.criteria, function (result) {
                             vm.data.rows = result.queryResult.pagedData;
+                            vm.searchItems = searchItems;
                             dataSyncService.injectDictData();
+                            dataSyncService.injectPageDict(['people']);
                             dataSyncService.updateTotalCount(vm, result.queryResult);
                             $scope.$broadcast('dictionaryReady');
                         });
@@ -130,6 +140,29 @@
                         }
                         vm.verify('regionVerify', '分区域确认', currentRow);
                     }
+
+                    vm.doVerify = function (item) {
+                        switch (item.text) {
+                            case '分出纳确认':
+                                vm.cashierVerify();
+                                break;
+                            case '分财务确认':
+                                vm.financeVerify();
+                                break;
+                            case '分区域确认':
+                                vm.regionVerify();
+                                break;
+                            default:
+                                break;
+                        }
+                    };
+
+                    vm.verifyMenus = [
+                        { text: '分出纳确认', click: vm.doVerify },
+                        { text: '分财务确认', click: vm.doVerify },
+                        { text: '分区域确认', click: vm.doVerify }
+                    ];
+
                     //退费单确认
                     vm.verify = function (action, actionName, currentRow) {
                         if (currentRow == null) {
@@ -173,7 +206,7 @@
                         for (var i = 0; i < vm.data.rows.length; i++) {
                             for (var j = 0; j < vm.data.rowsSelected.length; j++) {
                                 if (vm.data.rows[i].applyID == vm.data.rowsSelected[j].applyID && vm.data.rows[i].canCheck) {
-                                    applyIDs.push({ applyID: vm.data.rows[i].applyID });
+                                    applyIDs.push(vm.data.rows[i].applyID);
                                 }
                             }
                         }

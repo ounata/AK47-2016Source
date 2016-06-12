@@ -1,75 +1,37 @@
 ﻿<!-- #开始：学员成绩.高级查询条件 -->
-<div id="accordion" class="accordion-style1 panel-group">
-    <div class="panel panel-info">
-        <div class="panel-heading">
-            <h4 class="panel-title">
-                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#advance-search">
-                    <i class="ace-icon fa fa-angle-right bigger-110" data-icon-hide="fa-angle-down" data-icon-show="fa-angle-right"></i>
-                    &nbsp;高级查询
-                </a>
-            </h4>
-        </div>
-        <div class="panel-collapse collapse mcs-advance-search" id="advance-search">
-            <div class="panel-body">
-                <div class="profile-user-info mcs-user-profile score-list">
-                    <div class="profile-info-row" ng-repeat="item in vm.searchItems" ng-show="{{item.show == undefined || item.show}}">
-                        <div class="profile-info-name">{{item.name}}</div>
-                        <div class="profile-info-value" ppts-compile-html="item.template | trusted"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<ppts-dynamic-content template="advance-search.tpl.html" />
 <!-- /结束：成绩列表.高级查询条件 -->
 <!-- #开始：成绩列表.快速查询条件 -->
-<div class="mcs-panel-search well well-sm">
-    <div class="portlet">
-        <div class="portlet-title line">
-            <div class="caption">
-                <label class="quick-search"><i class="ace-icon fa fa-search bigger-125"></i> 快速查询</label>
-            </div>
+<ppts-dynamic-content template="quick-search.tpl.html">
+    <div class="row">
+        <div class="col-md-8">
+            <ppts-select-branch model="vm.criteria.orgIds" />
         </div>
-        <div class="portlet-body">
-            <div class="line-height-40">
-                <div class="input-group input-xlarge mcs-input-group pull-left">
-                    <mcs-input placeholder="选择大区/分公司/校区" model="" readonly="true" css="form-control mcs-input-search" />
-                    <span class="input-group-btn">
-                        <button class="btn btn-sm btn-info" type="button" ng-click="vm.selectOrgTree()">
-                            <i class="ace-icon fa fa-check bigger-110"></i>
-                            选择
-                        </button>
-                    </span>
-                </div>
-            </div>
-           
-            <div>
-                <mcs-input model="vm.criteria.customerName" placeholder="学生姓名" css="col-xs-3 col-sm-2"/>
-                <mcs-input model="vm.criteria.teacherName" placeholder="教师姓名" css="col-xs-3 col-sm-2"/>
-                <mcs-input model="vm.criteria.staffName" placeholder="员工姓名" css="col-xs-3 col-sm-2"/>
-                <mcs-input model="vm.criteria.staffOA" placeholder="员工OA" css="col-xs-3 col-sm-2"/>
-                <mcs-button category="search" click="vm.search()" size="medium"/>
-            </div>
-
+        <div class="col-md-4">
+            <mcs-input placeholder="员工OA" uib-tooltip="员工OA" css="mcs-input-search mcs-width-full" model="vm.criteria.staffOA" />
         </div>
     </div>
-</div>
+    <div class="row">
+        <div class="col-md-4">
+            <mcs-input placeholder="学员姓名" uib-tooltip="学生姓名" css="mcs-input-search mcs-width-full" model="vm.criteria.customerName" />
+        </div>
+        <div class="col-md-4">
+            <mcs-input placeholder="教师姓名" uib-tooltip="教师姓名" css="mcs-input-search mcs-width-full" model="vm.criteria.teacherName" />
+        </div>
+        <div class="col-md-4">
+            <mcs-input placeholder="员工姓名" uib-tooltip="员工姓名" css="mcs-input-search mcs-width-full" model="vm.criteria.staffName" />
+        </div>
+    </div>
+</ppts-dynamic-content>
 <!-- /结束：成绩列表.快速查询条件 -->
 <!-- #开始：成绩列表.工具栏 -->
-<div class="mcs-panel-toolbar">
+<ppts-dynamic-content template="toolbar.tpl.html">
     <mcs-button category="add" text="录入成绩" click="vm.add()"></mcs-button>
     <mcs-button category="edit" text="编辑成绩" click="vm.edit()"></mcs-button>
     <mcs-button category="add" text="批量录入成绩" click="vm.batchAdd()"></mcs-button>
     <mcs-button category="view" text="查看成绩" click="vm.view()"></mcs-button>
     <mcs-button category="export" click="vm.export()"></mcs-button>
-</div>
-<div class="alert alert-block alert-danger" ng-show="vm.errorMessage">
-    <button type="button" class="close" data-dismiss="alert">
-        <i class="ace-icon fa fa-times"></i>
-    </button>
-    <i class="ace-icon fa fa-warning"></i>
-    {{vm.errorMessage}}
-</div>
+</ppts-dynamic-content>
 <!-- /结束：成绩列表.工具栏 -->
 <!-- #开始：成绩列表.数据表格 -->
 <mcs-datatable data="vm.data" />

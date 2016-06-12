@@ -14,7 +14,7 @@ namespace PPTS.Data.Products.Entities
     /// 服务费用表
     /// </summary>
     [Serializable]
-    [ORTableMapping("Expenses")]
+    [ORTableMapping("[PM].[Expenses]")]
     [DataContract]
     public class Expense
     {

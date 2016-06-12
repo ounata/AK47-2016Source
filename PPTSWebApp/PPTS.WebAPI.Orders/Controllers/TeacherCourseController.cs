@@ -140,5 +140,62 @@ namespace PPTS.WebAPI.Orders.Controllers
 
         #endregion 
 
+
+        [HttpPost]
+        public dynamic InitTchWeekCourse()
+        {
+            //校区
+            IOrganization campus = DeluxeIdentity.CurrentUser.GetCurrentJob().GetParentOrganizationByType(DepartmentType.Campus);
+            if (campus == null)
+            {
+                return null;
+            }
+            ///分公司
+            IOrganization company = DeluxeIdentity.CurrentUser.GetCurrentJob().GetParentOrganizationByType(DepartmentType.Branch);
+            ///学科组
+            IList<IOrganization> xk = campus.GetChildOrganizationsByPPTSType(DepartmentType.XueKeZu);
+
+            Dictionary<string, IEnumerable<BaseConstantEntity>> dic = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(Data.Orders.Entities.Assign));
+
+            return new
+            {
+                Campus = campus,
+                Company = company,
+                XueKeZu = xk,
+                Dictionaries = dic
+            };
+        }
+
+        [HttpPost]
+        public dynamic GetWeekCourse(Assign assingQM)
+        {
+            if (assingQM.StartTime == DateTime.MinValue || assingQM.EndTime == DateTime.MinValue)
+            {
+                DateTime dt = DateTime.Now;
+                DateTime startWeek = dt.AddDays(1-Convert.ToInt32(dt.DayOfWeek.ToString("d")));
+                DateTime endWeek = startWeek.AddDays(6);
+
+                assingQM.StartTime = startWeek;
+                assingQM.EndTime = endWeek;
+            }
+
+            assingQM.StartTime = assingQM.StartTime.Date;
+            assingQM.EndTime = assingQM.EndTime.Date;
+
+            //校区
+            IOrganization organ = DeluxeIdentity.CurrentUser.GetCurrentJob().GetParentOrganizationByType(DepartmentType.Campus);
+            if (organ == null)
+            {
+                return null;
+            }
+            assingQM.CampusID = organ.ID;
+            AssignCollection ac = AssignsAdapter.Instance.LoadCollection(assingQM);
+
+            TeacherCourseModel tcm = new TeacherCourseModel();
+            tcm.StartTime = assingQM.StartTime;
+            tcm.EndTime = assingQM.EndTime;
+            IList<TWC> twc = tcm.GetTchWeekCourse(ac);
+            return  new { result = twc } ;
+        }
     }
 }

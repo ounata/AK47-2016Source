@@ -82,5 +82,31 @@ namespace PPTS.ExtServices.CTI.Common
 
             return strMD5Encrypt.ToLower();
         }
+
+        /// <summary>
+        /// 判断分公司ID是否已经存在于配置表中，存在返回true
+        /// 配置表中的分公司是指未上线新系统的分公司
+        /// </summary>
+        /// <param name="strBranchId"></param>
+        /// <returns></returns>
+        public static bool ExistesBranchCurrent(string strBranchId)
+        {
+            bool exist = false;
+
+            var nodeList = configNode.SelectNodes("NewSystemBranch/BranchInfo");
+            if(nodeList == null || nodeList.Count == 0)
+            {
+                exist = false;
+            }
+            foreach (XmlNode node in nodeList)
+            {
+                if (strBranchId == (node.GetAttributeText("id") == null ? string.Empty : node.GetAttributeText("id")))
+                {
+                    exist = true;
+                }
+            }
+
+            return exist;
+        }
     }
 }

@@ -122,7 +122,7 @@ namespace PPTS.WebAPI.Orders.Controllers
         public InitDataByTchCAQR InitCreateAssign(TeacherAssignQM queryModel)
         {
             AssignConditionCollection acc = AssignConditionAdapter.Instance.LoadCollection(AssignTypeDefine.ByTeacher, queryModel.TeacherID, queryModel.TeacherJobID);
-            acc.Insert(0, new AssignCondition() { ConditionID = "-1", ConditionName4Customer = "新建", ConditionName4Teacher = "新建" });
+            acc.Insert(0, new AssignCondition() { ConditionID = "100", ConditionName4Customer = "新建", ConditionName4Teacher = "新建" });
 
             IOrganization org = DeluxeIdentity.CurrentUser.GetCurrentJob().GetParentOrganizationByType(DepartmentType.Campus);
             if (org == null)

@@ -24,6 +24,8 @@ namespace MCS.Library.Data.Mapping
         private string subClassTypeDescription = string.Empty;
         private string subClassPropertyName = string.Empty;
         private MemberInfo memberInfo = null;
+        private bool utcTimeToLocal = false;
+        private string defaultExpression = string.Empty;
 
         /// <summary>
 		/// 对象的属性名称
@@ -87,7 +89,7 @@ namespace MCS.Library.Data.Mapping
             get { return this.defaultValueUsage; }
             set { this.defaultValueUsage = value; }
         }
-  
+
         /// <summary>
         /// 枚举类型的使用方法（值/还是描述）
         /// </summary>
@@ -125,6 +127,30 @@ namespace MCS.Library.Data.Mapping
         }
 
         /// <summary>
+        /// 假设数据库中存放的是UTC time，转换为TimeZoneContext中的时区
+        /// </summary>
+        public bool UtcTimeToLocal
+        {
+            get { return this.utcTimeToLocal; }
+            set { this.utcTimeToLocal = value; }
+        }
+
+        /// <summary>
+        /// 对应的属性为空时，所提供的缺省值表达式
+        /// </summary>
+        public string DefaultExpression
+        {
+            get
+            {
+                return this.defaultExpression;
+            }
+            set
+            {
+                this.defaultExpression = value;
+            }
+        }
+
+        /// <summary>
         /// 从对应属性进行填充
         /// </summary>
         internal protected virtual void FillFromAttr(ConditionMappingAttributeBase attr)
@@ -138,6 +164,8 @@ namespace MCS.Library.Data.Mapping
             this.adjustDays = attr.AdjustDays;
             this.isExpression = attr.IsExpression;
             this.defaultValueUsage = attr.DefaultValueUsage;
+            this.utcTimeToLocal = attr.UtcTimeToLocal;
+            this.defaultExpression = attr.DefaultExpression;
         }
 
         /// <summary>
@@ -160,8 +188,17 @@ namespace MCS.Library.Data.Mapping
             {
                 if (data is DateTime && (DateTime)data != DateTime.MinValue && (DateTime)data != DateTime.MaxValue)
                 {
+                    DateTime dt = (DateTime)data;
+
+                    if (this.utcTimeToLocal)
+                    {
+                        dt = DateTime.SpecifyKind(dt, DateTimeKind.Unspecified);
+                        dt = TimeZoneContext.Current.ConvertTimeToUtc(dt);
+                    }
                     if (this.AdjustDays != 0)
-                        result = ((DateTime)data).AddDays(this.AdjustDays);
+                        result = dt.AddDays(this.AdjustDays);
+                    else
+                        result = dt;
                 }
             }
 

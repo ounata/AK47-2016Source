@@ -101,7 +101,7 @@ namespace PPTS.WebAPI.Products.Controllers
         [HttpPost]
         public void DisablePresent(dynamic data)
         {
-            string PresentID = data.PresentID;
+            string PresentID = data.presentID;
             DisablePresentExecutor executor = new DisablePresentExecutor(PresentID);
             executor.Execute();
         }

@@ -22,7 +22,7 @@
                         <div class="profile-info-row">
                             <div class="profile-info-name"> 订购日期</div>
                             <div class="profile-info-value">
-                                <ppts-radiobutton-group category="dateRange" model="vm.criteria.dateRange" />
+                                <ppts-radiobutton-group category="dateRange" model="vm.criteria.dateRange" show-all="true" />
                                 <div ng-show="vm.criteria.dateRange == 5">
                                     <ppts-daterangepicker start-Date="vm.criteria.customStartDate" end-Date="vm.criteria.customEndDate" />
                                 </div>
@@ -72,46 +72,49 @@
     </div>
     <!--高级查询-结束-->
 </form>
-<div class="mcs-panel-search well well-sm">
-    <div class="portlet">
-        <div class="portlet-title line">
-            <div class="caption">
-                <label class="quick-search"><i class="ace-icon fa fa-search bigger-125"></i> 快速查询条件</label>
-            </div>
+
+<ppts-dynamic-content template="quick-search.tpl.html">
+    <div class="row">
+        <div class="col-md-4">
+            <ppts-select-branch model="vm.criteria.campusIDs" />
         </div>
-        <div class="portlet-body">
-            <form name="orderListForm">
-                <div class="ppts-oneline-block">
-                    <div class="search-inline">
-                        <ppts-select-branch model="vm.criteria.campusIDs" />
-                    </div>
-
-                    <div class="search-inline">
-
-                        <ppts-select category="subject" class="ppts-select-search" model="vm.criteria.subject" caption="科目" />
-                        <ppts-select category="courseLevel" class="ppts-select-search" model="vm.criteria.courseLevel" caption="课程级别" />
-                        <ppts-select category="duration" class="ppts-select-search" model="vm.criteria.duration" caption="课时时长" />
-                    </div>
-                </div>
-               
-                <div class="ppts-oneline-block">
-                    <mcs-input placeholder="学生姓名" model="vm.criteria.stuName" class="mcs-input-search"/>
-                    <mcs-input placeholder="家长姓名" model="vm.criteria.parentName" class="mcs-input-search"/>
-                    <mcs-input placeholder="学生编号" model="vm.criteria.stuCode" class="mcs-input-search"/>
-                    <mcs-input placeholder="订单编号" model="vm.criteria.orderCode" class="mcs-input-search"/>
-                    <mcs-button category="search" click="vm.search()" size="medium"/>
-                </div>
-
-            </form>
+        <div class="col-md-4">
+            <ppts-select category="subject" model="vm.criteria.subject" caption="科目" css="mcs-padding-0" />
+        </div>
+        <div class="col-md-4">
+            <ppts-select category="courseLevel" model="vm.criteria.courseLevel" caption="课程级别" css="mcs-padding-0" />
         </div>
     </div>
-</div>
+    <div class="row">
+        <div class="col-md-4">
+            <ppts-select category="duration" model="vm.criteria.duration" caption="课时时长" css="mcs-padding-0" />
+        </div>
+        <div class="col-md-4">
+            <mcs-input placeholder="学生姓名" uib-tooltip="学生姓名" model="vm.criteria.stuName" css="mcs-input-search mcs-width-full" />
+        </div>
+        <div class="col-md-4">
+            <mcs-input placeholder="家长姓名" uib-tooltip="家长姓名" model="vm.criteria.parentName" css="mcs-input-search mcs-width-full" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <mcs-input placeholder="学生编号" uib-tooltip="学生编号" model="vm.criteria.stuCode" css="mcs-input-search mcs-width-full" />
+        </div>
+        <div class="col-md-4">
+            <mcs-input placeholder="订单编号" uib-tooltip="订单编号" model="vm.criteria.orderCode" css="mcs-input-search mcs-width-full" />
+        </div>
+        <div class="col-md-4">
+        </div>
+    </div>
+</ppts-dynamic-content>
+
+
 <!-- /结束：订购列表.查询条件 -->
 <!-- #开始：订购列表.工具条 -->
 <div class="mcs-panel-toolbar">
     <mcs-button category="edit" text="退订" ng-disabled="vm.data.rowsSelected.length!=1" click="vm.unsubscribe()"></mcs-button>
     <mcs-button category="edit" text="编辑关联缴费单" ng-disabled="vm.data.rowsSelected.length!=1" click="vm.editchargepay()"></mcs-button>
-    <mcs-button category="print" text="打印订单" ng-disabled="vm.data.rowsSelected.length!=1 && vm.data.rowsSelected[0].categoryType!=1 && vm.data.rowsSelected[0].categoryType!=2" click="vm.print()" ></mcs-button>
+    <mcs-button category="print" text="打印订单" ng-disabled="vm.data.rowsSelected.length!=1 && vm.data.rowsSelected[0].categoryType!=1 && vm.data.rowsSelected[0].categoryType!=2" click="vm.print()"></mcs-button>
     <mcs-button category="export" click="vm.export()"></mcs-button>
 </div>
 <!-- /结束：订购列表.工具条 -->

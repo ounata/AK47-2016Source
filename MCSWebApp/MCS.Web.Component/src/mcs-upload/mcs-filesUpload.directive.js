@@ -36,16 +36,10 @@
                     };
 
                     $scope.downloadFile = function(file) {
-                        $http.post($scope.downloadUrl, {
-                            status: file.status,
-                            id: file.id,
-                            originalName: file.originalName
-                        }).then(function(response) {
 
-                            var win = window.open('_blank', 'filedownloadwin');
-                            win.write(response.data);
+                        mcs.util.postMockForm($scope.downloadUrl, file);
 
-                        });
+
                     };
 
                     $scope.uploadFiles = function(files) {
@@ -72,9 +66,9 @@
                             file.upload.then(function(response) {
                                 $timeout(function() {
                                     mcs.util.removeByObject(files, file);
-                                    response.data.method = 'edit';
+                                    response.data[0].method = 'edit';
 
-                                    $scope.model.push(response.data);
+                                    $scope.model.push(response.data[0]);
                                 });
                             }, function(response) {
                                 if (response.status > 0) {

@@ -189,7 +189,7 @@
             ], function () {
                 window.onload = function () {
                     // the script will be run once for ie
-                    if (mcs.browser.s.msie) {
+                    if (!mcs.browser.s.edge && mcs.browser.s.msie) {
                         if (!sessionStorage.getItem('ppts_expand_sidebar')) {
                             ace.handle_side_menu($);
                             sessionStorage.setItem('ppts_expand_sidebar', true);
@@ -199,7 +199,7 @@
 
                 angular.element(document).ready(function () {
                     angular.bootstrap(document, ['ppts']);
-                    // the script will not run for ie & edge
+                    // the script will not run for ie && edge
                     if (!mcs.browser.s.msie) {
                         ace.handle_side_menu($);
                     }

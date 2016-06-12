@@ -2,11 +2,12 @@
 (
 	[ObjectID] NVARCHAR(36) NOT NULL , 
     [ObjectType] NVARCHAR(32) NOT NULL, 
+	[RelationType] NVARCHAR(32) NOT NULL DEFAULT (10),
     [OwnerID] NVARCHAR(36) NOT NULL, 
     [OwnerType] NVARCHAR(32) NOT NULL, 
     [CreateTime] DATETIME NULL, 
     [ModifyTime] DATETIME NULL, 
-    CONSTRAINT [PK_RecordOrgAuthorizations] PRIMARY KEY ([ObjectID], [ObjectType], [OwnerID], [OwnerType]) 
+    CONSTRAINT [PK_RecordOrgAuthorizations] PRIMARY KEY ([RelationType], [ObjectType], [OwnerID], [OwnerType]) 
 )
 
 GO
@@ -73,3 +74,12 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level2type = NULL,
     @level2name = NULL
 GO
+
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'授权对象类别:"建档关系"(10),预留',
+    @level0type = N'SCHEMA',
+    @level0name = N'MT',
+    @level1type = N'TABLE',
+    @level1name = N'RecordOrgAuthorizations',
+    @level2type = N'COLUMN',
+    @level2name = N'RelationType'

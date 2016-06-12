@@ -11,10 +11,10 @@ define([ppts.config.modules.customer,
         ppts.config.dataServiceConfig.customerVisitDataService],
         function (customer) {
             customer.registerController('customerVisitEditController', [
-                '$state', '$scope', '$stateParams', 'customerVisitDataService', 'customerVisitDataViewService', 'dataSyncService',
-                function ($state, $scope, $stateParams, customerVisitDataService, customerVisitDataViewService, dataSyncService) {
+                '$state', '$scope', '$stateParams', 'customerVisitDataService', 'customerVisitDataViewService', 'dataSyncService','mcsValidationService',
+                function ($state, $scope, $stateParams, customerVisitDataService, customerVisitDataViewService, dataSyncService, mcsValidationService) {
                     var vm = this;
-
+                    mcsValidationService.init($scope);
                     vm.id = $stateParams.visitId;
 
                     (function () {
@@ -36,12 +36,13 @@ define([ppts.config.modules.customer,
                     };
 
                     vm.edit = function () {
-
-                        customerVisitDataService.editCustomerVisit({
-                            customerVisit: vm.customerVisit
-                        }, function () {
-                            $state.go('ppts.student-view.visits', { prev: 'ppts.student' });
-                        });
+                        if (mcsValidationService.run($scope)) {
+                            customerVisitDataService.editCustomerVisit({
+                                customerVisit: vm.customerVisit
+                            }, function () {
+                                $state.go('ppts.student-view.visits', { prev: 'ppts.student' });
+                            });
+                        }
                     };
 
                 }]);

@@ -21,23 +21,23 @@
                     <div class="form-group horizontal">
                         <mcs-label required="true" text="潜在客户" css="col-sm-3" />
                         <div class="col-sm-4">
-                            <ppts-select-customer model="vm.customer" required />
+                            <ppts-select-customer model="vm.customer" css="mcs-padding-0" style="margin-left:14px;" required />
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="form-group horizontal">
-                        <mcs-label required="true" text="实际上门人数" css="col-md-3" />
+                        <mcs-label text="实际上门人数" css="col-md-3" />
                         <div class="col-md-4">
-                            <ppts-select category="verifyPeople" model="vm.customerVerify.verifyPeoples" class="ppts-select-lg" required />
+                            <ppts-select category="verifyPeople" model="vm.customerVerify.verifyPeoples" class="ppts-select-lg" />
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="form-group horizontal">
-                        <mcs-label required="true" text="上门人员关系" css="col-md-3" />
+                        <mcs-label text="上门人员关系" css="col-md-3" />
                         <div class="col-md-4">
-                            <ppts-select category="verifyRelation" model="vm.customerVerify.verifyRelations" class="ppts-select-lg" required />
+                            <ppts-select category="verifyRelation" model="vm.customerVerify.verifyRelations" class="ppts-select-lg" />
                         </div>
                     </div>
                 </div>

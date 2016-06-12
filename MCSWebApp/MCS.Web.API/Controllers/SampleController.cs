@@ -19,6 +19,7 @@ using System.Web.Http.ModelBinding;
 using MCS.Web.MVC.Library.ModelBinder;
 using MCS.Web.MVC.Library.Providers;
 using System.Text;
+using MCS.Library.SOA.DataObjects;
 using MCS.Web.MVC.Library.Models;
 
 namespace MCS.Web.API.Controllers
@@ -181,7 +182,7 @@ namespace MCS.Web.API.Controllers
         }
 
         [HttpPost]
-        public HttpResponseMessage DownloadMaterial(MaterialModel material)
+        public HttpResponseMessage DownloadMaterial([ModelBinder(typeof(FormBinder))] MaterialModel material)
         {
             return material.ProcessMaterialDownload();
         }
@@ -189,8 +190,12 @@ namespace MCS.Web.API.Controllers
         [HttpPost]
         public MaterialModelCollection UploadMaterial(HttpRequestMessage request)
         {
+
+            
             return request.ProcessMaterialUpload();
         }
+
+        
     }
 
     public class Person

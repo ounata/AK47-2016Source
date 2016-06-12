@@ -6,275 +6,309 @@ using System.Collections;
 
 namespace MCS.Library.Core
 {
-	/// <summary>
-	/// List的扩展方法
-	/// </summary>
-	public static class IListExtension
-	{
-		/// <summary>
-		/// 在一个有序的List中进行二分查找
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="list"></param>
-		/// <param name="target">查找目标</param>
-		/// <param name="comparison"></param>
-		/// <returns></returns>
-		public static int BinarySearch<T>(this IList<T> list, T target, Comparison<T> comparison)
-		{
-			list.NullCheck("list");
-			target.NullCheck("target");
-			comparison.NullCheck("comparison");
+    /// <summary>
+    /// List的扩展方法
+    /// </summary>
+    public static class IListExtension
+    {
+        /// <summary>
+        /// 枚举处理IList的内容
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="data"></param>
+        /// <param name="action"></param>
+        public static void ForEach<T>(this IList<T> data, Action<T, int> action)
+        {
+            if (data != null && action != null)
+            {
+                for (int i = 0; i < data.Count; i++)
+                {
+                    action(data[i], i);
+                }
+            }
+        }
 
-			return InnerBinarySearch(list, target, 0, list.Count - 1, comparison);
-		}
+        /// <summary>
+        /// 枚举处理IList的内容
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="data"></param>
+        /// <param name="action"></param>
+        public static void ForEach<T>(this IList data, Action<T, int> action)
+        {
+            if (data != null && action != null)
+            {
+                for (int i = 0; i < data.Count; i++)
+                {
+                    action((T)data[i], i);
+                }
+            }
+        }
 
-		private static int InnerBinarySearch<T>(IList<T> list, T target, int startIndex, int endIndex, Comparison<T> comparison)
-		{
-			int result = -1;
+        /// <summary>
+        /// 在一个有序的List中进行二分查找
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="target">查找目标</param>
+        /// <param name="comparison"></param>
+        /// <returns></returns>
+        public static int BinarySearch<T>(this IList<T> list, T target, Comparison<T> comparison)
+        {
+            list.NullCheck("list");
+            target.NullCheck("target");
+            comparison.NullCheck("comparison");
 
-			if (endIndex >= startIndex)
-			{
-				int midIndex = (endIndex + startIndex) / 2;
+            return InnerBinarySearch(list, target, 0, list.Count - 1, comparison);
+        }
 
-				T data = list[midIndex];
+        private static int InnerBinarySearch<T>(IList<T> list, T target, int startIndex, int endIndex, Comparison<T> comparison)
+        {
+            int result = -1;
 
-				int compareResult = comparison(target, data);
+            if (endIndex >= startIndex)
+            {
+                int midIndex = (endIndex + startIndex) / 2;
 
-				if (compareResult == 0)
-					result = midIndex;
-				else
-					if (compareResult < 0)
-						result = InnerBinarySearch(list, target, startIndex, midIndex - 1, comparison);
-					else
-						result = InnerBinarySearch(list, target, midIndex + 1, endIndex, comparison);
-			}
+                T data = list[midIndex];
 
-			return result;
-		}
+                int compareResult = comparison(target, data);
 
-		/// <summary>
-		/// 查找最接近的项，返回最接近的项（小于等于）的下标。如果比第一项小，则返回0，如果比最后一项大，则返回集合的下标+1。
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="list"></param>
-		/// <param name="target"></param>
-		/// <param name="comparison"></param>
-		/// <returns></returns>
-		public static int BinaryNearestSearch<T>(this IList<T> list, T target, Comparison<T> comparison)
-		{
-			list.NullCheck("list");
-			target.NullCheck("target");
-			comparison.NullCheck("comparison");
+                if (compareResult == 0)
+                    result = midIndex;
+                else
+                    if (compareResult < 0)
+                    result = InnerBinarySearch(list, target, startIndex, midIndex - 1, comparison);
+                else
+                    result = InnerBinarySearch(list, target, midIndex + 1, endIndex, comparison);
+            }
 
-			return InnerBinaryNearestSearch(list, target, 0, list.Count - 1, comparison);
-		}
+            return result;
+        }
 
-		#region QuickSort<T>
-		/// <summary>
-		/// 快速排序，使用对象默认的比较规则
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="list"></param>
-		public static void QuickSort<T>(this IList<T> list) where T : IComparable<T>
-		{
-			list.NullCheck("list");
+        /// <summary>
+        /// 查找最接近的项，返回最接近的项（小于等于）的下标。如果比第一项小，则返回0，如果比最后一项大，则返回集合的下标+1。
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="target"></param>
+        /// <param name="comparison"></param>
+        /// <returns></returns>
+        public static int BinaryNearestSearch<T>(this IList<T> list, T target, Comparison<T> comparison)
+        {
+            list.NullCheck("list");
+            target.NullCheck("target");
+            comparison.NullCheck("comparison");
 
-			Comparison<T> comparison = (left, right) => left.CompareTo(right);
+            return InnerBinaryNearestSearch(list, target, 0, list.Count - 1, comparison);
+        }
 
-			InnerQuickSort(list, 0, list.Count - 1, comparison);
-		}
+        #region QuickSort<T>
+        /// <summary>
+        /// 快速排序，使用对象默认的比较规则
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
+        public static void QuickSort<T>(this IList<T> list) where T : IComparable<T>
+        {
+            list.NullCheck("list");
 
-		/// <summary>
-		/// 按照一定的规则进行快速排序
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="list"></param>
-		/// <param name="comparison"></param>
-		public static void QuickSort<T>(this IList<T> list, Comparison<T> comparison)
-		{
-			list.NullCheck("list");
-			comparison.NullCheck("comparison");
+            Comparison<T> comparison = (left, right) => left.CompareTo(right);
 
-			InnerQuickSort(list, 0, list.Count - 1, comparison);
-		}
+            InnerQuickSort(list, 0, list.Count - 1, comparison);
+        }
 
-		/// <summary>
-		/// 按照一定的规则进行快速排序
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="list"></param>
-		/// <param name="comparer"></param>
-		public static void QuickSort<T>(this IList<T> list, IComparer<T> comparer)
-		{
-			list.NullCheck("list");
-			comparer.NullCheck("comparer");
+        /// <summary>
+        /// 按照一定的规则进行快速排序
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="comparison"></param>
+        public static void QuickSort<T>(this IList<T> list, Comparison<T> comparison)
+        {
+            list.NullCheck("list");
+            comparison.NullCheck("comparison");
 
-			Comparison<T> comparison = (left, right) => comparer.Compare(left, right);
+            InnerQuickSort(list, 0, list.Count - 1, comparison);
+        }
 
-			InnerQuickSort(list, 0, list.Count - 1, comparison);
-		}
+        /// <summary>
+        /// 按照一定的规则进行快速排序
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="comparer"></param>
+        public static void QuickSort<T>(this IList<T> list, IComparer<T> comparer)
+        {
+            list.NullCheck("list");
+            comparer.NullCheck("comparer");
 
-		private static int InnerBinaryNearestSearch<T>(IList<T> list, T target, int startIndex, int endIndex, Comparison<T> comparison)
-		{
-			int result = -1;
+            Comparison<T> comparison = (left, right) => comparer.Compare(left, right);
 
-			if (endIndex >= startIndex)
-			{
-				int midIndex = (endIndex + startIndex) / 2;
+            InnerQuickSort(list, 0, list.Count - 1, comparison);
+        }
 
-				T data = list[midIndex];
+        private static int InnerBinaryNearestSearch<T>(IList<T> list, T target, int startIndex, int endIndex, Comparison<T> comparison)
+        {
+            int result = -1;
 
-				int compareResult = comparison(target, data);
+            if (endIndex >= startIndex)
+            {
+                int midIndex = (endIndex + startIndex) / 2;
 
-				if (compareResult == 0)
-					result = midIndex;
-				else
-					if (compareResult < 0)
-						result = InnerBinaryNearestSearch(list, target, startIndex, midIndex - 1, comparison);
-					else
-						result = InnerBinaryNearestSearch(list, target, midIndex + 1, endIndex, comparison);
-			}
-			else
-				result = endIndex + 1;
+                T data = list[midIndex];
 
-			return result;
-		}
+                int compareResult = comparison(target, data);
 
-		private static void InnerQuickSort<T>(IList<T> list, int left, int right, Comparison<T> comparison)
-		{
-			if (left < right)
-			{
-				int middle = GetMiddleFromQuickSort(list, left, right, comparison);
+                if (compareResult == 0)
+                    result = midIndex;
+                else
+                    if (compareResult < 0)
+                    result = InnerBinaryNearestSearch(list, target, startIndex, midIndex - 1, comparison);
+                else
+                    result = InnerBinaryNearestSearch(list, target, midIndex + 1, endIndex, comparison);
+            }
+            else
+                result = endIndex + 1;
 
-				InnerQuickSort(list, left, middle - 1, comparison);
-				InnerQuickSort(list, middle + 1, right, comparison);
-			}
-		}
+            return result;
+        }
 
-		private static int GetMiddleFromQuickSort<T>(IList<T> list, int left, int right, Comparison<T> comparison)
-		{
-			T key = list[left];
+        private static void InnerQuickSort<T>(IList<T> list, int left, int right, Comparison<T> comparison)
+        {
+            if (left < right)
+            {
+                int middle = GetMiddleFromQuickSort(list, left, right, comparison);
 
-			while (left < right)
-			{
-				while (left < right && comparison(key, list[right]) < 0)
-					right--;
+                InnerQuickSort(list, left, middle - 1, comparison);
+                InnerQuickSort(list, middle + 1, right, comparison);
+            }
+        }
 
-				if (left < right)
-				{
-					T temp = list[left];
-					list[left] = list[right];
-					list[right] = temp;
-					left++;
-				}
+        private static int GetMiddleFromQuickSort<T>(IList<T> list, int left, int right, Comparison<T> comparison)
+        {
+            T key = list[left];
 
-				while (left < right && comparison(key, list[left]) > 0)
-					left++;
+            while (left < right)
+            {
+                while (left < right && comparison(key, list[right]) < 0)
+                    right--;
 
-				if (left < right)
-				{
-					T temp = list[right];
-					list[right] = list[left];
-					list[left] = temp;
-					right--;
-				}
+                if (left < right)
+                {
+                    T temp = list[left];
+                    list[left] = list[right];
+                    list[right] = temp;
+                    left++;
+                }
 
-				list[left] = key;
-			}
+                while (left < right && comparison(key, list[left]) > 0)
+                    left++;
 
-			return left;
-		}
-		#endregion QuickSort<T>
+                if (left < right)
+                {
+                    T temp = list[right];
+                    list[right] = list[left];
+                    list[left] = temp;
+                    right--;
+                }
 
-		#region QuickSortList
-		/// <summary>
-		/// 快速排序，使用对象默认的比较规则
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="list"></param>
-		public static void QuickSortList<T>(this IList list) where T : IComparable<T>
-		{
-			list.NullCheck("list");
+                list[left] = key;
+            }
 
-			Comparison<T> comparison = (left, right) => left.CompareTo(right);
+            return left;
+        }
+        #endregion QuickSort<T>
 
-			InnerQuickSort(list, 0, list.Count - 1, comparison);
-		}
+        #region QuickSortList
+        /// <summary>
+        /// 快速排序，使用对象默认的比较规则
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
+        public static void QuickSortList<T>(this IList list) where T : IComparable<T>
+        {
+            list.NullCheck("list");
 
-		/// <summary>
-		/// 按照一定的规则进行快速排序
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="list"></param>
-		/// <param name="comparison"></param>
-		public static void QuickSortList<T>(this IList list, Comparison<T> comparison)
-		{
-			list.NullCheck("list");
-			comparison.NullCheck("comparison");
+            Comparison<T> comparison = (left, right) => left.CompareTo(right);
 
-			InnerQuickSort(list, 0, list.Count - 1, comparison);
-		}
+            InnerQuickSort(list, 0, list.Count - 1, comparison);
+        }
 
-		/// <summary>
-		/// 按照一定的规则进行快速排序
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="list"></param>
-		/// <param name="comparer"></param>
-		public static void QuickSortList<T>(this IList list, IComparer<T> comparer)
-		{
-			list.NullCheck("list");
-			comparer.NullCheck("comparer");
+        /// <summary>
+        /// 按照一定的规则进行快速排序
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="comparison"></param>
+        public static void QuickSortList<T>(this IList list, Comparison<T> comparison)
+        {
+            list.NullCheck("list");
+            comparison.NullCheck("comparison");
 
-			Comparison<T> comparison = (left, right) => comparer.Compare(left, right);
+            InnerQuickSort(list, 0, list.Count - 1, comparison);
+        }
 
-			InnerQuickSort(list, 0, list.Count - 1, comparison);
-		}
+        /// <summary>
+        /// 按照一定的规则进行快速排序
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="comparer"></param>
+        public static void QuickSortList<T>(this IList list, IComparer<T> comparer)
+        {
+            list.NullCheck("list");
+            comparer.NullCheck("comparer");
 
-		private static void InnerQuickSort<T>(IList list, int left, int right, Comparison<T> comparison)
-		{
-			if (left < right)
-			{
-				int middle = GetMiddleFromQuickSort(list, left, right, comparison);
+            Comparison<T> comparison = (left, right) => comparer.Compare(left, right);
 
-				InnerQuickSort(list, left, middle - 1, comparison);
-				InnerQuickSort(list, middle + 1, right, comparison);
-			}
-		}
+            InnerQuickSort(list, 0, list.Count - 1, comparison);
+        }
 
-		private static int GetMiddleFromQuickSort<T>(IList list, int left, int right, Comparison<T> comparison)
-		{
-			T key = (T)list[left];
+        private static void InnerQuickSort<T>(IList list, int left, int right, Comparison<T> comparison)
+        {
+            if (left < right)
+            {
+                int middle = GetMiddleFromQuickSort(list, left, right, comparison);
 
-			while (left < right)
-			{
-				while (left < right && comparison(key, (T)list[right]) < 0)
-					right--;
+                InnerQuickSort(list, left, middle - 1, comparison);
+                InnerQuickSort(list, middle + 1, right, comparison);
+            }
+        }
 
-				if (left < right)
-				{
-					T temp = (T)list[left];
-					list[left] = list[right];
-					list[right] = temp;
-					left++;
-				}
+        private static int GetMiddleFromQuickSort<T>(IList list, int left, int right, Comparison<T> comparison)
+        {
+            T key = (T)list[left];
 
-				while (left < right && comparison(key, (T)list[left]) > 0)
-					left++;
+            while (left < right)
+            {
+                while (left < right && comparison(key, (T)list[right]) < 0)
+                    right--;
 
-				if (left < right)
-				{
-					T temp = (T)list[right];
-					list[right] = list[left];
-					list[left] = temp;
-					right--;
-				}
+                if (left < right)
+                {
+                    T temp = (T)list[left];
+                    list[left] = list[right];
+                    list[right] = temp;
+                    left++;
+                }
 
-				list[left] = key;
-			}
+                while (left < right && comparison(key, (T)list[left]) > 0)
+                    left++;
 
-			return left;
-		}
-		#endregion QuickSortList
-	}
+                if (left < right)
+                {
+                    T temp = (T)list[right];
+                    list[right] = list[left];
+                    list[left] = temp;
+                    right--;
+                }
+
+                list[left] = key;
+            }
+
+            return left;
+        }
+        #endregion QuickSortList
+    }
 }

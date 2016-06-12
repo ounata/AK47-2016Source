@@ -44,6 +44,7 @@ namespace PPTS.WebAPI.Orders.Controllers
             {
                 QueryResult = GenericPurchaseSource<OrderItemView, OrderItemViewCollection>.Instance.Query(criteria.PageParams, criteria, criteria.OrderBy),
                 Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(OrderItemView),typeof(Product)),
+                Categories = Service.ProductService.GetCategories(),
             };
         }
 
@@ -65,6 +66,7 @@ namespace PPTS.WebAPI.Orders.Controllers
             return new
             {
                 Entity = OrderItemViewAdapter.Instance.Load(id),
+                Expense = Service.CustomerService.GetCustomerExpenseByOrderId(id),
                 Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(OrderItemView)),
             };
         }
@@ -99,7 +101,9 @@ namespace PPTS.WebAPI.Orders.Controllers
         public dynamic GetServiceChargeByUserId(dynamic data)
         {
             string customerId = data.customerId;
-            string campusId = data.campusId;
+            var customer = Service.CustomerService.GetCustomerByCustomerId(customerId);
+            (customerId == null).TrueThrow(customerId+"该学员不存在！");
+            string campusId = customer.CampusID;
 
             return new
             {

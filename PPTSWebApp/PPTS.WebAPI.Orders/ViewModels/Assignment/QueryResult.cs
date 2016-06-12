@@ -8,9 +8,6 @@ using System.Web;
 
 namespace PPTS.WebAPI.Orders.ViewModels.Assignment
 {
-
-    [Serializable]
-    [DataContract]
     public class TeacherModel
     {
         #region
@@ -31,8 +28,6 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
         }
         #endregion
     }
-    [Serializable]
-    [DataContract]
     public class TchSubjectGradeRela
     {
         [DataMember]
@@ -72,13 +67,7 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
         {
             get;set;
         }
-
     }
-
-
-
-    [Serializable]
-    [DataContract]
     public class KeyValue
     {
         [DataMember]
@@ -89,26 +78,22 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
         public string Field01 { get; set; }
     }
 
-    [Serializable]
-    [DataContract]
     public class StudentModel
     {
         #region
 
         [DataMember]
-        public string TeacherJobOrgID
-        {
-            get;
-            set;
-        }
+        public string TeacherJobOrgID { get; set; }
+
         [DataMember]
         public string TeacherJobOrgName { get; set; }
 
-
         [DataMember]
         public IList<KeyValue> Student { get; set; }
+
         [DataMember]
         public IList<KeyValue> Grade { get; set; }
+
         [DataMember]
         public IDictionary<string, IList<KeyValue>> GradeSubjectRela { get; set; }
 
@@ -118,39 +103,26 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
             Grade = new List<KeyValue>();
             GradeSubjectRela = new Dictionary<string, IList<KeyValue>>();
         }
-
         #endregion
-
     }
 
     ///按学员创建排课条件，初始化数据模型
     public class InitDataByStuCAQR : CreateAssignQRBase
     {
-        public AssetViewCollection AssignExtension
-        {
-            get;
-            set;
-        }
+        public AssetViewCollection AssignExtension { get; set; }
 
-        public TeacherModel Teacher
-        {
-            get;
-            set;
-        }
+        public TeacherModel Teacher { get; set; }
 
         public InitDataByStuCAQR() : base()
         {
 
         }
     }
+    
     ///按教师创建排课条件，初始化数据模型
     public class InitDataByTchCAQR : CreateAssignQRBase
     {
-        public StudentModel Student
-        {
-            get;
-            set;
-        }
+        public StudentModel Student { get; set; }
         public InitDataByTchCAQR() : base()
         {
 
@@ -161,6 +133,7 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
     {
         public AssetViewCollection Result { get; set; }
     }
+
     public class SimpleAssetView
     {
         public AssetView Result { get; set; }

@@ -271,8 +271,9 @@ namespace MCS.Web.WebControls
 					Translator.Translate(Define.DefaultCulture, "没有上传的数据"));
 
 				ProcessProgress.Current.RegisterResponser(UploadProgressResponser.Instance);
+                response.Write(new string(' ', 4096));
 
-				this.ClientExtraPostedData = request.Form["clientExtraPostedData"];
+                this.ClientExtraPostedData = request.Form["clientExtraPostedData"];
 
 				PostProgressPrepareDataEventArgs prepareDataArgs = new PostProgressPrepareDataEventArgs() { SerializedData = request["postedData"] };
 

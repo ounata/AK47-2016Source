@@ -95,11 +95,15 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Services\CategoryQueryService.svc" />
     <Content Include="Services\ConfigRuleQueryService.svc" />
     <Content Include="Services\ProductQueryService.svc" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Services\CategoryQueryService.svc.cs">
+      <DependentUpon>CategoryQueryService.svc</DependentUpon>
+    </Compile>
     <Compile Include="Services\ConfigRuleQueryService.svc.cs">
       <DependentUpon>ConfigRuleQueryService.svc</DependentUpon>
     </Compile>

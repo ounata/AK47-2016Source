@@ -23,10 +23,21 @@
                             vm.teas = result;
                             for (var i in result) {
                                 var item = result[i];
-                                vm.tags.push({ teacherID: item.teacherID, teacherName: item.teacherName, teacherJobID: item.jobID, teacherJobOrgID: item.jobOrgID, teacherJobOrgName: item.jobOrgName, viewName: item.jobShortOrgName + '-' + item.teacherName + '(' + item.teacherCode + ')' });
+                                vm.tags.push({ teacherID: item.teacherID, teacherName: item.teacherName, teacherJobID: item.jobID, teacherJobOrgID: item.jobOrgID, teacherJobOrgName: item.jobOrgName, viewName: getShortOrgName(item.jobOrgName) + '-' + item.teacherName + '(' + item.teacherCode + ')' });
                             }
                         }, function () {
                         });
+                    }
+
+                    var getShortOrgName = function (orgName) {
+                        if (!orgName)
+                            return "";
+                        var part = orgName.split("-");
+                        for (var i in part) {
+                            if (part[i].indexOf("组") != -1)
+                                return part[i];
+                        }
+                        return "";
                     }
 
                     vm.searchTeacher();
@@ -90,6 +101,9 @@
                         if (data.customers.length == 1) {
                             studentDataService.getAllCustomerTeacherRelations(data.customers[0], function (result) {
                                 vm.data.rows = result.customerTeachers;
+                                for (var i in vm.data.rows) {
+                                    vm.data.rows[i].viewName = getShortOrgName(vm.data.rows[i].teacherJobOrgName) + '-' + vm.data.rows[i].teacherName + '(' + vm.data.rows[i].teacherOACode + ')';
+                                }
                             }, function () { });
                         }
                     }

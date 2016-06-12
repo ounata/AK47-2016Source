@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [MT].[OwnerRelationAuthorizations]
 (
 	[ObjectID] NVARCHAR(36) NOT NULL , 
-    [ObjectType] NVARCHAR(32) NOT NULL, 
+    [ObjectType] NVARCHAR(32) NOT NULL DEFAULT (10), 
     [OrgID] NVARCHAR(36) NULL, 
     [OrgType] NVARCHAR(32) NULL, 
     [OwnerID] NVARCHAR(36) NOT NULL, 
@@ -22,7 +22,7 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level2name = N'ObjectID'
 GO
 EXEC sp_addextendedproperty @name = N'MS_Description',
-    @value = N'授权对象类别:"建档关系"',
+    @value = N'授权对象类别:"建档关系"(10)',
     @level0type = N'SCHEMA',
     @level0name = N'MT',
     @level1type = N'TABLE',

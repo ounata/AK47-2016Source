@@ -72,7 +72,7 @@
                         url: 'ppts.student-view.stuAsgmtConditionEdit({prev:vm.page})',
                         title: '排课条件'
                     }, {
-                        url: 'ppts.demo',
+                        url: 'ppts.student-view.stuWeekCourse({prev:vm.page})',
                         title: '课表'
                     }, {
                         url: 'ppts.student-view.studentRecordList({prev:vm.page})',

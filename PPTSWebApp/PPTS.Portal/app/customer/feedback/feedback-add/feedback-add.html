@@ -8,12 +8,13 @@
                 </div>
             </div>
         </div>
-        <div class="form-control padding-4">
-            <span class="pull-left profile-info-name">被访学员:</span>
-            <span class="pull-left">{{vm.parentName}}</span>
-            
-            <span class="pull-right">{{vm.customerName}}</span>
-            <span class="pull-right profile-info-name">学员家长:</span>
+        <div class="form-control">
+            <div class="col-md-1">被访学员:</div>
+            <div class="col-md-5">{{vm.parentName}}</div>
+
+
+            <div class="col-md-1">学员家长:</div>
+            <div class="col-md-5">{{vm.customerName}}</div>
         </div>
         <div class="tabbable">
             <ul class="nav nav-tabs padding-2 tab-color-blue background-blue padding-top-2" id="myTab4">
@@ -30,14 +31,24 @@
                 <div id="weekFeedback" class="tab-pane active">
                     <textarea class="form-control" placeholder="请输入内容...." rows="5" id="textArea"
                               ng-model="vm.weekFeedback" maxlength="500" required></textarea>
+                    <span class="span-memo pull-right">
+                        最多输入500字,您还能输入<span style="color:red">{{vm.weekFeedbackMemo}}</span>
+                        字!
+                    </span>
                 </div>
 
                 <div id="replyParent" class="tab-pane">
                     <textarea class="form-control" placeholder="请输入内容...." rows="5" id="textArea"
                               ng-model="vm.replyParent" maxlength="500" required></textarea>
+                    <span class="span-memo pull-right">
+                        最多输入500字,您还能输入<span style="color:red">{{vm.replyParentMemo}}</span>
+                        字!
+                    </span>
                 </div>
+                
             </div>
         </div>
-        <span class="span-memo">最多输入500字</span>
+        
+        
     </div>
 </form>

@@ -14,7 +14,7 @@
             templateUrl: 'app/order/purchase/list/order-list.html',
             controller: 'orderListController',
             breadcrumb: {
-                label: '订购管理',
+                label: '订购列表',
                 parent: 'ppts'
             },
             dependencies: ['app/order/purchase/list/order-list.controller']

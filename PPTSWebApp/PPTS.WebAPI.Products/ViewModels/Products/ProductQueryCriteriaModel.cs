@@ -10,8 +10,8 @@ namespace PPTS.WebAPI.Products.ViewModels.Products
         [NoMapping]
         public string[] CampusIDs { get; set; }
 
-        [ConditionMapping("CategoryType")]
-        public string CategoryType { get; set; }
+        [InConditionMapping("Category")]
+        public string[] Categories { get; set; }
 
         [ConditionMapping("CreatorName")]
         public string CreatorName { get; set; }
@@ -52,7 +52,13 @@ namespace PPTS.WebAPI.Products.ViewModels.Products
         [ConditionMapping("EndDate", Operation = "<", AdjustDays = 1)]
         public DateTime EndEndDate { get; set; }
 
-        
+        //收入确认时间
+        [ConditionMapping("ConfirmStartDate", Operation = ">=")]
+        public DateTime StartConfirmStartDate { get; set; }
+
+        [ConditionMapping("ConfirmEndDate", Operation = "<", AdjustDays = 1)]
+        public DateTime EndConfirmEndDate { get; set; }
+
 
         //----------------------------
 

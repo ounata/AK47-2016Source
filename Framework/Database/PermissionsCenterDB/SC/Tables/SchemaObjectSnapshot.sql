@@ -28,7 +28,7 @@ CREATE INDEX [IX_SchemaObjectSnapshot_StartTime] ON [SC].[SchemaObjectSnapshot] 
 GO
 
 
-CREATE INDEX [IX_SchemaObjectSnapshot_Name] ON [SC].[SchemaObjectSnapshot] ([Name])
+CREATE INDEX [IX_SchemaObjectSnapshot_Name] ON [SC].[SchemaObjectSnapshot] ([Name], [VersionStartTime])
 
 GO
 

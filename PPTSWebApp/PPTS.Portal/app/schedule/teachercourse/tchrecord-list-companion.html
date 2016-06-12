@@ -15,8 +15,8 @@
             </div>
             <div class="profile-info-row">
                 <div class="profile-info-name"> 上课教师 </div>
-                <div class="profile-info-value">
-                    <tags-input class="mcs-tags-input-lg noplaceholder" ng-disable="true" ng-model="vm.teachers" add-on-space="true" add-from-autocomplete-only="true" add-on-enter="true" key-property="teacherId" display-property="name" placeholder="">
+                <div class="profile-info-value">            
+                    <tags-input class="mcs-tags-input-lg noplaceholder noshow" ng-disable="true" ng-model="vm.teachers" add-on-space="true" add-from-autocomplete-only="true" add-on-enter="true" key-property="teacherId" display-property="name" placeholder="">
                         <auto-complete min-length="1" source="vm.queryTeacherList($query)"></auto-complete>
                     </tags-input>
                 </div>

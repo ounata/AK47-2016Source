@@ -21,6 +21,10 @@
         margin: 0;
     }
     
+    .justPrint {
+        display: inherit;
+    }
+    
     .noprint {
         display: none;
     }
@@ -29,10 +33,10 @@
         margin: 0.1cm;
     }
     
-    printArea {
+    #printArea {
         size: A4 landscape;
-        mso-header-margin: .5in;
-        mso-footer-margin: .5in;
+        mso-header-margin: 1.5in;
+        mso-footer-margin: 1.5in;
         mso-paper-source: 0;
     }
     </style>
@@ -44,6 +48,8 @@
     <div class="container" id="printContainer">
         <div id="tools" class="center noprint">
             <input type="button" value="打印" onclick="printWindow()" class="btn btn-primary btn-sm">
+        </div>
+        <div id="printDiv">
         </div>
     </div>
     <script>
@@ -64,23 +70,33 @@
             return false;
     }
 
-    function printWindow() {
+    function printWindow(nopreview) {
         adaptPrint();
 
         if (isIE()) {
             factory.printing.header = "";
             factory.printing.footer = "";
-            factory.printing.paperSize = "A4";
-            factory.printing.SetPrintScale(-1);
+
+
             factory.printing.portrait = false;
             factory.printing.leftMargin = 1.0;
             factory.printing.topMargin = 1.0;
             factory.printing.rightMargin = 1.0;
             factory.printing.bottomMargin = 1.0;
-            factory.printing.Print(false);
+            factory.printing.Print(true);
+            if (nopreview) {
+                window.close();
+            }
         } else {
             if (tata = document.execCommand("print")) {
-                window.close();
+
+                if (nopreview) {
+                    window.close();
+                }
+
+
+
+
             }
         }
 

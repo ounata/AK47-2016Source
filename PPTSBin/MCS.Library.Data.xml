@@ -4550,6 +4550,18 @@
             </summary>
             <param name="context"></param>
         </member>
+        <member name="M:MCS.Library.Data.Executors.DataExecutorBase`1.BeforeTransactionComplete(MCS.Library.Data.Executors.DataExecutionContext{`0})">
+            <summary>
+            操作完成以后，事务提交之前
+            </summary>
+            <param name="context"></param>
+        </member>
+        <member name="M:MCS.Library.Data.Executors.DataExecutorBase`1.AfterTransactionCompleted(MCS.Library.Data.Executors.DataExecutionContext{`0})">
+            <summary>
+            事务完成以后
+            </summary>
+            <param name="context"></param>
+        </member>
         <member name="M:MCS.Library.Data.Executors.DataExecutorBase`1.PrepareOperationLog(MCS.Library.Data.Executors.DataExecutionContext{`0})">
             <summary>
             准备操作日志
@@ -4814,6 +4826,16 @@
         <member name="P:MCS.Library.Data.Mapping.ConditionMappingItemBase.MemberInfo">
             <summary>
             对应的成员对象信息
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Data.Mapping.ConditionMappingItemBase.UtcTimeToLocal">
+            <summary>
+            假设数据库中存放的是UTC time，转换为TimeZoneContext中的时区
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Data.Mapping.ConditionMappingItemBase.DefaultExpression">
+            <summary>
+            对应的属性为空时，所提供的缺省值表达式
             </summary>
         </member>
         <member name="M:MCS.Library.Data.Mapping.ConditionMappingItemBase.FillFromAttr(MCS.Library.Data.Mapping.ConditionMappingAttributeBase)">

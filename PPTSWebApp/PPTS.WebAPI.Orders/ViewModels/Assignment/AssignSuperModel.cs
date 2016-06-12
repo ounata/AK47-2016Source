@@ -195,13 +195,17 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
 
         ///教师，全职还是兼职
         [DataMember]
-        public int IsFullTimeTeacher { get; set; }
+        public int? IsFullTimeTeacher { get; set; }
 
         ///学员账户ID
         [DataMember]
         public string AccountID { get; set; }
 
+        [DataMember]
+        public string CategoryType { get; set; }
 
+        [DataMember]
+        public string CategoryTypeName { get; set; }
         #endregion
 
         #region IAssignAttr

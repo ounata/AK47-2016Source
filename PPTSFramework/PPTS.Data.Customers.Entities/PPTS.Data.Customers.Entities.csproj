@@ -79,6 +79,7 @@
     <Compile Include="Entities\CustomerFulltext.cs" />
     <Compile Include="Entities\CustomerMeeting.cs" />
     <Compile Include="Entities\CustomerMeetingItem.cs" />
+    <Compile Include="Entities\PotentialCustomerParentPhone.cs" />
     <Compile Include="Entities\CustomerParentPhone.cs" />
     <Compile Include="Entities\CustomerParentRelation.cs" />
     <Compile Include="Entities\CustomerRefundAlerts.cs" />

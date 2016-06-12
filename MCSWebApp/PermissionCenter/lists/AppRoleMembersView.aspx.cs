@@ -229,7 +229,7 @@ namespace PermissionCenter
 
 			e.Result.DataChanged = true;
 			e.Result.CloseWindow = false;
-			e.Result.ProcessLog = ProcessProgress.Current.GetDefaultOutput();
+			e.Result.ProcessLog = GetOutputLog();
 		}
 
 		protected void ProcessGlobalCaculating(object sender, MCS.Web.WebControls.PostProgressDoPostedDataEventArgs e)
@@ -242,7 +242,17 @@ namespace PermissionCenter
 
 			e.Result.DataChanged = true;
 			e.Result.CloseWindow = false;
-			e.Result.ProcessLog = ProcessProgress.Current.GetDefaultOutput();
+			e.Result.ProcessLog = GetOutputLog();
 		}
+
+        private static string GetOutputLog()
+        {
+            string log = ProcessProgress.Current.GetDefaultOutput();
+
+            if (log.Length > 8192)
+                log = log.Substring(0, 8192) + "...";
+
+            return log;
+        }
 	}
 }

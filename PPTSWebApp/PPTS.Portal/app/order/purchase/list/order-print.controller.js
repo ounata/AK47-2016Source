@@ -73,7 +73,8 @@
                             console.log(result);
 
                             vm.entity = result.entity;
-
+                            vm.expenseMoney = 0;
+                            if (result.expense) { vm.expenseMoney = result.expense.expenseMoney; }
                             vm.data.rows = [result.entity];
 
                         });

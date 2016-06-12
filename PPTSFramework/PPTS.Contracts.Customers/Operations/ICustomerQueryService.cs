@@ -16,6 +16,14 @@ namespace PPTS.Contracts.Customers.Operations
         Customer QueryCustomerByID(string customerID);
 
         /// <summary>
+        /// 获取客户主监护人信息
+        /// </summary>
+        /// <param name="customerID"></param>
+        /// <returns></returns>
+        [OperationContract]
+        PrimaryParentQueryResult QueryPrimaryParentByCustomerID(string customerID);
+
+        /// <summary>
         /// 通过检索条件获得对应的学员教师关系
         /// </summary>
         /// <param name="queryModel">查询条件,可选择是否包含客户信息</param>
@@ -62,5 +70,13 @@ namespace PPTS.Contracts.Customers.Operations
         /// <returns></returns>
         [OperationContract]
         CustomerExpenseCollectionQueryResult QueryCustomerExpenseByCustomerIDs(params string[] customerIDs);
+
+        /// <summary>
+        /// 获取关联订单 综合服务费
+        /// </summary>
+        /// <param name="orderID"></param>
+        /// <returns></returns>
+        [OperationContract]
+        CustomerExpenseRelation GetCustomerExpenseByOrderId(string orderID);
     }
 }

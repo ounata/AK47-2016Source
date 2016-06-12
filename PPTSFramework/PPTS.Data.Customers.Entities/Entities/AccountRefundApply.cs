@@ -337,6 +337,7 @@ namespace PPTS.Data.Customers.Entities
         /// 制度外退费类型（综合服务费赔偿，争议性课时差价赔偿，服务不满意协商赔偿，已上课全额退款，大额赔偿）
         /// </summary>
         [ORFieldMapping("ExtraRefundType")]
+        [ConstantCategory("Account_ExtraRefundType")]
         [DataMember]
         public string ExtraRefundType
         {

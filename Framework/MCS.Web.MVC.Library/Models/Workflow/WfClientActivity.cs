@@ -23,5 +23,11 @@ namespace MCS.Web.MVC.Library.Models.Workflow
         public int ApproverCount { get; set; }
         public string ApproverList { get; set; }
         public string ActivityScene { get; set; }
+        public string ActivityStatus { get; set; }
+        public string Action { get; set; }
+        public string Approver { get; set; }
+        public string ApproverLogonName { get; set; }
+        public DateTime? ApprovalTime { get; set; }
+        public string ApprovalElapsedTime { get; set; }
     }
 }

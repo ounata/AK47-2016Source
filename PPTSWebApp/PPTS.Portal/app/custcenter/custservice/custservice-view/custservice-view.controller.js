@@ -20,6 +20,7 @@
                             vm.customerService.complaintTimes = '0';
                         }
                         vm.customer = result.customer;
+                        vm.pCustomer = result.pCustomer;
                         dataSyncService.injectPageDict(['ifElse']);
 
                         custserviceDataViewService.initCustomerServiceItemAllList(vm, function () {

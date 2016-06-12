@@ -59,7 +59,7 @@
                             loadDataCallback(elem, $scope.data[id]);
                         });
                     } else {
-                        if (typeof ($scope.data[id]) == undefined)
+                        if ($scope.data == undefined || typeof ($scope.data[id]) == undefined)
                             return false;
                         loadDataCallback(elem, $scope.data[id]);
                     }

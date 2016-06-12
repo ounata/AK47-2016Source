@@ -227,5 +227,6 @@ namespace PPTS.WebAPI.Customers.ViewModels.CustomerFollows
             }
             return model;
         }
+
     }
 }

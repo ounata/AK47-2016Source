@@ -18,7 +18,7 @@ namespace PPTS.Data.Products.Adapters
         public string GetProductIdsByCampusIdsSQL(params string [] campusIds)
         {
             
-            var where = new InSqlClauseBuilder("UseOrgID").AppendItem(campusIds);
+            var where = new InSqlClauseBuilder("CampusID").AppendItem(campusIds);
             var connective = new ConnectiveSqlClauseCollection(where);
 
             return string.Format("select ProductID from {0} where {1}", this.GetTableName(), connective.ToSqlString(TSqlBuilder.Instance));

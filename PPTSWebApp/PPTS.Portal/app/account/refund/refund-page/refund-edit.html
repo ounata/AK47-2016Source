@@ -85,17 +85,22 @@
                 <div class="col-sm-8">
                     <mcs-label text="差价补偿：" css="col-sm-3" />
                     <div class="col-sm-9">
-                        <mcs-input model="vm.apply.compensateMoney" type="Number" number-length="7" minnum="1" maxnum="9999999" />元
+                        <mcs-input model="vm.apply.compensateMoney" type="Number" number-length="7" minnum="1" maxnum="9999999" />元   <span class="red">备注：此处填写的金额用于差价找补，扣除的金额数</span>
+                    </div>
+                </div>     
+            </div>           
+            <div class="form-group">
+                <div class="col-sm-8">
+                    <mcs-label text="制度外退款：" css="col-sm-3" />
+                    <div class="col-sm-9">
+                        <mcs-input model="vm.apply.extraRefundMoney" type="Number" number-length="7" minnum="1" maxnum="9999999" />元  <span class="red">备注：此处填写的金额用于补偿给客户的金额数</span>
                     </div>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-8">
-                    <mcs-label text="制度外退款：" css="col-sm-3" />
-                    <div class="col-sm-4">
-                        <mcs-input model="vm.apply.extraRefundMoney" type="Number" number-length="7" minnum="1" maxnum="9999999" />元
-                    </div>
-                    <div class="col-sm-5">
+                    <mcs-label text="" css="col-sm-3" />
+                    <div class="col-sm-9 ppts-select-search">
                         <ppts-select category="extraRefundType" model="vm.apply.extraRefundType" caption="请选择制度外退款类型" />
                     </div>
                 </div>
@@ -139,7 +144,7 @@
                 <div class="col-sm-8">
                     <mcs-label text="退费原因：" css="col-sm-3" />
                     <div class="col-sm-9">
-                        <textarea class="autosize-transition form-control" ng-model="vm.apply.applyMemo" style="overflow-x: hidden; overflow-y: auto;word-wrap: break-word; resize: horizontal; height: 100px;"></textarea>
+                        <textarea class="autosize-transition form-control" ng-model="vm.apply.applyMemo" style="overflow-x: hidden; overflow-y: auto;word-wrap: break-word; resize: none; height: 100px;"></textarea>
                     </div>
                 </div>
             </div>

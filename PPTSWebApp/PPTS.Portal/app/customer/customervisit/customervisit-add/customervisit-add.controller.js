@@ -11,10 +11,10 @@ define([ppts.config.modules.customer,
         ppts.config.dataServiceConfig.customerVisitDataService],
         function (customer) {
             customer.registerController('customerVisitSingleListController', [
-                '$state', '$scope', '$stateParams', 'customerVisitDataService', 'customerVisitDataViewService', 'dataSyncService',
-                function ($state, $scope,$stateParams, customerVisitDataService, customerVisitDataViewService, dataSyncService) {
+                '$state', '$scope', '$stateParams', 'customerVisitDataService', 'customerVisitDataViewService', 'dataSyncService','mcsValidationService',
+                function ($state, $scope, $stateParams, customerVisitDataService, customerVisitDataViewService, dataSyncService, mcsValidationService) {
                     var vm = this;
-
+                    mcsValidationService.init($scope);
                     vm.id = $stateParams.id;
 
                     (function () {
@@ -26,11 +26,13 @@ define([ppts.config.modules.customer,
 
                     // 保存数据
                     vm.save = function () {
-                        customerVisitDataService.createCustomerVisit({
-                            customerVisit: vm.customerVisit
-                        }, function () {
-                            $state.go('ppts.student-view.visits', { prev: 'ppts.student' });
-                        });
+                        if (mcsValidationService.run($scope)) {
+                            customerVisitDataService.createCustomerVisit({
+                                customerVisit: vm.customerVisit
+                            }, function () {
+                                $state.go('ppts.student-view.visits', { prev: 'ppts.student' });
+                            });
+                        }
                     };
 
                     // 取消

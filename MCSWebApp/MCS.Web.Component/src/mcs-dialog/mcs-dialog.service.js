@@ -10,7 +10,7 @@
             },
             info: {
                 title: '消息',
-                message: '操作发生错误'
+                message: '至少选择一条数据！'
             },
             error: {
                 title: '错误',

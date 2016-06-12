@@ -92,7 +92,7 @@ namespace PPTS.WebAPI.Orders.Controllers
             }
             string operaterCampusID = org.ID;
             AssignConditionCollection acc = AssignConditionAdapter.Instance.LoadCollection(AssignTypeDefine.ByStudent, customerID, string.Empty);
-            acc.Insert(0, new AssignCondition() { ConditionID = "-1", ConditionName4Customer = "新建", ConditionName4Teacher = "新建" });
+            acc.Insert(0, new AssignCondition() { ConditionID = "100", ConditionName4Customer = "新建", ConditionName4Teacher = "新建" });
 
             var dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(Data.Orders.Entities.Assign));
             AssetViewCollection avm = AssetViewAdapter.Instance.LoadCollection(customerID);

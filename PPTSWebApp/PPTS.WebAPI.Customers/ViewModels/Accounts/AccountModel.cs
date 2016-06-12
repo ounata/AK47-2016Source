@@ -20,28 +20,6 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
     public class AccountModel : Account
     {
         /// <summary>
-        /// 订购资金余额（剩余的资产的价值）
-        /// </summary>
-        [DataMember]
-        public decimal AssetMoney
-        {
-            set;
-            get;
-        }
-
-        /// <summary>
-        /// 账户价值（资产价值AssetMoney+账户余额AccountMoney）
-        /// </summary>
-        [DataMember]
-        public decimal AccountValue
-        {
-            get
-            {
-                return this.AccountMoney + this.AssetMoney;
-            }
-        }
-        
-        /// <summary>
         /// 当前已排定课时数量
         /// </summary>
         [DataMember]

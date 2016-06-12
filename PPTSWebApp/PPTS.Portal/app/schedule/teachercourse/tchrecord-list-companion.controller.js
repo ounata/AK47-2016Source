@@ -82,7 +82,7 @@ define([ppts.config.modules.schedule,
                     criteria.teacherName = query;
                     return teacherCourseDataService.getTeacher(criteria, function (retValue) {
                         vm.tchList = [];
-                        retValue.data.result.forEach(function (item, index) {
+                        retValue.result.forEach(function (item, index) {
                             vm.tchList.push({
                                 teacherId: item.teacherID,
                                 name: item.jobOrgName + '-' + item.teacherName + '(' + item.teacherOACode + ')',

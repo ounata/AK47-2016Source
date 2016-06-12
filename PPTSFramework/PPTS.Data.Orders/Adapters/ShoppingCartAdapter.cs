@@ -34,7 +34,7 @@ namespace PPTS.Data.Orders.Adapters
             var wcondition = new WhereLoadingCondition(w => w.AppendItem("CustomerID", data.CustomerID).AppendItem("ProductID", data.ProductID).AppendItem("OrderType", data.OrderType));
             var builder = new WhereSqlClauseBuilder(LogicOperatorDefine.And);
             wcondition.BuilderAction(builder);
-            var sql = string.Format("if exists( select 1 from {0} where {1} ) begin select -1; end", this.GetTableName(), builder.ToSqlString(TSqlBuilder.Instance));
+            var sql = string.Format("if exists( select 1 from {0} where {1} ) begin select -1;return; end", this.GetTableName(), builder.ToSqlString(TSqlBuilder.Instance));
 
             sqlContext.AppendSqlInContext(TSqlBuilder.Instance, TSqlBuilder.Instance.DBStatementSeperator);
             sqlContext.AppendSqlInContext(TSqlBuilder.Instance, sql);

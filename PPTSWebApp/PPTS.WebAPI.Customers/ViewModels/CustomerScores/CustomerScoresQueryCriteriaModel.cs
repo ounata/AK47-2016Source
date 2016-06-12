@@ -7,10 +7,15 @@ namespace PPTS.WebAPI.Customers.ViewModels.PotentialCustomers
     public class CustomerScoresQueryCriteriaModel
     {
         /// <summary>
+        /// 机构ID
+        /// </summary>
+        [InConditionMapping("CampusID")]
+        public string[] OrgIds { get; set; }
+        /// <summary>
         /// 学年度
         /// </summary>
-        [ConditionMapping("StudyYear")]
-        public string StudyYear { get; set; }
+        [InConditionMapping("StudyYear")]
+        public string[] StudyYear { get; set; }
         /// <summary>
         /// 学期
         /// </summary>
@@ -116,6 +121,7 @@ namespace PPTS.WebAPI.Customers.ViewModels.PotentialCustomers
             object result = propertyValue;
             switch (propertyName)
             {
+                case "OrgIds":
                 case "StudyYear":
                 case "StudyStage":
                 case "ScoreGrade":

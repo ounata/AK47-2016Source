@@ -39,5 +39,13 @@ namespace MCS.Library.OGUPermission
         /// <param name="application"></param>
         /// <returns></returns>
         PermissionCollection GetPermissions(IApplication application);
+
+        /// <summary>
+        /// 得到应用下某个角色对应的权限
+        /// </summary>
+        /// <param name="application"></param>
+        /// <param name="roleCodeNames"></param>
+        /// <returns></returns>
+        PermissionCollection GetRolesPermissions(IApplication application, string roleCodeNames);
     }
 }

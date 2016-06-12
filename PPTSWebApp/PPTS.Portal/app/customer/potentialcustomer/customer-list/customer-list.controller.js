@@ -2,9 +2,10 @@
         ppts.config.dataServiceConfig.customerDataService],
         function (customer) {
             customer.registerController('customerListController', [
-                '$state', 'dataSyncService', 'customerDataService', 'customerDataViewService', 'utilService', 'customerRelationType', 'customerListDataHeader', 'customerAdvanceSearchItems',
-                function ($state, dataSyncService, customerDataService, customerDataViewService, util, relationType, customerListDataHeader, searchItems) {
+                '$scope', '$state', 'dataSyncService', 'customerDataService', 'customerDataViewService', 'utilService', 'customerRelationType', 'customerListDataHeader', 'customerAdvanceSearchItems',
+                function ($scope,$state, dataSyncService, customerDataService, customerDataViewService, util, relationType, customerListDataHeader, searchItems) {
                     var vm = this;
+
 
                     // 配置数据表头 
                     customerDataViewService.configCustomerListHeaders(vm, customerListDataHeader);
@@ -16,6 +17,16 @@
                     vm.search = function () {
                         customerDataViewService.initCustomerList(vm, function () {
                             vm.searchItems = searchItems;
+                            customerDataViewService.initWatchExps($scope, vm, [
+                                  { watchExp: 'vm.criteria.isAssignCallcenter', selectedValue: 0, watch: 'callcenterName' },
+                                  { watchExp: 'vm.criteria.isAssignConsultant', selectedValue: 0, watch: 'consultantName' },
+                                  { watchExp: 'vm.criteria.isAssignMarket', selectedValue: 0, watch: 'marketName' },
+                                  { watchExp: 'vm.followPeriodValue', selectedValue: 5, watch: 'followDays' }
+                            ]);
+                            customerDataViewService.initDatePeriod($scope, vm, [
+                                  { watchExp: 'vm.followPeriodValue', selectedValue: 'followPeriodValue', end: 'followTime' },
+                                  { watchExp: 'vm.followDays', selectedValue: 'followPeriodValue', end: 'followTime' }
+                            ]);
                         });
                     };
                     vm.search();

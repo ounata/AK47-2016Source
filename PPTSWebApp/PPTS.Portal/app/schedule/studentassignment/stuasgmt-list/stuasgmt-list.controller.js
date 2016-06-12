@@ -3,8 +3,8 @@ define([ppts.config.modules.schedule,
         ppts.config.dataServiceConfig.studentAssignmentDataService],
         function (schedule) {
             schedule.registerController('stuAsgmtListController', [
-                '$scope', '$state', 'dataSyncService', 'studentassignmentDataService', 'blockUI', 'mcsDialogService',
-                function ($scope, $state, dataSyncService, studentassignmentDataService, blockUI, mcsDialogService) {
+                '$scope', '$state', 'dataSyncService', 'studentassignmentDataService', 'mcsDialogService',
+                function ($scope, $state, dataSyncService, studentassignmentDataService, mcsDialogService) {
                     var vm = this;
                     vm.data = {
                         selection: 'radio',
@@ -25,7 +25,7 @@ define([ppts.config.modules.schedule,
                         }, {
                             field: "birthday",
                             name: "出生日期",
-                            template: '<span>{{row.birthday | date:"yyyy-MM-dd"}}</span>'
+                            template: '<span>{{row.birthday | date:"yyyy-MM-dd" | normalize }}</span>'
                         }, {
                             field: "schoolName",
                             name: "在读学校",
@@ -58,20 +58,17 @@ define([ppts.config.modules.schedule,
                     }
 
                     /*页面初始化加载或重新搜索时查询*/
-                    vm.init = function () {
-                        blockUI.start();
+                    vm.search = function () {
                         dataSyncService.initCriteria(vm);
                         studentassignmentDataService.getAllStuUnAsgmt(vm.criteria, function (result) {
                             vm.data.rows = result.queryResult.pagedData;
                             dataSyncService.injectDictData();
                             dataSyncService.updateTotalCount(vm, result.queryResult);
                             $scope.$broadcast('dictionaryReady');
-                            blockUI.stop();
                         }, function (error) {
-                            blockUI.stop();
                         });
                     };
-                    vm.init();
+                    vm.search();
 
                     /*跳转排课*/
                     vm.stuAssignClick = function () {
@@ -79,14 +76,7 @@ define([ppts.config.modules.schedule,
                             vm.showMsg("请选择一个学员");
                             return;
                         }
-                        var stuName = '';
-                        for (var i in vm.data.rows) {
-                            if (vm.data.rows[i].customerID == vm.data.rowsSelected[0].customerID) {
-                                stuName = vm.data.rows[i].customerName;
-                                break;
-                            };
-                        };
-                        $state.go('ppts.stuasgmt-course', { cID: vm.data.rowsSelected[0].customerID, tn: stuName });
+                        $state.go('ppts.stuasgmt-course', { id: vm.data.rowsSelected[0].customerID });
                     };
 
 

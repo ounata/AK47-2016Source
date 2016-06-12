@@ -2,6 +2,7 @@
 using MCS.Library.Data.Builder;
 using MCS.Library.Data.DataObjects;
 using MCS.Library.Data.Mapping;
+using PPTS.Data.Orders;
 using PPTS.Data.Orders.DataSources;
 using PPTS.Data.Orders.Entities;
 using PPTS.WebAPI.Orders.ViewModels.ClassGroup;
@@ -32,6 +33,8 @@ namespace PPTS.WebAPI.Orders.DataSources
             string classLessonItemsWhere = condition.CheckClassLessonItemsAdjustCondition() ? string.Format(" and  exists(select * from [OM].[ClassLessonItems] cli inner join [OM].[ClassLessons] cll on cli.LessonID = cll.LessonID and cll.ClassID = Classes.ClassID and {0})", classLessonItemsBuilder.ToSqlString(TSqlBuilder.Instance)) : "";
 
             string sqlWhere = string.Format("{0}{1}{2}", string.IsNullOrEmpty(classWhere)?" 1 = 1 ": classWhere, classLessonsWhere, classLessonItemsWhere);
+
+            sqlWhere = sqlWhere + string.Format(" and  ClassStatus != {0} ", ((int)ClassStatusDefine.Deleted).ToString());
 
             var result = Query(prp, sqlWhere, " ClassID desc ");
 

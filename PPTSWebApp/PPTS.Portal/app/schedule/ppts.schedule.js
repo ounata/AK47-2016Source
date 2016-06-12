@@ -15,13 +15,13 @@
             templateUrl: 'app/schedule/studentassignment/stuasgmt-list/stuasgmt-list.html',
             controller: 'stuAsgmtListController',
             breadcrumb: {
-                label: '学员排课',
+                label: '按学员排课',
                 parent: 'ppts'
             },
             dependencies: ['app/schedule/studentassignment/stuasgmt-list/stuasgmt-list.controller']
         }).loadRoute($stateProvider, {
             name: 'ppts.stuasgmt-course',
-            url: '/course/:cID/:tn',
+            url: '/course/:id',
             templateUrl: 'app/schedule/studentassignment/stuasgmt-course/stuasgmt-course.html',
             controller: 'stuAsgmtCourseController',
             breadcrumb: {
@@ -35,7 +35,7 @@
             ]
         }).loadRoute($stateProvider, {
             name: 'ppts.stuasgmt-course-list',
-            url: '/courselist/:cID',
+            url: '/courselist/:id',
             templateUrl: 'app/schedule/studentassignment/stuasgmt-course/stuasgmt-course-list.html',
             controller: 'stuAsgmtCourseListController',
             breadcrumb: {
@@ -53,7 +53,7 @@
             templateUrl: 'app/schedule/teacherassignment/tchasgmt-list/tchasgmt-list.html',
             controller: 'tchAsgmtListController',
             breadcrumb: {
-                label: '教师排课',
+                label: '按教师排课',
                 parent: 'ppts'
             },
             dependencies: ['app/schedule/teacherassignment/tchasgmt-list/tchasgmt-list.controller']
@@ -91,7 +91,7 @@
             templateUrl: 'app/schedule/studentcourse/stucourse-list/stucourse-list.html',
             controller: 'stuCourseListController',
             breadcrumb: {
-                label: '学员课表',
+                label: '客户课表',
                 parent: 'ppts'
             },
             dependencies: ['app/schedule/studentcourse/stucourse-list/stucourse-list.controller'

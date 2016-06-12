@@ -47,7 +47,7 @@
             template: '<span uib-tooltip="{{row.campusNames}}">{{row.campusNames | truncate}}</span>',
         }, {
             field: "expenseType",
-            name: "服务费名称",
+            name: "服务费类型",
             template: '<span>{{ row.expenseType | serviceFeeType }}</span>'
         }, {
             field: "creatorName",
@@ -67,7 +67,7 @@
         }],
         pager: {
             pageIndex: 1,
-            pageSize: 10,
+            pageSize: ppts.config.pageSizeItem,
             totalCount: -1
         },
         orderBy: [{ dataField: 'createTime', sortDirection: 1 }]

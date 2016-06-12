@@ -22,6 +22,9 @@
                     vm.search = function () {
                         scoresDataViewService.initCustomerScoresList(vm, function () {
                             vm.searchItems = searchItems;
+                            scoresDataViewService.initWatchExps($scope, vm, [
+                                  { watchExp: 'vm.criteria.scoreType', selectedValue: 16, watch: 'otherScoreTypeName' }
+                            ]);
                             scoresDataViewService.fillGradeParentKey();
                             $scope.$broadcast('dictionaryReady');
                         });
@@ -68,7 +71,7 @@
 
                     // 导出
                     vm.export = function () {
-                        mcs.util.postMockForm('http://localhost/PPTSWebApp/PPTS.WebAPI.Customers/api/customerscores/exportallScores', vm.criteria);
+                        mcs.util.postMockForm(ppts.config.customerApiBaseUrl + 'api/customerscores/exportallScores', vm.criteria);
                     };
 
                 }]);

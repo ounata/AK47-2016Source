@@ -8,14 +8,18 @@ namespace PPTS.WebAPI.Customers.ViewModels.PotentialCustomers
     [Serializable]
     public class PotentialCustomerSearchModel : PotentialCustomerModel
     {
+        /// <summary>
+        /// 家长姓名
+        /// </summary>
         [DataMember]
         public string ParentName { get; set; }
+
         /// <summary>
         /// 当前归属咨询师
         /// </summary>
-
         [DataMember]
         public string ConsultantStaff { get; set; }
+
         /// <summary>
         /// 当前归属市场专员
         /// </summary>

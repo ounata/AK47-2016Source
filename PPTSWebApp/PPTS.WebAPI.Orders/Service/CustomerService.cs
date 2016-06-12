@@ -49,6 +49,7 @@ namespace PPTS.WebAPI.Orders.Service
         public static Dictionary<int, bool> GetWhetherToDeductServiceChargeByCustomerId(string customerId)
         {
             var result = new Dictionary<int, bool>();
+            
             PPTS.Contracts.Proxies.PPTSCustomerQueryServiceProxy.Instance.QueryCustomerExpenseByCustomerID(customerId).CustomerExpenseRelationCollection.ForEach(item =>
             {
                 if (!result.ContainsKey(Convert.ToInt32(item.ExpenseType)))
@@ -91,7 +92,7 @@ namespace PPTS.WebAPI.Orders.Service
         /// <returns></returns>
         public static Data.Customers.Entities.Customer GetCustomerByCustomerId(string customerId)
         {
-            return Data.Customers.Adapters.CustomerAdapter.Instance.Load(customerId);
+            return PPTS.Contracts.Proxies.PPTSCustomerQueryServiceProxy.Instance.QueryCustomerByID(customerId);
         }
 
         /// <summary>
@@ -101,8 +102,19 @@ namespace PPTS.WebAPI.Orders.Service
         /// <returns></returns>
         public static Data.Customers.Entities.Parent GetPrimaryParentByCustomerId(string customerId)
         {
-            return Data.Customers.Adapters.ParentAdapter.Instance.LoadPrimaryParentInContext(customerId);
+            return PPTS.Contracts.Proxies.PPTSCustomerQueryServiceProxy.Instance.QueryPrimaryParentByCustomerID(customerId).Parent;
         }
+
+        /// <summary>
+        /// 获取关联订单扣除综合服务费
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
+        public static CustomerExpenseRelation GetCustomerExpenseByOrderId(string orderId)
+        {
+            return PPTS.Contracts.Proxies.PPTSCustomerQueryServiceProxy.Instance.GetCustomerExpenseByOrderId(orderId);
+        }
+
 
         #endregion
 
@@ -111,23 +123,14 @@ namespace PPTS.WebAPI.Orders.Service
         /// <summary>
         /// 扣除服务费用
         /// </summary>
-        public static void DeductServiceCharge(Data.Customers.Entities.CustomerExpenseRelationCollection expenseRelations)
+        public static void DeductExpenses(Data.Customers.Entities.CustomerExpenseRelationCollection expenseRelations)
         {
+            PPTS.Contracts.Proxies.PPTSCustomerUpdateServiceProxy.Instance.DeductExpenses(expenseRelations.ToList());
         }
 
-        /// <summary>
-        /// 同步扣除服务费用
-        /// </summary>
-        public static void SyncDeductServiceCharge(Order model)
-        {
-
-        }
+        
 
         #endregion 
     }
-
-    //public class Account : Data.Customers.Entities.Account { }
-
-    //public class AccountChargePayment :Data.Customers.Entities.AccountChargePayment { }
-
+    
 }

@@ -45,7 +45,25 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MCS.Library">
+      <HintPath>..\..\Bin\MCS.Library.dll</HintPath>
+    </Reference>
+    <Reference Include="MCS.Library.OGUPermission">
+      <HintPath>..\..\Bin\MCS.Library.OGUPermission.dll</HintPath>
+    </Reference>
+    <Reference Include="MCS.Library.Passport">
+      <HintPath>..\..\Bin\MCS.Library.Passport.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\ThirdPartComponent\Bin\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="PPTS.Data.Common">
+      <HintPath>..\..\PPTSBin\PPTS.Data.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="PPTS.Data.Common.Entities">
+      <HintPath>..\..\PPTSBin\PPTS.Data.Common.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -64,7 +82,23 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="assets\images\avatar.png" />
+    <Content Include="assets\images\dash.PNG" />
+    <Content Include="assets\images\department.png" />
+    <Content Include="assets\images\loading.gif" />
+    <Content Include="assets\images\logo.gif" />
+    <Content Include="assets\images\metro.gif" />
+    <Content Include="assets\images\person.png" />
+    <Content Include="assets\images\user.png" />
+    <Content Include="assets\styles\site.bk.css" />
+    <Content Include="assets\styles\site.css" />
+    <Content Include="build\ppts.global.js" />
+    <Content Include="build\ppts.global.min.js" />
+    <Content Include="build\ppts.startup.js" />
+    <Content Include="build\ppts.startup.min.js" />
     <Content Include="build\require.config.min.js" />
+    <Content Include="Gruntfile.js" />
+    <Content Include="index.aspx" />
     <Content Include="package.json" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -74,10 +108,24 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="build\ppts.global.js" />
-    <Content Include="build\ppts.global.min.js" />
-    <Content Include="build\ppts.startup.js" />
-    <Content Include="build\ppts.startup.min.js" />
+    <Content Include="favicon.ico" />
+    <Content Include="samples\build\ppts.global.js" />
+    <Content Include="samples\build\ppts.startup.js" />
+    <Content Include="samples\common\global\ppts.controller.js" />
+    <Content Include="samples\common\global\ppts.head.js" />
+    <Content Include="samples\common\global\ppts.route.js" />
+    <Content Include="samples\common\global\ppts.service.js" />
+    <Content Include="samples\common\layout.html" />
+    <Content Include="samples\common\tpl\breadcrumb.tpl.html" />
+    <Content Include="samples\common\tpl\footer.tpl.html" />
+    <Content Include="samples\common\tpl\header.tpl.html" />
+    <Content Include="samples\common\tpl\sidebar.tpl.html" />
+    <Content Include="samples\common\config\ppts.config.js" />
+    <Content Include="samples\common\config\require.config.js" />
+    <Content Include="samples\component\ppts.component.js" />
+    <Content Include="samples\dashboard\dashboard.controller.js" />
+    <Content Include="samples\dashboard\main.html" />
+    <Content Include="samples\dashboard\ppts.dashboard.js" />
     <Content Include="src\config\ppts.config.js" />
     <Content Include="src\config\require.config.js" />
     <Content Include="src\global\ppts.controller.js" />
@@ -99,10 +147,16 @@
     <Content Include="src\tpl\selectcustomer.tpl.html" />
     <Content Include="src\tpl\timepicker.tpl.html" />
     <Content Include="src\tpl\tree.tpl.html" />
-    <Content Include="Gruntfile.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="index.aspx.cs">
+      <DependentUpon>index.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="index.aspx.designer.cs">
+      <DependentUpon>index.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
@@ -137,8 +191,8 @@
     </PropertyGroup>
   </Target>
   <PropertyGroup>
-    <PostBuildEvent>xcopy $(ProjectDir)build\ppts.startup.js $(ProjectDir)..\PPTS.Portal\app\common\config\ /Y
-xcopy $(ProjectDir)build\ppts.startup.min.js $(ProjectDir)..\PPTS.Portal\app\common\config\ /Y</PostBuildEvent>
+    <PostBuildEvent>xcopy $(ProjectDir)build\ppts.startup.js $(ProjectDir)..\PPTS.Portal\app\common\config\ /Y /D /R
+xcopy $(ProjectDir)build\ppts.startup.min.js $(ProjectDir)..\PPTS.Portal\app\common\config\ /Y /D /R</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>

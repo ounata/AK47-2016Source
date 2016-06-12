@@ -2,8 +2,8 @@
         ppts.config.dataServiceConfig.studentAssignmentDataService],
         function (schedule) {
             schedule.registerController('stuAsgmtConditionController', [
-                '$scope', '$state', 'dataSyncService', 'studentassignmentDataService', '$stateParams', 'blockUI', 'mcsDialogService',
-                function ($scope, $state, dataSyncService, studentassignmentDataService, $stateParams, blockUI, mcsDialogService) {
+                '$scope', '$state', 'dataSyncService', 'studentassignmentDataService', '$stateParams', 'mcsDialogService',
+                function ($scope, $state, dataSyncService, studentassignmentDataService, $stateParams, mcsDialogService) {
                     var vm = this;
                     vm.customerID = $stateParams.id;
                     vm.criteria = vm.criteria || {};
@@ -58,16 +58,13 @@
 
                     /*页面初始化加载或重新搜索时查询*/
                     vm.init = function () {
-                        blockUI.start();
                         dataSyncService.initCriteria(vm);
                         studentassignmentDataService.getACC(vm.criteria, function (result) {
                             vm.data.rows = result.queryResult.pagedData;
                             dataSyncService.injectDictData();
                             dataSyncService.updateTotalCount(vm, result.queryResult);
                             $scope.$broadcast('dictionaryReady');
-                            blockUI.stop();
                         }, function (error) {
-                            blockUI.stop();
                         });
                     };
                     vm.init();

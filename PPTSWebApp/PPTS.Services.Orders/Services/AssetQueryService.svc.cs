@@ -24,25 +24,28 @@ namespace PPTS.Services.Orders.Services
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         public AssetStatisticQueryResult QueryAssetStatisticByAccountID(string accountID)
         {
-            return null;
-            //AssetMoneyQueryResult result = new AssetMoneyQueryResult();
-            //string[] accountIDs = new string[] { accountID };
-            //DataSet ds = DbHelper.RunSqlReturnDS(GetAssetMoneyCollectionByAccountIDsSQL(accountIDs), AssetAdapter.Instance.GetDbContext().Name);
-            //if (ds.Tables[0].Rows.Count > 0)
-            //    result = ORMapping.DataRowToObject<AssetMoneyQueryResult>(ds.Tables[0].Rows[0], new AssetMoneyQueryResult());
-            //return result;
+            string sqlText = "select  sum(Amount*Price) AS AssetMoney,sum(AssignedAmount) as AssignedAmount,sum(ConfirmedAmount) as ConfirmedAmount from Assets_Current where AccountID='{0}' group by AccountID";
+            sqlText = string.Format(sqlText, accountID);
+            DataSet ds = DbHelper.RunSqlReturnDS(sqlText, AssetAdapter.Instance.GetDbContext().Name);
+            
+            AssetStatisticQueryResult result = new AssetStatisticQueryResult();
+            if (ds.Tables[0].Rows.Count > 0)
+                result = ORMapping.DataRowToObject<AssetStatisticQueryResult>(ds.Tables[0].Rows[0], new AssetStatisticQueryResult());
+            return result;
         }
 
         [WfJsonFormatter]
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         public AssetStatisticQueryResult QueryAssetStatisticByCustomerID(string customerID)
         {
-            return null;
-            //HasPeriodCourseQueryResult result = new HasPeriodCourseQueryResult();
-            //result.HasPeriod = AssignsAdapter.Instance.Exists(builder => builder
-            // .AppendItem("CustomerID", customerID)
-            // .AppendItem("AssignStatus", (int)AssignStatusDefine.Finished));
-            //return result;
+            string sqlText = "select  sum(Amount*Price) AS AssetMoney,sum(AssignedAmount) as AssignedAmount,sum(ConfirmedAmount) as ConfirmedAmount from Assets_Current where CustomerID='{0}' group by customerID";
+            sqlText = string.Format(sqlText, customerID);
+            DataSet ds = DbHelper.RunSqlReturnDS(sqlText, AssetAdapter.Instance.GetDbContext().Name);
+
+            AssetStatisticQueryResult result = new AssetStatisticQueryResult();
+            if (ds.Tables[0].Rows.Count > 0)
+                result = ORMapping.DataRowToObject<AssetStatisticQueryResult>(ds.Tables[0].Rows[0], new AssetStatisticQueryResult());
+            return result;
         }
 
         [WfJsonFormatter]
@@ -112,21 +115,6 @@ namespace PPTS.Services.Orders.Services
             //return result;
 
             return null;
-
-        }
-
-        private string GetAssetMoneyCollectionByAccountIDsSQL(string[] accountIDs)
-        {
-            InSqlClauseBuilder inBuilder = new InSqlClauseBuilder();
-            inBuilder.AppendItem(accountIDs).DataField = "AccountID";
-            WhereSqlClauseBuilder whereBuilder = new WhereSqlClauseBuilder();
-            whereBuilder.AppendItem("Amount", 0, ">");
-            ConnectiveSqlClauseCollection connectiveBuilder = new ConnectiveSqlClauseCollection();
-            connectiveBuilder.Add(inBuilder).Add(whereBuilder).LogicOperator = LogicOperatorDefine.And;
-            string sql = string.Format(@"select AccountID,isnull(sum(isnull(Price,0)*isnull(Amount,0)),0) AssetMoney from {0} where {1} group by AccountID"
-            , AssetAdapter.Instance.GetQueryMappingInfo().GetQueryTableName()
-            , connectiveBuilder.ToSqlString(TSqlBuilder.Instance));
-            return sql;
         }
     }
 }

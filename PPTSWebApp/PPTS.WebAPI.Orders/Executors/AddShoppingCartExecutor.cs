@@ -15,34 +15,24 @@ namespace PPTS.WebAPI.Orders.Executors
     [DataExecutorDescription("加入购物车")]
     public class AddShoppingCartExecutor : PPTSEditPurchaseExecutorBase<ShoppingCartCollection>
     {
-
-
+        
         public AddShoppingCartExecutor(ShoppingCartCollection model) : base(model, null)
         {
             model.NullCheck("model");
-
         }
 
         protected override void PrepareData(DataExecutionContext<UserOperationLogCollection> context)
         {
-            base.PrepareData(context);
-
+            
             this.Model.ForEach(m => {
-                m.CartID = Guid.NewGuid().ToString();
+                m.CartID = UuidHelper.NewUuidString();
                 ShoppingCartAdapter.Instance.UpdateInContext(m);
             });
-
+            base.PrepareData(context);
         }
 
-        protected override object DoOperation(DataExecutionContext<UserOperationLogCollection> context)
-        {
-            using (DbContext dbContext = PPTS.Data.Orders.ConnectionDefine.GetDbContext())
-            {
-                return dbContext.ExecuteScalarSqlInContext();
-                
-            }
-            
-        }
+        
+
 
     }
 }

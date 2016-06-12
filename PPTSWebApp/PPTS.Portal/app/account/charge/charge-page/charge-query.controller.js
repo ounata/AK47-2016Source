@@ -2,8 +2,8 @@
         ppts.config.dataServiceConfig.accountChargeDataService],
         function (account) {
             account.registerController('accountChargeQueryController', [
-                '$scope', '$state', 'mcsDialogService', 'dataSyncService', 'accountChargeDataService',
-                function ($scope, $state, mcsDialogService, dataSyncService, accountDataService) {
+                '$scope', '$state', 'mcsDialogService', 'dataSyncService', 'accountChargeDataService', 'chargeQueryAdvanceSearchItems',
+                function ($scope, $state, mcsDialogService, dataSyncService, accountDataService, searchItems) {
                     var vm = this;
 
                     vm.data = {
@@ -69,7 +69,7 @@
                         }],
                         pager: {
                             pageIndex: 1,
-                            pageSize: 10,
+                            pageSize: ppts.config.pageSizeItem,
                             totalCount: -1,
                             pageChange: function () {
                                 dataSyncService.initCriteria(vm);
@@ -87,6 +87,7 @@
                         dataSyncService.initCriteria(vm);
                         accountDataService.queryChargeApplyList(vm.criteria, function (result) {
                             vm.data.rows = result.queryResult.pagedData;
+                            vm.searchItems = searchItems;
                             dataSyncService.injectDictData();
                             dataSyncService.injectPageDict(['people']);
                             dataSyncService.updateTotalCount(vm, result.queryResult);

@@ -220,8 +220,9 @@ namespace MCS.Web.WebControls
 					Translator.Translate(Define.DefaultCulture, "请选择一个上传文件"));
 
 				ProcessProgress.Current.RegisterResponser(UploadProgressResponser.Instance);
+                response.Write(new string(' ', 4096));
 
-				this.PostedData = request.Form["postedData"];
+                this.PostedData = request.Form["postedData"];
 
 				response.Buffer = false;
 				response.BufferOutput = false;

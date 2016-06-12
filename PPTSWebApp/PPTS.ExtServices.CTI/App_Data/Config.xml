@@ -99,4 +99,7 @@
     <SecondSourceInfo   ERPSourceValue="奇虎360cpc" LeYuSourceValue="k=qihucpc"/>
     <SecondSourceInfo   ERPSourceValue="麦恩思远" LeYuSourceValue="k=maiensy"/>
   </CTItoERPSourceInfo>
+  <NewSystemBranch>
+    <BranchInfo id="8" name="北京分公司" />
+  </NewSystemBranch>
 </config>

@@ -9,7 +9,7 @@
 define([ppts.config.modules.customer,
         ppts.config.dataServiceConfig.customerMeetingDataService],
         function (customer) {
-            customer.registerController('customerMeetingListController', ['$scope', 'customerMeetingDataViewService',
+            customer.registerController('customerMeetingListController', ['$scope', 'customerMeetingDataViewService', 'customerMeetingsAdvanceSearchItems',
                 function ($scope, customerMeetingDataViewService, searchItems) {
                 	var vm = this;
 
@@ -19,8 +19,7 @@ define([ppts.config.modules.customer,
                 	// 页面初始化加载或重新搜索时查询
                 	vm.search = function () {
                 	    customerMeetingDataViewService.initCustomerMeetingList(vm, function () {
-                			//vm.searchItems = searchItems;
-                			$scope.$broadcast('dictionaryReady');
+                			vm.searchItems = searchItems;
                 		});
                 	};
                 	vm.search();

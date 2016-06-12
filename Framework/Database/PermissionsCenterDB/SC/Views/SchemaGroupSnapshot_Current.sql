@@ -24,6 +24,10 @@ CREATE INDEX [IX_SchemaGroupSnapshot_Current_CodeName] ON [SC].[SchemaGroupSnaps
 
 GO
 
+CREATE INDEX [IX_SchemaGroupSnapshot_Current_Name] ON [SC].[SchemaGroupSnapshot_Current] ([Name])
+
+GO
+
 CREATE INDEX [IX_SchemaGroupSnapshot_Current_ParentJobID] ON [SC].[SchemaGroupSnapshot_Current] ([ParentJobID])
 
 GO

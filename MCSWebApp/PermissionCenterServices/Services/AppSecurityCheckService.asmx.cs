@@ -105,6 +105,27 @@ namespace PermissionCenter.Services
         }
 
         /// <summary>
+        /// 查找指定应用中，具有指定功能的角色。
+        /// </summary>
+        /// <param name="appCodeName">应用的英文标识</param>
+        /// <param name="roleCodeNames">功能的英文标识，多个时用逗号分隔</param>
+        /// <returns></returns>
+        [WebMethod]
+        public DataSet GetRolesFunctions(string appCodeName, string roleCodeNames)
+        {
+            string[] schemaTypes = SchemaInfo.FilterByCategory("Roles").ToSchemaNames();
+            string[] roleCodeNamesArray = OGUReaderService.SplitObjectValues(roleCodeNames);
+
+            SchemaObjectCollection objs = SCSnapshotAdapter.Instance.QueryRolePermissionsByCodeName(schemaTypes, appCodeName, roleCodeNamesArray, false, DateTime.MinValue);
+
+            DataSet ds = new DataSet();
+
+            ds.Tables.Add(QueryHelper.GetAppObjectTableBuilder(schemaTypes).Convert(objs));
+
+            return ds;
+        }
+
+        /// <summary>
         /// 查询指定部门范围下，指定应用系统中，指定角色下的所有人员。这个查询是递归的
         /// </summary>
         /// <param name="orgRoot">部门范围的全路径，空串时不做限制，多个时用逗号分隔（在本服务实现中，这个参数被忽略了）</param>

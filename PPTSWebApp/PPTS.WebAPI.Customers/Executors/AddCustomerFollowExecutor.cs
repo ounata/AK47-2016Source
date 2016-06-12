@@ -1,7 +1,9 @@
 ﻿using MCS.Library.Data;
 using MCS.Library.Data.Executors;
+using MCS.Library.Principal;
 using MCS.Library.SOA.DataObjects;
 using PPTS.Data.Common.Executors;
+using PPTS.Data.Common.Security;
 using PPTS.Data.Customers.Adapters;
 using PPTS.Data.Customers.Entities;
 using PPTS.Data.Customers.Executors;
@@ -24,7 +26,8 @@ namespace PPTS.WebAPI.Customers.Executors
         protected override void PrepareData(DataExecutionContext<UserOperationLogCollection> context)
         {
             base.PrepareData(context);
-
+            this.Model.Follow.FillCreator();
+            this.Model.InitVerifier(DeluxeIdentity.CurrentUser);
             CustomerFollowAdapter.Instance.UpdateInContext(this.Model.Follow);
 
             //准备更新潜客或者学员的跟进信息的SQL

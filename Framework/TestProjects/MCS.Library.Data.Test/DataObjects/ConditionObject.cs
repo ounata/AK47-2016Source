@@ -50,22 +50,29 @@ namespace MCS.Library.Data.Test.DataObjects
             set;
         }
 
-        [ConditionMapping("CREATE_TIME", Operation = "<", AdjustDays = 1)]
+        [ConditionMapping("CREATE_TIME", UtcTimeToLocal = true, Operation = "<", AdjustDays = 1)]
         public DateTime EndTime
         {
             get;
             set;
         }
 
-        [ConditionMapping("AGE_1", Operation = ">", DefaultValueUsage = DefaultValueUsageType.UseDefaultValue)]
+        [ConditionMapping("AgeWithDefaultValue", Operation = ">", DefaultValueUsage = DefaultValueUsageType.UseDefaultValue)]
         public int AgeWithDefaultValue
         {
             get;
             set;
         }
 
-        [ConditionMapping("AGE_2", Operation = ">")]
+        [ConditionMapping("AgeIgnoreDefaultValue", Operation = ">")]
         public int AgeIgnoreDefaultValue
+        {
+            get;
+            set;
+        }
+
+        [ConditionMapping("AgeWithDefaultExpression", DefaultExpression = "AgeWithDefaultExpression = '40'", Operation = "<>")]
+        public int AgeWithDefaultExpression
         {
             get;
             set;

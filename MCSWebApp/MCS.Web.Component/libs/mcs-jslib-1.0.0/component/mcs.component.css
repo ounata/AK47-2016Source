@@ -1,7 +1,11 @@
+.justPrint {
+    display: none;
+}
+
 .fileUploadForm td {
     width: 200px;
     height: 30px;
-    vertical-align: middle;
+    vertical-align: middle !important;
 }
 
 tags-input.noshow .tags input::-moz-placeholder {
@@ -34,24 +38,69 @@ div.warning {
 
 .countdown {
     color: red;
-    font-size: 20pt;
+    font-size: 14px;
 }
 
 .clearfix {
     padding-top: 5px !important;
 }
 
+.clickable {
+   cursor:pointer;
+}
 
+/* 消息提示 */
+.tooltip-inner {background-color:#428bca!important;}
+
+.tooltip.top .tooltip-arrow {
+    border-top-color: #428bca !important;
+     -moz-border-top-color: #428bca !important;
+}
+
+.tooltip.right .tooltip-arrow {
+    border-right-color: #428bca !important;
+    -moz-border-right-color: #428bca !important;
+}
+
+.tooltip.left .tooltip-arrow {
+    border-left-color: #428bca !important;
+    -moz-border-left-color: #428bca !important;
+}
+
+.tooltip.bottom .tooltip-arrow {
+    border-bottom-color: #428bca !important;
+    -moz-border-bottom-color: #428bca !important;
+}
+
+.block-ui-message {
+    background-color:#428bca!important;
+    color:#fff!important;
+    font-size: 16px;
+    font-weight: normal;
+}
 /* 内边距 */
 
 .mcs-padding-0 {
     padding: 0 !important;
 }
 
+.mcs-padding-left-0 {
+    padding-left: 0 !important;
+}
+
+.mcs-padding-right-0 {
+    padding-right: 0 !important;
+}
+
 .mcs-padding-5 {
     padding: 5px !important;
 }
-
+.mcs-padding-left-5 {
+    padding-left: 5px !important;
+}
+.mcs-padding-left-10 {
+    padding-left: 10px !important;
+}
 .mcs-padding-left-15 {
     padding-left: 15px;
 }
@@ -67,12 +116,28 @@ div.warning {
     margin-top: 5px;
 }
 
+.mcs-margin-top-10 {
+    margin-top: 10px;
+}
+
 .mcs-margin-top-15 {
     margin-top: 15px !important;
 }
 
+.mcs-margin-left-5 {
+    margin-left: 5px !important;
+}
+
+.mcs-margin-left-10 {
+    margin-left: 10px !important;
+}
+
 .mcs-margin-left-15 {
     margin-left: 15px;
+}
+
+.mcs-margin-left-40 {
+    margin-left: 40px !important;
 }
 
 .mcs-margin-right-0 {
@@ -87,6 +152,9 @@ div.warning {
     margin-right: 20px;
 }
 
+.mcs-margin-top-2 {
+    margin-top: 2px !important;
+}
 .mcs-margin-bottom-2 {
     margin-bottom: 2px !important;
 }
@@ -100,9 +168,15 @@ div.warning {
 
 
 /* 宽度 */
+
 .mcs-width-full {
     width: 100% !important;
 }
+
+.mcs-width-half {
+    width: 50% !important;
+}
+
 .mcs-width-100 {
     width: 100px;
 }
@@ -113,6 +187,10 @@ div.warning {
 
 .mcs-width-130 {
     width: 130px;
+}
+
+.mcs-width-200 {
+    width: 200px;
 }
 
 .mcs-select-width-50,
@@ -127,9 +205,11 @@ div.warning {
 .mcs-select-width-30 {
     width: 28.5%;
 }
+
 .pull-none {
-    float:none;
+    float: none;
 }
+
 
 /* 对话框 */
 
@@ -178,9 +258,11 @@ div.warning {
 .modal-dialog .datepicker {
     z-index: 1052;
 }
+
 .datepicker {
-    padding-left:0px !important;
+    padding-left: 0px !important;
 }
+
 .modal-header .close {
     font-size: 20px;
 }
@@ -195,13 +277,42 @@ div.warning {
 .mcs-panel-search {
     margin-bottom: 10px !important;
 }
-
+.mcs-panel-search.well-sm {
+    padding-top:4px;
+}
 .mcs-panel-search .quick-search {
     color: #4c8fbd;
     font-weight: 700;
     font-size: 13px;
     line-height: 1;
-    padding: 0 6px;
+    padding: 0 5px;
+}
+
+.mcs-panel-search .portlet {
+    padding:0;
+    background:none;
+    border:0;    
+}
+
+.mcs-panel-search .portlet > .portlet-title {
+    border-bottom:1px solid #e5e5e5;
+    padding:0;
+    height:42px;
+}
+
+.mcs-panel-search .portlet > .portlet-title > .caption {
+    padding:5px 0;
+}
+.mcs-panel-search .portlet > .portlet-title > .actions {
+    padding: 0 0 14px 0;
+    float: right;
+    display: inline-block;
+}
+.mcs-panel-search .portlet > .portlet-body .row {
+    margin-bottom: 5px;
+}
+.mcs-panel-search .portlet > .portlet-body .row div:not(:last-child) {
+    padding-right: 0px;
 }
 
 .search-inline {
@@ -384,36 +495,45 @@ table {
     border-top: 0px;
 }
 
+
 /* 级联下拉框 */
+
 .mcs-cascading-select-container {
-    position:relative;
-    width:100%;
+    position: relative;
+    width: 100%;
     /*background-color:#eee;*/
     /*overflow:hidden;*/
 }
+
 .mcs-cascading-select-container ul {
-    margin:0;
-    float:left;
-    position:relative;
+    margin: 0;
+    float: left;
+    position: relative;
 }
-.mcs-cascading-select-container ul li{
-    margin:0;
-    padding:0;
-    list-style:none;
-    float:left;
-    margin:0 14.5px 0 0;
-    position:relative;
+
+.mcs-cascading-select-container ul li {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    float: left;
+    margin: 0 14.5px 0 0;
+    position: relative;
 }
+
 .mcs-cascading-select-container ul li.last {
-    margin:0 !important;     
-    float:right;
+    margin: 0 !important;
+    float: right;
 }
 
 
 /* 标签 */
 
-.label-150 {
+.label-100 {
     width: 100px !important;
+}
+
+.label-150 {
+    width: 150px !important;
 }
 
 .label-260 {
@@ -541,6 +661,17 @@ table {
     padding-top: 4px !important;
 }
 
+.checkbox-inline {
+    width: 120px;
+}
+.checkbox-inline:first-child {
+    margin-left:10px;
+}
+
+.checkbox-inline.all {
+    color:#4c8fbd;
+    font-weight:700;
+}
 
 /* 按钮 */
 
@@ -612,6 +743,11 @@ a:focus {
     border-radius: 4px;
 }
 
+.portlet > .portlet-title.line {
+    border-bottom: 0;
+    margin-bottom: 0px;
+}
+
 .portlet > .portlet-title::after {
     clear: both;
 }
@@ -620,6 +756,23 @@ a:focus {
 .portlet > .portlet-title::after {
     content: "";
     display: table;
+}
+
+.portlet > .portlet-title > .caption {
+    float: left;
+    display: inline-block;
+    font-size: 18px;
+    line-height: 18px;
+}
+
+.portlet > .portlet-title > .caption .caption-helper {
+    font-size:14px;
+}
+
+.portlet > .portlet-title > .tools {
+    float: right;
+    display: inline-block;
+    padding: 12px 0 8px 0;
 }
 
 .portlet > .portlet-body {
@@ -667,8 +820,8 @@ a:focus {
 
 .portlet > .portlet-body.form .form-bordered .form-group {
     margin: 2px 0;
-    /*border-bottom: 1px dashed #efefef;*/
-    height:35px;
+    border-bottom: 1px dashed #efefef;
+    height: 35px;
 }
 
 .portlet > .portlet-body.form .form-bordered .form-group.line-height {
@@ -710,7 +863,20 @@ a:focus {
 
 .portlet > .portlet-body.form .form-control-static {
     padding-top: 5px;
-    color: #336199;
+    color: #393939;
+}
+
+.portlet > .portlet-body.form .form-control-static .control-label{
+    padding-top: 4px;
+}
+
+.portlet > .portlet-body.form .form-group span.info {
+    color: #858585;
+}
+
+.portlet.light {
+    padding: 12px 0px 15px;
+    background-color: #fff;
 }
 
 .portlet.light {
@@ -912,20 +1078,20 @@ a:focus {
 .form-group.validate {
     margin-bottom: 0px;
 }
+
 .form-group.horizontal {
     margin-bottom: 5px;
 }
 
 .form-group.validate div.help-block,
-.form-group.validate div.help-inline
-{
+.form-group.validate div.help-inline {
     visibility: hidden;
     margin: 0px;
     font-size: 12px;
 }
 
 .form-group.validate div.horizontal {
-    margin:5px 0;
+    margin: 5px 0;
 }
 
 span.has-error input,
@@ -1041,7 +1207,8 @@ span.has-error .help-inline,
 }
 
 .table-layout tr {
-    line-height: 50px
+    line-height: 34px;
+    height: 36px;
 }
 
 .table-layout tr td {

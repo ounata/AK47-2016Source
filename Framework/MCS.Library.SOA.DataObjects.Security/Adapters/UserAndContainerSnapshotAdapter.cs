@@ -280,9 +280,9 @@ namespace MCS.Library.SOA.DataObjects.Security.Adapters
 			ORMappingItemCollection mapping = this.GetMappingInfo();
 			StringBuilder strB = new StringBuilder();
 
-			string currentTimeSql = TSqlBuilder.Instance.DBCurrentTimeFunction;
+			string currentTimeSql = TimePointContext.Current.DBCurrentTimeFunction(TSqlBuilder.Instance);
 
-			SCActionContext.Current.TimePoint.IsNotMinValue(tp => currentTimeSql = TSqlBuilder.Instance.FormatDateTime(tp));
+            SCActionContext.Current.TimePoint.IsNotMinValue(tp => currentTimeSql = TSqlBuilder.Instance.FormatDateTime(tp));
 
 			strB.Append("DECLARE @currentTime DATETIME");
 			strB.Append(TSqlBuilder.Instance.DBStatementSeperator);
@@ -308,9 +308,9 @@ namespace MCS.Library.SOA.DataObjects.Security.Adapters
 			ORMappingItemCollection mapping = this.GetMappingInfo();
 			StringBuilder strB = new StringBuilder();
 
-			string currentTimeSql = TSqlBuilder.Instance.DBCurrentTimeFunction;
+            string currentTimeSql = TimePointContext.Current.DBCurrentTimeFunction(TSqlBuilder.Instance);
 
-			SCActionContext.Current.TimePoint.IsNotMinValue(tp => currentTimeSql = TSqlBuilder.Instance.FormatDateTime(tp));
+            SCActionContext.Current.TimePoint.IsNotMinValue(tp => currentTimeSql = TSqlBuilder.Instance.FormatDateTime(tp));
 
 			strB.Append("DECLARE @currentTime DATETIME");
 			strB.Append(TSqlBuilder.Instance.DBStatementSeperator);

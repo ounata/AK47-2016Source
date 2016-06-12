@@ -6,7 +6,7 @@ BEGIN
 
 	DECLARE @now DATETIME
 
-	SET @now = GETDATE()
+	SET @now = GETUTCDATE()
 
 	DECLARE @adminID NVARCHAR(36)
 

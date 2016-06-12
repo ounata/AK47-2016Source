@@ -7,6 +7,7 @@ using PPTS.Data.Products.Entities;
 using PPTS.WebAPI.Customers.ViewModels.Students;
 using MCS.Library.Principal;
 using PPTS.Data.Common.Security;
+using PPTS.WebAPI.Customers.ViewModels.PotentialCustomers;
 
 namespace PPTS.WebAPI.Customers.ViewModels.CustomerServices
 {
@@ -19,6 +20,12 @@ namespace PPTS.WebAPI.Customers.ViewModels.CustomerServices
         }
 
         public StudentModel Customer
+        {
+            get;
+            set;
+        }
+
+        public PotentialCustomerModel PCustomer
         {
             get;
             set;
@@ -67,6 +74,8 @@ namespace PPTS.WebAPI.Customers.ViewModels.CustomerServices
             CustomerServiceAdapter.Instance.GetDbContext().DoAction(context => context.ExecuteDataSetSqlInContext());
 
             GenericCustomerAdapter<StudentModel, List<StudentModel>>.Instance.LoadInContext(result.CustomerService.CustomerID, customer => result.Customer = customer);
+
+            GenericPotentialCustomerAdapter<PotentialCustomerModel, List<PotentialCustomerModel>>.Instance.LoadInContext(result.CustomerService.CustomerID, customer => result.PCustomer = customer);
 
             CustomerServiceAdapter.Instance.GetDbContext().DoAction(context => context.ExecuteDataSetSqlInContext());
 

@@ -1,0 +1,157 @@
+﻿/*全局字体修改*/
+body {
+    font-family: "微软雅黑", Arial
+}
+/*顶部导航条背景色由ace.css里的浅蓝色#438eb9改成了白色*/
+#navbar {
+    background-color: #EBF4FA;
+    border: 1px solid #e5e5e5;
+}
+.nav.nav-list a {
+    cursor: pointer;
+}
+.page-header {
+    border-bottom: 2px solid #6fb3e0;
+    padding: 5px 10px;
+    font-size: 14px;
+    font-weight: normal;
+    color: #8089a0;
+}
+
+.dialog-title {
+    font-size:12px;
+    color: #8089a0;
+    margin-right:10px;
+}
+.dialog-button{
+    margin-top:15px;
+
+}
+
+tags-input.noplaceholder  input{
+    
+}
+
+/*nav-brand里的logo把padding-top, bottom从10px改成了0px*/
+#logo {
+    padding: 0px;
+}
+
+/*跟进，成绩单独修正*/
+.mcs-user-profile.follow-list .profile-info-name {
+    width: 15%;
+}
+.mcs-user-profile.score-list .profile-info-name {
+    width: 12%;
+}
+
+.user-menu .fa-caret-left {
+    float:none !important;
+    margin-left:50px;
+}
+
+/*页面布局*/
+.page-header.info {
+    margin: 0px;
+}
+/*修改底部版权信息的行距从36px到20px*/
+.footer-content {
+    line-height: 20px!important;
+}
+
+/*项目组件*/
+ppts-daterangepicker.search .datepicker {
+    padding-left: 0px !important;
+}
+.inline-ppts-datepicker {
+    display: inline-block;
+    width:180px;
+    vertical-align: middle;
+}
+
+.ppts-datatable-solidlineheight{
+    height:30px;
+}
+
+.ppts-panel-pager {
+    height:45px;
+    text-align: right;
+    margin-top:25px;
+
+}
+ppts-select {
+    padding: 0px;
+}
+.ppts-select-label {
+    width:120px !important;
+    height: 32px !important;
+    float:right !important;
+}
+.ppts-select-search {
+    width:200px;
+    display: inline-flex;
+    padding-top: 5px;
+}
+.ppts-select-search div {
+    padding-left: 0px !important;
+}
+.ppts-select-search-nopadding {
+     width:200px;
+    display: inline-block;
+    padding-top: 0px;
+}
+.search-inline ppts-select {
+    padding-top: 0px !important;
+}
+ppts-select-branch.search{
+    display:inline-block !important;
+    vertical-align:middle;
+}
+
+ppts-daterangepicker.search div {
+    width: 380px !important;
+}
+ppts-select-branch.search div {
+    display: inline-grid !important;
+}
+.ppts-select-users {
+    width: 200px;
+    margin-left: 20px;
+}
+.ppts-select div {
+    width: 200px !important;
+}
+.ppts-select-md div {
+    width: 260px !important;
+}
+.ppts-select-lg div {
+    width: 400px !important;
+}
+ppts-select-branch .btn {
+    height: 33px !important;
+}
+.ppts-select-middle-align {
+    margin-top: 10px;
+}
+ppts-search .input-group {
+ width:500px;   
+}
+ppts-search .input-group .form-control {
+    height:37px;
+   
+}
+.ppts-oneline-block {
+    display: inline-block;
+}
+/**已对帐显示红色*/
+.ppts-checked-color{
+    color:red;
+}
+
+tags-input.lg  .tags{
+    width:500px !important;
+}
+
+.datatable-header {
+   width:250px;
+}

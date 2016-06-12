@@ -28,6 +28,12 @@ namespace PPTS.WebAPI.Customers.ViewModels.CustomerFollows
             set;
         }
 
+        public CustomerFollowItemCollection FollowItems
+        {
+            get;
+            set;
+        }
+
         public IDictionary<string, IEnumerable<BaseConstantEntity>> Dictionaries
         {
             get;
@@ -43,6 +49,23 @@ namespace PPTS.WebAPI.Customers.ViewModels.CustomerFollows
         {
             ViewFollowModel model = new ViewFollowModel();
             model.Follow = CustomerFollowAdapter.Instance.Load(followId);
+            #region Add FollowItems
+
+            if (followId != null)
+            {
+                CustomerFollowItemCollection followItem = CustomerFollowItemAdapter.Instance.LoadCollectionByCustomerID(followId);
+                //if (followItem != null && followItem.Count > 0)
+                //{
+                //    foreach (CustomerFollowItem item in followItem)
+                //    {
+                //        model.FollowItems.Add(item);
+                //    }
+                //}
+                model.FollowItems = followItem;
+            }
+
+            #endregion
+            
             model.Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(CustomerFollow), typeof(ViewFollowModel));
             model.PreviousFollowStage = CustomerFollowAdapter.Instance.LoadPreviousFollow(model.Follow.CustomerID).FollowStage;
             return model;

@@ -85,6 +85,7 @@ namespace PPTS.Data.Customers.Entities
         /// </summary>
         [ORFieldMapping("CustomerLevel")]
         [DataMember]
+        [ConstantCategory("C_CODE_ABBR_Customer_CRM_CustomerLevelEx")]
         public string CustomerLevel
         {
             get;
@@ -263,11 +264,11 @@ namespace PPTS.Data.Customers.Entities
         }
 
         /// <summary>
-        /// 信息来源一级分类(C_Code_Abbr_BO_Customer_Source)
+        /// 信息来源一级分类(C_CODE_ABBR_BO_Customer_Source)
         /// </summary>
         [ORFieldMapping("SourceMainType")]
         [DataMember]
-        [ConstantCategory("C_Code_Abbr_BO_Customer_Source")]
+        [ConstantCategory("C_CODE_ABBR_BO_Customer_Source")]
         public string SourceMainType
         {
             get;
@@ -275,11 +276,11 @@ namespace PPTS.Data.Customers.Entities
         }
 
         /// <summary>
-        /// 信息来源二级分类(C_Code_Abbr_BO_Customer_Source)
+        /// 信息来源二级分类(C_CODE_ABBR_BO_Customer_Source)
         /// </summary>
         [ORFieldMapping("SourceSubType")]
         [DataMember]
-        [ConstantCategory("C_Code_Abbr_BO_Customer_Source")]
+        [ConstantCategory("C_CODE_ABBR_BO_Customer_Source")]
         public string SourceSubType
         {
             get;
@@ -302,7 +303,7 @@ namespace PPTS.Data.Customers.Entities
         /// </summary>
         [ORFieldMapping("CustomerStatus")]
         [DataMember]
-        [ConstantCategory("C_Code_Abbr_BO_CTI_CustomerStatus")]
+        [ConstantCategory("C_CODE_ABBR_BO_CTI_CustomerStatus")]
         public CustomerStatus Status
         {
             get;

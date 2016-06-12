@@ -71,10 +71,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\CategoryQueryResult.cs" />
     <Compile Include="Models\DiscountQueryResult.cs" />
     <Compile Include="Models\ExpenseQueryResult.cs" />
     <Compile Include="Models\PresentQueryResult.cs" />
     <Compile Include="Models\ProductViewQueryResult.cs" />
+    <Compile Include="Operations\ICategoryQueryService.cs" />
     <Compile Include="Operations\IProductQueryService.cs" />
     <Compile Include="Operations\IConfigRuleQueryService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

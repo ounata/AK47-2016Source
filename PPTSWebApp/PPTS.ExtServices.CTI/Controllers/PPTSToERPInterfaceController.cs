@@ -278,6 +278,14 @@ namespace PPTS.ExtServices.CTI.Controllers
                 }
             }
             );
+            if (paramCTIModel.BranchOrgID.IndexOf("Org") < 0)
+            {
+                paramCTIModel.BranchOrgID = paramCTIModel.BranchOrgID + "-Org";
+            }
+            if (paramCTIModel.CampusID.IndexOf("Org") < 0)
+            {
+                paramCTIModel.CampusID = paramCTIModel.CampusID + "-Org";
+            }
             //跟进记录备注
             paramCTIModel.ParentInfo = (!paramCTIModel.ParentInfo.IsNullOrEmpty()) ? "家长情况：" + paramCTIModel.ParentInfo.Trim().Replace("\r\n", "") + "\r\n" : string.Empty;
             paramCTIModel.StudentScore = (!paramCTIModel.StudentScore.IsNullOrEmpty()) ? "学生成绩：" + paramCTIModel.StudentScore.Trim().Replace("\r\n", "") + "\r\n" : string.Empty;
@@ -309,7 +317,7 @@ namespace PPTS.ExtServices.CTI.Controllers
                 strERPSourceValue = APPFunc.GetERPSourceValue(strCTISource);
             }
 
-            KeyValuePair<string, IEnumerable<BaseConstantEntity>> constants = dictionaryCategories.Where(d => d.Key == "C_Code_Abbr_BO_Customer_Source").SingleOrDefault();
+            KeyValuePair<string, IEnumerable<BaseConstantEntity>> constants = dictionaryCategories.Where(d => d.Key == "C_CODE_ABBR_BO_Customer_Source").SingleOrDefault();
 
             //默认选取第一个结果
             subSource = constants.Value.Where(c => c.Value == strERPSourceValue).FirstOrDefault();
@@ -555,7 +563,7 @@ namespace PPTS.ExtServices.CTI.Controllers
                 //SourceSystem = param.InfoFrom == "呼出" ? 3 : 4;//没有系统来源属性成员字段，3，4不知道从哪里来的
             };
 
-            model.UpdatePotentialCustomer();
+            //model.UpdatePotentialCustomer();
             StringBuilder str = new StringBuilder();
             str.AppendFormat("delete from [CM].[PotentialCustomers] where [CustomerID] = '{0}'\r\n", model.PotentialCustomer.CustomerID);
             str.AppendFormat("delete from [CM].[Parents] where [ParentID] = '{0}'\r\n", model.Parent.ParentID);

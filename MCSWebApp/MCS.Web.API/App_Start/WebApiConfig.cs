@@ -5,6 +5,7 @@ using MCS.Web.MVC.Library.Filters;
 using Newtonsoft.Json.Serialization;
 using System.Net.Http.Formatting;
 using System.Web.Http;
+using Newtonsoft.Json;
 
 namespace MCS.Web.API
 {
@@ -28,9 +29,8 @@ namespace MCS.Web.API
 
             config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
 
+            config.Formatters.JsonFormatter.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
             JsonDotNetConvertersSettings.GetConfig().GetConverters().ForEach(converter => config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(converter));
-
-            config.Filters.Add(new ApiExceptionFilterAttribute());
         }
     }
 }

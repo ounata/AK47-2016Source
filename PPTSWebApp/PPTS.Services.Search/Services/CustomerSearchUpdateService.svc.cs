@@ -20,18 +20,6 @@ namespace PPTS.Services.Search.Services
     public class CustomerSearchUpdateService : ICustomerSearchUpdateService
     {
         #region 更新客户信息部分
-        [WfJsonFormatter]
-        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
-        public void UpdateByCustomerTextInfo(string customerID)
-        {
-            CustomerSearchUpdateModel model = new CustomerSearchUpdateModel()
-            {
-                CustomerID = customerID,
-                ObjectID = customerID,
-                Type = CustomerSearchUpdateType.Customer
-            };
-            UpdateByCustomerInfo(model);
-        }
         /// <summary>
         /// 更新客户部分信息
         /// </summary>
@@ -121,8 +109,9 @@ namespace PPTS.Services.Search.Services
                 , "ModifierID"
                 , "ModifierName"
                 , "ModifyTime"
-                , "TenantCode").AppendItem("VisitTime", "VistTime", string.Empty,true)
-                .AppendItem("NextVisitTime", "NextVistTime", string.Empty, true);
+                , "TenantCode"
+                , "VisitTime"
+                , "NextVisitTime");
 
             string sql = string.Format(@"select top 1 {0} from {1} where {2}"
             , selectBuilder.ToSqlString(TSqlBuilder.Instance)

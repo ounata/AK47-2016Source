@@ -36,6 +36,7 @@ AS
       ,[ReferralCustomerID]
       ,[ReferralCustomerCode]
       ,[ReferralCustomerName]
+      ,[ReferralCount]
       ,[PurchaseIntention]
       ,[Locked]
       ,[LockMemo]

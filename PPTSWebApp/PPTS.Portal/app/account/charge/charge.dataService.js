@@ -93,4 +93,21 @@
 
         return resource;
     }]);
+
+    account.registerValue('chargeQueryAdvanceSearchItems', [
+        { name: '当前年级：', template: '<ppts-checkbox-group category="grade" model="vm.criteria.grades" async="false"/>' },
+        { name: '建档日期：', template: '<ppts-daterangepicker start-date="vm.criteria.createTimeStart" end-date="vm.criteria.createTimeEnd" width="41.5%" css="mcs-margin-left-10"/>' },
+        { name: '充值日期：', template: '<ppts-daterangepicker start-date="vm.criteria.applyTimeStart" end-date="vm.criteria.applyTimeEnd" width="41.5%" css="mcs-margin-left-10"/>' },
+        { name: '充值金额：', template: '<ppts-datarange min="vm.criteria.chargeMoneyStart" max="vm.criteria.chargeMoneyEnd" min-text="充值金额起" max-text="充值金额止" width="42%" css="mcs-padding-left-10"/>' },
+        { name: '充值类型：', template: '<ppts-checkbox-group category="chargeType" model="vm.criteria.chargeTypes" width="150px" async="false"/>' },
+        { name: '审核状态：', template: '<ppts-checkbox-group category="aduitStatus" model="vm.criteria.aduitStatuses" width="150px" async="false"/>' },
+        { name: '建档人：', template: '<ppts-checkbox-group category="people" model="vm.criteria.creatorJobs" width="150px" async="false" css="mcs-padding-left-10"/> <mcs-input placeholder="建档人姓名" model="vm.criteria.creatorName" custom-style="width:28%"/>' },
+    ]);
+
+    account.registerValue('paymentQueryAdvanceSearchItems', [
+        { name: '充值日期：', template: '<ppts-daterangepicker start-date="vm.criteria.applyTimeStart" end-date="vm.criteria.applyTimeEnd" width="41.5%" css="mcs-margin-left-10"/>' },
+        { name: '充值类型：', template: '<ppts-checkbox-group category="chargeType" model="vm.criteria.chargeTypes" width="150px" async="false"/>' },
+        { name: '支付类型：', template: '<ppts-checkbox-group category="payType" model="vm.criteria.payTypes" width="150px" async="false"/>' },
+        { name: '对账状态：', template: '<ppts-checkbox-group category="checkStatus" model="vm.criteria.checkStatuses" width="150px" async="false"/>' },
+    ]);
 });

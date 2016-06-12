@@ -16,6 +16,11 @@ namespace PPTS.Data.Customers.Authorization
             throw new NotImplementedException();
         }
 
+        public override CourseRelationAuthorizationAdpterBase GetCourseRelationAuthorizationAdpter()
+        {
+            throw new NotImplementedException();
+        }
+
         public override CustomerOrgAuthorizationAdapterBase GetCustomerOrgAuthorizationAdapter()
         {
             return CustomerOrgAuthorizationAdapter.Instance;

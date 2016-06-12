@@ -2,8 +2,8 @@
         ppts.config.dataServiceConfig.accountChargeDataService],
         function (account) {
             account.registerController('accountChargePaymentQueryController', [
-                '$scope', '$state', 'mcsDialogService', 'dataSyncService', 'accountChargeDataService',
-                function ($scope, $state, mcsDialogService, dataSyncService, accountDataService) {
+                '$scope', '$state', 'mcsDialogService', 'dataSyncService', 'accountChargeDataService', 'paymentQueryAdvanceSearchItems',
+                function ($scope, $state, mcsDialogService, dataSyncService, accountDataService, searchItems) {
                     var vm = this;
 
                     vm.data = {
@@ -49,11 +49,11 @@
                         }, {
                             field: "checkStatus",
                             name: "对账状态",
-                            template: '<span ng-class="{1: \'ppts-checked-color\', 0: \'\'}[{{row.checkStatus}}]">{{row.checkStatus | checkStatus}}</span>'
+                            template: '<span ng-class="{1: \'ppts-checked-color\', 0: \'ppts-unchecked-color\'}[{{row.checkStatus}}]">{{row.checkStatus | checkStatus}}</span>'
                         }],
                         pager: {
                             pageIndex: 1,
-                            pageSize: 10,
+                            pageSize: ppts.config.pageSizeItem,
                             totalCount: -1,
                             pageChange: function () {
                                 dataSyncService.initCriteria(vm);
@@ -71,6 +71,7 @@
                         dataSyncService.initCriteria(vm);
                         accountDataService.queryChargePaymentList(vm.criteria, function (result) {
                             vm.data.rows = result.queryResult.pagedData;
+                            vm.searchItems = searchItems;
                             dataSyncService.injectDictData();
                             dataSyncService.updateTotalCount(vm, result.queryResult);
                             $scope.$broadcast('dictionaryReady');
@@ -86,7 +87,7 @@
                         for (var i = 0; i < vm.data.rows.length; i++) {
                             for (var j = 0; j < vm.data.rowsSelected.length; j++) {
                                 if (vm.data.rows[i].payID == vm.data.rowsSelected[j].payID && vm.data.rows[i].canCheck) {
-                                    payIDs.push({ payID: vm.data.rows[i].payID });
+                                    payIDs.push(vm.data.rows[i].payID);
                                 }
                             }
                         }

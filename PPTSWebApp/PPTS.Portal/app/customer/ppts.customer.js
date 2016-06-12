@@ -105,7 +105,7 @@
             name: 'ppts.customer-view.follows',
             url: '/follows?prev=:page',
             templateUrl: 'app/customer/follow/follow-view/follow-view.html',
-            controller: 'followListController',
+            controller: 'followViewController',
             breadcrumb: {
                 label: '我的跟进记录',
             },
@@ -328,7 +328,7 @@
             dependencies: ['app/customer/feedback/feedback-add/feedback-add.controller']
         }).loadRoute($stateProvider, {
             name: 'ppts.student-view.feedbacks',
-            url: '/feedbacks?prev=:page',
+            url: '/feedbacks/:id?prev=:page',
             templateUrl: 'app/customer/feedback/feedback-view/feedback-view.html',
             controller: 'feedbackViewController',
             breadcrumb: {
@@ -394,6 +394,20 @@
                 parent: 'ppts.student'
             },
             dependencies: ['app/schedule/studentassignment/stuasgmt-condition/stuasgmt-condition-list.controller']
+        }).loadRoute($stateProvider, {
+            name: 'ppts.student-view.stuWeekCourse',
+            url: '/schedule/stuasgmt/weekcourse?prev=:page',
+            templateUrl: 'app/schedule/studentassignment/stuasgmt-course/stuasgmt-course.html',
+            controller: 'stuAsgmtCourseController',
+            breadcrumb: {
+                label: '课表',
+                parent: 'ppts.student'
+            },
+            dependencies: ['app/schedule/studentassignment/stuasgmt-course/stuasgmt-course.controller'
+                  , 'app/schedule/studentassignment/stuasgmt-add/stuasgmt-add.controller'
+                , 'app/schedule/studentassignment/stuasgmt-course/stuasgmt-course-copy.controller'
+                , 'app/schedule/studentassignment/stuasgmt-course/stuasgmt-course-reset.controller'
+            ]
         }).loadRoute($stateProvider, {
             name: 'ppts.student-view.studentRecordList',
             url: '/schedule/sturecord/list?prev=:page',
@@ -528,7 +542,7 @@
             name: 'ppts.student-view.follows',
             url: '/follows?prev=:page',
             templateUrl: 'app/customer/follow/follow-view/follow-view.html',
-            controller: 'followListController',
+            controller: 'followViewController',
             breadcrumb: {
                 label: '我的跟进记录',
             },

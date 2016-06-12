@@ -10,6 +10,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Web;
+using PPTS.Data.Common;
+using PPTS.Data.Orders;
+using PPTS.Data.Common.Entities;
 
 namespace PPTS.WebAPI.Orders.ViewModels.Unsubscribe
 {
@@ -39,8 +42,14 @@ namespace PPTS.WebAPI.Orders.ViewModels.Unsubscribe
             Order.CustomerName = OrderItemView.CustomerName;
             Order.CampusID = OrderItemView.CampusID;
             Order.CampusName = OrderItemView.CampusName;
-            Order.DebookStatus = "1";
-            Order.ProcessStatus = "1";
+            Order.ParentID = OrderItemView.ParentID;
+            Order.ParentName = OrderItemView.ParentName;
+
+            Order.DebookStatus = ((int)OrderStatus.PendingApproval).ToString();
+            Order.ProcessStatus = ((int)ProcessStatusDefine.Processing).ToString();
+
+            FillUser(Order);
+
             return this;
         }
 
@@ -65,26 +74,43 @@ namespace PPTS.WebAPI.Orders.ViewModels.Unsubscribe
             }
 
             Item.DebookMoney = Item.DebookAmount * OrderItemView.RealPrice;
+            
+            Item.AssetID = OrderItemView.AssetID;
 
-            Item.AssetID = "test";
+            FillUser(Item);
 
             return this;
         }
 
-        public DebookOrderModel FillUser()
+        private void FillUser(object info)
         {
-            if (CurrentUser != CurrentUser)
+            if (CurrentUser != null)
             {
-                CurrentUser.FillCreatorInfo(Order);
-                CurrentUser.FillModifierInfo(Order);
+                if (info is IEntityWithCreator)
+                {
+                    CurrentUser.FillCreatorInfo(info as IEntityWithCreator);
+                }
+                if (info is IEntityWithModifier)
+                {
+                    CurrentUser.FillModifierInfo(info as IEntityWithModifier);
+                }
+                if (info is DebookOrder)
+                {
+                    var model = info as DebookOrder;
+                    model.SubmitterID = model.CreatorID;
+                    model.SubmitterName = model.CreatorName;
+                    model.SubmitterJobID = CurrentUser.GetCurrentJob().ID;
+                    model.SubmitterJobName = CurrentUser.GetCurrentJob().Name;
+                }
             }
-            return this;
         }
+
+
 
         public Asset ToAsset()
         {
             if (null != Asset) { return Asset; }
-            Asset = GenericAssetAdapter<Asset, AssetCollection>.Instance.LoadByItemId(Item.ItemID);
+            Asset = GenericAssetAdapter<Asset, AssetCollection>.Instance.LoadByItemId(OrderItemView.ItemID);
             Asset.NullCheck("Asset");
 
             Asset.ReturnedMoney = Item.ReturnMoney;
@@ -111,7 +137,16 @@ namespace PPTS.WebAPI.Orders.ViewModels.Unsubscribe
         {
             Order.NullCheck("Order");
             Item.NullCheck("Item");
-            (Asset.ConfirmedAmount == Asset.RealAmount).TrueThrow("无剩余数量可退");
+
+            (
+                Item.DebookAmount == 0 ||
+                Asset.RealAmount - Item.DebookAmount- Asset.AssignedAmount - Asset.ConfirmedAmount- Asset.DebookedAmount < 0
+            ).TrueThrow("退订数据有误！");
+
+            (
+                Asset.ConfirmedAmount == Asset.RealAmount || 
+                Asset.DebookedAmount + Asset.AssignedAmount == Asset.RealAmount
+             ).TrueThrow("无剩余数量可退");
             
         }
 

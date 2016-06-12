@@ -9,8 +9,8 @@
                 'query': { method: 'GET', isArray: false }
             });
 
-        resource.addProductView = function (type,callback) {
-            resource.query({ operation: 'createProduct', type:type }, function (product) { if (callback) { callback(product); } });
+        resource.addProductView = function (type, callback) {
+            resource.query({ operation: 'createProduct', type: type }, function (product) { if (callback) { callback(product); } });
         }
 
         resource.copyProductView = function (id, callback) {
@@ -76,7 +76,7 @@
     }]);
 
 
-    helper.registerFactory('productEditHelper', ['dataSyncService', 'mcsValidationService', '$state', function (dataSyncService, mcsValidationService, $state) {
+    helper.registerFactory('productEditHelper', ['dataSyncService', 'mcsDialogService', 'mcsValidationService', '$state', '$location', function (dataSyncService, mcsDialogService, mcsValidationService,$location, $state) {
 
         var handler = {};
 
@@ -109,7 +109,7 @@
                 },
                 'wukeshou': {
                     index: 5, title: '代理招生', active: false, templateUrl: 'product-add-other.html'
-                    , description: '代理招生产品：学大与合作商一起运营，收入与合作商按比例分账，不在系统里排课、不算课时收入的产品。如，合作方提供场地、师资，学大提供学员。<br/>常规实物产品：学大独立运营，收入完全归学大所有的实物产品，如大区、分公司自主研发的教材、试卷、文具、学习工具（如PAD）等。'
+                    , description: '代理招生产品：学大与合作商一起运营，收入与合作商按比例分账，不在系统里排课、不算课时收入的产品。如，合作方提供场地、师资，学大提供学员。'/*<br/>常规实物产品：学大独立运营，收入完全归学大所有的实物产品，如大区、分公司自主研发的教材、试卷、文具、学习工具（如PAD）等。*/
                     , example: ''
                 },
             };
@@ -141,33 +141,32 @@
                 return (product.productMemo && product.productMemo.length) || 0;
             };
             vm.submit = function () {
-                if (!mcsValidationService.run()) { return; }
+                if (!mcsValidationService.run($scope)) { return; }
 
-                var productName = '';
-                switch (vm.m[loadtype].categoryType) {
-                    case 1:
-                        var grade = getTextByTag('grade', vm.m[loadtype].product.grade);
-                        var subject = getTextByTag('subject', vm.m[loadtype].product.subject);
-                        var duration = getTextByTag('duration', vm.m[loadtype].exOfCourse.periodDuration);
-                        var courseLevel = getTextByTag('courseLevel', vm.m[loadtype].exOfCourse.courseLevel);
-                        var coachType = getTextByTag('coachType', vm.m[loadtype].exOfCourse.coachType);
-                        productName = grade + ' ' + subject + ' ' + duration + ' ' + courseLevel + ' ' + coachType;
-                        break;
-                    case 2:
-                        var grade = getTextByTag('grade', vm.m[loadtype].product.grade);
-                        var subject = getTextByTag('subject', vm.m[loadtype].product.subject);
-                        var duration = getTextByTag('duration', vm.m[loadtype].exOfCourse.periodDuration);
-                        var courseLevel = getTextByTag('courseLevel', vm.m[loadtype].exOfCourse.courseLevel);
-                        var coachType = getTextByTag('coachType', vm.m[loadtype].exOfCourse.coachType);
-                        var season = getTextByTag('season', vm.m[loadtype].product.season);
-                        productName = grade + ' ' + subject + ' ' + duration + ' ' + courseLevel + ' ' + coachType + ' ' + season;
-                        break;
+                if (vm.m[loadtype].categoryType < 3) {
+                    var productName = '';
+                    switch (vm.m[loadtype].categoryType) {
+                        case 1:
+                            var grade = getTextByTag('grade', vm.m[loadtype].product.grade);
+                            var subject = getTextByTag('subject', vm.m[loadtype].product.subject);
+                            var duration = getTextByTag('duration', vm.m[loadtype].exOfCourse.periodDuration);
+                            var courseLevel = getTextByTag('courseLevel', vm.m[loadtype].exOfCourse.courseLevel);
+                            var coachType = getTextByTag('coachType', vm.m[loadtype].exOfCourse.coachType);
+                            productName = grade + ' ' + subject + ' ' + duration + ' ' + courseLevel + ' ' + coachType;
+                            break;
+                        case 2:
+                            var grade = getTextByTag('grade', vm.m[loadtype].product.grade);
+                            var subject = getTextByTag('subject', vm.m[loadtype].product.subject);
+                            var duration = getTextByTag('duration', vm.m[loadtype].exOfCourse.periodDuration);
+                            var courseLevel = getTextByTag('courseLevel', vm.m[loadtype].exOfCourse.courseLevel);
+                            var coachType = getTextByTag('coachType', vm.m[loadtype].exOfCourse.coachType);
+                            var season = getTextByTag('season', vm.m[loadtype].product.season);
+                            productName = grade + ' ' + subject + ' ' + duration + ' ' + courseLevel + ' ' + coachType + ' ' + season;
+                            break;
+                    }
+                    vm.m[loadtype].product.productName = productName;
                 }
 
-                vm.m[loadtype].product.productName = productName;
-
-                console.log(vm.m[loadtype])
-                //return;
                 productDataService.submitProduct(vm.m[loadtype], function () { $state.go('ppts.product'); });
             };
             vm.submitAndContinue = function () {
@@ -183,6 +182,14 @@
 
             var init = (function () {
 
+                if (loadtype == "classgroup") {
+                    $scope.$watch("vm.m.classgroup.exOfCourse.lessonCount", function (o, n) {
+                        if (o == 1) {
+                            mcsDialogService.info({ title: '温馨提示', message: '总课次为1时，课时收入将一次性确认，请谨慎操作。' });
+                        }
+                    });
+                }
+
                 var discountInfos = [{ key: '0', value: '不享受折扣' }, { key: '1', value: '享受折扣' }, ];
                 dataSyncService.injectDictData(mcs.util.mapping(discountInfos, { key: 'key', value: 'value' }, 'DiscountInfo'));
                 ppts.config.dictMappingConfig["discountInfo"] = "c_codE_ABBR_DiscountInfo";
@@ -195,15 +202,65 @@
                 dataSyncService.injectDictData(mcs.util.mapping(incomeBelongings, { key: 'key', value: 'value' }, 'IncomeBelonging'));
                 ppts.config.dictMappingConfig["incomeBelonging"] = "c_codE_ABBR_IncomeBelonging";
 
+                var periodsOfLesson = [];
+                for (var i = 0; i < 9; i++) { periodsOfLesson[i] = { key: (i + 1) + '', value: (i + 1) + '' }; }
+                dataSyncService.injectDictData(mcs.util.mapping(periodsOfLesson, { key: 'key', value: 'value' }, 'PeriodsOfLesson'));
+                ppts.config.dictMappingConfig["periodsOfLesson"] = "c_codE_ABBR_PeriodsOfLesson";
+
+                var commission_custom = [{ key: '0', value: '遵循所属机构薪酬规则' }, { key: '1', value: '按照每时课提成' }, ];
+                dataSyncService.injectDictData(mcs.util.mapping(commission_custom, { key: 'key', value: 'value' }, 'CommissionCustom'));
+                ppts.config.dictMappingConfig["commission_custom"] = "c_codE_ABBR_CommissionCustom";
+
+                vm.zxs = vm.xgs = vm.js = '0';
+
                 dataSyncService.injectPageDict(['ifElse']);
+
 
                 if (loadHandler) {
                     loadHandler();
                 }
 
-                
+
 
             })();
+
+        };
+
+        handler.callback = function ($scope, vm, loadtype, entity) {
+
+            console.warn(entity);
+
+            vm.dictionaries = entity.dictionaries;
+
+            vm.m[loadtype].categoryType = entity.categoryType;
+            vm.m[loadtype].product = entity.product;
+            vm.m[loadtype].exOfCourse = entity.exOfCourse || vm.m[loadtype].exOfCourse;
+            vm.m[loadtype].salaryRules = entity.salaryRules || vm.m[loadtype].salaryRules;
+            vm.m[loadtype].catalogs = entity.catalogs;
+
+            if (loadtype == "other") {
+                var typeName = $location.params.lname;
+                if (typeName != 'all') {
+                    entity.catalogs = $(entity.catalogs).map(function (i, v) { if (v.catalogName.indexOf(typeName) > -1) { return v; } }).toArray();
+                }
+            }
+
+            dataSyncService.injectDictData(mcs.util.mapping(entity.catalogs, { key: 'catalog', value: 'catalogName' }, 'CategoryCustom'));
+            ppts.config.dictMappingConfig["categoryCustom"] = "c_codE_ABBR_CategoryCustom";
+
+
+            var filterParentKey = '';
+            if (loadtype == 'onetoone') {
+                filterParentKey = '1';
+            } else if (loadtype == 'classgroup') {
+                filterParentKey = '2';
+            }
+            ppts.dict['c_codE_ABBR_Product_CourseLevel'] = $(ppts.dict['c_codE_ABBR_Product_CourseLevel']).map(function (i, v) { if (v.parentKey == "0" || v.parentKey == filterParentKey) { return v; } });
+
+            $scope.$broadcast('dictionaryReady');
+
+            console.warn(vm.m[loadtype]);
+            console.log(ppts.dict);
 
         };
 

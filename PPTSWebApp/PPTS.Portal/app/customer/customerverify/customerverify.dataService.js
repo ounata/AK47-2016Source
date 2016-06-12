@@ -44,7 +44,7 @@
         headers: [{
             field: "customerName",
             name: "学员姓名",
-            template: '<span>{{row.customerName}}</span>',
+            template: '<a ui-sref="ppts.student-view.profiles({id:row.customerID,prev:\'ppts.customerverify\'})">{{row.customerName}}</a>',
         }, {
             field: "customerCode",
             name: "学员编号",
@@ -56,7 +56,7 @@
         }, {
             field: "followTime",
             name: "学员所在学校",
-            template: '<span>{{row.followTime | date:"yyyy-MM-dd"}}</span>'
+            template: '<span>{{row.campusName}}</span>'
         }, {
             field: "grade",
             name: "学员当前年级",
@@ -88,11 +88,20 @@
         }],
         pager: {
             pageIndex: 1,
-            pageSize: 10,
+            pageSize: ppts.config.pageSizeItem,
             totalCount: -1
         },
         orderBy: [{ dataField: 'a.CreateTime', sortDirection: 1 }]
     });
+
+    customer.registerValue('customerVerifyAdvanceSearchItems', [
+    { name: '建档人：', template: '<ppts-checkbox-group category="people" model="vm.criteria.creatorJobs" clear="vm.criteria.creatorJobs=[]" async="false" /><mcs-input placeholder="建档人姓名" model="vm.criteria.creatorName" />' },
+    { name: '实际上门时间：', template: '<ppts-radiobutton-group category="dateRange" model="vm.createTimeValue" async="false" css="mcs-padding-left-10" /><span ng-show="vm.createTimeValue == 5"><ppts-daterangepicker class="search" start-date="vm.criteria.createStartTime" end-date="vm.criteria.createEndTime"></ppts-daterangepicker></span>' },
+    { name: '邀约情况：', template: '<ppts-radiobutton-group show-all="true" category="ifElse" model="vm.isInvitedValue" async="false" css="mcs-padding-left-10" />' },
+    { name: '预计上门时间：', template: '<ppts-radiobutton-group category="dateRange" model="vm.followTimeValue" async="false" css="mcs-padding-left-10" /><span ng-show="vm.followTimeValue == 5"><ppts-daterangepicker class="search" start-date="vm.criteria.planVerifyStartTime" end-date="vm.criteria.planVerifyEndTime"></ppts-daterangepicker></span>', hide: 'vm.isInvitedValue != 1' },
+    { name: '建档时间：', template: '<ppts-radiobutton-group category="dateRange" model="vm.customerCreateTimeValue" async="false" css="mcs-padding-left-10" /><span ng-show="vm.customerCreateTimeValue == 5"><ppts-daterangepicker class="search" start-date="vm.criteria.customerCreateStartTime" end-date="vm.criteria.customerCreateEndTime"></ppts-daterangepicker></span>' },
+    ]);
+
     customer.registerValue('customerVerifyInstutionItem',
       { template: '<td><ppts-select category="subject" style="width:120px" async="false" /></td><td><input class="mcs-readonly-input" ng-model="vm.customer.customerName" style="margin: 0 0 0 15px" placeholder="请填写机构名称"/></td><td><ppts-daterangepicker start-date="" end-date="" size="sm"/></td><td><button ng-click="" class="btn btn-link"><i class="ace-icon fa fa-plus bigger-110"></i></button></td>' });
 
@@ -115,10 +124,24 @@
         // 初始化上门列表数据
         service.initCustomerVerifyList = function (vm, callback) {
             dataSyncService.initCriteria(vm);
+            if (vm.createTimeValue != 5) {
+                var createDateRange = dataSyncService.selectPageDict('dateRange', vm.createTimeValue);
+                vm.criteria.createStartTime = createDateRange.start;
+                vm.criteria.createEndTime = createDateRange.end;
+            }
+            if (vm.followTimeValue != 5) {
+                var followDateRange = dataSyncService.selectPageDict('dateRange', vm.followTimeValue);
+                vm.criteria.planVerifyStartTime = followDateRange.start;
+                vm.criteria.planVerifyEndTime = followDateRange.end;
+            }
+            if (vm.customerCreateTimeValue != 5) {
+                var customerDateRange = dataSyncService.selectPageDict('dateRange', vm.customerCreateTimeValue);
+                vm.criteria.customerCreateStartTime = customerDateRange.start;
+                vm.criteria.customerCreateEndTime = customerDateRange.end;
+            }
+            dataSyncService.injectPageDict(['dateRange', 'people', 'ifElse']);
             customerVerifyDataService.getAllCustomerVerifies(vm.criteria, function (result) {
                 vm.data.rows = result.queryResult.pagedData;
-                dataSyncService.injectDictData();
-                dataSyncService.injectPageDict(['dateRange', 'people', 'ifElse']);
                 dataSyncService.updateTotalCount(vm, result.queryResult);
                 if (ng.isFunction(callback)) {
                     callback();

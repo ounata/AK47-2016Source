@@ -28,24 +28,6 @@ namespace PPTS.Contracts.Proxies
             this.SingleCall(action => action.UpdateByCustomerInfo(model));
         }
 
-        public void UpdateByCustomerTextInfo(string customerID)
-        {
-            this.SingleCall(action => action.UpdateByCustomerTextInfo(customerID));
-        }
-
-        public void UpdateByCustomerTextInfoByTask(string customerID)
-        {
-            InvokeServiceTask task = new InvokeServiceTask()
-            {
-                TaskID = UuidHelper.NewUuidString(),
-                TaskTitle = "CustomerSearch更新客户信息任务(字符串)",
-                ResourceID = UuidHelper.NewUuidString()
-            };
-            task.SvcOperationDefs.Add(PrepareCustomerWfServiceOperation(customerID));
-            task.FillData();
-            InvokeServiceTaskAdapter.Instance.Push(task);
-        }
-
         private WfServiceOperationDefinition PrepareCustomerWfServiceOperation(string customerID)
         {
             WfServiceOperationParameterCollection parameters = new WfServiceOperationParameterCollection();

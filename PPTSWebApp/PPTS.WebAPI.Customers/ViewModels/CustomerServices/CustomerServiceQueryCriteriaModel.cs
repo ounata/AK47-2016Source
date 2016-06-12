@@ -15,10 +15,22 @@ namespace PPTS.WebAPI.Customers.ViewModels.CustomerServices
             this.IsUpgradeHandle = BooleanState.Unknown;
         }
         /// <summary>
+        /// 机构ID
+        /// </summary>
+        [InConditionMapping("cs.CampusID")]
+        public string[] OrgIds { get; set; }
+
+        /// <summary>
         /// 家长姓名
         /// </summary>
         [ConditionMapping("ParentName", EscapeLikeString = true, Prefix = "%", Postfix = "%", Operation = "LIKE")]
         public string ParentName { get; set; }
+
+        /// <summary>
+        /// 学员编号
+        /// </summary>
+        [ConditionMapping("CustomerCode")]
+        public string CustomerCode { get; set; }
 
         /// <summary>
         /// 客服受理人

@@ -87,7 +87,7 @@
                             }],
                             pager: {
                                 pageIndex: 1,
-                                pageSize: 10,
+                                pageSize: ppts.config.pageSizeItem,
                                 totalCount: -1,
                                 pageChange: function () {
                                     dataSyncService.initCriteria(vm);
@@ -101,7 +101,7 @@
 
                         //初始化数据
                         dataSyncService.initCriteria(vm);
-                        vm.criteria.dateRange = '0';
+
                         dataSyncService.injectPageDict(['dateRange']);
 
 

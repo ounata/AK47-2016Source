@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [MT].[OwnerRelationAuthorizations]
 (
 	[ObjectID] NVARCHAR(36) NOT NULL , 
-    [ObjectType] NVARCHAR(32) NOT NULL, 
+    [ObjectType] NVARCHAR(32) NOT NULL DEFAULT (10), 
     [OrgID] NVARCHAR(36) NULL, 
     [OrgType] NVARCHAR(32) NULL, 
     [OwnerID] NVARCHAR(36) NOT NULL, 

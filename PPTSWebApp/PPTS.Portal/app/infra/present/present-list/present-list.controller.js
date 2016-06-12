@@ -60,6 +60,13 @@
                     };
 
                     vm.search = function () {
+                        if (vm.criteria.startDate && vm.criteria.endDate && vm.criteria.endDate < vm.criteria.startDate) {
+                            var dlg = mcsDialogService.error({
+                                title: '提示',
+                                message: '开始时间不能大于结束时间'
+                            });
+                            
+                        }
                         presentDataViewService.initPresentList(vm, function () {
                             $scope.$broadcast('dictionaryReady');
                         });

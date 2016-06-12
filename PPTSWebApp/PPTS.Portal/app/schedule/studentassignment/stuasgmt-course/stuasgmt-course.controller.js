@@ -2,13 +2,17 @@
         ppts.config.dataServiceConfig.studentAssignmentDataService], function (schedule) {
             schedule.registerController("stuAsgmtCourseController", [
                  '$scope', '$state', '$stateParams', '$filter', 'dataSyncService', '$compile'
-                 , '$uibModal', 'blockUI', '$http', 'studentassignmentDataService', 'mcsDialogService', 'uiCalendarConfig', 'printService',
+                 , '$uibModal', '$http', 'studentassignmentDataService', 'mcsDialogService', 'uiCalendarConfig', 'printService',
             function ($scope, $state, $stateParams, $filter, dataSyncService, $compile
-                , $uibModal, blockUI, $http, studentassignmentDataService, mcsDialogService, uiCalendarConfig, printService) {
+                , $uibModal, $http, studentassignmentDataService, mcsDialogService, uiCalendarConfig, printService) {
 
                 var vm = this;
 
-                vm.CID = $stateParams.cID, vm.stuName = $stateParams.tn, vm.selectedEvents = [], vm.events = [];
+                vm.CID = $stateParams.id;
+                //vm.stuName = $stateParams.tn;
+                vm.selectedEvents = [];
+                vm.events = [];
+
                 vm.weekText = new Array("星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六");
                 vm.acQM = { customerID: vm.CID, startTime: '2016-04-18', endTime: '2016-05-09', isUTCTime: false, grade: '', assignStatus: '', teacherName: '' };
                 
@@ -68,7 +72,6 @@
                 vm.result = {};
                 /*日程组件回调方法，加载周课表数据*/
                 vm.schedules = function (start, end, timezone, callback) {
-                    blockUI.start();
                     vm.acQM.startTime = start;
                     vm.acQM.endTime = end;
                     studentassignmentDataService.getStudentWeekCourse(vm.acQM, function (data) {
@@ -78,7 +81,6 @@
                             var evt = vm.getViewModel(event);
                             vm.events.push(evt);
                         });
-                        blockUI.stop();
                         if (firstExec) {
                             firstExec = false;
                             $scope.$broadcast('dictionaryReady');
@@ -91,7 +93,6 @@
 
                 /*刷新周视图数据*/
                 vm.reLoadCourse = function () {
-                    blockUI.start();
                     vm.events.splice(0, vm.events.length);
                     studentassignmentDataService.getStudentWeekCourse(vm.acQM, function (data) {
                         var assignCollection = data.result;
@@ -100,10 +101,8 @@
                             vm.events.push(evt);
                         });
                         uiCalendarConfig.calendars.courseCalendar.fullCalendar('rerenderEvents');
-                        blockUI.stop();
                     },
                     function (error) {
-                        blockUI.stop();
                     });
                 };
 
@@ -289,7 +288,7 @@
 
                 /*跳转列表视图*/
                 vm.gotoCourseList = function () {
-                    $state.go('ppts.stuasgmt-course-list', { cID: vm.CID });
+                    $state.go('ppts.stuasgmt-course-list', { id: vm.CID });
                 };
 
                 /*跳转学生排课列表*/

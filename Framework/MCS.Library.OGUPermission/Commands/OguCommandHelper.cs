@@ -36,7 +36,8 @@ namespace MCS.Library.OGUPermission.Commands
 			CommandHelper.RegisterCommand(new GetUserPermissions("getUserPermissions"));
 			CommandHelper.RegisterCommand(new GetRoot("getRoot"));
 			CommandHelper.RegisterCommand(new GetAllChildren("getAllChildren"));
-			CommandHelper.RegisterCommand(new RemoveOguCache("removeOguCache"));
+            CommandHelper.RegisterCommand(new GetRolesPermissions("getRolesPermissions"));
+            CommandHelper.RegisterCommand(new RemoveOguCache("removeOguCache"));
 			CommandHelper.RegisterCommand(new RemovePermissionCache("removePermissionCache"));
 		}
 	}

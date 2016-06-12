@@ -152,6 +152,7 @@
     <Build Include="CM\Tables\SpecialCampuses.sql" />
     <Build Include="CM\Stored Procedures\CustomerAutoUpgrade.sql" />
     <Build Include="CM\Stored Procedures\CustomerGraduated.sql" />
+    <Build Include="CM\Stored Procedures\CustomerFrozen.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PPTS.Data.Customers.DB.refactorlog" />

@@ -1,43 +1,36 @@
-﻿<div class="page-content">
-    <div class="page-content-area">
-        <!-- #开始：教师列表 -->
-        <div class="row">
-            <div class="col-sm-12">
-                <!-- #开始：教师列表.快速查询条件 -->
-                <div class="mcs-panel-search well well-sm">
-                    <div class="portlet">
-                        <div class="portlet-title line">
-                            <div class="caption">
-                                <label class="quick-search"><i class="ace-icon fa fa-search bigger-125"></i> 快速查询</label>
-                            </div>
-                        </div>
-                        <div class="portlet-body">
-                            <ppts-select caption="授课年级" category="grade" model="vm.criteria.gradeMemo" class="ppts-select-search-nopadding"  />
-                            <ppts-select caption="授课科目" category="subject" model="vm.criteria.subjectMemo" class="ppts-select-search-nopadding" />
-                            <ppts-select caption="岗位性质" category="teacherType" model="vm.criteria.isFullTime" class="ppts-select-search-nopadding" />
-                            <ppts-select caption="性别" category="gender" model="vm.criteria.gender" class="ppts-select-search-nopadding" />
-                            <mcs-input placeholder="教师姓名" model="vm.criteria.teacherName" class="search-input"/>
-                            <mcs-button category="search" click="vm.init()" class="search-input"/>
-                        </div>
-                    </div>
-                </div>
-                <!-- /结束：教师列表.快速查询条件 -->
-                <!-- #开始：教师列表.工具栏 -->
-                <div class="mcs-panel-toolbar">
-                    <mcs-button icon="user-plus" css="btn-success" text="排课" click="vm.tchAssignClick()"></mcs-button>
-                </div>
-                <!-- /结束：教师列表.工具栏 -->
-                <!-- #开始：教师列表.数据表格 -->
-                <mcs-datatable data="vm.data" />
-                <!-- /结束：教师列表.数据表格 -->
-            </div>
+﻿<!-- #开始：教师列表.快速查询条件 -->
+<ppts-dynamic-content template="quick-search.tpl.html">
+    <div class="row">
+        <div class="col-md-4">
+            <mcs-input uib-tooltip="教师姓名" css="mcs-input-search mcs-width-full" placeholder="教师姓名" model="vm.criteria.teacherName" />
+        </div>
+        <div class="col-md-4">
+            <ppts-select caption="授课年级" category="grade" model="vm.criteria.gradeMemo" css="mcs-padding-0" />
+        </div>
+        <div class="col-md-4">
+            <ppts-select caption="授课科目" category="subject" model="vm.criteria.subjectMemo"  css="mcs-padding-0" />
         </div>
     </div>
-</div>
+    <div class="row">
+        <div class="col-md-4">
+            <ppts-select caption="岗位性质" category="teacherType" model="vm.criteria.isFullTime" css="mcs-padding-0"  />
+        </div>
+        <div class="col-md-4">
+            <ppts-select caption="性别" category="gender" model="vm.criteria.gender" css="mcs-padding-0"  />
+        </div>
+        <div class="col-md-4">
+            <ppts-select caption="年龄" category="ageCollection" model="vm.age" callback="vm.calcAge(item)" css="mcs-padding-0"  />
+        </div>
+    </div>
+</ppts-dynamic-content>
+<!-- /结束：教师列表.快速查询条件 -->
 
+<!-- #开始：教师列表.工具栏 -->
+<ppts-dynamic-content template="toolbar.tpl.html">
+    <mcs-button icon="user-plus" css="btn-success" text="排课" click="vm.tchAssignClick()"></mcs-button>
+</ppts-dynamic-content>
+<!-- /结束：教师列表.工具栏 -->
 
-
-
-
-
-
+<!-- #开始：教师列表.数据表格 -->
+<mcs-datatable data="vm.data" />
+<!-- /结束：教师列表.数据表格 -->

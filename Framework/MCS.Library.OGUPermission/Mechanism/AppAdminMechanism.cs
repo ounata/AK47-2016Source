@@ -267,9 +267,29 @@ namespace MCS.Library.OGUPermission
 
 			return permissions;
 		}
-		#endregion IPermissionImplInterface
 
-		private static string BuildRoleObjectIDs(IEnumerable<IRole> objs)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="application"></param>
+        /// <param name="roleCodeNames"></param>
+        /// <returns></returns>
+        public PermissionCollection GetRolesPermissions(IApplication application, string roleCodeNames)
+        {
+            application.NullCheck("application");
+
+            DataTable table = AppAdminServiceBroker.Instance.GetRolesFunctions(application.CodeName, roleCodeNames).Tables[0];
+
+            PermissionCollection permissions = new PermissionCollection(BuildObjectsFromTable<IPermission>(table));
+
+            foreach (PermissionImpl permission in permissions)
+                permission.Application = application;
+
+            return permissions;
+        }
+        #endregion IPermissionImplInterface
+
+        private static string BuildRoleObjectIDs(IEnumerable<IRole> objs)
 		{
 			StringBuilder strB = new StringBuilder();
 

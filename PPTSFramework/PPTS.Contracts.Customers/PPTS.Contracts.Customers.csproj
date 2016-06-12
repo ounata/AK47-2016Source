@@ -69,6 +69,7 @@
     <Compile Include="Models\AccountChargeCollectionQueryResult.cs" />
     <Compile Include="Models\CustomerRelationByTeacherQueryResult.cs" />
     <Compile Include="Models\CustomerExpenseCollectionQueryResult.cs" />
+    <Compile Include="Models\PrimaryParentQueryResult.cs" />
     <Compile Include="Models\TeacherRelationByCustomerQueryResult.cs" />
     <Compile Include="Models\TeacherJobModel.cs" />
     <Compile Include="Operations\IAccountQueryService.cs" />

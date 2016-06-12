@@ -1,4 +1,4 @@
-﻿<div class="widget-box">
+﻿<!--<div class="widget-box">
     <div class="widget-header">
         <h4>
             查看跟进记录
@@ -121,5 +121,118 @@
                 </div>
             </div>
         </div>
+    </div>
+</div>-->
+<div class="portlet light">
+    <div class="portlet-body form">
+        <form class="form-horizontal form-bordered form-row-stripped" action="#" role="form" novalidate>
+            <div class="form-actions noborder">
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <mcs-button category="cancel" text="返回跟进列表" click="$state.go('ppts.follow')"></mcs-button>
+                    </div>
+                </div>
+            </div>
+            <div class="form-body">
+                <div class="form-group">
+                    <mcs-label text="跟进方式" css="col-md-3" />
+                    <div class="col-md-4">
+                        <p class="form-control-static">{{ vm.follow.followType | followType }}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="跟进对象" css="col-md-3" />
+                    <div class="col-md-4">
+                        <p class="form-control-static">{{ vm.follow.followObject | followObject }}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="想要补习的科目" css="col-md-3" />
+                    <div class="col-md-4">
+                        <p class="form-control-static">{{ vm.follow.intensionSubjects | subject_full }}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="购买意愿" css="col-md-3" />
+                    <div class="col-md-4">
+                        <p class="form-control-static">{{ vm.follow.purchaseIntention | purchaseIntention }}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="客户级别" css="col-md-3" />
+                    <div class="col-md-4">
+                        <p class="form-control-static">{{ vm.follow.customerLevel | customerLevel }}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="无效理由" css="col-md-3" />
+                    <div class="col-md-4">
+                        <p class="form-control-static">{{ vm.follow.invalidReason | invalidReason }}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="沟通结果" css="col-md-3" />
+                    <div class="col-md-8">
+                        <p class="form-control-static">{{ vm.follow.talkMainResult | mainTalk }}  {{ vm.follow.talkSubResult | subTalk }}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="跟进前阶段" css="col-md-3" />
+                    <div class="col-md-4">
+                        <p class="form-control-static">{{ vm.previousFollowStage | followStage }}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="本次跟进阶段" css="col-md-3" />
+                    <div class="col-md-4">
+                        <p class="form-control-static">{{ vm.follow.followStage | followStage }}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="预计上门时间" css="col-md-3" />
+                    <div class="col-md-4">
+                        <p class="form-control-static">{{ vm.follow.planVerifyTime | date:'yyyy-MM-dd HH:mm:ss' }}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="预计下次沟通时间" css="col-md-3" />
+                    <div class="col-md-4">
+                        <p class="form-control-static">{{ vm.follow.nextFollowTime | date:'yyyy-MM-dd HH:mm:ss' }}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="预计签约时间" css="col-md-3" />
+                    <div class="col-md-4">
+                        <p class="form-control-static">{{ vm.follow.planSignDate | date:'yyyy-MM-dd HH:mm:ss' }}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="此次通电号码" css="col-md-3" />
+                    <div class="col-md-4">
+                        <p class="form-control-static">{{ vm.follow.followPhone }}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="是否在其他机构辅导" css="col-md-3" />
+                    <div class="col-md-4">
+                        <p class="form-control-static">{{ vm.follow.isStudyThere | ifElse }}</p>
+                    </div>
+                </div>
+                <div class="row" ng-show="vm.follow.isStudyThere==true">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-6">
+                        <p class="form-control-static" style="margin-left:8px;">
+                            <mcs-uicopy data="vm.followItems" item-template-url="./app/customer/follow/follow-info/is-study-there.tpl.html"></mcs-uicopy>
+                        </p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="跟进情况备注" css="col-md-3" />
+                    <div class="col-md-4">
+                        <p class="form-control-static">{{ vm.follow.followMemo }}</p>
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
 </div>

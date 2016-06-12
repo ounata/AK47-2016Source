@@ -75,7 +75,7 @@
         { name: '考试学段：', template: '<ppts-radiobutton-group category="studyStage" model="vm.criteria.studyStage" show-all="true" async="false" />' },
         { name: '考试年级：', template: '<ppts-radiobutton-group category="grade" model="vm.criteria.scoreGrade" parent="vm.criteria.studyStage" show-all="true" async="false" />' },
         { name: '考试科目：', template: '<ppts-radiobutton-group category="examSubject" model="vm.criteria.subject" parent="vm.criteria.studyStage" show-all="true" async="false" />' },
-        { name: '考试类型：', template: '<ppts-radiobutton-group category="scoreType" model="vm.criteria.scoreType" parent="vm.criteria.studyStage" show-all="true" async="false" />&nbsp;<span ng-show="(vm.criteria.scoreType | scoreType) == \'其它\'"><input type="text" ng-model="vm.criteria.otherScoreTypeName" class="mcs-input-small" /></span>' },
+        { name: '考试类型：', template: '<ppts-radiobutton-group category="scoreType" model="vm.criteria.scoreType" parent="vm.criteria.studyStage" show-all="true" async="false" />&nbsp;<span ng-show="vm.criteria.scoreType == 16"><input type="text" ng-model="vm.criteria.otherScoreTypeName" class="mcs-input-small" /></span>' },
         { name: '录取院校类型：', template: '<ppts-radiobutton-group category="admissionType" model="vm.criteria.admissionType" parent="vm.criteria.scoreType" show-all="true" async="false" />', show: "vm.criteria.scoreType==6 || vm.criteria.scoreType==10 || vm.criteria.scoreType==14" },
         { name: '学员类别：', template: '<ppts-radiobutton-group category="examCustomerType" model="vm.criteria.studentType" parent="vm.criteria.scoreType" show-all="true" async="false" />', show: "vm.criteria.scoreType == 14" },
         { name: '成绩范围：', template: '<ppts-datarange min="vm.criteria.minPaperScore" max="vm.criteria.maxPaperScore" min-text="最低成绩" max-text="最高成绩" unit="分" css="col-xs-4 col-sm-4" />' }
@@ -93,47 +93,52 @@
             name: "学年度",
             template: '<span>{{ row.studyYear | studyYear }}</span>'
         }, {
-            field: "customerCode",
-            name: "学员编号"
-        }, {
             field: "customerName",
             name: "学生姓名",
             template: '<a ui-sref="ppts.student-view.profiles({id:row.customerID,prev:\'ppts.score\'})">{{row.customerName}}</a>'
         }, {
+            field: "customerCode",
+            name: "学员编号"
+        },  {
             field: "scoreGrade",
             name: "考试年级",
-            template: '<span>{{ row.scoreGrade | grade }}</span>'
+            template: '<span>{{ row.scoreGrade | grade | normalize }}</span>'
         }, {
             field: "studyTerm",
             name: "学期",
-            template: '<span>{{ row.studyTerm | studyTerm }}</span>'
+            template: '<span>{{ row.studyTerm | studyTerm | normalize }}</span>'
         }, {
             field: "scoreType",
             name: "考试类型",
-            template: '<span>{{ row.scoreType | scoreType }}</span>'
+            template: '<span>{{ row.scoreType | scoreType | normalize }}</span>'
         }, {
             field: "examineMonth",
             name: "考试月份",
-            template: '<span>{{ row.examineMonth | examMonth }}</span>'
+            template: '<span>{{ row.examineMonth | examMonth | normalize }}</span>'
         }, {
             field: "subject",
             name: "科目",
-            template: '<span>{{ row.subject | examSubject }}</span>'
+            template: '<span>{{ row.subject | examSubject | normalize }}</span>'
         }, {
             field: "realScore",
-            name: "得分"
+            name: "得分",
+            template: '<span>{{ row.realScore | normalize }}</span>'
         }, {
             field: "paperScore",
-            name: "卷面分"
+            name: "卷面分",
+            template: '<span>{{ row.paperScore | normalize }}</span>'
         }, {
             field: "classPeoples",
-            name: "班级人数"
+            name: "班级人数",
+            template: '<span>{{ row.classPeoples | normalize }}</span>'
         }, {
             field: "classRank",
-            name: "班级名次"
+            name: "班级名次",
+            template: '<span>{{ row.classRank | normalize }}</span>'
         }, {
             field: "gradeRank",
-            name: "年级名次"
+            name: "年级名次",
+            template: '<span>{{ row.gradeRank | normalize }}</span>'
         }, {
             field: "teacherName",
             name: "任课教师"
@@ -147,7 +152,7 @@
         }, {
             field: "satisficing",
             name: "家长满意度",
-            template: '<span>{{ row.satisficing | scoreSatisficing }}</span>'
+            template: '<span>{{ row.satisficing | scoreSatisficing | normalize }}</span>'
         }, {
             field: "educatorName",
             name: "学管师"
@@ -160,11 +165,11 @@
         }, {
             field: "studentType",
             name: "学员类型",
-            template: '<span>{{ row.studentType | examCustomerType }}</span>'
+            template: '<span>{{ row.studentType | examCustomerType | normalize }}</span>'
         }, {
             field: "admissionType",
             name: "录取院校类别",
-            template: '<span>{{ row.admissionType | admissionType }}</span>'
+            template: '<span>{{ row.admissionType | admissionType | normalize }}</span>'
         }, {
             field: "isKeyCollege",
             name: "属985或211院校",
@@ -172,7 +177,7 @@
         }],
         pager: {
             pageIndex: 1,
-            pageSize: 10,
+            pageSize: ppts.config.pageSizeItem,
             totalCount: -1
         },
         orderBy: [{
@@ -336,6 +341,24 @@
                         callback();
                     }
                 });
+            };
+
+            service.initWatchExps = function ($scope, vm, watchExps) {
+                if (!watchExps && !watchExps.length) return;
+                for (var index in watchExps) {
+                    (function () {
+                        var exp = watchExps[index];
+                        $scope.$watch(exp.watchExp, function (value) {
+                            if (value != exp.selectedValue) {
+                                if (vm.criteria[exp.watch]) {
+                                    vm.criteria[exp.watch] = '';
+                                } else {
+                                    vm[exp.watch] = '';
+                                }
+                            }
+                        });
+                    })();
+                }
             };
 
             service.handleTeachers = function () {

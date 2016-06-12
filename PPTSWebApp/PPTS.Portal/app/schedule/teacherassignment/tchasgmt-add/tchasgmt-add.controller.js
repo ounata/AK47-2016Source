@@ -64,22 +64,22 @@
                         */
 
                     vm.shareFieldName = ['assetID', 'assetCode', 'customerID', 'customerCode', 'customerName', 'productID', 'productCode', 'productName', 'accountID'
-                   , 'grade', 'gradeName', 'subject', 'subjectName'];
+                   , 'grade', 'gradeName', 'subject', 'subjectName', 'categoryType', 'categoryTypeName'];
 
                     vm.initAssignFieldFromAsset = ['assetID', 'assetCode', 'customerID', 'customerCode', 'customerName', 'productID', 'productCode', 'productName', 'accountID'
-                , 'grade', 'gradeName', 'subject', 'subjectName', 'courseLevel', 'courseLevelName', 'lessonDuration', 'lessonDurationValue'];
+                , 'grade', 'gradeName', 'subject', 'subjectName', 'courseLevel', 'courseLevelName', 'lessonDuration', 'lessonDurationValue', 'categoryType', 'categoryTypeName'];
 
                     vm.fieldToAssign = [];
 
                     vm.fieldToAC = ['conditionID', 'conditionName4Customer', 'conditionName4Teacher', 'courseLevel', 'courseLevelName', 'lessonDuration'
-                        , 'lessonDurationValue'];
+                        , 'lessonDurationValue', 'categoryType', 'categoryTypeName'];
 
                     vm.subjectInfo = ['subject', 'subjectName'];
 
                     /*选择排课条件*/
                     vm.selectAssignConditionClick = function (item) {
-                        //不等-1，选择了一个已经存在的排课条件
-                        if (item.key != '-1') {
+                        //不等100，选择了一个已经存在的排课条件
+                        if (item.key != '100') {
                             ///重新设置传回结果对象值
                             vm.resetAssignExtension();
                             //资产选择及科目选择都已经确定，所以选项隐藏
@@ -127,7 +127,7 @@
                         //对应资产表中的Price
                         vm.result.assign['assignPrice'] = "";
                         vm.result.assign["assetName"] = "";
-                        vm.result.assign.conditionID = '-1';
+                        vm.result.assign.conditionID = '100';
                     };
 
                     /*获取指定排课条件对象*/

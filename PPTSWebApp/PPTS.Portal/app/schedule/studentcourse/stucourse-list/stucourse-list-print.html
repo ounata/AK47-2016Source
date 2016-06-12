@@ -1,0 +1,17 @@
+﻿<div class="widget-main no-padding">
+    <div class="clearfix form-actions mcs-form-actions">
+        <div class="col-md-offset-3 col-md-9">
+            <mcs-button category="print" text="打印本页课表" click="vm.print()"></mcs-button>
+            <mcs-button category="export" text="导出" click="vm.export()"></mcs-button>
+        </div>
+    </div>
+    <div class="profile-user-info profile-user-info-striped mcs-user-profile" style="overflow:auto;">
+        <!-- /结束：学员课表.工具栏 -->
+        <!-- #开始：学员课表.数据表格 -->
+       
+        <!-- /结束：学员课表.数据表格 -->
+    </div>
+</div>
+
+<mcs-datatable id="printArea" data="vm.data" />
+

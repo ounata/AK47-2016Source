@@ -16,5 +16,11 @@
 			onbeforeauthenticate="signInControl_BeforeAuthenticate" />
 	</div>
 	</form>
+	<div style="text-align:center">
+	<h3>
+	停站通知：
+	</h3>
+	<p>因系统维护，本站暂停服务，何时恢复另行通知！</p>
+	</div>
 </body>
 </html>

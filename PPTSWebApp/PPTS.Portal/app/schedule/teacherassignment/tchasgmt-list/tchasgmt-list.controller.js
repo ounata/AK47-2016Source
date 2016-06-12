@@ -3,8 +3,8 @@ define([ppts.config.modules.schedule,
         ppts.config.dataServiceConfig.teacherAssignmentDataService],
         function (schedule) {
             schedule.registerController('tchAsgmtListController', [
-                '$scope', 'dataSyncService', 'teacherAssignmentDataService', 'mcsDialogService', '$state', 'blockUI',
-                function ($scope, dataSyncService, teacherAssignmentDataService, mcsDialogService, $state, blockUI) {
+                '$scope', 'dataSyncService', 'teacherAssignmentDataService', 'mcsDialogService', '$state',
+                function ($scope, dataSyncService, teacherAssignmentDataService, mcsDialogService, $state) {
                     var vm = this;
                     vm.criteria = vm.criteria || {};
                     vm.criteria.gradeMemo = '';
@@ -12,7 +12,16 @@ define([ppts.config.modules.schedule,
                     vm.criteria.isFullTime = '';
                     vm.criteria.gender = '';
                     vm.criteria.teacherName = '';
-                   
+
+                    vm.age = '';
+
+                    vm.ageCollection = new Array();
+                    vm.ageCollection.push({ key: '30-', value: '30-' })
+                    vm.ageCollection.push({ key: '30+', value: '30+' })
+                    vm.ageCollection.push({ key: '50-', value: '50-' })
+                    vm.ageCollection.push({ key: '50+', value: '50+' })
+
+
                     vm.data = {
                         selection: 'radio',
                         rowsSelected: [],
@@ -67,20 +76,22 @@ define([ppts.config.modules.schedule,
                     }
 
                     // 页面初始化加载或重新搜索时查询
-                    vm.init = function () {
-                        blockUI.start();
+                    vm.search = function () {
+
                         dataSyncService.initCriteria(vm);
                         teacherAssignmentDataService.getTeacherList(vm.criteria, function (result) {
                             vm.data.rows = result.queryResult.pagedData;
-                            dataSyncService.injectDictData();
+
                             dataSyncService.updateTotalCount(vm, result.queryResult);
+
+                            dataSyncService.injectDictData();
+                            dataSyncService.injectDictData(mcs.util.mapping(vm.ageCollection, { key: 'key', value: 'value' }, 'AgeCollection'));
+                         
                             $scope.$broadcast('dictionaryReady');
-                            blockUI.stop();
                         }, function (error) {
-                            blockUI.stop();
                         });
                     };
-                    vm.init();
+                    vm.search();
 
                     vm.tchAssignClick = function () {
                         if (vm.data.rowsSelected[0] == undefined) {
@@ -98,6 +109,35 @@ define([ppts.config.modules.schedule,
                         };
                         $state.go('ppts.tchasgmt-course', { cID: vm.data.rowsSelected[0].teacherID, tn: teacherName, tji: teacherJobID });
                     };
+
+
+                    vm.calcAge = function (item) {
+                        var curDate = new Date();
+                        switch (item.key)
+                        {
+                            case '30-':
+                                vm.criteria.moreBirthday = new Date(curDate.getFullYear() - 30, curDate.getMonth(), curDate.getDate(), 0, 0, 0);
+                                vm.criteria.lessBirthday = '';
+                                break;
+                            case '30+':
+                                vm.criteria.moreBirthday = ''
+                                vm.criteria.lessBirthday = new Date(curDate.getFullYear() - 30, curDate.getMonth(), curDate.getDate(), 0, 0, 0);
+                                break;
+                            case '50-':
+                                vm.criteria.moreBirthday = new Date(curDate.getFullYear() - 50, curDate.getMonth(), curDate.getDate(), 0, 0, 0);
+                                vm.criteria.lessBirthday = '';
+                                break;
+                            case '50+':
+                                vm.criteria.moreBirthday = ''
+                                vm.criteria.lessBirthday = new Date(curDate.getFullYear() - 50, curDate.getMonth(), curDate.getDate(), 0, 0, 0);
+                                break;
+                            default:
+                                vm.criteria.moreBirthday = '';
+                                vm.criteria.lessBirthday = '';
+                                break;
+                        }
+                    };
+
 
                     vm.showMsg = function (msg) {
                         mcsDialogService.error({ title: '提示信息', message: msg });

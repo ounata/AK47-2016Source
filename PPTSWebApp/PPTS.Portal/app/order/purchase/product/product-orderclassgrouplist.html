@@ -1,28 +1,26 @@
-﻿
-<div class="mcs-panel-search well well-sm">
-    <div class="portlet">
-        <div class="portlet-title line">
-            <div class="caption">
-                <label class="quick-search"><i class="ace-icon fa fa-search bigger-125"></i> 快速查询条件</label>
-            </div>
+﻿<ppts-dynamic-content template="quick-search.tpl.html">
+    <div class="row">
+        <div class="col-md-4">
+            <ppts-select-branch model="vm.criteria.campusIDs" />
         </div>
-        <div class="portlet-body">
-            <div class="form-inline ">
-                <select><option>选择分公司</option></select>
-                <select><option>选择校区</option></select>
-
-                <mcs-input class="form-group"  placeholder="产品名称" model="vm.criteria.productName" />
-                <ppts-select class="form-group"  category="grade" model="vm.criteria.grade" caption="年级" />
-
-                <ppts-select class="form-group"  category="subject" model="vm.criteria.subject" caption="科目" />
-
-                <ppts-select class="form-group"  category="duration" model="vm.criteria.duration" caption="课时时长" />
-
-                <mcs-button category="search" click="vm.search()" size="medium" />
-            </div>
+        <div class="col-md-4">
+            <ppts-select category="subject" model="vm.criteria.subject" caption="科目" css="mcs-padding-0" />
+        </div>
+        <div class="col-md-4">
+            <ppts-select category="grade" model="vm.criteria.grade" caption="年级" css="mcs-padding-0" />
         </div>
     </div>
-</div>
+    <div class="row">
+        <div class="col-md-4">
+            <ppts-select category="duration" model="vm.criteria.duration" caption="课时时长" css="mcs-padding-0" />
+        </div>
+        <div class="col-md-4">
+            <mcs-input placeholder="产品名称" css="mcs-input-search mcs-width-full" model="vm.criteria.productName" />
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+</ppts-dynamic-content>
+
 <!-- /结束：订购列表.查询条件 -->
 <!-- #开始：订购列表.工具条 -->
 <div class="mcs-panel-toolbar">

@@ -1,10 +1,10 @@
 ﻿//注册过滤器
 for (var mappingCongfig in ppts.config.dictMappingConfig) {
-    (function () {
+    (function() {
         var filterName = mappingCongfig;
-        ppts.ng.filter(filterName, function () {
+        ppts.ng.filter(filterName, function() {
             var config = ppts.config.dictMappingConfig[filterName];
-            return function (current, separator) {
+            return function(current, separator) {
                 if (filterName == 'ifElse') {
                     current = mcs.util.bool(current) ? '1' : '0';
                 }
@@ -22,9 +22,9 @@ for (var mappingCongfig in ppts.config.dictMappingConfig) {
             };
         });
 
-        ppts.ng.filter(filterName + '_full', function () {
+        ppts.ng.filter(filterName + '_full', function() {
             var config = ppts.config.dictMappingConfig[filterName];
-            return function (current, separator) {
+            return function(current, separator) {
                 if (!mcs.util.bool(current)) return '';
                 separator = separator || ',';
                 var array = mcs.util.toArray(current, separator);

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PPTS.Data.Customers.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
@@ -26,6 +27,14 @@ namespace PPTS.Contracts.Customers.Operations
         /// <param name="accountID"></param>
         [OperationContract]
         void RollbackDebitAccount(string processID, string accountID, decimal money);
+
+
+        /// <summary>
+        /// 提交订单后同步服务费
+        /// </summary>
+        /// <param name="assets"></param>
+        [OperationContract]
+        void SyncExpense(string processID, CustomerExpenseRelationCollection collection);
 
     }
 }

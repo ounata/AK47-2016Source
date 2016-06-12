@@ -4,6 +4,7 @@ using MCS.Library.Data.DataObjects;
 using PPTS.Data.Customers.Entities;
 using PPTS.Data.Common.Security;
 using MCS.Library.OGUPermission;
+using PPTS.Data.Common.Entities;
 
 namespace PPTS.WebAPI.Customers.ViewModels.CustomerServices
 {
@@ -26,6 +27,7 @@ namespace PPTS.WebAPI.Customers.ViewModels.CustomerServices
         /// 当前年级
         /// </summary>
         [DataMember]
+        [ConstantCategory("c_codE_ABBR_CUSTOMER_GRADE")]
         public string Grade { get; set; }
 
         /// <summary>

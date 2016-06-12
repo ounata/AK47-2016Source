@@ -22,5 +22,11 @@ namespace PPTS.Data.Customers.Adapters
 		{
             return this.Load(builder => builder.AppendItem("ItemID", itemid)).SingleOrDefault();
 		}
-	}
+
+        public CustomerFollowItemCollection LoadCollectionByCustomerID(string followID)
+        {
+            return this.Load(builder => builder.AppendItem("FollowID", followID));
+        }
+
+    }
 }

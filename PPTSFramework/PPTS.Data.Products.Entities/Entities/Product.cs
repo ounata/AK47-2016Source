@@ -12,7 +12,7 @@ namespace PPTS.Data.Products.Entities
     [Serializable]
     [ORTableMapping("PM.Products")]
     [DataContract]
-    public class Product
+    public class Product: IEntityWithCreator, IEntityWithModifier
     {
         /// <summary>
         /// 产品ID
@@ -194,7 +194,26 @@ namespace PPTS.Data.Products.Entities
         [ORFieldMapping("PromotionQuota")]
         [DataMember]
         public decimal PromotionQuota { set; get; }
-        
+
+
+        /// <summary>
+        /// 收入确认开始时间
+        /// </summary>
+        [ORFieldMapping("ConfirmStartDate", UtcTimeToLocal = true)]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.Select | ClauseBindingFlags.Where)]
+        [DataMember]
+        public DateTime ConfirmStartDate { set; get; }
+
+        /// <summary>
+        /// 收入确认结束时间
+        /// </summary>
+        [ORFieldMapping("ConfirmEndDate", UtcTimeToLocal = true)]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.Select | ClauseBindingFlags.Where)]
+        [DataMember]
+        public DateTime ConfirmEndDate { set; get; }
+
+
+
         /// <summary>
         /// 提交人ID
         /// </summary>
@@ -235,6 +254,7 @@ namespace PPTS.Data.Products.Entities
         /// 创建人ID
         /// </summary>
         [ORFieldMapping("CreatorID")]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update)]
         [DataMember]
         public string CreatorID { set; get; }
 
@@ -242,6 +262,7 @@ namespace PPTS.Data.Products.Entities
         /// 创建人姓名
         /// </summary>
         [ORFieldMapping("CreatorName")]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update)]
         [DataMember]
         public string CreatorName { set; get; }
 
@@ -257,6 +278,7 @@ namespace PPTS.Data.Products.Entities
         /// 最后修改人ID
         /// </summary>
         [ORFieldMapping("ModifierID")]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update)]
         [DataMember]
         public string ModifierID { set; get; }
 
@@ -264,6 +286,7 @@ namespace PPTS.Data.Products.Entities
         /// 最后修改人姓名
         /// </summary>
         [ORFieldMapping("ModifierName")]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update)]
         [DataMember]
         public string ModifierName { set; get; }
 

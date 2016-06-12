@@ -25,13 +25,13 @@ namespace PPTS.Data.Common.Authorization
     public enum RelationType
     {
         [EnumItemDescription("建档关系")]
-        Owner = 0,
+        Owner = 10,
         [EnumItemDescription("资询关系")]
         Consultant = JobTypeDefine.Consultant,
         [EnumItemDescription("学管关系")]
         Educator = JobTypeDefine.Educator,
-        [EnumItemDescription("教师关系")]
-        Teacher = JobTypeDefine.Teacher,
+        //[EnumItemDescription("教师关系")]
+        //Teacher = JobTypeDefine.Teacher,
         [EnumItemDescription("坐席关系")]
         Callcenter = JobTypeDefine.Callcenter,
         [EnumItemDescription("市场关系")]

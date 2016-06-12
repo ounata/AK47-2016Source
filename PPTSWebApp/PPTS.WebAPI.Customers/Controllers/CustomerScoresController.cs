@@ -133,13 +133,13 @@ namespace PPTS.WebAPI.Customers.Controllers
                 teachers = TeacherSearchAdapter.Instance.Load(customer.CustomerID);
             }
 
-            ConfigArgs args = ConfigsCache.GetArgs(DeluxeIdentity.CurrentUser.GetCurrentJob().GetParentOrganizationByType(DepartmentType.Campus).ID);
-            DateTime closingAccountDate = args.GetCurrentClosingAccountDate();
+            // ConfigArgs args = ConfigsCache.GetArgs(DeluxeIdentity.CurrentUser.GetCurrentJob().GetParentOrganizationByType(DepartmentType.Campus).ID);
+            // DateTime closingAccountDate = args.GetCurrentClosingAccountDate();
 
             return new CustomerScoresModel
             {
                 IsTeacher = isTeacher,
-                ClosingAccountDate = closingAccountDate,
+                // ClosingAccountDate = closingAccountDate,
                 Customer = customer,
                 Teachers = teachers,
                 Score = score,

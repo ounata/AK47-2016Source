@@ -103,6 +103,8 @@ namespace PPTS.WebAPI.Orders.ViewModels.Purchase
     {
         public PagedQueryResult<OrderItemView, OrderItemViewCollection> QueryResult { get; set; }
         public IDictionary<string, IEnumerable<BaseConstantEntity>> Dictionaries { get; set; }
+
+        public Data.Products.Entities.CategoryEntityCollection Categories { set; get; }
     }
 
 }

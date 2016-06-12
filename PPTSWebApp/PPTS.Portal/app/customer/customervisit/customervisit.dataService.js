@@ -95,12 +95,12 @@ define(['angular', ppts.config.modules.customer], function (ng, customerVisit) {
         {
             field: "visitContent",
             name: "回访内容",
-            template: '<span>{{row.visitContent }}</span>'
+            template: '<span uib-tooltip="{{row.visitContent}}">{{row.visitContent | truncate:10}}</span>'
         }
         ],
         pager: {
             pageIndex: 1,
-            pageSize: 10,
+            pageSize: ppts.config.pageSizeItem,
             totalCount: -1
         },
         orderBy: [{ dataField: 'c.CreateTime', sortDirection: 1 }]
@@ -139,7 +139,7 @@ define(['angular', ppts.config.modules.customer], function (ng, customerVisit) {
         ],
         pager: {
             pageIndex: 1,
-            pageSize: 10,
+            pageSize: ppts.config.pageSizeItem,
             totalCount: -1
         },
         orderBy: [{ dataField: 'c.CreateTime', sortDirection: 1 }]
@@ -158,27 +158,27 @@ define(['angular', ppts.config.modules.customer], function (ng, customerVisit) {
         }, {
             field: 'visitWay',
             name: '回访方式',
-            template: '<ppts-select category="visitWay" model="row.visitWay" async="false" style="width:90px;"/>',
+            template: '<ppts-select category="visitWay" model="row.visitWay" async="false" style="width:90px;" required/>',
         }, {
             field: 'visitType',
             name: '回访类型',
-            template: '<ppts-select category="visitType" model="row.visitType" async="false" style="width:90px;"/>',
+            template: '<ppts-select category="visitType" model="row.visitType" async="false" style="width:90px;" required/>',
         }, {
             field: 'visitTime',
             name: '回访时间',
-            template: '<ppts-datetimepicker model="row.visitTime" style="width:90px;" />'
+            template: '<ppts-datetimepicker model="row.visitTime" style="width:90px;" required/>'
         }, {
             field: 'satisficing',
             name: '家长满意度',
-            template: '<ppts-select category="satisficing" model="row.satisficing" async="false" style="width:90px;"/>',
+            template: '<ppts-select category="satisficing" model="row.satisficing" async="false" style="width:90px;" required/>',
         }, {
             field: 'visitContent',
             name: '回访内容',
-            template: '<textarea class="col-sm-8" id="textArea" ng-model="row.visitContent" css="mcs-padding-0" style="width:200px;"></textarea>',
+            template: '<textarea class="col-sm-8" id="textArea" ng-model="row.visitContent" css="mcs-padding-0" style="width:200px;" required></textarea>',
         }, {
             field: 'nextVisitTime',
             name: '预计下次回访时间',
-            template: '<ppts-datetimepicker model="row.nextVisitTime" style="width:90px;" />'
+            template: '<ppts-datetimepicker model="row.nextVisitTime" style="width:90px;" required/>'
         }, {
             field: 'remainTime',
             name: '设置提醒时间',

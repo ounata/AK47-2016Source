@@ -35,7 +35,7 @@ namespace PPTS.ExtServices.CTI.Test
                     <CityID_PPTS>35</CityID_PPTS>  
                     <WPName_PPTS>方庄校区</WPName_PPTS> 
                     <WPID_PPTS>63</WPID_PPTS>  
-                    <orgid>8-Org</orgid>  
+                    <orgid>8</orgid>  
                     <InfoFrom>呼出</InfoFrom>  
                     <StuIntro>学员情况描述</StuIntro>  
                     <Memo>备注</Memo>  

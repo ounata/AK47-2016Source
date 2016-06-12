@@ -7,8 +7,9 @@ var ppts = ppts || mcs.app;
     ppts.user = ppts.user || {};
 
     ppts.config = {
+        pageSizeItem: 20,
         datePickerFormat: 'yyyy-mm-dd',
-        datetimePickerFormat: 'yyyy-mm-dd hh:ii',
+        datetimePickerFormat: 'yyyy-mm-dd hh:ii:ss',
         datePickerLang: 'zh-CN',
         modules: {
             dashboard: 'app/dashboard/ppts.dashboard',
@@ -80,6 +81,10 @@ var ppts = ppts || mcs.app;
             changeTeacherReason: 'c_codE_ABBR_BO_Customer_ChangeTeacherReason',
             // 分配教师操作类型
             teacherApplyType: 'c_codE_ABBR_Customer_Teacher_ApplyType',
+            // 高三毕业库学员
+            graduated: 'c_codE_ABBR_Customer_Graduated',
+            // 距最后上课时长
+            lastCourseType: 'c_codE_ABBR_Customer_LastCourseType',
 
             /*
             * 教学服务会相关
@@ -252,6 +257,8 @@ var ppts = ppts || mcs.app;
             assignSource: 'c_codE_ABBR_Assign_Source',
             /*课时数，补录课时用*/
             courseAmount: 'c_codE_ABBR_CourseAmount',
+            /*教师年龄区间，按教师排课用*/
+            ageCollection: 'c_codE_ABBR_AgeCollection',
 
             /*
             * 订单相关
@@ -262,6 +269,9 @@ var ppts = ppts || mcs.app;
             post: 'c_codE_ABBR_Order_Post',
             //特殊折扣原因
             orderSpecialType: 'c_codE_ABBR_Order_SpecialType',
+	    //订单类型
+            orderType: 'c_codE_ABBR_Order_OrderType',
+
             /*
             * 客服相关
             */

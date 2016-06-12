@@ -44,7 +44,6 @@
     }]);
     //学大反馈结果集列头
     customer.registerValue('feedbackListDataHeader', {
-        selection: 'checkbox',
         rowsSelected: [],
         keyFields: ['replyID'],
         headers: [{
@@ -86,11 +85,12 @@
         },
         {
             field: "replyContent",
-            name: "反馈内容"
+            name: "反馈内容",
+            template: '<span uib-tooltip="{{row.replyContent}}">{{row.replyContent | truncate:10}}</span>'
         }],
         pager: {
             pageIndex: 1,
-            pageSize: 10,
+            pageSize: ppts.config.pageSizeItem,
             totalCount: -1
         },
         orderBy: [{ dataField: 'replyTime', sortDirection: 1 }]

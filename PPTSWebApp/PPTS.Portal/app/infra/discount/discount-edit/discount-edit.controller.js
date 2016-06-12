@@ -156,6 +156,10 @@
 
                 vm.save = function () {
                     if (mcsValidationService.run($scope)) {
+                        if (discountData.rows[0].discountStandard == "" || discountData.rows[0].discountValue == "") {
+                            vm.errorMessage = '充值额与折扣率至少輸入一条记录！';
+                            return;
+                        }
                         for (var value in discountData.rows) {
                             if (!discountData.rows[value].validStandard || !discountData.rows[value].validValue) {
                                 vm.errorMessage = '充值折扣关系表填写的值验证不通过,请重新填写！';

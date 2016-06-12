@@ -56,7 +56,7 @@
         }, {
             field: "startDate",
             name: "启用时间",
-            template: '<span>{{row.startDate}}</span>'
+            template: '<span>{{row.startDate | date:"yyyy-MM-dd"}}</span>'
         }, {
             field: "discountStatus",
             name: "状态",
@@ -85,7 +85,7 @@
         }],
         pager: {
             pageIndex: 1,
-            pageSize: 10,
+            pageSize: ppts.config.pageSizeItem,
             totalCount: -1
         },
         orderBy: [{ dataField: 'createTime', sortDirection: 1 }]
@@ -127,12 +127,14 @@
         {
             field: 'discountStandard',
             name: '充值额(万元)',
-            template: '<span ng-class=\'{"has-error":!row.validStandard}\'><mcs-input model="row.discountStandard" validate="vm.updateDiscountStandardRank(row, $index)" datatype="float" custom-style="width:40%"/><span class=\'help-inline\' ng-if="!row.validStandard">需大于上档小于下档!</span></span>'
+            headerCss: 'datatable-header',
+            template: '<span ng-class=\'{"has-error":!row.validStandard}\'><mcs-input model="row.discountStandard" class="input-width-100" validate="vm.updateDiscountStandardRank(row, $index)" datatype="float"/><span class=\'help-inline\' ng-if="!row.validStandard">需大于上档小于下档!</span></span>'
         },
         {
             field: 'discountValue',
             name: '折扣率(精确到0.01)',
-            template: '<span ng-class=\'{"has-error":!row.validValue}\'><mcs-input model="row.discountValue" validate="vm.updateDiscountValueRank(row, $index)" datatype="float" custom-style="width:40%"/><span class=\'help-inline\' ng-if="!row.validValue">{{vm.errorRowMessage}}</span></span>'
+            headerCss: 'datatable-header',
+            template: '<span ng-class=\'{"has-error":!row.validValue}\'><mcs-input model="row.discountValue" class="input-width-100" validate="vm.updateDiscountValueRank(row, $index)" datatype="float"/><span class=\'help-inline\' ng-if="!row.validValue">{{vm.errorRowMessage}}</span></span>'
         }],
         pager: {
             pagable: false,

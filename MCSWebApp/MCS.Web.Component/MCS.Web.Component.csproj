@@ -36,7 +36,7 @@
     <OutputPath>bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <WarningLevel>1</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -887,6 +887,12 @@
     <Content Include="samples\app\widget\ppts-select\ppts-select.directive.js" />
     <Content Include="samples\app\widget\ppts-select\select.tpl.html" />
     <Content Include="samples\app\widget\ppts.js" />
+    <Content Include="samples\app\workflow\form.html" />
+    <Content Include="samples\app\workflow\workflow-form.controller.js" />
+    <Content Include="samples\app\workflow\workflow-usertask.controller.js" />
+    <Content Include="samples\app\workflow\workflow-startup.controller.js" />
+    <Content Include="samples\app\workflow\startup.html" />
+    <Content Include="samples\app\workflow\usertask.html" />
     <Content Include="samples\assets\css\components-md.css" />
     <Content Include="samples\assets\css\components-rounded.min.css" />
     <Content Include="samples\assets\css\components.css" />
@@ -1267,6 +1273,7 @@
     <Content Include="src\mcs-upload\mcs-excelImport.service.js" />
     <Content Include="src\mcs-upload\mcs-filesUpload.directive.js" />
     <Content Include="src\mcs-validation\mcs-validation.js" />
+    <Content Include="src\mcs-workflow\mcs-workflow.service.js" />
     <Content Include="src\mcs\angular\mcs.bootstrap.js" />
     <Content Include="src\mcs\util\mcs.browser.js" />
     <Content Include="src\mcs\util\mcs.date.js" />
@@ -1336,7 +1343,10 @@
     <Folder Include="samples\app\component\mcs-tree\" />
     <Folder Include="samples\app\rule\" />
     <Folder Include="src\mcs-autocomplete\" />
+    <Folder Include="src\mcs-datarange\" />
     <Folder Include="src\mcs-datepicker\" />
+    <Folder Include="src\mcs-daterangepicker\" />
+    <Folder Include="src\mcs-datetimepicker\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
@@ -1363,8 +1373,8 @@
     </PropertyGroup>
   </Target>
   <PropertyGroup>
-    <PostBuildEvent>xcopy $(ProjectDir)libs\mcs-jslib-1.0.0\global\mcs.js $(ProjectDir)..\..\PPTSWebApp\PPTS.Web.Component\src\startup\ /Y
-xcopy $(ProjectDir)libs\mcs-jslib-1.0.0\global\mcs.min.js $(ProjectDir)..\..\PPTSWebApp\PPTS.Web.Component\src\startup\ /Y</PostBuildEvent>
+    <PostBuildEvent>xcopy $(ProjectDir)libs\mcs-jslib-1.0.0\global\mcs.js $(ProjectDir)..\..\PPTSWebApp\PPTS.Web.Component\src\startup\ /Y /D /R
+xcopy $(ProjectDir)libs\mcs-jslib-1.0.0\global\mcs.min.js $(ProjectDir)..\..\PPTSWebApp\PPTS.Web.Component\src\startup\ /Y /D /R</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

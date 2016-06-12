@@ -18,11 +18,5 @@ namespace PPTS.Contracts.Search.Operations
         [OperationContract]
         void UpdateByCustomerInfo(CustomerSearchUpdateModel model);
 
-        /// <summary>
-        /// 客户信息更新(字符串)
-        /// </summary>
-        /// <param name="customerID">客户ID</param>
-        [OperationContract]
-        void UpdateByCustomerTextInfo(string customerID);
     }
 }

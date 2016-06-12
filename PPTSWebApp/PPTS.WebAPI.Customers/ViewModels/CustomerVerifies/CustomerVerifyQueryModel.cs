@@ -48,6 +48,7 @@ namespace PPTS.WebAPI.Customers.ViewModels.CustomerVerifies
         /// </summary>
         [DataMember]
         public string StaffName { get; set; }
+
     }
 
     public class CustomerVerifiesQueryCollection : EditableDataObjectCollectionBase<CustomerVerifyQueryModel>

@@ -72,7 +72,7 @@ ppts.ng.directive('pptsFunctions', ['utilService', function (util) {
     };
 }]);
 */
-ppts.ng.directive('pptsCheckboxGroup', ['$compile', function ($compile) {
+ppts.ng.directive('pptsCheckboxGroup', function() {
     return {
         restrict: 'E',
         scope: {
@@ -80,16 +80,17 @@ ppts.ng.directive('pptsCheckboxGroup', ['$compile', function ($compile) {
             model: '=',
             parent: '=?',
             async: '@',
-            clear: '@'
+            width: '@',
+            showAll: '@'
         },
         template: '<span><mcs-checkbox-group data="data" model="model"></mcs-checkbox-group></span>',
-        link: function ($scope, $elem) {
-            $scope.clear = mcs.util.bool($scope.clear || true);
+        link: function($scope, $elem) {
+            $scope.showAll = mcs.util.bool($scope.showAll || true);
             $scope.async = mcs.util.bool($scope.async || true);
 
             function prepareDataDict() {
                 var items = ppts.dict[ppts.config.dictMappingConfig[$scope.category]];
-                $scope.$watchCollection('parent', function () {
+                $scope.$watchCollection('parent', function() {
                     if ($scope.parent == undefined) {
                         $scope.data = items;
                     } else {
@@ -104,6 +105,15 @@ ppts.ng.directive('pptsCheckboxGroup', ['$compile', function ($compile) {
                                     $scope.data.push(item);
                                 }
                             }
+                        }
+                    }
+                    if (mcs.util.bool($scope.showAll)) {
+                        if (!$scope.data) $scope.data = [];
+                        if (mcs.util.indexOf($scope.data, -1, '全部') == -1) {
+                            $scope.data.unshift({
+                                key: '-1',
+                                value: '全部'
+                            });
                         }
                     }
                     if (!$scope.data.length) {
@@ -126,15 +136,11 @@ ppts.ng.directive('pptsCheckboxGroup', ['$compile', function ($compile) {
             }
 
             $scope.model = $scope.model || [];
-
-            if ($scope.clear) {
-                $elem.prepend($compile(angular.element('<button class="btn btn-link" ng-click="model=[]">清空</button>'))($scope));
-            }
         }
     }
-}]);
+});
 
-ppts.ng.directive('pptsRadiobuttonGroup', function () {
+ppts.ng.directive('pptsRadiobuttonGroup', function() {
     return {
         restrict: 'E',
         scope: {
@@ -147,21 +153,27 @@ ppts.ng.directive('pptsRadiobuttonGroup', function () {
             parent: '=?'
         },
         template: '<mcs-radiobutton-group data="data" model="model" value="value" class="{{css}}"/>',
-        link: function ($scope, $elem, $attrs, $ctrl) {
+        link: function($scope, $elem, $attrs, $ctrl) {
             function prepareDataDict() {
                 $scope.data = ppts.dict[ppts.config.dictMappingConfig[$scope.category]];
-                if ($scope.showAll) {
-                    $scope.data.unshift({ key: '-1', value: '全部' });
+                if (mcs.util.bool($scope.showAll)) {
+                    if (!$scope.data) $scope.data = [];
+                    if (mcs.util.indexOf($scope.data, -1, '全部') == -1) {
+                        $scope.data.unshift({
+                            key: '-1',
+                            value: '全部'
+                        });
+                    }
                 }
                 if (mcs.util.hasAttr($elem, 'required')) {
                     $scope.required = true;
 
                     mcs.util.appendMessage($elem);
                 }
-                $scope.$watch('parent', function () {
+                $scope.$watch('parent', function() {
                     for (var index in $scope.data) {
                         var item = $scope.data[index];
-                        item.state = function () {
+                        item.state = function() {
                             if (!mcs.util.bool($scope.parent) || $scope.parent == '-1') return true;
                             return !mcs.util.bool(item.parentKey) || mcs.util.containsElement(item.parentKey, $scope.parent);
                         }();
@@ -184,7 +196,7 @@ ppts.ng.directive('pptsRadiobuttonGroup', function () {
     }
 });
 
-ppts.ng.directive('pptsSelect', ['mcsValidationService', function (validationService) {
+ppts.ng.directive('pptsSelect', ['mcsValidationService', function(validationService) {
     return {
         restrict: 'E',
         scope: {
@@ -203,16 +215,18 @@ ppts.ng.directive('pptsSelect', ['mcsValidationService', function (validationSer
             parseType: '@',
             showDefault: '@',
             showAll: '@',
+            defaultKey: '@',
             customStyle: '@?'
         },
         template: '<div class="col-sm-12 {{css}}"><select style="width:100%;" ng-disabled="disabled" ng-style="customStyle"></select></div>',
-        link: function ($scope, $elem) {
+        link: function($scope, $elem) {
             $scope.caption = $scope.caption || '请选择';
             $scope.disabled = mcs.util.bool($scope.disabled || false);
             $scope.showDefault = mcs.util.bool($scope.showDefault || true);
             $scope.showAll = mcs.util.bool($scope.showAll || true);
             $scope.async = mcs.util.bool($scope.async || true);
             $scope.parseType = $scope.parseType || 'string';
+            $scope.defaultKey = $scope.defaultKey || '-1';
 
             var select = $elem.find('select');
             if (mcs.util.hasAttr($elem, 'required')) {
@@ -221,10 +235,10 @@ ppts.ng.directive('pptsSelect', ['mcsValidationService', function (validationSer
 
                 mcs.util.appendMessage($elem, 'mcs-padding-left-15');
             }
-            var prepareDataDict = function () {
+            var prepareDataDict = function() {
                 var items = ppts.dict[ppts.config.dictMappingConfig[$scope.category]];
 
-                $scope.$watch('filter', function () {
+                $scope.$watch('filter', function() {
                     if (!mcs.util.bool($scope.showAll) && $scope.filter == '') {
                         $scope.data = [];
                     } else {
@@ -242,21 +256,24 @@ ppts.ng.directive('pptsSelect', ['mcsValidationService', function (validationSer
                         }
                     }
                 });
-                $scope.$watch('data', function () {
+                $scope.$watch('data', function() {
                     select.empty();
                     if (mcs.util.bool($scope.showDefault)) {
                         select.append('<option value="">' + $scope.caption + '</option>');
                     }
-                    $.each($scope.data, function (k, v) {
+                    $.each($scope.data, function(k, v) {
                         v.parentKey = v.parentKey || '';
-                        var option = '<option value="' + v.key + '" parent="' + v.parentKey + '">' + v.value + '</option>';
-                        if (v.key == $scope.model) {
-                            option = '<option value="' + v.key + '" parent="' + v.parentKey + '" selected="selected">' + v.value + '</option>';
+                        // 过滤掉全部选项
+                        if (v.key != $scope.defaultKey) {
+                            var option = '<option value="' + v.key + '" parent="' + v.parentKey + '">' + v.value + '</option>';
+                            if (v.key == $scope.model) {
+                                option = '<option value="' + v.key + '" parent="' + v.parentKey + '" selected="selected">' + v.value + '</option>';
+                            }
+                            select.append(option);
                         }
-                        select.append(option);
                     });
 
-                    select.select2().change(function () {
+                    select.select2().change(function() {
                         // 返回已选择的数据
                         $scope.model = select.val();
                         $scope.value = !select.val() ? '' : select.select2('data').text;
@@ -272,13 +289,16 @@ ppts.ng.directive('pptsSelect', ['mcsValidationService', function (validationSer
                             $scope.model = parseFloat($scope.model);
                         }
                         if (angular.isFunction($scope.callback)) {
-                            $.each($scope.data, function (k, v) {
+                            $.each($scope.data, function(k, v) {
                                 if (v.key == $scope.model) {
                                     $scope.selected.selectItem = v.selectItem;
                                     return false;
                                 }
                             });
-                            $scope.callback({ item: $scope.selected, model: $scope.model });
+                            $scope.callback({
+                                item: $scope.selected,
+                                model: $scope.model
+                            });
                         }
                         // 执行验证
                         validationService.validate(select, $scope);
@@ -308,24 +328,86 @@ ppts.ng.directive('pptsSelect', ['mcsValidationService', function (validationSer
     }
 }]);
 
-ppts.ng.directive('pptsDatepicker', ['mcsValidationService', function (validationService) {
+ppts.ng.directive('pptsDatepicker', ['mcsValidationService', function(validationService) {
     return {
         restrict: 'E',
         scope: {
             css: '@',
             model: '=',
             placeholder: '@',
-            zIndex: '@'
+            zIndex: '@',
+            startDate: '=?',
+            endDate: '=?'
         },
         templateUrl: mcs.app.config.pptsComponentBaseUrl + '/src/tpl/datepicker.tpl.html',
-        controller: function ($scope) {
+        controller: function($scope) {
             if ($scope.zIndex) {
-                $scope.dateStyle = { 'z-index': $scope.zIndex };
+                $scope.dateStyle = {
+                    'z-index': $scope.zIndex
+                };
             }
         },
-        link: function ($scope, $elem) {
+        link: function($scope, $elem) {
             var $this = $elem.find('.date-picker');
             $scope.placeholder = $scope.placeholder || '输入日期';
+            if (mcs.util.hasAttr($elem, 'required')) {
+                $scope.required = true;
+                $elem.find('input[type=text]').attr('required', 'required');
+
+                mcs.util.appendMessage($elem);
+            }
+
+            $this.datepicker({
+                    autoclose: true,
+                    todayHighlight: true,
+                    startDate: $scope.startDate,
+                    endDate: $scope.endDate,
+                    format: ppts.config.datePickerFormat,
+                    language: ppts.config.datePickerLang
+                }) //show datepicker when clicking on the icon
+                .on("hide", function() {
+                    var _this = this;
+                    $scope.$apply(function() {
+                        $scope[$this.attr('ng-model')] = moment(_this.value).utc().toISOString();
+                    });
+                    validationService.validate($elem.find('input[required]'), $scope);
+                }).next().on('click', function() {
+                    $(this).prev().focus();
+                });
+        }
+    }
+}]);
+
+ppts.ng.directive('pptsDaterangepicker', ['mcsValidationService', function(validationService) {
+    return {
+        restrict: 'E',
+        scope: {
+            width: '@',
+            css: '@',
+            size: '@',
+            startDate: '=?',
+            endDate: '=?',
+            startText: '@',
+            endText: '@',
+            zIndex: '@'
+        },
+        templateUrl: mcs.app.config.pptsComponentBaseUrl + '/src/tpl/daterangepicker.tpl.html',
+        controller: function($scope) {
+            $scope.dateStyle = {};
+
+            if ($scope.zIndex) {
+                $scope.dateStyle['z-index'] = $scope.zIndex;
+            }
+            if ($scope.width) {
+                $scope.dateStyle['width'] = $scope.width;
+            }
+        },
+        link: function($scope, $elem) {
+            var $this = $elem.find('.date-picker');
+
+            $scope.startText = $scope.startText || '开始时间';
+            $scope.endText = $scope.endText || '结束时间';
+            $scope.size = $scope.size || 'lg';
             if (mcs.util.hasAttr($elem, 'required')) {
                 $scope.required = true;
                 $elem.find('input[type=text]').attr('required', 'required');
@@ -337,59 +419,22 @@ ppts.ng.directive('pptsDatepicker', ['mcsValidationService', function (validatio
                 autoclose: true,
                 todayHighlight: true,
                 format: ppts.config.datePickerFormat,
-                language: ppts.config.datePickerLang
-            }) //show datepicker when clicking on the icon
-            .on("hide", function () {
-                validationService.validate($elem.find('input[required]'), $scope);
-            }).next().on('click', function () {
-                $(this).prev().focus();
-            });
-        }
-    }
-}]);
-
-ppts.ng.directive('pptsDatetimepicker', ['mcsValidationService', function (validationService) {
-    return {
-        restrict: 'E',
-        scope: {
-            css: '@',
-            model: '=',
-            placeholder: '@',
-            zIndex: '@'
-        },
-        templateUrl: mcs.app.config.pptsComponentBaseUrl + '/src/tpl/daterangepicker.tpl.html',
-        controller: function ($scope) {
-            if ($scope.zIndex) {
-                $scope.dateStyle = { 'z-index': $scope.zIndex };
-            }
-        },
-        link: function ($scope, $elem) {
-            var $this = $elem.find('.date-timepicker');
-            $scope.placeholder = $scope.placeholder || '输入时间';
-            if (mcs.util.hasAttr($elem, 'required')) {
-                $scope.required = true;
-                $elem.find('input[type=text]').attr('required', 'required');
-
-                mcs.util.appendMessage($elem);
-            }
-
-            $this.datetimepicker({
-                format: ppts.config.datetimePickerFormat,
                 language: ppts.config.datePickerLang,
-                autoclose: true,
-            }).on("hide", function () {
-                var _this = this;
-                $scope.$apply(function () {
-                    $scope[$this.attr('ng-model')] = _this.value;
+                startDate: $scope.startDate,
+                endDate: $scope.endDate
+            }).on('hide', function() {
+                var _this = $(this); //.find('.date-picker');
+                $scope.$apply(function() {
+                    $scope[_this.attr('ng-model')] = moment(_this.val()).utc().toISOString();
                 });
                 validationService.validate($elem.find('input[required]'), $scope);
-            }).next().on('click', function () {
+            }).next().on('click', function() {
                 $(this).prev().focus();
             });
         }
     }
 }]);
-
+/*
 ppts.ng.directive('pptsTimepicker', function () {
     return {
         restrict: 'E',
@@ -418,23 +463,49 @@ ppts.ng.directive('pptsTimepicker', function () {
         }
     }
 });
+*/
 
-ppts.ng.directive('pptsDatetimepicker', ['mcsValidationService', function (validationService) {
+
+
+ppts.ng.directive('clearMinDate', function() {
+
+    function clearMinDateFormatter(value) {
+        if (value && value.getFullYear && value.getFullYear() == 1) {
+            return '';
+        }
+
+        return value;
+    }
+
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: function($scope, iElm, iAttrs, ngModelController) {
+            ngModelController.$formatters.push(clearMinDateFormatter);
+        }
+    };
+});
+
+ppts.ng.directive('pptsDatetimepicker', ['mcsValidationService', function(validationService) {
     return {
         restrict: 'E',
         scope: {
             css: '@',
             model: '=',
             placeholder: '@',
-            zIndex: '@'
+            zIndex: '@',
+            startDate: '=?',
+            endDate: '=?'
         },
         templateUrl: mcs.app.config.pptsComponentBaseUrl + '/src/tpl/datetimepicker.tpl.html',
-        controller: function ($scope) {
+        controller: function($scope) {
             if ($scope.zIndex) {
-                $scope.dateStyle = { 'z-index': $scope.zIndex };
+                $scope.dateStyle = {
+                    'z-index': $scope.zIndex
+                };
             }
         },
-        link: function ($scope, $elem) {
+        link: function($scope, $elem) {
             var $this = $elem.find('.date-timepicker');
             $scope.placeholder = $scope.placeholder || '输入时间';
             if (mcs.util.hasAttr($elem, 'required')) {
@@ -448,95 +519,120 @@ ppts.ng.directive('pptsDatetimepicker', ['mcsValidationService', function (valid
                 format: ppts.config.datetimePickerFormat,
                 language: ppts.config.datePickerLang,
                 autoclose: true,
-            }).on("hide", function () {
+                startDate: $scope.startDate,
+                endDate: $scope.endDate
+            }).on("hide", function() {
                 var _this = this;
-                $scope.$apply(function () {
-                    $scope[$this.attr('ng-model')] = _this.value;
+                $scope.$apply(function() {
+                    $scope[$this.attr('ng-model')] = moment(_this.value).utc().toISOString();
                 });
                 validationService.validate($elem.find('input[required]'), $scope);
-            }).next().on('click', function () {
+            }).next().on('click', function() {
                 $(this).prev().focus();
             });
         }
     }
 }]);
 
-ppts.ng.directive('datetimeType', function ($filter) {
+ppts.ng.directive('datetimeType', function($filter) {
     return {
         restrict: 'A',
         require: 'ngModel',
-        link: function ($scope, $elem, $attrs, $ctrl) {
-            $ctrl.$parsers.push(function (data) {
+        link: function($scope, $elem, $attrs, $ctrl) {
+            $ctrl.$parsers.push(function(data) {
                 return new Date(data);
             });
 
-            $ctrl.$formatters.push(function (data) {
+            $ctrl.$formatters.push(function(data) {
                 return $filter('date')(data, 'yyyy-MM-dd HH:mm:ss');
             });
         }
     }
 });
 
-ppts.ng.directive('dateType', function ($filter) {
+ppts.ng.directive('dateType', function($filter) {
     return {
         restrict: 'A',
         require: 'ngModel',
-        link: function ($scope, $elem, $attrs, $ctrl) {
-            $ctrl.$parsers.push(function (data) {
+        link: function($scope, $elem, $attrs, $ctrl) {
+            $ctrl.$parsers.push(function(data) {
                 return new Date(data);
             });
 
-            $ctrl.$formatters.push(function (data) {
+            $ctrl.$formatters.push(function(data) {
                 return $filter('date')(data, 'yyyy-MM-dd');
             });
         }
     }
 });
 
-ppts.ng.directive('pptsDatarange', ['mcsValidationService', function (validationService) {
+ppts.ng.directive('pptsDatarange', ['mcsValidationService', function(validationService) {
     return {
         restrict: 'E',
         scope: {
             css: '@',
+            width: '@',
             min: '=',
             minText: '@',
             max: '=',
             maxText: '@',
+            datatype: '@',
             unit: '@'
         },
         templateUrl: mcs.app.config.pptsComponentBaseUrl + '/src/tpl/datarange.tpl.html',
-        link: function ($scope, $elem) {
+        controller: function($scope) {
+            $scope.customStyle = {};
+
+            if ($scope.width) {
+                $scope.customStyle['width'] = $scope.width;
+            }
+        },
+        link: function($scope, $elem) {
             $scope.minText = $scope.minText || '起始金额';
             $scope.maxText = $scope.maxText || '截止金额';
             $scope.unit = $scope.unit || '元';
+            var dataType = ($scope.datatype || 'number').toLowerCase();
+            var inputs = $elem.find('input[type=text]');
             if (mcs.util.hasAttr($elem, 'required')) {
                 $scope.required = true;
-                $elem.find('input[type=text]').attr('required', 'required');
+                inputs.attr('required', 'required');
 
                 mcs.util.appendMessage($elem);
             }
 
-            $scope.$watch('min', function (data) {
+            if (dataType == 'int') {
+                inputs.bind('keyup afterpaste', function() {
+                    var $this = $(this);
+                    mcs.util.limit($this);
+                });
+            } else if (dataType == 'number') {
+                inputs.bind('keyup afterpaste', function() {
+                    var $this = $(this);
+                    mcs.util.number($this);
+                });
+            }
+
+            $scope.$watch('min', function(data) {
                 if (data == undefined) return;
                 var max = parseFloat($scope.max);
                 if (data > max) {
                     $scope.min = max;
                 }
-                validationService.validate($elem.find('input[type=text]'), $scope);
+                validationService.validate(inputs, $scope);
             });
-            $scope.$watch('max', function (data) {
+            $scope.$watch('max', function(data) {
                 if (data == undefined) return;
                 var min = parseFloat($scope.min);
                 if (data < min) {
                     $scope.max = min;
                 }
-                validationService.validate($elem.find('input[type=text]'), $scope);
+                validationService.validate(inputs, $scope);
             });
         }
     }
 }]);
 
-ppts.ng.directive('pptsSource', function () {
+ppts.ng.directive('pptsSource', function() {
     return {
         restrict: 'E',
         scope: {
@@ -545,16 +641,19 @@ ppts.ng.directive('pptsSource', function () {
             selected: '=?'
         },
         template: '<mcs-cascading-select caption="信息来源一,信息来源二" model="model" url="{{requestUrl}}" params="params" callback="callback(model)"></mcs-cascading-select>',
-        controller: function ($scope) {
+        controller: function($scope) {
             $scope.requestUrl = ppts.config.pptsApiBaseUrl + 'api/metadata/getdata';
-            $scope.params = { parentKey: '0', category: ppts.config.dictMappingConfig.source }; //默认加载第一层参数(信息来源一)
-            $scope.callback = function (value) {
+            $scope.params = {
+                parentKey: '0',
+                category: ppts.config.dictMappingConfig.source
+            }; //默认加载第一层参数(信息来源一)
+            $scope.callback = function(value) {
                 $scope.main = value['0'];
                 $scope.sub = value['1'];
                 $scope.selected = value['selected'];
             }
         },
-        link: function ($scope, $elem, $attrs) {
+        link: function($scope, $elem, $attrs) {
             if (mcs.util.hasAttr($elem, 'required')) {
                 $scope.required = true;
             }
@@ -565,7 +664,7 @@ ppts.ng.directive('pptsSource', function () {
     }
 });
 
-ppts.ng.directive('pptsRegion', ['$compile', function ($compile) {
+ppts.ng.directive('pptsRegion', ['$compile', function($compile) {
     return {
         restrict: 'E',
         scope: {
@@ -576,17 +675,20 @@ ppts.ng.directive('pptsRegion', ['$compile', function ($compile) {
             selected: '=?'
         },
         template: '<mcs-cascading-select caption="省份,城市,区县" model="model" url="{{requestUrl}}" params="params" callback="callback(model)"></mcs-cascading-select>',
-        controller: function ($scope) {
+        controller: function($scope) {
             $scope.requestUrl = ppts.config.pptsApiBaseUrl + 'api/metadata/getdata';
-            $scope.params = { parentKey: '0', category: ppts.config.dictMappingConfig.region }; //默认加载第一层参数(省份)
-            $scope.callback = function (value) {
+            $scope.params = {
+                parentKey: '0',
+                category: ppts.config.dictMappingConfig.region
+            }; //默认加载第一层参数(省份)
+            $scope.callback = function(value) {
                 $scope.province = value['0'];
                 $scope.city = value['1'];
                 $scope.district = value['2'];
                 $scope.selected = value['selected'];
             }
         },
-        link: function ($scope, $elem, $attrs) {
+        link: function($scope, $elem, $attrs) {
             if (mcs.util.hasAttr($elem, 'required')) {
                 $scope.required = true;
             }
@@ -600,7 +702,7 @@ ppts.ng.directive('pptsRegion', ['$compile', function ($compile) {
     }
 }]);
 
-ppts.ng.directive('pptsOrganization', function () {
+ppts.ng.directive('pptsOrganization', function() {
     return {
         restrict: 'E',
         scope: {
@@ -609,17 +711,22 @@ ppts.ng.directive('pptsOrganization', function () {
             selected: '=?'
         },
         template: '<mcs-cascading-select caption="分公司,校区" model="model" url="{{requestUrl}}" params="params" other-params="otherParams" callback="callback(model)"></mcs-cascading-select>',
-        controller: function ($scope) {
+        controller: function($scope) {
             $scope.requestUrl = ppts.config.pptsApiBaseUrl + 'api/organization/getchildrenbytype';
-            $scope.params = { parentKey: ppts.user.orgId, departmentType: 2 }; //默认加载第一层参数(分公司)
-            $scope.otherParams = { departmentType: 3 }; // 加载校区
-            $scope.callback = function (value) {
+            $scope.params = {
+                parentKey: ppts.user.orgId,
+                departmentType: 2
+            }; //默认加载第一层参数(分公司)
+            $scope.otherParams = {
+                departmentType: 3
+            }; // 加载校区
+            $scope.callback = function(value) {
                 $scope.branch = value['0'];
                 $scope.campus = value['1'];
                 $scope.selected = value['selected'];
             }
         },
-        link: function ($scope, $elem, $attrs) {
+        link: function($scope, $elem, $attrs) {
             if (mcs.util.hasAttr($elem, 'required')) {
                 $scope.required = true;
             }
@@ -630,22 +737,29 @@ ppts.ng.directive('pptsOrganization', function () {
     }
 });
 
-ppts.ng.directive('pptsSelectCustomer', ['mcsDialogService', function (mcsDialogService) {
+ppts.ng.directive('pptsSelectCustomer', ['mcsDialogService', 'mcsValidationService', function(mcsDialogService, mcsValidationService) {
     return {
         restrict: 'E',
         scope: {
+            css: '@',
             model: '=',
             callback: '&?'
         },
         templateUrl: mcs.app.config.pptsComponentBaseUrl + '/src/tpl/selectcustomer.tpl.html',
-        link: function ($scope, $elem, $attrs, $ctrl) {
-            $scope.select = function () {
+        link: function($scope, $elem, $attrs, $ctrl) {
+            if (mcs.util.hasAttr($elem, 'required')) {
+                $scope.required = true;
+                $elem.find('input[type=text]').attr('required', 'required').blur();
+
+                mcs.util.appendMessage($elem);
+            }
+            $scope.select = function() {
                 mcsDialogService.create('app/customer/potentialcustomer/customer-search/select-customer.tpl.html', {
                     controller: 'customerSearchController',
                     settings: {
                         size: 'lg'
                     }
-                }).result.then(function (customer) {
+                }).result.then(function(customer) {
                     $scope.model = customer[0];
                     if (ng.isFunction($scope.callback)) {
                         $scope.callback()(customer[0]);
@@ -656,7 +770,7 @@ ppts.ng.directive('pptsSelectCustomer', ['mcsDialogService', function (mcsDialog
     }
 }]);
 
-ppts.ng.directive('pptsSelectStaff', ['$http', function ($http) {
+ppts.ng.directive('pptsSelectStaff', ['$http', 'mcsValidationService', function($http, mcsValidationService) {
     return {
         restrict: 'E',
         scope: {
@@ -664,21 +778,24 @@ ppts.ng.directive('pptsSelectStaff', ['$http', function ($http) {
             jobType: '='
         },
         template: '<ppts-select caption="选择人员" data="data" callback="callback(item)" css="mcs-padding-0"></ppts-select>',
-        controller: function ($scope) {
+        controller: function($scope) {
             $scope.requestUrl = ppts.config.pptsApiBaseUrl + 'api/usergraph/getdata';
-            $scope.params = { jobs: ppts.user.jobs, jobType: $scope.jobType };
-            $scope.callback = function (item) {
+            $scope.params = {
+                jobs: ppts.user.jobs,
+                jobType: $scope.jobType
+            };
+            $scope.callback = function(item) {
                 $scope.staff = item.selectItem;
             }
         },
-        link: function ($scope, $elem) {
+        link: function($scope, $elem) {
             $scope.$broadcast('dataReady');
             $http({
                 method: 'post',
                 url: $scope.requestUrl,
                 data: $scope.params,
                 cache: true
-            }).then(function (result) {
+            }).then(function(result) {
                 if (!result.data) return;
                 $scope.data = result.data;
             });
@@ -686,7 +803,7 @@ ppts.ng.directive('pptsSelectStaff', ['$http', function ($http) {
     }
 }]);
 
-ppts.ng.directive('pptsSelectBranch', ['mcsDialogService', function (mcsDialogService) {
+ppts.ng.directive('pptsSelectBranch', ['mcsDialogService', 'mcsValidationService', function(mcsDialogService, mcsValidationService) {
     return {
         restrict: 'E',
         scope: {
@@ -705,14 +822,14 @@ ppts.ng.directive('pptsSelectBranch', ['mcsDialogService', function (mcsDialogSe
             callback: '&?'
         },
         templateUrl: mcs.app.config.pptsComponentBaseUrl + '/src/tpl/selectbranch.tpl.html',
-        link: function ($scope, $elem, $attrs, $ctrl) {
-            var showDisplayNames = function (campusNames) {
+        link: function($scope, $elem, $attrs, $ctrl) {
+            var showDisplayNames = function(campusNames) {
                 var names = mcs.util.toArray(campusNames);
                 return names.length > 1 ? names[0] + '...' : names[0];
             }
 
             $scope.title = $scope.title || '选择大区/分公司/校区';
-            $scope.$watch('campusNames', function () {
+            $scope.$watch('campusNames', function() {
                 $scope.displayNames = showDisplayNames($scope.campusNames);
                 if (mcs.util.hasAttr($elem, 'required')) {
                     $scope.required = true;
@@ -720,7 +837,7 @@ ppts.ng.directive('pptsSelectBranch', ['mcsDialogService', function (mcsDialogSe
                 }
             });
 
-            $scope.select = function () {
+            $scope.select = function() {
                 mcsDialogService.create(mcs.app.config.pptsComponentBaseUrl + '/src/tpl/tree.tpl.html', {
                     controller: 'treeController',
                     params: {
@@ -729,13 +846,13 @@ ppts.ng.directive('pptsSelectBranch', ['mcsDialogService', function (mcsDialogSe
                         selection: $scope.selection,
                         distinctLevel: $scope.distinctLevel
                     }
-                }).result.then(function (treeSettings) {
+                }).result.then(function(treeSettings) {
                     var checkNodeIds = treeSettings.getIdsOfNodesChecked();
                     var checkNodeNames = treeSettings.getNamesOfNodesChecked();
                     var checkNodes = treeSettings.getNodesChecked(mcs.util.bool($scope.parent || false));
 
                     if ($scope.distinctLevel) {
-                        var branch = checkNodes.filter(function (node) {
+                        var branch = checkNodes.filter(function(node) {
                             return node.level == '1';
                         });
                         if (branch && branch.length) {
@@ -748,7 +865,10 @@ ppts.ng.directive('pptsSelectBranch', ['mcsDialogService', function (mcsDialogSe
                     $scope.model = checkNodeIds;
                     $scope.campusIds = checkNodeIds.join(',');
                     $scope.campusNames = checkNodeNames.join(',');
-                    $scope.selected = { ids: $scope.model, names: checkNodeNames };
+                    $scope.selected = {
+                        ids: $scope.model,
+                        names: checkNodeNames
+                    };
                     $scope.displayNames = showDisplayNames(checkNodeNames);
 
                     if (ng.isFunction($scope.callback)) {
@@ -760,7 +880,7 @@ ppts.ng.directive('pptsSelectBranch', ['mcsDialogService', function (mcsDialogSe
     }
 }]);
 
-ppts.ng.directive('pptsSearch', function () {
+ppts.ng.directive('pptsSearch', function() {
     return {
         restrict: 'E',
         scope: {
@@ -773,18 +893,29 @@ ppts.ng.directive('pptsSearch', function () {
     }
 });
 
-ppts.ng.directive("pptsCompileHtml", ['$parse', '$sce', '$compile', function ($parse, $sce, $compile) {
+ppts.ng.directive("pptsCompileHtml", ['$sce', '$compile', function($sce, $compile) {
     return {
         restrict: "A",
-        link: function ($scope, $elem, $attrs) {
+        link: function($scope, $elem, $attrs) {
             var expression = $sce.parseAsHtml($attrs.pptsCompileHtml);
-            var getResult = function () {
+            var getResult = function() {
                 return expression($scope);
             };
-            $scope.$watch(getResult, function (newValue) {
+            $scope.$watch(getResult, function(newValue) {
                 var linker = $compile(newValue);
                 $elem.append(linker($scope));
             });
         }
     }
 }]);
+
+ppts.ng.directive("pptsDynamicContent", function() {
+    return {
+        restrict: 'E',
+        replace: true,
+        transclude: true,
+        templateUrl: function($elem, $attrs) {
+            return $attrs.template;
+        }
+    };
+});

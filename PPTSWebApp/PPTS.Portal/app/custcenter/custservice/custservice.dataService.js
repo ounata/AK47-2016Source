@@ -48,9 +48,6 @@
 
 
     custcenter.registerValue('custserviceListDataHeader', {
-        selection: 'checkbox',
-        rowsSelected: [],
-        keyFields: ['serviceID'],
         headers: [{
             field: "parentName",
             name: "家长姓名",
@@ -108,7 +105,7 @@
         ],
         pager: {
             pageIndex: 1,
-            pageSize: 10,
+            pageSize: ppts.config.pageSizeItem,
             totalCount: -1
         },
         orderBy: [{ dataField: 'cs.CreateTime', sortDirection: 1 }]
@@ -151,7 +148,7 @@
         ],
         pager: {
             pageIndex: 1,
-            pageSize: 10,
+            pageSize: ppts.config.pageSizeItem,
             totalCount: -1
         },
         orderBy: [{ dataField: 'pcc.CreateTime', sortDirection: 1 }]
@@ -178,7 +175,7 @@
         ],
         pager: {
             pageIndex: 1,
-            pageSize: 10,
+            pageSize: ppts.config.pageSizeItem,
             totalCount: -1
         },
         orderBy: [{ dataField: 'ci.ItemID', sortDirection: 1 }]
@@ -205,7 +202,7 @@
         ],
         pager: {
             pageIndex: 1,
-            pageSize: 10,
+            pageSize: ppts.config.pageSizeItem,
             totalCount: -1
         },
         orderBy: [{ dataField: 'ci.ItemID', sortDirection: 1 }]
@@ -213,14 +210,14 @@
 
 
     custcenter.registerValue('custserviceAdvanceSearchItems', [
-        { name: '当前年级：', template: '<ppts-checkbox-group category="grade" model="vm.criteria.grades" clear="vm.criteria.grades=[]" async="false"/>' },
-        { name: '受理状态：', template: '<ppts-checkbox-group category="serviceStatus" model="vm.criteria.serviceStatuses" clear="vm.criteria.serviceStatuses=[]" async="false"/>' },
-        { name: '来电日期：', template: '<ppts-daterangepicker start-date="vm.criteria.callTimeStart" end-date="vm.criteria.callTimeEnd"/>' },
-        { name: '服务类型：', template: '<ppts-checkbox-group category="serviceType" model="vm.criteria.serviceTypes" clear="vm.criteria.serviceTypes=[]" async="false"/>' },
-        { name: '投诉次数：', template: '<ppts-checkbox-group category="complaintTimes" model="vm.criteria.complaintTimes" clear="vm.criteria.complaintTimes=[]" async="false"/>' },
-        { name: '客服升级：', template: '<ppts-checkbox-group category="complaintUpgrade" model="vm.criteria.complaintUpgrades" clear="vm.criteria.complaintUpgrades=[]" async="false"/>' },
-        { name: '是否升级：', template: '<ppts-radiobutton-group category="ifElse" model="vm.criteria.isUpgradeHandle" show-all="true" async="false"/>' },
-        { name: '严重程度：', template: '<ppts-checkbox-group category="complaintLevel" model="vm.criteria.complaintLevels" clear="vm.criteria.complaintLevels=[]" async="false"/>' },
+        { name: '当前年级：', template: '<ppts-checkbox-group category="grade" model="vm.criteria.grades" async="false"/>' },
+        { name: '受理状态：', template: '<ppts-checkbox-group category="serviceStatus" model="vm.criteria.serviceStatuses" async="false"/>' },
+        { name: '来电日期：', template: '<ppts-daterangepicker start-date="vm.criteria.callTimeStart" end-date="vm.criteria.callTimeEnd" width="41.5%" css="mcs-margin-left-10"/>' },
+        { name: '服务类型：', template: '<ppts-checkbox-group category="serviceType" model="vm.criteria.serviceTypes" async="false"/>' },
+        { name: '投诉次数：', template: '<ppts-checkbox-group category="complaintTimes" model="vm.criteria.complaintTimes" async="false"/>' },
+        { name: '客服升级：', template: '<ppts-checkbox-group category="complaintUpgrade" model="vm.criteria.complaintUpgrades" async="false"/>' },
+        { name: '是否升级：', template: '<ppts-radiobutton-group category="ifElse" model="vm.criteria.isUpgradeHandle" show-all="true" async="false" css="mcs-padding-left-10"/>' },
+        { name: '严重程度：', template: '<ppts-checkbox-group category="complaintLevel" model="vm.criteria.complaintLevels" async="false"/>' },
 
     ]);
 
@@ -315,6 +312,22 @@
          service.initCreateCustomerServiceInfo = function (vm, callback) {
              custserviceDataService.getCustomerServiceForCreate(function (result) {
                  dataSyncService.injectPageDict(['ifElse']);
+                 vm.title = '客服';
+                 switch (vm.customerService.serviceType) {
+                     case 1:
+                         vm.title = '投诉';
+                         break;
+                     case 2:
+                         vm.title = '退费';
+                         break;
+                     case 3:
+                         vm.title = '咨询';
+                         break;
+                     case 4:
+                         vm.title = '其他';
+                         break;
+                 }
+
                  if (ng.isFunction(callback)) {
                      callback();
                  }

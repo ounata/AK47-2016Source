@@ -380,6 +380,29 @@
                         </li>
                     </ul>
                 </li>
+                <!--工作流-->
+                <li class="">
+                    <a href="#" class="dropdown-toggle">
+                        <i class="menu-icon fa fa-table"></i>
+                        <span class="menu-text"> 工作流 </span>
+                        <b class="arrow fa fa-angle-down"></b>
+                    </a>
+                    <b class="arrow"></b>
+                    <ul class="submenu">
+                        <li class="">
+                            <a href="#/workflow-usertask">
+                                <i class="menu-icon fa fa-caret-right"></i> 待办列表
+                            </a>
+                            <b class="arrow"></b>
+                        </li>
+                        <li class="">
+                            <a href="#/workflow-startup">
+                                <i class="menu-icon fa fa-caret-right"></i> 启动工作流
+                            </a>
+                            <b class="arrow"></b>
+                        </li>
+                    </ul>
+                </li>
                 <!--技术整理-->
                 <li class="">
                     <a href="#" class="dropdown-toggle">
@@ -545,6 +568,7 @@
     <script src="../libs/angular-ui-select-0.13.2/dist/select.js"></script>
     <script src="../libs/angular-ui-select-0.13.2/dist/select2.js"></script>
     <script src="../libs/angular-ui-select-0.13.2/dist/select2_locale_zh-CN.js"></script>
+    <script src="../libs/angular-resource-1.5.0/angular-resource.js"></script>
     <script src="../libs/mcs-jslib-1.0.0/global/mcs.js"></script>
     <script src="../libs/mcs-jslib-1.0.0/component/mcs.component.js"></script>
     <!--#主程序-->
@@ -603,6 +627,11 @@
     <script src="app/widget/ppts-datetimepicker/ppts-datetimepicker.directive.js"></script>
     <script src="app/widget/ppts-datetimepicker/ppts-datetimepicker.controller.js"></script>
     <!--/结束：项目组件模块-->
+    <!--#开始：工作流模块-->
+    <script src="app/workflow/workflow-startup.controller.js"></script>
+    <script src="app/workflow/workflow-usertask.controller.js"></script>
+    <script src="app/workflow/workflow-form.controller.js"></script>
+    <!--/结束：工作流模块-->
     <!--#开始：页面布局-->
     <script src="app/page/mcs-page.controller.js"></script>
     <!--/结束：页面布局-->

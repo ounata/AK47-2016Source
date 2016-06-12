@@ -13,6 +13,24 @@ namespace PermissionCenter.Dialogs {
     public partial class Maintain {
         
         /// <summary>
+        /// ImportRolesAndPermissions control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::MCS.Web.WebControls.UploadProgressControl ImportRolesAndPermissions;
+        
+        /// <summary>
+        /// btnImportRolesAndPermissions control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlButton btnImportRolesAndPermissions;
+        
+        /// <summary>
         /// btnClearServerCache control.
         /// </summary>
         /// <remarks>

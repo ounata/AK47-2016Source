@@ -27,7 +27,7 @@ namespace PPTS.Services.UnionPay.ProcessCSVFile
 
         private static void SortAsFilesCreationTimeDesc(ref FileInfo[] files)
         {
-            Array.Sort(files, (FileInfo x, FileInfo y) => { return x.CreationTime.CompareTo(y.CreationTime); });
+            Array.Sort(files, (FileInfo x, FileInfo y) => { return y.CreationTime.CompareTo(x.CreationTime); });
         }
 
         private static FileInfo GetFirstAsCreationTimeDesc(FileInfo[] files)

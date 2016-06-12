@@ -1,5 +1,5 @@
 ﻿<!-- #开始：折扣表管理列表.快速查询条件 -->
-<div class="mcs-panel-search well well-sm">
+<!--<div class="mcs-panel-search well well-sm">
     <div class="portlet">
         <div class="portlet-title line">
             <div class="caption">
@@ -10,21 +10,40 @@
             <div>
                 <ppts-select-branch model="vm.criteria.campusIDs" />
                 <ppts-daterangepicker  class="search" start-text="启用开始时间" end-text="启用结束时间" start-date="vm.criteria.startDate" end-date="vm.criteria.endDate"></ppts-daterangepicker>
-                <ppts-select category="discountStatus" class="ppts-select-search" model="vm.criteria.discountStatus" async="true" />
+                <ppts-select caption="折扣表状态" category="discountStatus" class="ppts-select-search" model="vm.criteria.discountStatus" async="true" />
             </div>
             <div>
-                <ppts-select category="campusUseInfo" class="ppts-select-search" model="vm.criteria.campusStatus" async="true" />
+                <ppts-select caption="校区当前使用" category="campusUseInfo" class="ppts-select-search" model="vm.criteria.campusStatus" async="true" />
                 <mcs-button category="search" click="vm.search()" class="search-btn" size="medium" />
             </div>
         </div>
     </div>
-</div>
-<div class="mcs-panel-toolbar">
+</div>-->
+<ppts-dynamic-content template="quick-search.tpl.html">
+    <div class="row">
+        <div class="col-md-6">
+            <ppts-select-branch model="vm.criteria.campusIDs" />
+        </div>
+        <div class="col-md-6">
+            <ppts-daterangepicker start-text="启用开始时间" end-text="启用结束时间" start-date="vm.criteria.startDate" end-date="vm.criteria.endDate" css="mcs-width-full"></ppts-daterangepicker>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <ppts-select caption="折扣表状态" category="discountStatus" model="vm.criteria.discountStatus" css="mcs-padding-0" async="true" />
+        </div>
+        <div class="col-md-6">
+            <ppts-select caption="校区当前使用" category="campusUseInfo" model="vm.criteria.campusStatus" css="mcs-padding-0" async="true" />
+        </div>
+    </div>
+</ppts-dynamic-content>
+
+<ppts-dynamic-content template="toolbar.tpl.html">
     <mcs-button category="add" text="新增折扣表" ppts-job-functions="新增折扣表" click="$state.go('ppts.discount-add')"></mcs-button>
     <mcs-button category="delete" text="删除折扣表" ppts-job-functions="删除折扣表" click="vm.delete()"></mcs-button>
     <mcs-button category="export" text="导出折扣表" ppts-job-functions="导出折扣表" click="vm.export()"></mcs-button>
     <mcs-button category="disable" text="停用折扣表" ppts-job-functions="停用折扣表" click="vm.disable()"></mcs-button>
-</div>
+</ppts-dynamic-content>
 <!-- /结束：折扣表管理列表.快速查询条件 -->
 <div class="alert alert-block alert-danger" ng-show="vm.errorMessage">
     <button type="button" class="close" data-dismiss="alert">

@@ -13,6 +13,10 @@ using PPTS.Data.Orders.Adapters;
 using PPTS.Data.Common;
 using PPTS.Contracts.Customers.Operations;
 using PPTS.Contracts.Orders.Operations;
+using PPTS.Data.Common.Entities;
+using PPTS.Data.Products.Entities;
+using PPTS.Data.Customers.Entities;
+using PPTS.WebAPI.Orders.Service;
 
 namespace PPTS.WebAPI.Orders.ViewModels.Purchase
 {
@@ -46,16 +50,7 @@ namespace PPTS.WebAPI.Orders.ViewModels.Purchase
         public List<OrderItemViewModel> item { set; get; }
 
 
-
-        #region 
-
-
-        public MCS.Library.OGUPermission.IUser CurrentUser { set; get; }
-
-
-        #endregion
-
-        #region
+        #region private fields
 
         private Data.Customers.Entities.Account Account { set; get; }
         private List<Data.Products.Entities.ProductView> ProductViews { set; get; }
@@ -67,6 +62,7 @@ namespace PPTS.WebAPI.Orders.ViewModels.Purchase
 
         #endregion
 
+
         [ObjectValidator]
         public Order Order { private set; get; }
 
@@ -76,12 +72,12 @@ namespace PPTS.WebAPI.Orders.ViewModels.Purchase
         [ObjectValidator]
         public AssetCollection Assets { set; get; }
 
+
         public SubmitOrderModel FillOrder()
         {
             if (Order == null)
             {
-                
-                FillUser();
+
                 FillAccount();
 
                 var parentInfo = Service.CustomerService.GetPrimaryParentByCustomerId(CustomerID);
@@ -91,18 +87,7 @@ namespace PPTS.WebAPI.Orders.ViewModels.Purchase
                 {
                     OrderID = UuidHelper.NewUuidString(),
 
-
-                    //CreatorID = CurrentUser.ID,
-                    //CreatorName = CurrentUser.Name,
-                    //SubmitterID = CurrentUser.ID,
-                    //SubmitterName = CurrentUser.Name,
-                    //SubmitterJobName = CurrentUser.GetCurrentJob().ID,
-                    //SubmitterJobID = ((int)CurrentUser.GetCurrentJob().JobType).ToString(),
-
-
                     CustomerID = CustomerID,
-                    //OrderStatus = OrderStatus.,
-
                     ChargeApplyID = ChargeApplyID,
                     SpecialType = SpecialType,
                     SpecialMemo = SpecialMemo,
@@ -113,14 +98,15 @@ namespace PPTS.WebAPI.Orders.ViewModels.Purchase
                     CustomerName = customerInfo.CustomerName,
                     ParentID = parentInfo != null ? parentInfo.ParentID : "",
                     ParentName = parentInfo != null ? parentInfo.ParentName : "",
-
                     OrderType = (OrderType)ListType,
-
+                    //OrderStatus = OrderStatus.PendingApproval,
                     ProcessStatus = (int)ProcessStatusDefine.Processing,
-                    //CampusID = CustomerCampusID,
-                    CampusName = "--",
-                    CampusID = "test"
+                    CampusName = customerInfo.CampusName,
+                    CampusID = customerInfo.CampusID
                 };
+
+
+                FillUser(Order);
             }
             return this;
         }
@@ -129,17 +115,19 @@ namespace PPTS.WebAPI.Orders.ViewModels.Purchase
         {
             if (OrderItems == null)
             {
-                FillProductViews();
-
                 var cartids = item.Select(m => m.CartID).ToArray();
-                var carts = Data.Orders.Adapters.ShoppingCartAdapter.Instance.Load(cartids);
+                var carts = ShoppingCartAdapter.Instance.Load(cartids);
+                (cartids.Length != carts.Count).TrueThrow("提交数据有误，请重新提交！");
 
+                FillProductViews();
+                
                 var mapper = new AutoMapper.MapperConfiguration(c =>
                 {
-                    c.CreateMap<Data.Products.Entities.ProductView, Data.Orders.Entities.OrderItem>();
+                    c.CreateMap<Data.Products.Entities.ProductView, OrderItem>();
                 }).CreateMapper();
 
                 Service.Present preset = null;
+
                 //买赠
                 if (ListType == 2)
                 {
@@ -161,62 +149,8 @@ namespace PPTS.WebAPI.Orders.ViewModels.Purchase
 
                     oitem.ProductCampusID = carts.Single(s => s.ProductID == product.ProductID).ProductCampusID;
 
-                    if (product.CategoryType == CategoryType.CalssGroup)
-                    {
-                        oitem.OrderAmount = product.LessonCount;
-                    }
-                    else
-                    {
-                        //是否允许修改订购产品数量
-                        if (product.CanInput == 1)
-                        {
-                            oitem.OrderAmount = submitItem.OrderAmount;
-                        }
-                    }
-
-                    //是否允许使用 客户折扣
-                    if (product.TunlandAllowed == 1)
-                    {
-                        oitem.DiscountRate = oitem.TunlandRate = Account.DiscountRate;
-                        oitem.DiscountType = ((int)DiscountTypeDefine.Tunland).ToString();
-                    }
-                    //是否允许特殊折扣
-                    if (product.SpecialAllowed == 1)
-                    {
-                        if (oitem.DiscountRate > submitItem.SpecialRate)
-                        {
-                            oitem.DiscountRate = oitem.SpecialRate = submitItem.SpecialRate;
-                            oitem.DiscountType = ((int)DiscountTypeDefine.Special).ToString();
-                        }
-
-                    }
-
-                    //oitem.RealPrice = oitem.OrderPrice * oitem.OrderAmount * oitem.DiscountRate;
-
-
-                    //是否允许产品优惠金额 因 优惠金额 出现 该属性失效
-                    //if (product.PromotionAllowed == 1)
-                    //{
-                    //    oitem.RealPrice = submitItem.RealPrice;
-                    //}
-                    //else
-                    //{
-                    //    oitem.RealPrice = oitem.OrderPrice * oitem.OrderAmount * (oitem.SpecialRate < 1 ? oitem.SpecialRate : oitem.TunlandRate);
-                    //}
-
-                    //买赠
-                    if (preset != null)
-                    {
-                        var presetitem = preset.Items.FirstOrDefault(s => oitem.OrderAmount >= s.PresentStandard);
-                        oitem.PresentID = preset.PresentID;
-                        oitem.PresentQuato = presetitem == null ? 0 : presetitem.PresentStandard;
-                    }
-                    oitem.PresentAmount = submitItem.PresentAmount;
-
-                    oitem.RealPrice = oitem.OrderPrice * oitem.DiscountRate;
-                    oitem.RealAmount = oitem.OrderAmount + oitem.PresentAmount;
-
-
+                    product.Process(oitem, submitItem, preset, Account);
+                    
                     oitem.ItemID = UuidHelper.NewUuidString();
                     OrderItems.Add(oitem);
                 }
@@ -248,13 +182,36 @@ namespace PPTS.WebAPI.Orders.ViewModels.Purchase
             return this;
         }
 
-        private void FillUser() {
-            if(CurrentUser != CurrentUser)
+        public MCS.Library.OGUPermission.IUser CurrentUser { set; get; }
+
+        private void FillUser(object info)
+        {
+            if (CurrentUser != null)
             {
-                CurrentUser.FillCreatorInfo(Order);
-                CurrentUser.FillModifierInfo(Order);
+                if (info is IEntityWithCreator)
+                {
+                    CurrentUser.FillCreatorInfo(info as IEntityWithCreator);
+                }
+                if (info is IEntityWithModifier)
+                {
+                    CurrentUser.FillModifierInfo(info as IEntityWithModifier);
+                }
+                if (info is Order)
+                {
+                    var model = info as Order;
+                    model.SubmitterID = model.CreatorID;
+                    model.SubmitterName = model.CreatorName;
+                    model.SubmitterJobID = CurrentUser.GetCurrentJob().ID;
+                    model.SubmitterJobName = CurrentUser.GetCurrentJob().Name;
+                }
             }
+
         }
+
+        #region Private
+
+
+
 
         private void FillAccount()
         {
@@ -278,6 +235,8 @@ namespace PPTS.WebAPI.Orders.ViewModels.Purchase
             FrozenMoney = OrderItemAdapter.Instance.GetFrozenMoneyByCustomerId(CustomerID, AccountID);
         }
 
+        #endregion
+
         public void Validate()
         {
             FillFrozenMoney();
@@ -289,7 +248,7 @@ namespace PPTS.WebAPI.Orders.ViewModels.Purchase
              ).TrueThrow("游学类产品不能与其他类产品同时订购");
 
             //扣除服务费集合
-            ExpenseRelations = new Data.Customers.Entities.CustomerExpenseRelationCollection();
+            ExpenseRelations = new CustomerExpenseRelationCollection();
 
             var totalMoney = OrderItems.Sum(m => m.RealPrice * m.RealAmount);
 
@@ -300,17 +259,28 @@ namespace PPTS.WebAPI.Orders.ViewModels.Purchase
             {
                 //获取该校区综合服务费
                 var expenses = Service.ProductService.GetServiceChargeByCampusId(CustomerCampusID);
-                var containsExpenses = expenses.Where(item => categoryTypes.Contains(Convert.ToInt32(item.ExpenseType)));
+                var extype = new string[] {"1","2" };
+                var containsExpenses = expenses.Where(item => extype.Contains(item.ExpenseType) && categoryTypes.Contains(Convert.ToInt32(item.ExpenseType)));
                 (expenses == null || containsExpenses.Count() != categoryTypes.Count()).TrueThrow("该校区存在未创建综合服务费");
                 containsExpenses.ForEach(item =>
                 {
                     totalMoney += item.ExpenseValue;
-                    ExpenseRelations.Add(new Data.Customers.Entities.CustomerExpenseRelation() { ExpenseID = item.ExpenseID, ExpenseType = item.ExpenseType, ExpenseMoney = item.ExpenseValue, AccountID = AccountID, CustomerID = CustomerID, ID = UuidHelper.NewUuidString() });
+                    ExpenseRelations.Add(new CustomerExpenseRelation() {
+                        ExpenseID = item.ExpenseID,
+                        ExpenseType = item.ExpenseType,
+                        ExpenseMoney = item.ExpenseValue,
+                        AccountID = AccountID,
+                        CustomerID = CustomerID });
                 });
             }
 
             (totalMoney + FrozenMoney > Account.AccountMoney).TrueThrow("该学员帐户余额不足");
-            
+
+            if (ExpenseRelations.Count > 0)
+            {
+                Service.CustomerService.DeductExpenses(ExpenseRelations);
+            }
+
             //买赠订购
             //有未完成的退费操作不允许订购
             //提交订单后，扣减对应账户的可用金额，订购资金余额增加对应金额。
@@ -322,7 +292,7 @@ namespace PPTS.WebAPI.Orders.ViewModels.Purchase
         }
 
 
-
+        #region 异步使用
 
         public TxProcess TxProcess { private set; get; }
 
@@ -340,13 +310,6 @@ namespace PPTS.WebAPI.Orders.ViewModels.Purchase
 
             //process.ConnectionName = MCS.Library.SOA.DataObjects.ConnectionDefine.DBConnectionName;
 
-            if (ExpenseRelations.Count > 0)
-            {
-               // TxActivity activity3 = TxProcess.Activities.AddActivity("扣除综合服务费");
-               // activity3.AddActionService<IAccountTransactionService>(
-               //     UriSettings.GetConfig().CheckAndGet("pptsServices", "accountTransactionService").ToString(),
-               //     proxy => proxy.DebitExpense(TxProcess.ProcessID, ExpenseRelations));
-            }
 
             var debitMoney = OrderItems.Sum(m => m.RealPrice * m.RealAmount);
 
@@ -374,12 +337,179 @@ namespace PPTS.WebAPI.Orders.ViewModels.Purchase
                 UriSettings.GetConfig().CheckAndGet("pptsServices", "orderTransactionService").ToString(),
                 proxy => proxy.SyncAsset(TxProcess.ProcessID, Assets));
 
+
+            if (ExpenseRelations.Count > 0)
+            {
+                ExpenseRelations.ForEach(m => m.OrderID = Order.OrderID);
+
+                TxActivity activity6 = TxProcess.Activities.AddActivity("同步扣除综合服务费订单ID");
+                activity6.AddActionService<IAccountTransactionService>(
+                    UriSettings.GetConfig().CheckAndGet("pptsServices", "accountTransactionService").ToString(),
+                    proxy => proxy.SyncExpense(TxProcess.ProcessID, ExpenseRelations));
+            }
+            
+
             return TxProcess;
         }
-        
 
+        #endregion
 
     }
 
+
+
+
+
+
+
+
+    static class ProductViewExtend
+    {
+
+        public static void Process(this ProductView productView, OrderItem item, OrderItemViewModel ovitem, Service.Present preset, Account Account)
+        {
+            ICalculateStrategy strategy = null;
+            switch (productView.CategoryType)
+            {
+
+                case CategoryType.OneToOne:
+                    strategy = new OneToOneStrategy();
+                    break;
+                case CategoryType.CalssGroup:
+                    strategy = new ClassGroupStrategy();
+                    break;
+                case CategoryType.YouXue:
+                    strategy = new YouXueStrategy();
+                    break;
+                case CategoryType.Other:
+                    strategy = new OtherStrategy();
+                    break;
+            }
+
+            strategy.Process(item, ovitem, productView, preset, Account);
+        }
+
+    }
+
+
+    interface ICalculateStrategy
+    {
+        void Process(OrderItem item, OrderItemViewModel ovitem, ProductView product, Service.Present preset, Account Account);
+    }
+
+    abstract class CalculateItem : ICalculateStrategy
+    {
+        protected void Prepare(OrderItem oitem, OrderItemViewModel submitItem, ProductView product, Service.Present preset, Account Account)
+        {
+            //是否允许修改订购产品数量
+            if (product.CanInput == 1)
+            {
+                oitem.OrderAmount = submitItem.OrderAmount;
+            }
+
+            //是否允许使用 客户折扣
+            if (product.TunlandAllowed == 1)
+            {
+                oitem.DiscountRate = oitem.TunlandRate = Account.DiscountRate;
+                oitem.DiscountType = ((int)DiscountTypeDefine.Tunland).ToString();
+            }
+
+            //是否允许特殊折扣
+            if (product.SpecialAllowed == 1)
+            {
+                if (oitem.DiscountRate > submitItem.SpecialRate)
+                {
+                    oitem.DiscountRate = oitem.SpecialRate = submitItem.SpecialRate;
+                    oitem.DiscountType = ((int)DiscountTypeDefine.Special).ToString();
+                }
+            }
+
+            oitem.PresentAmount = submitItem.PresentAmount;
+            oitem.RealPrice = oitem.OrderPrice * oitem.DiscountRate;
+            oitem.RealAmount = oitem.OrderAmount + oitem.PresentAmount;
+
+        }
+
+        public virtual void Process(OrderItem oitem, OrderItemViewModel submitItem, ProductView product, Service.Present preset, Account Account)
+        {
+            Prepare(oitem, submitItem, product, preset, Account);
+        }
+    }
+
+    class OneToOneStrategy : CalculateItem
+    {
+        public override void Process(OrderItem oitem, OrderItemViewModel submitItem, ProductView product, Service.Present preset, Account Account)
+        {
+            //买赠
+            if (preset != null)
+            {
+                var presetitem = preset.Items.FirstOrDefault(s => oitem.OrderAmount >= s.PresentStandard);
+                oitem.PresentID = preset.PresentID;
+                oitem.PresentQuato = presetitem == null ? 0 : presetitem.PresentStandard;
+            }
+
+            Prepare(oitem, submitItem, product, preset, Account);
+        }
+    }
+
+    class ClassGroupStrategy : CalculateItem
+    {
+        public override void Process(OrderItem oitem, OrderItemViewModel submitItem, ProductView product, Service.Present preset, Account Account)
+        {
+            oitem.OrderAmount = product.LessonCount;
+            Prepare(oitem, submitItem, product, preset, Account);
+        }
+    }
+
+    class YouXueStrategy : CalculateItem
+    {
+        public override void Process(OrderItem oitem, OrderItemViewModel submitItem, ProductView product, Service.Present preset, Account Account)
+        {
+            //是否允许修改订购产品数量
+            if (product.CanInput == 1)
+            {
+                oitem.OrderAmount = submitItem.OrderAmount;
+            }
+
+            //是否允许特殊折扣
+            if (product.SpecialAllowed == 1)
+            {
+                if (oitem.DiscountRate > submitItem.SpecialRate)
+                {
+                    oitem.DiscountRate = oitem.SpecialRate = submitItem.SpecialRate;
+                    oitem.DiscountType = ((int)DiscountTypeDefine.Special).ToString();
+                }
+            }
+
+            //是否允许使用 客户折扣
+            if (product.TunlandAllowed == 1)
+            {
+                //只享受客户折扣
+                if (product.PromotionAllowed == 1)
+                {
+                    oitem.DiscountRate = oitem.TunlandRate = Account.DiscountRate;
+                    oitem.DiscountType = ((int)DiscountTypeDefine.Tunland).ToString();
+                }
+                else
+                {
+                    //只享受订购时特殊优惠
+                    if (oitem.OrderPrice * oitem.OrderAmount * (1 - oitem.DiscountRate) >= product.PromotionQuota)
+                    {
+                        //TODO 需要进行审批
+                    }
+
+                }
+            }
+
+            oitem.RealPrice = oitem.OrderPrice * oitem.DiscountRate;
+            oitem.RealAmount = oitem.OrderAmount;
+
+        }
+    }
+
+    class OtherStrategy: CalculateItem
+    {
+
+    }
 
 }

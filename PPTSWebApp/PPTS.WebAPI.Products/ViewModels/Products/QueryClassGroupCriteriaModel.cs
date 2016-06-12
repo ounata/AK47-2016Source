@@ -13,6 +13,9 @@ namespace PPTS.WebAPI.Products.ViewModels.Products
     public class QueryClassGroupCriteriaModel
     {
 
+        [NoMapping]
+        public string[] CampusIDs { get; set; }
+
         [ConditionMapping("ProductName")]
         public string ProductName { set; get; }
 
@@ -49,7 +52,7 @@ namespace PPTS.WebAPI.Products.ViewModels.Products
     }
 
     public class QueryClassGroupQueryResult {
-        public PagedQueryResult<OrderClassGroupProduct, OrderClassGroupProductCollection> QueryResult { get; set; }
+        public PagedQueryResult<OrderClassGroupProductView, OrderClassGroupProductViewCollection> QueryResult { get; set; }
         public IDictionary<string, IEnumerable<BaseConstantEntity>> Dictionaries { get; set; }
     }
 }

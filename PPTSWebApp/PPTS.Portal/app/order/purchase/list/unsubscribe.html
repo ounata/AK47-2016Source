@@ -27,7 +27,7 @@
                 <div class="from-group row">
                     <mcs-label required="true" text="退订单原因：" class="col-sm-2" />
                     <div class="col-sm-4">
-                        <textarea ng-model="vm.item.order.debookMemo" />
+                        <textarea ng-model="vm.item.order.debookMemo" required/>
                     </div>
                 </div>
                 <div class="from-group row">
@@ -37,13 +37,15 @@
                 <div class="from-group row">
                     <mcs-label required="true" text="家长联系方式：" class="col-sm-2" />
                     <div class="col-sm-4">
-                        <mcs-input placeholder="家长联系方式" model="vm.item.order.contactTel" />
+                        <mcs-input placeholder="家长联系方式" model="vm.item.order.contactTel" required/>
                     </div>
                 </div>
 
             </form>
         </div>
-        <mcs-datatable data="vm.data" />
+        <form name="productCreateForm_1" class="form-horizontal">
+            <mcs-datatable data="vm.data" />
+        </form>
 
         <div>
             申请人：{{ vm.applicant() }}

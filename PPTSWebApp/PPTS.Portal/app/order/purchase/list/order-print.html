@@ -4,14 +4,16 @@
     <br/>
     学员编号：{{vm.entity.customerCode}}
     <br/>
-    一、现申请订购学大教育“{{vm.entity.categoryType | categoryType }}”个性化辅导产品和服务，订购产品及培训辅导服务费合计：{{}}元。（大写XXXX元整），其中综合服务费合计：￥XXXX.XX元（大写XXXX元整）。
+    一、现申请订购学大教育“{{vm.entity.categoryType | categoryType }}”个性化辅导产品和服务，订购产品及培训辅导服务费合计：{{ vm.entity.realAmount * vm.entity.realPrice + vm.expenseMoney | currency }}元。（大写  {{ vm.entity.realAmount * vm.entity.realPrice + vm.expenseMoney | rmb }}  ），其中综合服务费合计：{{vm.expenseMoney | currency}}元（大写  {{vm.expenseMoney | rmb }} ）。
     <br/>
     二、订购“{{vm.entity.categoryType | categoryType }}”产品服务和服务的具体内容【课时定制单】为：
     <mcs-datatable data="vm.data" />
     三、订购人同意接受学大教育产品和服务相关规则。
     <br/>
-    订购人（签名）：
-    订购监护人（签名）：
+    订购人（签名）：{{vm.entity.customerName}}
+    <br />
+    订购监护人（签名）：{{vm.entity.parentName}}
+    <br />
     订购日期：{{vm.entity.orderTime|date:'yyyy年MM月dd日'}}
 
 </div>

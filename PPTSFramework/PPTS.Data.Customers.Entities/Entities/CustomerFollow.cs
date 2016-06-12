@@ -243,6 +243,7 @@ namespace PPTS.Data.Customers.Entities
         /// </summary>
         [ORFieldMapping("IntensionSubjects")]
         [DataMember]
+        [ConstantCategory("c_codE_ABBR_BO_Product_TeacherSubject")]
         public string IntensionSubjects
         {
             get;
@@ -298,7 +299,7 @@ namespace PPTS.Data.Customers.Entities
         /// </summary>
         [ORFieldMapping("IsStudyThere")]
         [DataMember]
-        public bool IsStudyThere
+        public int IsStudyThere
         {
             get;
             set;

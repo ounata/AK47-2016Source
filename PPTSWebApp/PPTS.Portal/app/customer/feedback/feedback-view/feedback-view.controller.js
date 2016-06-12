@@ -55,7 +55,7 @@ define([ppts.config.modules.customer,
                         });
                     }
                     vm.add = function () {
-                        $state.go('ppts.feedback-add', { id: vm.customerId, prev: $location.$$search.prev });
+                        $state.go('ppts.feedback-add', { id: vm.customerId, prev: $stateParams.prev });
                     }
                     vm.search = function () {
                         vm.tabs = [];

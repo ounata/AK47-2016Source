@@ -14,6 +14,10 @@ namespace MCS.Library.SOA.DataObjects
 	[Serializable, ComVisible(true)]
     public abstract class DeltaDataCollectionBase
     {
+        /// <summary>
+        /// 在Clone时创建自己这个类
+        /// </summary>
+        /// <returns></returns>
         protected abstract DeltaDataCollectionBase CreateNewInstance();
 
         public virtual DeltaDataCollectionBase Clone()
@@ -35,7 +39,7 @@ namespace MCS.Library.SOA.DataObjects
     /// </summary>
     /// <typeparam name="T">业务实体的集合对象</typeparam>
 	[Serializable, ComVisible(true)]
-    public abstract class DeltaDataCollectionBase<T> : DeltaDataCollectionBase where T : IList, new()
+    public abstract class DeltaDataCollectionBase<T> : DeltaDataCollectionBase where T : IList
     {
         private T inserted = default(T);
         private T updated = default(T);
@@ -49,7 +53,7 @@ namespace MCS.Library.SOA.DataObjects
             get
             {
                 if (this.inserted == null)
-                    this.inserted = new T();
+                    this.inserted = this.CreateNewInnerCollecction();
 
                 return this.inserted;
             }
@@ -68,7 +72,7 @@ namespace MCS.Library.SOA.DataObjects
             get
             {
                 if (this.updated == null)
-                    this.updated = new T();
+                    this.updated = this.CreateNewInnerCollecction();
 
                 return updated;
             }
@@ -87,7 +91,7 @@ namespace MCS.Library.SOA.DataObjects
             get
             {
                 if (this.deleted == null)
-                    this.deleted = new T();
+                    this.deleted = this.CreateNewInnerCollecction();
 
                 return this.deleted;
             }
@@ -95,6 +99,17 @@ namespace MCS.Library.SOA.DataObjects
             {
                 ExceptionHelper.FalseThrow<ArgumentNullException>(value != null, "deleted");
                 this.deleted = value;
+            }
+        }
+
+        /// <summary>
+        /// 变化的数据总量
+        /// </summary>
+        public int TotalChanges
+        {
+            get
+            {
+                return this.Inserted.Count + this.Updated.Count + this.Deleted.Count;
             }
         }
 
@@ -143,6 +158,21 @@ namespace MCS.Library.SOA.DataObjects
             foreach (object obj in data.Deleted)
                 this.Deleted.Add(obj);
         }
+
+        /// <summary>
+        /// 是否为空
+        /// </summary>
+        /// <returns></returns>
+        public override bool IsEmpty()
+        {
+            return this.Inserted.Count == 0 && this.Deleted.Count == 0 && this.Updated.Count == 0;
+        }
+
+        /// <summary>
+        /// 创建新的内部集合
+        /// </summary>
+        /// <returns></returns>
+        public abstract T CreateNewInnerCollecction();
     }
 
     /// <summary>

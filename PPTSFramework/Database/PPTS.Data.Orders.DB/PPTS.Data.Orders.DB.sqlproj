@@ -108,6 +108,7 @@
     <Build Include="OM\Views\v_Assigns4Teacher.sql" />
     <Build Include="OM\Views\v_DebookOrderItems.sql" />
     <Build Include="OM\Views\v_OrderItems.sql" />
+    <Build Include="MT\Tables\CourseRelationAuthorizations.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PPTS.Data.Order.Local.Dev.DB.publish.xml" />

@@ -90,6 +90,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\GetPermissionRelativeRoles.cs" />
+    <Compile Include="Commands\GetRolesPermissions.cs" />
     <Compile Include="Commands\GetUserDetail.cs" />
     <Compile Include="Commands\RemovePermissionCache.cs" />
     <Compile Include="Commands\GetAllChildren.cs" />

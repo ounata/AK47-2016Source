@@ -5,7 +5,7 @@ WITH SCHEMABINDING
 AS
 SELECT [ID], [VersionStartTime], [VersionEndTime], [Status], [CreateDate], [SearchContent], [RowUniqueID], [SchemaType], [CreatorID], [CreatorName],
 	[Name], [CodeName], [DisplayName], [FirstName], [LastName], [Mail], [Sip], [MP], [WP], [Address], [OwnerID], [OwnerName],
-	[AccountDisabled], [PasswordNotRequired], [DontExpirePassword], [AccountExpires], [AccountInspires], [Comment]
+	[AccountDisabled], [PasswordNotRequired], [DontExpirePassword], [AccountExpires], [AccountInspires], [EmployeeID], [Comment]
 FROM [SC].[SchemaUserSnapshot]
 WHERE [VersionEndTime] = CONVERT(DATETIME, '99990909 00:00:00', 112) AND [Status] = 1
 
@@ -24,6 +24,10 @@ CREATE UNIQUE INDEX [IX_SchemaUserSnapshot_Current_RowID] ON [SC].[SchemaUserSna
 GO
 
 CREATE INDEX [IX_SchemaUserSnapshot_Current_CodeName] ON [SC].[SchemaUserSnapshot_Current] ([CodeName])
+
+GO
+
+CREATE INDEX [IX_SchemaUserSnapshot_Current_Name] ON [SC].[SchemaUserSnapshot_Current] ([Name])
 
 GO
 

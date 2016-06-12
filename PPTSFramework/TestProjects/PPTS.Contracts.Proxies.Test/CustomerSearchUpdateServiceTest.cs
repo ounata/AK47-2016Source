@@ -61,20 +61,5 @@ namespace PPTS.Contracts.Proxies.Test
 
             //return WfServiceInvoker.InvokeContext["ReturnValue"] as UserData;
         }
-
-        [TestMethod]
-        public void UpdateByCustomerTextInfoByTaskTest()
-        {
-            string customerID = "605917";
-            PPTSCustomerSearchUpdateServiceProxy.Instance.UpdateByCustomerTextInfoByTask(customerID);
-        }
-
-
-        [TestMethod]
-        public void UpdateByCustomerTextInfoTest()
-        {
-            string customerID = "605917";
-            PPTSCustomerSearchUpdateServiceProxy.Instance.UpdateByCustomerTextInfo(customerID);
-        }
     }
 }

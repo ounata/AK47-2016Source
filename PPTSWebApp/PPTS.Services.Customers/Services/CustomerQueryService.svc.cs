@@ -25,11 +25,14 @@ namespace PPTS.Services.Customers.Services
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         public Customer QueryCustomerByID(string customerID)
         {
-            return new Customer()
-            {
-                CustomerID = UuidHelper.NewUuidString(),
-                CustomerName = "何明宇"
-            };
+            return CustomerAdapter.Instance.Load(customerID);
+        }
+
+        [WfJsonFormatter]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        public PrimaryParentQueryResult QueryPrimaryParentByCustomerID(string customerID)
+        {
+            return new PrimaryParentQueryResult() { Parent = ParentAdapter.Instance.LoadPrimaryParentInContext(customerID) };
         }
 
         [WfJsonFormatter]
@@ -168,5 +171,11 @@ namespace PPTS.Services.Customers.Services
         }
 
 
+        [WfJsonFormatter]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        public CustomerExpenseRelation GetCustomerExpenseByOrderId(string orderID)
+        {
+            return Data.Customers.Adapters.CustomerExpenseRelationAdapter.Instance.Load(orderID);
+        }
     }
 }

@@ -67,5 +67,16 @@ namespace PPTS.Data.Common
             oaname.NullCheck("oaname");
             return OguMechanismFactory.GetMechanism().GetObjects<IUser>(SearchOUIDType.LogOnName, oaname).FirstOrDefault();
         }
+
+        public static PPTSJob GetPPTSJobByJobID(string jobID)
+        {
+            PPTSJob job=null;
+            jobID.NullCheck("jobID");
+            OguObjectCollection<IGroup> groups = OguMechanismFactory.GetMechanism().GetObjects<IGroup>(SearchOUIDType.Guid, jobID);
+            IGroup group = groups.FirstOrDefault();
+            group.IsNotNull(model => job = model.ToJob());
+            return job;
+
+        }
     }
 }

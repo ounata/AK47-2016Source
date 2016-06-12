@@ -1,5 +1,6 @@
 ﻿using MCS.Library.Data.DataObjects;
 using MCS.Library.Data.Mapping;
+using PPTS.Data.Customers;
 using PPTS.Data.Customers.Entities;
 using System;
 using System.Collections.Generic;
@@ -30,6 +31,28 @@ namespace PPTS.WebAPI.Customers.ViewModels.CustomerFollows
         /// </summary>
         [DataMember]
         public string ParentName { get; set; }
+
+        /// <summary>
+        /// 记录人及岗位
+        /// </summary>
+        [DataMember]
+        public string FollowerAndJobName { get; set; }
+
+        [DataMember]
+        public CustomerStatus CustomerStatus
+        {
+            set;
+            get;
+        }
+
+        [DataMember]
+        public bool IsStudent
+        {
+            get
+            {
+                return this.CustomerStatus == PPTS.Data.Customers.CustomerStatus.Formal;
+            }
+        }
     }
 
     public class CustomerFollowQueryCollection : EditableDataObjectCollectionBase<FollowQueryModel>

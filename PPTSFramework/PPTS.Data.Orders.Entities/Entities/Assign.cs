@@ -449,7 +449,7 @@ namespace PPTS.Data.Orders.Entities
         [ConstantCategory("Common_TeacherType")]
         [ORFieldMapping("IsFullTimeTeacher")]
         [DataMember]
-        public int IsFullTimeTeacher { get; set; }
+        public int? IsFullTimeTeacher { get; set; }
 
         ///学员账户ID
         [ORFieldMapping("AccountID")]
@@ -464,6 +464,14 @@ namespace PPTS.Data.Orders.Entities
             get; set;
         }
 
+        [ConstantCategory("c_codE_ABBR_Product_CategoryType")]
+        [ORFieldMapping("CategoryType")]
+        [DataMember]
+        public string CategoryType { get; set; }
+
+        [ORFieldMapping("CategoryTypeName")]
+        [DataMember]
+        public string CategoryTypeName { get; set; }
 
 
         #endregion

@@ -27,6 +27,9 @@ namespace MCS.Library.SOA.DataObjects.Security
 		[NonSerialized]
 		private SCObjectMemberRelationCollection _AllMembersRelations = null;
 
+        /// <summary>
+        /// 无人使用，有性能隐患
+        /// </summary>
 		[ScriptIgnore]
 		[NoMapping]
 		public SCObjectMemberRelationCollection AllMembersRelations
@@ -53,6 +56,9 @@ namespace MCS.Library.SOA.DataObjects.Security
 		[NonSerialized]
 		private SchemaObjectCollection _AllMembers = null;
 
+        /// <summary>
+        /// 无人使用，有性能隐患
+        /// </summary>
 		[ScriptIgnore]
 		[NoMapping]
 		public SchemaObjectCollection AllMembers
@@ -77,10 +83,12 @@ namespace MCS.Library.SOA.DataObjects.Security
 			{
 				if (this._CurrentMembers == null && this.ID.IsNotEmpty())
 				{
-					this._CurrentMembers = SchemaObjectAdapter.Instance.Load(CurrentMembersRelations.ToMemberIDsBuilder());
+                    //this._CurrentMembers = SchemaObjectAdapter.Instance.Load(CurrentMembersRelations.ToMemberIDsBuilder());
+                    //this._CurrentMembers = this._CurrentMembers.FilterByStatus(SchemaObjectStatusFilterTypes.Normal);
 
-					this._CurrentMembers = this._CurrentMembers.FilterByStatus(SchemaObjectStatusFilterTypes.Normal);
-				}
+                    //沈峥优化查询，2016-6-11，去掉了大规模的IN操作
+                    this._CurrentMembers = SchemaObjectAdapter.Instance.LoadMembers(this.SchemaType, this.ID, SchemaObjectStatus.Normal, DateTime.MinValue);
+                }
 
 				return this._CurrentMembers;
 			}
@@ -89,6 +97,9 @@ namespace MCS.Library.SOA.DataObjects.Security
 		[NonSerialized]
 		private SCPermissionCollection _AllPermissions = null;
 
+        /// <summary>
+        /// 无人使用，有性能隐患
+        /// </summary>
 		[ScriptIgnore]
 		[NoMapping]
 		public SCPermissionCollection AllPermissions

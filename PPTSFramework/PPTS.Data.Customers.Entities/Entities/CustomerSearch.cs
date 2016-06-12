@@ -1,5 +1,6 @@
 ﻿using MCS.Library.Data.DataObjects;
 using MCS.Library.Data.Mapping;
+using PPTS.Data.Common.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -115,6 +116,7 @@ namespace PPTS.Data.Customers.Entities
         /// </summary>
         [ORFieldMapping("CustomerLevel")]
         [DataMember]
+        [ConstantCategory("C_CODE_ABBR_Customer_CRM_CustomerLevelEx")]
         public string CustomerLevel
         {
             get;
@@ -236,6 +238,7 @@ namespace PPTS.Data.Customers.Entities
         /// </summary>
         [ORFieldMapping("VipLevel")]
         [DataMember]
+        [ConstantCategory("C_CODE_ABBR_CUSTOMER_VipLevel")]
         public string VipLevel
         {
             get;
@@ -258,6 +261,7 @@ namespace PPTS.Data.Customers.Entities
         /// </summary>
         [ORFieldMapping("Grade")]
         [DataMember]
+        [ConstantCategory("C_CODE_ABBR_CUSTOMER_GRADE")]
         public string Grade
         {
             get;
@@ -302,6 +306,7 @@ namespace PPTS.Data.Customers.Entities
         /// </summary>
         [ORFieldMapping("SourceMainType")]
         [DataMember]
+        [ConstantCategory("C_CODE_ABBR_BO_Customer_Source")]
         public string SourceMainType
         {
             get;
@@ -313,6 +318,7 @@ namespace PPTS.Data.Customers.Entities
         /// </summary>
         [ORFieldMapping("SourceSubType")]
         [DataMember]
+        [ConstantCategory("C_CODE_ABBR_BO_Customer_Source")]
         public string SourceSubType
         {
             get;
@@ -751,7 +757,7 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 创建时间
         /// </summary>
-        [ORFieldMapping("CreateTime")]
+        [ORFieldMapping("CreateTime", UtcTimeToLocal = true)]
         [DataMember]
         public DateTime CreateTime
         {

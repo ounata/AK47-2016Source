@@ -160,13 +160,15 @@
                     }
                 }
             }
+            // 如果不参与required验证，则不需要再进行其他规则验证
+            var skipRequiredValidation = validationResult && !mcs.util.hasAttrs(elem, 'required required-level') && $.trim(elem.val()).length == 0;
             // minlength
             if (validationResult && mcs.util.hasAttr(elem, 'minlength')) {
                 var minlength = parseInt(elem.attr('minlength'));
                 if (minlength > 0) {
                     validationResult = checkValidationResult(elem, {
                         errorMessage: elem.attr('data-validation-minlength-message') || mcs.util.format(config.minlength, minlength),
-                        validate: $.trim(elem.val()).length >= minlength
+                        validate: skipRequiredValidation || $.trim(elem.val()).length >= minlength
                     });
                 }
             }
@@ -176,7 +178,7 @@
                 if (maxlength > 0) {
                     validationResult = checkValidationResult(elem, {
                         errorMessage: elem.attr('data-validation-maxlength-message') || mcs.util.format(config.maxlength, maxlength),
-                        validate: $.trim(elem.val()).length <= maxlength
+                        validate: skipRequiredValidation || $.trim(elem.val()).length <= maxlength
                     });
                 }
             }
@@ -185,7 +187,7 @@
                 var min = parseFloat(elem.attr('min'));
                 validationResult = checkValidationResult(elem, {
                     errorMessage: elem.attr('data-validation-min-message') || mcs.util.format(config.min, min),
-                    validate: parseFloat($.trim(elem.val())) >= min
+                    validate: skipRequiredValidation || parseFloat($.trim(elem.val())) >= min
                 });
             }
             //max
@@ -193,35 +195,35 @@
                 var max = parseFloat(elem.attr('max'));
                 validationResult = checkValidationResult(elem, {
                     errorMessage: elem.attr('data-validation-max-message') || mcs.util.format(config.max, max),
-                    validate: parseFloat($.trim(elem.val())) <= max
+                    validate: skipRequiredValidation || parseFloat($.trim(elem.val())) <= max
                 });
             }
             //positive
             if (validationResult && mcs.util.hasAttr(elem, 'positive')) {
                 validationResult = checkValidationResult(elem, {
                     errorMessage: elem.attr('data-validation-positive-message') || config.positive,
-                    validate: ($.trim(elem.val()) == '0' || (/^[1-9]+[0-9]*$/).test($.trim(elem.val())))
+                    validate: skipRequiredValidation || ($.trim(elem.val()) == '0' || (/^[1-9]+[0-9]*$/).test($.trim(elem.val())))
                 });
             }
             //negative
             if (validationResult && mcs.util.hasAttr(elem, 'negative')) {
                 validationResult = checkValidationResult(elem, {
                     errorMessage: elem.attr('data-validation-negative-message') || config.negative,
-                    validate: ($.trim(elem.val()) == '0' || (/^-[1-9]+[0-9]*$/).test($.trim(elem.val())))
+                    validate: skipRequiredValidation || ($.trim(elem.val()) == '0' || (/^-[1-9]+[0-9]*$/).test($.trim(elem.val())))
                 });
             }
             //number
             if (validationResult && mcs.util.hasAttr(elem, 'number')) {
                 validationResult = checkValidationResult(elem, {
                     errorMessage: elem.attr('data-validation-number-message') || config.number,
-                    validate: (/^(([1-9]\d*)|0)(\.\d+)?$/).test($.trim(elem.val()))
+                    validate: skipRequiredValidation || (/^(([1-9]\d*)|0)(\.\d+)?$/).test($.trim(elem.val()))
                 });
             }
             //currency
             if (validationResult && mcs.util.hasAttr(elem, 'currency')) {
                 validationResult = checkValidationResult(elem, {
                     errorMessage: elem.attr('data-validation-currency-message') || config.currency,
-                    validate: (/^(([1-9]\d*)|0)(\.\d{1,2})?$/).test($.trim(elem.val()))
+                    validate: skipRequiredValidation || (/^(([1-9]\d*)|0)(\.\d{1,2})?$/).test($.trim(elem.val()))
                 });
             }
             //less
@@ -229,7 +231,7 @@
                 var less = parseFloat(elem.attr('less'));
                 validationResult = checkValidationResult(elem, {
                     errorMessage: elem.attr('data-validation-less-message') || mcs.util.format(config.less, less),
-                    validate: parseFloat($.trim(elem.val())) > less
+                    validate: skipRequiredValidation || parseFloat($.trim(elem.val())) > less
                 });
             }
             //great
@@ -237,7 +239,7 @@
                 var great = parseFloat(elem.attr('great'));
                 validationResult = checkValidationResult(elem, {
                     errorMessage: elem.attr('data-validation-great-message') || mcs.util.format(config.great, great),
-                    validate: parseFloat($.trim(elem.val())) < great
+                    validate: skipRequiredValidation || parseFloat($.trim(elem.val())) < great
                 });
             }
             //between
@@ -249,7 +251,7 @@
                     if (!isNaN(min) && !isNaN(max)) {
                         validationResult = checkValidationResult(elem, {
                             errorMessage: elem.attr('data-validation-between-message') || mcs.util.format(config.between, min, max),
-                            validate: parseFloat($.trim(elem.val())) >= min && parseFloat($.trim(elem.val())) <= max
+                            validate: skipRequiredValidation || (parseFloat($.trim(elem.val())) >= min && parseFloat($.trim(elem.val())) <= max)
                         });
                     }
                 }
@@ -258,21 +260,21 @@
             if (validationResult && mcs.util.hasAttr(elem, 'phone')) {
                 validationResult = checkValidationResult(elem, {
                     errorMessage: elem.attr('data-validation-phone-message') || config.phone,
-                    validate: (/(^1[34578]\d{9}$)|(^\d{3,4}-\d{7,8}-\d{1,5}$)|(^\d{3,4}-\d{7,8}$)/).test($.trim(elem.val()))
+                    validate: skipRequiredValidation || (/(^1[34578]\d{9}$)|(^\d{3,4}-\d{7,8}-\d{1,5}$)|(^\d{3,4}-\d{7,8}$)/).test($.trim(elem.val()))
                 });
             }
             //email
             if (validationResult && mcs.util.hasAttr(elem, 'email')) {
                 validationResult = checkValidationResult(elem, {
                     errorMessage: elem.attr('data-validation-email-message') || config.email,
-                    validate: (/^[0-9a-z][_.0-9a-z-]{0,31}@([0-9a-z][0-9a-z-]{0,30}[0-9a-z]\.){1,4}[a-z]{2,4}$/).test($.trim(elem.val()))
+                    validate: skipRequiredValidation || (/^[0-9a-z][_.0-9a-z-]{0,31}@([0-9a-z][0-9a-z-]{0,30}[0-9a-z]\.){1,4}[a-z]{2,4}$/).test($.trim(elem.val()))
                 });
             }
             //idcard
             if (validationResult && mcs.util.hasAttr(elem, 'idcard')) {
                 validationResult = checkValidationResult(elem, {
                     errorMessage: elem.attr('data-validation-idcard-message') || config.idcard,
-                    validate: (/^(\d{18,18}|\d{15,15}|\d{17,17}x|\d{17,17}X)$/).test($.trim(elem.val()))
+                    validate: skipRequiredValidation || (/^(\d{18,18}|\d{15,15}|\d{17,17}x|\d{17,17}X)$/).test($.trim(elem.val()))
                 });
             }
             //validate

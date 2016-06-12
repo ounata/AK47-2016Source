@@ -432,11 +432,11 @@ namespace MCS.Library.SOA.DataObjects
 			return list;
 		}
 
-		public override bool IsEmpty()
-		{
-			return this.Inserted.Count == 0 && this.Deleted.Count == 0 && this.Updated.Count == 0;
-		}
-	}
+        public override List<string> CreateNewInnerCollecction()
+        {
+            return new List<string>();
+        }
+    }
 
 	#endregion
 
@@ -597,11 +597,11 @@ namespace MCS.Library.SOA.DataObjects
 			return deltaMaterials;
 		}
 
-		public override bool IsEmpty()
-		{
-			return this.Inserted.Count == 0 && this.Deleted.Count == 0 && this.Updated.Count == 0;
-		}
-	}
+        public override MaterialModifyObjectCollection CreateNewInnerCollecction()
+        {
+            return new MaterialModifyObjectCollection();
+        }
+    }
 
 	/// <summary>
 	/// 附件对象的比较结果

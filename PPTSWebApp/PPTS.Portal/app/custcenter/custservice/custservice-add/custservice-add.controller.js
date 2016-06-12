@@ -1,11 +1,11 @@
 ﻿define([ppts.config.modules.custcenter,
         ppts.config.dataServiceConfig.custserviceDataService],
         function (customer) {
-            customer.registerController('custserviceAddController', ['$scope', '$state', 'custserviceDataService', 'custserviceDataViewService', 'dataSyncService', 'mcsDialogService',
+            customer.registerController('custserviceAddController', ['$scope', '$state', 'custserviceDataService', 'custserviceDataViewService', 'dataSyncService', 'mcsDialogService','mcsValidationService',
 
-                function ($scope, $state, custserviceDataService, custserviceDataViewService, dataSyncService, mcsDialogService) {
+                function ($scope, $state, custserviceDataService, custserviceDataViewService, dataSyncService, mcsDialogService, mcsValidationService) {
                     var vm = this;
-
+                    mcsValidationService.init($scope);
                     // 页面初始化加载
                     (function () {
                         custserviceDataViewService.initCreateCustomerServiceInfo(vm, function () {
@@ -15,11 +15,13 @@
 
                     // 保存数据
                     vm.save = function () {
-                        custserviceDataService.createCustomerService({
-                            customer: vm.customerService
-                        }, function () {
-                            $state.go('ppts.custservice');
-                        });
+                        if (mcsValidationService.run($scope)) {
+                            custserviceDataService.createCustomerService({
+                                customer: vm.customerService
+                            }, function () {
+                                $state.go('ppts.custservice');
+                            });
+                        }
                     };
 
                     vm.saveAndNext = function () {

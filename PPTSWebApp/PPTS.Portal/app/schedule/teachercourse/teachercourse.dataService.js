@@ -1,6 +1,6 @@
 ﻿define([ppts.config.modules.schedule], function (schedule) {
 
-    schedule.registerFactory('teacherCourseDataService', ['$resource', '$http', function ($resource, $http) {
+    schedule.registerFactory('teacherCourseDataService', ['$resource', 'autoCompleteDataService', function ($resource, autoCompleteDataService) {
 
         var resource = $resource(ppts.config.orderApiBaseUrl + 'api/teachercourse/:operation/:id',
         { operation: '@operation', id: '@id' },
@@ -10,7 +10,8 @@
         });
 
         resource.getTeacher = function (criteria, success, error) {
-            return $http.post(ppts.config.orderApiBaseUrl + 'api/teachercourse/getTeacher', criteria).then(success, error);
+            //return $http.post(ppts.config.orderApiBaseUrl + 'api/teachercourse/getTeacher', criteria).then(success, error);
+            return autoCompleteDataService.query(ppts.config.orderApiBaseUrl + 'api/teachercourse/getTeacher', criteria, success, error);
         }
 
         resource.getCurrUserCampus = function (success, error) {
@@ -44,6 +45,15 @@
         resource.markupAssign = function (criteria, success, error) {
             resource.post({ operation: 'markupAssign' }, criteria, success, error);
         }
+
+        resource.getWeekCourse = function (criteria, success, error) {
+            resource.post({ operation: 'getWeekCourse' }, criteria, success, error);
+        }
+
+        resource.initTchWeekCourse = function (criteria, success, error) {
+            resource.post({ operation: 'initTchWeekCourse' }, criteria, success, error);
+        }
+
 
         return resource;
     }]);

@@ -1,64 +1,42 @@
-﻿<!-- #开始：学大反馈.快速查询条件 -->
-<style>
-    .pad-left0 {
-        padding-left: 0px;
-    }
-
-    .margin-left2 {
-        padding-left: 12px;
-        margin-left: 10px;
-    }
-</style>
-
-<div class="mcs-panel-search well well-lg container-fluid">
-    <div class="portlet">
-        <div class="portlet-title line row-fluid">
-            <div class="caption">
-                <label class="quick-search"><i class="ace-icon fa fa-search bigger-125"></i> 快速查询</label>
-            </div>
+﻿<ppts-dynamic-content template="quick-search.tpl.html">
+    <div class="row">
+        <div class="col-md-8">
+            <ppts-select-branch model="vm.criteria.orgIds" />
         </div>
-
-        <div class="portlet-body">
-            <div class="ppts-oneline-block">
-                <div class="search-inline">
-                    <ppts-select-branch model="vm.criteria.orgIds"/>
-                </div>
-                <div class="search-inline" >
-                    <ppts-select class="ppts-select-search" category="grade" model="vm.criteria.grades" caption="学生年级" />
-                    
-                    <ppts-select class="ppts-select-search" category="replyType" model="vm.criteria.replyType" />
-                    <ppts-select class="ppts-select-search" category="replyObject" model="vm.criteria.replyObject" caption="互动岗位" />
-                </div>
-
-            </div>
-
-            <div class="ppts-oneline-block">
-
-
-                <ppts-daterangepicker class="search" start-date="vm.criteria.replyTimeStart" end-date="vm.criteria.replyTimeEnd" />
-
-
-                <mcs-input placeholder="员工姓名" model="vm.criteria.replierName" />
-                <mcs-input placeholder="学生姓名" model="vm.criteria.customerName" />
-                <mcs-input placeholder="学员编号" model="vm.criteria.customerCode" />
-                <mcs-button class="search-btn" category="search" click="vm.search()" />
-            </div>
-
-
-
-
+        <div class="col-md-4">
+            <ppts-daterangepicker start-date="vm.criteria.replyTimeStart" end-date="vm.criteria.replyTimeEnd" css="mcs-width-full mcs-padding-0" />
         </div>
-
-
-        
     </div>
-</div>
+    <div class="row">
+        <div class="col-md-4">
+            <ppts-select category="grade" model="vm.criteria.grades" caption="学生年级" css="mcs-padding-0" />
+        </div>
+        <div class="col-md-4">
+            <ppts-select category="replyType" model="vm.criteria.replyType" css="mcs-padding-0" caption="反馈类型"/>
+        </div>
+        <div class="col-md-4">
+            <ppts-select category="replyObject" model="vm.criteria.replyObject" caption="互动岗位" css="mcs-padding-0" />
+        </div>
 
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <mcs-input placeholder="员工姓名" uib-tooltip="员工姓名"  model="vm.criteria.replierName" css="mcs-input-search mcs-width-full" />
+        </div>
+        <div class="col-md-4">
+            <mcs-input placeholder="学生姓名" uib-tooltip="学生姓名"  model="vm.criteria.customerName" css="mcs-input-search mcs-width-full" />
+        </div>
+        <div class="col-md-4">
+            <mcs-input placeholder="学员编号" uib-tooltip="学员编号" model="vm.criteria.customerCode" css="mcs-input-search mcs-width-full" />
+        </div>
+
+    </div>
+</ppts-dynamic-content>
 <!-- /结束：学大反馈.快速查询条件 -->
 <!-- #开始：学大反馈.工具栏 -->
-<div class="mcs-panel-toolbar">
+<ppts-dynamic-content template="toolbar.tpl.html">
     <mcs-button category="export" click="vm.export()"></mcs-button>
-</div>
+</ppts-dynamic-content>
 <!-- #开始：学大反馈.数据表格 -->
 <mcs-datatable data="vm.data" />
 <!-- /结束：学大反馈.数据表格 -->

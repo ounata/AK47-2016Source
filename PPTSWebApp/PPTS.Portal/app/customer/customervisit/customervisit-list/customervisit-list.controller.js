@@ -29,6 +29,9 @@ define([ppts.config.modules.customer,
 
                         });
                     };
+                    vm.export = function () {
+                        mcs.util.postMockForm(ppts.config.customerApiBaseUrl + '/api/customervisits/exportCustomerVisit', vm.criteria);
+                    }
                     vm.search();
                    
                 }]);

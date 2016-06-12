@@ -6,6 +6,7 @@ using MCS.Library.Core;
 using PPTS.Data.Common.Security;
 using PPTS.Data.Customers.Executors;
 using PPTS.Data.Common;
+using System;
 
 namespace PPTS.WebAPI.Customers.Executors
 {
@@ -43,6 +44,7 @@ namespace PPTS.WebAPI.Customers.Executors
             Model.CustomerMeeting.CampusName = customer.CampusName;
             //修改当前操作人信息
             Model.CustomerMeeting.FillCreator();
+            Model.CustomerMeeting.CreateTime = DateTime.Now;
 
             CustomerMeetingAdapter.Instance.UpdateInContext(this.Model.CustomerMeeting);
             CustomerMeetingItemAdapter.Instance.Delete(x => x.AppendItem("MeetingID", Model.CustomerMeeting.MeetingID));

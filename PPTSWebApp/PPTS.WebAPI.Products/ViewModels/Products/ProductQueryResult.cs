@@ -11,5 +11,8 @@ namespace PPTS.WebAPI.Products.ViewModels.Products
         
         public PagedQueryResult<PPTS.Data.Products.Entities.ProductView, ProductViewCollection> QueryResult { get; set; }
         public IDictionary<string, IEnumerable<BaseConstantEntity>> Dictionaries { get; set; }
+
+        public CategoryEntityCollection Categories { set; get; }
+
     }
 }

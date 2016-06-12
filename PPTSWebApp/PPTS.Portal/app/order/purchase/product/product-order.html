@@ -1,33 +1,34 @@
-﻿
-<div class="mcs-panel-search well well-sm">
-    <div class="portlet">
-        <div class="portlet-title line">
-            <div class="caption">
-                <label class="quick-search"><i class="ace-icon fa fa-search bigger-125"></i> 快速查询条件</label>
-            </div>
+﻿<ppts-dynamic-content template="quick-search.tpl.html">
+    <div class="row">
+        <div class="col-md-4">
+            <ppts-select-branch model="vm.criteria.campusIDs" />
         </div>
-        <div class="portlet-body">
-            <div class="form-inline ">
-                <ppts-select-branch model="vm.criteria.orgIds" />
-
-                <span ng-if="type==1">
-                    <ppts-select class="form-group" category="categoryType" model="vm.criteria.categoryType" caption="产品类型" />
-                </span>
-                <span ng-if="type==2">
-                    <ppts-select class="form-group" category="categoryType" model="vm.criteria.categoryType" caption="产品类型" disabled="true" />
-                </span>
-
-                <ppts-select class="form-group" category="grade" model="vm.criteria.selectedGrades" caption="年级" />
-
-                <ppts-select class="form-group" category="subject" model="vm.criteria.selectedSubjects" caption="科目" />
-                <ppts-select class="form-group" category="courseLevel" model="vm.criteria.courseLevel" caption="课程级别" />
-                <ppts-select class="form-group" category="duration" model="vm.criteria.duration" caption="课时时长" />
-
-                <mcs-button category="search" click="vm.search()" size="medium" />
-            </div>
+        <div class="col-md-4">
+            <span ng-if="type==1">
+                <ppts-select category="categoryType" model="vm.criteria.categoryType" caption="产品类型" css="mcs-padding-0" />
+            </span>
+            <span ng-if="type==2">
+                <ppts-select category="categoryType" model="vm.criteria.categoryType" caption="产品类型" disabled="true" css="mcs-padding-0" />
+            </span>
+        </div>
+        <div class="col-md-4">
+            <ppts-select category="grade" model="vm.criteria.selectedGrades" caption="年级" css="mcs-padding-0" />
         </div>
     </div>
-</div>
+    <div class="row">
+        <div class="col-md-4">
+            <ppts-select category="subject" model="vm.criteria.selectedSubjects" caption="科目" css="mcs-padding-0" />
+        </div>
+        <div class="col-md-4">
+            <ppts-select category="courseLevel" model="vm.criteria.courseLevel" caption="课程级别" css="mcs-padding-0" />
+        </div>
+        <div class="col-md-4">
+            <ppts-select category="duration" model="vm.criteria.duration" caption="课时时长" css="mcs-padding-0" />
+        </div>
+    </div>
+</ppts-dynamic-content>
+
+
 <!-- /结束：订购列表.查询条件 -->
 <!-- #开始：订购列表.工具条 -->
 <div class="mcs-panel-toolbar">

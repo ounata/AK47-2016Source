@@ -9,8 +9,8 @@
 define([ppts.config.modules.infra,
         ppts.config.dataServiceConfig.servicefeeDataService],
         function (customer) {
-            customer.registerController('servicefeeListController', ['$scope', 'servicefeeDataViewService', '$state', 'utilService', 'servicefeeDataService',
-                function ($scope, servicefeeDataViewService, $state, util, servicefeeDataService) {
+            customer.registerController('servicefeeListController', ['$scope', 'servicefeeDataViewService', '$state', 'utilService', 'servicefeeDataService','mcsDialogService',
+                function ($scope, servicefeeDataViewService, $state, util, servicefeeDataService, mcsDialogService) {
                     var vm = this;
 
                     // 配置跟列表数据表头
@@ -33,16 +33,24 @@ define([ppts.config.modules.infra,
                     }
                     vm.delete = function () {
                         if (util.selectMultiRows(vm)) {
-                            var expenseIds = [];
-                            for(var index in vm.data.rowsSelected){
-                                expenseIds.push(vm.data.rowsSelected[index].expenseID);
-                            }
-                            servicefeeDataService.delExpenses(expenseIds, function () {
-                                vm.search();
+                            mcsDialogService.confirm({
+                                title: 'confirm',
+                                message: '确认删除吗?'
+                            }).result.then(function (reslut) {
+                                if ("yes" == reslut) {
+                                    var expenseIds = [];
+                                    for(var index in vm.data.rowsSelected){
+                                        expenseIds.push(vm.data.rowsSelected[index].expenseID);
+                                    }
+                                    servicefeeDataService.delExpenses(expenseIds, function () {
+                                        vm.search();
+                                    });
+                                }
                             });
+                           
                         }
                     }
-                   
+                    
                     vm.search();
                 }]);
         });

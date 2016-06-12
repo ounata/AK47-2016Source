@@ -25,7 +25,8 @@
     [PasswordNotRequired] INT NULL DEFAULT 0, 
     [DontExpirePassword] INT NULL DEFAULT 0, 
     [AccountExpires] DATETIME NULL, 
-    [AccountInspires] DATETIME NULL, 
+    [AccountInspires] DATETIME NULL,
+	[EmployeeID] NVARCHAR(36),
     [Comment] NVARCHAR(255) NULL, 
     CONSTRAINT [PK_SchemaUser] PRIMARY KEY CLUSTERED ([ID] ASC, [VersionStartTime] DESC)
 );

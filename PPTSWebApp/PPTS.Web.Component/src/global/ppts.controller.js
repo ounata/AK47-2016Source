@@ -2,6 +2,10 @@
     var vm = this;
     user.initJob(vm);
 
+    vm.toggle = function () {
+        vm.hideSidebar = !vm.hideSidebar;
+    };
+
     vm.switch = function (job) {
         user.switchJob(vm, job);
     };

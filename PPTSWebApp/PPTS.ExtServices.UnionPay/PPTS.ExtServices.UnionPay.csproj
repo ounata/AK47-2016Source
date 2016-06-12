@@ -156,7 +156,6 @@
     <Compile Include="Models\Statement\UnionPaySourceType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="Validation\DescriptionAttribute.cs" />
     <Compile Include="Validation\ValidateAttribute.cs" />
     <Compile Include="Validation\ValidateExecutor.cs" />
     <Compile Include="Validation\ValidateModel.cs" />

@@ -27,7 +27,7 @@
             })
             .loadRoute($stateProvider, {
                 name: 'ppts.productAdd.onetoone',
-                url: '/onetoone',
+                url: '/onetoone?loadtype=:ltype&typename=:lname',
                 breadcrumb: {
                     label: '添加产品',
                     parent: 'ppts.product'
@@ -35,7 +35,7 @@
                 templateUrl: 'app/product/productlist/product-add/product-add-onetoone.html',
             }).loadRoute($stateProvider, {
                 name: 'ppts.productAdd.classgroup',
-                url: '/classgroup',
+                url: '/classgroup?loadtype=:ltype&typename=:lname',
                 breadcrumb: {
                     label: '添加产品',
                     parent: 'ppts.product'
@@ -43,7 +43,7 @@
                 templateUrl: 'app/product/productlist/product-add/product-add-classgroup.html',
             }).loadRoute($stateProvider, {
                 name: 'ppts.productAdd.youxue',
-                url: '/youxue',
+                url: '/youxue?loadtype=:ltype&typename=:lname',
                 breadcrumb: {
                     label: '添加产品',
                     parent: 'ppts.product'
@@ -51,7 +51,7 @@
                 templateUrl: 'app/product/productlist/product-add/product-add-other.html',
             }).loadRoute($stateProvider, {
                 name: 'ppts.productAdd.wukeshou',
-                url: '/wukeshou',
+                url: '/wukeshou?loadtype=:ltype&typename=:lname',
                 breadcrumb: {
                     label: '添加产品',
                     parent: 'ppts.product'
@@ -59,7 +59,7 @@
                 templateUrl: 'app/product/productlist/product-add/product-add-other.html',
             }).loadRoute($stateProvider, {
                 name: 'ppts.productAdd.other',
-                url: '/other',
+                url: '/other?loadtype=:ltype&typename=:lname',
                 breadcrumb: {
                     label: '添加产品',
                     parent: 'ppts.product'

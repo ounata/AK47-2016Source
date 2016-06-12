@@ -4,22 +4,20 @@ using MCS.Library.Net.SNTP;
 using MCS.Library.OGUPermission;
 using MCS.Library.Principal;
 using MCS.Web.MVC.Library.Filters;
-using PPTS.Data.Common;
 using PPTS.Data.Common.Adapters;
 using PPTS.Data.Common.Entities;
 using PPTS.Data.Common.Security;
 using PPTS.Data.Customers;
 using PPTS.Data.Customers.Adapters;
-using PPTS.Data.Customers.DataSources;
 using PPTS.Data.Customers.Entities;
 using PPTS.Data.Customers.Executors;
+using PPTS.WebAPI.Customers.DataSources;
 using PPTS.WebAPI.Customers.Executors;
 using PPTS.WebAPI.Customers.ViewModels.Accounts;
 using PPTS.WebAPI.Customers.ViewModels.PotentialCustomers;
 using PPTS.WebAPI.Customers.ViewModels.Students;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web.Http;
 
 namespace PPTS.WebAPI.Customers.Controllers
@@ -39,15 +37,15 @@ namespace PPTS.WebAPI.Customers.Controllers
         {
             return new StudentQueryResult
             {
-                QueryResult = GenericCustomerDataSource<Customer, CustomerCollection>.Instance.Query(criteria.PageParams, criteria, criteria.OrderBy),
-                Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(Customer))
+                QueryResult = CustomerSearchDataSource.Instance.LoadCustomerSearch(criteria.PageParams, criteria, criteria.OrderBy),
+                Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(CustomerSearch))
             };
         }
 
         [HttpPost]
-        public PagedQueryResult<Customer, CustomerCollection> GetPagedStudents(StudentQueryCriteriaModel criteria)
+        public PagedQueryResult<StudentQueryResultModel, StudentQueryResultModelCollection> GetPagedStudents(StudentQueryCriteriaModel criteria)
         {
-            return GenericCustomerDataSource<Customer, CustomerCollection>.Instance.Query(criteria.PageParams, criteria, criteria.OrderBy);
+            return CustomerSearchDataSource.Instance.LoadCustomerSearch(criteria.PageParams, criteria, criteria.OrderBy);
         }
 
         #endregion

@@ -11,10 +11,9 @@ namespace PPTS.ExtServices.UnionPay.Controllers
 {
     public class PPTSUnionPaySaleController : ApiController
     {
-        [Route("api/PPTSUnionPaySale/PutStatement")]
+        [Route("api/PPTSUnionPaySale/PostStatement")]
         [HttpPost]
-        [HttpGet]
-        public ResponseModel PutStatement([FromBody]StatementModel model)
+        public ResponseModel PostStatement([FromBody]StatementModel model)
         {
             ResponseModel response = new ResponseModel();
 

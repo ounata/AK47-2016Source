@@ -73,6 +73,10 @@
     <Reference Include="MCS.Library.Data">
       <HintPath>..\..\Bin\MCS.Library.Data.dll</HintPath>
     </Reference>
+    <Reference Include="MCS.Library.Office.OpenXml.Excel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=62ea08f894871798, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Bin\MCS.Library.Office.OpenXml.Excel.dll</HintPath>
+    </Reference>
     <Reference Include="MCS.Library.OGUPermission, Version=1.3.0.0, Culture=neutral, PublicKeyToken=62ea08f894871798, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Bin\MCS.Library.OGUPermission.dll</HintPath>
@@ -119,6 +123,8 @@
     <Compile Include="Adapters\ExportQueryHelper.cs" />
     <Compile Include="Adapters\LogCategoryAdapter.cs" />
     <Compile Include="Adapters\RoleDisplayItemAdapter.cs" />
+    <Compile Include="Adapters\RolesFunctionsImporter.cs" />
+    <Compile Include="Adapters\SchemaObjectAdapter_Members.cs" />
     <Compile Include="Adapters\SCOperationSnapshotAdapter.cs" />
     <Compile Include="Conditions\SCBuiltInFunctionsCalculator.cs" />
     <Compile Include="Conditions\SCCalculatorObjectCache.cs" />
@@ -264,6 +270,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Schemas\Constants.cs" />
     <Compile Include="Schemas\Delegations.cs" />
+    <Compile Include="Schemas\DeltaSchemaObjectCollection.cs" />
     <Compile Include="Schemas\Enums.cs" />
     <Compile Include="Schemas\Interfaces.cs" />
     <Compile Include="Schemas\SchemaDefine.cs" />
@@ -279,6 +286,8 @@
     <Compile Include="Schemas\SchemaObjectPhotoKey.cs" />
     <Compile Include="Schemas\SchemaOperationDefine.cs" />
     <Compile Include="Schemas\SCOperationSnapshot.cs" />
+    <Compile Include="Schemas\SCRoleAndDeltaPermission.cs" />
+    <Compile Include="Schemas\SCRolesAndPermissions.cs" />
     <Compile Include="Schemas\UserAndContainerSnapshot.cs" />
     <Compile Include="Adapters\UserPasswordAdapter.cs" />
     <Compile Include="Tasks\SCToDoJobList.cs" />
@@ -391,6 +400,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Adapters\Templates\QueryObjectAndRelationByParentID_Current.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Adapters\Templates\QueryRolePermissions.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Adapters\Templates\QueryRolePermissions_Current.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

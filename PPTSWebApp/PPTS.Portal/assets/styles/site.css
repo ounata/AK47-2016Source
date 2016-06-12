@@ -143,11 +143,19 @@ ppts-search .input-group .form-control {
 .ppts-oneline-block {
     display: inline-block;
 }
-/**已对帐显示红色*/
-.ppts-checked-color{
+/**未对帐显示红色*/
+.ppts-unchecked-color{
     color:red;
+}
+/**已对帐显示绿色*/
+.ppts-checked-color{
+    color:green;
 }
 
 tags-input.lg  .tags{
     width:500px !important;
+}
+
+.datatable-header {
+   width:250px;
 }

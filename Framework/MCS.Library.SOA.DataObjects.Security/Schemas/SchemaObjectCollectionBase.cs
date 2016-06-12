@@ -13,197 +13,206 @@ using MCS.Library.SOA.DataObjects.Schemas.SchemaProperties;
 
 namespace MCS.Library.SOA.DataObjects.Security
 {
-	[Serializable]
-	public abstract class SchemaObjectCollectionBase<T, TFilterResult> :
-		EditableDataObjectCollectionBase<T>
-		where T : SchemaObjectBase
-		where TFilterResult : EditableDataObjectCollectionBase<T>
-	{
-		/// <summary>
-		/// 创建过滤结果的集合
-		/// </summary>
-		/// <returns></returns>
-		protected abstract TFilterResult CreateFilterResultCollection();
+    [Serializable]
+    public abstract class SchemaObjectCollectionBase<T, TFilterResult> :
+        EditableDataObjectCollectionBase<T>
+        where T : SchemaObjectBase
+        where TFilterResult : EditableDataObjectCollectionBase<T>
+    {
+        /// <summary>
+        /// 创建过滤结果的集合
+        /// </summary>
+        /// <returns></returns>
+        protected abstract TFilterResult CreateFilterResultCollection();
 
-		public virtual void AddRange(IEnumerable<T> source)
-		{
-			foreach (T item in source)
-			{
-				this.Add(item);
-			}
-		}
+        public virtual void AddRange(IEnumerable<T> source)
+        {
+            foreach (T item in source)
+            {
+                this.Add(item);
+            }
+        }
 
-		/// <summary>
-		/// 获取按状态进行过滤的结果的集合
-		/// </summary>
-		/// <param name="filter"><see cref="SchemaObjectStatusFilterTypes"/>值之一，表示过滤的类型</param>
-		/// <returns></returns>
-		public TFilterResult FilterByStatus(SchemaObjectStatusFilterTypes filter)
-		{
-			TFilterResult result = CreateFilterResultCollection();
+        /// <summary>
+        /// 获取按状态进行过滤的结果的集合
+        /// </summary>
+        /// <param name="filter"><see cref="SchemaObjectStatusFilterTypes"/>值之一，表示过滤的类型</param>
+        /// <returns></returns>
+        public TFilterResult FilterByStatus(SchemaObjectStatusFilterTypes filter)
+        {
+            TFilterResult result = CreateFilterResultCollection();
 
-			foreach (T obj in this)
-			{
-				if ((filter & SchemaObjectStatusFilterTypes.Normal) != SchemaObjectStatusFilterTypes.None &&
-					obj.Status == SchemaObjectStatus.Normal)
-				{
-					result.Add(obj);
-				}
+            foreach (T obj in this)
+            {
+                if ((filter & SchemaObjectStatusFilterTypes.Normal) != SchemaObjectStatusFilterTypes.None &&
+                    obj.Status == SchemaObjectStatus.Normal)
+                {
+                    result.Add(obj);
+                }
 
-				if ((filter & SchemaObjectStatusFilterTypes.Deleted) != SchemaObjectStatusFilterTypes.None &&
-					obj.Status == SchemaObjectStatus.Deleted)
-				{
-					result.Add(obj);
-				}
-			}
+                if ((filter & SchemaObjectStatusFilterTypes.Deleted) != SchemaObjectStatusFilterTypes.None &&
+                    obj.Status == SchemaObjectStatus.Deleted)
+                {
+                    result.Add(obj);
+                }
+            }
 
-			return result;
-		}
+            return result;
+        }
 
-		public void LoadFromDataView(DataView view)
-		{
-			foreach (DataRowView drv in view)
-			{
-				T obj = (T)SchemaExtensions.CreateObject((string)drv["SchemaType"]);
+        public void LoadFromDataView(DataView view)
+        {
+            foreach (DataRowView drv in view)
+            {
+                T obj = (T)SchemaExtensions.CreateObject((string)drv["SchemaType"]);
 
-				obj.FromString((string)drv["Data"]);
+                obj.FromString((string)drv["Data"]);
 
-				ORMapping.DataRowToObject(drv.Row, obj);
+                ORMapping.DataRowToObject(drv.Row, obj);
 
-				this.Add(obj);
-			}
-		}
-	}
+                this.Add(obj);
+            }
+        }
+    }
 
-	[Serializable]
-	public abstract class SchemaObjectEditableKeyedCollectionBase<T, TFilterResult> :
-		SerializableEditableKeyedDataObjectCollectionBase<string, T>
-		where T : SchemaObjectBase
-		where TFilterResult : EditableKeyedDataObjectCollectionBase<string, T>
-	{
-		public SchemaObjectEditableKeyedCollectionBase()
-			: base(100)
-		{
-		}
+    [Serializable]
+    public abstract class SchemaObjectEditableKeyedCollectionBase<T, TFilterResult> :
+        SerializableEditableKeyedDataObjectCollectionBase<string, T>
+        where T : SchemaObjectBase
+        where TFilterResult : EditableKeyedDataObjectCollectionBase<string, T>
+    {
+        public SchemaObjectEditableKeyedCollectionBase()
+            : base(100)
+        {
+        }
 
-		public SchemaObjectEditableKeyedCollectionBase(int capacity)
-			: base(capacity)
-		{
-		}
+        public SchemaObjectEditableKeyedCollectionBase(int capacity)
+            : base(capacity)
+        {
+        }
 
-		protected SchemaObjectEditableKeyedCollectionBase(SerializationInfo info, StreamingContext context) :
-			base(info, context)
-		{
-		}
+        protected SchemaObjectEditableKeyedCollectionBase(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
 
-		/// <summary>
-		/// 创建过滤结果的集合
-		/// </summary>
-		/// <returns></returns>
-		protected abstract TFilterResult CreateFilterResultCollection();
+        /// <summary>
+        /// 创建过滤结果的集合
+        /// </summary>
+        /// <returns></returns>
+        protected abstract TFilterResult CreateFilterResultCollection();
 
-		public TFilterResult FilterByStatus(SchemaObjectStatusFilterTypes filter)
-		{
-			TFilterResult result = CreateFilterResultCollection();
+        public IEnumerable<TFilterType> FilterByType<TFilterType>() where TFilterType : SchemaObjectBase
+        {
+            foreach (SchemaObjectBase obj in this)
+            {
+                if (obj is TFilterType)
+                    yield return (TFilterType)obj;
+            }
+        }
 
-			foreach (T obj in this)
-			{
-				if ((filter & SchemaObjectStatusFilterTypes.Normal) != SchemaObjectStatusFilterTypes.None &&
-					obj.Status == SchemaObjectStatus.Normal)
-				{
-					result.Add(obj);
-				}
+        public TFilterResult FilterByStatus(SchemaObjectStatusFilterTypes filter)
+        {
+            TFilterResult result = CreateFilterResultCollection();
 
-				if ((filter & SchemaObjectStatusFilterTypes.Deleted) != SchemaObjectStatusFilterTypes.None &&
-					obj.Status == SchemaObjectStatus.Deleted)
-				{
-					result.Add(obj);
-				}
-			}
+            foreach (T obj in this)
+            {
+                if ((filter & SchemaObjectStatusFilterTypes.Normal) != SchemaObjectStatusFilterTypes.None &&
+                    obj.Status == SchemaObjectStatus.Normal)
+                {
+                    result.Add(obj);
+                }
 
-			return result;
-		}
+                if ((filter & SchemaObjectStatusFilterTypes.Deleted) != SchemaObjectStatusFilterTypes.None &&
+                    obj.Status == SchemaObjectStatus.Deleted)
+                {
+                    result.Add(obj);
+                }
+            }
 
-		public void LoadFromDataView(DataView view, Action<DataRow, T> action)
-		{
-			Dictionary<string, ObjectSchemaConfigurationElement> schemaElements = new Dictionary<string, ObjectSchemaConfigurationElement>(StringComparer.OrdinalIgnoreCase);
+            return result;
+        }
 
-			ObjectSchemaSettings settings = ObjectSchemaSettings.GetConfig();
+        public void LoadFromDataView(DataView view, Action<DataRow, T> action)
+        {
+            Dictionary<string, ObjectSchemaConfigurationElement> schemaElements = new Dictionary<string, ObjectSchemaConfigurationElement>(StringComparer.OrdinalIgnoreCase);
 
-			foreach (DataRowView drv in view)
-			{
-				string schemaType = (string)drv["SchemaType"];
+            ObjectSchemaSettings settings = ObjectSchemaSettings.GetConfig();
 
-				ObjectSchemaConfigurationElement schemaElement = null;
+            foreach (DataRowView drv in view)
+            {
+                string schemaType = (string)drv["SchemaType"];
 
-				if (schemaElements.TryGetValue(schemaType, out schemaElement) == false)
-				{
-					schemaElement = settings.Schemas[schemaType];
+                ObjectSchemaConfigurationElement schemaElement = null;
 
-					schemaElements.Add(schemaType, schemaElement);
-				}
+                if (schemaElements.TryGetValue(schemaType, out schemaElement) == false)
+                {
+                    schemaElement = settings.Schemas[schemaType];
 
-				if (schemaElement != null)
-				{
-					T obj = (T)schemaElement.CreateInstance(schemaType);
+                    schemaElements.Add(schemaType, schemaElement);
+                }
 
-					obj.FromString((string)drv["Data"]);
+                if (schemaElement != null)
+                {
+                    T obj = (T)schemaElement.CreateInstance(schemaType);
 
-					ORMapping.DataRowToObject(drv.Row, obj);
+                    obj.FromString((string)drv["Data"]);
 
-					if (action != null)
-						action(drv.Row, obj);
+                    ORMapping.DataRowToObject(drv.Row, obj);
 
-					if (this.ContainsKey(obj.ID) == false)
-						this.Add(obj);
-				}
-			}
-		}
+                    if (action != null)
+                        action(drv.Row, obj);
 
-		public void LoadFromDataView(DataView view)
-		{
-			LoadFromDataView(view, null);
-		}
+                    if (this.ContainsKey(obj.ID) == false)
+                        this.Add(obj);
+                }
+            }
+        }
 
-		public void LoadFromDataReader(IDataReader reader)
-		{
-			Dictionary<string, ObjectSchemaConfigurationElement> schemaElements = new Dictionary<string, ObjectSchemaConfigurationElement>(StringComparer.OrdinalIgnoreCase);
+        public void LoadFromDataView(DataView view)
+        {
+            LoadFromDataView(view, null);
+        }
 
-			ObjectSchemaSettings settings = ObjectSchemaSettings.GetConfig();
+        public void LoadFromDataReader(IDataReader reader)
+        {
+            Dictionary<string, ObjectSchemaConfigurationElement> schemaElements = new Dictionary<string, ObjectSchemaConfigurationElement>(StringComparer.OrdinalIgnoreCase);
 
-			while (reader.Read())
-			{
-				string schemaType = (string)reader["SchemaType"];
-				ObjectSchemaConfigurationElement schemaElement = null;
+            ObjectSchemaSettings settings = ObjectSchemaSettings.GetConfig();
 
-				if (schemaElements.TryGetValue(schemaType, out schemaElement) == false)
-				{
-					schemaElement = settings.Schemas[schemaType];
+            while (reader.Read())
+            {
+                string schemaType = (string)reader["SchemaType"];
+                ObjectSchemaConfigurationElement schemaElement = null;
 
-					schemaElements.Add(schemaType, schemaElement);
-				}
+                if (schemaElements.TryGetValue(schemaType, out schemaElement) == false)
+                {
+                    schemaElement = settings.Schemas[schemaType];
 
-				if (schemaElement != null)
-				{
-					T obj = (T)schemaElement.CreateInstance(schemaType);
+                    schemaElements.Add(schemaType, schemaElement);
+                }
 
-					obj.FromString((string)reader["Data"]);
+                if (schemaElement != null)
+                {
+                    T obj = (T)schemaElement.CreateInstance(schemaType);
 
-					ORMapping.DataReaderToObject(reader, obj);
+                    obj.FromString((string)reader["Data"]);
 
-					if (this.ContainsKey(obj.ID) == false)
-						this.Add(obj);
-				}
-			}
-		}
+                    ORMapping.DataReaderToObject(reader, obj);
 
-		public string[] ToIDArray()
-		{
-			List<string> result = new List<string>(this.Count);
+                    if (this.ContainsKey(obj.ID) == false)
+                        this.Add(obj);
+                }
+            }
+        }
 
-			this.ForEach(s => result.Add(s.ID));
+        public string[] ToIDArray()
+        {
+            List<string> result = new List<string>(this.Count);
 
-			return result.ToArray();
-		}
-	}
+            this.ForEach(s => result.Add(s.ID));
+
+            return result.ToArray();
+        }
+    }
 }

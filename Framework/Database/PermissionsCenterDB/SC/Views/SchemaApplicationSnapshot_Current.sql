@@ -21,6 +21,10 @@ CREATE UNIQUE INDEX [IX_SchemaApplicationSnapshot_Current_RowID] ON [SC].[Schema
 
 GO
 
+CREATE INDEX [IX_SchemaApplicationSnapshot_Current_Name] ON [SC].[SchemaGroupSnapshot_Current] ([Name])
+
+GO
+
 CREATE INDEX [IX_SchemaApplicationSnapshot_Current_CodeName] ON [SC].[SchemaApplicationSnapshot_Current] ([CodeName])
 
 GO

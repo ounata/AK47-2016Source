@@ -177,3 +177,21 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level1name = N'SchemaOrganizationSnapshot',
     @level2type = N'COLUMN',
     @level2name = N'DepartmentType'
+GO
+	EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'部门拼音简称',
+    @level0type = N'SCHEMA',
+    @level0name = N'SC',
+    @level1type = N'TABLE',
+    @level1name = N'SchemaOrganizationSnapshot',
+    @level2type = N'COLUMN',
+    @level2name = N'SimplePinyin'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'部门拼音全称',
+    @level0type = N'SCHEMA',
+    @level0name = N'SC',
+    @level1type = N'TABLE',
+    @level1name = N'SchemaOrganizationSnapshot',
+    @level2type = N'COLUMN',
+    @level2name = N'FullPinyin'

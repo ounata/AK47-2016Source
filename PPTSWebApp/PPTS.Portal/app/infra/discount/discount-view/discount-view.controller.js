@@ -65,8 +65,8 @@
                                     }
                                 }
                                 else {
-                                    standard = '0';
-                                    value = '0';
+                                    standard = '-';
+                                    value = '-';
                                 }
                                 discountData.rows.push({
                                     stall: i + 1,

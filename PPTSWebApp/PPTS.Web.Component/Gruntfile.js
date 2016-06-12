@@ -4,12 +4,12 @@
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         concat: {
-            startup: {
+            ppts_startup: {
                 src: ['src/startup/mcs.js',
             		  'src/config/ppts.config.js'],
                 dest: 'build/ppts.startup.js'
             },
-            global: {
+            ppts_global: {
                 src: ['src/global/ppts.head.js',
                       'src/global/ppts.controller.js',
                       'src/global/ppts.route.js',
@@ -19,6 +19,21 @@
                       'src/global/ppts.interceptor.js',
                       'src/global/ppts.tail.js'],
                 dest: 'build/ppts.global.js'
+            },
+            component_startup: {
+                src: ['src/startup/mcs.js',
+            		  'samples/common/config/ppts.config.js'],
+                dest: 'samples/build/ppts.startup.js'
+            },
+            component_global: {
+                src: ['samples/common/global/ppts.head.js',
+                      'samples/common/global/ppts.controller.js',
+                      'samples/common/global/ppts.route.js',
+                      'samples/common/global/ppts.service.js',
+                      'src/global/ppts.directive.js',
+                      'src/global/ppts.interceptor.js',
+                      'src/global/ppts.tail.js'],
+                dest: 'samples/build/ppts.global.js'
             }
         },
         uglify: {

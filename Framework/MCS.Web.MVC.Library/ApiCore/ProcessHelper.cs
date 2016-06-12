@@ -92,8 +92,8 @@ namespace MCS.Web.MVC.Library.ApiCore
             IMaterialContentPersistManager persistManager =
                         GetMaterialContentPersistManager(material.ID, destFileInfo);
 
-            using (Stream stream = persistManager.GetMaterialContent(material.ID))
-            {
+            Stream stream = persistManager.GetMaterialContent(material.ID);
+            
                 result.Content = new StreamContent(stream);
 
                 result.Content.Headers.ContentType =
@@ -103,9 +103,11 @@ namespace MCS.Web.MVC.Library.ApiCore
                 {
                     FileName = HttpContext.Current.EncodeFileNameByBrowser(material.OriginalName)
                 };
-            }
 
+
+           
             return result;
+
         }
 
         public static MaterialModelCollection ProcessMaterialUpload(this HttpRequestMessage request)
@@ -147,14 +149,41 @@ namespace MCS.Web.MVC.Library.ApiCore
 
                 MaterialModel material = uploadModel.GenerateMaterial();
 
+               
+
                 IMaterialContentPersistManager persistManager = GetMaterialContentPersistManager(material.ID,
                     GetTempUploadFilePath(material.ID, uploadModel.RootPathName, uploadModel.OriginalName));
 
                 persistManager.SaveTempMaterialContent(material.ID, fileContent.ReadAsStreamAsync().Result);
+
+                //write DB
+                var content = UploadMaterialWriteDB(material);
+
                 materials.Add(material);
             }
 
             return materials;
+        }
+
+        public static MaterialContent UploadMaterialWriteDB(MaterialModel model)
+        {
+            MaterialModel material = model;
+
+            MaterialModelCollection materials = new MaterialModelCollection();
+
+            materials.Add(material);
+
+            MaterialModelHelper helper = MaterialModelHelper.GetInstance("DataAccessTest");
+
+            helper.Update(materials);
+
+            Material loaded = helper.LoadByResourceID(material.ResourceID).FirstOrDefault();
+
+
+
+            MaterialContent content = MaterialContentAdapter.Instance.Load(loaded.ID);
+
+            return content;
         }
 
         private static IMaterialContentPersistManager GetMaterialContentPersistManager(string contentID, FileInfo destFile)

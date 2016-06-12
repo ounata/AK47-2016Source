@@ -1,4 +1,5 @@
 ﻿using MCS.Library.Data.DataObjects;
+using MCS.Library.Data.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,7 @@ namespace PPTS.Data.Customers.Entities
     /// </summary>
     [Serializable]
     [DataContract]
+    [ORTableMapping("CM.CustomerParentPhone_Current")]
     public class CustomerParentPhone
     {
         [DataMember]

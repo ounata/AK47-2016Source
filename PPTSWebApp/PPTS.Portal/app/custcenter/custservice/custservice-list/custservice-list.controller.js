@@ -15,6 +15,9 @@
                             vm.searchItems = searchItems;
                         });
                     };
+                    vm.export = function () {
+                        mcs.util.postMockForm(ppts.config.customerApiBaseUrl + '/api/customerservices/exportCustomerService', vm.criteria);
+                    }
                     vm.search();
                 }]);
         });

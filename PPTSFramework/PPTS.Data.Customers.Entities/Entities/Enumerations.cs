@@ -7,6 +7,8 @@ namespace PPTS.Data.Customers
     /// </summary>
     public enum CustomerRelationType
     {
+        [EnumItemDescription("建党关系")]
+        Creator = 0,
         [EnumItemDescription("咨询关系")]
         Consultant = 1,
         [EnumItemDescription("学管关系")]
@@ -673,10 +675,187 @@ namespace PPTS.Data.Customers
         /// <summary>
         /// 否
         /// </summary>
+        [EnumItemDescription("否")]
         No,
         /// <summary>
         /// 是
         /// </summary>
+        [EnumItemDescription("是")]
         Yes
     }
+
+    /// <summary>
+    /// 归属关系是否已分配
+    /// </summary>
+    public enum StaffRelationIsAssigned
+    {
+        /// <summary>
+        /// 否
+        /// </summary>
+        [EnumItemDescription("否")]
+        No,
+        /// <summary>
+        /// 是
+        /// </summary>
+        [EnumItemDescription("是")]
+        Yes
+    }
+
+    #region 学员管理学员状态
+
+    /// <summary>
+    /// 学员状态
+    /// </summary>
+    public enum CustomerTypeDefine
+    {
+        /// <summary>
+        /// 有效学员
+        /// </summary>
+        [EnumItemDescription("有效学员")]
+        Valid = 1,
+        /// <summary>
+        /// 上课学员
+        /// </summary>
+        [EnumItemDescription("上课学员")]
+        Attend,
+        /// <summary>
+        /// 停课学员
+        /// </summary>
+        [EnumItemDescription("停课学员")]
+        Stop,
+        /// <summary>
+        /// 休学学员
+        /// </summary>
+        [EnumItemDescription("休学学员")]
+        Suspend,
+        /// <summary>
+        /// 结课学员
+        /// </summary>
+        [EnumItemDescription("结课学员")]
+        Completed,
+        /// <summary>
+        /// 无订单学员
+        /// </summary>
+        [EnumItemDescription("无订单学员")]
+        NoOrder,
+    }
+
+    /// <summary>
+    /// 有效学员二级
+    /// </summary>
+    public enum ValidDefine
+    {
+        /// <summary>
+        /// 1对1有效
+        /// </summary>
+        [EnumItemDescription("1对1有效")]
+        OneToOneValid = 1,
+        /// <summary>
+        /// 班组有效
+        /// </summary>
+        [EnumItemDescription("班组有效")]
+        ClassValid,
+        /// <summary>
+        /// 非课收有效
+        /// </summary>
+        [EnumItemDescription("非课收有效")]
+        OtherValid
+    }
+
+    /// <summary>
+    /// 上课学员二级
+    /// </summary>
+    public enum AttendDefine
+    {
+        /// <summary>
+        /// 1对1上课
+        /// </summary>
+        [EnumItemDescription("1对1上课")]
+        OneToOneAttend = 1,
+        /// <summary>
+        /// 班组上课
+        /// </summary>
+        [EnumItemDescription("班组上课")]
+        ClassAttend,
+        /// <summary>
+        /// 非课收上课
+        /// </summary>
+        [EnumItemDescription("非课收上课")]
+        OtherAttend
+    }
+
+    /// <summary>
+    /// 停课学员二级
+    /// </summary>
+    public enum StopDefine
+    {
+        /// <summary>
+        /// 1对1停课
+        /// </summary>
+        [EnumItemDescription("1对1停课")]
+        OneToOneStop = 1,
+        /// <summary>
+        /// 班组停课
+        /// </summary>
+        [EnumItemDescription("班组停课")]
+        ClassStop
+    }
+
+    /// <summary>
+    /// 休学学员二级
+    /// </summary>
+    public enum SuspendDefine
+    {
+        /// <summary>
+        /// 1对1停课
+        /// </summary>
+        [EnumItemDescription("1对1休学")]
+        OneToOneSuspend = 1,
+        /// <summary>
+        /// 班组停课
+        /// </summary>
+        [EnumItemDescription("班组休学")]
+        ClassSuspend
+    }
+
+    /// <summary>
+    /// 结课学员二级
+    /// </summary>
+    public enum CompletedDefine
+    {
+        /// <summary>
+        /// 消耗结课
+        /// </summary>
+        [EnumItemDescription("上课结课")]
+        ConsumeCompleted = 1,
+        /// <summary>
+        /// 退费结课
+        /// </summary>
+        [EnumItemDescription("退费结课")]
+        ReturnCompleted,
+        /// <summary>
+        /// 转让结课
+        /// </summary>
+        [EnumItemDescription("转让结课")]
+        TransferCompleted
+    }
+
+    /// <summary>
+    /// 时长判断方式
+    /// </summary>
+    public enum DateTypeDefine
+    {
+        /// <summary>
+        /// 按最后上课时间判断时长
+        /// </summary>
+        [EnumItemDescription("按最后上课时间判断时长")]
+        LastCourse,
+        /// <summary>
+        /// 未上过课按付款时间判断时长
+        /// </summary>
+        [EnumItemDescription("未上过课按付款时间判断时长")]
+        LastPay
+    }
+
+    #endregion 
 }

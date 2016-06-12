@@ -1,18 +1,12 @@
-﻿
-<div class="mcs-panel-search well well-sm">
-    <div class="portlet">
-        <div class="portlet-title line">
-            <div class="caption">
-                <label class="quick-search"><i class="ace-icon fa fa-search bigger-125"></i> 快速查询条件</label>
-            </div>
-        </div>
-        <div class="portlet-body">
-            <mcs-input placeholder="班级名称" model="vm.criteria.className" />
-
-            <mcs-button category="search" click="vm.search()" size="medium" />
+﻿<ppts-dynamic-content template="quick-search.tpl.html">
+    <div class="row">
+        <div class="col-md-4">
+            <mcs-input placeholder="班级名称"  css="mcs-input-search mcs-width-full"  model="vm.criteria.className" />
         </div>
     </div>
-</div>
+</ppts-dynamic-content>
+
+
 <!-- /结束：订购列表.查询条件 -->
 <!-- #开始：订购列表.工具条 -->
 <div class="mcs-panel-toolbar">

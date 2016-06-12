@@ -2,9 +2,9 @@
         ppts.config.dataServiceConfig.teacherAssignmentDataService], function (schedule) {
             schedule.registerController("tchAsgmtCourseController", [
                 '$scope', '$state', '$stateParams', '$filter', 'dataSyncService', '$compile'
-                 , '$uibModal', 'blockUI', '$http', 'teacherAssignmentDataService', 'mcsDialogService', 'uiCalendarConfig', 'printService',
+                 , '$uibModal', '$http', 'teacherAssignmentDataService', 'mcsDialogService', 'uiCalendarConfig', 'printService',
                 function ($scope, $state, $stateParams, $filter, dataSyncService, $compile
-                , $uibModal, blockUI, $http, teacherAssignmentDataService, mcsDialogService, uiCalendarConfig, printService) {
+                , $uibModal, $http, teacherAssignmentDataService, mcsDialogService, uiCalendarConfig, printService) {
                     var vm = this;
 
                     vm.print = function () {
@@ -78,7 +78,6 @@
                     var firstExec = true;
                     vm.result = {};
                     vm.schedules = function (start, end, timezone, callback) {
-                        blockUI.start();
                         vm.acQM.startTime = start;
                         vm.acQM.endTime = end;
                         teacherAssignmentDataService.getTeacherWeekCourse(vm.acQM, function (data) {
@@ -88,20 +87,17 @@
                                 var evt = vm.getViewModel(event);
                                 vm.events.push(evt);
                             });
-                            blockUI.stop();
                             if (firstExec) {
                                 firstExec = false;
                                 $scope.$broadcast('dictionaryReady');
                             };
                         },
                         function (error) {
-                            blockUI.stop();
                         });
                     };
                     vm.eventSources = [vm.events, vm.schedules];
 
                     vm.reLoadCourse = function () {
-                        blockUI.start();
                         vm.events.splice(0, vm.events.length);
                         teacherAssignmentDataService.getTeacherWeekCourse(vm.acQM, function (data) {
                             var assignCollection = data.result;
@@ -110,10 +106,8 @@
                                 vm.events.push(evt);
                             });
                             uiCalendarConfig.calendars.courseCalendar.fullCalendar('rerenderEvents');
-                            blockUI.stop();
                         },
                         function (error) {
-                            blockUI.stop();
                         });
                     };
 

@@ -87,6 +87,22 @@ namespace MCS.Library.Data.Executors
         }
 
         /// <summary>
+        /// 操作完成以后，事务提交之前
+        /// </summary>
+        /// <param name="context"></param>
+        protected virtual void BeforeTransactionComplete(DataExecutionContext<TLogs> context)
+        {
+        }
+
+        /// <summary>
+        /// 事务完成以后
+        /// </summary>
+        /// <param name="context"></param>
+        protected virtual void AfterTransactionCompleted(DataExecutionContext<TLogs> context)
+        {
+        }
+
+        /// <summary>
         /// 准备操作日志
         /// </summary>
         /// <param name="context"></param>
@@ -144,14 +160,19 @@ namespace MCS.Library.Data.Executors
                 {
                     ExecutionWrapper("DoOperation", () => result = DoOperation(context));
                     ExecutionWrapper("PersistOperationLog", () => PersistOperationLog(context));
+                    ExecutionWrapper("BeforeTransactionComplete", () => BeforeTransactionComplete(context));
 
                     scope.Complete();
                 }
+
+                ExecutionWrapper("AfterTransactionCompleted", () => AfterTransactionCompleted(context));
             }
             else
             {
                 ExecutionWrapper("DoOperation", () => result = DoOperation(context));
                 ExecutionWrapper("PersistOperationLog", () => PersistOperationLog(context));
+                ExecutionWrapper("BeforeTransactionComplete", () => BeforeTransactionComplete(context));
+                ExecutionWrapper("AfterTransactionCompleted", () => AfterTransactionCompleted(context));
             }
 
             return result;

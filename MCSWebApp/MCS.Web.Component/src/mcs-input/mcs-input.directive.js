@@ -12,7 +12,7 @@
                 readonly: '@',
                 css: '@',
                 customStyle: '@',
-                datatype: '@', //int, float
+                datatype: '@', //int, number, string
                 model: '='
             },
             template: '<input placeholder="{{placeholder}}" class="mcs-default-size-input mcs-margin-right-20 {{css}}" ng-model="model" style="{{customStyle}}"/>',
@@ -25,7 +25,7 @@
                     $elem.bind('keyup afterpaste', function () {
                         mcs.util.limit($elem);
                     });
-                } else if (dataType == 'float') {
+                } else if (dataType == 'number') {
                     $elem.bind('keyup afterpaste', function () {
                         mcs.util.number($elem);
                     });

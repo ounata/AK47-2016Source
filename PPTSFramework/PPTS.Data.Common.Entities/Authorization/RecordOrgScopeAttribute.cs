@@ -15,6 +15,11 @@ namespace PPTS.Data.Common.Authorization
         /// 授权机构类型
         /// </summary>
         public OrgType OrgType { get; set; }
+        
+        /// <summary>
+        /// 授权关系类型
+        /// </summary>
+        public RelationType RelationType { get; set; }
 
         /// <summary>
         /// 被授权记录类型

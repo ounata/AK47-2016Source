@@ -1,37 +1,39 @@
-﻿<div class="datatable-container table-responsive">
-    <table class="table table-striped table-bordered table-hover">
-        <thead class="thin-border-bottom">
-            <tr id="dataHeaders">
-                <th ng-show="data.selection" class="center" width="40">
-                    <label ng-show="data.selection=='checkbox'" class="position-relative">
-                        <input class="ace" type="{{data.selection}}" ng-disabled="data.pager.totalCount==0" ng-click="selectAll()" ng-checked="data.selectAll" ng-model="data.selectAll">
-                        <span class="lbl"></span>
-                    </label>
-                </th>
-                <th ng-repeat="header in data.headers" style="cursor: pointer" ng-click="reorder(header,data.pager.pageChange)">
-                    {{header.name}}
-                    <i ng-if="header.sortable" ng-class="{undefined:'fa fa-sort','desc':'fa fa-sort-alpha-desc','asc':'fa fa-sort-alpha-asc'}[header.orderDirection]"></i>
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr mcs-datatable-row ng-show="!data.pagable || data.pager.totalCount>0" ng-repeat="row
+﻿<div>
+    <div class="table-responsive">
+        <table style="overflow-x: auto;" class="table table-striped table-bordered table-hover">
+            <thead class="thin-border-bottom">
+                <tr id="dataHeaders">
+                    <th ng-show="data.selection" class="center noprint" width="40">
+                        <label ng-show="data.selection=='checkbox'" class="position-relative">
+                            <input class="ace" type="{{data.selection}}" ng-disabled="data.pager.totalCount==0" ng-click="selectAll()" ng-checked="data.selectAll" ng-model="data.selectAll">
+                            <span class="lbl"></span>
+                        </label>
+                    </th>
+                    <th ng-repeat="header in data.headers" style="cursor: pointer" ng-click="reorder(header,data.pager.pageChange)">
+                        {{header.name}}
+                        <i ng-if="header.sortable" ng-class="{undefined:'fa fa-sort','desc':'fa fa-sort-alpha-desc','asc':'fa fa-sort-alpha-asc'}[header.orderDirection]"></i>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr mcs-datatable-row ng-show="!data.pagable || data.pager.totalCount>0" ng-repeat="row
  in data.rows" ng-class="{'mcs-tr-selected': row.selected,'mcs-tr-highlight':row.highlight}">
-                <td ng-show="data.selection" class="center">
-                    <label class="position-relative">
-                        <input class="ace" type="{{data.selection}}" ng-click="rowSelect(row)" ng-checked="row.selected==true" ng-model="row.selected">
-                        <span class="lbl"></span>
-                    </label>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+                    <td ng-show="data.selection" class="center noprint">
+                        <label class="position-relative">
+                            <input class="ace" type="{{data.selection}}" ng-click="rowSelect(row)" ng-checked="row.selected==true" ng-model="row.selected">
+                            <span class="lbl"></span>
+                        </label>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
     <div ng-show="data.pager.totalCount==0">
         <div class="center well well-sm red bigger-110">
             没有查询到任何记录，请重新设置条件查询。
         </div>
     </div>
-    <div ng-if="data.pagable || data.pager.totalCount>0">
+    <div class="noprint" ng-if="data.pagable || data.pager.totalCount>0">
         <div class="mcs-padding-0">
             <div class="well well-sm mcs-panel-pager">
                 <tm-pagination conf="data.pager" page-change="pageChange(data.pager.pageChange)"></tm-pagination>

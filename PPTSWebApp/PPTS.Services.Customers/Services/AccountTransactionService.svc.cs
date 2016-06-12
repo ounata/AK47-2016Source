@@ -53,5 +53,19 @@ namespace PPTS.Services.Customers.Services
                 });
             });
         }
+
+        [WfJsonFormatter]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        public void SyncExpense(string processID, CustomerExpenseRelationCollection collection)
+        {
+            TxProcessExecutor.GetExecutor(processID).PrepareData(tp =>
+            {
+                tp.CurrentActivity.Context["CustomerExpenseRelationCollection"] = collection;
+            }).ExecuteMoveTo(tp =>
+            {
+                CustomerExpenseRelationAdapter.Instance.SyncOrderExpenseRelation(collection);
+            });
+            
+        }
     }
 }

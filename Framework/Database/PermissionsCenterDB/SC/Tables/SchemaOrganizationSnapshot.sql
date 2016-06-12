@@ -16,6 +16,8 @@
 	[WP] NVARCHAR(36) NULL, 
     [Address] NVARCHAR(MAX) NULL,
 	[DepartmentType] NVARCHAR(32) NULL,
+	[SimplePinyin] NVARCHAR(32) NULL,
+	[FullPinyin] NVARCHAR(255) NULL,
 	[CreatorID] NVARCHAR(36) NULL, 
     [CreatorName] NVARCHAR(255) NULL,
     [Comment] NVARCHAR(255) NULL,
@@ -31,4 +33,3 @@ GO
 CREATE INDEX [IX_SchemaOrganizationSnapshot_CodeName] ON [SC].[SchemaOrganizationSnapshot] ([CodeName])
 
 GO
-

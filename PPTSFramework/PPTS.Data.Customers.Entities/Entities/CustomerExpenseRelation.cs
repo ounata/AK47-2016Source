@@ -21,22 +21,11 @@ namespace PPTS.Data.Customers.Entities
         public CustomerExpenseRelation()
         {
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        [ORFieldMapping("ID", PrimaryKey = true)]
-        [DataMember]
-        public string ID
-        {
-            get;
-            set;
-        }
-
+        
         /// <summary>
         /// 学员ID
         /// </summary>
-        [ORFieldMapping("CustomerID")]
+        [ORFieldMapping("CustomerID", PrimaryKey = true)]
         [DataMember]
         public string CustomerID
         {
@@ -47,7 +36,7 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 费用ID
         /// </summary>
-        [ORFieldMapping("ExpenseID")]
+        [ORFieldMapping("ExpenseID", PrimaryKey = true)]
         [DataMember]
         public string ExpenseID
         {
@@ -83,6 +72,17 @@ namespace PPTS.Data.Customers.Entities
         [ORFieldMapping("AccountID")]
         [DataMember]
         public string AccountID
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 关联订单id
+        /// </summary>
+        [ORFieldMapping("OrderID")]
+        [DataMember]
+        public string OrderID
         {
             get;
             set;

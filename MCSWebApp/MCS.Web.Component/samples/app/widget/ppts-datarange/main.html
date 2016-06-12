@@ -23,6 +23,7 @@
                     <h3 class="header smaller lighter green">应用范例</h3>
                     <div>
                         默认用法：<ppts-datarange min="vm.minAmount" max="vm.maxAmount" /><br/>
+                        设置数据类型：<ppts-datarange min-text="最小年龄" max-text="最大年龄" min="vm.minAge" max="vm.maxAge" datatype="int"/><br />
                         更换单位：<ppts-datarange min="vm.minAmount" max="vm.maxAmount" unit="万元"/><br />
                         修改默认显示文字：<ppts-datarange min="vm.minAmount" max="vm.maxAmount" min-text="充值金额起" max-text="充值金额止" css="col-xs-4 col-sm-4" /><hr />
                         <span>起始金额：{{vm.minAmount}}, 截止金额：{{vm.maxAmount}}</span>
@@ -35,6 +36,7 @@
                         <pre class="codes">
                         <code><b>Html</b></code><br />
                         默认用法：&lt;ppts-datarange min="vm.minAmount" max="vm.maxAmount" /&gt;&lt;br/&gt;
+                        设置数据类型：&lt;ppts-datarange min-text="最小年龄" max-text="最大年龄" min="vm.minAge" max="vm.maxAge" datatype="int" /&gt;&lt;br/&gt;
                         更换单位：&lt;ppts-datarange min="vm.minAmount" max="vm.maxAmount" unit="万元"/&gt;&lt;br /&gt;
                         修改默认显示文字：&lt;ppts-datarange min="vm.minAmount" max="vm.maxAmount" min-text="充值金额起" max-text="充值金额止" css="col-xs-4 col-sm-4" /&gt;&lt;hr /&gt;
                         &lt;span&gt;起始金额：{{vm.minAmount}}, 截止金额：{{vm.maxAmount}}&lt;/span&gt;
@@ -93,6 +95,15 @@
                                 <td>否</td>
                                 <td>"截止金额"</td>
                                 <td>&lt;ppts-datarange min="vm.minAmount" max="vm.maxAmount" min-text="充值金额起" max-text="充值金额止" /&gt;</td>
+                            </tr>
+                            <tr>
+                                <td><code>datatype</code></td>
+                                <td>设置文本框的<code>数据类型</code></td>
+                                <td>int,number</td>
+                                <td>number</td>
+                                <td>
+                                    &lt;ppts-datarange min-text="最小年龄" max-text="最大年龄" min="vm.minAge" max="vm.maxAge" datatype="int" /&gt;
+                                </td>
                             </tr>
                             <tr>
                                 <td><code>css</code></td>

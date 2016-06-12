@@ -180,7 +180,7 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
     public class AssignQMBase
     {
         /// 学区ID
-        public string CustomerCampusID { get; set; }
+        public string CampusID { get; set; }
         ///开始日期
         public DateTime StartTime { get; set; }
         ///结束日期

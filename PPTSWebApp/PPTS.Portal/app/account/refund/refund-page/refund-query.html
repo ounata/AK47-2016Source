@@ -1,91 +1,25 @@
 ﻿<!-- 高级查询条件 -->
-<div id="accordion" class="accordion-style1 panel-group">
-    <div class="panel panel-info">
-        <div class="panel-heading">
-            <h4 class="panel-title">
-                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#advance-search">
-                    <i class="ace-icon fa fa-angle-right bigger-110" data-icon-hide="fa-angle-down" data-icon-show="fa-angle-right"></i>
-                    &nbsp;高级查询
-                </a>
-            </h4>
-        </div>
-        <div class="panel-collapse collapse mcs-advance-search" id="advance-search">
-            <div class="panel-body">
-                <div class="profile-user-info mcs-user-profile follow-list">
-                    <div class="profile-info-row">
-                        <div class="profile-info-name">业务终审日期：</div>
-                        <div class="profile-info-value">
-                            <ppts-daterangepicker startDate="vm.criteria.applyTimeStart" endDate="vm.criteria.applyTimeEnd" />
-                        </div>
-                    </div>
-                    <div class="profile-info-row">
-                        <div class="profile-info-name">财务终审日期：</div>
-                        <div class="profile-info-value">
-                            <ppts-daterangepicker startDate="vm.criteria.verifyTimeStart" endDate="vm.criteria.verifyTimeEnd" />
-                        </div>
-                    </div>
-                    <div class="profile-info-row">
-                        <div class="profile-info-name">退款确认状态：</div>
-                        <div class="profile-info-value">
-                            <ppts-checkbox-group category="refundVerifyStatus" model="vm.criteria.verifyStatuses" clear="vm.criteria.verifyStatuses=[]" />
-                        </div>
-                    </div>
-                    <div class="profile-info-row">
-                        <div class="profile-info-name">退款操作人：</div>
-                        <div class="profile-info-value">
-
-                        </div>
-                    </div>
-                    <div class="profile-info-row">
-                        <div class="profile-info-name">对账状态：</div>
-                        <div class="profile-info-value">
-                            <ppts-checkbox-group category="checkStatus" model="vm.criteria.checkStatuses" clear="vm.criteria.checkStatuses=[]" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<ppts-dynamic-content template="advance-search.tpl.html" />
 <!-- 快速查询条件 -->
-<div class="mcs-panel-search well well-sm">
-    <div class="portlet">
-        <div class="portlet-title line">
-            <div class="caption">
-                <label class="quick-search"><i class="ace-icon fa fa-search bigger-125"></i> 快速查询</label>
-            </div>
+<ppts-dynamic-content template="quick-search.tpl.html">
+    <div class="row">
+        <div class="col-md-6">
+            <ppts-select-branch model="vm.criteria.campusIDs" />
         </div>
-        <div class="portlet-body">
-            <div class="input-group input-xlarge mcs-input-group pull-left">
-                <mcs-input placeholder="选择大区/分公司/校区" model="vm.names" readonly="true" css="form-control mcs-input-search" />
-                <span class="input-group-btn">
-                    <button class="btn btn-sm btn-info" type="button" ng-click="vm.selectOrgTree()">
-                        <i class="ace-icon fa fa-check bigger-110"></i>
-                        选择
-                    </button>
-                </span>
-            </div>
-            <mcs-input placeholder="学员/家长姓名" model="vm.criteria.customerOrParentName" css="mcs-input-search" />
-            <mcs-input placeholder="学员编号" model="vm.criteria.customerCode" css="mcs-input-search" />
-            <mcs-button category="search" click="vm.search()" size="medium" />
+        <div class="col-md-3">
+            <mcs-input placeholder="学员/家长姓名" model="vm.criteria.customerOrParentName" css="mcs-input-search mcs-width-full" />
+        </div>
+        <div class="col-md-3">
+            <mcs-input placeholder="学员编号" model="vm.criteria.customerCode" css="mcs-input-search mcs-width-full" />
         </div>
     </div>
-</div>
+</ppts-dynamic-content>
 <!-- 工具栏 -->
-<div class="mcs-panel-toolbar">
-    <mcs-button category="ok" text="分出纳确认" click="vm.cashierVerify()"></mcs-button>
-    <mcs-button category="ok" text="分财务确认" click="vm.financeVerify()"></mcs-button>
-    <mcs-button category="ok" text="分区域确认" click="vm.regionVerify()"></mcs-button>
+<ppts-dynamic-content template="toolbar.tpl.html">
+    <mcs-dropdown-button title="确 认" items="vm.verifyMenus" icon="check" category="success"></mcs-dropdown-button>
+    <mcs-button category="approve" text="对 账" click="vm.check()"></mcs-button>
     <mcs-button category="print" text="打印凭证" click="vm.showPrint()"></mcs-button>
-    <mcs-button category="approve" text="对账" click="vm.check()"></mcs-button>
     <mcs-button category="export"></mcs-button>
-</div>
-<div class="alert alert-block alert-danger" ng-show="vm.errorMessage">
-    <button type="button" class="close" data-dismiss="alert">
-        <i class="ace-icon fa fa-times"></i>
-    </button>
-    <i class="ace-icon fa fa-warning"></i>
-    {{vm.errorMessage}}
-</div>
+</ppts-dynamic-content>
 <!-- 数据表格 -->
 <mcs-datatable data="vm.data" />

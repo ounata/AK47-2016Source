@@ -32,8 +32,7 @@ namespace PPTS.WebAPI.Products.Executors
 
         protected override void PrepareData(DataExecutionContext<UserOperationLogCollection> context)
         {
-            base.PrepareData(context);
-
+            
             this.Model.FillProduct()
                     .FillExOfCourse()
                     .FillSalaryRules()
@@ -48,9 +47,15 @@ namespace PPTS.WebAPI.Products.Executors
             ProductSalaryRuleAdapter.Instance.UpdateByProductIDInContext(this.Model.Product.ProductID, this.Model.SalaryRules);
             ProductPermissionAdapter.Instance.UpdateByProductIDInContext(this.Model.Product.ProductID, this.Model.Permissions);
 
-
+            base.PrepareData(context);
         }
-        
+
+        protected override void Validate()
+        {
+            Model.Validate();
+            base.Validate();
+        }
+
         /// <summary>
         /// 准备日志信息
         /// </summary>

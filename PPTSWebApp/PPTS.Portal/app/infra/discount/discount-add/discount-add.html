@@ -10,25 +10,26 @@
             <div class="form-actions">
                 <div class="row">
                     <div class="col-md-offset-3 col-md-9">
-                        <mcs-button category="save" text="提交审批" click="vm.save()"></mcs-button>
+                        <mcs-button category="submit" click="vm.save()"></mcs-button>
                         <mcs-button category="cancel" text="返回" click="$state.go('ppts.discount')"></mcs-button>
                     </div>
                 </div>
             </div>
             <div class="form-body">
-                <h4 class="form-section"><i class="ace-icon fa fa-th"></i> {{vm.discount.discountName}}</h4>
+                <h4 class="form-section"><i class="ace-icon fa fa-th"></i> {{(vm.discount.discountName?vm.discount.discountName:'折扣表信息')}}</h4>
                 <div class="row">
                     <div class="form-group horizontal">
                         <mcs-label required="true" text="启用日期" css="col-sm-3" />
-                        <div class="col-sm-4"><!--选择启用日期-->
-                            <ppts-datepicker model="vm.criteria.startDate" class="inline-ppts-datepicker" required />
+                        <div class="col-sm-4">
+                            <!--选择启用日期-->
+                            <ppts-datepicker placeholder="选择启用日期" model="vm.criteria.startDate" class="inline-ppts-datepicker" required />
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="form-group horizontal">
                         <mcs-label required="true" text="选择校区" css="col-sm-3" />
-                        <div class="col-sm-4">
+                        <div class="col-sm-4" style="width:327px;">
                             <ppts-select-branch model="vm.criteria.orgIds" callback="vm.selectBranch" required />
                         </div>
                     </div>
@@ -69,7 +70,7 @@
                     <span>3. 最后一档充值额只需填写比前一档高的金额即可，系统会自动显示为前一档最高金额到无穷大的样式；</span>
                 </div>
                 <div class="row">
-                    <span>4. 校区显示该折扣表提交时所有选择的校区，已停用表示：该校区已经不再使用当前折扣表；如果一个校区重复提交并审批通过未到启用日期的折扣表，有可能导致结束日期早于启用日期[2016.05.20 修改]；</span>
+                    <span>4. 校区显示该折扣表提交时所有选择的校区，已停用表示：该校区已经不再使用当前折扣表；如果一个校区重复提交并审批通过未到启用日期的折扣表，有可能导致结束日期早于启用日期。</span>
                 </div>
             </div>
         </form>

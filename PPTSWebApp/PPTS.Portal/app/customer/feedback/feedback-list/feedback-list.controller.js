@@ -28,16 +28,22 @@ define([ppts.config.modules.customer,
                                 vm.criteria.replyObjects.push(vm.criteria.replyType);
                             }
                             vm.criteria.replyObjects.push(vm.criteria.replyObject);
-                            
+
+                        }
+                        if (vm.criteria) {
+                            if ("" == vm.criteria.replyObject)
+                                vm.criteria.replyObject = undefined;
                         }
                         feedbackDataViewService.initFeedbackList(vm, function () {
                             //vm.searchItems = searchItems;
+
                             $scope.$broadcast('dictionaryReady');
                         });
                     };
                     vm.export = function () {
-                        mcs.util.postMockForm(ppts.config.customerApiBaseUrl+'/api/feedback/exportCustomerReplies', vm.criteria);
+                        mcs.util.postMockForm(ppts.config.customerApiBaseUrl + '/api/feedback/exportCustomerReplies', vm.criteria);
                     }
                     vm.search();
+                    vm.criteria.replyObject = "2";
                 }]);
         });

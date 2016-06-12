@@ -53,6 +53,104 @@ namespace PPTS.Data.Common.Authorization
         /// </summary>
         /// <returns></returns>
         public abstract CourseOrgAuthorizationAdapterBase GetCourseOrgAuthorizationAdapter();
+
+        /// <summary>
+        /// 课时所有者操作权限Adpter
+        /// </summary>
+        /// <returns></returns>
+        public abstract CourseRelationAuthorizationAdpterBase GetCourseRelationAuthorizationAdpter();
+        #endregion
+
+        #region 权限Builder拼接查询条件
+        private WhereSqlClauseBuilder BuilderRelationExistsWhereBuilder(string objectID,
+            string owenerColumnName, RecordType ownerType)
+        {
+            WhereSqlClauseBuilder whereBuilder = new WhereSqlClauseBuilder();
+            whereBuilder.AppendItem("ObjectID", objectID)
+                .AppendItem("OwnerID", owenerColumnName, "=", true)
+                .AppendItem("OwnerType", (int)ownerType);
+            return whereBuilder;
+        }
+
+        private WhereSqlClauseBuilder BuilderRelationExistsWhereBuilder(string objectID, RelationType objectType,
+            string owenerColumnName, RecordType ownerType)
+        {
+            WhereSqlClauseBuilder whereBuilder = new WhereSqlClauseBuilder();
+            whereBuilder.AppendItem("ObjectID", objectID)
+                .AppendItem("ObjectType", (int)objectType)
+                .AppendItem("OwnerID", owenerColumnName, "=", true)
+                .AppendItem("OwnerType", (int)ownerType);
+            return whereBuilder;
+        }
+
+        private WhereSqlClauseBuilder BuilderRelationWhereBuilder(string objectID,
+            string ownerID, RecordType ownerType)
+        {
+            WhereSqlClauseBuilder whereBuilder = new WhereSqlClauseBuilder();
+            whereBuilder.AppendItem("ObjectID", objectID)
+               .AppendItem("OwnerID", ownerID)
+                .AppendItem("OwnerType", (int)ownerType);
+            return whereBuilder;
+        }
+
+        private WhereSqlClauseBuilder BuilderRelationWhereBuilder(string objectID, RelationType objectType,
+            string ownerID, RecordType ownerType)
+        {
+            WhereSqlClauseBuilder whereBuilder = new WhereSqlClauseBuilder();
+            whereBuilder.AppendItem("ObjectID", objectID)
+                .AppendItem("ObjectType", (int)objectType)
+                .AppendItem("OwnerID", ownerID)
+                .AppendItem("OwnerType", (int)ownerType);
+            return whereBuilder;
+        }
+
+        private WhereSqlClauseBuilder BuilderOrgExistsWhereBuilder(string objectID, OrgType objectType, RelationType relationType,
+            string owenerColumnName, RecordType ownerType)
+        {
+            WhereSqlClauseBuilder whereBuilder = new WhereSqlClauseBuilder();
+            whereBuilder.AppendItem("ObjectID", objectID)
+                .AppendItem("ObjectType", (int)objectType)
+                .AppendItem("RelationType", (int)relationType)
+                .AppendItem("OwnerID", owenerColumnName, "=", true)
+                .AppendItem("OwnerType", (int)ownerType);
+            return whereBuilder;
+        }
+
+        private WhereSqlClauseBuilder BuilderOrgWhereBuilder(string objectID, OrgType objectType, RelationType relationType,
+            string ownerID, RecordType ownerType)
+        {
+            WhereSqlClauseBuilder whereBuilder = new WhereSqlClauseBuilder();
+            whereBuilder.AppendItem("ObjectID", objectID)
+                .AppendItem("ObjectType", (int)objectType)
+                .AppendItem("RelationType", (int)relationType)
+                .AppendItem("OwnerID", ownerID)
+                .AppendItem("OwnerType", (int)ownerType);
+            return whereBuilder;
+        }
+
+        private WhereSqlClauseBuilder BuilderOrgExistsWhereBuilder(string objectID, OrgType objectType,
+            string owenerColumnName, RecordType ownerType)
+        {
+            WhereSqlClauseBuilder whereBuilder = new WhereSqlClauseBuilder();
+            whereBuilder.AppendItem("ObjectID", objectID)
+                .AppendItem("ObjectType", (int)objectType)
+                .AppendItem("OwnerID", owenerColumnName, "=", true)
+                .AppendItem("OwnerType", (int)ownerType);
+            return whereBuilder;
+        }
+
+        private WhereSqlClauseBuilder BuilderOrgWhereBuilder(string objectID, OrgType objectType,
+            string ownerID, RecordType ownerType)
+        {
+            WhereSqlClauseBuilder whereBuilder = new WhereSqlClauseBuilder();
+            whereBuilder.AppendItem("ObjectID", objectID)
+                .AppendItem("ObjectType", (int)objectType)
+                .AppendItem("OwnerID", ownerID)
+                .AppendItem("OwnerType", (int)ownerType);
+            return whereBuilder;
+        }
+
+
         #endregion
 
         #region 权限Builder
@@ -92,7 +190,7 @@ namespace PPTS.Data.Common.Authorization
             return result.AppendItem(null, sql, null, true);
         }
 
-        protected WhereSqlClauseBuilder CourseOrgWhereBuilder(WhereSqlClauseBuilder requestBuilder)
+        private WhereSqlClauseBuilder CourseOrgWhereBuilder(WhereSqlClauseBuilder requestBuilder)
         {
             WhereSqlClauseBuilder result = new WhereSqlClauseBuilder();
             CourseOrgAuthorizationAdapterBase adapter = GetCourseOrgAuthorizationAdapter();
@@ -101,65 +199,13 @@ namespace PPTS.Data.Common.Authorization
             return result.AppendItem(null, sql, null, true);
         }
 
-        private WhereSqlClauseBuilder BuilderExistsWhereBuilder(string objectID, string objectType,
-            string owenerColumnName, string ownerType)
+        private WhereSqlClauseBuilder CourseRelationWhereBuilder(WhereSqlClauseBuilder requestBuilder)
         {
-            WhereSqlClauseBuilder whereBuilder = new WhereSqlClauseBuilder();
-            whereBuilder.AppendItem("ObjectID", objectID)
-                .AppendItem("ObjectType", objectType)
-                .AppendItem("OwnerID", owenerColumnName, "=", true)
-                .AppendItem("OwnerType", ownerType);
-            return whereBuilder;
-        }
-
-        private WhereSqlClauseBuilder BuilderExistsWhereBuilder(string objectType,
-            string owenerColumnName, string ownerType)
-        {
-            WhereSqlClauseBuilder whereBuilder = new WhereSqlClauseBuilder();
-            whereBuilder.AppendItem("ObjectType", objectType)
-                .AppendItem("OwnerID", owenerColumnName, "=", true)
-                .AppendItem("OwnerType", ownerType);
-            return whereBuilder;
-        }
-
-        private WhereSqlClauseBuilder BuilderExistsWhereBuilder(
-            string owenerColumnName, string ownerType)
-        {
-            WhereSqlClauseBuilder whereBuilder = new WhereSqlClauseBuilder();
-            whereBuilder.AppendItem("OwnerID", owenerColumnName, "=", true)
-                .AppendItem("OwnerType", ownerType);
-            return whereBuilder;
-        }
-
-
-        private WhereSqlClauseBuilder BuilderSelectWhereBuilder(string objectID, string objectType,
-            string ownerID, string ownerType)
-        {
-            WhereSqlClauseBuilder whereBuilder = new WhereSqlClauseBuilder();
-            whereBuilder.AppendItem("ObjectID", objectID)
-                .AppendItem("ObjectType", objectType)
-                .AppendItem("OwnerID", ownerID)
-                .AppendItem("OwnerType", ownerType);
-            return whereBuilder;
-        }
-
-        private WhereSqlClauseBuilder BuilderSelectWhereBuilder(string objectType,
-           string ownerID, string ownerType)
-        {
-            WhereSqlClauseBuilder whereBuilder = new WhereSqlClauseBuilder();
-            whereBuilder.AppendItem("ObjectType", objectType)
-                .AppendItem("OwnerID", ownerID)
-                .AppendItem("OwnerType", ownerType);
-            return whereBuilder;
-        }
-
-        private WhereSqlClauseBuilder BuilderSelectWhereBuilder(
-   string ownerID, string ownerType)
-        {
-            WhereSqlClauseBuilder whereBuilder = new WhereSqlClauseBuilder();
-            whereBuilder.AppendItem("OwnerID", ownerID)
-                .AppendItem("OwnerType", ownerType);
-            return whereBuilder;
+            WhereSqlClauseBuilder result = new WhereSqlClauseBuilder();
+            CourseRelationAuthorizationAdpterBase adapter = GetCourseRelationAuthorizationAdpter();
+            string sql = BuilderExistsSQL(adapter.GetMappingInfo().GetQueryTableName()
+                , requestBuilder.ToSqlString(TSqlBuilder.Instance));
+            return result.AppendItem(null, sql, null, true);
         }
 
         /// <summary>
@@ -184,10 +230,22 @@ namespace PPTS.Data.Common.Authorization
             ConnectiveSqlClauseCollection sqlClause = new ConnectiveSqlClauseCollection();
             sqlClause.LogicOperator = LogicOperatorDefine.Or;
 
-            existAttributes.ForEach(action => sqlClause.Add(CustomerRelationWhereBuilder(BuilderExistsWhereBuilder(jobID
-                , ((int)action.RelationType).ToString()
-                , ownerColumnName
-                , ((int)action.RecordType).ToString()))));
+            existAttributes.ForEach(action =>
+            {
+                if (Enum.GetValues(typeof(RelationType)).Exists<int>((a) => { return (a == (int)action.RelationType); }))
+                {
+                    sqlClause.Add(CustomerRelationWhereBuilder(BuilderRelationExistsWhereBuilder(jobID
+                   , action.RelationType
+                   , ownerColumnName
+                   , (RecordType)action.RecordType)));
+                }
+                else
+                {
+                    sqlClause.Add(CustomerRelationWhereBuilder(BuilderRelationExistsWhereBuilder(jobID
+                     , ownerColumnName
+                     , (RecordType)action.RecordType)));
+                }
+            });
 
             return sqlClause;
         }
@@ -201,10 +259,25 @@ namespace PPTS.Data.Common.Authorization
             ConnectiveSqlClauseCollection sqlClause = new ConnectiveSqlClauseCollection();
             sqlClause.LogicOperator = LogicOperatorDefine.Or;
 
-            existAttributes.ForEach(action => sqlClause.Add(CustomerRelationWhereBuilder(BuilderSelectWhereBuilder(jobID
-               , ((int)action.RelationType).ToString()
-               , ownerID
-               , ((int)action.RecordType).ToString()))));
+            existAttributes.ForEach(action =>
+            {
+                if (Enum.GetValues(typeof(RelationType)).Exists<int>((a) =>
+                {
+                    return (a == (int)action.RelationType);
+                }))
+                {
+                    sqlClause.Add(CustomerRelationWhereBuilder(BuilderRelationWhereBuilder(jobID
+                   , action.RelationType
+                   , ownerID
+                   , (RecordType)action.RecordType)));
+                }
+                else
+                {
+                    sqlClause.Add(CustomerRelationWhereBuilder(BuilderRelationWhereBuilder(jobID
+                    , ownerID
+                    , (RecordType)action.RecordType)));
+                }
+            });
 
             return sqlClause;
         }
@@ -244,9 +317,9 @@ namespace PPTS.Data.Common.Authorization
             //定位命中规则
             List<RecordOrgScopeAttribute> existAttributes = attributeModels.Where(att => HasFunction(jobFunctions, att.Functions.ToList()))
                 .Select(model => model.ScopeAttribute as RecordOrgScopeAttribute).ToList();
-            List<RecordOrgScopeAttribute> existCustomerAttributes = existAttributes.Where(att => (att.RecordType == RecordType.Customer || att.RecordType == RecordType.PotentialCustomer) && HasFunction(jobFunctions, att)).ToList();
-            List<RecordOrgScopeAttribute> existCourseAttributes = existAttributes.Where(att => (att.RecordType == RecordType.Assign) && HasFunction(jobFunctions, att)).ToList();
-            List<RecordOrgScopeAttribute> existRecordAttributes = existAttributes.Where(att => (att.RecordType != RecordType.Customer && att.RecordType != RecordType.PotentialCustomer && att.RecordType != RecordType.Assign) && HasFunction(jobFunctions, att)).ToList();
+            List<RecordOrgScopeAttribute> existCustomerAttributes = existAttributes.Where(att => (att.RecordType == RecordType.Customer || att.RecordType == RecordType.PotentialCustomer)).ToList();
+            List<RecordOrgScopeAttribute> existCourseAttributes = existAttributes.Where(att => (att.RecordType == RecordType.Assign)).ToList();
+            List<RecordOrgScopeAttribute> existRecordAttributes = existAttributes.Where(att => (att.RecordType != RecordType.Customer && att.RecordType != RecordType.PotentialCustomer && att.RecordType != RecordType.Assign)).ToList();
 
             ConnectiveSqlClauseCollection sqlClause = new ConnectiveSqlClauseCollection();
             sqlClause.LogicOperator = LogicOperatorDefine.Or;
@@ -279,27 +352,13 @@ namespace PPTS.Data.Common.Authorization
             sqlClause.LogicOperator = LogicOperatorDefine.Or;
             existAttributes.ForEach(attribute =>
             {
-                ConnectiveSqlClauseCollection sqlChildClause = new ConnectiveSqlClauseCollection();
-                sqlChildClause.LogicOperator = LogicOperatorDefine.And;
-                WhereSqlClauseBuilder whereBuilder = OrgExistsSqlClauseBuilder(org, ownerColumnName, (RecordOrgScopeAttribute)attribute, CustomerOrgWhereBuilder);
-                whereBuilder.IsNotNull(builder =>
-                {
-                    sqlChildClause.Add(builder);
-                    if (attribute.RelationType > 0)
-                        sqlChildClause.Add(CustomerRelationWhereBuilder(BuilderExistsWhereBuilder(((int)attribute.RelationType).ToString()
-                    , ownerColumnName
-                    , ((int)attribute.RecordType).ToString())));
-                    else
-                        sqlChildClause.Add(CustomerRelationWhereBuilder(BuilderExistsWhereBuilder(ownerColumnName
-                   , ((int)attribute.RecordType).ToString())));
-                });
-                if (sqlChildClause.Count > 0)
-                    sqlClause.Add(sqlChildClause);
+                WhereSqlClauseBuilder builder = OrgExistsSqlClauseBuilder(org, ownerColumnName, attribute, CustomerOrgWhereBuilder);
+                builder.IsNotNull(action => sqlClause.Add(action));
             });
             return sqlClause;
         }
 
-        protected ConnectiveSqlClauseCollection OrgCustomerRelationAuthSelectBuilder(IOrganization org, string jobID, string ownerColumnName, List<string> jobFunctions, List<ScopeAttributeModel> attributeModels)
+        protected ConnectiveSqlClauseCollection OrgCustomerRelationAuthSelectBuilder(IOrganization org, string jobID, string ownerID, List<string> jobFunctions, List<ScopeAttributeModel> attributeModels)
         {
             //定位命中规则
             List<OrgCustomerRelationScopeAttribute> existAttributes = attributeModels.Where(att => HasFunction(jobFunctions, att.Functions.ToList()))
@@ -309,22 +368,8 @@ namespace PPTS.Data.Common.Authorization
             sqlClause.LogicOperator = LogicOperatorDefine.Or;
             existAttributes.ForEach(attribute =>
             {
-                ConnectiveSqlClauseCollection sqlChildClause = new ConnectiveSqlClauseCollection();
-                sqlChildClause.LogicOperator = LogicOperatorDefine.And;
-                WhereSqlClauseBuilder whereBuilder = OrgSelectSqlClauseBuilder(org, ownerColumnName, (RecordOrgScopeAttribute)attribute, CustomerOrgWhereBuilder);
-                whereBuilder.IsNotNull(builder =>
-                {
-                    sqlChildClause.Add(builder);
-                    if (attribute.RelationType > 0)
-                        sqlChildClause.Add(CustomerRelationWhereBuilder(BuilderSelectWhereBuilder(((int)attribute.RelationType).ToString()
-                    , ownerColumnName
-                    , ((int)attribute.RecordType).ToString())));
-                    else
-                        sqlChildClause.Add(CustomerRelationWhereBuilder(BuilderSelectWhereBuilder(ownerColumnName
-                   , ((int)attribute.RecordType).ToString())));
-                });
-                if (sqlChildClause.Count > 0)
-                    sqlClause.Add(sqlChildClause);
+                WhereSqlClauseBuilder builder = OrgSelectSqlClauseBuilder(org, ownerID, attribute, CustomerOrgWhereBuilder);
+                builder.IsNotNull(action => sqlClause.Add(action));
             });
             return sqlClause;
         }
@@ -336,14 +381,29 @@ namespace PPTS.Data.Common.Authorization
                 .Where(att => HasFunction(jobFunctions, att.Functions.ToList()))
                 .Select(model => model.ScopeAttribute as OwnerRelationScopeAttribute).ToList();
 
+            List<OwnerRelationScopeAttribute> existCustomerAttributes = existAttributes.Where(att => (att.RecordType == RecordType.Customer || att.RecordType == RecordType.PotentialCustomer)).ToList();
+            List<OwnerRelationScopeAttribute> existCourseAttributes = existAttributes.Where(att => (att.RecordType == RecordType.Assign)).ToList();
+            List<OwnerRelationScopeAttribute> existRecordAttributes = existAttributes.Where(att => (att.RecordType != RecordType.Customer && att.RecordType != RecordType.PotentialCustomer && att.RecordType != RecordType.Assign)).ToList();
+
+
             ConnectiveSqlClauseCollection sqlClause = new ConnectiveSqlClauseCollection();
             sqlClause.LogicOperator = LogicOperatorDefine.Or;
 
-            existAttributes.ForEach(action => sqlClause.Add(OwnerRelationWhereBuilder(BuilderExistsWhereBuilder(jobID
-               , ((int)action.RelationType).ToString()
-               , ownerColumnName
-               , ((int)action.RecordType).ToString()))));
-
+            existCustomerAttributes.ForEach(attribute =>
+            {
+                WhereSqlClauseBuilder builder = OwnerRelationExistsSqlClauseBuilder(jobID, ownerColumnName, attribute, CustomerRelationWhereBuilder);
+                builder.IsNotNull(action => sqlClause.Add(action));
+            });
+            existCourseAttributes.ForEach(attribute =>
+            {
+                WhereSqlClauseBuilder builder = OwnerRelationExistsSqlClauseBuilder(jobID, ownerColumnName, attribute, CourseRelationWhereBuilder);
+                builder.IsNotNull(action => sqlClause.Add(action));
+            });
+            existRecordAttributes.ForEach(attribute =>
+            {
+                WhereSqlClauseBuilder builder = OwnerRelationExistsSqlClauseBuilder(jobID, ownerColumnName, attribute, OwnerRelationWhereBuilder);
+                builder.IsNotNull(action => sqlClause.Add(action));
+            });
             return sqlClause;
         }
 
@@ -354,14 +414,28 @@ namespace PPTS.Data.Common.Authorization
                 .Where(att => HasFunction(jobFunctions, att.Functions.ToList()))
                 .Select(model => model.ScopeAttribute as OwnerRelationScopeAttribute).ToList();
 
+            List<OwnerRelationScopeAttribute> existCustomerAttributes = existAttributes.Where(att => (att.RecordType == RecordType.Customer || att.RecordType == RecordType.PotentialCustomer)).ToList();
+            List<OwnerRelationScopeAttribute> existCourseAttributes = existAttributes.Where(att => (att.RecordType == RecordType.Assign)).ToList();
+            List<OwnerRelationScopeAttribute> existRecordAttributes = existAttributes.Where(att => (att.RecordType != RecordType.Customer && att.RecordType != RecordType.PotentialCustomer && att.RecordType != RecordType.Assign)).ToList();
+
             ConnectiveSqlClauseCollection sqlClause = new ConnectiveSqlClauseCollection();
             sqlClause.LogicOperator = LogicOperatorDefine.Or;
 
-            existAttributes.ForEach(action => sqlClause.Add(OwnerRelationWhereBuilder(BuilderSelectWhereBuilder(jobID
-               , ((int)action.RelationType).ToString()
-               , ownerID
-               , ((int)action.RecordType).ToString()))));
-
+            existCustomerAttributes.ForEach(attribute =>
+            {
+                WhereSqlClauseBuilder builder = OwnerRelationSelectSqlClauseBuilder(jobID, ownerID, attribute, CustomerRelationWhereBuilder);
+                builder.IsNotNull(action => sqlClause.Add(action));
+            });
+            existCourseAttributes.ForEach(attribute =>
+            {
+                WhereSqlClauseBuilder builder = OwnerRelationSelectSqlClauseBuilder(jobID, ownerID, attribute, CourseRelationWhereBuilder);
+                builder.IsNotNull(action => sqlClause.Add(action));
+            });
+            existRecordAttributes.ForEach(attribute =>
+            {
+                WhereSqlClauseBuilder builder = OwnerRelationSelectSqlClauseBuilder(jobID, ownerID, attribute, OwnerRelationWhereBuilder);
+                builder.IsNotNull(action => sqlClause.Add(action));
+            });
             return sqlClause;
         }
 
@@ -378,11 +452,12 @@ namespace PPTS.Data.Common.Authorization
             , Func<WhereSqlClauseBuilder, WhereSqlClauseBuilder> fun
             )
         {
-            string orgType = ((int)attribute.OrgType).ToString();
-            string recordType = ((int)attribute.RecordType).ToString();
             IOrganization parentOrg = org.GetParentOrganizationByType((DepartmentType)Enum.Parse(typeof(DepartmentType), ((int)attribute.OrgType).ToString()));
             if (parentOrg == null) return null;
-            return fun(BuilderExistsWhereBuilder(parentOrg.ID, orgType, ownerColumnName, recordType));
+            if (Enum.GetValues(typeof(RelationType)).Exists<int>((a) => { return (a == (int)attribute.RelationType); }))
+                return fun(BuilderOrgExistsWhereBuilder(parentOrg.ID, attribute.OrgType, attribute.RelationType, ownerColumnName, attribute.RecordType));
+            else
+                return fun(BuilderOrgExistsWhereBuilder(parentOrg.ID, attribute.OrgType, ownerColumnName, attribute.RecordType));
         }
 
         private WhereSqlClauseBuilder OrgSelectSqlClauseBuilder(IOrganization org
@@ -393,7 +468,34 @@ namespace PPTS.Data.Common.Authorization
             string orgtype = ((int)attribute.OrgType).ToString();
             IOrganization parentOrg = org.GetParentOrganizationByType((DepartmentType)Enum.Parse(typeof(DepartmentType), ((int)attribute.OrgType).ToString()));
             if (parentOrg == null) return null;
-            return fun(BuilderSelectWhereBuilder(parentOrg.ID, orgtype, ownerID, ((int)attribute.RecordType).ToString()));
+            if (Enum.GetValues(typeof(RelationType)).Exists<int>((a) => { return (a == (int)attribute.RelationType); }))
+                return fun(BuilderOrgWhereBuilder(parentOrg.ID, attribute.OrgType, attribute.RelationType, ownerID, attribute.RecordType));
+            else
+                return fun(BuilderOrgWhereBuilder(parentOrg.ID, attribute.OrgType, ownerID, attribute.RecordType));
+        }
+
+        private WhereSqlClauseBuilder OwnerRelationExistsSqlClauseBuilder(string jobID
+            , string ownerColumnName
+            , OwnerRelationScopeAttribute attribute
+            , Func<WhereSqlClauseBuilder, WhereSqlClauseBuilder> fun
+            )
+        {
+            if (Enum.GetValues(typeof(RelationType)).Exists<int>((a) => { return (a == (int)attribute.RelationType); }))
+                return fun(BuilderRelationExistsWhereBuilder(jobID, attribute.RelationType, ownerColumnName, attribute.RecordType));
+            else
+                return fun(BuilderRelationExistsWhereBuilder(jobID, RelationType.Owner, ownerColumnName, attribute.RecordType));
+        }
+
+        private WhereSqlClauseBuilder OwnerRelationSelectSqlClauseBuilder(string jobID
+            , string ownerID
+            , OwnerRelationScopeAttribute attribute
+            , Func<WhereSqlClauseBuilder, WhereSqlClauseBuilder> fun
+            )
+        {
+            if (Enum.GetValues(typeof(RelationType)).Exists<int>((a) => { return (a == (int)attribute.RelationType); }))
+                return fun(BuilderRelationWhereBuilder(jobID, attribute.RelationType, ownerID, attribute.RecordType));
+            else
+                return fun(BuilderRelationWhereBuilder(jobID, RelationType.Owner, ownerID, attribute.RecordType));
         }
 
         private bool IsFullOrgAuth(List<string> jobFunctions, List<ScopeAttributeModel> hqattributes)
@@ -416,6 +518,8 @@ namespace PPTS.Data.Common.Authorization
 
             sqlClause.LogicOperator = LogicOperatorDefine.Or;
             if (!IsFullOrgAuth(jobFunctions, models.Where(action => action.ScopeAttributeType == typeof(RecordOrgScopeAttribute)
+            && Enum.GetValues(typeof(RelationType)).NotExists<int>((a) => { return (a == (int)((RecordOrgScopeAttribute)action.ScopeAttribute).RelationType); })
+            //((RecordOrgScopeAttribute)action.ScopeAttribute).RelationType==0
             && ((RecordOrgScopeAttribute)action.ScopeAttribute).OrgType == OrgType.HQ).ToList()))//总公司权限
             {
                 sqlChildClause = CustomerRelationAuthExistsBuilder(jobID, recordCusomerIDColumnName, jobFunctions
@@ -447,6 +551,8 @@ namespace PPTS.Data.Common.Authorization
             ConnectiveSqlClauseCollection sqlChildClause;
 
             if (!IsFullOrgAuth(jobFunctions, models.Where(action => action.ScopeAttributeType == typeof(RecordOrgScopeAttribute)
+            && Enum.GetValues(typeof(RelationType)).NotExists<int>((a) => { return (a == (int)((RecordOrgScopeAttribute)action.ScopeAttribute).RelationType); })
+            //((RecordOrgScopeAttribute)action.ScopeAttribute).RelationType==0
             && ((RecordOrgScopeAttribute)action.ScopeAttribute).OrgType == OrgType.HQ).ToList()))//总公司权限
             {
                 sqlChildClause = CustomerRelationAuthSelectBuilder(jobID, recordKeyID, jobFunctions
@@ -541,8 +647,11 @@ namespace PPTS.Data.Common.Authorization
                     )
                     .FirstOrDefault();
                     ScopeAttributeModel newAttributeModel = InitScopeAttributeModel(attributeModel, orAttribute, typeof(OwnerRelationScopeAttribute));
-                    if (((OwnerRelationScopeAttribute)newAttributeModel.ScopeAttribute).RecordType <= 0)
-                        ((OwnerRelationScopeAttribute)newAttributeModel.ScopeAttribute).RecordType = entityRecordType;
+                    newAttributeModel.IsNotNull(action =>
+                    {
+                        if (((OwnerRelationScopeAttribute)action.ScopeAttribute).RecordType <= 0)
+                            ((OwnerRelationScopeAttribute)action.ScopeAttribute).RecordType = entityRecordType;
+                    });
                     attributeModel.IsNull(() => result.Add(newAttributeModel));
                 }
                 else if (attribute is RecordOrgScopeAttribute)
@@ -555,8 +664,12 @@ namespace PPTS.Data.Common.Authorization
                     )
                     .FirstOrDefault();
                     ScopeAttributeModel newAttributeModel = InitScopeAttributeModel(attributeModel, roAttribute, typeof(RecordOrgScopeAttribute));
-                    if (((RecordOrgScopeAttribute)newAttributeModel.ScopeAttribute).RecordType <= 0)
-                        ((RecordOrgScopeAttribute)newAttributeModel.ScopeAttribute).RecordType = entityRecordType;
+                    newAttributeModel.IsNotNull(action =>
+                    {
+                        if (((RecordOrgScopeAttribute)action.ScopeAttribute).RecordType <= 0)
+                            ((RecordOrgScopeAttribute)action.ScopeAttribute).RecordType = entityRecordType;
+                    });
+                    
                     attributeModel.IsNull(() => result.Add(newAttributeModel));
                 }
             }
@@ -908,131 +1021,135 @@ namespace PPTS.Data.Common.Authorization
         #endregion
 
         #region 对外开放权限生成(应用方法)
-
-        public void UpdateCustomerRelationAuthInContext(PPTSJob job, string keyID, RecordType recordType = 0)
+        private void UpdateAuth(string objectID, IOrganization org, string keyID, RecordType recordType, RelationType relationType = RelationType.Owner)
         {
-            job.NullCheck("job");
-            job.ID.NullCheck("JobID");
-            keyID.NullCheck("keyID");
-            IOrganization jobOrg = job.Organization();
-            jobOrg.NullCheck("Organization");
-            if (recordType == 0)
-                recordType = GetRecordType();
-            (recordType == 0).TrueThrow("recordType");
-            if (Enum.GetValues(typeof(RelationType)).NotExists<int>((value) => { return (value == (int)job.JobType); }))
-                return;
-            this.GetCustomerRelationAuthorizationAdaper().UpdateInContext(new CustomerRelationAuthorization()
+            objectID.NullCheck("objectID");
+            org.NullCheck("org");
+            Enum.GetValues(typeof(RecordType)).NotExists<int>(a => { return a == (int)recordType; }).TrueThrow("recordType Not Exist");
+            switch (recordType)
             {
-                ObjectID = job.ID,
-                ObjectType = (RelationType)Enum.Parse(typeof(RelationType), ((int)job.JobType).ToString()),
-                OrgID = job.Organization().ID,
-                OrgType = (OrgType)Enum.Parse(typeof(OrgType), ((int)jobOrg.DepartmentType).ToString()),
-                OwnerID = keyID,
-                OwnerType = recordType
-            });
-        }
-
-        public void UpdateOrgAuthInContext(IOrganization joborg, string keyID, RecordType recordType = 0, IOrganization org = null)
-        {
-            keyID.NullCheck("keyID");
-            joborg.NullCheck("joborg");
-
-            if (recordType == 0)
-                recordType = GetRecordType();
-            (recordType == 0).TrueThrow("recordType");
-
-
-            List<IOrganization> orgs = null;
-            org.IsNull(() =>
-            {
-                orgs = joborg.GetAllDataScopeParents().ToList();
-            });
-            org.IsNotNull((model) =>
-            {
-                orgs = model.GetAllDataScopeParents().ToList();
-            });
-            if (recordType == RecordType.PotentialCustomer || recordType == RecordType.Customer)
-            {
-                IOrganization departmentOrg = joborg.GetParentOrganizationByType(DepartmentType.Department);
-                departmentOrg.IsNotNull(model => orgs.Add(model));
-                orgs.ForEach(orgmodel =>
-                {
-                    CustomerOrgAuthorization authmodel = new CustomerOrgAuthorization()
+                case RecordType.PotentialCustomer:
+                case RecordType.Customer:
+                    GetCustomerRelationAuthorizationAdaper().Update(new CustomerRelationAuthorization()
                     {
-                        ObjectID = orgmodel.ID,
-                        ObjectType = (OrgType)Enum.Parse(typeof(OrgType), ((int)orgmodel.DepartmentType).ToString()),
+                        ObjectID = objectID,
+                        ObjectType = relationType,
+                        OrgID = org.ID,
+                        OrgType = (OrgType)org.PPTSDepartmentType(),
                         OwnerID = keyID,
                         OwnerType = recordType
-                    };
-                    this.GetCustomerOrgAuthorizationAdapter().UpdateInContext(authmodel);
-                });
-            }
-            else if (recordType == RecordType.Assign)
-            {
-                IOrganization xuekezuOrg = joborg.GetParentOrganizationByType(DepartmentType.XueKeZu);
-                xuekezuOrg.IsNotNull(model => orgs.Add(model));
-                orgs.ForEach(orgmodel =>
-                {
-                    CourseOrgAuthorization authmodel = new CourseOrgAuthorization()
+                    });
+                    GetCustomerOrgAuthorizationAdapter().UpdateOrgAuthorizations(keyID, org, recordType, relationType);
+                    break;
+                case RecordType.Assign:
+                    GetCourseRelationAuthorizationAdpter().Update(new CourseRelationAuthorization()
                     {
-                        ObjectID = orgmodel.ID,
-                        ObjectType = (OrgType)Enum.Parse(typeof(OrgType), ((int)orgmodel.DepartmentType).ToString()),
+                        ObjectID = objectID,
+                        ObjectType = relationType,
+                        OrgID = org.ID,
+                        OrgType = (OrgType)org.PPTSDepartmentType(),
                         OwnerID = keyID,
                         OwnerType = recordType
-                    };
-                    this.GetCourseOrgAuthorizationAdapter().UpdateInContext(authmodel);
-                });
-            }
-            else
-            {
-                IOrganization departmentOrg = joborg.GetParentOrganizationByType(DepartmentType.Department);
-                departmentOrg.IsNotNull(model => orgs.Add(model));
-                orgs.ForEach(orgmodel =>
-                {
-                    RecordOrgAuthorization authmodel = new RecordOrgAuthorization()
+                    });
+                    GetCourseOrgAuthorizationAdapter().UpdateOrgAuthorizations(keyID, org, recordType, relationType);
+                    break;
+                default:
+                    GetOwnerRelationAuthorizationAdapter().Update(new OwnerRelationAuthorization()
                     {
-                        ObjectID = orgmodel.ID,
-                        ObjectType = (OrgType)Enum.Parse(typeof(OrgType), ((int)orgmodel.DepartmentType).ToString()),
+                        ObjectID = objectID,
+                        ObjectType = relationType,
+                        OrgID = org.ID,
+                        OrgType = (OrgType)org.PPTSDepartmentType(),
                         OwnerID = keyID,
                         OwnerType = recordType
-                    };
-                    this.GetRecordOrgAuthorizationAdapter().UpdateInContext(authmodel);
-                });
+                    });
+                    GetRecordOrgAuthorizationAdapter().UpdateOrgAuthorizations(keyID, org, recordType, relationType);
+                    break;
             }
         }
 
-        public void UpdateOwnerAuthInContext(PPTSJob job, string keyID, RecordType recordType = 0)
+        public void UpdateAuth(PPTSJob job, IOrganization org, string keyID, RecordType recordType, RelationType relationType = RelationType.Owner)
         {
             job.NullCheck("job");
-            job.ID.NullCheck("JobID");
-            keyID.NullCheck("keyID");
-            IOrganization jobOrg = job.Organization();
-            jobOrg.NullCheck("Organization");
-            if (recordType == 0)
-                recordType = GetRecordType();
-            (recordType == 0).TrueThrow("recordType");
-
-
-            this.GetOwnerRelationAuthorizationAdapter().UpdateInContext(new OwnerRelationAuthorization()
-            {
-                ObjectID = job.ID,
-                ObjectType = RelationType.Owner,
-                OrgID = job.Organization().ID,
-                OrgType = (OrgType)Enum.Parse(typeof(OrgType), ((int)jobOrg.DepartmentType).ToString()),
-                OwnerID = keyID,
-                OwnerType = recordType
-            });
+            UpdateAuth(job.ID, org, keyID, recordType, relationType);
         }
 
-        public void UpdateBaseAuthInContext(PPTSJob job, string keyID, RecordType recordType = 0, IOrganization org = null)
+        public void UpdateAuth(PPTSJob job, IOrganization org, string keyID, RelationType relationType = RelationType.Owner)
+        {
+            RecordType recordType = GetRecordType();
+            UpdateAuth(job, org, keyID, recordType, relationType);
+        }
+
+        public void UpdateAuth(IUser staff, IOrganization org, string keyID, RecordType recordType, RelationType relationType = RelationType.Owner)
+        {
+            staff.NullCheck("staff");
+            UpdateAuth(staff.ID, org, keyID, recordType, relationType);
+        }
+
+        public void UpdateAuth(IUser staff, IOrganization org, string keyID, RelationType relationType = RelationType.Owner)
+        {
+            RecordType recordType = GetRecordType();
+            UpdateAuth(staff, org, keyID, recordType, relationType);
+        }
+
+        private void UpdateAuthInContext(string objectID, IOrganization org, string keyID, RecordType recordType, RelationType relationType = RelationType.Owner)
+        {
+            objectID.NullCheck("objectID");
+            org.NullCheck("org");
+            Enum.GetValues(typeof(RecordType)).NotExists<int>(a => { return a == (int)recordType; }).TrueThrow("recordType Not Exist");
+            switch (recordType)
+            {
+                case RecordType.PotentialCustomer:
+                case RecordType.Customer:
+                    GetCustomerRelationAuthorizationAdaper().UpdateInContext(new CustomerRelationAuthorization()
+                    {
+                        ObjectID = objectID,
+                        ObjectType = relationType,
+                        OrgID = org.ID,
+                        OrgType = (OrgType)org.PPTSDepartmentType(),
+                        OwnerID = keyID,
+                        OwnerType = recordType
+                    });
+                    GetCustomerOrgAuthorizationAdapter().UpdateOrgAuthorizationsInContext(keyID, org, recordType, relationType);
+                    break;
+                case RecordType.Assign:
+                    GetCourseRelationAuthorizationAdpter().UpdateInContext(new CourseRelationAuthorization()
+                    {
+                        ObjectID = objectID,
+                        ObjectType = relationType,
+                        OrgID = org.ID,
+                        OrgType = (OrgType)org.PPTSDepartmentType(),
+                        OwnerID = keyID,
+                        OwnerType = recordType
+                    });
+                    GetCourseOrgAuthorizationAdapter().UpdateOrgAuthorizationsInContext(keyID, org, recordType, relationType);
+                    break;
+                default:
+                    GetOwnerRelationAuthorizationAdapter().UpdateInContext(new OwnerRelationAuthorization()
+                    {
+                        ObjectID = objectID,
+                        ObjectType = relationType,
+                        OrgID = org.ID,
+                        OrgType = (OrgType)org.PPTSDepartmentType(),
+                        OwnerID = keyID,
+                        OwnerType = recordType
+                    });
+                    GetRecordOrgAuthorizationAdapter().UpdateOrgAuthorizationsInContext(keyID, org, recordType, relationType);
+                    break;
+            }
+
+        }
+
+        public void UpdateAuthInContext(PPTSJob job, IOrganization org, string keyID, RecordType recordType, RelationType relationType = RelationType.Owner)
         {
             job.NullCheck("job");
-            IOrganization jobOrg = job.Organization();
-            if (recordType == 0)
-                recordType = GetRecordType();
-            (recordType == 0).TrueThrow("recordType");
-            UpdateOwnerAuthInContext(job, keyID, recordType);
-            UpdateOrgAuthInContext(jobOrg, keyID, recordType, org);
+            UpdateAuthInContext(job.ID, org, keyID, recordType, relationType);
+        }
+
+        public void UpdateAuthInContext(PPTSJob job, IOrganization org, string keyID, RelationType relationType = RelationType.Owner)
+        {
+            RecordType recordType = GetRecordType();
+            UpdateAuthInContext(job, org, keyID, recordType, relationType);
         }
 
         private RecordType GetRecordType()

@@ -18,28 +18,6 @@ namespace PPTS.WebAPI.Customers.ViewModels.CustomerVerifies
 {
     public class CustomerVerifyModel : CustomerVerify
     {
-        ///// <summary>
-        ///// 实际上门人数
-        ///// </summary>
-        //[NoMapping]
-        //[ConstantCategory("c_codE_ABBR_Customer_CRM_RealCallPersonNum")]
-        //public int VerifyPeople
-        //{
-        //    get;
-        //    set;
-        //}
-
-        ///// <summary>
-        ///// 上门人员关系
-        ///// </summary>
-        //[NoMapping]
-        //[ConstantCategory("c_codE_ABBR_RealCallPersonRelation")]
-        //public int VerifyRelation
-        //{
-        //    get;
-        //    set;
-        //}
-
         public void InitVerifier(IUser user)
         {
             this.VerifierID = user.ID;
@@ -48,6 +26,5 @@ namespace PPTS.WebAPI.Customers.ViewModels.CustomerVerifies
             this.VerifierJobName = user.GetCurrentJob().Name;
             this.VerifyTime = SNTPClient.AdjustedTime;
         }
-
     }
 }

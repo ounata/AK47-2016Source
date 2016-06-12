@@ -61,6 +61,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\PPTSBin\MCS.Library.WcfExtensions.dll</HintPath>
     </Reference>
+    <Reference Include="PPTS.Contracts.Orders, Version=1.0.0.0, Culture=neutral, PublicKeyToken=62ea08f894871798, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\PPTSBin\PPTS.Contracts.Orders.dll</HintPath>
+    </Reference>
     <Reference Include="PPTS.Contracts.Products">
       <HintPath>..\..\PPTSBin\PPTS.Contracts.Products.dll</HintPath>
     </Reference>
@@ -92,6 +96,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Adapters\PotentialCustomerParentPhoneAdapter.cs" />
+    <Compile Include="Adapters\CustomerParentPhoneAdapter.cs" />
     <Compile Include="Adapters\CustomerTransferResourcesAdapter.cs" />
     <Compile Include="Adapters\CustomerTransferResourcesAdapterBase.cs" />
     <Compile Include="Adapters\TeacherSearchAdapter.cs" />
@@ -155,6 +161,7 @@
     <Compile Include="Common\ConnectionDefine.cs" />
     <Compile Include="Common\Helper.cs" />
     <Compile Include="DataSources\GenericCustomerAuthDataSourse.cs" />
+    <Compile Include="DataSources\GenericSearchDataSource.cs" />
     <Compile Include="DataSources\GenericCustomerDataSource.cs" />
     <Compile Include="Executors\AccountApproveRefundApplyExecutor.cs" />
     <Compile Include="Executors\AccountDeductAppliesExecutor.cs" />

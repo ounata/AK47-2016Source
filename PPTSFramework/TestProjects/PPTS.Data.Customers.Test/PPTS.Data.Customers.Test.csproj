@@ -84,21 +84,9 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="AccountDeductAppliesExecutorTest.cs" />
     <Compile Include="AssertHelper.cs" />
-    <Compile Include="CustomerScopeAuthorizationTest.cs" />
-    <Compile Include="DataHelper.cs" />
-    <Compile Include="FakePhoneNumbers.cs" />
-    <Compile Include="InheritedObjects.cs" />
-    <Compile Include="OutputHelper.cs" />
-    <Compile Include="POSRecordAdapterTest.cs" />
-    <Compile Include="PotentialCustomerAdapterTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ParentAdapterTest.cs" />
-    <Compile Include="PhoneAdapterTest.cs" />
-    <Compile Include="CustomerParentRelationAdapterTest.cs" />
-    <Compile Include="CustomerFulltextInfoAdapterTest.cs" />
-    <Compile Include="CustomerInfoQueryAdapterTest.cs" />
-    <Compile Include="CustomerFollowSummaryAdapterTest.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

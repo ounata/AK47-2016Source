@@ -1,5 +1,130 @@
 ﻿<!-- #开始：新增客户服务页面Form -->
-<div class="widget-box">
+<div class="portlet light bordered">
+    <div class="portlet-title">
+        <div class="caption">
+            <span class="caption-subject bold"><i class="ace-icon fa fa-plus"></i>  编辑{{vm.title}}记录</span>
+            <span class="caption-helper">(<span class="required"> * </span>表示必填字段)</span>
+        </div>
+    </div>
+    <div class="portlet-body form">
+        <form class="form-horizontal" action="#" role="form" novalidate>
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <mcs-button category="save" text="保存" ppts-job-functions="新增客服信息" click="vm.edit()"></mcs-button>
+                    </div>
+                </div>
+            </div>
+            <div class="form-body">
+                <h4 class="form-section"><i class="ace-icon fa fa-th"></i> {{vm.title}}记录信息</h4>
+                <div class="row">
+                    <div class="form-group horizontal">
+                        <mcs-label required="true" text="潜在客户" css="col-sm-3" />
+                        <div class="col-sm-6">
+                            <mcs-input placeholder="" model="vm.pCustomer.customerName" readonly="true" class="form-control input-height-normal" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group horizontal">
+                        <mcs-label required="true" text="服务类型" css="col-sm-3" />
+                        <div class="col-sm-6">
+                            <span>{{ vm.customerService.serviceType | serviceType }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" ng-hide="vm.customerService.serviceType == 3">
+                    <div class="form-group horizontal">
+                        <mcs-label required="true" text="投诉次数" css="col-sm-3" />
+                        <div class="col-sm-6">
+                            <ppts-select category="complaintTimes" css="mcs-padding-0 mcs-width-half" model="vm.customerService.complaintTimes" required/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" ng-hide="vm.customerService.serviceType == 3">
+                    <div class="form-group horizontal">
+                        <mcs-label required="true" text="投诉升级" css="col-sm-3" />
+                        <div class="col-sm-6">
+                            <ppts-select category="complaintUpgrade" css="mcs-padding-0 mcs-width-half" model="vm.customerService.complaintUpgrade" required/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" ng-hide="vm.customerService.serviceType == 3">
+                    <div class="form-group horizontal">
+                        <mcs-label required="true" text="严重程度" css="col-sm-3" />
+                        <div class="col-sm-6">
+                            <ppts-select category="complaintLevel" css="mcs-padding-0 mcs-width-half" model="vm.customerService.complaintLevel" required/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" ng-hide="vm.customerService.serviceType != 3">
+                    <div class="form-group horizontal">
+                        <mcs-label required="true" text="咨询" css="col-sm-3" />
+                        <div class="col-sm-6">
+                            <ppts-select category="complaintLevel" css="mcs-padding-0 mcs-width-half" model="vm.customerService.complaintLevel" required/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" ng-hide="vm.customerService.consultType != 4 || vm.customerService.serviceType != 3">
+                    <div class="form-group horizontal">
+                        <mcs-label required="true" text="咨询其他" css="col-sm-3" />
+                        <div class="col-sm-6 mcs-margin-top-10">
+                            <textarea class="form-control" rows="7" class="form-control" ng-model="vm.customerService.consultMemo" maxlength="15" required></textarea>
+                            <span class="text-left info">不允许超过15个字符，已经输入{{ vm.customerService.consultMemo.length || 0 }}个</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group horizontal">
+                        <mcs-label required="true" text="客服受理情况详描述" css="col-sm-3" />
+                        <div class="col-sm-6 mcs-margin-top-10">
+                            <textarea class="form-control" rows="7" class="form-control" ng-model="vm.customerService.acceptMemo" maxlength="500" required></textarea>
+                            <span class="text-left info">不允许超过500个字符，已经输入{{ vm.customerService.acceptMemo.length || 0 }}个</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" ng-hide="vm.customerService.serviceType == 3">
+                    <div class="form-group horizontal">
+                        <mcs-label required="true" text="诉求" css="col-sm-3" />
+                        <div class="col-sm-6 mcs-margin-top-10">
+                            <textarea class="form-control" rows="7" class="form-control" ng-model="vm.customerService.appealMemo" maxlength="500" required></textarea>
+                            <span class="text-left info">不允许超过500个字符，已经输入{{ vm.customerService.appealMemo.length || 0 }}个</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" ng-hide="vm.customerService.serviceType == 3">
+                    <div class="form-group horizontal">
+                        <mcs-label required="true" text="处理建议" css="col-sm-3" />
+                        <div class="col-sm-6 mcs-margin-top-10">
+                            <textarea class="form-control" rows="7" class="form-control" ng-model="vm.customerService.handleAdvice" maxlength="500" required></textarea>
+                            <span class="text-left info">不允许超过500个字符，已经输入{{ vm.customerService.handleAdvice.length || 0 }}个</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" ng-hide="vm.customerService.serviceType == 3">
+                    <div class="form-group horizontal">
+                        <mcs-label required="true" text="是否要升级处理" css="col-sm-3" />
+                        <div class="col-sm-6">
+                            <ppts-radiobutton-group category="ifElse" model="vm.customerService.isUpgradeHandle" required/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" ng-hide="vm.customerService.serviceType == 3">
+                    <div class="form-group horizontal">
+                        <mcs-label required="true" text="要求分客服受理并回复的时间限制" css="col-sm-3" />
+                        <div class="col-sm-6">
+                            <ppts-radiobutton-group category="acceptLimit" model="vm.customerService.acceptLimit" required/> 在每条记录的右上角，倒计时：
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<!--<div class="widget-box">
     <div class="widget-header">
         <h4>
             <span ng-show="vm.customerService.serviceType == 1">编辑投诉界面</span>
@@ -11,7 +136,6 @@
     <div class="widget-main no-padding1">
         <form class="form-horizontal" role="form">
             <div class="clearfix form-actions mcs-form-actions">
-                <!-- #开始：保存客服.工具栏 -->
                 <div class="mcs-panel-toolbar col-sm-offset-3">
                     <mcs-button category="save" text="保存" ppts-job-functions="新增客服信息" click="vm.edit()"></mcs-button>
                 </div>
@@ -134,4 +258,4 @@
             </div>
         </form>
     </div>
-</div>
+</div>-->

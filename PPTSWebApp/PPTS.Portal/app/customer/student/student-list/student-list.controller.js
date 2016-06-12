@@ -27,11 +27,16 @@
                             vm.searchItems = searchItems;
                         });
                         studentDataViewService.initDateRange($scope, vm, [
-                                { watchExp: 'vm.selectedAttendRange', selectedValue: 'selectedAttendRange', start: 'attendStartTime', end: 'attendEndTime' },
+                                { watchExp: 'vm.selectedAttendRange', selectedValue: 'selectedAttendRange', start: 'statusStartTime', end: 'statusEndTime' },
                                 { watchExp: 'vm.selectedRange', selectedValue: 'selectedRange', start: 'statusStartTime', end: 'statusEndTime' }
                         ]);
                     };
                     vm.search();
+
+                    $scope.$watch('vm.criteria.customerType', function (value) {
+                        vm.selectedAttendRange = '-1';
+                        vm.selectedRange = '-1';
+                    });
 
                     // 订购
                     vm.purchase = function (item) {
@@ -68,7 +73,7 @@
                                 case '分配教师':
                                     mcsDialogService.create('app/customer/student/student-assignTeacher/student-assignTeacher.html', {
                                         controller: 'assignTeacherController',
-                                        params: { customers: vm.data.rowsSelected[0] },
+                                        params: { customers: vm.data.rowsSelected },
                                         settings: { size: 'lg' }
                                     });
                                     break;

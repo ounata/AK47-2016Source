@@ -370,6 +370,22 @@ namespace MCS.Library.OGUPermission
         }
 
         /// <summary>
+        /// 查找指定应用中，具有指定功能的角色。
+        /// </summary>
+        /// <param name="appCodeName">应用的英文标识</param>
+        /// <param name="roleCodeNames">功能的英文标识，多个时用逗号分隔</param>
+        /// <returns>指定应用系统中，具有指定功能的角色</returns>
+        [ServiceBrokerExtension]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetRolesFunctions", RequestNamespace = "http://tempuri.org/", ResponseNamespace = "http://tempuri.org/", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public System.Data.DataSet GetRolesFunctions(string appCodeName, string roleCodeNames)
+        {
+            object[] results = this.Invoke("GetRolesFunctions", new object[] {
+                        appCodeName,
+                        roleCodeNames});
+            return ((System.Data.DataSet)(results[0]));
+        }
+
+        /// <summary>
         /// 查询指定部门范围下，指定应用系统中，拥有指定功能的所有人员
         /// </summary>
         /// <param name="orgRoot">部门范围的全路径，空串时不限制</param>

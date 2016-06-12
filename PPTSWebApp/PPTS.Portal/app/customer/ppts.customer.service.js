@@ -13,6 +13,8 @@ define(['angular', ppts.config.modules.customer,
                         switch (result.prev) {
                             case 'ppts.customer':
                             case 'ppts.market':
+                            case 'ppts.follow':
+                            case 'ppts.customerverify':
                                 switch (operation) {
                                     // 初始化潜客信息
                                     case 'init':

@@ -18,7 +18,7 @@ namespace MCS.Library.SOA.DataObjects.Security.Adapters
     /// 最基本的对象适配器。从SchemaObjectAdapterBase派生，是权限中心所有对象的读写器。
     /// 基类SchemaObjectAdapterBase中主要实现了更新操作，而SchemaObjectAdapter主要实现了对象的读（Load）操作。
     /// </summary>
-    public class SchemaObjectAdapter : SchemaObjectAdapterBase<SchemaObjectBase>
+    public partial class SchemaObjectAdapter : SchemaObjectAdapterBase<SchemaObjectBase>
     {
         /// <summary>
         /// <see cref="SchemaObjectAdapter"/>的实例，此字段为只读
@@ -117,11 +117,28 @@ namespace MCS.Library.SOA.DataObjects.Security.Adapters
         /// <returns>一个<see cref="SchemaObjectCollection"/>，包含条件指定的对象。</returns>
         public SchemaObjectCollection LoadByCodeName(Action<ConnectiveSqlClauseCollection> conditionAction, DateTime timePoint, params string[] codeNames)
         {
+            return this.LoadByNameCondition(conditionAction, "S.CodeName", timePoint, codeNames);
+        }
+
+        /// <summary>
+        /// 根据代称，<see cref="IConnectiveSqlClause"/>指定的条件和时间点载入对象
+        /// </summary>
+        /// <param name="conditionAction">要在构造条件时执行的操作</param>
+        /// <param name="timePoint">时间点</param>
+        /// <param name="codeNames">代码名称</param>
+        /// <returns>一个<see cref="SchemaObjectCollection"/>，包含条件指定的对象。</returns>
+        public SchemaObjectCollection LoadByName(Action<ConnectiveSqlClauseCollection> conditionAction, DateTime timePoint, params string[] codeNames)
+        {
+            return this.LoadByNameCondition(conditionAction, "S.Name", timePoint, codeNames);
+        }
+
+        private SchemaObjectCollection LoadByNameCondition(Action<ConnectiveSqlClauseCollection> conditionAction, string nameField, DateTime timePoint, params string[] codeNames)
+        {
             var timeCondition = VersionStrategyQuerySqlBuilder.Instance.TimePointToBuilder(timePoint, "O.");
 
             var timeCondition2 = VersionStrategyQuerySqlBuilder.Instance.TimePointToBuilder(timePoint, "S.");
 
-            InSqlClauseBuilder inBuilder = new InSqlClauseBuilder("S.CodeName");
+            InSqlClauseBuilder inBuilder = new InSqlClauseBuilder(nameField);
 
             inBuilder.AppendItem(codeNames);
 
@@ -140,33 +157,6 @@ namespace MCS.Library.SOA.DataObjects.Security.Adapters
                 result = new SchemaObjectCollection();
 
             return result;
-        }
-
-        private SchemaObjectCollection LoadByCodeNameInner(ConnectiveSqlClauseCollection conditions)
-        {
-            string sql = "SELECT O.* FROM SC.SchemaObject O INNER JOIN SC.SchemaObjectSnapshot S ON O.ID = S.ID AND S.VersionStartTime = O.VersionStartTime  WHERE ";
-            sql += conditions.ToSqlString(TSqlBuilder.Instance);
-
-            var result = new SchemaObjectCollection();
-            var dt = DbHelper.RunSqlReturnDS(sql, this.GetConnectionName()).Tables[0];
-
-            result.LoadFromDataView(dt.DefaultView);
-
-            return result;
-        }
-
-        [Obsolete("此方法已经被废弃，请使用带Status的重载方法")]
-        public SchemaObjectBase LoadByCodeName(string schemaType, string codeName, DateTime timePoint)
-        {
-            string.IsNullOrEmpty(schemaType).TrueThrow("schemaType不得为空");
-            string.IsNullOrEmpty(codeName).TrueThrow("codeName不得为空");
-
-            return LoadByCodeName(c =>
-            {
-                WhereSqlClauseBuilder condition = new WhereSqlClauseBuilder();
-                condition.AppendItem("O.SchemaType", schemaType);
-                c.Add(condition);
-            }, timePoint, codeName).FirstOrDefault();
         }
 
         /// <summary>
@@ -190,6 +180,55 @@ namespace MCS.Library.SOA.DataObjects.Security.Adapters
                 c.Add(condition);
             }, timePoint, codeName).FirstOrDefault();
         }
+
+        /// <summary>
+        /// 根据Name和status进行查询
+        /// </summary>
+        /// <param name="schemaType"></param>
+        /// <param name="name"></param>
+        /// <param name="status"></param>
+        /// <param name="timePoint"></param>
+        /// <returns></returns>
+        public SchemaObjectCollection LoadByName(string schemaType, string name, SchemaObjectStatus status, DateTime timePoint)
+        {
+            string.IsNullOrEmpty(schemaType).TrueThrow("schemaType不得为空");
+            string.IsNullOrEmpty(name).TrueThrow("name");
+
+            return LoadByName(c =>
+            {
+                WhereSqlClauseBuilder condition = new WhereSqlClauseBuilder();
+                condition.AppendItem("O.SchemaType", schemaType);
+                condition.AppendItem("O.Status", (int)status);
+                c.Add(condition);
+            }, timePoint, name);
+        }
+
+        private SchemaObjectCollection LoadByCodeNameInner(ConnectiveSqlClauseCollection conditions)
+        {
+            string sql = "SELECT O.* FROM SC.SchemaObject O INNER JOIN SC.SchemaObjectSnapshot S ON O.ID = S.ID AND S.VersionStartTime = O.VersionStartTime  WHERE ";
+            sql += conditions.ToSqlString(TSqlBuilder.Instance);
+
+            var result = new SchemaObjectCollection();
+            var dt = DbHelper.RunSqlReturnDS(sql, this.GetConnectionName()).Tables[0];
+
+            result.LoadFromDataView(dt.DefaultView);
+
+            return result;
+        }
+
+        //[Obsolete("此方法已经被废弃，请使用带Status的重载方法")]
+        //public SchemaObjectBase LoadByCodeName(string schemaType, string codeName, DateTime timePoint)
+        //{
+        //    string.IsNullOrEmpty(schemaType).TrueThrow("schemaType不得为空");
+        //    string.IsNullOrEmpty(codeName).TrueThrow("codeName不得为空");
+
+        //    return LoadByCodeName(c =>
+        //    {
+        //        WhereSqlClauseBuilder condition = new WhereSqlClauseBuilder();
+        //        condition.AppendItem("O.SchemaType", schemaType);
+        //        c.Add(condition);
+        //    }, timePoint, codeName).FirstOrDefault();
+        //}
 
         /// <summary>
         /// 按照SchemaType加载对象

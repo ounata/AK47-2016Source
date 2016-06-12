@@ -57,6 +57,26 @@ namespace PPTS.Contracts.Proxies
         }
 
         /// <summary>
+        /// 获取学员主监护人信息
+        /// </summary>
+        /// <param name="customerID"></param>
+        /// <returns></returns>
+        public PrimaryParentQueryResult QueryPrimaryParentByCustomerID(string customerID)
+        {
+            return this.SingleCall(action => action.QueryPrimaryParentByCustomerID(customerID));
+        }
+
+        /// <summary>
+        /// 获取关联订单扣除综合服务费
+        /// </summary>
+        /// <param name="orderID"></param>
+        /// <returns></returns>
+        public CustomerExpenseRelation GetCustomerExpenseByOrderId(string orderID)
+        {
+            return this.SingleCall(action => action.GetCustomerExpenseByOrderId(orderID));
+        }
+
+        /// <summary>
         /// 通过学员ID集合,获得综合服务费扣减情况信息
         /// </summary>
         /// <param name="customerIDs">学员ID集合</param>

@@ -27,15 +27,15 @@ namespace MCS.Library.SOA.DataObjects
             return new DeltaMaterialList();
         }
 
-		/// <summary>
-		/// 
-		/// </summary>
-		public void GenerateTempPhysicalFilePath()
-		{
-			this.Deleted.GenerateTempPhysicalFilePath(this.rootPathName);
-			this.Inserted.GenerateTempPhysicalFilePath(this.rootPathName);
-			this.Updated.GenerateTempPhysicalFilePath(this.rootPathName);
-		}
+        /// <summary>
+        /// 
+        /// </summary>
+        public void GenerateTempPhysicalFilePath()
+        {
+            this.Deleted.GenerateTempPhysicalFilePath(this.rootPathName);
+            this.Inserted.GenerateTempPhysicalFilePath(this.rootPathName);
+            this.Updated.GenerateTempPhysicalFilePath(this.rootPathName);
+        }
 
         /// <summary>
         /// 根据delta数据产生副本的delta数据
@@ -111,9 +111,9 @@ namespace MCS.Library.SOA.DataObjects
             return materialModifyResult;
         }
 
-        public override bool IsEmpty()
+        public override MaterialList CreateNewInnerCollecction()
         {
-            return this.Inserted.Count == 0 && this.Deleted.Count == 0 && this.Updated.Count == 0;
+            return new MaterialList();
         }
     }
 }

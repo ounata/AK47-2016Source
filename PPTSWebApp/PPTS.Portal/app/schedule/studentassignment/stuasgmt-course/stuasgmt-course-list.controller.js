@@ -5,7 +5,7 @@
                 function ($scope, $state, dataSyncService, studentassignmentDataService, $stateParams, mcsDialogService) {
                     var vm = this;
                     vm.weekText = new Array("星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六");
-                    vm.CID = $stateParams.cID;
+                    vm.CID = $stateParams.id;
                     vm.criteria = vm.criteria || {};
                     vm.criteria.customerID = vm.CID;
                     vm.criteria.startTime = '';
@@ -210,7 +210,7 @@
 
                     /*跳转周视图*/
                     vm.gotoCourseWeek = function () {
-                        $state.go('ppts.stuasgmt-course', { cID: vm.CID });
+                        $state.go('ppts.stuasgmt-course', { id: vm.CID });
                     };
 
                     /*跳转学生排课列表*/

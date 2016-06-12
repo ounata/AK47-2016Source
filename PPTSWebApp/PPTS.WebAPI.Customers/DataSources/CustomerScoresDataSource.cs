@@ -10,6 +10,7 @@ using PPTS.Data.Customers.Adapters;
 using PPTS.WebAPI.Customers.ViewModels.PotentialCustomers;
 using PPTS.Data.Common.Entities;
 using PPTS.Data.Common.Adapters;
+using MCS.Library.Data.DataObjects;
 
 namespace PPTS.WebAPI.Customers.DataSources
 {
@@ -19,6 +20,31 @@ namespace PPTS.WebAPI.Customers.DataSources
 
         private CustomerScoresDataSource()
         {
+        }
+
+        public PagedQueryResult<CustomerScoresSearchModel, CustomerScoresSearchModelCollection> LoadCustomerScores(IPageRequestParams prp, CustomerScoresQueryCriteriaModel condition, IEnumerable<IOrderByRequestItem> orderByBuilder)
+        {
+            WhereSqlClauseBuilder customerScoreBuilder = ConditionMapping.GetWhereSqlClauseBuilder(condition, new AdjustConditionValueDelegate(CustomerScoresQueryCriteriaModel.AdjustConditionValueDelegate_CustomerScore));
+            WhereSqlClauseBuilder customerScoreItemsBuilder = ConditionMapping.GetWhereSqlClauseBuilder(condition, new AdjustConditionValueDelegate(CustomerScoresQueryCriteriaModel.AdjustConditionValueDelegate_CustomerScoreItems));
+            WhereSqlClauseBuilder staffRelationBuilder = ConditionMapping.GetWhereSqlClauseBuilder(condition, new AdjustConditionValueDelegate(CustomerScoresQueryCriteriaModel.AdjustConditionValueDelegate_StaffRelations));
+            WhereSqlClauseBuilder customerBuilder = ConditionMapping.GetWhereSqlClauseBuilder(condition, new AdjustConditionValueDelegate(CustomerScoresQueryCriteriaModel.AdjustConditionValueDelegate_Customers));
+
+            string customerScoreWhere = customerScoreBuilder.ToSqlString(TSqlBuilder.Instance);
+            string customerScoreItemsWhere = customerScoreItemsBuilder.ToSqlString(TSqlBuilder.Instance);
+            string staffRelationsWhere = condition.CheckCondition_StaffRelations() ? "" : string.Format(" and exists(select CustomerID from CM.CustomerStaffRelations_Current Staff where Staff.CustomerID = CustomerScores.CustomerID and {0}) ", staffRelationBuilder.ToSqlString(TSqlBuilder.Instance));
+            string customersWhere = condition.CheckCondition_Customers() ? "" : string.Format(" and exists(select CustomerID from CM.Customers Customers where Customers.CustomerID = CustomerScores.CustomerID and {0}) ", customerBuilder.ToSqlString(TSqlBuilder.Instance));
+
+            string select = @"";
+            string from = @"";
+
+            string where = string.Format("{0}{1}{2}{3}",
+                                        string.IsNullOrEmpty(customerScoreWhere) ? " 1 = 1 " : customerScoreWhere,
+                                        string.IsNullOrEmpty(customerScoreItemsWhere) ? "" : " and " + customerScoreItemsWhere,
+                                        staffRelationsWhere,
+                                        customersWhere);
+            var result = Query(prp, select, from, where, orderByBuilder);
+
+            return result;
         }
 
         protected override void OnAfterQuery(CustomerScoresSearchModelCollection result)
@@ -56,34 +82,17 @@ namespace PPTS.WebAPI.Customers.DataSources
 
         }
 
-        public PagedQueryResult<CustomerScoresSearchModel, CustomerScoresSearchModelCollection> LoadCustomerScores(IPageRequestParams prp, CustomerScoresQueryCriteriaModel condition, IEnumerable<IOrderByRequestItem> orderByBuilder)
+        protected override void OnBuildQueryCondition(QueryCondition qc)
         {
-            WhereSqlClauseBuilder customerScoreBuilder = ConditionMapping.GetWhereSqlClauseBuilder(condition, new AdjustConditionValueDelegate(CustomerScoresQueryCriteriaModel.AdjustConditionValueDelegate_CustomerScore));
-            WhereSqlClauseBuilder customerScoreItemsBuilder = ConditionMapping.GetWhereSqlClauseBuilder(condition, new AdjustConditionValueDelegate(CustomerScoresQueryCriteriaModel.AdjustConditionValueDelegate_CustomerScoreItems));
-            WhereSqlClauseBuilder staffRelationBuilder = ConditionMapping.GetWhereSqlClauseBuilder(condition, new AdjustConditionValueDelegate(CustomerScoresQueryCriteriaModel.AdjustConditionValueDelegate_StaffRelations));
-            WhereSqlClauseBuilder customerBuilder = ConditionMapping.GetWhereSqlClauseBuilder(condition, new AdjustConditionValueDelegate(CustomerScoresQueryCriteriaModel.AdjustConditionValueDelegate_Customers));
-
-            string customerScoreWhere = customerScoreBuilder.ToSqlString(TSqlBuilder.Instance);
-            string customerScoreItemsWhere = customerScoreItemsBuilder.ToSqlString(TSqlBuilder.Instance);
-            string staffRelationsWhere = condition.CheckCondition_StaffRelations() ? "" : string.Format(" and exists(select CustomerID from CM.CustomerStaffRelations_Current Staff where Staff.CustomerID = CustomerScores.CustomerID and {0}) ", staffRelationBuilder.ToSqlString(TSqlBuilder.Instance));
-            string customersWhere = condition.CheckCondition_Customers() ? "" : string.Format(" and exists(select CustomerID from CM.Customers Customers where Customers.CustomerID = CustomerScores.CustomerID and {0}) ", customerBuilder.ToSqlString(TSqlBuilder.Instance));
-
-            string select = @" CustomerScores.CampusName, CustomerScores.CustomerID, CustomerScores.ScoreID, CustomerScores.ScoreType, CustomerScores.ScoreGrade,
+            qc.SelectFields = @" CustomerScores.CampusName, CustomerScores.CustomerID, CustomerScores.ScoreID, CustomerScores.ScoreType, CustomerScores.ScoreGrade,
 	                           CustomerScores.StudyYear, CustomerScores.StudyTerm, CustomerScores.StudyStage, /* CustomerScores.GradeRank, CustomerScores.ClassRank,*/
 	                           CustomerScores.ClassPeoples, CustomerScores.AdmissionType, CustomerScores.IsKeyCollege, CustomerScores.ExamineMonth, CustomerScores.CreateTime,
                                CustomerScoreItems.ItemID, CustomerScoreItems.SortNo, CustomerScoreItems.Subject, CustomerScoreItems.TeacherID, 
                                CustomerScoreItems.TeacherName, CustomerScoreItems.PaperScore, CustomerScoreItems.RealScore, CustomerScoreItems.GradeRank, 
                                CustomerScoreItems.ClassRank, CustomerScoreItems.Satisficing, CustomerScoreItems.IsStudyHere ";
-            string from = @" CM.CustomerScores CustomerScores inner join CM.CustomerScoreItems CustomerScoreItems on CustomerScores.ScoreID = CustomerScoreItems.ScoreID ";
-
-            string where = string.Format("{0}{1}{2}{3}",
-                                        string.IsNullOrEmpty(customerScoreWhere) ? " 1 = 1 " : customerScoreWhere,
-                                        string.IsNullOrEmpty(customerScoreItemsWhere) ? "" : " and " + customerScoreItemsWhere,
-                                        staffRelationsWhere,
-                                        customersWhere);
-            var result = Query(prp, select, from, where, orderByBuilder);
-
-            return result;
+            qc.FromClause = @" CM.CustomerScores CustomerScores inner join CM.CustomerScoreItems CustomerScoreItems on CustomerScores.ScoreID = CustomerScoreItems.ScoreID ";
+            
         }
+
     }
 }

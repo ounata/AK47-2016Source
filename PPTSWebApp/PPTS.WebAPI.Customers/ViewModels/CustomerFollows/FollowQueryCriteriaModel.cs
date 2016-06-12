@@ -8,6 +8,7 @@ namespace PPTS.WebAPI.Customers.ViewModels.CustomerFollows
     /// <summary>
     /// 客户跟进记录实体类
     /// </summary>
+    [Serializable]
     public class FollowQueryCriteriaModel
     {
         /// <summary>
@@ -23,40 +24,64 @@ namespace PPTS.WebAPI.Customers.ViewModels.CustomerFollows
         public string CustomerID { get; set; }
 
         /// <summary>
+        /// 跟进对象
+        /// </summary>
+        [ConditionMapping("a.FollowObject")]
+        public string FollowObject { get; set; }
+
+        /// <summary>
         /// 记录人
         /// </summary>
         [InConditionMapping("a.FollowerName")]
-        public int FollowerName { get; set; }
+        public string FollowerName { get; set; }
 
         /// <summary>
         /// 建档人
         /// </summary>
         [InConditionMapping("a.CreatorName")]
-        public int CreatorName { get; set; }
+        public string CreatorName { get; set; }
+
+        /// <summary>
+        /// 多个跟进阶段
+        /// </summary>
+        [InConditionMapping("a.FollowStage")]
+        public string[] FollowStages { get; set; }
 
         /// <summary>
         /// 跟进阶段
         /// </summary>
-        [InConditionMapping("a.FollowStage")]
-        public int[] FollowStages { get; set; }
+        [ConditionMapping("a.FollowStage")]
+        public string FollowStage { get; set; }
 
         /// <summary>
         /// 购买意愿
         /// </summary>
         [InConditionMapping("a.PurchaseIntention")]
-        public int[] PurchaseIntentions { get; set; }
+        public string[] PurchaseIntentions { get; set; }
+
+        /// <summary>
+        /// 购买意愿
+        /// </summary>
+        [ConditionMapping("a.PurchaseIntention")]
+        public string PurchaseIntention { get; set; }
 
         /// <summary>
         /// 客户级别
         /// </summary>
         [InConditionMapping("a.CustomerLevel")]
-        public int[] CustomerLevels { get; set; }
+        public string[] CustomerLevels { get; set; }
+
+        /// <summary>
+        /// 多个跟进方式
+        /// </summary>
+        [InConditionMapping("a.FollowType")]
+        public string[] FollowTypes { get; set; }
 
         /// <summary>
         /// 跟进方式
         /// </summary>
-        [InConditionMapping("a.FollowType")]
-        public int[] FollowTypes { get; set; }
+        [ConditionMapping("a.FollowType")]
+        public string FollowType { get; set; }
 
         /// <summary>
         /// 归属组织机构ID
@@ -96,11 +121,14 @@ namespace PPTS.WebAPI.Customers.ViewModels.CustomerFollows
 
         #endregion
 
+        [NoMapping]
+        public int IsStudyThere { get; set; }
+
         /// <summary>
         /// 是否在本机构进行辅导
         /// </summary>
-        [InConditionMapping("a.IsStudyThere")]
-        public int IsStudyThere { get; set; }
+        [ConditionMapping("a.IsStudyThere")]
+        public string NoIsStudyThere { get { return IsStudyThere == -1 ? "" : IsStudyThere.ToString(); } }
 
         #region 预计上门时间
 
@@ -146,7 +174,7 @@ namespace PPTS.WebAPI.Customers.ViewModels.CustomerFollows
         /// <summary>
         /// 咨询师姓名
         /// </summary>
-        [ConditionMapping("StaffName")]
+        [NoMapping]
         public string StaffName { get; set; }
 
 
@@ -162,6 +190,19 @@ namespace PPTS.WebAPI.Customers.ViewModels.CustomerFollows
         {
             get;
             set;
+        }
+
+        public static object AdjustConditionValueDelegate_Follow(string propertyName, object propertyValue, ref bool ignored)
+        {
+            object result = propertyValue;
+            switch (propertyName)
+            {
+                case "IsStudyThere":
+                    if (result.ToString() == "-1")
+                        ignored = true;
+                    break;
+            }
+            return result;
         }
     }
 }

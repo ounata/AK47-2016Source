@@ -374,8 +374,8 @@
     mcs.util.indexOf = function (data, key, value) {
         if (!data || !data.length) return -1;
         for (var index in data) {
-            if (!data[index][key]) return -1;
-            if (data[index][key] == value) {
+            if (!data[index]['key']) return -1;
+            if (data[index]['value'] == value) {
                 return index;
             }
         }
@@ -449,15 +449,21 @@
     /*
      * 设置当前的操作项(checkbox)
      */
-    mcs.util.setSelectedItems = function (selected, item, event) {
+    mcs.util.setSelectedItems = function (selected, item, event, length, defaultKey) {
         var index = selected.indexOf(item.key);
         if (event.target.checked) {
             if (index === -1) {
                 selected.push(item.key);
             }
+            if (selected.length == length - 1 && selected.indexOf(defaultKey) == -1) {
+                selected.push(defaultKey);
+            }
         } else {
             if (index !== -1) {
                 selected.splice(index, 1);
+                if (selected.indexOf(defaultKey) > -1) {
+                    selected.splice(selected.indexOf(defaultKey), 1);
+                }
             }
         }
     };
@@ -638,6 +644,16 @@
         ngModule.registerService = $provide.service;
         ngModule.registerConstant = $provide.constant;
         ngModule.registerValue = $provide.value;
+    };
+
+    /*
+    * 配置应用程序的缓存模板
+    */
+    mcs.util.configCacheTemplate = function ($templateCache, key, content) {
+        var template = $templateCache.get(key);
+        if (!template) {
+            $templateCache.put(key, content);
+        }
     };
 
     /**

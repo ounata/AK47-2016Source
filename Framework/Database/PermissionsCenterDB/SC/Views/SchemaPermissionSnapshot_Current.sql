@@ -25,3 +25,7 @@ CREATE INDEX [IX_SchemaPermissionSnapshot_Current_CodeName] ON [SC].[SchemaPermi
 
 GO
 
+CREATE INDEX [IX_SchemaPermissionSnapshot_Current_Name] ON [SC].[SchemaPermissionSnapshot_Current] ([Name])
+
+GO
+

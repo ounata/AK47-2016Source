@@ -47,6 +47,14 @@ namespace PPTS.WebAPI.Orders.Service
             return PPTS.Contracts.Proxies.PPTSConfigRuleQueryServiceProxy.Instance.QueryExpenseByCampusID(campusId).ExpenseCollection;
         }
 
+        /// <summary>
+        /// 获取2级产品分类
+        /// </summary>
+        /// <returns></returns>
+        public static CategoryEntityCollection GetCategories() {
+            return PPTS.Contracts.Proxies.PPTSCategoryQueryServiceProxy.Instance.QueryCategories();
+        }
+
 
     }
     

@@ -192,6 +192,7 @@
     <Compile Include="DataSources\CustomerScoresDataSource.cs" />
     <Compile Include="DataSources\CustomerVisitDataSource.cs" />
     <Compile Include="DataSources\ParentDataSource.cs" />
+    <Compile Include="DataSources\CustomerSearchDataSource.cs" />
     <Compile Include="DataSources\PotentialCustomerDataSource.cs" />
     <Compile Include="DataSources\CustomerStopAlertDataSource.cs" />
     <Compile Include="Executors\AccountEditReturnApplyExecutor.cs" />

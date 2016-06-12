@@ -1,25 +1,22 @@
 ﻿<!-- #开始：综合服务费.快速查询条件 -->
-<div class="mcs-panel-search well well-sm">
-    <div class="portlet">
-        <div class="portlet-title line">
-            <div class="caption">
-                <label class="quick-search"><i class="ace-icon fa fa-search bigger-125"></i> 快速查询</label>
-            </div>
-        </div>
-        <div class="portlet-body">
-            <ppts-select-branch model="vm.criteria.orgIds" class="pull-left"/>
-            <div class="pull-left">
-                <div class="profile-info-name">综合服务费类：</div>
-                <div class="profile-info-value">
-                    <ppts-checkbox-group category="serviceFeeType" model="vm.criteria.serviceFeeTypes" clear="vm.criteria.serviceFeeTypes=[]" class="pull-left" />
-                </div>
-            </div>
-           
-            <mcs-input model="vm.criteria.creatorName" placeholder="创建人姓名" />
-            <mcs-button category="search" click="vm.search()" size="medium" />
-        </div>
+
+<ppts-dynamic-content template="quick-search.tpl.html">
+    <div class="row">
+       <div class="col-md-4">
+           <ppts-select-branch model="vm.criteria.orgIds" class="pull-left mcs-width-full" />
+       </div>
+      <div class="col-md-4">
+          <div class="col-md-3">服务费类型：</div>
+          <div class="col-md-9">
+              <ppts-checkbox-group category="serviceFeeType" model="vm.criteria.serviceFeeTypes" clear="vm.criteria.serviceFeeTypes=[]" class="mcs-width-full pull-left" />
+          </div>
+      </div>
+        <div class="col-md-4">
+            <mcs-input model="vm.criteria.creatorName" placeholder="创建人姓名" class="pull-left mcs-width-full"/>
+        </div>  
     </div>
-</div>
+
+</ppts-dynamic-content>
 <!-- /结束：综合服务费.快速查询条件 -->
 <!-- #开始：综合服务费.工具栏 -->
 <div class="mcs-panel-toolbar">

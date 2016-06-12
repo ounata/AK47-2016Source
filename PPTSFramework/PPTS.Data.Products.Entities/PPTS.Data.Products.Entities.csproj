@@ -58,6 +58,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\CategoryEntity.cs" />
     <Compile Include="Entities\DiscountPermissionView.cs" />
     <Compile Include="Entities\CategoryCatalog.cs" />
     <Compile Include="Entities\Discount.cs" />
@@ -68,7 +69,7 @@
     <Compile Include="Entities\Expense.cs" />
     <Compile Include="Entities\ExpensePermission.cs" />
     <Compile Include="Entities\Extensions.cs" />
-    <Compile Include="Entities\OrderClassGroupProduct.cs" />
+    <Compile Include="Entities\OrderClassGroupProductView.cs" />
     <Compile Include="Entities\Partner.cs" />
     <Compile Include="Entities\Present.cs" />
     <Compile Include="Entities\PresentItem.cs" />

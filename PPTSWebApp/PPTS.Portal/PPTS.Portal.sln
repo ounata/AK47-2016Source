@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPTS.Data.Customers", "..\.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPTS.Data.Products", "..\..\PPTSFramework\PPTS.Data.Products\PPTS.Data.Products.csproj", "{FC0E93D0-1D5C-4BDC-95CA-D77052D2F9D2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPTS.Web.Component", "..\PPTS.Web.Component\PPTS.Web.Component.csproj", "{D40DC48B-6186-4DCF-8693-3CDB8F7F8245}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,12 +52,18 @@ Global
 		{FC0E93D0-1D5C-4BDC-95CA-D77052D2F9D2}.DELUXEWORKSTEST|Any CPU.Build.0 = Debug|Any CPU
 		{FC0E93D0-1D5C-4BDC-95CA-D77052D2F9D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FC0E93D0-1D5C-4BDC-95CA-D77052D2F9D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D40DC48B-6186-4DCF-8693-3CDB8F7F8245}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D40DC48B-6186-4DCF-8693-3CDB8F7F8245}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D40DC48B-6186-4DCF-8693-3CDB8F7F8245}.DELUXEWORKSTEST|Any CPU.ActiveCfg = Debug|Any CPU
+		{D40DC48B-6186-4DCF-8693-3CDB8F7F8245}.DELUXEWORKSTEST|Any CPU.Build.0 = Debug|Any CPU
+		{D40DC48B-6186-4DCF-8693-3CDB8F7F8245}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D40DC48B-6186-4DCF-8693-3CDB8F7F8245}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 6
+		SccNumberOfProjects = 7
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://10.1.56.70:8080/tfs/pptsv2.0
 		SccLocalPath0 = .
@@ -73,5 +81,8 @@ Global
 		SccProjectUniqueName5 = ..\\..\\PPTSFramework\\PPTS.Data.Products\\PPTS.Data.Products.csproj
 		SccProjectName5 = ../../PPTSFramework/PPTS.Data.Products
 		SccLocalPath5 = ..\\..\\PPTSFramework\\PPTS.Data.Products
+		SccProjectUniqueName6 = ..\\PPTS.Web.Component\\PPTS.Web.Component.csproj
+		SccProjectName6 = ../PPTS.Web.Component
+		SccLocalPath6 = ..\\PPTS.Web.Component
 	EndGlobalSection
 EndGlobal

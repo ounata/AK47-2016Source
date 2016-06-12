@@ -45,11 +45,6 @@
                     }
                 }
 
-                vm.initData = function () {
-                    vm.type = data.type;
-                    vm.customer = data.customer;
-                }
-
                 // 新建家长
                 vm.new = function () {
                     customerService.handle('trans-new-parent', function () {
@@ -58,10 +53,10 @@
                 };
 
                 // 页面初始化加载
-                vm.initData();
                 customerParentService.configParentAddHeaders(vm);
                 customerParentService.getAllParents(vm, data, function () {
                     $scope.$broadcast('dictionaryReady');
+                    $scope.$broadcast('dataReady');
                 });
 
                 // 亲属关系切换

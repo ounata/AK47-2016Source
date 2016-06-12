@@ -9,9 +9,11 @@ angular.module('app.lib', ['ngSanitize', 'ui.select', 'app.common']);
 angular.module('app.page', []);
 angular.module('app.issue', []);
 
+angular.module('app.workflow', []);
+
 angular.module('app', [
-        'ngCookies', 'ngSanitize', 'ui.router', 'ui.bootstrap', 'blockUI', 'mcs.ng', 'app.common',
-        'app.main', 'app.lib', 'app.component', 'app.widget', 'app.page', 'app.issue', 'dialogs.main'
+        'ngCookies', 'ngSanitize', 'ngResource', 'ui.router', 'ui.bootstrap', 'blockUI', 'mcs.ng', 'app.common',
+        'app.main', 'app.lib', 'app.component', 'app.widget', 'app.page', 'app.issue', 'dialogs.main', 'app.workflow'
     ])
     .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
         $urlRouterProvider.otherwise("/main");
@@ -214,11 +216,50 @@ angular.module('app', [
             templateUrl: 'app/widget/ppts-datetimepicker/main.html',
             controller: 'PPTSDatetimepickerController',
             controllerAs: 'vm'
+        }).state('workflow-startup', {
+            url: '/workflow-startup',
+            templateUrl: 'app/workflow/startup.html',
+            controller: 'WorkflowStartupController',
+            controllerAs: 'vm'
+        }).state('workflow-usertask', {
+            url: '/workflow-usertask',
+            templateUrl: 'app/workflow/usertask.html',
+            controller: 'WorkflowUsertaskController',
+            controllerAs: 'vm'
+        }).state('workflow-form', {
+            url: '/workflow-form?pid&aid&rid',
+            templateUrl: 'app/workflow/form.html',
+            controller: 'WorkflowFormController',
+            controllerAs: 'vm'
         });
     }])
     .config(['$httpProvider', function($httpProvider) {
-        $httpProvider.defaults.headers.put['Content-Type'] = 'application/x-www-form-urlencoded';
-        $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+        //$httpProvider.defaults.headers.put['Content-Type'] = 'application/x-www-form-urlencoded';
+        //$httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+
+        $httpProvider.defaults.transformResponse.unshift(function (data, headers) {
+            if (mcs.util.isString(data)) {
+                var JSON_PROTECTION_PREFIX = /^\)\]\}',?\n/;
+                var APPLICATION_JSON = 'application/json';
+                var JSON_START = /^\[|^\{(?!\{)/;
+                var JSON_ENDS = {
+                    '[': /]$/,
+                    '{': /}$/
+                };
+                // Strip json vulnerability protection prefix and trim whitespace
+                var tempData = data.replace(JSON_PROTECTION_PREFIX, '').trim();
+
+                if (tempData) {
+                    var contentType = headers('Content-Type');
+                    var jsonStart = tempData.match(JSON_START);
+                    if ((contentType && (contentType.indexOf(APPLICATION_JSON) === 0)) || jsonStart && JSON_ENDS[jsonStart[0]].test(tempData)) {
+                        data = (new Function("", "return " + tempData))();
+                    }
+                }
+            }
+
+            return data;
+        });
 
         // Override $http service's default transformRequest
         $httpProvider.defaults.transformRequest = [function(data) {
@@ -262,5 +303,11 @@ angular.module('app', [
         }];
     }])
     .config(['blockUIConfig', function(blockUIConfig) {
+        blockUIConfig.autoBlock = true;
+        blockUIConfig.requestFilter = function(requestConfig) {
+            if (requestConfig.headers['autoComplete']) {
+                return false;
+            }
+        };
         blockUIConfig.message = '正在加载数据 ...';
     }]);

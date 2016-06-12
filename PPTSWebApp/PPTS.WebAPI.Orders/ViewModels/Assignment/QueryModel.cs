@@ -19,17 +19,9 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
     public class StudentAssignQM : AssignQMBase
     {
         /// 学员ID
-        public string CustomerID
-        {
-            get;
-            set;
-        }
+        public string CustomerID { get; set; }
         ///教师姓名
-        public string TeacherName
-        {
-            get;
-            set;
-        }
+        public string TeacherName { get; set; }
     }
 
     ///按教师排课 周视图 查询排课信息模型
@@ -48,24 +40,19 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
 
         public string CustomerID { get; set; }
 
-        /// <summary>
         /// 复制课表源开始日期
-        /// </summary>
         [DataMember]
         public DateTime SrcDateStart { get; set; }
-        /// <summary>
+
         /// 复制课表源结束日期
-        /// </summary>
         [DataMember]
         public DateTime SrcDateEnd { get; set; }
-        /// <summary>
+
         /// 复制课表目标开始日期
-        /// </summary>
         [DataMember]
         public DateTime DestDateStart { get; set; }
-        /// <summary>
+
         /// 复制课表目标结束日期
-        /// </summary>
         [DataMember]
         public DateTime DestDateEnd { get; set; }
         #endregion
@@ -79,76 +66,39 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
 
         /// 排课ID
         [DataMember]
-        public string AssignID
-        {
-            get;
-            set;
-        }
+        public string AssignID { get; set; }
 
-        /// 
         [DataMember]
-        public string Info
-        {
-            get;
-            set;
-        }
+        public string Info { get; set; }
 
         /// 调课后日期
         [DataMember]
-        public DateTime ReDate
-        {
-            get;
-            set;
-        }
+        public DateTime ReDate { get; set; }
 
         /// 调课后小时
         [DataMember]
-        public string ReHour
-        {
-            get;
-            set;
-        }
+        public string ReHour { get; set; }
 
         /// 调整后分钟
         [DataMember]
-        public string ReMinute
-        {
-            get;
-            set;
-        }
+        public string ReMinute { get; set; }
 
         /// 原排课开始时间
         [DataMember]
-        public DateTime StartTime
-        {
-            get;
-            set;
-        }
+        public DateTime StartTime { get; set; }
 
         /// 原排课结束时间
         [DataMember]
-        public DateTime EndTime
-        {
-            get;
-            set;
-        }
+        public DateTime EndTime { get; set; }
 
         ///学员ID
         [DataMember]
-        public string CustomerID
-        {
-            get;
-            set;
-        }
+        public string CustomerID { get; set; }
 
         /// 该排课允许调整的最大时间
         /// 规则： 1.时间选择框只能选择当前日期后10日内的日期，例：今天是3月25日，只可选择4月3日（含）之前的日期 
         [DataMember]
-        public DateTime AllowResetDateTime
-        {
-            get;
-            set;
-        }
+        public DateTime AllowResetDateTime { get; set; }
         #endregion
     }
 

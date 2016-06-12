@@ -5219,6 +5219,22 @@
             List的扩展方法
             </summary>
         </member>
+        <member name="M:MCS.Library.Core.IListExtension.ForEach``1(System.Collections.Generic.IList{``0},System.Action{``0,System.Int32})">
+            <summary>
+            枚举处理IList的内容
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="data"></param>
+            <param name="action"></param>
+        </member>
+        <member name="M:MCS.Library.Core.IListExtension.ForEach``1(System.Collections.IList,System.Action{``0,System.Int32})">
+            <summary>
+            枚举处理IList的内容
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="data"></param>
+            <param name="action"></param>
+        </member>
         <member name="M:MCS.Library.Core.IListExtension.BinarySearch``1(System.Collections.Generic.IList{``0},``0,System.Comparison{``0})">
             <summary>
             在一个有序的List中进行二分查找
@@ -5681,6 +5697,22 @@
             </summary>
             <param name="flag"></param>
             <param name="func"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MCS.Library.Core.Extensions.TrueAction(System.Boolean,System.Action)">
+            <summary>
+            当bool参数为true时，调用操作函数
+            </summary>
+            <param name="flag"></param>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MCS.Library.Core.Extensions.FalseAction(System.Boolean,System.Action)">
+            <summary>
+            当bool参数为false时，调用操作函数
+            </summary>
+            <param name="flag"></param>
+            <param name="action"></param>
             <returns></returns>
         </member>
         <member name="M:MCS.Library.Core.Extensions.IsNotMinValue(System.DateTime,System.Action{System.DateTime})">
@@ -11525,6 +11557,16 @@
         <member name="P:MCS.Library.Data.Mapping.ConditionMappingAttributeBase.DefaultValueUsage">
             <summary>
             默认值的操作方式
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Data.Mapping.ConditionMappingAttributeBase.UtcTimeToLocal">
+            <summary>
+            假设数据库中存放的是UTC time，转换为TimeZoneContext中的时区
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Data.Mapping.ConditionMappingAttributeBase.DefaultExpression">
+            <summary>
+            对应的属性为空时，所提供的缺省值表达式
             </summary>
         </member>
         <member name="T:MCS.Library.Data.Mapping.ClauseBindingFlags">

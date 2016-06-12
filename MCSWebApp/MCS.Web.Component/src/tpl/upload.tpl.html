@@ -29,7 +29,7 @@
                 <input ng-disabled="readonly" type="text" name="fileTitle" ng-model="f.title">
             </td>
             <td>
-                <a ng-click="downloadFile(f)" title="{{f.originalName}}">点击下载</a>
+                <a ng-click="downloadFile(f)" style="cursor:pointer" title="{{f.originalName}}">点击下载</a>
             </td>
             <td>
                 <input ng-disabled="readonly" type="button" class="btn btn-info" ng-click="editFile(f)" value="修改">

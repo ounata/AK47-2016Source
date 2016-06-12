@@ -1,111 +1,38 @@
 ﻿<!-- 高级查询条件 -->
-<div id="accordion" class="accordion-style1 panel-group">
-    <div class="panel panel-info">
-        <div class="panel-heading">
-            <h4 class="panel-title">
-                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#advance-search">
-                    <i class="ace-icon fa fa-angle-right bigger-110" data-icon-hide="fa-angle-down" data-icon-show="fa-angle-right"></i>
-                    &nbsp;高级查询
-                </a>
-            </h4>
-        </div>
-        <div class="panel-collapse collapse mcs-advance-search" id="advance-search">
-            <div class="panel-body">
-                <div class="profile-user-info mcs-user-profile follow-list">
-                    <div class="profile-info-row">
-                        <div class="profile-info-name">当前年级：</div>
-                        <div class="profile-info-value">
-                            <ppts-checkbox-group category="grade" model="vm.criteria.grades" clear="vm.criteria.grades=[]" />
-                        </div>
-                    </div>
-                    <div class="profile-info-row">
-                        <div class="profile-info-name">建档日期：</div>
-                        <div class="profile-info-value">
-                            <ppts-daterangepicker startDate="vm.criteria.createTimeStart" endDate="vm.criteria.createTimeEnd" />
-                        </div>
-                    </div>
-                    <div class="profile-info-row">
-                        <div class="profile-info-name">充值日期：</div>
-                        <div class="profile-info-value">
-                            <ppts-daterangepicker startDate="vm.criteria.applyTimeStart" endDate="vm.criteria.applyTimeEnd" />
-                        </div>
-                    </div>
-                    <div class="profile-info-row">
-                        <div class="profile-info-name">充值类型：</div>
-                        <div class="profile-info-value">
-                            <ppts-checkbox-group category="chargeType" model="vm.criteria.chargeTypes" clear="vm.criteria.chargeTypes=[]" />
-                        </div>
-                    </div>
-                    <div class="profile-info-row">
-                        <div class="profile-info-name">充值金额：</div>
-                        <div class="profile-info-value">
-                            <ppts-datarange min="vm.criteria.chargeMoneyStart" max="vm.criteria.chargeMoneyEnd" css="col-sm-4 col-sm-4" />
-                        </div>
-                    </div>
-                    <div class="profile-info-row">
-                        <div class="profile-info-name">审核状态：</div>
-                        <div class="profile-info-value">
-                            <ppts-checkbox-group category="aduitStatus" model="vm.criteria.aduitStatuses" clear="vm.criteria.aduitStatuses=[]" />
-                        </div>
-                    </div>
-                    <div class="profile-info-row">
-                        <div class="profile-info-name">建档人：</div>
-                        <div class="profile-info-value">
-                            <ppts-checkbox-group category="people" model="vm.criteria.creatorJobs" clear="vm.criteria.creatorJobs=[]" />
-                            <mcs-input placeholder="建档人姓名" model="vm.criteria.creatorName" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<ppts-dynamic-content template="advance-search.tpl.html" />
 <!-- 快速查询条件 -->
-<div class="mcs-panel-search well well-sm">
-    <div class="portlet">
-        <div class="portlet-title line">
-            <div class="caption">
-                <label class="quick-search"><i class="ace-icon fa fa-search bigger-125"></i> 快速查询</label>
-            </div>
+<ppts-dynamic-content template="quick-search.tpl.html">
+    <div class="row">
+        <div class="col-md-6">
+            <ppts-select-branch model="vm.criteria.campusIDs" />
         </div>
-        <div class="portlet-body">
-            <div class="line-height-40">
-                <div class="input-group input-xlarge mcs-input-group pull-left search-inline">
-                    <mcs-input placeholder="选择大区/分公司/校区" model="vm.names" readonly="true" css="form-control mcs-input-search" />
-                    <span class="input-group-btn">
-                        <button class="btn btn-sm btn-info" type="button" ng-click="vm.selectOrgTree()">
-                            <i class="ace-icon fa fa-check bigger-110"></i>
-                            选择
-                        </button>
-                    </span>
-                </div>
-                <mcs-input placeholder="学员/家长姓名" model="vm.criteria.customerOrParentName" css="mcs-input-search" />
-                <mcs-input placeholder="家长联系电话" model="vm.criteria.phoneNumber" css="mcs-input-search" />
-                <mcs-input placeholder="学员编号" model="vm.criteria.customerCode" css="mcs-input-search" />
-            </div>
-           
-            <div class="line-height-40">
-                <mcs-input placeholder="缴费单号" model="vm.criteria.applyNo" css="mcs-input-search"/>
-                <mcs-input placeholder="咨询师" model="vm.criteria.consultantName" css="mcs-input-search"/>
-                <mcs-input placeholder="学管师" model="vm.criteria.educatorName" css="mcs-input-search"/>
-                <mcs-button category="search" click="vm.search()" class="search-btn"/>
-            </div>
-
+        <div class="col-md-3">
+            <mcs-input placeholder="缴费单号" uib-tooltip="缴费单号" css="mcs-input-search mcs-width-full" model="vm.criteria.applyNo" />
+        </div>
+        <div class="col-md-3">
+            <mcs-input placeholder="学员编号" uib-tooltip="学员编号" css="mcs-input-search mcs-width-full" model="vm.criteria.customerCode" />
         </div>
     </div>
-</div>
+    <div class="row">
+        <div class="col-md-3">
+            <mcs-input placeholder="学员/家长姓名" uib-tooltip="学员/家长姓名" css="mcs-input-search mcs-width-full" model="vm.criteria.customerOrParentName" />
+        </div>
+        <div class="col-md-3">
+            <mcs-input placeholder="家长联系方式" uib-tooltip="家长联系方式" css="mcs-input-search mcs-width-full" model="vm.criteria.phoneNumber" />
+        </div>
+        <div class="col-md-3">
+            <mcs-input placeholder="咨询师" uib-tooltip="咨询师" css="mcs-input-search mcs-width-full" model="vm.criteria.consultantName" />
+        </div>
+        <div class="col-md-3">
+            <mcs-input placeholder="学管师" uib-tooltip="学管师" css="mcs-input-search mcs-width-full" model="vm.criteria.educatorName" />
+        </div>
+    </div>
+</ppts-dynamic-content>
 <!-- 工具栏 -->
-<div class="mcs-panel-toolbar">
+<ppts-dynamic-content template="toolbar.tpl.html">
     <mcs-button category="edit" text="编辑业绩归属" click="vm.edit()"></mcs-button>
     <mcs-button category="approve" text="缴费单审核" click="vm.audit()"></mcs-button>
     <mcs-button category="export"></mcs-button>
-</div>
-<div class="alert alert-block alert-danger" ng-show="vm.errorMessage">
-    <button type="button" class="close" data-dismiss="alert">
-        <i class="ace-icon fa fa-times"></i>
-    </button>
-    <i class="ace-icon fa fa-warning"></i>
-    {{vm.errorMessage}}
-</div>
+</ppts-dynamic-content>
 <!-- 数据表格 -->
 <mcs-datatable data="vm.data" />

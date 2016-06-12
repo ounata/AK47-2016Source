@@ -1,0 +1,81 @@
+﻿<style>
+    span.activity-step{
+        font-size: 20px;
+        padding: 10px;
+    }
+    .activity-step .active{
+        background-color: #4cff00;
+    }
+    .activity-step .inactive{
+        background-color: lightgray;
+    }
+</style>
+<!-- #开始：位置条 -->
+<div class="breadcrumbs" id="breadcrumbs">
+    <script type="text/javascript">
+        try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }
+    </script>
+
+    <ul class="breadcrumb">
+        <li class="active">
+            <i class="ace-icon fa fa-home home-icon"></i>
+            首页
+        </li>
+        <li class="active">
+            <i class="ace-icon fa fa-buttons"></i>
+            工作流表单
+        </li>
+    </ul>
+</div>
+<!-- /结束：位置条 -->
+<div class="page-content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h3 class="header smaller lighter green">应用范例</h3>
+                    <div class="portlet light bordered">
+                        <div class="portlet-title" style="margin-bottom:0;border-bottom:0;">
+                            <div class="caption">
+                                <span class="caption-subject bold"><i class="ace-icon fa fa-plus"></i> 工作流表单</span>
+                            </div>
+                        </div>
+                        <div class="portlet-body form">
+                            <form class="form-horizontal" role="form" action="#" novalidate>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        工作流表单没有数据<br /><br />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <span class="activity-step" ng-repeat="item in vm.clientProcess.activities">
+                                            <span ng-class="{true: 'active', false: 'inactive'}[item.isActive]">{{item.activityName}}({{item.approvers}}<span ng-if="$last">{{vm.clientProcess.processStatusString}}</span>)</span><span ng-if="!$last"> => </span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <mcs-datatable data="vm.approvalHistoryData" />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <span>审批意见：</span>
+                                        <textarea ng-model="vm.comment" cols="100" rows="3"></textarea>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <mcs-button category="submit" text="同意" click="vm.moveto()"></mcs-button>
+                                        <mcs-button category="cancel" text="驳回" click="vm.cancel()"></mcs-button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

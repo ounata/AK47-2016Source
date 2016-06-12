@@ -541,8 +541,8 @@ var mcs = mcs || {};
     mcs.util.indexOf = function (data, key, value) {
         if (!data || !data.length) return -1;
         for (var index in data) {
-            if (!data[index][key]) return -1;
-            if (data[index][key] == value) {
+            if (!data[index]['key']) return -1;
+            if (data[index]['value'] == value) {
                 return index;
             }
         }
@@ -616,15 +616,21 @@ var mcs = mcs || {};
     /*
      * 设置当前的操作项(checkbox)
      */
-    mcs.util.setSelectedItems = function (selected, item, event) {
+    mcs.util.setSelectedItems = function (selected, item, event, length, defaultKey) {
         var index = selected.indexOf(item.key);
         if (event.target.checked) {
             if (index === -1) {
                 selected.push(item.key);
             }
+            if (selected.length == length - 1 && selected.indexOf(defaultKey) == -1) {
+                selected.push(defaultKey);
+            }
         } else {
             if (index !== -1) {
                 selected.splice(index, 1);
+                if (selected.indexOf(defaultKey) > -1) {
+                    selected.splice(selected.indexOf(defaultKey), 1);
+                }
             }
         }
     };
@@ -807,6 +813,16 @@ var mcs = mcs || {};
         ngModule.registerValue = $provide.value;
     };
 
+    /*
+    * 配置应用程序的缓存模板
+    */
+    mcs.util.configCacheTemplate = function ($templateCache, key, content) {
+        var template = $templateCache.get(key);
+        if (!template) {
+            $templateCache.put(key, content);
+        }
+    };
+
     /**
      * 配置应用的拦截器以及设置白名单
      */
@@ -853,7 +869,7 @@ var mcs = mcs || {};
     return mcs.util;
 })();
 
-(function () { 
+(function () {
     /** * 获取本周、本季度、本月、上月的开端日期、停止日期 */
     //当前日期 
     var now = new Date();
@@ -874,7 +890,7 @@ var mcs = mcs || {};
     var lastYear = lastMonthDate.getYear();
     var lastMonth = lastMonthDate.getMonth();
     //格局化日期：yyyy-MM-dd 
-    mcs.date.format = function(date) {
+    mcs.date.format = function (date) {
         var myyear = date.getFullYear();
         var mymonth = date.getMonth() + 1;
         var myweekday = date.getDate();
@@ -890,17 +906,17 @@ var mcs = mcs || {};
         //将字符串转换为日期
         var begin = new Date(beginTime.replace(/-/g, "/"));
         var end = new Date(endTime.replace(/-/g, "/"));
-        return begin <= end;
+        return begin < end ? 1 : (begin == end ? 0 : -1);
     };
     //获得某月的天数 
-    mcs.date.getMonthDays = function(month) {
+    mcs.date.getMonthDays = function (month) {
         var monthStartDate = new Date(nowYear, month, 1);
         var monthEndDate = new Date(nowYear, month + 1, 1);
         var days = (monthEndDate - monthStartDate) / (1000 * 60 * 60 * 24);
         return days;
     }
     //获得本季度的开端月份 
-    mcs.date.getQuarterStartMonth = function() {
+    mcs.date.getQuarterStartMonth = function () {
         var quarterStartMonth = 0;
         if (nowMonth < 3) {
             quarterStartMonth = 0;
@@ -918,46 +934,51 @@ var mcs = mcs || {};
         var todayDate = new Date(nowYear, nowMonth, nowDay);
         return todayDate;
     };
+    //获取今天之前的某一天
+    mcs.date.lastDay = function (offsetDay) {
+        var lastStartDate = new Date(nowYear, nowMonth, nowDay + offsetDay + 1);
+        return lastStartDate;
+    };
     //获得本周的开始日期 
-    mcs.date.getWeekStartDate = function() {
+    mcs.date.getWeekStartDate = function () {
         var weekStartDate = new Date(nowYear, nowMonth, nowDay - nowDayOfWeek);
-        return mcs.date.format(weekStartDate);
+        return weekStartDate;
     }
     //获得本周的停止日期 
-    mcs.date.getWeekEndDate = function() {
+    mcs.date.getWeekEndDate = function () {
         var weekEndDate = new Date(nowYear, nowMonth, nowDay + (6 - nowDayOfWeek));
-        return mcs.date.format(weekEndDate);
+        return weekEndDate;
     }
     //获得本月的开始日期 
-    mcs.date.getMonthStartDate = function() {
+    mcs.date.getMonthStartDate = function () {
         var monthStartDate = new Date(nowYear, nowMonth, 1);
-        return mcs.date.format(monthStartDate);
+        return monthStartDate;
     }
     //获得本月的停止日期 
-    mcs.date.getMonthEndDate = function() {
-        var monthEndDate = new Date(nowYear, nowMonth, getMonthDays(nowMonth));
-        return mcs.date.format(monthEndDate);
+    mcs.date.getMonthEndDate = function () {
+        var monthEndDate = new Date(nowYear, nowMonth, mcs.date.getMonthDays(nowMonth));
+        return monthEndDate;
     }
     //获得上月开始日期 
-    mcs.date.getLastMonthStartDate = function() {
+    mcs.date.getLastMonthStartDate = function () {
         var lastMonthStartDate = new Date(nowYear, lastMonth, 1);
-        return mcs.date.format(lastMonthStartDate);
+        return lastMonthStartDate;
     }
     //获得上月停止日期 
-    mcs.date.getLastMonthEndDate = function() {
-        var lastMonthEndDate = new Date(nowYear, lastMonth, getMonthDays(lastMonth));
-        return mcs.date.format(lastMonthEndDate);
+    mcs.date.getLastMonthEndDate = function () {
+        var lastMonthEndDate = new Date(nowYear, lastMonth, mcs.date.getMonthDays(lastMonth));
+        return lastMonthEndDate;
     }
     //获得本季度的开始日期 
-    mcs.date.getQuarterStartDate = function() {
+    mcs.date.getQuarterStartDate = function () {
         var quarterStartDate = new Date(nowYear, getQuarterStartMonth(), 1);
-        return mcs.date.format(quarterStartDate);
+        return quarterStartDate;
     }
     //获得本季度的停止日期 
-    mcs.date.getQuarterEndDate = function() {
+    mcs.date.getQuarterEndDate = function () {
         var quarterEndMonth = getQuarterStartMonth() + 2;
-        var quarterStartDate = new Date(nowYear, quarterEndMonth, getMonthDays(quarterEndMonth));
-        return mcs.date.format(quarterStartDate);
+        var quarterStartDate = new Date(nowYear, quarterEndMonth, mcs.date.getMonthDays(quarterEndMonth));
+        return quarterStartDate;
     }
 
     return mcs.date;

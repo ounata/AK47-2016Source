@@ -134,10 +134,6 @@
                             name: "折扣率",
                             template: '<span>{{row.discountRate|number:2}}</span>'
                         }, {
-                            field: "accountValue",
-                            name: "账户价值",
-                            template: '<span>{{row.accountValue|currency:"￥"}}</span>'
-                        }, {
                             field: "accountMoney",
                             name: "可退金额",
                             template: '<span>{{row.accountMoney|currency:"￥"}}</span>'

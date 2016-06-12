@@ -1,61 +1,34 @@
 ﻿<!-- #开始：客户服务列表.高级查询条件 -->
-<div id="accordion" class="accordion-style1 panel-group">
-    <div class="panel panel-info">
-        <div class="panel-heading">
-            <h4 class="panel-title">
-                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#advance-search">
-                    <i class="ace-icon fa fa-angle-right bigger-110" data-icon-hide="fa-angle-down" data-icon-show="fa-angle-right"></i>
-                    &nbsp;高级查询
-                </a>
-            </h4>
-        </div>
-        <div class="panel-collapse collapse mcs-advance-search" id="advance-search">
-            <div class="panel-body">
-                <div class="profile-user-info mcs-user-profile">
-                    <div class="profile-info-row" ng-repeat="item in vm.searchItems">
-                        <div class="profile-info-name">{{item.name}}</div>
-                        <div class="profile-info-value" ppts-compile-html="item.template | trusted"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<ppts-dynamic-content template="advance-search.tpl.html" />
 <!-- /结束：客户服务列表.高级查询条件 -->
 <!-- #开始：客户服务列表.快速查询条件 -->
-<div class="mcs-panel-search well well-sm">
-    <div class="portlet">
-        <div class="portlet-title line">
-            <div class="caption">
-                <label class="quick-search"><i class="ace-icon fa fa-search bigger-125"></i> 快速查询</label>
-            </div>
+<ppts-dynamic-content template="quick-search.tpl.html">
+    <div class="row">
+        <div class="col-md-4">
+            <ppts-select-branch model="vm.criteria.orgIds" />
         </div>
-        <div class="portlet-body">
-            
-            <mcs-input placeholder="学生家长姓名" model="vm.criteria.parentName" css="mcs-input-search" />
-            <mcs-input placeholder="客服受理人" model="vm.criteria.accepterName" css="mcs-input-search" />
-            <mcs-input placeholder="当前受理人" model="vm.criteria.handlerName" css="mcs-input-search" />
-            <mcs-button category="search" click="vm.search()" size="medium" />
+        <div class="col-md-4">
+            <mcs-input placeholder="学员家长姓名" uib-tooltip="学员家长姓名" model="vm.criteria.parentName" css="mcs-input-search mcs-width-full" />
+        </div>
+        <div class="col-md-4">
+            <mcs-input placeholder="学员编号" uib-tooltip="学员编号" model="vm.criteria.customerCode" css="mcs-input-search mcs-width-full" />
         </div>
     </div>
-    <div class="tags mcs-search-tags hide">
-        <label class="quick-search"><i class="ace-icon fa fa-filter bigger-125"></i> 查询条件</label>
-        <span class="tag" uib-tooltip="入学年级: 小学一年级、小学二年级、小学三年级">入学年级: 小学一年级、小学二年级...<button type="button" class="close">×</button></span>
+    <div class="row">
+        <div class="col-md-4">
+            <mcs-input placeholder="客服受理人" uib-tooltip="客服受理人" model="vm.criteria.accepterName" css="mcs-input-search mcs-width-full" />
+        </div>
+        <div class="col-md-4">
+            <mcs-input placeholder="当前受理人" uib-tooltip="当前受理人" model="vm.criteria.handlerName" css="mcs-input-search mcs-width-full" />
+        </div>
     </div>
-</div>
+</ppts-dynamic-content>
 <!-- /结束：客户服务列表.快速查询条件 -->
 <!-- #开始：客户服务列表.工具栏 -->
-<div class="mcs-panel-toolbar">
+<ppts-dynamic-content template="toolbar.tpl.html">
     <mcs-button category="add" text="新增客服记录" ppts-job-functions="新增客服记录" click="$state.go('ppts.custservice-add')"></mcs-button>
     <mcs-button category="export" click="vm.export()"></mcs-button>
-</div>
-<div class="alert alert-block alert-danger" ng-show="vm.errorMessage">
-    <button type="button" class="close" data-dismiss="alert">
-        <i class="ace-icon fa fa-times"></i>
-    </button>
-    <i class="ace-icon fa fa-warning"></i>
-    {{vm.errorMessage}}
-</div>
+</ppts-dynamic-content>
 <!-- /结束：客户服务列表.工具栏 -->
 <!-- #开始：客户服务列表.数据表格 -->
 <mcs-datatable data="vm.data" />

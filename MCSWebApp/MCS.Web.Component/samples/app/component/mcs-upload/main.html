@@ -34,7 +34,7 @@
                         <input type="text" ng-model="vm.userInfo.userName" name="userName">
                         <label>年龄：</label>
                         <input type="text" ng-model="vm.userInfo.userAge" name="userAge">
-                        <div files-upload model="vm.files" pattern="{size: {max: '5MB'},pattern: 'image/*'}" readonly="false" resource-Id="123-124-222-123" files-amount="5" module-name="liucy" url="http://localhost/MCSWebApp/MCS.Web.API/api/sample/UploadMaterial">
+                        <div files-upload model="vm.userInfo.files" pattern="{size: {max: '5MB'},pattern: 'image/*'}" readonly="false" resource-Id="123-124-222-123" files-amount="5" module-name="liucy" download-url="http://localhost/MCSWebApp/MCS.Web.API/api/sample/DownloadMaterial" url="http://localhost/MCSWebApp/MCS.Web.API/api/sample/UploadMaterial">
                         </div>
                         <hr>
                         <input type="submit" ng-click="vm.submit()">

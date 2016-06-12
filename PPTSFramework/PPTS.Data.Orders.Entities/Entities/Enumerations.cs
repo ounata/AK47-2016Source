@@ -83,9 +83,9 @@ namespace PPTS.Data.Orders
     /// 班级状态
     /// </summary>
     public enum ClassStatusDefine {
-        [EnumItemDescription("新建")]
+        [EnumItemDescription("全未上")]
         Createed =0,
-        [EnumItemDescription("已上部分")]
+        [EnumItemDescription("上部分")]
         Part =1,
         [EnumItemDescription("已上完")]
         All =2,

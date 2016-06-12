@@ -304,6 +304,34 @@ namespace MCS.Library.Core
         }
 
         /// <summary>
+        /// 当bool参数为true时，调用操作函数
+        /// </summary>
+        /// <param name="flag"></param>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        public static bool TrueAction(this bool flag, Action action)
+        {
+            if (flag && action != null)
+                action();
+
+            return flag;
+        }
+
+        /// <summary>
+        /// 当bool参数为false时，调用操作函数
+        /// </summary>
+        /// <param name="flag"></param>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        public static bool FalseAction(this bool flag, Action action)
+        {
+            if (flag == false && action != null)
+                action();
+
+            return flag;
+        }
+
+        /// <summary>
         /// 如果时间不是MinValue，则执行Action
         /// </summary>
         /// <param name="data"></param>

@@ -1,12 +1,12 @@
-﻿<div class="input-daterange input-group mcs-input-group input-xxlarge large mcs-padding-left-15 {{css}}">
-    <input class="form-control data-range" ng-model="min" ng-model-options="{ updateOn: 'blur' }" name="min" type="text" placeholder="{{minText}}" onblur="mcs.util.number(this)" onkeyup="this.value = this.value.replace(/[^0-9.]/g, '')" style="text-align:left;">
+﻿<div class="input-daterange input-group mcs-input-group input-xxlarge large mcs-padding-left-15 {{css}}" ng-style="customStyle">
+    <input class="form-control data-range" ng-model="min" ng-model-options="{ updateOn: 'blur' }" name="min" type="text" placeholder="{{minText}}" style="text-align:left;">
     <span class="input-group-addon">
         {{unit}}
     </span>
     <span class="input-group-addon" style="border-left:1px solid #d5d5d5">
         <i class="ace-icon fa fa-arrow-right icon-on-right"></i>
     </span>
-    <input class="form-control data-range" ng-model="max" ng-model-options="{ updateOn: 'blur' }" name="max" type="text" placeholder="{{maxText}}" onblur="mcs.util.number(this)" onkeyup="this.value = this.value.replace(/[^0-9.]/g, '')" style="text-align:left;">
+    <input class="form-control data-range" ng-model="max" ng-model-options="{ updateOn: 'blur' }" name="max" type="text" placeholder="{{maxText}}" style="text-align:left;">
     <span class="input-group-addon" style="border-right:1px solid #d5d5d5">
         {{unit}}
     </span>

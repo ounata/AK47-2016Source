@@ -284,6 +284,31 @@ namespace PPTS.Data.Customers.Entities
             get;
             set;
         }
+        
+        /// <summary>
+        /// 订购资金余额（剩余的资产的价值）
+        /// </summary>
+        [NoMapping]
+        [DataMember]
+        public decimal AssetMoney
+        {
+            set;
+            get;
+        }
+
+        /// <summary>
+        /// 账户价值（资产价值AssetMoney+账户余额AccountMoney）
+        /// </summary>
+        [NoMapping]
+        [DataMember]
+        public decimal AccountValue
+        {
+            get
+            {
+                return this.AccountMoney + this.AssetMoney;
+            }
+        }
+
     }
 
     [Serializable]

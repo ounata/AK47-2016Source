@@ -32,7 +32,7 @@ namespace PPTS.WebAPI.Customers.DataSources
 							case 
 							when cReplies.ReplyObject=6 and cReplies.Poster=1 Then 6--周反馈
 							when cReplies.ReplyObject<>6 and cReplies.Poster=1 Then 3--对家长回复
-							when  cReplies.Poster=2 Then 7--对家长回复
+							when  cReplies.Poster=2 Then 7--家长反馈
 							ELSE 0 END)ReplyType,
                             (CASE when  cReplies.Poster=1 Then 2--学管师
 							ELSE cReplies.ReplyObject END)ReplyObject1,

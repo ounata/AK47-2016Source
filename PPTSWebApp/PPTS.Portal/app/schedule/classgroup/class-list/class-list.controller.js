@@ -28,7 +28,7 @@
                     keyFields: ['classID','classStatus'],
                     pager: {
                         pageIndex: 1,
-                        pageSize: 10,
+                        pageSize: ppts.config.pageSizeItem,
                         totalCount: -1,
                         pageChange: function () {
                             var deferred = $q.defer();

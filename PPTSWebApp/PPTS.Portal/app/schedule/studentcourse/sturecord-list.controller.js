@@ -3,8 +3,8 @@ define([ppts.config.modules.schedule,
         ppts.config.dataServiceConfig.studentCourseDataService],
         function (schedule) {
             schedule.registerController('stucrsListController', [
-                '$scope', '$state', 'dataSyncService', 'studentCourseDataService', '$stateParams', 'blockUI', 'mcsDialogService', 'printService',
-                function ($scope, $state, dataSyncService, studentCourseDataService, $stateParams, blockUI, mcsDialogService, printService) {
+                '$scope', '$state', 'dataSyncService', 'studentCourseDataService', '$stateParams', 'mcsDialogService', 'printService',
+                function ($scope, $state, dataSyncService, studentCourseDataService, $stateParams, mcsDialogService, printService) {
                     var vm = this;
                     vm.weekText = new Array("星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六");
 
@@ -112,7 +112,6 @@ define([ppts.config.modules.schedule,
 
                     // 页面初始化加载或重新搜索时查询
                     vm.init = function () {
-                        blockUI.start();
                         dataSyncService.initCriteria(vm);
 
                         vm.criteria.assignSource = new Array();
@@ -127,7 +126,6 @@ define([ppts.config.modules.schedule,
                             dataSyncService.injectDictData();
                             dataSyncService.updateTotalCount(vm, result.queryResult);
                             $scope.$broadcast('dictionaryReady');
-                            blockUI.stop();
                         });
                     };
                     vm.init();

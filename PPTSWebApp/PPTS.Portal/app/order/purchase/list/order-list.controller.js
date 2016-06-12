@@ -9,7 +9,7 @@
                     vm.data = {
                         selection: 'radio',
                         rowsSelected: [],
-                        keyFields: ['orderID', 'itemID', 'categoryType'],
+                        keyFields: ['itemID', 'orderID', 'categoryType', ''],
                         headers: [{
                             field: "customerName",
                             name: "学生姓名",
@@ -22,7 +22,7 @@
                             field: "parentName",
                             name: "家长姓名"
                         }, {
-                            //field: "orderNo",
+                            //field: "itemID",
                             name: "订单编号",
                             template: '<a ui-sref="ppts.purchaseOrderView({orderId:row.orderID})">{{row.orderNo}}</a>',
                         }, {
@@ -80,7 +80,7 @@
                         }],
                         pager: {
                             pageIndex: 1,
-                            pageSize: 10,
+                            pageSize: ppts.config.pageSizeItem,
                             totalCount: -1,
                             pageChange: function () {
                                 dataSyncService.initCriteria(vm);
@@ -97,7 +97,7 @@
                         mcs.util.postMockForm(ppts.config.orderApiBaseUrl + '/api/Purchase/ExportOrderItemList', vm.criteria);
                     }
                     vm.search = function () {
-                       
+
                         if (vm.criteria.dateRange ) {
                             var dateRange = dataSyncService.selectPageDict('dateRange', vm.criteria.dateRange);
                             vm.criteria.startDate = dateRange.start || vm.criteria.customStartDate;
@@ -137,7 +137,7 @@
                     var init = (function () {
                         dataSyncService.initCriteria(vm);
 
-                        vm.criteria.dateRange = "0";
+                        //vm.criteria.dateRange = "-1";
                         dataSyncService.injectPageDict(['dateRange']);
 
                         vm.search();

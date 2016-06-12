@@ -59,7 +59,7 @@ namespace PPTS.WebAPI.Orders.Executors
             GenericAssetAdapter<Asset, AssetCollection>.Instance.CheckUnAssignedAmountInContext(this.Model.AssetID, this.Model.Amount);
 
             //新增排课条件           
-            if (string.IsNullOrEmpty(this.Model.ConditionID) || this.Model.ConditionID.Trim() == "-1")
+            if (string.IsNullOrEmpty(this.Model.ConditionID) || this.Model.ConditionID.Trim() == "100")
             {
                 AssignCondition ac = this.GetAssignCondition(this.Model);
                 ac.ConditionID = UuidHelper.NewUuidString();

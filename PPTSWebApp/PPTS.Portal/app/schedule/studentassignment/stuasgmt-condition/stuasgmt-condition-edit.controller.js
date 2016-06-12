@@ -2,8 +2,8 @@
         ppts.config.dataServiceConfig.studentAssignmentDataService],
         function (schedule) {
             schedule.registerController('asgmtConditionEditController', [
-                '$scope', '$state', 'dataSyncService', 'studentassignmentDataService', '$stateParams', 'blockUI', 'mcsDialogService',
-                function ($scope, $state, dataSyncService, studentassignmentDataService, $stateParams, blockUI, mcsDialogService) {
+                '$scope', '$state', 'dataSyncService', 'studentassignmentDataService', '$stateParams', 'mcsDialogService',
+                function ($scope, $state, dataSyncService, studentassignmentDataService, $stateParams, mcsDialogService) {
                     var vm = this;
                     vm.accID = $stateParams.accid;
                     vm.customerID = $stateParams.cid;

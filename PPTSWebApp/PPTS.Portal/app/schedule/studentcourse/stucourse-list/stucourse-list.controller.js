@@ -3,9 +3,13 @@ define([ppts.config.modules.schedule,
         ppts.config.dataServiceConfig.studentCourseDataService],
         function (schedule) {
             schedule.registerController('stuCourseListController', [
-                '$scope', 'studentCourseDataService', 'dataSyncService', 'mcsDialogService', 'blockUI', 'studentassignmentDataService', 'printService',
-                function ($scope, studentCourseDataService, dataSyncService, mcsDialogService, blockUI, studentassignmentDataService, printService) {
+                '$scope', 'studentCourseDataService', 'dataSyncService', 'utilService', 'mcsDialogService', 'studentassignmentDataService', 'printService', '$state', 'studentCourseAdvanceSearchItems',
+                function ($scope, studentCourseDataService, dataSyncService, utilService, mcsDialogService, studentassignmentDataService, printService, $state, searchItems) {
                     var vm = this;
+
+                    vm.strcalssTime = '';
+                    vm.strfindTime = '';
+                    vm.strcourseTotal = '';
 
                     vm.weekText = new Array("星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六");
 
@@ -24,6 +28,9 @@ define([ppts.config.modules.schedule,
                     vm.criteria.educatorName = '';
                     vm.criteria.consultantName = '';
                     vm.criteria.assetCode = '';
+                    vm.criteria.isFullTimeTeacher = [];
+                    vm.criteria.startTime = '';
+                    vm.criteria.endTime = '';
 
                     vm.data = {
                         selection: 'checkbox',
@@ -94,6 +101,7 @@ define([ppts.config.modules.schedule,
                                 dataSyncService.initCriteria(vm);
                                 studentCourseDataService.getStuCoursePaged(vm.criteria, function (result) {
                                     vm.data.rows = result.pagedData;
+                                    vm.statResult();
                                 });
                             }
                         },
@@ -101,8 +109,7 @@ define([ppts.config.modules.schedule,
                     }
 
                     /*页面初始化加载或重新搜索时查询*/
-                    vm.init = function () {
-                        blockUI.start();
+                    vm.search = function () {
                         dataSyncService.initCriteria(vm);
                         vm.criteria.assignSource = new Array();
                         vm.criteria.assignStatus = new Array();
@@ -113,22 +120,43 @@ define([ppts.config.modules.schedule,
 
                         studentCourseDataService.getStuCourse(vm.criteria, function (result) {
                             vm.data.rows = result.queryResult.pagedData;
+                            vm.statResult();
+                            vm.searchItems = searchItems;
                             dataSyncService.injectDictData();
                             dataSyncService.updateTotalCount(vm, result.queryResult);
                             $scope.$broadcast('dictionaryReady');
-                            blockUI.stop();
                         });
                     };
-                    vm.init();
+                    vm.search();
 
+                    vm.statResult = function () {
+                        var dateStart;
+                        var dateEnd;
+                        if(vm.data.rows.length >0)
+                        {
+                            dateStart = vm.data.rows[0].startTime;
+                            dateEnd = vm.data.rows[0].endTime;
+                        };
 
+                        var courseTotal = 0;
+                        for (var i in vm.data.rows)
+                        {
+                            if (dateStart > vm.data.rows[i].startTime)
+                                dateStart = vm.data.rows[i].startTime;
+                            if (dateEnd < vm.data.rows[i].endTime)
+                                dateEnd = vm.data.rows[i].endTime;
+                            courseTotal += vm.data.rows[i].amount;
+                        };
 
-                    vm.queryList = function () {
-                        vm.init();
+                        vm.strcalssTime = '上课日期：' + vm.getDateFormat(dateStart) + '至' + vm.getDateFormat(dateEnd);
+                        vm.strfindTime = '查询日期：' + vm.getDateFormat(new Date());
+                        vm.strcourseTotal = '课时总量：'+ courseTotal;
+
                     };
 
                     /*调整课表*/
                     vm.resetCourseClick = function () {
+                        if (!utilService.selectMultiRows(vm)) return;
                         /*将聂鑫航（ST00001）2016-05-05（星期二）13:00 - 15:00 的数学课调整为*/
                         var model = [], msg = '', tempdate2 = new Date();
                         var tempdate = new Date(tempdate2.getFullYear(), tempdate2.getMonth(), tempdate2.getDate(), 0, 0, 0, 0);
@@ -162,16 +190,11 @@ define([ppts.config.modules.schedule,
                                 };
                             }
                         };
-                        if (selectedObj.length > 0 && model.length == 0)
-                        {
-                            vm.showMsg("选择的记录不允许调课，请重新选择！");
+
+                        if (utilService.showMessage(vm, model.length == 0, '选择的记录不允许调课，请重新选择！')) {
                             return;
                         }
 
-                        if (model.length == 0) {
-                            vm.showMsg("请选择要调课的记录！");
-                            return;
-                        }
                         mcsDialogService.create('app/schedule/studentassignment/stuasgmt-course/stuasgmt-course-reset.html', {
                             controller: 'stuAsgmtCourseResetController',
                             params: { para: model },
@@ -339,15 +362,19 @@ define([ppts.config.modules.schedule,
                         mcs.util.postMockForm(ppts.config.orderApiBaseUrl + '/api/studentcourse/exportPageStuCourse', vm.criteria);
                     };
 
-              
                     vm.print = function () {
-                        printService.print();
+                        printService.print(true);
                     }
 
                     vm.getCourseDate = function (sDate) {
                         var startDate = new Date(sDate);
                         return startDate.getFullYear() + '-' + vm.getDoubleStr((startDate.getMonth() + 1)) + '-' + vm.getDoubleStr(startDate.getDate())
                          + '(' + vm.weekText[startDate.getDay()] + ')';
+                    };
+
+                    vm.getDateFormat = function (date) {
+                        var startDate = new Date(date);
+                        return startDate.getFullYear() + '-' + vm.getDoubleStr((startDate.getMonth() + 1)) + '-' + vm.getDoubleStr(startDate.getDate());
                     };
 
                     vm.getDoubleStr = function (curValue) {

@@ -60,17 +60,17 @@
                 vm.init();
 
                 vm.shareFieldName = ['assetID', 'assetCode', 'customerID', 'customerCode', 'customerName', 'productID', 'productCode', 'productName', 'accountID'
-                  , 'grade', 'gradeName', 'subject', 'subjectName'];
+                  , 'grade', 'gradeName', 'subject', 'subjectName', 'categoryType', 'categoryTypeName'];
 
                 /* 'RoomID','RoomCode','RoomName','TeacherID','TeacherName','TeacherJobID','TeacherJobOrgID','TeacherJobOrgName','IsFullTimeTeacher'*/
 
                 vm.initAssignFieldFromAsset = ['assetID', 'assetCode', 'customerID', 'customerCode', 'customerName', 'productID', 'productCode', 'productName', 'accountID'
-                    , 'grade', 'gradeName', 'subject', 'subjectName', 'courseLevel', 'courseLevelName', 'lessonDuration', 'lessonDurationValue'];
+                    , 'grade', 'gradeName', 'subject', 'subjectName', 'courseLevel', 'courseLevelName', 'lessonDuration', 'lessonDurationValue', 'categoryType', 'categoryTypeName'];
 
                 vm.fieldToAssign = [];
 
                 vm.fieldToAC = ['conditionID', 'conditionName4Customer', 'conditionName4Teacher', 'courseLevel', 'courseLevelName', 'lessonDuration'
-                    , 'lessonDurationValue'];
+                    , 'lessonDurationValue', 'categoryType', 'categoryTypeName'];
 
               /*  vm.filedName = ['assetID', 'assetCode', 'grade', 'gradeName', 'courseLevel', 'courseLevelName', 'subject', 'subjectName', 'lessonDuration'
                     , 'lessonDurationValue', 'assetName', 'customerID', 'customerCode', 'customerName', 'consultantID', 'consultantJobID', 'consultantName', 'educatorID'
@@ -85,13 +85,13 @@
 
                 /*选择排课条件*/
                 vm.selectAssignConditionClick = function (item) {
-                    //不等-1，选择了一个已经存在的排课条件
-                    if (item.key != '-1') {
+                    //不等100，选择了一个已经存在的排课条件
+                    if (item.key != '100') {
                         //选项隐藏
                         vm.showOrderSelect = false; vm.showSubjectSelect = false; vm.showGradeSelect = false; vm.showTchSelect = false;
                         //重新初始化排课对象
                         vm.resetAssignExtension();
-                        vm.result.assign.assetID = '-1';
+                        vm.result.assign.assetID = '100';
                         //获取排课条件对象
                         var ac = vm.getAssignCondition(item.key);
                         //获取资产对象
@@ -117,7 +117,7 @@
                         //新建 重新初始化排课对象
                         vm.showOrderSelect = true; vm.showSubjectSelect = false; vm.showGradeSelect = false; vm.showTchSelect = false;
                         vm.resetAssignExtension();
-                        vm.result.assign.conditionID = '-1';
+                        vm.result.assign.conditionID = '100';
                     }
                 };
 

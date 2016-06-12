@@ -6,7 +6,7 @@ BEGIN
 	DECLARE @currentObjs [SC].[ObjectWithParentTable]
 	DECLARE @time DATETIME
 
-	SET @time = GETDATE()
+	SET @time = GETUTCDATE()
 
 	SET NOCOUNT ON
 	INSERT INTO @currentObjs

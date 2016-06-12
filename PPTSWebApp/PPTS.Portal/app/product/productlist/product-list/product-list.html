@@ -13,7 +13,7 @@
             <div class="panel-collapse collapse mcs-advance-search" id="advance-search">
                 <div class="panel-body">
                     <div class="profile-user-info">
-                        <div class="profile-info-row">
+                        <!--<div class="profile-info-row">
                             <div class="profile-info-name"> 产品类型</div>
                             <div class="profile-info-value">
                                 <button ng-click="vm.selectCategory()" class="btn btn-link ng-scope">选择</button>
@@ -25,6 +25,7 @@
                                 <ppts-checkbox-group category="hasPartner" model="vm.criteria.hasPartners" clear="vm.criteria.hasPartners=[]" />
                             </div>
                         </div>
+                            -->
                         <div class="profile-info-row">
                             <div class="profile-info-name"> 年级</div>
                             <div class="profile-info-value">
@@ -55,12 +56,12 @@
                                 <ppts-checkbox-group category="season" model="vm.criteria.selectedSeasons" clear="vm.criteria.selectedSeasons=[]" />
                             </div>
                         </div>
-                        <div class="profile-info-row">
+                        <!--<div class="profile-info-row">
                             <div class="profile-info-name"> 班级类型</div>
                             <div class="profile-info-value">
                                 <ppts-checkbox-group category="classType" model="vm.criteria.selectedClassTypes" clear="vm.criteria.selectedClassTypes=[]" />
                             </div>
-                        </div>
+                        </div>-->
                         <div class="profile-info-row">
                             <div class="profile-info-name"> 满班人数</div>
                             <div class="profile-info-value">
@@ -100,55 +101,52 @@
     </div>
     <!--高级查询-结束-->
 </form>
-<div class="mcs-panel-search well well-sm">
-    <div class="portlet">
-        <div class="portlet-title line">
-            <div class="caption">
-                <label class="quick-search"><i class="ace-icon fa fa-search bigger-125"></i> 快速查询</label>
-            </div>
+<ppts-dynamic-content template="quick-search.tpl.html">
+    <div class="row">
+        <div class="col-md-4">
+            <ppts-select-branch model="vm.criteria.campusIDs" />
         </div>
-        <div class="portlet-body">
-            <div>
-
-                <ppts-select-branch model="vm.criteria.campusIDs" />
-
-                <mcs-input placeholder="产品名称" class="mcs-input-search" model="vm.criteria.productName" />
-                <mcs-input placeholder="产品编码" class="mcs-input-search" model="vm.criteria.productCode" />
-                <mcs-input placeholder="创建人" class="mcs-input-search" model="vm.criteria.creatorName" />
-            </div>
-
-            <div>
-                <ppts-select class="ppts-select-search" category="productStatus" model="vm.criteria.productStatus" caption="销售状态"/>
-                <ppts-select class="ppts-select-search" category="timeType" model="vm.criteria.timeType" caption="时间类型"/>
-                <ppts-select class="ppts-select-search" category="categoryType" model="vm.criteria.categoryType" caption="产品类型"/>
-                <ppts-select class="ppts-select-search" category="hasPartner" model="vm.criteria.hasPartner" caption="是否合作"/>
-
-                
-            </div>
-            <div>
-                <ppts-daterangepicker class="search" start-date="vm.criteria.begainTime" end-date="vm.criteria.endTime" />
-                <mcs-button category="search" click="vm.search()" size="medium" />
-            </div>
-           
-           
-           
-               
-          
+        <div class="col-md-4">
+            <ppts-select category="categories" model="vm.criteria.categories_extend" caption="产品类型" css="mcs-padding-0" />
+        </div>
+        <div class="col-md-4">
+            <ppts-select category="hasPartner" model="vm.criteria.hasPartner" caption="合作关系" css="mcs-padding-0"/>
         </div>
     </div>
-   
+    <div class="row">
+        <div class="col-md-4">
+            <mcs-input placeholder="产品名称" uib-tooltip="产品名称" css="mcs-input-search mcs-width-full" model="vm.criteria.productName" />
+        </div>
+        <div class="col-md-4">
+            <mcs-input placeholder="产品编码" uib-tooltip="产品编码" css="mcs-input-search mcs-width-full" model="vm.criteria.productCode" />
+        </div>
+        <div class="col-md-4">
+            <mcs-input placeholder="创建人" uib-tooltip="创建人" css="mcs-input-search mcs-width-full" model="vm.criteria.creatorName" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <ppts-select category="productStatus" model="vm.criteria.productStatus" caption="销售状态" css="mcs-padding-0"/>
+        </div>
+        <div class="col-md-4">
+            <ppts-select category="timeType" model="vm.criteria.timeType" caption="时间类型" css="mcs-padding-0"/>
+        </div>
+        <div class="col-md-4"  ng-show="vm.criteria.timeType >0 ">
+            <ppts-daterangepicker start-date="vm.criteria.beginTime" end-date="vm.criteria.endTime" css="mcs-width-full mcs-padding-0" />
+        </div>
+    </div>
     
-</div>
+</ppts-dynamic-content>
 <!-- /结束：产品列表.查询条件 -->
 <!-- #开始：产品列表.工具条 -->
-<div class="mcs-panel-toolbar">
-    <mcs-dropdown-button items="vm.products"></mcs-dropdown-button>   
-    <mcs-button category="delete" ng-disabled="vm.data.rowsSelected.length<1" click="vm.delete()"></mcs-button>
-    <mcs-button type="edit" text="止售产品" ng-disabled="vm.data.rowsSelected.length!=1" click="vm.stopProduct()"></mcs-button>
-    <mcs-button type="edit" text="延期产品" ng-disabled="vm.data.rowsSelected.length!=1" click="vm.delayProduct()"></mcs-button>
-    <mcs-button type="edit" text="复制创建产品" click="vm.copyProduct()" ng-disabled="vm.data.rowsSelected.length!=1"></mcs-button>
-    <mcs-button type="add" text="创建班级" ppts-job-functions="新建班级" click="vm.createClass()"></mcs-button>
-</div>
+<ppts-dynamic-content template="toolbar.tpl.html">
+    <mcs-dropdown-button items="vm.products"></mcs-dropdown-button>
+    <mcs-button category="delete" click="vm.delete()"></mcs-button>
+    <mcs-button category="delete" text="止售产品" click="vm.stopProduct()"></mcs-button>
+    <mcs-button category="edit" text="延期产品" click="vm.delayProduct()"></mcs-button>
+    <mcs-button category="edit" text="复制产品" click="vm.copyProduct()"></mcs-button>
+    <mcs-button category="add" text="创建班级" ppts-job-functions="新建班级" click="vm.createClass()"></mcs-button>
+</ppts-dynamic-content>
 <!-- /结束：产品列表.工具条 -->
 <!-- #开始：产品列表.数据表格 -->
 <mcs-datatable data="vm.data" />

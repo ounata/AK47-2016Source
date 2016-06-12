@@ -13,7 +13,7 @@ namespace PPTS.Data.Products.Entities
     /// 服务费用归属权限表
     /// </summary>
     [Serializable]
-    [ORTableMapping("ExpensePermissions")]
+    [ORTableMapping("[PM].[ExpensePermissions]")]
     [DataContract]
     public class ExpensePermission
     {

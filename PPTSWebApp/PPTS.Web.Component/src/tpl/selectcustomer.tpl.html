@@ -1,7 +1,7 @@
-﻿<div class="input-group input-xlarge mcs-input-group-lg">
-    <mcs-input placeholder="选择潜在客户" model="model.customerName" readonly="true" class="form-control input-height-normal" />
+﻿<div class="input-group input-xlarge mcs-input-group {{css}}">
+    <mcs-input placeholder="选择潜在客户" model="model.customerName" onkeydown="return false;" css="form-control mcs-input-search" />
     <span class="input-group-btn">
-        <button class="btn btn-sm btn-info" type="button" ng-click="select()">
+        <button class="btn btn-sm btn-info" type="button" ng-click="select()" style="height:34px;">
             <i class="ace-icon fa fa-check bigger-110"></i>
             选择
         </button>

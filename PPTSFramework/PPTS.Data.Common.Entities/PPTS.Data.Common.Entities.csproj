@@ -56,9 +56,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Authorization\CourseOrgAuthorization.cs" />
+    <Compile Include="Authorization\CourseRelationAuthorization.cs" />
     <Compile Include="Authorization\CustomerFiledMappingAttribute.cs" />
     <Compile Include="Authorization\CustomerOrgAuthorization.cs" />
     <Compile Include="Authorization\Enumerations.cs" />
+    <Compile Include="Authorization\OrgAuthorizationBase.cs" />
     <Compile Include="Authorization\OrgCustomerRelationScopeAttribute.cs" />
     <Compile Include="Authorization\OwnerRelationAuthorization.cs" />
     <Compile Include="Authorization\OwnerRelationScopeAttribute.cs" />
@@ -67,6 +69,7 @@
     <Compile Include="Authorization\RecordOrgScopeAttribute.cs" />
     <Compile Include="Authorization\CustomerRelationScopeAttribute.cs" />
     <Compile Include="Authorization\EntityAuthAttribute.cs" />
+    <Compile Include="Authorization\RelationAuthorizationBase.cs" />
     <Compile Include="Authorization\ScopeBaseAttribute.cs" />
     <Compile Include="Entities\BaseConstantEntity.cs" />
     <Compile Include="Entities\ConfigArgs.cs" />

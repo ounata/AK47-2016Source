@@ -24,3 +24,7 @@ GO
 CREATE INDEX [IX_SchemaObjectSnapshot_Current_CodeName] ON [SC].[SchemaObjectSnapshot_Current] ([CodeName])
 
 GO
+
+CREATE INDEX [IX_SchemaObjectSnapshot_Current_Name] ON [SC].[SchemaObjectSnapshot_Current] ([Name])
+
+GO

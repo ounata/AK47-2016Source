@@ -23,7 +23,7 @@
                     <h3 class="header smaller lighter green">应用范例</h3>
                     <div id="usage">
                         <mcs-dropdown-button title="订 购" items="vm.products"></mcs-dropdown-button>
-                        <mcs-dropdown-button title="订 购" items="vm.products"></mcs-dropdown-button>
+                        <mcs-dropdown-button title="订 购" items="vm.products_2"></mcs-dropdown-button>
                         <mcs-button category="add"></mcs-button><br/>
                         <mcs-dropdown-button title="订 购" items="vm.products" icon="shopping-cart"></mcs-dropdown-button>
                         <mcs-dropdown-button title="订 购" items="vm.products" icon="shopping-cart" category="warning"></mcs-dropdown-button>
@@ -39,7 +39,7 @@
                         <pre class="codes">
                         <code><b>Html</b></code><br />
                         &lt;mcs-dropdown-button title="订 购" items="vm.products"&gt;&lt;/mcs-dropdown-button&gt;
-                        &lt;mcs-dropdown-button title="订 购" items="vm.products"&gt;&lt;/mcs-dropdown-button&gt;
+                        &lt;mcs-dropdown-button title="订 购" items="vm.products_2"&gt;&lt;/mcs-dropdown-button&gt;
                         &lt;mcs-button category="add"&gt;&lt;/mcs-button&gt;&lt;br/&gt;
                         &lt;mcs-dropdown-button title="订 购" items="vm.products" icon="shopping-cart"&gt;&lt;/mcs-dropdown-button&gt;
                         &lt;mcs-dropdown-button title="订 购" items="vm.products" icon="shopping-cart" category="warning"&gt;&lt;/mcs-dropdown-button&gt;
@@ -59,6 +59,17 @@
                                     text: '插班订购', route: 'ppts.products({type:"cbdg"})', click: vm.purchase
                                 }, {
                                     text: '买赠订购', route: 'ppts.products({type:"mzdg"})', click: vm.purchase
+                                }];
+                               vm.products_2 = [{
+                                    text: '常规订购', route: 'ppts.products({type:"cgdg"})', click: vm.purchase
+                                }, {
+                                    text: '插班订购', route: 'ppts.products({type:"cbdg"})', click: vm.purchase
+                                }, {
+                                    text: '买赠订购', children: [
+                                        { text: '买赠订购1', route: 'ppts.products({type:"mzdg1"})', click: vm.purchase },
+                                        { text: '买赠订购2', route: 'ppts.products({type:"mzdg2"})', click: vm.purchase },
+                                        { text: '买赠订购3', route: 'ppts.products({type:"mzdg3"})', click: vm.purchase }
+                                    ]
                                 }];
                             }]);
                         </pre>

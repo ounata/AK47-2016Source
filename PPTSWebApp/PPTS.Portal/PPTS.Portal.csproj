@@ -14,7 +14,7 @@
     <RootNamespace>PPTS.Portal</RootNamespace>
     <AssemblyName>PPTS.Portal</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -112,6 +112,8 @@
     <Content Include="app\account\display\account-page\account-view.html" />
     <Content Include="app\account\display\display.dataService.js" />
     <Content Include="app\account\ppts.account.readme.txt" />
+    <Content Include="app\account\refund\refund-page\refund-info.html" />
+    <Content Include="app\account\refund\refund-page\refund-info.controller.js" />
     <Content Include="app\account\refund\refund-page\refund-approve.html" />
     <Content Include="app\account\refund\refund-page\refund-approve.controller.js" />
     <Content Include="app\account\refund\refund-page\refund-verify.html" />
@@ -135,9 +137,13 @@
     <Content Include="app\common\config\ppts.startup.js" />
     <Content Include="app\common\config\ppts.startup.min.js" />
     <Content Include="app\common\layout.html" />
+    <Content Include="app\common\tpl\advance-search.tpl.html" />
     <Content Include="app\common\tpl\breadcrumb.tpl.html" />
     <Content Include="app\common\tpl\footer.tpl.html" />
     <Content Include="app\common\tpl\header.tpl.html" />
+    <Content Include="app\common\tpl\quick-search.tpl.html" />
+    <Content Include="app\common\tpl\sidebar.tpl.html" />
+    <Content Include="app\common\tpl\toolbar.tpl.html" />
     <Content Include="app\customer\customervisit\customervisit-addBatch\customervisit-addBatch.controller.js" />
     <Content Include="app\customer\customervisit\customervisit-addBatch\customervisit-addBatch.html" />
     <Content Include="app\custcenter\custservice\custservice-add\custservice-add.controller.js" />
@@ -181,6 +187,7 @@
     <Content Include="app\customer\follow\follow-add\is-study-there.tpl.html" />
     <Content Include="app\customer\follow\follow-info\follow-info.controller.js" />
     <Content Include="app\customer\follow\follow-info\follow-info.html" />
+    <Content Include="app\customer\follow\follow-info\is-study-there.tpl.html" />
     <Content Include="app\customer\follow\follow-list\follow-list.controller.js" />
     <Content Include="app\customer\follow\follow-list\follow-list.html" />
     <Content Include="app\customer\customermeeting\customermeeting-edit\customermeeting-edit.controller.js" />
@@ -390,7 +397,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="app\common\tpl\sidebar.tpl.html" />
     <Content Include="app\contract\contractlist\contractlist.dataService.js" />
     <Content Include="app\contract\paylist\paylist.dataService.js" />
     <Content Include="app\contract\ppts.contract.js" />
@@ -477,9 +483,7 @@
     <Analyzer Include="..\..\Bin\MCS.Library.dll" />
     <Analyzer Include="..\..\Bin\MCS.Library.Passport.dll" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="app\product\productcategory\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

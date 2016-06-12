@@ -172,6 +172,71 @@ namespace MCS.Library.SOA.DataObjects.Security.Adapters
         }
 
         /// <summary>
+        /// 根据AppCodeName和Role的CodeName查询出对应的Permission
+        /// </summary>
+        /// <param name="schemaTypes"></param>
+        /// <param name="appCodeName"></param>
+        /// <param name="roleCodeNames"></param>
+        /// <param name="includingDeleted"></param>
+        /// <param name="timePoint"></param>
+        /// <returns></returns>
+        public SchemaObjectCollection QueryRolePermissionsByCodeName(string[] schemaTypes, string appCodeName, string[] roleCodeNames, bool includingDeleted, DateTime timePoint)
+        {
+            SchemaObjectCollection result = null;
+
+            if (appCodeName.IsNotEmpty() && roleCodeNames != null && roleCodeNames.Length > 0)
+            {
+                InSqlClauseBuilder schemaTypeBuilder = new InSqlClauseBuilder("M.MemberSchemaType");
+
+                schemaTypeBuilder.AppendItem(schemaTypes);
+
+                WhereSqlClauseBuilder codeBuilder = new WhereSqlClauseBuilder();
+
+                codeBuilder.AppendItem("A.CodeName", appCodeName);
+
+                InSqlClauseBuilder roleCodeTypeBuilder = new InSqlClauseBuilder("P.CodeName");
+
+                roleCodeTypeBuilder.AppendItem(roleCodeNames);
+
+                result = QueryRolePermissionsByBuilder(new ConnectiveSqlClauseCollection(schemaTypeBuilder, codeBuilder, roleCodeTypeBuilder), includingDeleted, timePoint);
+            }
+            else
+                result = new SchemaObjectCollection();
+
+            return result;
+        }
+
+        public SchemaObjectCollection QueryRolePermissionsByBuilder(IConnectiveSqlClause builder, bool includingDeleted, DateTime timePoint)
+        {
+            builder.NullCheck("builder");
+
+            SchemaObjectCollection result = new SchemaObjectCollection();
+
+            if (builder.IsEmpty == false)
+            {
+                IConnectiveSqlClause extraBuilder = CreateStatusAndTimePointBuilder(includingDeleted, timePoint,
+                    "SC.", "A.", "M.", "P.", "R.");
+
+                ConnectiveSqlClauseCollection connectiveBuilder = new ConnectiveSqlClauseCollection(builder, extraBuilder);
+
+                string resourcePath = "QueryRolePermissions_Current.sql";
+
+                if (timePoint != DateTime.MinValue && includingDeleted == true)
+                    resourcePath = "QueryRolePermissions.sql";
+
+                string sqlTemplate = ResourceHelper.LoadStringFromResource(Assembly.GetExecutingAssembly(), string.Concat("MCS.Library.SOA.DataObjects.Security.Adapters.Templates.", resourcePath));
+
+                string sql = string.Format(sqlTemplate, connectiveBuilder.ToSqlString(TSqlBuilder.Instance));
+
+                DataTable table = DbHelper.RunSqlReturnDS(sql, this.GetConnectionName()).Tables[0];
+
+                result.LoadFromDataView(table.DefaultView);
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// 查询用户所属的角色
         /// </summary>
         /// <param name="schemaTypes"></param>

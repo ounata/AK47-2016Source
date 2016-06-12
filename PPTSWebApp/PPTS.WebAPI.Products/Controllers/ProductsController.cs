@@ -36,10 +36,12 @@ namespace PPTS.WebAPI.Products.Controllers
         [HttpPost]
         public QueryClassGroupQueryResult GetClassGroupProducts(QueryClassGroupCriteriaModel criteria)
         {
+            var dataSource = ProductClassStatsViewDataSource.Instance;
+            dataSource.CampusIDs = criteria.CampusIDs;
+
             return new QueryClassGroupQueryResult
-            {
-                QueryResult = GenericProductDataSource<OrderClassGroupProduct, OrderClassGroupProductCollection>.Instance.Query(criteria.PageParams, criteria, criteria.OrderBy),
-                Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(OrderClassGroupProduct)),
+            {   QueryResult= dataSource.Query(criteria.PageParams, criteria, criteria.OrderBy),
+                Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(OrderClassGroupProductView)),
             };
         }
 
@@ -49,9 +51,11 @@ namespace PPTS.WebAPI.Products.Controllers
         /// <param name="criteria">查询条件</param>
         /// <returns>返回不带字典的潜客数据列表</returns>
         [HttpPost]
-        public PagedQueryResult<OrderClassGroupProduct, OrderClassGroupProductCollection> GetPagedClassGroupProducts(QueryClassGroupCriteriaModel criteria)
+        public PagedQueryResult<OrderClassGroupProductView, OrderClassGroupProductViewCollection> GetPagedClassGroupProducts(QueryClassGroupCriteriaModel criteria)
         {
-            return GenericProductDataSource<OrderClassGroupProduct, OrderClassGroupProductCollection>.Instance.Query(criteria.PageParams, criteria, criteria.OrderBy);
+            var dataSource = ProductClassStatsViewDataSource.Instance;
+            dataSource.CampusIDs = criteria.CampusIDs;
+            return dataSource.Query(criteria.PageParams, criteria, criteria.OrderBy);
         }
 
 
@@ -74,6 +78,7 @@ namespace PPTS.WebAPI.Products.Controllers
             {
                 QueryResult = dataSource.Query(criteria.PageParams, criteria, criteria.OrderBy),
                 Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(ProductView)),
+                Categories = CategoryAdapter.Instance.LoadAll()
             };
         }
 
@@ -124,14 +129,8 @@ namespace PPTS.WebAPI.Products.Controllers
         [HttpPost]
         public IHttpActionResult SubmitProduct(ProductModel model)
         {
-
-            model.Product.SubmitterID = model.CreatorID = DeluxeIdentity.CurrentUser.ID;
-            model.Product.SubmitterName = model.CreatorName = DeluxeIdentity.CurrentUser.DisplayName;
-            model.Product.SubmitterJobID = DeluxeIdentity.CurrentUser.GetCurrentJob().ID;
-            model.Product.SubmitterJobName = DeluxeIdentity.CurrentUser.GetCurrentJob().Name;
-
-            model.CreatorName = DeluxeIdentity.CurrentUser.DisplayName;
-
+            model.CurrentUser = DeluxeIdentity.CurrentUser;
+            
             return Ok( new ProductExecutor(model) { NeedValidation=true }.Execute());
             
         }

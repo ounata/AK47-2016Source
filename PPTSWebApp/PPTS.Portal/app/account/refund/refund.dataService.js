@@ -65,4 +65,12 @@
         }
         return resource;
     }]);
+
+    account.registerValue('refundQueryAdvanceSearchItems', [
+        { name: '业务终审日期：', template: '<ppts-daterangepicker start-date="vm.criteria.applyTimeStart" end-date="vm.criteria.applyTimeEnd" width="41.5%" css="mcs-margin-left-10"/>' },
+        { name: '财务终审日期：', template: '<ppts-daterangepicker start-date="vm.criteria.verifyTimeStart" end-date="vm.criteria.verifyTimeEnd" width="41.5%" css="mcs-margin-left-10"/>' },
+        { name: '退费确认状态：', template: '<ppts-checkbox-group category="refundVerifyStatus" model="vm.criteria.verifyStatuses" width="150px" async="false"/>' },
+        { name: '对账状态：', template: '<ppts-checkbox-group category="checkStatus" model="vm.criteria.checkStatuses" width="150px" async="false"/>' },
+        { name: '退款操作人：', template: '<ppts-checkbox-group category="people" model="vm.criteria.creatorJobs"  width="150px"  async="false" css="mcs-padding-left-10"/> <mcs-input placeholder="退款操作人姓名" model="vm.criteria.applierName" custom-style="width:28%"/>' },
+    ]);
 });

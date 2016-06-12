@@ -17,7 +17,7 @@
                     keyFields: ['customerID', 'assetID', 'assetCode', 'price', 'customerName'],
                     pager: {
                         pageIndex: 1,
-                        pageSize: 10,
+                        pageSize: ppts.config.pageSizeItem,
                         totalCount: -1,
                         pageChange: function () {
                             dataSyncService.initCriteria(vm,false);

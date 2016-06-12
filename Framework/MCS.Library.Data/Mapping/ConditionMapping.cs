@@ -182,8 +182,11 @@ namespace MCS.Library.Data.Mapping
                 {
                     object data = GetValueFromObject(item, condition);
 
-                    DoAdjustValueAndAppendItem(data, item, ignoreDefaultValue, acv,
-                        adjustedData => builder.AppendItem(item.DataFieldName, adjustedData, item.Operation, item.Template, item.IsExpression));
+                    if (IsTypeDefaultValue(item, data) && item.DefaultExpression.IsNotEmpty())
+                        builder.AppendItem(string.Empty, item.DefaultExpression, string.Empty, "${Data}$", true);
+                    else
+                        DoAdjustValueAndAppendItem(data, item, ignoreDefaultValue, acv,
+                            adjustedData => builder.AppendItem(item.DataFieldName, adjustedData, item.Operation, item.Template, item.IsExpression));
                 }
             }
 
@@ -267,7 +270,8 @@ namespace MCS.Library.Data.Mapping
         {
             if (data != null)
             {
-                bool needIgnoreDefaultValue = ignoreDefaultValue;
+                //有默认表达式，就不能自动忽略默认值
+                bool needIgnoreDefaultValue = ignoreDefaultValue && item.DefaultExpression.IsNullOrEmpty();
 
                 switch (item.DefaultValueUsage)
                 {
@@ -279,16 +283,24 @@ namespace MCS.Library.Data.Mapping
                         break;
                 }
 
-                if (needIgnoreDefaultValue == false || (needIgnoreDefaultValue == true && IsTypeDefaultValue(item, data) == false))
-                {
-                    bool ignored = false;
+                //忽略默认值
+                if (needIgnoreDefaultValue == true && IsTypeDefaultValue(item, data))
+                    return;
 
-                    object adJustedData = item.AdjustValue(data);
-                    adJustedData = OnAdjustConditionValue(acv, item.PropertyName, adJustedData, ref ignored);
+                //不忽略默认值，或者本身就不是默认值
+                object adJustedData = null;
 
-                    if (ignored == false && builderAction != null)
-                        builderAction(adJustedData);
-                }
+                //当默认表达式不为空，且为默认值时
+                if (IsTypeDefaultValue(item, data) && item.DefaultExpression.IsNotEmpty())
+                    adJustedData = item.DefaultExpression;
+                else
+                    adJustedData = item.AdjustValue(data);
+
+                bool ignored = false;
+                adJustedData = OnAdjustConditionValue(acv, item.PropertyName, adJustedData, ref ignored);
+
+                if (ignored == false && builderAction != null)
+                    builderAction(adJustedData);
             }
         }
 

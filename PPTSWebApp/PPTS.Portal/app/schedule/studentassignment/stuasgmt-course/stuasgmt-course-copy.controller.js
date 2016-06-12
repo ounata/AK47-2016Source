@@ -13,7 +13,7 @@
                         destDateEnd: initDate
                     };
                     vm.watchLogOff = null;
-                    vm.aCM.customerID = $stateParams.cID;
+                    vm.aCM.customerID = $stateParams.id;
 
                     dataSyncService.injectDictData({
                         c_codE_ABBR_copyCourseType: [{ key: 0, value: '复制单日课表' }, { key: 1, value: '复制多日课表' }]

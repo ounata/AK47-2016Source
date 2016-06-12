@@ -24,6 +24,7 @@ namespace PPTS.Data.Common.Entities
             this.Key = source.Key;
             this.ParentKey = source.ParentKey;
             this.Value = source.Value;
+            this.IsValidate = source.IsValidate;
         }
 
         public virtual string Key
@@ -39,6 +40,12 @@ namespace PPTS.Data.Common.Entities
         }
 
         public virtual string ParentKey
+        {
+            get;
+            set;
+        }
+
+        public virtual bool IsValidate
         {
             get;
             set;

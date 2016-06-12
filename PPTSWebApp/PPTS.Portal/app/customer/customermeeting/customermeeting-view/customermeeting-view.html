@@ -12,7 +12,7 @@
                 <div class="col-sm-6">
                     <mcs-label text="会议组织人" css="col-sm-3" />
                     <div class="col-sm-9">
-                        <mcs-label model="vm.organizerName" css="col-xs-10 col-sm-9" style="width:100%;" />
+                        <mcs-label text="{{vm.customerMeeting.organizerName}}"/>
                     </div>
                 </div>
                 <div class="col-sm-6">
@@ -26,10 +26,17 @@
                     </div>
                 </div>
                 <div class="col-sm-6">
+                   
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-6">
                     <mcs-label required="true" text="会议时长" css="col-sm-3" />
                     <div class="col-sm-9">
                         <mcs-label text="{{vm.customerMeeting.meetingDuration}}" />
                     </div>
+                </div>
+                <div class="col-sm-6">
                 </div>
             </div>
             <div class="form-group">
@@ -66,7 +73,8 @@
                 <div class="col-sm-6">
                     <mcs-label required="true" text="会议参与人" css="col-sm-3" />
                     <div class="col-sm-9">
-                        <mcs-label model="vm.customerMeeting.participants" css="col-xs-10 col-sm-9" style="width:100%;" />
+                        <mcs-label text="{{vm.customerMeeting.participants}}" />
+                      
                     </div>
                 </div>
                 <div class="col-sm-6"></div>
@@ -76,35 +84,7 @@
                     <div class="widget-box" style="margin:0 50px;">
                         <div class="widget-header" style="">
                             <h4 class="widget-title">对象及内容</h4>
-                            
                         </div>
-                        <!--<div class="widget-body">
-                            <div class="widget-main">
-                                <div class="form-group">
-                                    <mcs-label class="col-sm-2"  required="true" text="参会对象" />
-                                    <div class="col-sm-10">
-                                        <ppts-select category="participants" class="col-sm-4" model="row.objectType" caption="请选择" />
-                                        <mcs-input model="row.objectName" class="col-sm-4 input-height-36" required="true" placeholder="输入姓名" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <mcs-label class="col-sm-2"  required="true" text="会议内容" />
-                                    <div class="col-sm-10">
-                                        <ppts-select category="contentType" class="ppts-select-md inline-ppts-datepicker" model="row.objectType" caption="请选择" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-sm-1">
-                                    </div>
-                                    <div class="col-sm-10">
-                                        <textarea class="form-control" placeholder="请输入家长反馈内容或解决方案...." rows="5" id="textArea"
-                                                  ng-model="row.feedbackContentOrSolution" maxlength="400"></textarea>
-                                    </div>
-                                    <div class="col-sm-1">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>-->
                         <mcs-uicopy class="widget-body" data="vm.items" item-template-url="./app/customer/customermeeting/customermeeting-add/customermeeting-add-item.tpl.html">
                         </mcs-uicopy>
                     </div>
@@ -114,7 +94,7 @@
                 <div class="col-sm-6">
                     <mcs-label text="上传附件" css="col-sm-3" />
                     <div class="col-sm-9">
-                       附近1</br>
+                        附近1</br>
                         附近2</br>
                     </div>
                 </div>

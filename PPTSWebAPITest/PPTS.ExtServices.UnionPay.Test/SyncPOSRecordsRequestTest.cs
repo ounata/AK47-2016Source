@@ -28,7 +28,7 @@ namespace PPTS.ExtServices.UnionPay.Test
             using (WebApp.Start<Startup>(url))
             {
                 HttpClient client = new HttpClient();
-                var response = client.PostAsJsonAsync<StatementModel>(url+ "api/PPTSUnionPaySale/PutStatement", statementModel).Result;
+                var response = client.PostAsJsonAsync<StatementModel>(url+ "api/PPTSUnionPaySale/PostStatement", statementModel).Result;
                 var result = response.Content.ReadAsAsync<ResponseModel>().Result;
                 Console.WriteLine(string.Format("错误代码：{0}，错误信息：{1}", result.Flag, result.ErrorMessage));
                 Assert.AreEqual(result.Flag, "0");

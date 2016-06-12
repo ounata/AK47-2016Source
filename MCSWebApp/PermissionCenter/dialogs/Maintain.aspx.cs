@@ -2,12 +2,16 @@
 using MCS.Library.Data;
 using MCS.Library.Data.Builder;
 using MCS.Library.Data.Mapping;
+using MCS.Library.Office.OpenXml.Excel;
 using MCS.Library.SOA.DataObjects;
+using MCS.Library.SOA.DataObjects.Schemas.SchemaProperties;
 using MCS.Library.SOA.DataObjects.Security;
 using MCS.Library.SOA.DataObjects.Security.Actions;
 using MCS.Library.SOA.DataObjects.Security.Adapters;
 using MCS.Library.SOA.DataObjects.Workflow;
+using MCS.Web.WebControls;
 using System;
+using System.IO;
 using System.Transactions;
 using PC = MCS.Library.SOA.DataObjects.Security;
 
@@ -176,6 +180,39 @@ namespace PermissionCenter.Dialogs
         protected void btnClearServerCache_Click(object sender, EventArgs e)
         {
             SCCacheHelper.InvalidateAllCache();
+        }
+
+        protected void ImportRolesAndPermissions_DoUploadProgress(System.Web.HttpPostedFile file, UploadProgressResult result)
+        {
+            ExceptionHelper.FalseThrow(Path.GetExtension(file.FileName).ToLower() == ".xlsx",
+                "'{0}' 必须是Excel的xlsx类型的文件", file.FileName);
+
+            WorkBook workbook = WorkBook.Load(file.InputStream);
+            WorkSheet sheet = workbook.Sheets.Any;
+
+            sheet.NullCheck("Excel中至少要有一个工作表");
+
+            UploadProgressStatus status = new UploadProgressStatus();
+
+            SCApplication app = (SCApplication)SchemaObjectAdapter.Instance.LoadByCodeName("Applications", "PPTS", SchemaObjectStatus.Normal, DateTime.MinValue);
+
+            app.NullCheck("不能找到CodeName为PPTS的应用");
+
+            int processed = 0;
+            int completed = 0;
+
+            app.ImportRolesAndPermissions(sheet, context =>
+            {
+                processed++;
+                context.Exception.IsNull(() => completed++);
+            });
+
+            result.DataChanged = processed > 0 && completed > 0;
+            result.ProcessLog = string.Format("总共处理了{0}条数据，{1}条成功", processed, completed);
+            result.CloseWindow = processed == completed;
+
+            if (result.DataChanged)
+                SCCacheHelper.InvalidateAllCache();
         }
     }
 }

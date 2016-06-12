@@ -23,15 +23,15 @@
     });
 })();
 
-(function () {
+(function() {
     'use strict';
 
-    mcs.ng.filter('props', function () {
-        return function (items, props) {
+    mcs.ng.filter('props', function() {
+        return function(items, props) {
             var out = [];
             if (angular.isArray(items)) {
                 var keys = Object.keys(props);
-                items.forEach(function (item) {
+                items.forEach(function(item) {
                     var itemMatches = false;
                     for (var i = 0; i < keys.length; i++) {
                         var prop = keys[i];
@@ -53,20 +53,21 @@
         };
     });
 
-    mcs.ng.filter('trusted', ['$sce', function ($sce) {
-        return function (text) {
+    mcs.ng.filter('trusted', ['$sce', function($sce) {
+        return function(text) {
             return $sce.trustAsHtml(text);
         };
     }]);
 
-    mcs.ng.filter('normalize', function () {
-        return function (text) {
-            return !text || text == '0001-01-01' ? '' : text;
+    mcs.ng.filter('normalize', function() {
+        return function(text) {
+            return !mcs.util.bool(text) || text == '0001-01-01' ? '' : text;
         };
     });
 
-    mcs.ng.filter('truncate', function () {
-        return function (text, length) {
+
+    mcs.ng.filter('truncate', function() {
+        return function(text, length) {
             var array = mcs.util.toArray(text);
             if (array.length > 1) {
                 return array[0] + '...';
@@ -77,7 +78,25 @@
             return text;
         }
     });
+
+    mcs.ng.filter('rmb', function () {
+        return function (input) {
+            if (!/^(0|[1-9]\d*)(\.\d+)?$/.test(input))
+                return '';
+            if (parseFloat(input) == 0) return '零元整';
+            var unit = '仟佰拾亿仟佰拾万仟佰拾元角分', str = '';
+            input += '00';
+            var p = input.indexOf('.');
+            if (p >= 0)
+                input = input.substring(0, p) + input.substr(p + 1, 2);
+            unit = unit.substr(unit.length - input.length);
+            for (var i = 0; i < input.length; i++)
+                str += '零壹贰叁肆伍陆柒捌玖'.charAt(input.charAt(i)) + unit.charAt(i);
+            return str.replace(/零(仟|佰|拾|角)/g, '零').replace(/(零)+/g, '零').replace(/零(万|亿|元)/g, '$1').replace(/(亿)万|壹(拾)/g, '$1$2').replace(/^元零?|零分/g, "").replace(/元$/g, '元整');
+        };
+    });
 })();
+
 (function () {
     'use strict';
 
@@ -244,7 +263,7 @@
                             loadDataCallback(elem, $scope.data[id]);
                         });
                     } else {
-                        if (typeof ($scope.data[id]) == undefined)
+                        if ($scope.data == undefined || typeof ($scope.data[id]) == undefined)
                             return false;
                         loadDataCallback(elem, $scope.data[id]);
                     }
@@ -410,21 +429,40 @@
             restrict: 'E',
             scope: {
                 data: '=',
-                model: '='
+                model: '=',
+                defaultKey: '@'
             },          
-            template: '<label class="checkbox-inline" ng-repeat="item in data"><input type="checkbox" class="ace" ng-checked="model && model.indexOf(item.key)!=-1" ng-click="change(item, $event)"><span class="lbl"></span> {{item.value}}</label>',
+            template: '<label class="checkbox-inline" ng-repeat="item in data" ng-class="{\'all\':item.key==-1}" ng-style="customStyle"><input type="checkbox" class="ace" ng-checked="model && model.indexOf(item.key)!=-1" ng-click="change(item, $event)"><span class="lbl"></span> {{item.value}}</label>',
             controller: function ($scope) {
+                $scope.defaultKey = $scope.defaultKey || '-1';
                 $scope.change = function (item, event) {
-                    mcs.util.setSelectedItems($scope.model, item, event);
+                    $scope.model = $scope.model || [];
+                    if (item.key == $scope.defaultKey) {
+                        var items = $scope.data;
+                        $scope.model = [];
+                        if (event.target.checked) {
+                            for (var index in items) {
+                                var item = items[index];
+                                $scope.model.push(item.key);
+                            }
+                        } 
+                    } else {
+                        var length = !$scope.data ? 0 : $scope.data.length;
+                        mcs.util.setSelectedItems($scope.model, item, event, length, $scope.defaultKey);
+                    }
                     validationService.validate($(event.target), $scope);
                 };
+                $scope.customStyle = {};
+                if ($scope.$parent.width) {
+                    $scope.customStyle['width'] = $scope.$parent.width;
+                }
             },
             link: function ($scope, $elem) {
                 $scope.$watch('$parent.required', function () {
                     if ($scope.$parent.required) {
                         $elem.find(':checkbox').attr('required', 'required');
                     }
-                })
+                });
             }
         }
     }]);
@@ -866,7 +904,7 @@
             },
             info: {
                 title: '消息',
-                message: '操作发生错误'
+                message: '至少选择一条数据！'
             },
             error: {
                 title: '错误',
@@ -931,6 +969,7 @@
         };
     }]);
 })();
+
 (function () {
     'use strict';
 
@@ -945,7 +984,7 @@
                 readonly: '@',
                 css: '@',
                 customStyle: '@',
-                datatype: '@', //int, float
+                datatype: '@', //int, number, string
                 model: '='
             },
             template: '<input placeholder="{{placeholder}}" class="mcs-default-size-input mcs-margin-right-20 {{css}}" ng-model="model" style="{{customStyle}}"/>',
@@ -958,7 +997,7 @@
                     $elem.bind('keyup afterpaste', function () {
                         mcs.util.limit($elem);
                     });
-                } else if (dataType == 'float') {
+                } else if (dataType == 'number') {
                     $elem.bind('keyup afterpaste', function () {
                         mcs.util.number($elem);
                     });
@@ -1021,25 +1060,56 @@
                     return false;
             }
 
-            printService.print = function() {
+
+
+            printService.checkTargetPageLoaded = function(newwin, nopreview, content) {
+                printService.timeoutObj = setTimeout(function() {
+                    var container = newwin.document.getElementById('printDiv');
+                    if (container) {
+                        container.innerHTML = content.innerHTML;
+
+                        if (nopreview) {
+                            newwin.printWindow(nopreview);
+                        }
+                    } else {
+                        clearTimeout(printService.timeoutObj);
+                        printService.checkTargetPageLoaded();
+                    }
+                }, 100);
+            };
+
+
+
+            printService.print = function(nopreview) {
 
 
 
                 var content = document.getElementById("printArea").cloneNode(true);
 
+
                 var newwin = window.open(mcs.app.config.mcsComponentBaseUrl + '/src/mcs-print/mcs-print.html', '', '');
-                newwin.opener = null;
 
 
-
-                newwin.onload = function() {
-                    var container = newwin.document.getElementById('printContainer');
-                    container.appendChild(content);
+                if (mcs.browser.s.msie) {
+                    printService.checkTargetPageLoaded(newwin, nopreview, content);
+                    return;
                 }
 
 
+                newwin[newwin.addEventListener ? 'addEventListener' : 'attachEvent'](
+                    (newwin.attachEvent ? 'on' : '') + 'load',
+                    function() {
+                        var container = newwin.document.getElementById('printDiv');
+                        container.innerHTML = content.innerHTML;
 
-            }
+                        if (nopreview) {
+                            newwin.printWindow(nopreview);
+                        }
+
+
+                    }, false);
+
+            };
 
             return printService;
         });
@@ -1059,7 +1129,7 @@
                 value: '='
             },
 
-            template: '<label class="radio-inline" ng-repeat="item in data" ng-show="item.state"><input name="{{groupName}}" type="radio" class="ace" ng-checked="item.key==model" ng-click="change(item, $event)"><span class="lbl"></span> {{item.value}}</label>',
+            template: '<label class="radio-inline" ng-repeat="item in data" ng-show="item.state"><span uib-tooltip="{{item.tooltip}}"><input name="{{groupName}}" type="radio" class="ace" ng-checked="item.key==model" ng-click="change(item, $event)"><span class="lbl"></span> {{item.value}}</span></label>',
             controller: function ($scope) {
                 $scope.groupName = mcs.util.newGuid();
                 $scope.change = function (item, event) {
@@ -1287,7 +1357,7 @@
                 data: '=',
                 itemTemplateUrl: '@'
             },
-            template: '<table style="width:100%" class="table-layout"><tr ng-repeat="row in data track by $index"><td><div ng-include="itemTemplateUrl"></div></td></tr></table>',
+            template: '<table style="width:100%" class="table-layout"><tr ng-repeat="row in data track by $index"><td class="mcs-padding-0"><div ng-include="itemTemplateUrl"></div></td></tr></table>',
 
             link: function($scope, iElm, iAttrs, controller) {
 
@@ -1355,16 +1425,10 @@
                     };
 
                     $scope.downloadFile = function(file) {
-                        $http.post($scope.downloadUrl, {
-                            status: file.status,
-                            id: file.id,
-                            originalName: file.originalName
-                        }).then(function(response) {
 
-                            var win = window.open('_blank', 'filedownloadwin');
-                            win.write(response.data);
+                        mcs.util.postMockForm($scope.downloadUrl, file);
 
-                        });
+
                     };
 
                     $scope.uploadFiles = function(files) {
@@ -1391,9 +1455,9 @@
                             file.upload.then(function(response) {
                                 $timeout(function() {
                                     mcs.util.removeByObject(files, file);
-                                    response.data.method = 'edit';
+                                    response.data[0].method = 'edit';
 
-                                    $scope.model.push(response.data);
+                                    $scope.model.push(response.data[0]);
                                 });
                             }, function(response) {
                                 if (response.status > 0) {
@@ -1590,13 +1654,15 @@
                     }
                 }
             }
+            // 如果不参与required验证，则不需要再进行其他规则验证
+            var skipRequiredValidation = validationResult && !mcs.util.hasAttrs(elem, 'required required-level') && $.trim(elem.val()).length == 0;
             // minlength
             if (validationResult && mcs.util.hasAttr(elem, 'minlength')) {
                 var minlength = parseInt(elem.attr('minlength'));
                 if (minlength > 0) {
                     validationResult = checkValidationResult(elem, {
                         errorMessage: elem.attr('data-validation-minlength-message') || mcs.util.format(config.minlength, minlength),
-                        validate: $.trim(elem.val()).length >= minlength
+                        validate: skipRequiredValidation || $.trim(elem.val()).length >= minlength
                     });
                 }
             }
@@ -1606,7 +1672,7 @@
                 if (maxlength > 0) {
                     validationResult = checkValidationResult(elem, {
                         errorMessage: elem.attr('data-validation-maxlength-message') || mcs.util.format(config.maxlength, maxlength),
-                        validate: $.trim(elem.val()).length <= maxlength
+                        validate: skipRequiredValidation || $.trim(elem.val()).length <= maxlength
                     });
                 }
             }
@@ -1615,7 +1681,7 @@
                 var min = parseFloat(elem.attr('min'));
                 validationResult = checkValidationResult(elem, {
                     errorMessage: elem.attr('data-validation-min-message') || mcs.util.format(config.min, min),
-                    validate: parseFloat($.trim(elem.val())) >= min
+                    validate: skipRequiredValidation || parseFloat($.trim(elem.val())) >= min
                 });
             }
             //max
@@ -1623,35 +1689,35 @@
                 var max = parseFloat(elem.attr('max'));
                 validationResult = checkValidationResult(elem, {
                     errorMessage: elem.attr('data-validation-max-message') || mcs.util.format(config.max, max),
-                    validate: parseFloat($.trim(elem.val())) <= max
+                    validate: skipRequiredValidation || parseFloat($.trim(elem.val())) <= max
                 });
             }
             //positive
             if (validationResult && mcs.util.hasAttr(elem, 'positive')) {
                 validationResult = checkValidationResult(elem, {
                     errorMessage: elem.attr('data-validation-positive-message') || config.positive,
-                    validate: ($.trim(elem.val()) == '0' || (/^[1-9]+[0-9]*$/).test($.trim(elem.val())))
+                    validate: skipRequiredValidation || ($.trim(elem.val()) == '0' || (/^[1-9]+[0-9]*$/).test($.trim(elem.val())))
                 });
             }
             //negative
             if (validationResult && mcs.util.hasAttr(elem, 'negative')) {
                 validationResult = checkValidationResult(elem, {
                     errorMessage: elem.attr('data-validation-negative-message') || config.negative,
-                    validate: ($.trim(elem.val()) == '0' || (/^-[1-9]+[0-9]*$/).test($.trim(elem.val())))
+                    validate: skipRequiredValidation || ($.trim(elem.val()) == '0' || (/^-[1-9]+[0-9]*$/).test($.trim(elem.val())))
                 });
             }
             //number
             if (validationResult && mcs.util.hasAttr(elem, 'number')) {
                 validationResult = checkValidationResult(elem, {
                     errorMessage: elem.attr('data-validation-number-message') || config.number,
-                    validate: (/^(([1-9]\d*)|0)(\.\d+)?$/).test($.trim(elem.val()))
+                    validate: skipRequiredValidation || (/^(([1-9]\d*)|0)(\.\d+)?$/).test($.trim(elem.val()))
                 });
             }
             //currency
             if (validationResult && mcs.util.hasAttr(elem, 'currency')) {
                 validationResult = checkValidationResult(elem, {
                     errorMessage: elem.attr('data-validation-currency-message') || config.currency,
-                    validate: (/^(([1-9]\d*)|0)(\.\d{1,2})?$/).test($.trim(elem.val()))
+                    validate: skipRequiredValidation || (/^(([1-9]\d*)|0)(\.\d{1,2})?$/).test($.trim(elem.val()))
                 });
             }
             //less
@@ -1659,7 +1725,7 @@
                 var less = parseFloat(elem.attr('less'));
                 validationResult = checkValidationResult(elem, {
                     errorMessage: elem.attr('data-validation-less-message') || mcs.util.format(config.less, less),
-                    validate: parseFloat($.trim(elem.val())) > less
+                    validate: skipRequiredValidation || parseFloat($.trim(elem.val())) > less
                 });
             }
             //great
@@ -1667,7 +1733,7 @@
                 var great = parseFloat(elem.attr('great'));
                 validationResult = checkValidationResult(elem, {
                     errorMessage: elem.attr('data-validation-great-message') || mcs.util.format(config.great, great),
-                    validate: parseFloat($.trim(elem.val())) < great
+                    validate: skipRequiredValidation || parseFloat($.trim(elem.val())) < great
                 });
             }
             //between
@@ -1679,7 +1745,7 @@
                     if (!isNaN(min) && !isNaN(max)) {
                         validationResult = checkValidationResult(elem, {
                             errorMessage: elem.attr('data-validation-between-message') || mcs.util.format(config.between, min, max),
-                            validate: parseFloat($.trim(elem.val())) >= min && parseFloat($.trim(elem.val())) <= max
+                            validate: skipRequiredValidation || (parseFloat($.trim(elem.val())) >= min && parseFloat($.trim(elem.val())) <= max)
                         });
                     }
                 }
@@ -1688,21 +1754,21 @@
             if (validationResult && mcs.util.hasAttr(elem, 'phone')) {
                 validationResult = checkValidationResult(elem, {
                     errorMessage: elem.attr('data-validation-phone-message') || config.phone,
-                    validate: (/(^1[34578]\d{9}$)|(^\d{3,4}-\d{7,8}-\d{1,5}$)|(^\d{3,4}-\d{7,8}$)/).test($.trim(elem.val()))
+                    validate: skipRequiredValidation || (/(^1[34578]\d{9}$)|(^\d{3,4}-\d{7,8}-\d{1,5}$)|(^\d{3,4}-\d{7,8}$)/).test($.trim(elem.val()))
                 });
             }
             //email
             if (validationResult && mcs.util.hasAttr(elem, 'email')) {
                 validationResult = checkValidationResult(elem, {
                     errorMessage: elem.attr('data-validation-email-message') || config.email,
-                    validate: (/^[0-9a-z][_.0-9a-z-]{0,31}@([0-9a-z][0-9a-z-]{0,30}[0-9a-z]\.){1,4}[a-z]{2,4}$/).test($.trim(elem.val()))
+                    validate: skipRequiredValidation || (/^[0-9a-z][_.0-9a-z-]{0,31}@([0-9a-z][0-9a-z-]{0,30}[0-9a-z]\.){1,4}[a-z]{2,4}$/).test($.trim(elem.val()))
                 });
             }
             //idcard
             if (validationResult && mcs.util.hasAttr(elem, 'idcard')) {
                 validationResult = checkValidationResult(elem, {
                     errorMessage: elem.attr('data-validation-idcard-message') || config.idcard,
-                    validate: (/^(\d{18,18}|\d{15,15}|\d{17,17}x|\d{17,17}X)$/).test($.trim(elem.val()))
+                    validate: skipRequiredValidation || (/^(\d{18,18}|\d{15,15}|\d{17,17}x|\d{17,17}X)$/).test($.trim(elem.val()))
                 });
             }
             //validate
@@ -1778,4 +1844,36 @@
         email: '输入数据项不是合法电子邮件！',
         idcard: '输入数据项不是合法身份证号！'
     });
+})();
+(function () {
+    'use strict';
+
+    mcs.ng.service('mcsWorkflowService', ['$resource', function ($resource) {
+        var service = this;
+
+        var resource = $resource(ppts.config.mcsApiBaseUrl + '/api/workflow/:operation/:id',
+            { operation: '@operation', id: '@id' },
+            {
+                'post': { method: 'POST' },
+                'query': { method: 'GET', isArray: false }
+            });
+
+        service.startup = function (startupParames, success, error) {
+            resource.post({ operation: 'Startup' }, JSON.stringify(startupParames), success, error);
+        };
+        service.queryUsertask = function (searchParams, success, error) {
+            resource.post({ operation: 'QueryUsertask' }, JSON.stringify(searchParams), success, error);
+        };
+        service.getClientProcess = function (searchParams, success, error) {
+            resource.post({ operation: 'GetClientProcess' }, JSON.stringify(searchParams), success, error);
+        };
+        service.moveto = function (movetoParames, success, error) {
+            resource.post({ operation: 'Moveto' }, JSON.stringify(movetoParames), success, error);
+        };
+        service.cancel = function (cancelParames, success, error) {
+            resource.post({ operation: 'Cancel' }, JSON.stringify(cancelParames), success, error);
+        };
+
+        return service;
+    }]);
 })();

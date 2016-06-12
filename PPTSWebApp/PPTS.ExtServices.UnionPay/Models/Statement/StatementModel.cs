@@ -23,7 +23,6 @@ namespace PPTS.ExtServices.UnionPay.Models.Statement
         /// <summary>
         /// 清算日期
         /// </summary>
-        [Description(Name = "清算日期", Index = 1)]
         [Validate(ValidateType.IsMiniDate, ErrorMessage = "清算日期不正确")]
         public DateTime LiquidationDate
         { get; set; }
@@ -31,7 +30,6 @@ namespace PPTS.ExtServices.UnionPay.Models.Statement
         /// <summary>
         /// 交易时间
         /// </summary>
-        [Description(Name = "交易时间", Index = 2)]
         [Validate(ValidateType.IsMiniDate,ErrorMessage = "交易时间不正确")]
         public DateTime TransactionTime
         { get; set; }
@@ -39,7 +37,6 @@ namespace PPTS.ExtServices.UnionPay.Models.Statement
         /// <summary>
         /// 参考号
         /// </summary>
-        [Description(Name = "参考号", Index = 4)]
         [Validate(ValidateType.NullOrEmpty,ErrorMessage = "参考号为空")]
         public string RefNum
         { get; set; }
@@ -47,7 +44,6 @@ namespace PPTS.ExtServices.UnionPay.Models.Statement
         /// <summary>
         /// 卡号
         /// </summary>
-        [Description(Name = "卡号", Index = 5)]
         [Validate(ValidateType.NullOrEmpty,ErrorMessage = "卡号不能为空")]
         public string CardNumber
         { get; set; }
@@ -55,7 +51,6 @@ namespace PPTS.ExtServices.UnionPay.Models.Statement
         /// <summary>
         /// 商户号
         /// </summary>
-        [Description(Name = "商户号", Index = 0)]
         [Validate(ValidateType.NullOrEmpty, ErrorMessage = "商户号为空")]
         public string MerchantNumber
         { get; set; }
@@ -63,7 +58,6 @@ namespace PPTS.ExtServices.UnionPay.Models.Statement
         /// <summary>
         /// 终端号
         /// </summary>
-        [Description(Name = "终端号", Index = 3)]
         [Validate(ValidateType.NullOrEmpty, ErrorMessage = "终端号不能为空")]
         public string TerminalNo
         { get; set; }
@@ -71,7 +65,6 @@ namespace PPTS.ExtServices.UnionPay.Models.Statement
         /// <summary>
         /// 交易金额
         /// </summary>
-        [Description(Name = "交易金额", Index = 7)]
         [Validate(ValidateType.IsDecimal, RegexContent = @"^[-+]?(([0-9]+)|([0-9]+\.[0-9]{1,2}))$", ErrorMessage = "交易金额的格式不正确")]
         [Validate(ValidateType.IsLessEqualZero, ErrorMessage = "交易金额应大于零")]
         public decimal Amount

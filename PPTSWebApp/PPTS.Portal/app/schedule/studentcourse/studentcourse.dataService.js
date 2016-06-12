@@ -39,4 +39,9 @@
 
         return resource;
     }]);
+
+    schedule.registerValue('studentCourseAdvanceSearchItems', [
+        { name: '上课时间：', template: '<ppts-daterangepicker start-date="vm.criteria.startTime" end-date="vm.criteria.endTime" css="mcs-margin-left-10"/>' },
+        { name: '教师编制：', template: '<ppts-checkbox-group category="teacherType" model="vm.criteria.isFullTimeTeacher" async="false"/>' },
+    ]);
 });

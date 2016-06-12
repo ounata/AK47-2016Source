@@ -17,6 +17,7 @@ namespace PPTS.Data.Customers.Entities
     [Serializable]
     [ORTableMapping("CM.Customers", "CM.Customers_Current")]
     [DataContract]
+    [EntityAuth(RecordType =RecordType.Customer)]
     [CustomerRelationScope(ActionType = ActionType.Read, Functions = "查看客户（不含联系方式）"
         , RelationType = RelationType.Callcenter, RecordType = CustomerRecordType.Customer, Description = "电销关系读取客户权限分配")]
 

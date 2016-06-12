@@ -303,7 +303,7 @@
                                     }
                                 }
 
-                                if (categoryTypes.length > 0 && serviceMoney>0) {
+                                if (categoryTypes.length > 0 && serviceMoney > 0) {
                                     totalMoney += serviceMoney;
                                     messageServiceMoney = '+¥' + serviceMoney + '(综合服务费)';
                                 }
@@ -331,9 +331,10 @@
                                     //productCampusName:'',
                                 };
 
-                                console.debug(param)
-                                //return;;
-                                purchaseCourseDataService.submitShoppingCart(param, function (entity) { console.log(entity); });
+                                purchaseCourseDataService.submitShoppingCart(param, function (entity) {
+                                    var removeCartIds = $(items).map(function (i, v) { return { cartID: v.cartID } }).toArray();
+                                    mcs.util.removeByObjectsWithKeys(vm.data.rows, removeCartIds);
+                                });
 
                             });
 
@@ -343,61 +344,69 @@
                     };
 
 
-                    purchaseCourseDataService.getShoppingCart({ customerId: customerId, listType: listType, campusId: campusId }, function (result) {
-                        console.debug(result)
-
-                        var rows = $(result.cart).map(function (i, v) {
-
-                            if (v.noOpenClassCount) {
-                                v.product['noOpenClassCount'] = v.noOpenClassCount;
-                            }
-                            if (v.remainLessonCount) {
-                                v.product['remainLessonCount'] = v.remainLessonCount;
-                            }
-                            v.product['orderPrice'] = 0;
-                            v.product['highlight'] = v.product.tunlandAllowed == 0;
-                            v.product['cartID'] = v.cartID;
-                            v.product['item'] = v.item;
-                            v.product['discount'] = function () {
-                                if (v.product.tunlandAllowed == 0) { return '--'; }
-                                if (vm.account.data.rowsSelected.length < 1) return 1;
-                                return vm.account.data.rowsSelected[0].discountRate;
-                            };
-                            return v.product;
-                        });
-
-                        vm.account.data.rows = result.account;
-                        if (result.account.length > 0) {
-                            vm.account.data.rowsSelected[0] = result.account[0];
-                        }
-
-
-                        vm.data.rows = rows.toArray();
-
-                        //查看买赠清单
-                        if (listType == 2) {
-                            vm.reCalcPreset = function (row) {
-                                if (result.present.items.length > 0) {
-                                    for (var index in result.present.items) {
-                                        if (row.item.orderAmount >= result.present.items[index].presentStandard) {
-                                            return row.item.presentAmount = result.present.items[index].presentValue;
-                                        }
-                                    }
-                                }
-                            };
-                        }
-
-
-                        //初始化缴费单下拉列表
-                        var chargePays = $(result.chargePays).map(function (i, v) { return { applyID: v.applyID, payMemo: v.applyNo + ' 付款日期：' + mcs.date.format(v.payTime) + ' 缴费金额：' + v.paidMoney + '元' }; }).toArray();
-                        dataSyncService.injectDictData(mcs.util.mapping(chargePays, { key: 'applyID', value: 'payMemo' }, 'ChargePayment'));
-                        ppts.config.dictMappingConfig["chargePayment"] = "c_codE_ABBR_ChargePayment";
-
+                    var init = (function () {
 
                         //选中0折
                         vm.specialType = "1";
-                        $scope.$broadcast('dictionaryReady');
-                    });
+
+
+                        purchaseCourseDataService.getShoppingCart({ customerId: customerId, listType: listType, campusId: campusId }, function (result) {
+
+                            var rows = $(result.cart).map(function (i, v) {
+
+                                if (v.noOpenClassCount) {
+                                    v.product['noOpenClassCount'] = v.noOpenClassCount;
+                                }
+                                if (v.remainLessonCount) {
+                                    v.product['remainLessonCount'] = v.remainLessonCount;
+                                }
+                                v.product['orderPrice'] = 0;
+                                v.product['highlight'] = v.product.tunlandAllowed == 0;
+                                v.product['cartID'] = v.cartID;
+                                v.product['item'] = v.item;
+                                v.product['discount'] = function () {
+                                    if (v.product.tunlandAllowed == 0) { return '--'; }
+                                    if (vm.account.data.rowsSelected.length < 1) return 1;
+                                    return vm.account.data.rowsSelected[0].discountRate;
+                                };
+                                return v.product;
+                            });
+
+                            vm.account.data.rows = result.account;
+                            if (result.account.length > 0) {
+                                vm.account.data.rowsSelected[0] = result.account[0];
+                            }
+
+
+                            vm.data.rows = rows.toArray();
+
+                            //查看买赠清单
+                            if (listType == 2) {
+                                vm.reCalcPreset = function (row) {
+                                    if (result.present.items.length > 0) {
+                                        for (var index in result.present.items) {
+                                            if (row.item.orderAmount >= result.present.items[index].presentStandard) {
+                                                return row.item.presentAmount = result.present.items[index].presentValue;
+                                            }
+                                        }
+                                    }
+                                };
+                            }
+
+
+                            //初始化缴费单下拉列表
+                            var chargePays = $(result.chargePays).map(function (i, v) { return { applyID: v.applyID, payMemo: v.applyNo + ' 付款日期：' + mcs.date.format(v.payTime) + ' 缴费金额：' + v.paidMoney + '元' }; }).toArray();
+                            dataSyncService.injectDictData(mcs.util.mapping(chargePays, { key: 'applyID', value: 'payMemo' }, 'ChargePayment'));
+                            ppts.config.dictMappingConfig["chargePayment"] = "c_codE_ABBR_ChargePayment";
+
+                            $scope.$broadcast('dictionaryReady');
+                        });
+
+                    })();
+
+
+
+
 
                 }]);
         });

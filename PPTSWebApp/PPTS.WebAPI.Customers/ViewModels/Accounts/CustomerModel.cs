@@ -184,6 +184,14 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
                 model.Gender = customer.Gender;
                 model.Grade = customer.Grade;
                 model.SchoolID = customer.SchoolID;
+
+                CustomerParentPhone parent = CustomerParentPhoneAdapter.Instance.Load(customerID);
+                if (parent != null)
+                {
+                    model.ParentName = parent.ParentName;
+                    model.PhoneNumber = parent.PhoneNumber;
+                    model.ParentRole = parent.ParentRole;
+                }
             }
             else
             {
@@ -201,18 +209,15 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
                     model.Grade = potential.Grade;
                     model.SchoolID = potential.SchoolID;
                     model.IsPotential = true;
+
+                    PotentialCustomerParentPhone parent = PotentialCustomerParentPhoneAdapter.Instance.Load(customerID);
+                    if (parent != null)
+                    {
+                        model.ParentName = parent.ParentName;
+                        model.PhoneNumber = parent.PhoneNumber;
+                        model.ParentRole = parent.ParentRole;
+                    }
                 }
-            }
-            Parent parent =  ParentAdapter.Instance.LoadPrimaryParentInContext(customerID);
-            if (parent != null)
-            {
-                model.ParentName = parent.ParentName;
-                Phone phone = PhoneAdapter.Instance.LoadPrimaryPhoneByOwnerID(parent.ParentID);
-                if (phone != null)
-                    model.PhoneNumber = phone.PhoneNumber;
-                CustomerParentRelation relation = CustomerParentRelationAdapter.Instance.LoadPrimary(customerID, parent.ParentID);
-                if (relation != null)
-                    model.ParentRole = relation.ParentRole.ToString();
             }
             School school = SchoolAdapter.Instance.Load(model.SchoolID);
             if(school != null)

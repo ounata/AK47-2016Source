@@ -119,7 +119,7 @@ namespace PPTS.Data.Orders.Entities
         }
 
         ///教师，全职还是兼职
-        int IsFullTimeTeacher { get; set; }
+        int? IsFullTimeTeacher { get; set; }
 
         ///学员账户ID
         string AccountID { get; set; }
@@ -165,6 +165,13 @@ namespace PPTS.Data.Orders.Entities
             get;
             set;
         }
+
+        ///课时类型代码
+        string CategoryType { get; set; }
+
+        ///课时类型名称
+        string CategoryTypeName { get; set; }
+
 
         string TenantCode
         {

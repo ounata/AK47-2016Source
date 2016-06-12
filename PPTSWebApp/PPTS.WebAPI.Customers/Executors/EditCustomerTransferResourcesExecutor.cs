@@ -20,7 +20,7 @@ namespace PPTS.WebAPI.Customers.Executors
         public EditCustomerTransferResourcesExecutor(EditCustomerTransferResourcesModel model) : base(model, null)
         { }
         /// <summary>
-        /// 新增客户与员工归属关系数据
+        ///划转资源
         /// </summary>
         /// <param name="context"></param>
         protected override void PrepareData(DataExecutionContext<UserOperationLogCollection> context)

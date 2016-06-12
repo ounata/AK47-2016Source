@@ -11,10 +11,6 @@ namespace PPTS.Data.Common.Authorization
     /// </summary>
     public class OrgCustomerRelationScopeAttribute : RecordOrgScopeAttribute
     {
-        /// <summary>
-        /// 授权关系类型
-        /// </summary>
-        public RelationType RelationType { get; set; }
 
         /// <summary>
         /// 被授权记录类型

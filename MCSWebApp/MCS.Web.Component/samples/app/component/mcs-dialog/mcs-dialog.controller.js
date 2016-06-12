@@ -24,8 +24,18 @@
 
                 vm.confirm = function() {
                     mcsDialogService.confirm({
-                            title: 'confirm',
+                            title: '请确认',
                             message: 'are you sure to do that?'
+                        }
+
+
+                    );
+                }
+
+                vm.info = function() {
+                    mcsDialogService.info({
+                            title: '提示',
+                            message: 'info occurs!'
                         }
 
 
@@ -34,7 +44,7 @@
 
                 vm.error = function() {
                     mcsDialogService.error({
-                            title: 'Error',
+                            title: '警告',
                             message: 'error occurs!'
                         }
 

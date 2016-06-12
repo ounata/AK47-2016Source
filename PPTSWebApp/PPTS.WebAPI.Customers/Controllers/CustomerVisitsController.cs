@@ -8,6 +8,14 @@ using PPTS.WebAPI.Customers.DataSources;
 using PPTS.WebAPI.Customers.Executors;
 using MCS.Web.MVC.Library.Filters;
 using PPTS.WebAPI.Customers.ViewModels.CustomerVisits;
+using System.Net.Http;
+using System.Web.Http.ModelBinding;
+using MCS.Web.MVC.Library.ModelBinder;
+using MCS.Library.Office.OpenXml.Excel;
+using MCS.Web.MVC.Library.ApiCore;
+using System.Data;
+using System.Linq;
+using System;
 
 namespace PPTS.WebAPI.Customers.Controllers
 {
@@ -112,6 +120,55 @@ namespace PPTS.WebAPI.Customers.Controllers
         public EditableCustomerVisitModel GetCustomerVisitInfo(string id)
         {
             return this.UpdateCustomerVisit(id);
+        }
+
+        #endregion
+
+        #region api/customerservices/exportcustVisits
+
+        [HttpPost]
+        public HttpResponseMessage ExportCustomerVisit([ModelBinder(typeof(FormBinder))]CustomerVisitQueryCriteriaModel criteria)
+        {
+            var wb = WorkBook.CreateNew();
+            var sheet = wb.Sheets["sheet1"];
+            var tableDesp = new TableDescription("回访记录");
+            criteria.PageParams.PageIndex = 0;
+            criteria.PageParams.PageSize = 0;
+            var pageData = CustomerVisitDataSource.Instance.LoadCustomerVisit(criteria.PageParams, criteria, criteria.OrderBy);
+            tableDesp.AllColumns.Add(new TableColumnDescription(new DataColumn("学员姓名", typeof(string))) { PropertyName = "CustomerName" });
+            tableDesp.AllColumns.Add(new TableColumnDescription(new DataColumn("学员编号", typeof(string))) { PropertyName = "CustomerCode" });
+            tableDesp.AllColumns.Add(new TableColumnDescription(new DataColumn("家长姓名", typeof(string))) { PropertyName = "ParentName" });
+            tableDesp.AllColumns.Add(new TableColumnDescription(new DataColumn("回访时间", typeof(string))) { PropertyName = "VisitTime", Format = "yyyy-MM-dd" });
+            tableDesp.AllColumns.Add(new TableColumnDescription(new DataColumn("回访方式", typeof(string))) { PropertyName = "VisitWay" });
+            tableDesp.AllColumns.Add(new TableColumnDescription(new DataColumn("回访类型", typeof(string))) { PropertyName = "VisitType" });
+            tableDesp.AllColumns.Add(new TableColumnDescription(new DataColumn("回访人", typeof(string))) { PropertyName = "VisitorName" });
+            tableDesp.AllColumns.Add(new TableColumnDescription(new DataColumn("家长满意度", typeof(string))) { PropertyName = "Satisficing" });
+            tableDesp.AllColumns.Add(new TableColumnDescription(new DataColumn("回访内容", typeof(string))) { PropertyName = "VisitContent" });
+            var dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(CustomerVisitModel), typeof(PotentialCustomer));
+
+            sheet.LoadFromCollection(pageData.PagedData, tableDesp, (cell, param) =>
+            {
+                switch (param.ColumnDescription.PropertyName)
+                {
+                    case "VisitWay":
+                        var vw = dictionaries["C_CODE_ABBR_Customer_CRM_ReturnWay"].Where(c => c.Key == Convert.ToString(param.PropertyValue));
+                        cell.Value = null != vw ? (null == vw.FirstOrDefault() ? null : vw.FirstOrDefault().Value) : null;
+                        break;
+                    case "VisitType":
+                        var vt = dictionaries["C_CODE_ABBR_BO_Customer_ReturnInfoType"].Where(c => c.Key == Convert.ToString(param.PropertyValue));
+                        cell.Value = null != vt ? (null == vt.FirstOrDefault() ? null : vt.FirstOrDefault().Value) : null;
+                        break;
+                    case "Satisficing":
+                        var ss = dictionaries["C_CODE_ABBR_BO_Customer_Satisfaction"].Where(c => c.Key == Convert.ToString(param.PropertyValue));
+                        cell.Value = null != ss ? (null == ss.FirstOrDefault() ? null : ss.FirstOrDefault().Value) : null;
+                        break;
+                    default:
+                        cell.Value = param.PropertyValue;
+                        break;
+                }
+            });
+
+            return wb.ToResponseMessage("回访记录.xlsx");
         }
 
         #endregion

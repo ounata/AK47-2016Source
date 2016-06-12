@@ -35,8 +35,6 @@
                 case 'dateRange':
                     mcs.util.merge({
                         'dateRange': [{
-                            key: '0', value: '全部'
-                        }, {
                             key: '1', value: '今天'
                         }, {
                             key: '2', value: '本周'
@@ -52,8 +50,6 @@
                 case 'period':
                     mcs.util.merge({
                         'period': [{
-                            key: '0', value: '全部'
-                        }, {
                             key: '1', value: '7天未跟进'
                         }, {
                             key: '2', value: '15天未跟进'
@@ -160,11 +156,42 @@
                         };
                         // 全部
                         // 自定义日期
-                    case '0':
+                    case '-1':
                     case '5':
                         return {
                             start: null,
                             end: null
+                        };
+                }
+                break;
+            case 'period':
+                switch (selectedValue) {
+                    // 全部
+                    // 其他
+                    case '-1':
+                    case '5':
+                        return {
+                            end: null
+                        };
+                        // 7天未跟进
+                    case '1':
+                        return {
+                            end: mcs.date.lastDay(-7)
+                        };
+                        // 15天未跟进
+                    case '2':
+                        return {
+                            end: mcs.date.lastDay(-15)
+                        };
+                        // 30天未跟进
+                    case '3':
+                        return {
+                            end: mcs.date.lastDay(-30)
+                        };
+                        // 60天未跟进
+                    case '4':
+                        return {
+                            end: mcs.date.lastDay(-60)
                         };
                 }
                 break;
@@ -243,7 +270,7 @@
         }, options);
 
         if (options.distinctLevel) {
-            options.callback =  options.callback || {};
+            options.callback = options.callback || {};
             options.callback.beforeCheck = function (treeId, treeNode) {
                 return options.justCheckWithinSameParent(treeId, treeNode);
             };
@@ -272,6 +299,14 @@
 ppts.ng.service('userService', ['storage', function (storage) {
     var service = this;
 
+    service.sessionTokenSetter = function(token) {
+        service.sessionToken = token;
+    }
+
+    service.sessionTokenGetter = function() {
+        return service.sessionToken || null;
+    }
+
     service.initJob = function (vm) {
         var ssoUser = ng.fromJson(sessionStorage.getItem('configData'));
         var currentUser = storage.get('vm.currentUser');
@@ -293,6 +328,7 @@ ppts.ng.service('userService', ['storage', function (storage) {
         ppts.user.orgId = ssoUser.orgId;
         ppts.user.roles = ssoUser.roles;
         ppts.user.jobs = ssoUser.jobs;
+        ppts.user.token = ssoUser.token;
         ppts.user.functions = [];
         ppts.user.jobFunctions = [];
         for (var i in ssoUser.jobs) {
@@ -327,6 +363,17 @@ ppts.ng.service('utilService', function () {
         }
 
         return false;
+    };
+
+    service.showMessage = function (vm, condition, message) {
+        var result = mcs.util.bool(condition);
+        if (result) {
+            vm.errorMessage = message || '选择的记录不满足条件！';
+        } else {
+            vm.errorMessage = '';
+        }
+
+        return result;
     };
 
     service.selectOneRow = function (vm, message) {

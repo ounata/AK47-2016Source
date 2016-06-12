@@ -25,3 +25,8 @@ CREATE INDEX [IX_SchemaRoleSnapshot_Current_CodeName] ON [SC].[SchemaRoleSnapsho
 
 GO
 
+CREATE INDEX [IX_SchemaRoleSnapshot_Current_Name] ON [SC].[SchemaRoleSnapshot_Current] ([Name])
+
+GO
+
+

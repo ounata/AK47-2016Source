@@ -38,8 +38,10 @@ namespace PPTS.WebAPI.Orders.Controllers
         [HttpPost]
         public AssignQCR GetStuCourse(AssignQCM criteriaQCM)
         {
-            ///当前操作人所属校区ID
-            // IOrganization org = DeluxeIdentity.CurrentUser.GetCurrentJob().GetParentOrganizationByType(DepartmentType.Campus);
+            if (criteriaQCM.EndTime != DateTime.MinValue)
+            {
+                criteriaQCM.EndTime = criteriaQCM.EndTime.AddDays(1);
+            }
             return new AssignQCR()
             {
                 QueryResult = GenericOrderDataSource<Data.Orders.Entities.Assign, AssignCollection>.Instance.Query(criteriaQCM.PageParams, criteriaQCM, criteriaQCM.OrderBy),

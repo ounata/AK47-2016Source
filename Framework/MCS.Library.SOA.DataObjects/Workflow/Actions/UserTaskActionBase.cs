@@ -66,6 +66,29 @@ namespace MCS.Library.SOA.DataObjects.Workflow.Actions
 
                 task.Context["OperationName"] = opName;
 
+                IWfTransitionDescriptor fromTransition = activity.FromTransitionDescriptor;
+
+                if (fromTransition != null)
+                {
+                    task.Context["IsReturn"] = fromTransition.IsBackward;
+
+                    //退回线标记为批退
+                    if (fromTransition.IsBackward)
+                    {
+                        task.Context["ApprovalResult"] = false;
+                    }
+                    else
+                    {
+                        //线属性决定是否为批退
+                        if (fromTransition.AffectProcessReturnValue)
+                            task.Context["ApprovalResult"] = fromTransition.AffectedProcessReturnValue;
+                        else
+                            task.Context["ApprovalResult"] = true;
+                    }
+                }
+
+                task.Context["AllowBatchMove"] = activity.Descriptor.Properties.GetValue("AllowBatchMove", false);
+
                 tasks.Add(task);
             }
 

@@ -1,9 +1,9 @@
 (function() {
     'use strict';
     angular.module('app.component').controller('MCSAutoCompleteController', [
-        '$scope', '$http', '$q',
+        '$scope', 'autoCompleteDataService', '$q',
 
-        function($scope, $http, $q) {
+        function($scope, autoCompleteDataService, $q) {
             var vm = this;
             $scope.vm = vm;
 
@@ -43,22 +43,11 @@
             vm.queryStudentList = function(query) {
 
 
-                return $http.post('http://localhost/MCSWebApp/MCS.Web.API/api/UserGraph/query', JSON.stringify({
+                return autoCompleteDataService.query('http://localhost/MCSWebApp/MCS.Web.API/api/UserGraph/query', JSON.stringify({
                     searchTerm: query,
                     maxCount: 10,
                     listMark: 15
-                }), {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-
-                    }
-                }).then(function(result) {
-                    if (result.data) {
-                        return result.data;
-                    }
-
-                });
+                }));
 
 
 
