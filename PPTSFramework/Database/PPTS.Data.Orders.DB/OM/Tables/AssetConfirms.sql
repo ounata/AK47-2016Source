@@ -8,8 +8,12 @@ CREATE TABLE [OM].[AssetConfirms](
     [AccountID] NVARCHAR(36) NULL, 
     [AssetID] NVARCHAR(36) NULL, 
 	[AssetCode] [nvarchar](64) NULL,
+    [AssetType] NVARCHAR(32) NULL, 
+    [AssetRefType] NVARCHAR(32) NULL, 
+    [AssetRefPID] NVARCHAR(36) NULL, 
+    [AssetRefID] NVARCHAR(36) NULL, 
+    [AssetMoney] DECIMAL(18, 4) NULL, 
 	[ConfirmID] [nvarchar](36) NOT NULL DEFAULT newid(),
-	[ConfirmType] [nvarchar](32) NOT NULL,
     [ConfirmFlag] INT NULL DEFAULT 1, 
 	[ConfirmMoney] [decimal](18, 4) NOT NULL DEFAULT 0,
 	[ConfirmMemo] [nvarchar](255) NULL,
@@ -20,7 +24,7 @@ CREATE TABLE [OM].[AssetConfirms](
 	[ConfirmerJobID] [nvarchar](36) NULL,
 	[ConfirmerJobName] [nvarchar](64) NULL,
 	[ConfirmerJobType] [nvarchar](32) NULL,
-    [ProcessStatus] NVARCHAR(32) NOT NULL DEFAULT 0, 
+    [ProcessStatus] NVARCHAR(32) NOT NULL DEFAULT '0', 
     [ProcessTime] DATETIME NULL, 
     [ProcessMemo] NVARCHAR(255) NULL, 
 	[ConsultantID] [nvarchar](36) NULL,
@@ -29,12 +33,17 @@ CREATE TABLE [OM].[AssetConfirms](
 	[EducatorID] [nvarchar](36) NULL,
 	[EducatorName] [nvarchar](64) NULL,
 	[EducatorJobID] [nvarchar](36) NULL,
+    [TeacherID] NVARCHAR(36) NULL, 
+    [TeacherName] NVARCHAR(64) NULL, 
+    [TeacherJobID] NVARCHAR(36) NULL, 
+    [StartTime] DATETIME NULL, 
+    [EndTime] DATETIME NULL, 
+    [DurationValue] DECIMAL(18, 2) NULL DEFAULT 0, 
+    [Amount] DECIMAL(18, 2) NULL DEFAULT 0, 
+    [Price] DECIMAL(18, 4) NULL DEFAULT 0, 
 	[CreatorID] [nvarchar](36) NULL,
 	[CreatorName] [nvarchar](64) NULL,
 	[CreateTime] [datetime] NULL,
-    [ModifierID] NVARCHAR(36) NULL, 
-    [ModifierName] NVARCHAR(64) NULL, 
-    [ModifyTime] DATETIME NULL, 
     [TenantCode] NVARCHAR(36) NULL, 
     CONSTRAINT [PK_AssetConfirms] PRIMARY KEY NONCLUSTERED 
 (
@@ -65,7 +74,7 @@ ALTER TABLE [OM].[AssetConfirms] ADD  CONSTRAINT [DF_AssetConfirms_CreateTime]  
 GO
 
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'校区ID' , @level0type=N'SCHEMA',@level0name=N'OM', @level1type=N'TABLE',@level1name=N'AssetConfirms', @level2type=N'COLUMN',@level2name=N'CampusID'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'收入归属校区ID' , @level0type=N'SCHEMA',@level0name=N'OM', @level1type=N'TABLE',@level1name=N'AssetConfirms', @level2type=N'COLUMN',@level2name='CampusID'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'学员ID' , @level0type=N'SCHEMA',@level0name=N'OM', @level1type=N'TABLE',@level1name=N'AssetConfirms', @level2type=N'COLUMN',@level2name=N'CustomerID'
 GO
@@ -75,7 +84,7 @@ GO
 GO
 
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'确认类型（0-非课程，1-课程类）' , @level0type=N'SCHEMA',@level0name=N'OM', @level1type=N'TABLE',@level1name=N'AssetConfirms', @level2type=N'COLUMN',@level2name='ConfirmType'
+
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'确认状态（1-已确认，3-已删除 ）参考排课' , @level0type=N'SCHEMA',@level0name=N'OM', @level1type=N'TABLE',@level1name=N'AssetConfirms', @level2type=N'COLUMN',@level2name='ConfirmStatus'
 GO
@@ -158,7 +167,7 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level2name = 'ConfirmMemo'
 GO
 EXEC sp_addextendedproperty @name = N'MS_Description',
-    @value = N'校区名称',
+    @value = N'收入归属校区名称',
     @level0type = N'SCHEMA',
     @level0name = N'OM',
     @level1type = N'TABLE',
@@ -187,7 +196,7 @@ GO
 
 GO
 EXEC sp_addextendedproperty @name = N'MS_Description',
-    @value = N'确认单ID',
+    @value = N'确认ID',
     @level0type = N'SCHEMA',
     @level0name = N'OM',
     @level1type = N'TABLE',
@@ -223,32 +232,11 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level2type = N'COLUMN',
     @level2name = N'AssetCode'
 GO
-EXEC sp_addextendedproperty @name = N'MS_Description',
-    @value = N'最后修改人ID',
-    @level0type = N'SCHEMA',
-    @level0name = N'OM',
-    @level1type = N'TABLE',
-    @level1name = N'AssetConfirms',
-    @level2type = N'COLUMN',
-    @level2name = N'ModifierID'
+
 GO
-EXEC sp_addextendedproperty @name = N'MS_Description',
-    @value = N'最后修改人姓名',
-    @level0type = N'SCHEMA',
-    @level0name = N'OM',
-    @level1type = N'TABLE',
-    @level1name = N'AssetConfirms',
-    @level2type = N'COLUMN',
-    @level2name = N'ModifierName'
+
 GO
-EXEC sp_addextendedproperty @name = N'MS_Description',
-    @value = N'最后修改时间',
-    @level0type = N'SCHEMA',
-    @level0name = N'OM',
-    @level1type = N'TABLE',
-    @level1name = N'AssetConfirms',
-    @level2type = N'COLUMN',
-    @level2name = N'ModifyTime'
+
 GO
 EXEC sp_addextendedproperty @name = N'MS_Description',
     @value = N'异步处理状态（参考订购）',
@@ -308,3 +296,125 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level1name = N'AssetConfirms',
     @level2type = N'COLUMN',
     @level2name = N'ConfirmFlag'
+GO
+
+GO
+
+GO
+
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'资产来源类型',
+    @level0type = N'SCHEMA',
+    @level0name = N'OM',
+    @level1type = N'TABLE',
+    @level1name = N'AssetConfirms',
+    @level2type = N'COLUMN',
+    @level2name = N'AssetRefType'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'资产来源PID（存放订购单ID）',
+    @level0type = N'SCHEMA',
+    @level0name = N'OM',
+    @level1type = N'TABLE',
+    @level1name = N'AssetConfirms',
+    @level2type = N'COLUMN',
+    @level2name = N'AssetRefPID'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'资产来源ID（存放订购明细ID）',
+    @level0type = N'SCHEMA',
+    @level0name = N'OM',
+    @level1type = N'TABLE',
+    @level1name = N'AssetConfirms',
+    @level2type = N'COLUMN',
+    @level2name = N'AssetRefID'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'之前资产剩余价值',
+    @level0type = N'SCHEMA',
+    @level0name = N'OM',
+    @level1type = N'TABLE',
+    @level1name = N'AssetConfirms',
+    @level2type = N'COLUMN',
+    @level2name = N'AssetMoney'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'资产类型（参考资产表）',
+    @level0type = N'SCHEMA',
+    @level0name = N'OM',
+    @level1type = N'TABLE',
+    @level1name = N'AssetConfirms',
+    @level2type = N'COLUMN',
+    @level2name = N'AssetType'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'教师ID',
+    @level0type = N'SCHEMA',
+    @level0name = N'OM',
+    @level1type = N'TABLE',
+    @level1name = N'AssetConfirms',
+    @level2type = N'COLUMN',
+    @level2name = N'TeacherID'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'教师姓名',
+    @level0type = N'SCHEMA',
+    @level0name = N'OM',
+    @level1type = N'TABLE',
+    @level1name = N'AssetConfirms',
+    @level2type = N'COLUMN',
+    @level2name = N'TeacherName'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'教师岗位ID',
+    @level0type = N'SCHEMA',
+    @level0name = N'OM',
+    @level1type = N'TABLE',
+    @level1name = N'AssetConfirms',
+    @level2type = N'COLUMN',
+    @level2name = N'TeacherJobID'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'上课开始时间',
+    @level0type = N'SCHEMA',
+    @level0name = N'OM',
+    @level1type = N'TABLE',
+    @level1name = N'AssetConfirms',
+    @level2type = N'COLUMN',
+    @level2name = N'StartTime'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'上课结束时间',
+    @level0type = N'SCHEMA',
+    @level0name = N'OM',
+    @level1type = N'TABLE',
+    @level1name = N'AssetConfirms',
+    @level2type = N'COLUMN',
+    @level2name = N'EndTime'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'课次时长',
+    @level0type = N'SCHEMA',
+    @level0name = N'OM',
+    @level1type = N'TABLE',
+    @level1name = N'AssetConfirms',
+    @level2type = N'COLUMN',
+    @level2name = N'DurationValue'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'课次数',
+    @level0type = N'SCHEMA',
+    @level0name = N'OM',
+    @level1type = N'TABLE',
+    @level1name = N'AssetConfirms',
+    @level2type = N'COLUMN',
+    @level2name = N'Amount'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'课次单价',
+    @level0type = N'SCHEMA',
+    @level0name = N'OM',
+    @level1type = N'TABLE',
+    @level1name = N'AssetConfirms',
+    @level2type = N'COLUMN',
+    @level2name = N'Price'

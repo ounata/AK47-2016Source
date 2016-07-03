@@ -44,11 +44,13 @@
         headers: [{
             field: "customerName",
             name: "学员姓名",
-            template: '<a ui-sref="ppts.customer-view.profiles({id:row.customerID,prev:\'ppts.follow\'})">{{row.customerName}}</a>',
+            template: '<a ng-show="row.isStudent" ui-sref="ppts.student-view.follows({id:row.customerID,prev:\'ppts.follow\'})">{{row.customerName}}</a>' +
+                      '<a ng-show="!row.isStudent" ui-sref="ppts.customer-view.follows({id:row.customerID,prev:\'ppts.follow\'})">{{row.customerName}}</a>',
         }, {
             field: "customerCode",
             name: "学员编号",
-            template: '<span>{{row.customerCode}}</span>',
+            template: '<a ng-show="row.isStudent" ui-sref="ppts.student-view.follows({id:row.customerID,prev:\'ppts.follow\'})">{{row.customerCode}}</a>' +
+                      '<a ng-show="!row.isStudent" ui-sref="ppts.customer-view.follows({id:row.customerID,prev:\'ppts.follow\'})">{{row.customerCode}}</a>',
         }, {
             field: "parentName",
             name: "家长姓名",
@@ -84,7 +86,7 @@
         }, {
             field: "followMemo",
             name: "跟进情况备注",
-            template: '<span uib-tooltip="{{row.followMemo}}">{{row.followMemo| truncate:10}}</span>'
+            template: '<span uib-popover="{{row.followMemo | tooltip:10}}" popover-trigger="mouseenter">{{row.followMemo| truncate:10}}</span>'
         }, {
             field: "followerAndJobName",
             name: "记录人（所在部门）",
@@ -130,7 +132,7 @@
         }, {
             field: "followMemo",
             name: "跟进情况备注",
-            template: '<span uib-tooltip="{{row.followMemo}}">{{row.followMemo| truncate:10}}</span>'
+            template: '<span uib-popover="{{row.followMemo|tooltip:10}}" popover-trigger="mouseenter">{{row.followMemo| truncate:10}}</span>'
         }, {
             field: "followerAndJobName",
             name: "记录人（所在部门）",
@@ -146,115 +148,51 @@
 
 
     customer.registerValue('followAdvanceSearchItems', [
-        { name: '记录人：', template: '<ppts-checkbox-group category="people" model="vm.criteria.followerJobs" clear="vm.criteria.followerJobs=[]" async="false" /><mcs-input placeholder="记录人姓名" model="vm.criteria.followerName" />' },
-        { name: '建档人：', template: '<ppts-checkbox-group category="people" model="vm.criteria.creatorJobs" clear="vm.criteria.creatorJobs=[]" async="false" /><mcs-input placeholder="建档人姓名" model="vm.criteria.followerName" />' },
+        { name: '记录人：', template: '<ppts-checkbox-group category="people" model="vm.criteria.followerJobIDs" async="false" /><mcs-input placeholder="记录人姓名" model="vm.criteria.followerName" />' },
+        { name: '建档关系：', template: '<ppts-checkbox-group category="creation" model="vm.criteria.creatorJobTypes" show-all="true" async="false" css="mcs-padding-left-10"/> <mcs-input placeholder="建档人姓名" model="vm.criteria.creatorName" custom-style="width:28%"/>' },
+        { name: '建档时间：', template: '<mcs-daterangepicker start-date="vm.criteria.createTimeStart" end-date="vm.criteria.createTimeEnd" css="mcs-margin-left-10"/>' },
         { name: '跟进阶段：', template: '<ppts-checkbox-group category="followStage" model="vm.criteria.followStages" async="false"/>' },
         { name: '购买意愿：', template: '<ppts-checkbox-group category="purchaseIntention" model="vm.criteria.purchaseIntentions" clear="vm.criteria.purchaseIntentions=[]" async="false" />' },
         { name: '客户级别：', template: '<ppts-checkbox-group category="customerLevel" model="vm.criteria.customerLevels" clear="vm.criteria.customerLevels=[]" async="false" />' },
         { name: '跟进方式：', template: '<ppts-checkbox-group category="followType" model="vm.criteria.followTypes" clear="vm.criteria.followTypes=[]" async="false" />' },
-        { name: '跟进时间：', template: '<ppts-radiobutton-group category="dateRange" model="vm.followTimeValue" async="false" css="mcs-padding-left-10" /><span ng-show="vm.followTimeValue == 5"><ppts-daterangepicker class="search" start-date="vm.criteria.followStartTime" end-date="vm.criteria.followEndTime"></ppts-daterangepicker></span>' },
-        { name: '下次沟通时间：', template: '<ppts-radiobutton-group category="dateRange" model="vm.nextFollowTimeValue" async="false" css="mcs-padding-left-10" /><span ng-show="vm.nextFollowTimeValue == 5"><ppts-daterangepicker class="search" start-date="vm.criteria.nextTalkStartTime" end-date="vm.criteria.nextTalkEndTime"></ppts-daterangepicker></span>' },
+        { name: '跟进时间：', template: '<ppts-radiobutton-group category="dateRange" model="vm.followTimeValue" show-all="true" async="false" css="mcs-padding-left-10" /><span ng-show="vm.followTimeValue == 5"><mcs-daterangepicker start-date="vm.criteria.followStartTime" end-date="vm.criteria.followEndTime"></mcs-daterangepicker></span>' },
+        { name: '下次沟通时间：', template: '<ppts-radiobutton-group category="dateRange" model="vm.nextFollowTimeValue" show-all="true" async="false" css="mcs-padding-left-10" /><span ng-show="vm.nextFollowTimeValue == 5"><mcs-daterangepicker start-date="vm.criteria.nextTalkStartTime" end-date="vm.criteria.nextTalkEndTime"></mcs-daterangepicker></span>' },
         { name: '在其它机构辅导：', template: '<ppts-radiobutton-group category="ifElse" show-all="true" model="vm.criteria.isStudyThere" async="false" css="mcs-padding-left-10" />' },
-        { name: '预计上门时间：', template: '<ppts-radiobutton-group category="dateRange" model="vm.planVerifyTimeValue" async="false" css="mcs-padding-left-10" /><span ng-show="vm.planVerifyTimeValue == 5"><ppts-daterangepicker class="search" start-date="vm.criteria.planVerifyStartTime" end-date="vm.criteria.planVerifyEndTime"></ppts-daterangepicker></span>' },
-        { name: '预计签约时间：', template: '<ppts-radiobutton-group category="dateRange" model="vm.planSignDateValue" async="false" css="mcs-padding-left-10" /><span ng-show="vm.planSignDateValue == 5"><ppts-daterangepicker class="search" start-date="vm.criteria.planSignStartTime" end-date="vm.criteria.planSignEndTime"></ppts-daterangepicker></span>' },
+        { name: '预计上门时间：', template: '<ppts-radiobutton-group category="dateRange" model="vm.planVerifyTimeValue" show-all="true" async="false" css="mcs-padding-left-10" /><span ng-show="vm.planVerifyTimeValue == 5"><mcs-daterangepicker start-date="vm.criteria.planVerifyStartTime" end-date="vm.criteria.planVerifyEndTime"></mcs-daterangepicker></span>' },
+        { name: '预计签约时间：', template: '<ppts-radiobutton-group category="dateRange" model="vm.planSignDateValue" show-all="true" async="false" css="mcs-padding-left-10" /><span ng-show="vm.planSignDateValue == 5"><mcs-daterangepicker start-date="vm.criteria.planSignStartTime" end-date="vm.criteria.planSignEndTime"></mcs-daterangepicker></span>' },
+        { name: '本部门：', template: '<ppts-checkbox-group category="dept" model="vm.criteria.queryDepts" width="150px" async="false" css="mcs-padding-left-10"/>' },
     ]);
 
     customer.registerValue('followInstutionItem',
-      { template: '<td><ppts-select category="subject" style="width:120px" async="false" /></td><td><input class="mcs-readonly-input" ng-model="vm.customer.customerName" style="margin: 0 0 0 15px" placeholder="请填写机构名称"/></td><td><ppts-daterangepicker start-date="" end-date="" size="sm"/></td><td><button ng-click="" class="btn btn-link"><i class="ace-icon fa fa-plus bigger-110"></i></button></td>' });
+      { template: '<td><mcs-select category="subject" style="width:120px" async="false" /></td><td><input class="mcs-readonly-input" ng-model="vm.customer.customerName" style="margin: 0 0 0 15px" placeholder="请填写机构名称"/></td><td><mcs-daterangepicker start-date="" end-date="" size="sm"/></td><td><button ng-click="" class="btn btn-link"><i class="ace-icon fa fa-plus bigger-110"></i></button></td>' });
 
-    customer.registerFactory('followDataViewService', ['followDataService', 'dataSyncService', 'followListDataHeader', 'showfollowListDataHeader',
-    function (followDataService, dataSyncService, followListDataHeader, showfollowListDataHeader) {
+    customer.registerFactory('followDataViewService', ['followDataService', 'dataSyncService',
+        function (followDataService, dataSyncService) {
         var service = this;
 
-        // 配置跟进列表表头
-        service.configFollowListHeaders = function (vm) {
-            vm.data = followListDataHeader;
-            vm.data.pager.pageChange = function () {
-                dataSyncService.initCriteria(vm);
-                followDataService.getPagedFollows(vm.criteria, function (result) {
-                    vm.data.rows = result.pagedData;
-                });
-            }
-        };
-
-        service.configShowFollowListHeaders = function (vm) {
-            vm.data = showfollowListDataHeader;
-            vm.data.pager.pageChange = function () {
-                dataSyncService.initCriteria(vm);
-                followDataService.getPagedFollows(vm.criteria, function (result) {
-                    vm.data.rows = result.pagedData;
-                });
-            }
-        };
-
-        // 初始化跟进列表数据
-        service.initFollowList = function (vm, callback) {
-            dataSyncService.initCriteria(vm);
-            dataSyncService.injectPageDict(['dateRange', 'people', 'ifElse']);
-            if (vm.followTimeValue && vm.followTimeValue != 5) {
-                var followDateRange = dataSyncService.selectPageDict('dateRange', vm.followTimeValue);
-                vm.criteria.followStartTime = followDateRange.start;
-                vm.criteria.followEndTime = followDateRange.end;
-            }
-            if (vm.nextFollowTimeValue && vm.nextFollowTimeValue != 5) {
-                var nextFollowDateRange = dataSyncService.selectPageDict('dateRange', vm.nextFollowTimeValue);
-                vm.criteria.nextTalkStartTime = nextFollowDateRange.start;
-                vm.criteria.nextTalkEndTime = nextFollowDateRange.end;
-            }
-            if (vm.planVerifyTimeValue && vm.planVerifyTimeValue != 5) {
-                var planVerifyDateRange = dataSyncService.selectPageDict('dateRange', vm.planVerifyTimeValue);
-                vm.criteria.planVerifyStartTime = planVerifyDateRange.start;
-                vm.criteria.planVerifyEndTime = planVerifyDateRange.end;
-            }
-            if (vm.planSignDateValue && vm.planSignDateValue != 5) {
-                var planSignDateRange = dataSyncService.selectPageDict('dateRange', vm.planSignDateValue);
-                vm.criteria.planSignStartTime = planSignDateRange.start;
-                vm.criteria.planSignEndTime = planSignDateRange.end;
-            }
-            followDataService.getAllFollows(vm.criteria, function (result) {
-                vm.data.rows = result.queryResult.pagedData;
-                dataSyncService.updateTotalCount(vm, result.queryResult);
-                if (ng.isFunction(callback)) {
-                    callback();
-                }
-            });
-        };
-
         // 初始化日期范围
-        service.initDateRange = function ($scope, vm, watchExps) {
-            if (!watchExps && !watchExps.length) return;
-            for (var index in watchExps) {
-                (function () {
-                    var temp = index, exp = watchExps[index];
-                    $scope.$watch(exp.watchExp, function () {
-                        var selectedValue = exp.selectedValue;
-                        var dateRange = dataSyncService.selectPageDict('dateRange', vm[selectedValue]);
-                        if (dateRange) {
-                            vm.criteria[exp.start] = dateRange.start;
-                            vm.criteria[exp.end] = dateRange.end;
-                        }
-                    });
-                })();
-            }
-        };
-
-        service.buildTalkData = function (vm) {
-            var mainTalk = ppts.dict[ppts.config.dictMappingConfig.mainTalk];
-            var subTalk = ppts.dict[ppts.config.dictMappingConfig.subTalk];
-
-            for (var index in subTalk) {
-                mainTalk.push(subTalk[index]);
-            }
-            vm.talkData = mcs.util.convert(mainTalk);
-        };
+        //service.initDateRange = function ($scope, vm, watchExps) {
+        //    if (!watchExps && !watchExps.length) return;
+        //    for (var index in watchExps) {
+        //        (function () {
+        //            var temp = index, exp = watchExps[index];
+        //            $scope.$watch(exp.watchExp, function () {
+        //                var selectedValue = exp.selectedValue;
+        //                var dateRange = dataSyncService.selectPageDict('dateRange', vm[selectedValue]);
+        //                if (dateRange) {
+        //                    vm.criteria[exp.start] = dateRange.start;
+        //                    vm.criteria[exp.end] = dateRange.end;
+        //                }
+        //            });
+        //        })();
+        //    }
+        //};
 
         // 初始化新增跟进记录信息
         service.initCreateFollowInfo = function (vm, result, callback) {
             vm.follow = result.follow;
-            dataSyncService.injectPageDict(['ifElse']);
+            dataSyncService.injectDynamicDict('ifElse');
             vm.previousFollowStage = result.previousFollowStage;
-            service.buildTalkData(vm);
-
             if (ng.isFunction(callback)) {
                 callback();
             }
@@ -264,9 +202,8 @@
             followDataService.getFollowForView(id, function (result) {
                 vm.follow = result.follow;
                 vm.followItems = result.followItems;
-                dataSyncService.injectPageDict(['ifElse']);
+                dataSyncService.injectDynamicDict('ifElse');
                 vm.previousFollowStage = result.previousFollowStage;
-                service.buildTalkData(vm);
                 if (ng.isFunction(callback)) {
                     callback();
                 }

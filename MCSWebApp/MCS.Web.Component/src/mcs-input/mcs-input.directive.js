@@ -1,5 +1,28 @@
 ﻿(function () {
     'use strict';
+    mcs.ng.directive('parseInputValue', function () {
+        return {
+            restrict: 'A',
+            require: 'ngModel',
+            link: function ($scope, $elem, $attrs, $ctrl) {
+                $ctrl.$parsers.push(function (data) {
+                    if ($attrs.datatype) {
+                        var dataType = $attrs.datatype.toLowerCase();
+                        switch (dataType) {
+                            case 'int':
+                                return parseInt(data);
+                            case 'number':
+                                return parseFloat(data);
+                            default:
+                                return data;
+                        }
+                    } else {
+                        return data;
+                    }
+                });
+            }
+        };
+    });
 
     mcs.ng.directive('mcsInput', ['mcsValidationService', function (validationService) {
         return {
@@ -15,7 +38,7 @@
                 datatype: '@', //int, number, string
                 model: '='
             },
-            template: '<input placeholder="{{placeholder}}" class="mcs-default-size-input mcs-margin-right-20 {{css}}" ng-model="model" style="{{customStyle}}"/>',
+            template: '<input placeholder="{{placeholder}}" class="mcs-default-size-input mcs-margin-right-20 {{css}}" popover-trigger="mouseenter" ng-model="model" style="{{customStyle}}" parse-input-value/>',
             link: function ($scope, $elem, $attrs) {
                 var dataType = ($scope.datatype || 'string').toLowerCase();
                 if ($scope.id) {
@@ -36,6 +59,11 @@
                     //$elem.attr('readonly', 'readonly');
                     $elem.attr('disabled', 'disabled');
                 }
+                $scope.$watch('$parent.maxlength', function () {
+                    if ($scope.$parent.maxlength) {
+                        $elem.attr('maxlength', $scope.$parent.maxlength);
+                    }
+                });
                 // 执行验证
                 $scope.$watch('$parent.required', function () {
                     if ($scope.$parent.required) {

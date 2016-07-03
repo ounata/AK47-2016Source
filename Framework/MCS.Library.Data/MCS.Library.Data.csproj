@@ -119,6 +119,7 @@
     <Compile Include="Builder\QueryInContextBuilderBase.cs" />
     <Compile Include="Builder\SelectSqlClauseBuilder.cs" />
     <Compile Include="Builder\SqlClauseBuilderItemSelect.cs" />
+    <Compile Include="Builder\SqlFullTextDescriptionGenerator.cs" />
     <Compile Include="Builder\StreamDescriptionGenerator.cs" />
     <Compile Include="Builder\GuidDescriptionGenerator.cs" />
     <Compile Include="Builder\EnumDescriptionGenerator.cs" />
@@ -132,6 +133,7 @@
     <Compile Include="Builder\VersionStrategyQuerySqlBuilder.cs" />
     <Compile Include="Builder\VersionStrategyUpdateSqlBuilder.cs" />
     <Compile Include="Builder\VersionStrategyUpdateSqlHelper.cs" />
+    <Compile Include="Configuration\ConnectionNameMappingSettings.cs" />
     <Compile Include="Configuration\ConnectionStringConfigurationElementBase.cs" />
     <Compile Include="Configuration\DataProviderConfigurationElementCollection.cs" />
     <Compile Include="Configuration\DbEventArgsConfigurationElement.cs" />
@@ -142,6 +144,7 @@
     <Compile Include="DatabaseFactory.cs" />
     <Compile Include="Database_Async.cs" />
     <Compile Include="DbContext\AutoEnlistDbContext.cs" />
+    <Compile Include="DbContext\SqlActions.cs" />
     <Compile Include="DbContext\SqlContextItem.cs" />
     <Compile Include="DbContext\DeluxeDbContextBase.cs" />
     <Compile Include="DbContext\NotEnlistDbContext.cs" />

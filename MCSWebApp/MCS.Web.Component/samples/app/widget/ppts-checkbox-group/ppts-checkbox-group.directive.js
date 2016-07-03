@@ -7,29 +7,67 @@
             scope: {
                 category: '@',
                 model: '=',
+                parent: '=?',
+                disabled: '@?',
                 async: '@',
-                clear: '&?'
+                width: '@',
+                showAll: '@'
             },
             template: '<span><mcs-checkbox-group data="data" model="model"></mcs-checkbox-group></span>',
             link: function ($scope, $elem) {
+                $scope.showAll = mcs.util.bool($scope.showAll || true);
                 $scope.async = mcs.util.bool($scope.async || true);
-                if ($scope.async) {
-                    $scope.$on('dictionaryReady', function () {
-                        $scope.data = ppts.dict[ppts.config.dictMappingConfig[$scope.category]];
+                $scope.disabled = mcs.util.bool($scope.disabled || false);
+
+                function prepareDataDict() {
+                    var items = ppts.dict[ppts.config.dictMappingConfig[$scope.category]];
+                    $scope.$watchCollection('parent', function () {
+                        if ($scope.parent == undefined) {
+                            $scope.data = items;
+                        } else {
+                            $scope.data = [];
+                            $scope.model = [];
+                            var array = mcs.util.toArray($scope.parent);
+                            if (array.length == 1) {
+                                var parentKey = array[0];
+                                for (var index in items) {
+                                    var item = items[index];
+                                    if (item.parentKey == parentKey) {
+                                        $scope.data.push(item);
+                                    }
+                                }
+                            }
+                        }
+                        if (mcs.util.bool($scope.showAll)) {
+                            if (!$scope.data) $scope.data = [];
+                            if (mcs.util.indexOf($scope.data, function (item) {
+                                return item.key == -1 && item.value == '全部';
+                            }) < 0) {
+                                $scope.data.unshift({
+                                    key: '-1',
+                                    value: '全部'
+                                });
+                            }
+                        }
+                        if (!$scope.data.length) {
+                            $elem.hide();
+                        } else {
+                            $elem.show();
+                        }
                     });
-                } else {
-                    $scope.data = ppts.dict[ppts.config.dictMappingConfig[$scope.category]];
+                    if (mcs.util.hasAttr($elem, 'required')) {
+                        $scope.required = true;
+                        mcs.util.appendMessage($elem);
+                    }
                 }
 
-                if (mcs.util.hasAttr($elem, 'required')) {
-                    $scope.required = true;
-                    $elem.parent().append('<p class="help-block"></p>');
+                if ($scope.async) {
+                    $scope.$on('dictionaryReady', prepareDataDict);
+                } else {
+                    prepareDataDict();
                 }
 
                 $scope.model = $scope.model || [];
-                if (angular.isFunction($scope.clear)) {
-                    $elem.prepend($compile(angular.element('<button class="btn btn-link" ng-click="clear()">清空</button>'))($scope));
-                }
             }
         }
     }]);

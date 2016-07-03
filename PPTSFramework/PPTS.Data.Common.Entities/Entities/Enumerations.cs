@@ -9,6 +9,47 @@ using PPTS.Data.Common.Security;
 namespace PPTS.Data.Common
 {
     /// <summary>
+    /// 互斥操作
+    /// </summary>
+    public enum MutexAction
+    {
+        /// <summary>
+        /// 充值
+        /// </summary>
+        AccountCharge,
+
+        /// <summary>
+        /// 退费
+        /// </summary>
+        AccountRefund,
+
+        /// <summary>
+        /// 转入
+        /// </summary>
+        AccountTransferIn,
+
+        /// <summary>
+        /// 转出
+        /// </summary>
+        AccountTransferOut,
+
+        /// <summary>
+        /// 转学
+        /// </summary>
+        StudentTransfer,
+
+        /// <summary>
+        /// 订购
+        /// </summary>
+        Order,
+
+        /// <summary>
+        /// 退订
+        /// </summary>
+        Debook
+    }
+
+    /// <summary>
     /// 性别
     /// </summary>
     public enum GenderType
@@ -119,7 +160,7 @@ namespace PPTS.Data.Common
         /// 校区总监
         /// </summary>
         [EnumItemDescription("校区总监", Filter = "校区总监")]
-        CampusDirector = 10
+        CampusDirector = 100
     }
 
     /// <summary>
@@ -177,5 +218,28 @@ namespace PPTS.Data.Common
         [EnumItemDescription("错误")]
         Error
     }
-
+    /// <summary>
+    /// 产品分类
+    /// </summary>
+    public enum CategoryType
+    {
+        [EnumItemDescription("一对一")]
+        OneToOne = 1,
+        [EnumItemDescription("班组")]
+        CalssGroup = 2,
+        [EnumItemDescription("游学")]
+        YouXue = 3,
+        [EnumItemDescription("实物")]
+        Real = 41,
+        [EnumItemDescription("虚拟")]
+        Virtual = 42,
+        [EnumItemDescription("费用")]
+        Cost = 43,
+        [EnumItemDescription("留学")]
+        Abroad = 44,
+        [EnumItemDescription("其它")]
+        Other = 4,
+        [EnumItemDescription("代理招生")]
+        WuKeShou = 5,
+    }
 }

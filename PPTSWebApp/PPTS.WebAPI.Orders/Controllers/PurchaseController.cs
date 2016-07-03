@@ -24,6 +24,9 @@ using MCS.Web.MVC.Library.ModelBinder;
 using MCS.Library.Office.OpenXml.Excel;
 using System.Data;
 using MCS.Web.MVC.Library.ApiCore;
+using PPTS.WebAPI.Orders.DataSources;
+using PPTS.Web.MVC.Library.Filters;
+using MCS.Web.MVC.Library.Models.Workflow;
 
 namespace PPTS.WebAPI.Orders.Controllers
 {
@@ -32,11 +35,8 @@ namespace PPTS.WebAPI.Orders.Controllers
     {
         #region 订购列表
 
-        /// <summary>
-        /// 查询，第一次。第一页，下载字典
-        /// </summary>
-        /// <param name="criteria">查询条件</param>
-        /// <returns>返回带字典的潜客数据列表</returns>
+        //
+        [PPTSJobFunctionAuthorize("PPTS:订购管理列表（订购单详情）,订购管理列表（订购单详情）-本部门,订购管理列表（订购单详情）-本校区,订购管理列表（订购单详情）-本分公司,订购管理列表（订购单详情）-全国,学员视图-充值记录/订购历史/转让记录,学员视图-充值记录/订购历史/转让记录-本部门,学员视图-充值记录/订购历史/转让记录-本校区,学员视图-充值记录/订购历史/转让记录-本分公司")]
         [HttpPost]
         public OrderItemViewQueryResult GetAllOrderItems(OrderItemViewCriteriaModel criteria)
         {
@@ -44,21 +44,18 @@ namespace PPTS.WebAPI.Orders.Controllers
             {
                 QueryResult = GenericPurchaseSource<OrderItemView, OrderItemViewCollection>.Instance.Query(criteria.PageParams, criteria, criteria.OrderBy),
                 Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(OrderItemView),typeof(Product)),
-                Categories = Service.ProductService.GetCategories(),
             };
         }
 
-        /// <summary>
-        /// 查询，翻页或排序。不下载字典
-        /// </summary>
-        /// <param name="criteria">查询条件</param>
-        /// <returns>返回不带字典的潜客数据列表</returns>
+
+        [PPTSJobFunctionAuthorize("PPTS:订购管理列表（订购单详情）,订购管理列表（订购单详情）-本部门,订购管理列表（订购单详情）-本校区,订购管理列表（订购单详情）-本分公司,订购管理列表（订购单详情）-全国")]
         [HttpPost]
         public PagedQueryResult<OrderItemView, OrderItemViewCollection> GetPagedProducts(OrderItemViewCriteriaModel criteria)
         {
             return GenericPurchaseSource<OrderItemView, OrderItemViewCollection>.Instance.Query(criteria.PageParams, criteria, criteria.OrderBy);
         }
 
+        [PPTSJobFunctionAuthorize("PPTS:资产兑换,打印订单凭证,打印订单凭证-本校区,打印订单凭证-本分公司")]
         [HttpPost]
         public dynamic GetOrderItemView(dynamic data)
         {
@@ -80,16 +77,11 @@ namespace PPTS.WebAPI.Orders.Controllers
 
         #region 插班订购
 
-        /// <summary>
-        /// 查询，翻页或排序。不下载字典
-        /// </summary>
-        /// <param name="criteria">查询条件</param>
-        /// <returns>返回不带字典的潜客数据列表</returns>
+        [PPTSJobFunctionAuthorize("PPTS:订购")]
         [HttpPost]
-        public PagedQueryResult<ClassModel, ClassCollectionModel> GetPagedClasses(ClassCriteriaModel criteria)
+        public PagedQueryResult<Class, ClassCollection> GetPagedClasses(ClassCriteriaModel criteria)
         {
-            var result = GenericPurchaseSource<ClassModel, ClassCollectionModel>.Instance.Query(criteria.PageParams, criteria, criteria.OrderBy);
-            //result.PagedData.FillOrderAmount();
+            var result = GenericPurchaseSource<Class, ClassCollection>.Instance.Query(criteria.PageParams, criteria, criteria.OrderBy);
             return result;
         }
 
@@ -97,6 +89,7 @@ namespace PPTS.WebAPI.Orders.Controllers
 
         #region 用户扣除服务费
 
+        [PPTSJobFunctionAuthorize("PPTS:订购")]
         [HttpPost]
         public dynamic GetServiceChargeByUserId(dynamic data)
         {
@@ -105,22 +98,33 @@ namespace PPTS.WebAPI.Orders.Controllers
             (customerId == null).TrueThrow(customerId+"该学员不存在！");
             string campusId = customer.CampusID;
 
-            return new
-            {
-                DeductList = Service.CustomerService.GetWhetherToDeductServiceChargeByCustomerId(customerId),
-                ServiceCharge = Service.ProductService.GetServiceChargeByCampusId(campusId)
-            };
+            //return new
+            //{
+            //    DeductList = Service.CustomerService.GetWhetherToDeductServiceChargeByCustomerId(customerId),
+            //    ServiceCharge = Service.ProductService.GetServiceChargeByCampusId(campusId)
+            //};
+
+            var kfdic = Service.CustomerService.GetWhetherToDeductServiceChargeByCustomerId(customerId);
+            var serviceCharges = Service.ProductService.GetServiceChargeByCampusId(campusId);
+
+            var result = new Dictionary<int,dynamic>();
+            //kfdic.ForEach(kv => { result.Add(new { kv.Key,kv.Value,SC= serviceCharges.SingleOrDefault(m=>m.ExpenseType==kv.Key.ToString()) }); });
+            kfdic.ForEach(kv => { result.Add(kv.Key, new { kv.Value, SC = serviceCharges.SingleOrDefault(m => m.ExpenseType == kv.Key.ToString()) }); });
+
+            return new { DeductList= result };
         }
 
         #endregion
 
         #region 查看订单
 
+        [PPTSJobFunctionAuthorize("PPTS:订购管理列表（订购单详情）,订购管理列表（订购单详情）-本部门,订购管理列表（订购单详情）-本校区,订购管理列表（订购单详情）-本分公司,订购管理列表（订购单详情）-全国")]
         [HttpPost]
         public OrderModel GetOrder(dynamic data)
         {
             string orderId = data.orderId;
-            return OrderModel.FillOrderByOrderId(orderId).FillAccount().FillChargePayment();
+            
+            return OrderModel.FillOrderAndItemViewByOrderId(orderId, null).FillAccount().FillChargePayment();
 
         }
 
@@ -131,6 +135,7 @@ namespace PPTS.WebAPI.Orders.Controllers
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
+        [PPTSJobFunctionAuthorize("PPTS:订购")]
         [HttpPost]
         public ShoppingCartModel GetShoppingCart(dynamic data)
         {
@@ -153,6 +158,7 @@ namespace PPTS.WebAPI.Orders.Controllers
         /// </summary>
         /// <param name="cartIds"></param>
         /// <returns></returns>
+        [PPTSJobFunctionAuthorize("PPTS:订购")]
         [HttpPost]
         public bool DeleteShoppingCart(params string[] cartIds)
         {
@@ -164,6 +170,7 @@ namespace PPTS.WebAPI.Orders.Controllers
         /// </summary>
         /// <param name="collection"></param>
         /// <returns></returns>
+        [PPTSJobFunctionAuthorize("PPTS:订购")]
         [HttpPost]
         public void AddShoppingCart(ShoppingCartCollection collection)
         {
@@ -182,6 +189,7 @@ namespace PPTS.WebAPI.Orders.Controllers
         /// 提交订单
         /// </summary>
         /// <param name="model"></param>
+        [PPTSJobFunctionAuthorize("PPTS:订购")]
         [HttpPost]
         public void SubmitShoppingCart(SubmitOrderModel model)
         {
@@ -194,13 +202,39 @@ namespace PPTS.WebAPI.Orders.Controllers
 
         }
 
+        #region 订购历史
+
+
+        /// <summary>
+        /// 查看历史确认
+        /// </summary>
+        /// <param name="itemID"></param>
+        /// <returns></returns>
+        [PPTSJobFunctionAuthorize("PPTS:学员视图-充值记录/订购历史/转让记录,学员视图-充值记录/订购历史/转让记录-本部门,学员视图-充值记录/订购历史/转让记录-本校区,学员视图-充值记录/订购历史/转让记录-本分公司")]
+        public dynamic GetRecognizingIncomeList(string itemID)
+        {
+            return new { List= AssetConfirmAdapter.Instance.Load(itemID, null) } ;
+        }
+
+        /// <summary>
+        /// 确认非上课类收入
+        /// </summary>
+        /// <param name="model"></param>
+        [HttpPost]
+        public void AddRecognizingIncome(AssetConfirmModel model)
+        {
+            model.CurrentUser = DeluxeIdentity.CurrentUser;
+            new AddAssetConfirmExecutor(model) { NeedValidation=true }.Execute();
+        }
 
         #region 资产兑换
+
         /// <summary>
         /// 资产兑换 获取订单 及 要兑换的产品信息
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
+        [PPTSJobFunctionAuthorize("PPTS:资产兑换")]
         [HttpPost]
         public ExchangeAmountModel GetExchangeInfo(dynamic data)
         {
@@ -210,42 +244,55 @@ namespace PPTS.WebAPI.Orders.Controllers
 
         }
 
+        [PPTSJobFunctionAuthorize("PPTS:资产兑换")]
         [HttpPost]
         public void ExchangeOrder(ExchangeOrderModel model)
         {
             new ExchangeExecutor(model).Execute();
         }
 
+        /// <summary>
+        /// 获取产品信息
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ProductView GetProductByID(dynamic param)
+        {
+            string productId = param.productId;
+            return Service.ProductService.GetProductsByIds(productId).FirstOrDefault();
+        }
+
         #endregion
+
+        #endregion
+
+
 
         #region 编辑缴费单
 
+        [PPTSJobFunctionAuthorize("PPTS:编辑关联缴费单-本分公司")]
         [HttpPost]
         public OrderModel GetEditPayment(dynamic data)
         {
             string orderId = data.orderid;
-            return OrderModel.FillOrderByOrderId(orderId).FillPayments();
+            return OrderModel.FillOrderAndItemViewByOrderId(orderId, null).FillPayments();
         }
 
+
+        [PPTSJobFunctionAuthorize("PPTS:编辑关联缴费单-本分公司")]
         [HttpPost]
-        public void EditPayment(dynamic data)
+        public void EditPayment(EditPaymentModel model)
         {
-            string orderId = data.orderId;
-            string chargeApplyID = data.chargeApplyId;
-
-            var param = new Dictionary<string, object>() {
-                { "ChargeApplyID", chargeApplyID },
-                { "ModifierID", DeluxeIdentity.CurrentUser.ID },
-                { "ModifierName", DeluxeIdentity.CurrentUser.DisplayName },
-            };
-
-            new PPTSOrderExecutor("EditPayment") { OrderId = orderId, EditPaymentParams = param }.Execute();
+            model.CurrentUser = DeluxeIdentity.CurrentUser;
+            new PPTSOrderExecutor("EditPayment") {  Order= model.FillOrder().Order, CampusIDs= null }.Execute();
         }
 
         #endregion
 
         #region 导出
 
+        [PPTSJobFunctionAuthorize("PPTS:订购列表导出")]
         [HttpPost]
         public HttpResponseMessage ExportOrderItemList([ModelBinder(typeof(FormBinder))]OrderItemViewCriteriaModel criteria)
         {
@@ -319,5 +366,39 @@ namespace PPTS.WebAPI.Orders.Controllers
 
 
         #endregion
+
+        #region api/purchase/getAssetConsumeViews
+        [HttpPost]
+        public AssetConsumeViewResultModel getAssetConsumeViews(AssetConsumeViewCriteriaModel criteria) {
+            AssetConsumeViewResultModel result = new AssetConsumeViewResultModel
+            {
+                QueryResult = AssetConsumeDataSource.Instance.Load(criteria.PageParams, criteria, criteria.OrderBy),
+                Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(AssetConsumeViewModel))
+            };
+            return result;
+        }
+
+        [HttpPost]
+        public PagedQueryResult<AssetConsumeViewModel, AssetConsumeViewCollectionModel> getPageAssetConsumeViews(AssetConsumeViewCriteriaModel criteria) {
+            PagedQueryResult<AssetConsumeViewModel, AssetConsumeViewCollectionModel> result = AssetConsumeDataSource.Instance.Load(criteria.PageParams, criteria, criteria.OrderBy);
+            return result;
+        }
+        #endregion
+
+
+
+        [HttpPost]
+        public dynamic GetOrderByWorkflow(dynamic wfParams)
+        {
+            WfClientSearchParameters p = new WfClientSearchParameters();
+
+            p.ResourceID = wfParams.resourceID;
+            p.ActivityID = wfParams.activityID;
+            p.ProcessID = wfParams.processID;
+            
+            var model= OrderModel.FillOrderAndItemByOrderId(p.ResourceID, null).FillAccount();
+            return new { ClientProcess = WfClientProxy.GetClientProcess(p),Model= model };
+        }
+
     }
 }

@@ -43,6 +43,9 @@ namespace PPTS.WebAPI.Orders.Service
 
         /// <summary>
         /// 获取用户是否扣除过综合服务费
+        /// 1：1对1 是否扣除过
+        /// 2：班组 是否扣除过
+        /// 3：1对1 和 班组 是否扣除过
         /// </summary>
         /// <param name="customerId"></param>
         /// <returns></returns>
@@ -57,8 +60,10 @@ namespace PPTS.WebAPI.Orders.Service
                     result.Add(Convert.ToInt32(item.ExpenseType), true);
                 }
             });
+            
             if (!result.ContainsKey(1)) { result.Add(1, false); }
             if (!result.ContainsKey(2)) { result.Add(2, false); }
+            if (!result.ContainsKey(3)) { result.Add(3, false); }
             return result;
         }
 
@@ -115,6 +120,15 @@ namespace PPTS.WebAPI.Orders.Service
             return PPTS.Contracts.Proxies.PPTSCustomerQueryServiceProxy.Instance.GetCustomerExpenseByOrderId(orderId);
         }
 
+        /// <summary>
+        /// 获取学员 咨询、学管 师
+        /// </summary>
+        /// <param name="customerId"></param>
+        /// <returns></returns>
+        public static CustomerQueryResult GetCustomerStaffRelationByCustomerId(string customerId)
+        {
+            return PPTS.Contracts.Proxies.PPTSCustomerQueryServiceProxy.Instance.QueryCustomerCollectionByCustomerIDs(customerId).CustomerCollection[0];
+        }
 
         #endregion
 

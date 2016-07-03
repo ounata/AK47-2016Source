@@ -1,5 +1,6 @@
 ﻿using MCS.Library.Data.DataObjects;
 using MCS.Library.Data.Mapping;
+using PPTS.Data.Common.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace PPTS.Data.Customers.Entities
     [Serializable]
     [ORTableMapping("CM.CustomerFulltextInfo")]
     [DataContract]
-    public class CustomerFulltextInfo
+    public class CustomerFulltextInfo: IEntityWithCreator
     {
         public static readonly string PotentialCustomersType = "PotentialCustomers";
         public static readonly string CustomersType = "Customers";

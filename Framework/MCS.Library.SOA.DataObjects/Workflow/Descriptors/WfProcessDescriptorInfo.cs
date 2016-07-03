@@ -51,7 +51,7 @@ namespace MCS.Library.SOA.DataObjects.Workflow
             set;
         }
 
-        [ORFieldMapping("CREATE_TIME")]
+        [ORFieldMapping("CREATE_TIME", UtcTimeToLocal = true)]
         [SqlBehavior(BindingFlags = ClauseBindingFlags.Select | ClauseBindingFlags.Where)]
         public DateTime CreateTime
         {
@@ -79,8 +79,8 @@ namespace MCS.Library.SOA.DataObjects.Workflow
             }
         }
 
-        [ORFieldMapping("MODIFY_TIME")]
-        [SqlBehavior(DefaultExpression = "GETDATE()")]
+        [ORFieldMapping("MODIFY_TIME", UtcTimeToLocal = true)]
+        [SqlBehavior(DefaultExpression = "GETUTCDATE()")]
         public DateTime ModifyTime
         {
             get;
@@ -111,7 +111,7 @@ namespace MCS.Library.SOA.DataObjects.Workflow
             set { this._Enabled = value; }
         }
 
-        [ORFieldMapping("IMPORT_TIME")]
+        [ORFieldMapping("IMPORT_TIME", UtcTimeToLocal = true)]
         [SqlBehavior(BindingFlags = ClauseBindingFlags.Select | ClauseBindingFlags.Where)]
         public DateTime ImportTime
         {

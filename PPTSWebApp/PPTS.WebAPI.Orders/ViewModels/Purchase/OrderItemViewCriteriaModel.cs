@@ -1,19 +1,63 @@
 ﻿using MCS.Library.Data;
 using MCS.Library.Data.Mapping;
+using MCS.Library.Core;
+
 using PPTS.Data.Common.Entities;
 using PPTS.Data.Orders.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using MCS.Library.Principal;
+using PPTS.Data.Common;
 
 namespace PPTS.WebAPI.Orders.ViewModels.Purchase
 {
     public class OrderItemViewCriteriaModel
     {
+        
+
+        public OrderItemViewCriteriaModel() { campusidList = new List<string>(); }
+        
+
+        [NoMapping]
+        private List<string> campusidList { set; get; }
+
+        [NoMapping]
+        public string CampusID
+        {
+            set
+            {
+                (value.IsNullOrWhiteSpace()).FalseAction(() =>
+                {
+                    campusidList.Contains(value).FalseAction(() =>
+                    {
+                        campusidList.Add(value);
+                    });
+                });
+            }
+        }
 
         [InConditionMapping("CampusID")]
-        public string[] OrgIds { get; set; }
+        public string[] CampusIDs
+        {
+            get {
+                return campusidList.ToArray();
+            }
+            set
+            {
+                if (value != null)
+                {
+                    value.ForEach(s =>
+                    {
+                        campusidList.Contains(s).FalseAction(() => { campusidList.Add(s); });
+                    });
+                }
+            }
+        }
+
+        [ConditionMapping("ProcessStatus")]
+        public string ProcessStatus = ((int)ProcessStatusDefine.Processed).ToString();
 
         [ConditionMapping("CustomerName")]
         public string StuName { set; get; }
@@ -21,11 +65,13 @@ namespace PPTS.WebAPI.Orders.ViewModels.Purchase
         [ConditionMapping("ParentName")]
         public string ParentName { set; get; }
 
+        [ConditionMapping("CustomerID")]
+        public string stuId { set; get; }
 
         [ConditionMapping("CustomerCode")]
         public string StuCode { set; get; }
 
-        [ConditionMapping("OrderNo")]
+        [ConditionMapping("ItemNo")]
         public string OrderCode { set; get; }
 
         [ConditionMapping("Subject")]
@@ -41,22 +87,26 @@ namespace PPTS.WebAPI.Orders.ViewModels.Purchase
         public string[] selectedCategoryTypes { set; get; }
 
         [InConditionMapping("OrderStatus")]
-        public string[] selectedOrderStatus { set; get; }
+        public string[] SelectedOrderStatus { set; get; }
 
         [InConditionMapping("CustomerGrade")]
-        public string[] selectedStuGrades { set; get; }
+        public string[] SelectedStuGrades { set; get; }
 
         [InConditionMapping("Grade")]
-        public string[] selectedProductGrades { set; get; }
+        public string[] SelectedProductGrades { set; get; }
+
+        [InConditionMapping("CategoryType")]
+        public string[] SelectedCategories { set; get; }
+
 
         [InConditionMapping("ProductUnit")]
-        public string[] selectedUnits { set; get; }
+        public string[] SelectedUnits { set; get; }
 
         /// <summary>
         /// 操作人岗位
         /// </summary>
         [InConditionMapping("SubmitterJobType")]
-        public string[] selectedPosts { set; get; }
+        public string[] SelectedPosts { set; get; }
 
         //剩余课时
         [ConditionMapping("Amount", Operation = ">=")]

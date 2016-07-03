@@ -7,20 +7,20 @@
             <ppts-select-branch model="vm.criteria.campusIDs" />
         </div>
         <div class="col-md-3">
-            <mcs-input placeholder="学员/家长姓名" model="vm.criteria.customerOrParentName" css="mcs-input-search mcs-width-full" />
+            <mcs-input placeholder="请输入学员、家长姓名，学员编号，家长联系电话进行查询" uib-popover="请输入学员、家长姓名，学员编号，家长联系电话进行查询" model="vm.criteria.searchText" css="mcs-input-search mcs-width-full" />
         </div>
         <div class="col-md-3">
-            <mcs-input placeholder="缴费单号" model="vm.criteria.applyNo" css="mcs-input-search mcs-width-full" />
+            <mcs-input placeholder="缴费单编号" uib-popover="缴费单编号" model="vm.criteria.applyNo" css="mcs-input-search mcs-width-full" />
         </div>
         <div class="col-md-3">
-            <mcs-input placeholder="充值申请人" model="vm.criteria.applierName" css="mcs-input-search mcs-width-full" />
+            <mcs-input placeholder="充值申请人" uib-popover="充值申请人"  model="vm.criteria.applierName" css="mcs-input-search mcs-width-full" />
         </div>
     </div>
 </ppts-dynamic-content>
 <!-- 工具栏 -->
 <ppts-dynamic-content template="toolbar.tpl.html">
-    <mcs-button category="approve" text="对 账" click="vm.check()"></mcs-button>
-    <mcs-button category="export"></mcs-button>
+    <mcs-button category="approve" text="对 账" click="vm.check()" ppts-job-functions="收款对账-本分公司"></mcs-button>
+    <mcs-button category="export" click="vm.export()"  ppts-job-functions="收款管理导出"></mcs-button>
 </ppts-dynamic-content>
 <!-- 数据表格 -->
-<mcs-datatable data="vm.data" />
+<mcs-datatable data="vm.data" condition="vm.criteria" />

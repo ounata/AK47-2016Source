@@ -9,10 +9,21 @@ namespace PPTS.Data.Common.Authorization
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public abstract class ScopeBaseAttribute : Attribute
     {
+        private ActionType actionType = ActionType.Read;
+
+        /// <summary>
+        /// 授权名称
+        /// </summary>
+        public string Name { get; set; }
+
         /// <summary>
         /// 操作类型
         /// </summary>
-        public ActionType ActionType { get; set; }
+        public ActionType ActionType
+        {
+            get { return actionType; }
+            set { actionType = value; }
+        }
 
         /// <summary>
         /// 关联权限点

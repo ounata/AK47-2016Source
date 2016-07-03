@@ -9,13 +9,13 @@
         <div class="form-group">
             <span class="col-sm-4 control-label no-padding-right">原因类型：</span>
             <div class="col-sm-7">
-                <ppts-select caption="请选择退费预警类型" category="refundAlertReason" model="vm.criteria.alertReason" async="false" required />
+                <mcs-select caption="请选择退费预警类型" category="refundAlertReason" model="vm.criteria.alertReason" async="false" required />
             </div>
         </div>
         <div class="form-group">
             <span class="col-sm-4 control-label no-padding-right">当前状态：</span>
             <div class="col-sm-7">
-                <ppts-select caption="请选择退费预警状态" category="refundAlertStatus" model="vm.criteria.alertStatus" async="false" required />
+                <mcs-select caption="请选择退费预警状态" category="refundAlertStatus" model="vm.criteria.alertStatus" async="false" required />
             </div>
         </div>
         <div class="form-group" ng-show="vm.criteria.alertReason == 4">

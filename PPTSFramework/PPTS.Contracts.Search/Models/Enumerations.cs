@@ -31,7 +31,7 @@ namespace PPTS.Contracts.Search.Models
         [EnumItemDescription("更新学员成绩服务")]
         CustomerScore,
         [EnumItemDescription("更新缴费单服务")]
-        AccountChargeApplie,
+        AccountChargeApply,
         [EnumItemDescription("更新学员退费单服务")]
         AccountRefundApply,
         [EnumItemDescription("更新学员账户服务")]
@@ -47,6 +47,8 @@ namespace PPTS.Contracts.Search.Models
         [EnumItemDescription("更新学员退订服务")]
         DebookOrder,
         [EnumItemDescription("更新学员课时服务")]
-        Assign
+        Assign,
+        [EnumItemDescription("更新学员跟进服务")]
+        CustomerFollow
     }
 }

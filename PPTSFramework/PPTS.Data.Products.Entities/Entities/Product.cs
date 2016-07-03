@@ -1,5 +1,6 @@
 ﻿using MCS.Library.Data.DataObjects;
 using MCS.Library.Data.Mapping;
+using MCS.Library.Validation;
 using PPTS.Data.Common.Entities;
 using System;
 using System.Runtime.Serialization;
@@ -26,10 +27,25 @@ namespace PPTS.Data.Products.Entities
         }
 
         /// <summary>
+        /// 研发机构id
+        /// </summary>
+        [ORFieldMapping("RdOrgID")]
+        [DataMember]
+        public string RdOrgID { set; get; }
+
+        /// <summary>
+        /// 研发机构名称
+        /// </summary>
+        [ORFieldMapping("RdOrgName")]
+        [DataMember]
+        public string RdOrgName { set; get; }
+
+        /// <summary>
         /// 产品编码
         /// </summary>
         [ORFieldMapping("ProductCode")]
         [DataMember]
+        [StringEmptyValidator(MessageTemplate = "ProductCode 不能为空！")]
         public string ProductCode { set; get; }
 
         /// <summary>
@@ -37,6 +53,7 @@ namespace PPTS.Data.Products.Entities
         /// </summary>
         [ORFieldMapping("ProductName")]
         [DataMember]
+        [StringEmptyValidator( MessageTemplate = "ProductName 不能为空！")]
         public string ProductName { set; get; }
 
 
@@ -45,6 +62,7 @@ namespace PPTS.Data.Products.Entities
         /// </summary>
         [ORFieldMapping("ProductMemo")]
         [DataMember]
+        [StringLengthValidator(5, 400, MessageTemplate = "ProductMemo 有误，个数范围（5-400）")]
         public string ProductMemo { set; get; }
 
         /// <summary>
@@ -52,7 +70,7 @@ namespace PPTS.Data.Products.Entities
         /// </summary>
         [ORFieldMapping("ProductStatus")]
         [DataMember]
-        [ConstantCategory("C_CODE_ABBR_Product_Status")]
+        [ConstantCategory("c_codE_ABBR_Product_ProductStatus")]
         public ProductStatus ProductStatus { set; get; }
 
         /// <summary>
@@ -165,7 +183,7 @@ namespace PPTS.Data.Products.Entities
         /// </summary>
         [ORFieldMapping("SpecialAllowed")]
         [DataMember]
-        public int SpecialAllowed { set; get; }
+        public int? SpecialAllowed { set; get; }
 
         /// <summary>
         /// 是否允许买赠折扣
@@ -200,7 +218,7 @@ namespace PPTS.Data.Products.Entities
         /// 收入确认开始时间
         /// </summary>
         [ORFieldMapping("ConfirmStartDate", UtcTimeToLocal = true)]
-        [SqlBehavior(BindingFlags = ClauseBindingFlags.Select | ClauseBindingFlags.Where)]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.All)]
         [DataMember]
         public DateTime ConfirmStartDate { set; get; }
 
@@ -208,11 +226,23 @@ namespace PPTS.Data.Products.Entities
         /// 收入确认结束时间
         /// </summary>
         [ORFieldMapping("ConfirmEndDate", UtcTimeToLocal = true)]
-        [SqlBehavior(BindingFlags = ClauseBindingFlags.Select | ClauseBindingFlags.Where)]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.All)]
         [DataMember]
         public DateTime ConfirmEndDate { set; get; }
 
+        /// <summary>
+        /// 确认方式（1-手工确认，2-自动确认）
+        /// </summary>
+        [ORFieldMapping("ConfirmMode")]
+        [DataMember]
+        public string ConfirmMode { set; get; }
 
+        /// <summary>
+        /// 确认分期月份，即分几个月确认
+        /// </summary>
+        [ORFieldMapping("ConfirmStaging")]
+        [DataMember]
+        public int ConfirmStaging { set; get; }
 
         /// <summary>
         /// 提交人ID

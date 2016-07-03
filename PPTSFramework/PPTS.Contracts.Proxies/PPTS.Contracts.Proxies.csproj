@@ -94,13 +94,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PPTSFinancialAssignServiceProxy.cs" />
+    <Compile Include="PPTSCustomerScopeAuthorizationServiceProxy.cs" />
     <Compile Include="PPTSAccountQueryServiceProxy.cs" />
     <Compile Include="PPTSAssetQueryServiceProxy.cs" />
-    <Compile Include="PPTSCategoryQueryServiceProxy.cs" />
+    <Compile Include="PPTSClassServiceProxy.cs" />
     <Compile Include="PPTSConfigRuleQueryServiceProxy.cs" />
     <Compile Include="PPTSCustomerUpdateServiceProxy.cs" />
     <Compile Include="PPTSCustomerQueryServiceProxy.cs" />
     <Compile Include="PPTSCustomerSearchUpdateServiceProxy.cs" />
+    <Compile Include="PPTSCustomerWorkflowServiceProxy.cs" />
+    <Compile Include="PPTSFinancialChargeServiceProxy.cs" />
+    <Compile Include="PPTSOrderScopeAuthorizationServiceProxy.cs" />
+    <Compile Include="PPTSPorductWorkflowServiceProxy.cs" />
     <Compile Include="PPTSPOSRecordsUpdateServiceProxy.cs" />
     <Compile Include="PPTSProductQueryServiceProxy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

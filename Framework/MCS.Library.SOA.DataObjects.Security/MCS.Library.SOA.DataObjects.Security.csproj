@@ -125,6 +125,7 @@
     <Compile Include="Adapters\RoleDisplayItemAdapter.cs" />
     <Compile Include="Adapters\RolesFunctionsImporter.cs" />
     <Compile Include="Adapters\SchemaObjectAdapter_Members.cs" />
+    <Compile Include="Adapters\SchemaObjectAdapter_Organizations.cs" />
     <Compile Include="Adapters\SCOperationSnapshotAdapter.cs" />
     <Compile Include="Conditions\SCBuiltInFunctionsCalculator.cs" />
     <Compile Include="Conditions\SCCalculatorObjectCache.cs" />
@@ -238,6 +239,7 @@
     <Compile Include="Facade\SCObjectOperations.cs" />
     <Compile Include="Logs\SCOperationLog.cs" />
     <Compile Include="Logs\SCOperationLogAdapter.cs" />
+    <Compile Include="Organizations\SCRelationForFullPath.cs" />
     <Compile Include="Organizations\RoleDisplayItem.cs" />
     <Compile Include="Organizations\SCApplication.cs" />
     <Compile Include="Organizations\SCBase.cs" />

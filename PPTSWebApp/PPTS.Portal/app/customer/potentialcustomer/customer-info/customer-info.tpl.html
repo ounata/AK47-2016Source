@@ -1,24 +1,28 @@
 ﻿<div class="portlet light">
-    <div class="portlet-body form" >
+    <div class="portlet-body form">
         <form class="form-horizontal form-bordered form-row-stripped" action="#" role="form" novalidate>
             <div class="form-actions noborder">
                 <div class="row">
                     <div class="col-md-offset-3 col-md-9">
-                        <mcs-button category="edit" click="vm.edit()"></mcs-button>
-                        <mcs-button category="add" click="vm.parentAdd()" text="添加孩子家长"></mcs-button>
-                        <mcs-button icon="unlock" click="vm.thaw()" text="解冻"></mcs-button>
-                    </div>
+                        <mcs-button category="edit" click="vm.edit()" ppts-job-functions="{{vm.isCustomer?"编辑潜客信息,编辑潜客信息-本部门":"修改家长、学员非关键信息,修改家长、学员关键信息-本分公司"}}"></mcs-button>
+                        <mcs-button category="add" click="vm.parentAdd()" text="添加孩子家长" ppts-job-functions="添加孩子家长"></mcs-button>
+                        <mcs-button icon="unlock" click="vm.thaw()" ng-show="vm.isCustomer == false" ppts-job-functions="申请解冻" text="解冻"></mcs-button>
+                    </div> <!--ng-show="vm.customer.studentStatus == 14" -->
                 </div>
             </div>
             <div class="form-body">
-                <div class="form-group">
-                    <mcs-label text="接触方式" css="col-md-3"/>
+                <h4 class="form-section">
+                    <i class="ace-icon fa fa-th"></i> {{vm.isCustomer?"潜客":"学员"}}<span class="important">【{{vm.customer.customerName}}】</span>的基本信息
+                    <span class="section-helper"> (<i class="ace-icon fa fa-star red bigger-70" /> ：必填项，<i class="ace-icon fa fa-caret-up red" /> ：充值所需项，<i class="ace-icon fa fa-square red bigger-70" /> ：关键信息，签约后只能分审核经理修改)</span>
+                </h4>
+                <div class="form-group horizontal bordered">
+                    <mcs-label text="接触方式" icons="star" css="col-md-3"/>
                     <div class="col-md-4">
-                        <p class="form-control-static">{{ vm.customer.contactType | contactType }}</p>
+                        <p class="form-control-static">{{ vm.customer.contactType | contactType | normalize}}</p>
                     </div>
                 </div>
-                <div class="form-group">
-                    <mcs-label text="信息来源" css="col-md-3"/>
+                <div class="form-group horizontal bordered">
+                    <mcs-label text="信息来源" icons="star" css="col-md-3"/>
                     <div class="col-md-4">
                         <p class="form-control-static">
                             <span ng-if="vm.customer.sourceMainType!='' && vm.customer.sourceSubType!=''">
@@ -33,183 +37,187 @@
                         </p>
                     </div>
                 </div>
-                <div class="form-group">
-                    <mcs-label text="转介绍员工" css="col-md-3"/>
+                <div class="form-group horizontal bordered">
+                    <mcs-label text="转介绍员工" css="col-md-3" />
                     <div class="col-md-4">
                         <p class="form-control-static">
                             {{ vm.customer.referralStaffName }}
                             <span ng-if="vm.customer.referralStaffJobName != '' && vm.customer.referralStaffOACode != ''">
                                 {{ "（" + vm.customer.referralStaffJobName + "-" + vm.customer.referralStaffOACode + "）"  }}
                             </span>
-                            <span ng-if="vm.customer.referralStaffJobName != ''">
+                            <span ng-if="vm.customer.referralStaffJobName != '' && vm.customer.referralStaffOACode == ''">
                                 {{ "（" + vm.customer.referralStaffJobName + "）" }}
                             </span>
-                            <span ng-if="vm.customer.referralStaffOACode != ''">
+                            <span ng-if="vm.customer.referralStaffJobName == '' && vm.customer.referralStaffOACode != ''">
                                 {{ "（" + vm.customer.referralStaffOACode + "）"  }}
                             </span>
                         </p>
                     </div>
                 </div>
-                <div class="form-group">
-                    <mcs-label text="学员姓名" css="col-md-3"/>
+                <div class="form-group horizontal bordered">
+                    <mcs-label text="转介绍学员" css="col-md-3"/>
+                    <div class="col-md-4">
+                        <p class="form-control-static">
+                            {{ vm.customer.referralCustomerName }}
+                            <span ng-if="vm.customer.referralCustomerCode != ''">
+                                {{ "（" + vm.customer.referralCustomerCode +"）"  }}
+                            </span>
+                        </p>
+                    </div>
+                </div>
+                <div class="form-group horizontal bordered">
+                    <mcs-label text="学员姓名" icons="caret-up,star,square" css="col-md-3"/>
                     <div class="col-md-4">
                         <p class="form-control-static">{{ vm.customer.customerName }}</p>
                     </div>
                 </div>
-                <div class="form-group">
-                    <mcs-label text="vip客户" css="col-md-3"/>
+                <div class="form-group horizontal bordered">
+                    <mcs-label text="vip客户" css="col-md-3" />
                     <div class="col-md-4">
-                        <p class="form-control-static">{{ vm.customer.vipType | vipType }}</p>
+                        <p class="form-control-static">{{ vm.customer.vipType | vipType | normalize}}</p>
                     </div>
                 </div>
-                <div class="form-group">
-                    <mcs-label text="vip客户等级" css="col-md-3"/>
+                <div class="form-group horizontal bordered">
+                    <mcs-label text="vip客户等级" css="col-md-3" />
                     <div class="col-md-4">
                         <p class="form-control-static">{{ vm.customer.vipLevel | vipLevel }}</p>
                     </div>
                 </div>
-                <div class="form-group">
-                    <mcs-label text="学员的主监护人" css="col-md-3"/>
+                <div class="form-group horizontal bordered">
+                    <mcs-label text="学员的主监护人" css="col-md-3" />
                     <div class="col-md-4">
                         <p class="form-control-static">{{ vm.parent.parentName }}</p>
                     </div>
                 </div>
-                <div class="form-group">
-                    <mcs-label text="客户资源所属地" css="col-md-3"/>
+                <div class="form-group horizontal bordered">
+                    <mcs-label text="客户资源所属地" css="col-md-3" />
                     <div class="col-md-4">
                         <p class="form-control-static">{{ vm.customer.orgName }}</p>
                     </div>
                 </div>
-                <div class="form-group">
-                    <mcs-label text="学员编号" css="col-md-3"/>
+                <div class="form-group horizontal bordered">
+                    <mcs-label text="学员编号" icons="caret-up" css="col-md-3"/>
                     <div class="col-md-4">
                         <p class="form-control-static">{{ vm.customer.customerCode }}</p>
                     </div>
                 </div>
-                <div class="form-group">
-                    <mcs-label text="学员性别" css="col-md-3"/>
+                <div class="form-group horizontal bordered">
+                    <mcs-label text="学员性别" icons="caret-up" css="col-md-3"/>
                     <div class="col-md-4">
-                        <p class="form-control-static">{{ vm.customer.gender | gender }}</p>
+                        <p class="form-control-static">{{ vm.customer.gender | gender | normalize }}</p>
                     </div>
                 </div>
-                <div class="form-group">
-                    <mcs-label text="出生日期" css="col-md-3"/>
+                <div class="form-group horizontal bordered">
+                    <mcs-label text="出生日期" icons="caret-up" css="col-md-3"/>
                     <div class="col-md-4">
                         <p class="form-control-static">{{ vm.customer.birthday | date:'yyyy-MM-dd' | normalize }}</p>
                     </div>
                 </div>
-                <div class="form-group">
-                    <mcs-label text="身份证号码" css="col-md-3"/>
+                <div class="form-group horizontal bordered">
+                    <mcs-label text="{{ vm.customer.idType ? (vm.customer.idType | idtype) : '身份证' }}" css="col-md-3"/>
                     <div class="col-md-4">
-                        <p class="form-control-static">{{ vm.customer.idNumber }}</p>
+                        <p class="form-control-static">{{ vm.customer.idNumber | normalize }}</p>
                     </div>
                 </div>
-                <div class="form-group">
-                    <mcs-label text="入学大年级" css="col-md-3"/>
+                <div class="form-group horizontal bordered">
+                    <mcs-label text="入学大年级" icons="square" css="col-md-3"/>
                     <div class="col-md-4">
-                        <p class="form-control-static">{{ vm.customer.entranceGrade | grade }}</p>
+                        <p class="form-control-static">{{ vm.customer.entranceGrade | grade | normalize}}</p>
                     </div>
                 </div>
-                <div class="form-group">
-                    <mcs-label text="当前年级" css="col-md-3"/>
+                <div class="form-group horizontal bordered">
+                    <mcs-label text="当前年级" icons="caret-up,square" css="col-md-3"/>
                     <div class="col-md-4">
-                        <p class="form-control-static">{{ vm.customer.grade | grade }}</p>
+                        <p class="form-control-static">{{ vm.customer.grade | grade | normalize}}</p>
                     </div>
                 </div>
-                <div class="form-group">
-                    <mcs-label text="在读学校" css="col-md-3"/>
+                <div class="form-group horizontal bordered">
+                    <mcs-label text="在读学校" icons="caret-up" css="col-md-3"/>
                     <div class="col-md-4">
-                        <p class="form-control-static">{{ vm.customer.schoolID }}</p>
+                        <p class="form-control-static">{{ vm.customer.schoolName }}</p>
                     </div>
                 </div>
-                <div class="form-group">
-                    <mcs-label text="当前状态" css="col-md-3"/>
+                <div class="form-group horizontal bordered">
+                    <mcs-label text="当前状态" css="col-md-3" />
                     <div class="col-md-4">
                         <p class="form-control-static">{{ vm.customer.customerStatus }}</p>
                     </div>
                 </div>
-                <div class="form-group">
-                    <mcs-label text="学年制" css="col-md-3"/>
+                <div class="form-group horizontal bordered">
+                    <mcs-label text="学年制" css="col-md-3" />
                     <div class="col-md-4">
-                        <p class="form-control-static">{{ vm.customer.schoolYear }}</p>
+                        <p class="form-control-static">{{ vm.customer.schoolYear | academicYear | normalize}}</p>
                     </div>
                 </div>
-                <div class="form-group">
-                    <mcs-label text="文理科" css="col-md-3"/>
+                <div class="form-group horizontal bordered">
+                    <mcs-label text="文理科" css="col-md-3" />
                     <div class="col-md-4">
-                        <p class="form-control-static">{{ vm.customer.subjectType | subjectType }}</p>
+                        <p class="form-control-static">{{ vm.customer.subjectType | subjectType | normalize}}</p>
                     </div>
                 </div>
-                <div class="form-group">
-                    <mcs-label text="是否复读" css="col-md-3"/>
+                <div class="form-group horizontal bordered">
+                    <mcs-label text="是否复读" css="col-md-3" />
                     <div class="col-md-4">
                         <p class="form-control-static">{{ vm.customer.isStudyAgain | ifElse }}</p>
                     </div>
                 </div>
-                <div class="form-group">
-                    <mcs-label text="主要联系方式" css="col-md-3"/>
+                <div class="form-group horizontal bordered">
+                    <mcs-label text="联系方式" css="col-md-3"/>
                     <div class="col-md-4">
                         <p class="form-control-static">{{ vm.customer.primaryPhone.phoneNumber }}</p>
                     </div>
                 </div>
-                <div class="form-group">
-                    <mcs-label text="辅助联系方式" css="col-md-3" />
-                    <div class="col-md-4">
-                        <p class="form-control-static">{{ vm.customer.secondaryPhone.phoneNumber }}</p>
-                    </div>
-                </div>
-                <div class="form-group">
+                <div class="form-group horizontal bordered">
                     <mcs-label text="初始签约人" css="col-md-3"/>
                     <div class="col-md-4">
-                        <p class="form-control-static">{{  }}</p>
+                        <p class="form-control-static">{{ vm.customer.firstSignerName }}</p>
                     </div>
                 </div>
-                <div class="form-group">
-                    <mcs-label text="建档部门" css="col-md-3"/>
-                    <div class="col-md-4">
-                        <p class="form-control-static">{{  }}</p>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <mcs-label text="建档人" css="col-md-3"/>
-                    <div class="col-md-4">
-                        <p class="form-control-static">{{ vm.customer.CreatorName }}</p>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <mcs-label text="归属咨询师" css="col-md-3"/>
+                <div class="form-group horizontal bordered">
+                    <mcs-label text="归属咨询师" css="col-md-3" />
                     <div class="col-md-4 mcs-padding-0">
+                        <span class="form-control-static">{{ vm.consultantName }}</span>
                         <mcs-button text="查看历史" click="vm.viewHistory(vm.relationType.consultant)" css="btn-link" style="width:auto;" />
-                        <span class="form-control-static" ng-repeat="relation in (vm.customerStaffRelation | filter:{'relationType':vm.relationType.consultant})">{{ relation.staffName }}</span>
                     </div>
                 </div>
-                <div class="form-group">
-                    <mcs-label text="归属学管师" css="col-md-3"/>
+                <div class="form-group horizontal bordered">
+                    <mcs-label text="归属学管师" css="col-md-3" />
                     <div class="col-md-4 mcs-padding-0">
+                        <span class="form-control-static">{{ vm.educatorName }}</span>
                         <mcs-button text="查看历史" click="vm.viewHistory(vm.relationType.educator)" css="btn-link" style="width:auto;" />
-                        <span class="form-control-static" ng-repeat="relation in (vm.customerStaffRelation | filter:{'relationType':vm.relationType.educator})">{{ relation.staffName }}</span>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group horizontal bordered">
                     <mcs-label text="归属教师" css="col-md-3" />
                     <div class="col-md-4 mcs-padding-0">
+                        <span class="form-control-static">{{ vm.customer.belongTeacherNames }}</span>
                         <mcs-button text="查看历史" click="vm.viewHistoryTeachers(vm.customer.customerID)" css="btn-link" style="width:auto;" />
-                        <span class="form-control-static" ng-repeat="relation in (vm.customerStaffRelation | filter:{'relationType':vm.relationType.educator})">{{ relation.staffName }}</span>
                     </div>
                 </div>
-                <div class="form-group">
-                    <mcs-label text="归属坐席" css="col-md-3"/>
+                <div class="form-group horizontal bordered">
+                    <mcs-label text="归属坐席" css="col-md-3" />
                     <div class="col-md-4 mcs-padding-0">
+                        <span class="form-control-static">{{ vm.callcenterName }}</span>
                         <mcs-button text="查看历史" click="vm.viewHistory(vm.relationType.callcenter)" css="btn-link" style="width:auto;" />
-                        <span class="form-control-static" ng-repeat="relation in (vm.customerStaffRelation | filter:{'relationType':vm.relationType.callcenter})">{{ relation.staffName }}</span>
                     </div>
                 </div>
-                <div class="form-group">
-                    <mcs-label text="归属市场专员" css="col-md-3"/>
+                <div class="form-group horizontal bordered">
+                    <mcs-label text="归属市场专员" css="col-md-3" />
                     <div class="col-md-4 mcs-padding-0">
+                        <span class="form-control-static">{{ vm.marketName }}</span>
                         <mcs-button text="查看历史" click="vm.viewHistory(vm.relationType.market)" css="btn-link" style="width:auto;" />
-                        <span class="form-control-static" ng-repeat="relation in (vm.customerStaffRelation | filter:{'relationType':vm.relationType.market})">{{ relation.staffName }}</span>
+                    </div>
+                </div>
+                <div class="form-group horizontal bordered">
+                    <mcs-label text="建档部门" css="col-md-3" />
+                    <div class="col-md-4">
+                        <p class="form-control-static">{{ vm.creatorOrgName }}</p>
+                    </div>
+                </div>
+                <div class="form-group horizontal bordered">
+                    <mcs-label text="建档人" css="col-md-3" />
+                    <div class="col-md-4">
+                        <p class="form-control-static">{{ vm.customer.creatorName }}</p>
                     </div>
                 </div>
             </div>

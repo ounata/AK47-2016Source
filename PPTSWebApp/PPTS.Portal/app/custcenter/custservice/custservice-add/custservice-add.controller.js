@@ -32,6 +32,11 @@
                         });
                     };
 
+                    // 取消
+                    vm.cancel = function () {
+                        $state.go('ppts.custservice');
+                    };
+
                     vm.select = function (customer) {
                         vm.customerService.customerID = customer.customerID;
                         vm.customerService.consultantID = customer.consultant ? customer.consultant.staffID : '';

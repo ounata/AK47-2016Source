@@ -20,6 +20,14 @@ namespace PPTS.Data.Orders.Adapters
         private AssignsAdapter()
         { }
 
+        public void UpdateCollectionInContext(AssignCollection collection)
+        {
+            collection.IsNotNull(c =>
+            {
+                c.ForEach(item => { UpdateInContext(item); });
+            });
+        }
+
         /// <summary>
         /// 更改排课状态
         /// </summary>
@@ -50,10 +58,32 @@ namespace PPTS.Data.Orders.Adapters
             string assignIDs = string.Format("({0})", sb.ToString().Substring(1));
             WhereSqlClauseBuilder wSCB = new WhereSqlClauseBuilder();
             wSCB.AppendItem("AssignID", assignIDs, "in", true);
-            wSCB.AppendItem("AssignStatus", (int)AssignStatusDefine.Assigned, "=");
+            //wSCB.AppendItem("AssignStatus", (int)AssignStatusDefine.Assigned, "=");
 
-            //InLoadingCondition c =  new InLoadingCondition(p => p.AppendItem(assignID), "AssignID");
+            sCI.AppendSqlInContext(TSqlBuilder.Instance, "update {0} set {1} where {2};"
+                , this.GetTableName()
+                , uSCB.ToSqlString(TSqlBuilder.Instance)
+                , wSCB.ToSqlString(TSqlBuilder.Instance));
+        }
+        public void ConfirmAssignInContext(Assign assign)
+        {
+            assign.NullCheck("assign");
 
+            SqlContextItem sCI = this.GetSqlContext();
+
+            UpdateSqlClauseBuilder uSCB = new UpdateSqlClauseBuilder();
+            uSCB.AppendItem("AssignStatus", (int)assign.AssignStatus, "=");
+            uSCB.AppendItem("ModifyTime", "GETUTCDATE()", "=", true);
+            uSCB.AppendItem("ModifierID", assign.ModifierID, "=");
+            uSCB.AppendItem("ModifierName", assign.ModifierName, "=");
+
+            uSCB.AppendItem("ConfirmPrice", assign.ConfirmPrice, "=");
+            uSCB.AppendItem("ConfirmID", assign.ConfirmID, "=");
+            uSCB.AppendItem("ConfirmStatus", (int)assign.ConfirmStatus, "=");
+            uSCB.AppendItem("ConfirmTime", "GETUTCDATE()", "=", true);
+
+            WhereSqlClauseBuilder wSCB = new WhereSqlClauseBuilder();
+            wSCB.AppendItem("AssignID", assign.AssignID, "=");
 
             sCI.AppendSqlInContext(TSqlBuilder.Instance, "update {0} set {1} where {2};"
                 , this.GetTableName()
@@ -183,138 +213,6 @@ namespace PPTS.Data.Orders.Adapters
                 return null;
             assignIDs = string.Format("({0})", sb.ToString().Substring(1));
             return this.Load(builder => builder.AppendItem("AssignID", assignIDs, "in", true));
-        }
-
-        /// <summary>
-        /// 统计账户确认课时价值信息
-        /// </summary>
-        /// <param name="accountID">账户ID</param>
-        /// <param name="startTime">时间</param>
-        /// <returns></returns>
-        public decimal LoadAccountConfirmAssignByDateTime(string accountID, DateTime startTime)
-        {
-            accountID.NullCheck("accountID");
-            decimal assignValue = 0;
-            DataSet ds = DbHelper.RunSqlReturnDS(LoadAccountConfirmAssignForRefundByDateTimeSQL(accountID, startTime), this.ConnectionName);
-            if (ds.Tables[0].Rows.Count > 0)
-                assignValue = (decimal)(ds.Tables[0].Rows[0][0]);
-            return assignValue;
-        }
-
-        /// <summary>
-        /// 统计退费需要的课时消耗价值及折扣返还价值信息
-        /// </summary>
-        /// <param name="accountID">账户ID</param>
-        /// <param name="newDiscount">新折扣</param>
-        /// <param name="startTime">起始时间</param>
-        /// <returns></returns>
-        public decimal LoadDiscountReturnConfirmAssignByDateTime(string accountID, decimal newDiscount, DateTime startTime)
-        {
-            accountID.NullCheck("accountID");
-            decimal deductionValue = 0;
-            DataSet ds = DbHelper.RunSqlReturnDS(LoadDiscountReturnConfirmAssignByDateTimeSQL(accountID, newDiscount, startTime), this.ConnectionName);
-            if (ds.Tables[0].Rows.Count > 0)
-                deductionValue = (decimal)(ds.Tables[0].Rows[0][0]);
-            return deductionValue;
-        }
-
-        /// <summary>
-        /// 统计退费需要的课时消耗价值及折扣返还价值信息
-        /// </summary>
-        /// <param name="accountID"></param>
-        /// <param name="newDiscount"></param>
-        /// <param name="startTime"></param>
-        /// <param name="assignValue"></param>
-        /// <param name="discountReturn"></param>
-        public void LoadAccountRefundInfoByDateTime(string accountID, decimal newDiscount, DateTime startTime, ref decimal assignValue, ref decimal discountReturn)
-        {
-            accountID.NullCheck("accountID");
-            string sql = string.Format("{0};{1};", LoadAccountConfirmAssignForRefundByDateTimeSQL(accountID, startTime), LoadDiscountReturnConfirmAssignByDateTimeSQL(accountID, newDiscount, startTime));
-            DataSet ds = DbHelper.RunSqlReturnDS(sql, this.ConnectionName);
-            if (ds.Tables[0].Rows.Count > 0)
-                assignValue = (decimal)(ds.Tables[0].Rows[0][0]);
-            if (ds.Tables[1].Rows.Count > 0)
-                discountReturn = (decimal)(ds.Tables[1].Rows[0][0]);
-        }
-
-        public bool ExistAccountConfirmAssignByDateTime(string accountID, DateTime startTime)
-        {
-            accountID.NullCheck("accountID");
-            DataSet ds = DbHelper.RunSqlReturnDS(ExistAccountConfirmAssignByDateTimeSQL(accountID, startTime), this.ConnectionName);
-            return (ds.Tables[0].Rows.Count > 0);
-        }
-
-        /// <summary>
-        /// 存在指定时间内的课时消耗记录信息
-        /// </summary>
-        /// <param name="accountID">账户ID</param>
-        /// <param name="startTime">起始时间</param>
-        /// <returns></returns>
-        private string ExistAccountConfirmAssignByDateTimeSQL(string accountID, DateTime startTime)
-        {
-            WhereSqlClauseBuilder whereBuilder = new WhereSqlClauseBuilder();
-            whereBuilder.AppendItem("asset.AccountID", accountID)
-                .AppendItem("ass.AssignStatus", (int)AssignStatusDefine.Finished)
-                .AppendItem("ass.StartTime", TimeZoneContext.Current.ConvertTimeToUtc(startTime), ">=");
-            string sql = string.Format(@"select top 1 1 from {0}  as ass inner join {1} AS asset
-            on ass.AssetID=asset.AssetID 
-            where {2}"
-            , this.GetQueryMappingInfo().GetQueryTableName()
-            , AssetAdapter.Instance.GetQueryMappingInfo().GetQueryTableName()
-            , whereBuilder.ToSqlString(TSqlBuilder.Instance));
-            return sql;
-        }
-
-        /// <summary>
-        /// 消耗价值取数规则[不包含买赠部分]
-        /// </summary>
-        /// <param name="accountID">账户ID</param>
-        /// <param name="startTime">开始时间</param>
-        /// <returns></returns>
-        private string LoadAccountConfirmAssignForRefundByDateTimeSQL(string accountID, DateTime startTime)
-        {
-            WhereSqlClauseBuilder whereBuilder = new WhereSqlClauseBuilder();
-            whereBuilder.AppendItem("asset.AccountID", accountID)
-                .AppendItem("ass.AssignStatus", (int)AssignStatusDefine.Finished)
-                .AppendItem("ass.StartTime", TimeZoneContext.Current.ConvertTimeToUtc(startTime), ">=");
-            string sql = string.Format(@"select isnull(sum(isnull(ass.ConfirmPrice,0)*isnull(ass.Amount,0)),0) AssignValue from {0}  as ass inner join {1} AS asset
-            on ass.AssetID=asset.AssetID 
-            inner join {2} oi on asset.AssetRefID=oi.ItemID
-            and oi.DiscountType in (1,2,3)
-            where {3}"
-            , this.GetQueryMappingInfo().GetQueryTableName()
-            , AssetAdapter.Instance.GetQueryMappingInfo().GetQueryTableName()
-            , OrderItemAdapter.Instance.GetQueryMappingInfo().GetQueryTableName()
-            , whereBuilder.ToSqlString(TSqlBuilder.Instance)
-            );
-            return sql;
-        }
-
-        /// <summary>
-        /// 折扣返还，指定日期的sum(消耗价值/对应订购单使用折扣率*(新折扣率-对应订购单使用折扣率))[不包含买赠部分]
-        /// </summary>
-        /// <param name="accountID">账户ID</param>
-        /// <param name="newDiscount">新折扣率</param>
-        /// <param name="startTime">当前日期</param>
-        /// <returns></returns>
-        private string LoadDiscountReturnConfirmAssignByDateTimeSQL(string accountID, decimal newDiscount, DateTime startTime)
-        {
-            WhereSqlClauseBuilder whereBuilder = new WhereSqlClauseBuilder();
-            whereBuilder.AppendItem("asset.AccountID", accountID)
-                .AppendItem("ass.AssignStatus", (int)AssignStatusDefine.Finished)
-                .AppendItem("ass.StartTime", TimeZoneContext.Current.ConvertTimeToUtc(startTime), ">=");
-            string sql = string.Format(@"select isnull(sum(isnull(ass.Amount,0)*isnull(ass.ConfirmPrice,0)/isnull(oi.DiscountRate,1)*({0}-isnull(oi.DiscountRate,1))),0) DeductionValue 
-                                         from {1} ass 
-                                         inner join {2} asset on ass.AssetID=asset.AssetID
-                                         inner join {3} oi on asset.AssetRefID=oi.ItemID
-                                         and oi.DiscountType in (1,2,3)
-                                         where {4} "
-                , newDiscount
-                , this.GetQueryMappingInfo().GetQueryTableName()
-                , AssetAdapter.Instance.GetQueryMappingInfo().GetQueryTableName()
-                , OrderItemAdapter.Instance.GetQueryMappingInfo().GetQueryTableName()
-                , whereBuilder.ToSqlString(TSqlBuilder.Instance));
-            return sql;
         }
     }
 }

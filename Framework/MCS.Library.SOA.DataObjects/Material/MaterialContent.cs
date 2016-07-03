@@ -70,7 +70,7 @@ namespace MCS.Library.SOA.DataObjects
             }
         }
 
-        [ORFieldMapping("CREATE_TIME")]
+        [ORFieldMapping("CREATE_TIME", UtcTimeToLocal = true)]
         [SqlBehavior(BindingFlags = ClauseBindingFlags.Select | ClauseBindingFlags.Where)]
         public DateTime CreateTime
         {
@@ -78,8 +78,8 @@ namespace MCS.Library.SOA.DataObjects
             set;
         }
 
-        [ORFieldMapping("UPDATE_TIME")]
-        [SqlBehavior(DefaultExpression = "GETDATE()")]
+        [ORFieldMapping("UPDATE_TIME", UtcTimeToLocal = true)]
+        [SqlBehavior(DefaultExpression = "GETUTCDATE()")]
         public DateTime UpdateTime
         {
             get;

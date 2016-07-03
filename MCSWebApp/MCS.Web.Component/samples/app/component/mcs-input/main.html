@@ -33,8 +33,9 @@ input.hightlight {
                         <mcs-input placeholder="家长姓名" model="vm.parentName" />
                         <span>家长姓名：{{vm.parentName}}</span>
                         <mcs-input placeholder="家长姓名" css="hightlight" model="vm.parentName" />
-                        <mcs-input placeholder="充值金额" model="vm.amount" datatype="number"/>
+                        <mcs-input placeholder="充值金额" model="vm.amount" datatype="number" />
                         <mcs-input placeholder="学员年龄" model="vm.age" datatype="int" />
+                        {{vm.amount + 2}}
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
@@ -119,8 +120,7 @@ input.hightlight {
                                 <td>int,number,string</td>
                                 <td>string</td>
                                 <td>
-                                    &lt;mcs-input placeholder="充值金额" model="vm.amount" datatype="number" /&gt;
-                                    &lt;mcs-input placeholder="学员年龄" model="vm.age" datatype="int" /&gt;
+                                    &lt;mcs-input placeholder="充值金额" model="vm.amount" datatype="number" /&gt; &lt;mcs-input placeholder="学员年龄" model="vm.age" datatype="int" /&gt;
                                 </td>
                             </tr>
                         </tbody>

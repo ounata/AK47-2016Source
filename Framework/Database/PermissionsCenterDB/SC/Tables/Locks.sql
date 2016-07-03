@@ -4,7 +4,7 @@
     [ResourceID] NVARCHAR(36) NULL, 
     [LockPersonID] NVARCHAR(36) NULL, 
     [LockPersonName] NVARCHAR(255) NULL, 
-    [LockTime] DATETIME NULL DEFAULT GETDATE(), 
+    [LockTime] DATETIME NULL DEFAULT GETUTCDATE(), 
     [EffectiveTime] INT NULL, 
     [LockType] INT NULL, 
     [Description] NVARCHAR(255) NULL

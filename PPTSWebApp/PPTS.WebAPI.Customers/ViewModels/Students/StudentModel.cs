@@ -15,46 +15,31 @@ namespace PPTS.WebAPI.Customers.ViewModels.Students
         /// </summary>
         [NoMapping]
         [DataMember]
-        public Phone PrimaryPhone
-        {
-            get;
-            set;
-        }
+        public Phone PrimaryPhone { get; set; }
 
         /// <summary>
         /// 辅助联系方式
         /// </summary>
         [NoMapping]
         [DataMember]
-        public Phone SecondaryPhone
-        {
-            get;
-            set;
-        }
+        public Phone SecondaryPhone { get; set; }
+        /// <summary>
+        /// 建档部门
+        /// </summary>
+        [DataMember]
+        public string CreatorOrgName { get; set; }
+        /// <summary>
+        /// 所在学校
+        /// </summary>
+        [DataMember]
+        public string SchoolName { get; set; }
 
         /// <summary>
-        /// 转介绍员工信息
+        /// 归属教师姓名
         /// </summary>
         [NoMapping]
         [DataMember]
-        public string ReferralStaffInfo
-        {
-            get
-            {
-                string referralStaff = this.ReferralStaffName;
-
-                if (this.ReferralStaffJobName.IsNotEmpty())
-                {
-                    referralStaff += "(" + this.ReferralStaffJobName;
-
-                    if (this.ReferralStaffOACode.IsNotEmpty())
-                        referralStaff += " " + this.ReferralStaffOACode;
-
-                    referralStaff += ")";
-                }
-                return referralStaff;
-            }
-        }
+        public string BelongTeacherNames { get; set; }
 
         public string ToSearchContent()
         {

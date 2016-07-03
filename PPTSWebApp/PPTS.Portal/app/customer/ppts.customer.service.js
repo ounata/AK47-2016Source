@@ -90,6 +90,10 @@ define(['angular', ppts.config.modules.customer,
                                 break;
                             case 'ppts.student':
                             case 'ppts.customermeeting':
+                            case 'ppts.feedback':
+                            case 'ppts.accountCharge-query':
+                            case 'ppts.accountChargePayment-query':
+                            case 'ppts.accountRefund-query':
                             case 'ppts.score':
                                 switch (operation) {
                                     // 初始化学员信息

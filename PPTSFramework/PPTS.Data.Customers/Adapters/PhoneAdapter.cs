@@ -39,12 +39,17 @@ namespace PPTS.Data.Customers.Adapters
             this.LoadInContext(new WhereLoadingCondition(builder => builder.AppendItem("OwnerID", ownerID)), action, DateTime.MinValue, this.GetQueryMappingInfo().GetQueryTableName());
         }
 
+        public Phone LoadByPhoneNumber(string phoneNumber)
+        {
+            return this.Load(builder => builder.AppendItem("PhoneNumber", phoneNumber), DateTime.MinValue).FirstOrDefault();
+        }
+
         public void UpdateByOwnerIDInContext(string ownerID, IEnumerable<Phone> phones)
         {
             ownerID.CheckStringIsNullOrEmpty("ownerID");
             phones.NullCheck("phones");
 
-            this.UpdateCollectionInContext(new InSqlClauseBuilder("OwnerID").AppendItem("ownerID"), phones);
+            this.UpdateCollectionInContext(new InSqlClauseBuilder("OwnerID").AppendItem(ownerID), phones);
         }        
     }
 }

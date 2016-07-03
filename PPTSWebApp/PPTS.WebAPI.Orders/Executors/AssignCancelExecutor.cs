@@ -23,6 +23,8 @@ namespace PPTS.WebAPI.Orders.Executors
             model.NullCheck("model");
         }
 
+        public List<string> CustomerIDTask { get; private set; }
+
         protected override void PrepareData(DataExecutionContext<UserOperationLogCollection> context)
         {
             ///需要执行的判断
@@ -38,16 +40,19 @@ namespace PPTS.WebAPI.Orders.Executors
             AssignCollection ac = AssignsAdapter.Instance.LoadCollection(assignID);
             if (ac == null)
                 return;
+            IEnumerable<Assign> retValue = ac.Where(p=>p.AssignStatus == Data.Orders.AssignStatusDefine.Assigned 
+            || p.AssignStatus == Data.Orders.AssignStatusDefine.Exception);
+
+            if (retValue == null || retValue.Count() == 0)
+                return;
+
+            this.CustomerIDTask = retValue.Select(p => p.CustomerID).Distinct().ToList();
+
             ///排课可能来自不同的资产，所以要分组处理
-            IEnumerable<IGrouping<string, Assign>> result = ac.GroupBy(p => p.AssetID);
+            IEnumerable<IGrouping<string, Assign>> result = retValue.GroupBy(p => p.AssetID);
             foreach (IGrouping<string, Assign> g in result)
             {
                 IEnumerable<Assign> assigns = g.ToList<Assign>();
-
-                assigns = ac.Where(p => p.AssignStatus == Data.Orders.AssignStatusDefine.Assigned);
-                if (assigns == null)
-                    continue;
-
                 decimal assignedAmount = assigns.Sum(p => p.Amount);
                 Asset at = GenericAssetAdapter<Asset, AssetCollection>.Instance.Load(g.Key);
                 if (at == null)

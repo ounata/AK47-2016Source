@@ -1,5 +1,6 @@
 ﻿using MCS.Library.Data;
 using MCS.Web.MVC.Library.Filters;
+using PPTS.Contracts.Proxies;
 using PPTS.Data.Common.Adapters;
 using PPTS.Data.Common.DataSources;
 using PPTS.Data.Common.Entities;
@@ -15,14 +16,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
-using System.Web.Mvc;
 
 namespace PPTS.WebAPI.Orders.Controllers
 {
     [ApiPassportAuthentication]
     public class ClassGroupController : ApiController
     {
+        private void CheckEditAuth(string classID) {
+            PPTS.Data.Common.Authorization.ScopeAuthorization<Class>
+                .GetInstance(Data.Orders.ConnectionDefine.PPTSOrderConnectionName).CheckEditAuth(classID);
+        }
+
+        private void CheckReadAuth(string classID) {
+            PPTS.Data.Common.Authorization.ScopeAuthorization<Class>
+               .GetInstance(Data.Orders.ConnectionDefine.PPTSOrderConnectionName).CheckReadAuth(classID);
+        }
+
         #region api/classGroup/getAllClasses
+        [PPTSJobFunctionAuthorize("PPTS:班级管理（按钮查看班级、按钮查看学生）-本校区,班级管理（按钮查看班级、按钮查看学生）-本分公司,班级管理（按钮查看班级、按钮查看学生）-全国")]
         [System.Web.Http.HttpPost]
         public ClassesQueryResultModel GetAllClasses(ClassesQueryCriteriaModel criteria)
         {
@@ -33,6 +44,7 @@ namespace PPTS.WebAPI.Orders.Controllers
             };
         }
 
+        [PPTSJobFunctionAuthorize("PPTS:班级管理（按钮查看班级、按钮查看学生）-本校区,班级管理（按钮查看班级、按钮查看学生）-本分公司,班级管理（按钮查看班级、按钮查看学生）-全国")]
         [System.Web.Http.HttpPost]
         public PagedQueryResult<ClassSearchModel, ClassSearchModelCollection> GetPageClasses(ClassesQueryCriteriaModel criteria)
         {
@@ -41,62 +53,78 @@ namespace PPTS.WebAPI.Orders.Controllers
         #endregion
 
         #region api/classGroup/CreateClass
-        //[ApiPassportAuthentication]
-        //[PPTSJobFunctionAuthorize("PPTS:新增潜在客户")]
+        [PPTSJobFunctionAuthorize("PPTS:按钮新增班级（编辑课表/更换教师/增加学生/删除班级/移出班级）-本校区")]
         [System.Web.Http.HttpPost]
         public void CreateClass(CreatableClassModel model)
         {
             AddClassExecutor executor = new AddClassExecutor(model);
             executor.Execute();
+
+            PPTSClassServiceProxy.Instance.SyncClassCountToProduct(model.ProductID);
         }
         #endregion
 
         #region api/classGroup/getAllAssets
+
         [System.Web.Http.HttpPost]
         public AssetsQueryResultModel getAllAssets(AssetsQueryCriteriaModel criteria)
         {
-            return new AssetsQueryResultModel
+            AssetsQueryResultModel result = new AssetsQueryResultModel
             {
-                QueryResult = GenericOrderDataSource<AssetView, AssetViewCollection>.Instance.Query(criteria.PageParams, criteria, criteria.OrderBy)
+                QueryResult = GenericOrderDataSource<OrderItemView, OrderItemViewCollection>.Instance.Query(criteria.PageParams, criteria, criteria.OrderBy)
             };
+            return result;
         }
 
+
         [System.Web.Http.HttpPost]
-        public PagedQueryResult<AssetView, AssetViewCollection> getPageAssets(AssetsQueryCriteriaModel criteria)
+        public PagedQueryResult<OrderItemView, OrderItemViewCollection> getPageAssets(AssetsQueryCriteriaModel criteria)
         {
-            return GenericOrderDataSource<AssetView, AssetViewCollection>.Instance.Query(criteria.PageParams, criteria, criteria.OrderBy);
+            return GenericOrderDataSource<OrderItemView, OrderItemViewCollection>.Instance.Query(criteria.PageParams, criteria, criteria.OrderBy);
         }
         #endregion
 
         #region api/classGroup/getAllTeacherJobs
+
         [System.Web.Http.HttpPost]
         public TeacherJobsQueryResultModel getAllTeacherJobs(TeacherJobsCriteriaModel criteria)
         {
             return new TeacherJobsQueryResultModel
             {
-                QueryResult = GenericCommonDataSource<TeacherJobView, TeacherJobViewCollection>.Instance.Query(criteria.PageParams, criteria, criteria.OrderBy),
+                QueryResult = TeacherJobsQueryResultModel.Trim(GenericCommonDataSource<TeacherJobView, TeacherJobViewCollection>.Instance.Query(criteria.PageParams, criteria, criteria.OrderBy)),
                 Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(TeacherJobView))
             };
         }
 
+
         [System.Web.Http.HttpPost]
         public PagedQueryResult<TeacherJobView, TeacherJobViewCollection> getPageTeacherJobs(TeacherJobsCriteriaModel criteria)
         {
-            return GenericCommonDataSource<TeacherJobView, TeacherJobViewCollection>.Instance.Query(criteria.PageParams, criteria, criteria.OrderBy);
+            return TeacherJobsQueryResultModel.Trim(GenericCommonDataSource<TeacherJobView, TeacherJobViewCollection>.Instance.Query(criteria.PageParams, criteria, criteria.OrderBy));
         }
         #endregion
 
         #region api/classGroup/deleteClass
+        [PPTSJobFunctionAuthorize("PPTS:按钮新增班级（编辑课表/更换教师/增加学生/删除班级/移出班级）-本校区")]
         [System.Web.Http.HttpPost]
         public void DeleteClass(dynamic data)
         {
             string classID = data.classID;
+
+            #region 写入权限验证
+
+            #endregion
+
             DeleteClassExecutor executor = new DeleteClassExecutor(classID);
             executor.Execute();
+
+            SyncClassCountToProductExecutor exe = new SyncClassCountToProductExecutor(classID);
+            exe.Execute();
         }
         #endregion
 
         #region api/classGroup/getAllCustomers
+
         [System.Web.Http.HttpPost]
         public ClassCustomerQueryResultModel getAllCustomers(ClassCustomerQueryCriteriaModel criteria)
         {
@@ -107,6 +135,7 @@ namespace PPTS.WebAPI.Orders.Controllers
             };
         }
 
+
         [System.Web.Http.HttpPost]
         public PagedQueryResult<ClassLessonItem, ClassLessonItemCollection> GetPageCustomers(ClassCustomerQueryCriteriaModel criteria)
         {
@@ -115,18 +144,26 @@ namespace PPTS.WebAPI.Orders.Controllers
         #endregion
 
         #region api/classGroup/deleteCustomer
+        [PPTSJobFunctionAuthorize("PPTS:按钮新增班级（编辑课表/更换教师/增加学生/删除班级/移出班级）-本校区")]
         [System.Web.Http.HttpPost]
         public void deleteCustomer(DeleteCustomerModel model)
         {
+            #region 写入权限验证
+            CheckEditAuth(model.ClassID);
+            #endregion
+
             DeleteCustomerExecutor executor = new DeleteCustomerExecutor(model);
             executor.Execute();
         }
         #endregion
 
         #region api/classGroup/getClassDetail
+        [PPTSJobFunctionAuthorize("PPTS:班级管理（按钮查看班级、按钮查看学生）-本校区,班级管理（按钮查看班级、按钮查看学生）-本分公司,班级管理（按钮查看班级、按钮查看学生）-全国")]
         [System.Web.Http.HttpPost]
         public ClassDetailModel getClassDetail(ClassLessonQueryCriteriaModel criteria)
         {
+            CheckReadAuth(criteria.ClassID);
+
             return new ClassDetailModel()
             {
                 Class = GenericClassGroupAdapter<ClassModel, ClassModelCollection>.Instance.Load(builder => builder.AppendItem("ClassID", criteria.ClassID)).SingleOrDefault(),
@@ -144,32 +181,46 @@ namespace PPTS.WebAPI.Orders.Controllers
         #endregion
 
         #region api/classGroup/editClassLessones
+        [PPTSJobFunctionAuthorize("PPTS:按钮新增班级（编辑课表/更换教师/增加学生/删除班级/移出班级）-本校区")]
         public void editClassLessones(EditClassLessonesModel model)
         {
+            #region 写入权限验证
+            CheckEditAuth(model.ClassID);
+            #endregion
+
             EditClassLessonesExecutor executor = new EditClassLessonesExecutor(model);
             executor.Execute();
         }
         #endregion
 
         #region api/classGroup/editTeacher
+        [PPTSJobFunctionAuthorize("PPTS:按钮新增班级（编辑课表/更换教师/增加学生/删除班级/移出班级）-本校区")]
         public void editTeacher(EditTeacherModel model)
         {
+            #region 写入权限验证
+            CheckEditAuth(model.ClassID);
+            #endregion
+
             EditTeacherExecutor executor = new EditTeacherExecutor(model);
             executor.Execute();
         }
         #endregion
 
         #region api/classGroup/addCustomer
+        [PPTSJobFunctionAuthorize("PPTS:按钮新增班级（编辑课表/更换教师/增加学生/删除班级/移出班级）-本校区")]
         public void addCustomer(AddCustomerModel model)
         {
+            #region 写入权限验证
+            CheckEditAuth(model.ClassID);
+            #endregion
+
             AddCustomerExecutor executor = new AddCustomerExecutor(model);
             executor.Execute();
         }
         #endregion
 
         #region api/classGroup/CheckCreateClass_Product
-        //[ApiPassportAuthentication]
-        //[PPTSJobFunctionAuthorize("PPTS:新建班级")]
+        [PPTSJobFunctionAuthorize("PPTS:按钮新增班级（编辑课表/更换教师/增加学生/删除班级/移出班级）-本校区")]
         [System.Web.Http.HttpPost]
         public CheckResultModel checkCreateClass_Product(dynamic data)
         {

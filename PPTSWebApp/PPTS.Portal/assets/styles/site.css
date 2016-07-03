@@ -1,15 +1,185 @@
 ﻿/*全局字体修改*/
+
 body {
-    font-family: "微软雅黑", Arial
+    font-family: "微软雅黑", Arial;
 }
+
+.spinner {
+  position: absolute;
+  top: 40%;
+  left: 40%;
+  text-align: center;
+  /*margin: 100px auto 0;*/
+  width: 150px;
+  text-align: center;
+}
+
+.spinner > div {
+  width: 18px;
+  height: 18px;
+  background-color: #428bca;
+  border-radius: 100%;
+  display: inline-block;
+  -webkit-animation: bouncedelay 1.4s infinite ease-in-out;
+  animation: bouncedelay 1.4s infinite ease-in-out;
+  /* Prevent first frame from flickering when animation starts */
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+
+.spinner .bounce1 {
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+
+.spinner .bounce2 {
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+}
+
+@-webkit-keyframes bouncedelay {
+  0%, 80%, 100% { -webkit-transform: scale(0.0) }
+  40% { -webkit-transform: scale(1.0) }
+}
+
+@keyframes bouncedelay {
+  0%, 80%, 100% { 
+    transform: scale(0.0);
+    -webkit-transform: scale(0.0);
+  } 40% { 
+    transform: scale(1.0);
+    -webkit-transform: scale(1.0);
+  }
+}
+
+.sk-circle {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  text-align: center;
+  /*margin: 40px auto;*/
+  width: 60px;
+  height: 60px; }
+  .sk-circle .sk-child {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0; }
+  .sk-circle .sk-child:before {
+    content: '';
+    display: block;
+    margin: 0 auto;
+    width: 15%;
+    height: 15%;
+    background-color: #428bca;
+    border-radius: 100%;
+    -webkit-animation: sk-circleBounceDelay 1.2s infinite ease-in-out both;
+            animation: sk-circleBounceDelay 1.2s infinite ease-in-out both; }
+  .sk-circle .sk-circle2 {
+    -webkit-transform: rotate(30deg);
+        -ms-transform: rotate(30deg);
+            transform: rotate(30deg); }
+  .sk-circle .sk-circle3 {
+    -webkit-transform: rotate(60deg);
+        -ms-transform: rotate(60deg);
+            transform: rotate(60deg); }
+  .sk-circle .sk-circle4 {
+    -webkit-transform: rotate(90deg);
+        -ms-transform: rotate(90deg);
+            transform: rotate(90deg); }
+  .sk-circle .sk-circle5 {
+    -webkit-transform: rotate(120deg);
+        -ms-transform: rotate(120deg);
+            transform: rotate(120deg); }
+  .sk-circle .sk-circle6 {
+    -webkit-transform: rotate(150deg);
+        -ms-transform: rotate(150deg);
+            transform: rotate(150deg); }
+  .sk-circle .sk-circle7 {
+    -webkit-transform: rotate(180deg);
+        -ms-transform: rotate(180deg);
+            transform: rotate(180deg); }
+  .sk-circle .sk-circle8 {
+    -webkit-transform: rotate(210deg);
+        -ms-transform: rotate(210deg);
+            transform: rotate(210deg); }
+  .sk-circle .sk-circle9 {
+    -webkit-transform: rotate(240deg);
+        -ms-transform: rotate(240deg);
+            transform: rotate(240deg); }
+  .sk-circle .sk-circle10 {
+    -webkit-transform: rotate(270deg);
+        -ms-transform: rotate(270deg);
+            transform: rotate(270deg); }
+  .sk-circle .sk-circle11 {
+    -webkit-transform: rotate(300deg);
+        -ms-transform: rotate(300deg);
+            transform: rotate(300deg); }
+  .sk-circle .sk-circle12 {
+    -webkit-transform: rotate(330deg);
+        -ms-transform: rotate(330deg);
+            transform: rotate(330deg); }
+  .sk-circle .sk-circle2:before {
+    -webkit-animation-delay: -1.1s;
+            animation-delay: -1.1s; }
+  .sk-circle .sk-circle3:before {
+    -webkit-animation-delay: -1s;
+            animation-delay: -1s; }
+  .sk-circle .sk-circle4:before {
+    -webkit-animation-delay: -0.9s;
+            animation-delay: -0.9s; }
+  .sk-circle .sk-circle5:before {
+    -webkit-animation-delay: -0.8s;
+            animation-delay: -0.8s; }
+  .sk-circle .sk-circle6:before {
+    -webkit-animation-delay: -0.7s;
+            animation-delay: -0.7s; }
+  .sk-circle .sk-circle7:before {
+    -webkit-animation-delay: -0.6s;
+            animation-delay: -0.6s; }
+  .sk-circle .sk-circle8:before {
+    -webkit-animation-delay: -0.5s;
+            animation-delay: -0.5s; }
+  .sk-circle .sk-circle9:before {
+    -webkit-animation-delay: -0.4s;
+            animation-delay: -0.4s; }
+  .sk-circle .sk-circle10:before {
+    -webkit-animation-delay: -0.3s;
+            animation-delay: -0.3s; }
+  .sk-circle .sk-circle11:before {
+    -webkit-animation-delay: -0.2s;
+            animation-delay: -0.2s; }
+  .sk-circle .sk-circle12:before {
+    -webkit-animation-delay: -0.1s;
+            animation-delay: -0.1s; }
+
+@-webkit-keyframes sk-circleBounceDelay {
+  0%, 80%, 100% {
+    -webkit-transform: scale(0);
+            transform: scale(0); }
+  40% {
+    -webkit-transform: scale(1);
+            transform: scale(1); } }
+
+@keyframes sk-circleBounceDelay {
+  0%, 80%, 100% {
+    -webkit-transform: scale(0);
+            transform: scale(0); }
+  40% {
+    -webkit-transform: scale(1);
+            transform: scale(1); } }
 /*顶部导航条背景色由ace.css里的浅蓝色#438eb9改成了白色*/
+
 #navbar {
     background-color: #EBF4FA;
     border: 1px solid #e5e5e5;
 }
+
 .nav.nav-list a {
     cursor: pointer;
 }
+
 .page-header {
     border-bottom: 2px solid #6fb3e0;
     padding: 5px 10px;
@@ -18,144 +188,207 @@ body {
     color: #8089a0;
 }
 
+.breadcrumbs {
+    margin-top: 2px;
+}
+
+.sidebar .sidebar-shortcuts {
+    margin-top: 2px;
+}
+
+.dropdown-menu.dropdown-close.dropdown-menu-right {
+    top: 48px;
+}
+
+.dropdown-navbar > li.dropdown-footer > a {
+    text-align: left;
+}
+
+.dropdown-navbar > li > .ace-icon, .dropdown-navbar > li > a > .ace-icon {
+    color: #4F99C6;
+}
+
 .dialog-title {
-    font-size:12px;
+    font-size: 12px;
     color: #8089a0;
-    margin-right:10px;
-}
-.dialog-button{
-    margin-top:15px;
-
+    margin-right: 10px;
 }
 
-tags-input.noplaceholder  input{
-    
+.dialog-button {
+    margin-top: 15px;
 }
+
+tags-input.noplaceholder input {
+}
+
 
 /*nav-brand里的logo把padding-top, bottom从10px改成了0px*/
+
 #logo {
     padding: 0px;
 }
 
+
 /*跟进，成绩单独修正*/
+
 .mcs-user-profile.follow-list .profile-info-name {
     width: 15%;
 }
+
 .mcs-user-profile.score-list .profile-info-name {
     width: 12%;
 }
 
 .user-menu .fa-caret-left {
-    float:none !important;
-    margin-left:50px;
+    float: none !important;
+    margin-left: 50px;
 }
 
+
 /*页面布局*/
+
 .page-header.info {
     margin: 0px;
 }
+
+
 /*修改底部版权信息的行距从36px到20px*/
+
 .footer-content {
-    line-height: 20px!important;
+    line-height: 20px !important;
 }
 
+
 /*项目组件*/
-ppts-daterangepicker.search .datepicker {
+
+mcs-daterangepicker.search .datepicker {
     padding-left: 0px !important;
 }
-.inline-ppts-datepicker {
+
+.inline-mcs-datepicker {
     display: inline-block;
-    width:180px;
+    width: 180px;
     vertical-align: middle;
 }
 
-.ppts-datatable-solidlineheight{
-    height:30px;
+.ppts-datatable-solidlineheight {
+    height: 30px;
 }
 
 .ppts-panel-pager {
-    height:45px;
+    height: 45px;
     text-align: right;
-    margin-top:25px;
-
+    margin-top: 25px;
 }
-ppts-select {
+
+mcs-select {
     padding: 0px;
 }
+
 .ppts-select-label {
-    width:120px !important;
+    width: 120px !important;
     height: 32px !important;
-    float:right !important;
+    float: right !important;
 }
+
 .ppts-select-search {
-    width:200px;
+    width: 200px;
     display: inline-flex;
     padding-top: 5px;
 }
-.ppts-select-search div {
-    padding-left: 0px !important;
-}
+
+    .ppts-select-search div {
+        padding-left: 0px !important;
+    }
+
 .ppts-select-search-nopadding {
-     width:200px;
+    width: 200px;
     display: inline-block;
     padding-top: 0px;
 }
-.search-inline ppts-select {
+
+.search-inline mcs-select {
     padding-top: 0px !important;
 }
-ppts-select-branch.search{
-    display:inline-block !important;
-    vertical-align:middle;
+
+ppts-select-branch.search {
+    display: inline-block !important;
+    vertical-align: middle;
 }
 
-ppts-daterangepicker.search div {
+mcs-daterangepicker.search div {
     width: 380px !important;
 }
+
 ppts-select-branch.search div {
     display: inline-grid !important;
 }
+
 .ppts-select-users {
     width: 200px;
     margin-left: 20px;
 }
-.ppts-select div {
+
+.mcs-select div {
     width: 200px !important;
 }
+
 .ppts-select-md div {
     width: 260px !important;
 }
+
 .ppts-select-lg div {
     width: 400px !important;
 }
+
 ppts-select-branch .btn {
     height: 33px !important;
 }
+
 .ppts-select-middle-align {
     margin-top: 10px;
 }
+
 ppts-search .input-group {
- width:500px;   
+    width: 500px;
 }
-ppts-search .input-group .form-control {
-    height:37px;
-   
-}
+
+    ppts-search .input-group .form-control {
+        height: 37px;
+    }
+
 .ppts-oneline-block {
     display: inline-block;
 }
+
+
 /**未对帐显示红色*/
-.ppts-unchecked-color{
-    color:red;
-}
-/**已对帐显示绿色*/
-.ppts-checked-color{
-    color:green;
+
+.ppts-unchecked-color {
+    color: red;
 }
 
-tags-input.lg  .tags{
-    width:500px !important;
+
+/**已对帐显示绿色*/
+
+.ppts-checked-color {
+    color: green;
+}
+
+tags-input.lg .tags {
+    width: 500px !important;
 }
 
 .datatable-header {
-   width:250px;
+    width: 250px;
+}
+
+
+
+.responsive mcs-datetimepicker div input{
+    width: 150px !important;
+}
+
+.responsive .select2-container {
+    width: 150px !important;
 }

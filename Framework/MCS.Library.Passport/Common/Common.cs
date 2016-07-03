@@ -32,6 +32,7 @@ namespace MCS.Library.Passport
 		public const string C_USER_DELEGATION_KEY_NAME = "User_Delegation_Key_Name";
 
 		public const string C_LOGOFF_CALLBACK_VIRTUAL_PATH = "MCSAuthenticateLogOff.axd";
+        public const string TicketHeaderKey = "x-session-token";
 
 		/// <summary>
 		/// 检查Http的上下文是否存在

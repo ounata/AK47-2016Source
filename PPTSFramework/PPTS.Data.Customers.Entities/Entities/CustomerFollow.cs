@@ -2,12 +2,29 @@ using MCS.Library.Core;
 using MCS.Library.Data.DataObjects;
 using MCS.Library.Data.Mapping;
 using PPTS.Data.Common;
+using PPTS.Data.Common.Authorization;
 using PPTS.Data.Common.Entities;
 using System;
 using System.Runtime.Serialization;
 
 namespace PPTS.Data.Customers.Entities
 {
+    #region 数据范围权限(存入识别)
+    [EntityAuth(RecordType = RecordType.CustomerFollow)]
+    #endregion
+
+    #region 数据范围权限(数据读取权限)
+
+    [OwnerRelationScope(Name = "跟进管理（学员视图-跟进记录跟进记录详情）", Functions = "跟进管理（学员视图-跟进记录跟进记录详情）", RecordType = RecordType.CustomerFollow)]
+    [RecordOrgScope(Name = "跟进管理（学员视图-跟进记录跟进记录详情）-本部门", Functions = "跟进管理（学员视图-跟进记录跟进记录详情）-本部门", OrgType = Common.Authorization.OrgType.Department, RecordType = RecordType.CustomerFollow)]
+    [RecordOrgScope(Name = "跟进管理（学员视图-跟进记录跟进记录详情）-本校区", Functions = "跟进管理（学员视图-跟进记录跟进记录详情）-本校区", OrgType = Common.Authorization.OrgType.Campus, RecordType = RecordType.CustomerFollow)]
+
+    [RecordOrgScope(Name = "跟进管理（学员视图-跟进记录跟进记录详情）-本分公司", Functions = "跟进管理（学员视图-跟进记录跟进记录详情）-本分公司", OrgType = Common.Authorization.OrgType.Branch, RecordType = RecordType.CustomerFollow)]
+    [RecordOrgScope(Name = "跟进管理（跟进记录详情）-全国", Functions = "跟进管理（跟进记录详情）-全国", OrgType = Common.Authorization.OrgType.HQ, RecordType = RecordType.CustomerFollow)]
+
+    #endregion
+    [OwnerRelationScope(Name = "新增跟进记录", Functions = "新增跟进记录", ActionType = ActionType.Edit, RecordType = RecordType.CustomerFollow)]
+    [CustomerRelationScope(Name = "新增跟进记录", Functions = "新增跟进记录", ActionType =ActionType.Edit, RecordType = CustomerRecordType.Customer)]
     /// <summary>
     /// This object represents the properties and methods of a CustomerFollow.
     /// 跟进信息表
@@ -179,30 +196,6 @@ namespace PPTS.Data.Customers.Entities
         }
 
         /// <summary>
-        /// 沟通一级结果代码
-        /// </summary>
-        [ORFieldMapping("TalkMainResult")]
-        [DataMember]
-        [ConstantCategory("C_CODE_ABBR_Customer_CRM_CommunicateResultFirstEx")]
-        public string TalkMainResult
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 沟通二级结果代码
-        /// </summary>
-        [ORFieldMapping("TalkSubResult")]
-        [DataMember]
-        [ConstantCategory("C_CODE_ABBR_Customer_CRM_CommunicateResultSecondEx")]
-        public string TalkSubResult
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
         /// 客户级别代码
         /// </summary>
         [ORFieldMapping("CustomerLevel")]
@@ -293,13 +286,13 @@ namespace PPTS.Data.Customers.Entities
             get;
             set;
         }
-        
+
         /// <summary>
         /// 是否其它机构辅导
         /// </summary>
         [ORFieldMapping("IsStudyThere")]
         [DataMember]
-        public int IsStudyThere
+        public bool IsStudyThere
         {
             get;
             set;

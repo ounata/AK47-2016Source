@@ -15,13 +15,7 @@
         <div class="form-group">
             <span class="col-sm-4 control-label no-padding-right" style="padding-top:0px">转学原因：</span>
             <div class="col-sm-8">
-                <textarea class="autosize-transition form-control" ng-model="vm.apply.applyMemo" style="overflow-x: hidden; overflow-y: auto;word-wrap: break-word; resize: horizontal; height: 100px;"></textarea>
-            </div>
-        </div>
-        <div class="form-group">
-            <span class="col-sm-4 control-label no-padding-right" style="padding-top:8px;">通知处理人：</span>
-            <div class="col-sm-8 mcs-margin-top-2 mcs-padding-left-5">
-                <ppts-checkbox-group category="messageType" model="vm.selectTypes" show-all="false" async="false" />
+                <textarea class="form-control" ng-model="vm.apply.applyMemo" rows="4" maxlength="255" required style="resize: none;"></textarea>
             </div>
         </div>
     </div>

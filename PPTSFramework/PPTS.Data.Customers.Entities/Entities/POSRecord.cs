@@ -26,6 +26,17 @@ namespace PPTS.Data.Customers.Entities
             get;
             set;
         }
+        
+        /// <summary>
+        /// 交易参考类型（1-银联，4-通联）
+        /// </summary>
+        [ORFieldMapping("TransactionType", PrimaryKey = true)]
+        [DataMember]
+        public string TransactionType
+        {
+            get;
+            set;
+        }
 
         /// <summary>
 		/// 校区ID（商户号）
@@ -117,6 +128,9 @@ namespace PPTS.Data.Customers.Entities
             set;
         }
 
+        /// <summary>
+        /// 刷卡交易时间(来源原始值)
+        /// </summary>
         [ORFieldMapping("TransactionTimeValue")]
         [DataMember]
         public string TransactionTimeValue
@@ -124,6 +138,7 @@ namespace PPTS.Data.Customers.Entities
             get;
             set;
         }
+        
     }
     [Serializable]
     [DataContract]

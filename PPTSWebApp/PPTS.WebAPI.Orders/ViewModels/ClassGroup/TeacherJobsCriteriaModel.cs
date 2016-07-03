@@ -33,14 +33,15 @@ namespace PPTS.WebAPI.Orders.ViewModels.ClassGroup
         [ConditionMapping("TeacherName")]
         public string TeacherName { get; set; }
 
-        [ConditionMapping("GradeMemo")]
+        [ConditionMapping("GradeMemo", EscapeLikeString = true, Prefix = "%,", Postfix = ",%", Operation = "LIKE")]
         public string GradeMemo { get; set; }
 
-        [ConditionMapping("SubjectMemo")]
+        [ConditionMapping("SubjectMemo", EscapeLikeString = true, Prefix = "%,", Postfix = ",%", Operation = "LIKE")]
         public string SubjectMemo { get; set; }
 
         #region 创建人：通过当前用户信息获取
         private PPTSJob _createJob = null;
+        [NoMapping]
         PPTSJob CreateJob
         {
             get
@@ -54,6 +55,7 @@ namespace PPTS.WebAPI.Orders.ViewModels.ClassGroup
         }
 
         private IUser _createUser;
+        [NoMapping]
         IUser CreateUser
         {
             get

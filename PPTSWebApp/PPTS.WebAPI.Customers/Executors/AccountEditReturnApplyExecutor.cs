@@ -32,7 +32,7 @@ namespace PPTS.WebAPI.Customers.Executors
         private void Init(ReturnApplyModel apply, Account account)
         {
             if (apply.ApplyID.IsNullOrEmpty())
-                apply.ApplyID = Guid.NewGuid().ToString().ToUpper();
+                apply.ApplyID = UuidHelper.NewUuidString();
 
             apply.FillCreator();
             apply.FillModifier();

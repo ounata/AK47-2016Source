@@ -12,7 +12,7 @@
                         keyFields: ['applyID'],
                         headers: [{
                             field: "applyNo",                            
-                            name: "缴费单号",
+                            name: "缴费单编号",
                             headerCss: "col-sm-1",
                             template: '<a ui-sref="ppts.accountCharge-view.info({applyID:row.applyID,prev:vm.page})">{{row.applyNo}}</a>'
                         }, {
@@ -24,10 +24,10 @@
                             field: "applyTime",
                             name: "充值日期",
                             headerCss: "col-sm-1",
-                            template: '<span>{{row.applyTime | date:"yyyy-MM-dd"}}</span>'
+                            template: '<span>{{row.payTime | date:"yyyy-MM-dd" | normalize}}</span>'
                         }, {
                             field: "payStatus",
-                            name: "支付状态",
+                            name: "充值状态",
                             headerCss: "col-sm-1",
                             template: '<span>{{row.payStatus | payStatus}}</span>'
                         }, {
@@ -68,8 +68,7 @@
                         }],
                         pager: {
                             pagable: false
-                        },
-                        orderBy: [{ dataField: 'applyID', sortDirection: 1 }]
+                        }
                     }
                     // 页面初始化加载或重新搜索时查询
                     vm.init = function () {

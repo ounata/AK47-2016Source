@@ -61,7 +61,7 @@ namespace MCS.Library.SOA.DataObjects.Security.Locks
 		/// 上锁时间
 		/// </summary>
 		[ORFieldMapping("LockTime")]
-		[SqlBehavior(DefaultExpression = "GETDATE()")]
+		[SqlBehavior(DefaultExpression = "GETUTCDATE()")]
 		public DateTime LockTime { get; set; }
 
 		/// <summary>

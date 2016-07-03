@@ -1,0 +1,7 @@
+﻿<ul class="wizard-steps workflow">
+    <li ng-class="{'active':item.isActive,'complete':item.isComplete}" data-target="#s{{$index+1}}" ng-repeat="item in model.activities">
+        <span class="step bold" ng-class="{'light-grey':!item.isActive&&!item.isComplete,'dark-blue':item.isActive}">{{$index+1}}</span>
+        <span class="title" ng-class="{'bold':item.isActive}">{{item.activityName}}</span>
+        <span ng-if="!$last" ng-class="{'light-grey':!item.isActive&&!item.isComplete,'bold':item.isActive}" uib-popover="{{item.approverList|tooltip:10}}" popover-trigger="mouseenter" popover-placement="bottom">{{item.approverList|truncate:10}}</span>
+    </li>
+</ul>

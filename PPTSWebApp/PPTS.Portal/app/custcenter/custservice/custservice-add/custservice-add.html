@@ -13,6 +13,7 @@
                     <div class="col-md-offset-3 col-md-9">
                         <mcs-button category="save" text="保存" ppts-job-functions="新增客服信息" click="vm.save()"></mcs-button>
                         <mcs-button icon="female" text="转下一受理人" ppts-job-functions="转下一受理人" click="vm.saveAndNext()"></mcs-button>
+                        <mcs-button category="close" click="vm.cancel()"></mcs-button>
                     </div>
                 </div>
             </div>
@@ -31,7 +32,7 @@
                     <div class="form-group horizontal">
                         <mcs-label required="true" text="服务类型" css="col-sm-3" />
                         <div class="col-sm-6">
-                            <ppts-select category="serviceType" css="mcs-padding-0 mcs-width-half" model="vm.customerService.serviceType" required/>
+                            <mcs-select category="serviceType" css="mcs-padding-0 mcs-width-half" model="vm.customerService.serviceType" required/>
                         </div>
                     </div>
                 </div>
@@ -39,7 +40,7 @@
                     <div class="form-group horizontal">
                         <mcs-label required="true" text="投诉次数" css="col-sm-3" />
                         <div class="col-sm-6">
-                            <ppts-select category="complaintTimes" css="mcs-padding-0 mcs-width-half" model="vm.customerService.complaintTimes" required/>
+                            <mcs-select category="complaintTimes" css="mcs-padding-0 mcs-width-half" model="vm.customerService.complaintTimes" required/>
                         </div>
                     </div>
                 </div>
@@ -47,7 +48,7 @@
                     <div class="form-group horizontal">
                         <mcs-label required="true" text="投诉升级" css="col-sm-3" />
                         <div class="col-sm-6">
-                            <ppts-select category="complaintUpgrade" css="mcs-padding-0 mcs-width-half" model="vm.customerService.complaintUpgrade" required/>
+                            <mcs-select category="complaintUpgrade" css="mcs-padding-0 mcs-width-half" model="vm.customerService.complaintUpgrade" required/>
                         </div>
                     </div>
                 </div>
@@ -55,7 +56,7 @@
                     <div class="form-group horizontal">
                         <mcs-label required="true" text="严重程度" css="col-sm-3" />
                         <div class="col-sm-6">
-                            <ppts-select category="complaintLevel" css="mcs-padding-0 mcs-width-half" model="vm.customerService.complaintLevel" required/>
+                            <mcs-select category="complaintLevel" css="mcs-padding-0 mcs-width-half" model="vm.customerService.complaintLevel" required/>
                         </div>
                     </div>
                 </div>
@@ -63,16 +64,16 @@
                     <div class="form-group horizontal">
                         <mcs-label required="true" text="咨询" css="col-sm-3" />
                         <div class="col-sm-6">
-                            <ppts-select category="complaintLevel" css="mcs-padding-0 mcs-width-half" model="vm.customerService.complaintLevel" required/>
+                            <mcs-select category="consultType" css="mcs-padding-0 mcs-width-half" model="vm.customerService.consultType" required/>
                         </div>
                     </div>
                 </div>
                 <div class="row" ng-hide="vm.customerService.consultType != 4 || vm.customerService.serviceType != 3">
                     <div class="form-group horizontal">
-                        <mcs-label required="true" text="咨询其他" css="col-sm-3" />
+                        <mcs-label required="true" text="备注" css="col-sm-3" />
                         <div class="col-sm-6 mcs-margin-top-10">
                             <textarea class="form-control" rows="7" class="form-control" ng-model="vm.customerService.consultMemo" maxlength="15" required></textarea>
-                            <span class="text-left info">不允许超过15个字符，已经输入{{ vm.customerService.consultMemo.length || 0 }}个</span>
+                            <span class="text-left info">最大输入字符为15个字符，已经输入{{ vm.customerService.consultMemo.length || 0 }}个</span>
                         </div>
                     </div>
                 </div>
@@ -81,7 +82,7 @@
                         <mcs-label required="true" text="客服受理情况详描述" css="col-sm-3" />
                         <div class="col-sm-6 mcs-margin-top-10">
                             <textarea class="form-control" rows="7" class="form-control" ng-model="vm.customerService.acceptMemo" maxlength="500" required></textarea>
-                            <span class="text-left info">不允许超过500个字符，已经输入{{ vm.customerService.acceptMemo.length || 0 }}个</span>
+                            <span class="text-left info">最大输入字符为500个字符，已经输入{{ vm.customerService.acceptMemo.length || 0 }}个</span>
                         </div>
                     </div>
                 </div>
@@ -90,7 +91,7 @@
                         <mcs-label required="true" text="诉求" css="col-sm-3" />
                         <div class="col-sm-6 mcs-margin-top-10">
                             <textarea class="form-control" rows="7" class="form-control" ng-model="vm.customerService.appealMemo" maxlength="500" required></textarea>
-                            <span class="text-left info">不允许超过500个字符，已经输入{{ vm.customerService.appealMemo.length || 0 }}个</span>
+                            <span class="text-left info">最大输入字符为500个字符，已经输入{{ vm.customerService.appealMemo.length || 0 }}个</span>
                         </div>
                     </div>
                 </div>
@@ -99,7 +100,17 @@
                         <mcs-label required="true" text="处理建议" css="col-sm-3" />
                         <div class="col-sm-6 mcs-margin-top-10">
                             <textarea class="form-control" rows="7" class="form-control" ng-model="vm.customerService.handleAdvice" maxlength="500" required></textarea>
-                            <span class="text-left info">不允许超过500个字符，已经输入{{ vm.customerService.handleAdvice.length || 0 }}个</span>
+                            <span class="text-left info">最大输入字符为500个字符，已经输入{{ vm.customerService.handleAdvice.length || 0 }}个</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" ng-hide="vm.customerService.serviceType == 3">
+                    <div class="form-group horizontal">
+                        <mcs-label required="true" text="备注" css="col-sm-3" />
+                        <div class="col-sm-6 mcs-margin-top-10">
+                            <textarea class="form-control" rows="7" class="form-control" ng-model="vm.customerService.serviceMemo" maxlength="500" required></textarea>
+                            <span class="text-left info">最大输入字符为500个字符，已经输入{{ vm.customerService.serviceMemo.length || 0 }}个</span>
                         </div>
                     </div>
                 </div>
@@ -153,7 +164,7 @@
             <div class="form-group">
                 <label required class="control-label col-sm-3">服务类型:</label>
                 <div class="input-group col-sm-9">
-                    <ppts-select category="serviceType" class="ppts-select-lg" model="vm.customerService.serviceType" />
+                    <mcs-select category="serviceType" class="ppts-select-lg" model="vm.customerService.serviceType" />
                     <span class="label-260">
                         选项值内容有：投诉、退费、咨询、其他
                     </span>
@@ -162,7 +173,7 @@
             <div class="form-group" ng-hide="vm.customerService.serviceType == 3">
                 <label required class="control-label col-sm-3">投诉次数:</label>
                 <div class="input-group col-sm-9">
-                    <ppts-select category="complaintTimes" model="vm.customerService.complaintTimes" class="ppts-select-lg" />
+                    <mcs-select category="complaintTimes" model="vm.customerService.complaintTimes" class="ppts-select-lg" />
                     <span class="label-260">
                         选项值内容有：一次、两次、三次、三次以上
                     </span>
@@ -171,7 +182,7 @@
             <div class="form-group" ng-hide="vm.customerService.serviceType == 3">
                 <label required class="control-label col-sm-3">投诉升级:</label>
                 <div class="input-group col-sm-9">
-                    <ppts-select category="complaintUpgrade" model="vm.customerService.complaintUpgrade" class="ppts-select-lg" />
+                    <mcs-select category="complaintUpgrade" model="vm.customerService.complaintUpgrade" class="ppts-select-lg" />
                     <span class="label-260">
                         选项值内容有：普通、二级、三级、特级
                     </span>
@@ -180,7 +191,7 @@
             <div class="form-group" ng-hide="vm.customerService.serviceType == 3">
                 <label required class="control-label col-sm-3">严重程度:</label>
                 <div class="input-group col-sm-9">
-                    <ppts-select category="complaintLevel" model="vm.customerService.complaintLevel" class="ppts-select-lg" />
+                    <mcs-select category="complaintLevel" model="vm.customerService.complaintLevel" class="ppts-select-lg" />
                     <span class="label-260">
                         选项值内容有：普通、严重、紧急
                     </span>
@@ -189,7 +200,7 @@
             <div class="form-group" ng-hide="vm.customerService.serviceType != 3">
                 <label required class="control-label col-sm-3">咨询:</label>
                 <div class="input-group col-sm-9">
-                    <ppts-select category="consultType" model="vm.customerService.consultType" class="ppts-select-lg" />
+                    <mcs-select category="consultType" model="vm.customerService.consultType" class="ppts-select-lg" />
                     <span class="label-260">
                         选项值内容有：校区相关，退费相关，加盟，其他。 当选择其他时，可输入内容，不能超过15个字的文本字符。
                     </span>

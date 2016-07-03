@@ -121,7 +121,7 @@ namespace MCS.Library.SOA.DataObjects
 
 			foreach (EmailAddress ea in this)
 			{
-				addresses.Add(ea.ToMailAddress());
+				addresses.Add(ea.ToMailAddress(true));
 			}
 		}
 	}

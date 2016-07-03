@@ -9,6 +9,7 @@ using MCS.Library.Data.DataObjects;
 using PPTS.Data.Orders.Entities;
 using MCS.Library.Data.Builder;
 using MCS.Library.Data.Mapping;
+using MCS.Library.Core;
 
 namespace PPTS.Data.Orders.Adapters
 {
@@ -23,7 +24,7 @@ namespace PPTS.Data.Orders.Adapters
             return ConnectionDefine.PPTSOrderConnectionName;
         }
 
-        public ShoppingCartCollection Load(params string [] cartIds)
+        public ShoppingCartCollection Load(params string[] cartIds)
         {
             return LoadByInBuilder(new InLoadingCondition(w => w.AppendItem(cartIds), "CartID"));
         }
@@ -31,6 +32,7 @@ namespace PPTS.Data.Orders.Adapters
         protected override void BeforeInnerUpdateInContext(ShoppingCart data, SqlContextItem sqlContext, Dictionary<string, object> context)
         {
             base.BeforeInnerUpdateInContext(data, sqlContext, context);
+
             var wcondition = new WhereLoadingCondition(w => w.AppendItem("CustomerID", data.CustomerID).AppendItem("ProductID", data.ProductID).AppendItem("OrderType", data.OrderType));
             var builder = new WhereSqlClauseBuilder(LogicOperatorDefine.And);
             wcondition.BuilderAction(builder);
@@ -39,6 +41,7 @@ namespace PPTS.Data.Orders.Adapters
             sqlContext.AppendSqlInContext(TSqlBuilder.Instance, TSqlBuilder.Instance.DBStatementSeperator);
             sqlContext.AppendSqlInContext(TSqlBuilder.Instance, sql);
             sqlContext.AppendSqlInContext(TSqlBuilder.Instance, TSqlBuilder.Instance.DBStatementSeperator);
+
         }
 
         protected override void AfterInnerUpdateInContext(ShoppingCart data, SqlContextItem sqlContext, Dictionary<string, object> context)
@@ -47,6 +50,34 @@ namespace PPTS.Data.Orders.Adapters
             sqlContext.AppendSqlInContext(TSqlBuilder.Instance, "select 1;");
             sqlContext.AppendSqlInContext(TSqlBuilder.Instance, TSqlBuilder.Instance.DBStatementSeperator);
             base.AfterInnerUpdateInContext(data, sqlContext, context);
+        }
+
+        public void UpdateCollectionInContext(ShoppingCartCollection collection)
+        {
+            collection.NullCheck("ShoppingCartCollection");
+
+            collection.ForEach(data =>
+            {
+
+                var wcondition = new WhereLoadingCondition(w => w.AppendItem("CustomerID", data.CustomerID).AppendItem("ProductID", data.ProductID).AppendItem("OrderType", data.OrderType));
+                var builder = new WhereSqlClauseBuilder(LogicOperatorDefine.And);
+                wcondition.BuilderAction(builder);
+
+                var sql = string.Format(@"
+if not exists( select 1 from {0} where {1} ) begin
+", this.GetTableName(), builder.ToSqlString(TSqlBuilder.Instance));
+
+                GetSqlContext().AppendSqlWithSperatorInContext(TSqlBuilder.Instance, sql);
+
+                UpdateInContext(data);
+
+                sql = @"
+end
+";
+                GetSqlContext().AppendSqlWithSperatorInContext(TSqlBuilder.Instance, sql);
+
+            });
+
         }
 
     }

@@ -4,6 +4,7 @@
 	<Item source="MCS.Library.Passport.Resources.signout.gif" target="MCS.Library.Passport.Resources.en_US.signout.gif"/>
 
 	<Item source="用户登录" target="User Login"/>
+  <Item source="用户注销" target="User Logoff"/>
 	<Item source="登录名:" target="Login Name"/>
 	<Item source="密码:" target="Password"/>
 	<Item source="语言:" target="Language"/>

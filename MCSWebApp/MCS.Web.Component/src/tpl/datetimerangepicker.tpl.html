@@ -1,0 +1,19 @@
+﻿<div class="input-daterange datepicker input-group mcs-input-group input-xxlarge mcs-padding-left-15 {{css}}" ng-class="{'large':size=='lg'}" ng-style="dateStyle">
+    <input class="form-control date-timepicker" datetime-type ng-model="startDate" ng-readonly="true" clear-min-date name="start" type="text" ng-class="{'mcs-noborder-right':!(disabled=='before'||disabled=='both')}" ng-disabled="disabled=='before'||disabled=='both'" placeholder="{{startText}}" onkeydown="return false;" onpaste="return false;" oncontextmenu="return false;">
+    <span class="input-group-addon mcs-noborder-left mcs-border-right mcs-nobg" ng-show="!(disabled=='before'||disabled=='both')">
+        <i class="fa fa-remove bigger-110"></i>
+    </span>
+    <span class="input-group-addon mcs-noborder-left mcs-border-right">
+        <i class="fa fa-clock-o bigger-110"></i>
+    </span>
+    <span class="input-group-addon mcs-noborder-right">
+        <i class="ace-icon fa fa-arrow-right icon-on-right"></i>
+    </span>
+    <input class="form-control date-timepicker" datetime-type ng-model="endDate" ng-readonly="true" clear-min-date name="end" type="text" ng-class="{'mcs-noborder-right':!(disabled=='after'||disabled=='both')}" ng-disabled="disabled=='after'||disabled=='both'" placeholder="{{endText}}" onkeydown="return false;" onpaste="return false;" oncontextmenu="return false;">
+    <span class="input-group-addon mcs-noborder-left mcs-border-right mcs-nobg" ng-show="!(disabled=='after'||disabled=='both')">
+        <i class="fa fa-remove bigger-110"></i>
+    </span>
+    <span class="input-group-addon mcs-noborder-left mcs-border-right">
+        <i class="fa fa-clock-o bigger-110"></i>
+    </span>
+</div>

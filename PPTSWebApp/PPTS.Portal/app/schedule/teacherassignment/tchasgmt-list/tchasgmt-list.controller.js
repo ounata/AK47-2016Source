@@ -3,17 +3,17 @@ define([ppts.config.modules.schedule,
         ppts.config.dataServiceConfig.teacherAssignmentDataService],
         function (schedule) {
             schedule.registerController('tchAsgmtListController', [
-                '$scope', 'dataSyncService', 'teacherAssignmentDataService', 'mcsDialogService', '$state',
-                function ($scope, dataSyncService, teacherAssignmentDataService, mcsDialogService, $state) {
+                '$scope', 'dataSyncService', 'teacherAssignmentDataService', '$state', 'utilService', 'teacherUnAssignmentDataHeader',
+                function ($scope, dataSyncService, teacherAssignmentDataService, $state, utilService, teacherUnAssignmentDataHeader) {
                     var vm = this;
                     vm.criteria = vm.criteria || {};
-                    vm.criteria.gradeMemo = '';
-                    vm.criteria.subjectMemo = '';
-                    vm.criteria.isFullTime = '';
-                    vm.criteria.gender = '';
-                    vm.criteria.teacherName = '';
+                    //vm.criteria.gradeMemo = '';
+                    //vm.criteria.subjectMemo = '';
+                    //vm.criteria.isFullTime = '';
+                    //vm.criteria.gender = '';
+                    //vm.criteria.teacherName = '';
 
-                    vm.age = '';
+                    vm.criteria.age = '';
 
                     vm.ageCollection = new Array();
                     vm.ageCollection.push({ key: '30-', value: '30-' })
@@ -21,81 +21,93 @@ define([ppts.config.modules.schedule,
                     vm.ageCollection.push({ key: '50-', value: '50-' })
                     vm.ageCollection.push({ key: '50+', value: '50+' })
 
-
-                    vm.data = {
-                        selection: 'radio',
-                        rowsSelected: [],
-                        keyFields: ['teacherID'],
-                        headers: [{
-                            field: "teacherName",
-                            name: "教师姓名",
-                            template: '<span>{{row.teacherName}}</span>'
-                        }, {
-                            field: "teacherCode",
-                            name: "员工编号",
-                            template: '<span>{{row.teacherCode}}</span>'
-                        }, {
-                            field: "jobOrgName",
-                            name: "学科组",
-                            template: '<span>{{row.jobOrgName }}</span>'
-                        }, {
-                            field: "isFullTime",
-                            name: "岗位性质",
-                            template: '<span>{{row.isFullTime | teacherType }}</span>'
-                        }, {
-                            field: "gender",
-                            name: "性别",
-                            template: '<span>{{row.gender | gender}}</span>'
-                        }, {
-                            field: "gradeMemo",
-                            name: "授课年级",
-                            template: '<span uib-tooltip="{{row.gradeMemo | grade_full}}">{{row.gradeMemo | grade}}</span>',
-                            headerCss: 'datatable-header-align-right',
-                            sortable: false,
-                            description: ''
-                        }, {
-                            field: "subjectMemo",
-                            name: "授课科目",
-                            template: '<span uib-tooltip="{{row.subjectMemo | subject_full}}">{{row.subjectMemo | subject}}</span>',
-                            headerCss: 'datatable-header-align-right',
-                            sortable: false,
-                            description: ''
-                        }],
-                        pager: {
-                            pageIndex: 1,
-                            pageSize: 20,
-                            totalCount: -1,
-                            pageChange: function () {
-                                dataSyncService.initCriteria(vm);
-                                teacherAssignmentDataService.getTeacherListPaged(vm.criteria, function (result) {
-                                    vm.data.rows = result.pagedData;
-                                });
-                            }
-                        },
-                        orderBy: [{ dataField: 'teacherCode', sortDirection: 1 }]
-                    }
+                    // 配置数据表头 
+                    dataSyncService.configDataHeader(vm, teacherUnAssignmentDataHeader, teacherAssignmentDataService.getTeacherListPaged, function () {
+                        $scope.$broadcast('dictionaryReady');
+                    });
 
                     // 页面初始化加载或重新搜索时查询
                     vm.search = function () {
-
-                        dataSyncService.initCriteria(vm);
-                        teacherAssignmentDataService.getTeacherList(vm.criteria, function (result) {
-                            vm.data.rows = result.queryResult.pagedData;
-
-                            dataSyncService.updateTotalCount(vm, result.queryResult);
-
-                            dataSyncService.injectDictData();
+                        dataSyncService.initDataList(vm, teacherAssignmentDataService.getTeacherList, function () {
                             dataSyncService.injectDictData(mcs.util.mapping(vm.ageCollection, { key: 'key', value: 'value' }, 'AgeCollection'));
-                         
                             $scope.$broadcast('dictionaryReady');
-                        }, function (error) {
                         });
                     };
                     vm.search();
 
+                    //vm.data = {
+                    //    selection: 'radio',
+                    //    rowsSelected: [],
+                    //    keyFields: ['teacherID'],
+                    //    headers: [{
+                    //        field: "teacherName",
+                    //        name: "教师姓名",
+                    //        template: '<span>{{row.teacherName}}</span>'
+                    //    }, {
+                    //        field: "teacherCode",
+                    //        name: "员工编号",
+                    //        template: '<span>{{row.teacherCode}}</span>'
+                    //    }, {
+                    //        field: "jobOrgName",
+                    //        name: "学科组",
+                    //        template: '<span>{{row.jobOrgName }}</span>'
+                    //    }, {
+                    //        field: "isFullTime",
+                    //        name: "岗位性质",
+                    //        template: '<span>{{row.isFullTime | teacherType }}</span>'
+                    //    }, {
+                    //        field: "gender",
+                    //        name: "性别",
+                    //        template: '<span>{{row.gender | gender}}</span>'
+                    //    }, {
+                    //        field: "gradeMemo",
+                    //        name: "授课年级",
+                    //        template: '<span uib-popover="{{row.gradeMemo | grade_full}}" popover-trigger="mouseenter">{{row.gradeMemo | grade}}</span>',
+                    //        headerCss: 'datatable-header-align-right',
+                    //        sortable: false,
+                    //        description: ''
+                    //    }, {
+                    //        field: "subjectMemo",
+                    //        name: "授课科目",
+                    //        template: '<span uib-popover="{{row.subjectMemo | subject_full}}" popover-trigger="mouseenter">{{row.subjectMemo | subject}}</span>',
+                    //        headerCss: 'datatable-header-align-right',
+                    //        sortable: false,
+                    //        description: ''
+                    //    }],
+                    //    pager: {
+                    //        pageIndex: 1,
+                    //        pageSize: 20,
+                    //        totalCount: -1,
+                    //        pageChange: function () {
+                    //            dataSyncService.initCriteria(vm);
+                    //            teacherAssignmentDataService.getTeacherListPaged(vm.criteria, function (result) {
+                    //                vm.data.rows = result.pagedData;
+                    //            });
+                    //        }
+                    //    },
+                    //    orderBy: [{ dataField: 'teacherCode', sortDirection: 1 }]
+                    //}
+
+                    // 页面初始化加载或重新搜索时查询
+                    //vm.search = function () {
+                    //    dataSyncService.initCriteria(vm);
+                    //    teacherAssignmentDataService.getTeacherList(vm.criteria, function (result) {
+                    //        if (result.msg != 'ok'){
+                    //            vm.showMsg(result.msg);
+                    //            return;
+                    //        }
+                    //        vm.data.rows = result.queryResult.pagedData;
+                    //        dataSyncService.updateTotalCount(vm, result.queryResult);
+                    //        dataSyncService.injectDictData(mcs.util.mapping(vm.ageCollection, { key: 'key', value: 'value' }, 'AgeCollection'));
+                         
+                    //        $scope.$broadcast('dictionaryReady');
+                    //    }, function (error) {
+                    //    });
+                    //};
+                    //vm.search();
+
                     vm.tchAssignClick = function () {
-                        if (vm.data.rowsSelected[0] == undefined) {
-                            vm.showMsg("请选择一个教师");
+                        if (!utilService.selectOneRow(vm)) {
                             return;
                         }
                         var teacherName = '',teacherJobID = '';
@@ -139,9 +151,9 @@ define([ppts.config.modules.schedule,
                     };
 
 
-                    vm.showMsg = function (msg) {
-                        mcsDialogService.error({ title: '提示信息', message: msg });
-                    };
+                    //vm.showMsg = function (msg) {
+                    //    mcsDialogService.error({ title: '提示信息', message: msg });
+                    //};
 
                 }]);
         });

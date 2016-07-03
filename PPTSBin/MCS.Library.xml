@@ -511,6 +511,59 @@
             <param name="index"></param>
             <returns></returns>
         </member>
+        <member name="T:MCS.Library.Caching.CacheNotifyGroupConfigurationElement">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Caching.CacheNotifyGroupConfigurationElement.Queues">
+            <summary>
+            通知项
+            </summary>
+        </member>
+        <member name="T:MCS.Library.Caching.CacheNotifyGroupConfigurationElementCollection">
+            <summary>
+            通知组的集合
+            </summary>
+        </member>
+        <member name="T:MCS.Library.Caching.CacheNotifySettings">
+            <summary>
+            UDP Cache通知时的分组配置
+            </summary>
+        </member>
+        <member name="M:MCS.Library.Caching.CacheNotifySettings.GetConfig">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:MCS.Library.Caching.CacheNotifySettings.NotifyGroups">
+            <summary>
+            通知项的组
+            </summary>
+        </member>
+        <member name="M:MCS.Library.Caching.CacheNotifySettings.GetQueueNamesInGroup(System.String)">
+            <summary>
+            得到某个group下的UriConfigurationElement
+            </summary>
+            <param name="groupName"></param>
+            <returns></returns>
+        </member>
+        <member name="T:MCS.Library.Caching.CacheNotifyQueueConfigurationElement">
+            <summary>
+            通知项配置
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Caching.CacheNotifyQueueConfigurationElement.QueueName">
+            <summary>
+            Cache队列的
+            </summary>
+        </member>
+        <member name="T:MCS.Library.Caching.CacheNotifyQueueConfigurationElementCollection">
+            <summary>
+            通知项的集合
+            </summary>
+        </member>
         <member name="T:MCS.Library.Caching.CacheNotifierSettings">
             <summary>
             Cache通知的附加设置
@@ -603,6 +656,14 @@
             从byte[]还原CacheNotifyData
             </summary>
             <param name="buffer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MCS.Library.Caching.CacheNotifyData.FromSettings(System.String,MCS.Library.Caching.CacheNotifyType)">
+            <summary>
+            
+            </summary>
+            <param name="groupName"></param>
+            <param name="notifyType"></param>
             <returns></returns>
         </member>
         <member name="P:MCS.Library.Caching.CacheNotifyData.NotifyType">
@@ -3115,6 +3176,21 @@
             <param name="groups">SectionGroup</param>
             <returns>ConfigurationSection</returns>
         </member>
+        <member name="T:MCS.Library.Configuration.ConnectionStringConfigurationElementBase">
+            <summary>
+            用于连接串的配置项
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Configuration.ConnectionStringConfigurationElementBase.ConnectionString">
+            <summary>
+            连接串属性
+            </summary>
+        </member>
+        <member name="T:MCS.Library.Configuration.ConnectionStringConfigurationElementBaseCollection">
+            <summary>
+            用于连接串的配置项集合
+            </summary>
+        </member>
         <member name="T:MCS.Library.Configuration.DeluxeConfigurationSection">
             <summary>
             配置节的基类。允许不识别的属性存在
@@ -4067,6 +4143,11 @@
         <member name="P:MCS.Library.Core.ActionContextBase`1.ExistsInContext">
             <summary>
             是否在上下文中存在
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Core.ActionContextCache.Instance">
+            <summary>
+            ObjectContextCache的实例，此处必须是属性，动态计算
             </summary>
         </member>
         <member name="T:MCS.Library.Core.ActionContextDescriptionAttribute">
@@ -5746,6 +5827,13 @@
             <param name="enumItem"></param>
             <returns></returns>
         </member>
+        <member name="M:MCS.Library.Core.Extensions.Duration(System.Action)">
+            <summary>
+            得到某个操作的action的执行时间
+            </summary>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
         <member name="T:MCS.Library.Core.MonitorData">
             <summary>
             需要监控和记录日志的性能对象。主要用于计量执行时间
@@ -6898,6 +6986,23 @@
             <param name="fieldInfo"></param>
             <param name="valueType">值类型</param>
             <returns></returns>
+        </member>
+        <member name="M:MCS.Library.Core.DynamicHelper.GetPropertyValue(System.Reflection.PropertyInfo,System.Object)">
+            <summary>
+            得到属性的值。会根据预定义好的属性delegator来获取。如果没有预定义好的，直接使用反射
+            </summary>
+            <param name="pi"></param>
+            <param name="graph"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MCS.Library.Core.DynamicHelper.SetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Object)">
+            <summary>
+            设置属性的值。会根据预定义好的属性delegator来获取。如果没有预定义好的，直接使用反射
+            </summary>
+            <param name="pi"></param>
+            <param name="graph"></param>
+            <param name="value"></param>
+            <returns>返回graph对象，用于连续设置属性值</returns>
         </member>
         <member name="F:MCS.Library.Core.FieldGetMethodDelegateCache.Instance">
             <summary>
@@ -12500,11 +12605,12 @@
             对表达式进行解析的类
             </remarks>
         </member>
-        <member name="M:MCS.Library.Expression.ExpressionParser.Parse(System.String)">
+        <member name="M:MCS.Library.Expression.ExpressionParser.Parse(System.String,System.Boolean)">
             <summary>
             分析表达式，
             </summary>
             <param name="expression">表达式</param>
+            <param name="throwParseException">是否抛出分析的异常，默认为true</param>
             <returns>分析结果</returns>
             <remarks>
             对传入的表达式进行分析
@@ -12632,6 +12738,11 @@
             <param name="callerContext">调用者上下文</param>
             <param name="optimize">最优化选项</param>
             <returns>树结点值</returns>
+        </member>
+        <member name="P:MCS.Library.Expression.ExpressionParser.ParsingContext.ThrowParseException">
+            <summary>
+            是否抛出分析时的异常
+            </summary>
         </member>
         <member name="M:MCS.Library.Expression.ExpressionParser.DoExpression(MCS.Library.Expression.ExpressionParser.ParsingContext)">
             <summary>
@@ -12885,6 +12996,18 @@
             <summary>
             父标识符
             </summary>
+        </member>
+        <member name="M:MCS.Library.Expression.ParseIdentifier.ScanIdentifiers(System.Action{MCS.Library.Expression.ParseIdentifier})">
+            <summary>
+            遍历所有的标识符
+            </summary>
+            <param name="action"></param>
+        </member>
+        <member name="M:MCS.Library.Expression.ParseIdentifier.ScanIdentifiers(System.Func{MCS.Library.Expression.ParseIdentifier,System.Boolean})">
+            <summary>
+            遍历所有的标识符
+            </summary>
+            <param name="func"></param>
         </member>
         <member name="M:MCS.Library.Expression.ParseIdentifier.ToString">
             <summary>
@@ -14902,6 +15025,11 @@
         <member name="M:MCS.Library.Passport.ITicket.SaveToCookie">
             <summary>
             将应用登录信息保存到Cookie中
+            </summary>
+        </member>
+        <member name="M:MCS.Library.Passport.ITicket.SaveToHeader">
+            <summary>
+            Ticket信息保存入Header中
             </summary>
         </member>
         <member name="M:MCS.Library.Passport.ITicket.SaveToXml">

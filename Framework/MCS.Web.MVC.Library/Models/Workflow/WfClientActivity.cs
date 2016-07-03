@@ -29,5 +29,6 @@ namespace MCS.Web.MVC.Library.Models.Workflow
         public string ApproverLogonName { get; set; }
         public DateTime? ApprovalTime { get; set; }
         public string ApprovalElapsedTime { get; set; }
+        public DateTime StartTime { get; set; }
     }
 }

@@ -1,17 +1,18 @@
 ﻿define([ppts.config.modules.customer,
         ppts.config.dataServiceConfig.followDataService],
         function (customer) {
-            customer.registerController('followViewController', ['$scope', '$stateParams', 'followDataViewService',
-                function ($scope, $stateParams, followDataViewService) {
+            customer.registerController('followViewController', ['$scope', '$stateParams', 'dataSyncService', 'followDataService', 'followDataViewService', 'showfollowListDataHeader',
+                function ($scope, $stateParams, dataSyncService, followDataService, followDataViewService, followListDataHeader) {
                     var vm = this;
 
                     // 配置跟列表数据表头
                     (function () {
-                        followDataViewService.configShowFollowListHeaders(vm);
+                        // 配置跟列表数据表头
+                        dataSyncService.configDataHeader(vm, followListDataHeader, followDataService.getPagedFollows);
                         vm.criteria = vm.criteria || {};
                         vm.search = function () {
                             vm.criteria.customerID = ($stateParams.id ? $stateParams.id : $stateParams.customerID);
-                            followDataViewService.initFollowList(vm, function () {
+                            dataSyncService.initDataList(vm, followDataService.getAllFollows, function () {
                                 $scope.$broadcast('dictionaryReady');
                             });
                         };

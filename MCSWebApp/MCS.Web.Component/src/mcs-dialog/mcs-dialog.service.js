@@ -20,40 +20,51 @@
                 title: '请确认',
                 message: '确认进行此操作吗？'
             }
-
         };
 
         this.info = function(options) {
             options = jQuery.extend({
                 title: mcsDialogService.messageConfig.info.title,
-                message: mcsDialogService.messageConfig.info.message
+                message: mcsDialogService.messageConfig.info.message,
+                settings: {
+                    backdrop: 'static'
+                }
             }, options);
 
-            return dialogs.notify(options.title, options.message);
+            return dialogs.notify(options.title, options.message, options.settings);
         };
 
         this.confirm = function(options) {
             options = jQuery.extend({
                 title: mcsDialogService.messageConfig.confirm.title,
-                message: mcsDialogService.messageConfig.confirm.message
+                message: mcsDialogService.messageConfig.confirm.message,
+                settings: {
+                    backdrop: 'static'
+                }
             }, options);
 
-            return dialogs.confirm(options.title, options.message);
+            return dialogs.confirm(options.title, options.message, options.settings);
         };
 
         this.error = function(options) {
             options = jQuery.extend({
                 title: mcsDialogService.messageConfig.error.title,
-                message: mcsDialogService.messageConfig.error.message
+                message: mcsDialogService.messageConfig.error.message,
+                settings: {
+                    backdrop: 'static'
+                }
             }, options);
 
-            return dialogs.error(options.title, options.message);
+            return dialogs.error(options.title, options.message, options.settings);
         };
 
         this.wait = function(options) {
             options = jQuery.extend({
                 title: mcsDialogService.messageConfig.wait.title,
-                message: mcsDialogService.messageConfig.wait.message
+                message: mcsDialogService.messageConfig.wait.message,
+                settings: {
+                    backdrop: 'static'
+                }
             }, options);
 
             return dialogs.wait(options.title, options.message);

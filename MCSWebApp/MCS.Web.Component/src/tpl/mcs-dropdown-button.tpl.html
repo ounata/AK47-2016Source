@@ -5,13 +5,13 @@
     </button>
     <ul class="dropdown-menu dropdown-{{category}}">
         <li ng-repeat="item in items" class="clickable" ng-class="{'dropdown-hover':item.children}">
-            <a ng-if="!item.children" ng-click="item.click(item)">{{item.text}}</a>
+            <a ng-if="!item.children" ng-click="item.click(item)" ppts-job-functions="{{item.permission}}">{{item.text}}</a>
             <a ng-if="item.children">{{item.text}} <span class="ace-icon fa fa-caret-right icon-on-right"></span></a>
             <ul ng-if="item.children" class="dropdown-menu dropdown-menu-left dropdown-{{category}}">
                 <li ng-repeat="child in item.children" class="clickable">
                     <a ng-click="child.click(child)">{{child.text}}</a>
                 </li>
-            </ulng-if="!item.children">
+            </ul>
         </li>
     </ul>
 </div>

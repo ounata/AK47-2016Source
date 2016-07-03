@@ -27,7 +27,7 @@
             })
             .loadRoute($stateProvider, {
                 name: 'ppts.productAdd.onetoone',
-                url: '/onetoone?loadtype=:ltype&typename=:lname',
+                url: '/onetoone?loadtype=:ltype',
                 breadcrumb: {
                     label: '添加产品',
                     parent: 'ppts.product'
@@ -35,7 +35,7 @@
                 templateUrl: 'app/product/productlist/product-add/product-add-onetoone.html',
             }).loadRoute($stateProvider, {
                 name: 'ppts.productAdd.classgroup',
-                url: '/classgroup?loadtype=:ltype&typename=:lname',
+                url: '/classgroup?loadtype=:ltype',
                 breadcrumb: {
                     label: '添加产品',
                     parent: 'ppts.product'
@@ -43,15 +43,15 @@
                 templateUrl: 'app/product/productlist/product-add/product-add-classgroup.html',
             }).loadRoute($stateProvider, {
                 name: 'ppts.productAdd.youxue',
-                url: '/youxue?loadtype=:ltype&typename=:lname',
+                url: '/youxue?loadtype=:ltype',
                 breadcrumb: {
                     label: '添加产品',
                     parent: 'ppts.product'
                 },
                 templateUrl: 'app/product/productlist/product-add/product-add-other.html',
             }).loadRoute($stateProvider, {
-                name: 'ppts.productAdd.wukeshou',
-                url: '/wukeshou?loadtype=:ltype&typename=:lname',
+                name: 'ppts.productAdd.dailizhaosheng',
+                url: '/dailizhaosheng?loadtype=:ltype',
                 breadcrumb: {
                     label: '添加产品',
                     parent: 'ppts.product'
@@ -59,7 +59,7 @@
                 templateUrl: 'app/product/productlist/product-add/product-add-other.html',
             }).loadRoute($stateProvider, {
                 name: 'ppts.productAdd.other',
-                url: '/other?loadtype=:ltype&typename=:lname',
+                url: '/other?loadtype=:ltype',
                 breadcrumb: {
                     label: '添加产品',
                     parent: 'ppts.product'
@@ -86,7 +86,7 @@
             })
             .loadRoute($stateProvider, {
                 name: 'ppts.productCopy.onetoone',
-                url: '/onetoone/:id',
+                url: '/onetoone/?:ltype&:id',
                 breadcrumb: {
                     label: '复制产品',
                     parent: 'ppts.product'
@@ -95,7 +95,7 @@
                 controller: 'productCopyController',
             }).loadRoute($stateProvider, {
                 name: 'ppts.productCopy.classgroup',
-                url: '/classgroup/:id',
+                url: '/classgroup/?:ltype&:id',
                 breadcrumb: {
                     label: '复制产品',
                     parent: 'ppts.product'
@@ -104,7 +104,7 @@
                 controller: 'productCopyController',
             }).loadRoute($stateProvider, {
                 name: 'ppts.productCopy.youxue',
-                url: '/youxue/:id',
+                url: '/youxue/?:ltype&:id',
                 breadcrumb: {
                     label: '复制产品',
                     parent: 'ppts.product'
@@ -112,8 +112,8 @@
                 templateUrl: 'app/product/productlist/product-add/product-add-other.html',
                 controller: 'productCopyController',
             }).loadRoute($stateProvider, {
-                name: 'ppts.productCopy.wukeshou',
-                url: '/wukeshou/:id',
+                name: 'ppts.productCopy.dailizhaosheng',
+                url: '/dailizhaosheng/?:ltype&:id',
                 breadcrumb: {
                     label: '复制产品',
                     parent: 'ppts.product'
@@ -122,7 +122,7 @@
                 controller: 'productCopyController',
             }).loadRoute($stateProvider, {
                 name: 'ppts.productCopy.other',
-                url: '/other/:id',
+                url: '/other/?:ltype&:id',
                 breadcrumb: {
                     label: '复制产品',
                     parent: 'ppts.product'
@@ -144,10 +144,19 @@
                     label: '新增班级',
                     parent: 'ppts'
                 }
+            }).loadRoute($stateProvider, {
+                name: 'ppts.productApprove',
+                url: '/product/approve?processID&activityID&resourceID',
+                templateUrl: 'app/product/productlist/product-approve/product-approve.html',
+                controller: 'productApproveController',
+                breadcrumb: {
+                    label: '产品审批',
+                    parent: 'ppts.product'
+                },
+                dependencies: ['app/product/productlist/product-approve/product-approve.controller']
             });
 
         
-
 
     });
 

@@ -1,6 +1,7 @@
 using MCS.Library.Core;
 using MCS.Library.Data.DataObjects;
 using MCS.Library.Data.Mapping;
+using PPTS.Data.Common.Authorization;
 using PPTS.Data.Common.Entities;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,20 @@ namespace PPTS.Data.Products.Entities
     [Serializable]
     [ORTableMapping("[PM].[Expenses]")]
     [DataContract]
+    #region 数据范围权限(存入识别)
+    [EntityAuth(RecordType = RecordType.Product)]
+    #endregion 
+
+    #region 数据范围权限(数据读取权限)
+    [OwnerRelationScope(Name = "综合服务费管理-本分公司", Functions = "综合服务费管理-本分公司", RecordType = RecordType.Customer)]
+    [OwnerRelationScope(Name = "综合服务费管理-全国", Functions = "综合服务费管理-全国", RecordType = RecordType.Customer)]
+   
+    #endregion
+
+    #region 数据范围权限(编辑操作权限)
+    [OwnerRelationScope(Name = "新增/编辑/删除综合服务费-本分公司", Functions = "新增/编辑/删除综合服务费-本分公司", ActionType = ActionType.Edit, RecordType = RecordType.Customer)]
+    [OwnerRelationScope(Name = "新增/编辑/删除-全国", Functions = "新增/编辑/删除-全国", ActionType = ActionType.Edit, RecordType = RecordType.Customer)]
+    #endregion
     public class Expense
     {
         public Expense()
@@ -125,7 +140,7 @@ namespace PPTS.Data.Products.Entities
         /// <summary>
         /// 创建时间
         /// </summary>
-        [ORFieldMapping("CreateTime")]
+        [ORFieldMapping("CreateTime", UtcTimeToLocal = true)]
         [DataMember]
         public DateTime CreateTime
         {
@@ -158,7 +173,7 @@ namespace PPTS.Data.Products.Entities
         /// <summary>
         /// 最后修改时间
         /// </summary>
-        [ORFieldMapping("ModifyTime")]
+        [ORFieldMapping("ModifyTime", UtcTimeToLocal = true)]
         [DataMember]
         public DateTime ModifyTime
         {

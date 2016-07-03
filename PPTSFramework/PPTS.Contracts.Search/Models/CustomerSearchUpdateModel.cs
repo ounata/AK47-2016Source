@@ -33,5 +33,22 @@ namespace PPTS.Contracts.Search.Models
         /// </summary>
         [DataMember]
         public CustomerSearchUpdateType Type { get; set; }
+
+        public CustomerSearchUpdateModel()
+        {
+
+        }
+
+        public CustomerSearchUpdateModel(string customerID, CustomerSearchUpdateType type)
+        {
+            this.CustomerID = customerID;
+            this.Type = type;
+        }
+
+        public CustomerSearchUpdateModel(string customerID, CustomerSearchUpdateType type, string objectID)
+            : this(customerID, type)
+        {
+            this.ObjectID = objectID;
+        }
     }
 }

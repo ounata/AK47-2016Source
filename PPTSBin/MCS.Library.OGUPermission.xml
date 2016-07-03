@@ -26,6 +26,28 @@
             
             </summary>
         </member>
+        <member name="T:MCS.Library.OGUPermission.Commands.GetRolesPermissions">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:MCS.Library.OGUPermission.Commands.GetRolesPermissions.#ctor(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="name"></param>
+        </member>
+        <member name="M:MCS.Library.OGUPermission.Commands.GetRolesPermissions.Execute(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="argument"></param>
+        </member>
+        <member name="P:MCS.Library.OGUPermission.Commands.GetRolesPermissions.HelperString">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="T:MCS.Library.OGUPermission.Commands.GetUserDetailCommand">
             <summary>
             得到用户的详细信息，包括Properties集合中的每一项
@@ -545,6 +567,21 @@
             
             </summary>
         </member>
+        <member name="T:MCS.Library.OGUPermission.OguConnectionMappingElement">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MCS.Library.OGUPermission.OguConnectionMappingElement.Destination">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:MCS.Library.OGUPermission.OguConnectionMappingElementCollection">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="T:MCS.Library.OGUPermission.OguPermissionSettings">
             <summary>
             组织人员与授权的访问接口的配置信息类
@@ -646,6 +683,21 @@
             连接串的映射
             </summary>
         </member>
+        <member name="T:MCS.Library.OGUPermission.OrganizationMappingElement">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MCS.Library.OGUPermission.OrganizationMappingElement.SourcePath">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MCS.Library.OGUPermission.OrganizationMappingElement.DestinationPath">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="T:MCS.Library.OGUPermission.OrganizationMappingElementCollection">
             <summary>
             
@@ -653,27 +705,18 @@
         </member>
         <member name="M:MCS.Library.OGUPermission.OrganizationMappingElementCollection.DeserializeElement(System.Xml.XmlReader,System.Boolean)">
             <summary>
-            ÖØÔØÐòÁÐ»¯ElementµÄ´úÂë¡£³õÊ¼»¯LevelµÈÊôÐÔ
+            
             </summary>
             <param name="reader"></param>
             <param name="serializeCollectionKey"></param>
-            <remarks>
-            ±¾À´LevelÊôÐÔÊÇ¿ÉÒÔÍ¨¹ýÔÚÀàÊôÐÔÉÏÌí¼Ó[ConfigurationProperty("level", DefaultValue = 3)]À´ÊµÏÖµÄ£¬
-            µ«ÊÇ£¬ÎÒÃÇ·¢ÏÖÔÚÈ«¾ÖÅäÖÃÎÄ¼þÖÐ£¬ÕâÑù±àÂë£¬Ã»ÓÐÈÎºÎÐ§¹û£¨ÐÞ¸ÄÁËÅäÖÃÎÄ¼þÖÐ£¬³ÌÐòÖÐ²»»áÈ¡µ½ÐÂµÄÖµ£©£¬
-            Ä¿Ç°·¢ÏÖÕâÖÖBug³öÏÖÔÚConfigurationElementCollectionµÄÅÉÉúÀàÖÐ¡£
-            ÎªÁË½â¾ö´ËÎÊÌâ£¬ÎÒÃÇÖ»ÄÜÍ¨¹ýÖØÔØDeserializeElement£¬ÔÚÐòÁÐ»¯Õâ¸ö½ÚµãµÄ¹ý³ÌÖÐ£¬ÎªÕâ¸öÀàÌí¼ÓlevelÊôÐÔ£¬
-            ²¢ÇÒÉèÖÃ³õÊ¼Öµ¡£
-            Õâ¸ö·½·¨»á±»µ÷ÓÃ¶à´Î£¬Í¨¹ý¾²Ì¬ÊôÐÔneedReloadDataÀ´ÅÐ¶ÏÊÇ·ñÐèÒª³õÊ¼»¯levelÊôÐÔ¡£
-            needReloadData¿ÉÒÔÓÉ¸¸½ÚµãµÄÐòÁÐ»¯À´ÉèÖÃ¡£
-            </remarks>
         </member>
         <member name="M:MCS.Library.OGUPermission.OrganizationMappingElementCollection.GetMappedPath(System.String,System.String@)">
             <summary>
-            µÃµ½Â·¾¶Ó³ÉäµÄ½á¹û
+            
             </summary>
-            <param name="sourcePath">Ô´Â·¾¶</param>
-            <param name="destPath">Ó³ÉäºóµÄÂ·¾¶£¬Èç¹ûÃ»ÓÐÓ³Éä£¬Ôò·µ»ØÔ´Â·¾¶</param>
-            <returns>ÊÇ·ñÓ³Éä</returns>
+            <param name="sourcePath"></param>
+            <param name="destPath"></param>
+            <returns></returns>
         </member>
         <member name="M:MCS.Library.OGUPermission.OrganizationMappingElementCollection.GetElementKey(System.Configuration.ConfigurationElement)">
             <summary>
@@ -691,36 +734,6 @@
         <member name="P:MCS.Library.OGUPermission.OrganizationMappingElementCollection.Level">
             <summary>
             
-            </summary>
-        </member>
-        <member name="T:MCS.Library.OGUPermission.OrganizationMappingElement">
-            <summary>
-            ¶¥¼¶²¿ÃÅµÄÓ³ÉäÅäÖÃÏî
-            </summary>
-        </member>
-        <member name="P:MCS.Library.OGUPermission.OrganizationMappingElement.SourcePath">
-            <summary>
-            Ô´Â·¾¶
-            </summary>
-        </member>
-        <member name="P:MCS.Library.OGUPermission.OrganizationMappingElement.DestinationPath">
-            <summary>
-            Ä¿±êÂ·¾¶
-            </summary>
-        </member>
-        <member name="T:MCS.Library.OGUPermission.OguConnectionMappingElement">
-            <summary>
-            ¿Í»§¶Ë´«µÝµ½Web·þÎñµÄÁ¬½Ó´®Ó³ÉäÐÅÏ¢
-            </summary>
-        </member>
-        <member name="P:MCS.Library.OGUPermission.OguConnectionMappingElement.Destination">
-            <summary>
-            Ä¿±êÁ¬½Ó´®
-            </summary>
-        </member>
-        <member name="T:MCS.Library.OGUPermission.OguConnectionMappingElementCollection">
-            <summary>
-            ¿Í»§¶Ë´«µÝµ½Web·þÎñµÄÁ¬½Ó´®Ó³ÉäÐÅÏ¢¼¯ºÏ
             </summary>
         </member>
         <member name="T:MCS.Library.OGUPermission.IApplicationMemberPropertyAccessible">
@@ -830,6 +843,14 @@
             <param name="application"></param>
             <returns></returns>
         </member>
+        <member name="M:MCS.Library.OGUPermission.IPermissionImplInterface.GetRolesPermissions(MCS.Library.OGUPermission.IApplication,System.String)">
+            <summary>
+            得到应用下某个角色对应的权限
+            </summary>
+            <param name="application"></param>
+            <param name="roleCodeNames"></param>
+            <returns></returns>
+        </member>
         <member name="F:MCS.Library.OGUPermission.AppAdminMechanism.Instance">
             <summary>
             得到实例
@@ -897,6 +918,14 @@
             
             </summary>
             <param name="application"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MCS.Library.OGUPermission.AppAdminMechanism.GetRolesPermissions(MCS.Library.OGUPermission.IApplication,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="application"></param>
+            <param name="roleCodeNames"></param>
             <returns></returns>
         </member>
         <member name="T:MCS.Library.OGUPermission.IOguImplInterface">
@@ -3156,6 +3185,14 @@
             </summary>
             <param name="appCodeName">应用的英文标识</param>
             <param name="funcCodeNames">功能的英文标识，多个时用逗号分隔</param>
+            <returns>指定应用系统中，具有指定功能的角色</returns>
+        </member>
+        <member name="M:MCS.Library.OGUPermission.AppAdminServiceBroker.GetRolesFunctions(System.String,System.String)">
+            <summary>
+            查找指定应用中，具有指定功能的角色。
+            </summary>
+            <param name="appCodeName">应用的英文标识</param>
+            <param name="roleCodeNames">功能的英文标识，多个时用逗号分隔</param>
             <returns>指定应用系统中，具有指定功能的角色</returns>
         </member>
         <member name="M:MCS.Library.OGUPermission.AppAdminServiceBroker.GetFunctionsUsers(System.String,System.String,System.String,MCS.Library.OGUPermission.DelegationMaskType,MCS.Library.OGUPermission.SidelineMaskType,System.String)">

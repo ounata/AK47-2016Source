@@ -24,6 +24,7 @@ SELECT [CustomerID]
       ,[ModifyTime]
 	  ,[VersionStartTime]
 	  ,[VersionEndTime]
+	  ,[TenantCode]
   FROM [CM].[Accounts]
   WHERE   (VersionEndTime = CONVERT(DATETIME, '99990909 00:00:00', 112))
 

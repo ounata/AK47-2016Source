@@ -7,22 +7,7 @@ using System.Threading.Tasks;
 
 namespace PPTS.Data.Products
 {
-    /// <summary>
-    /// 产品分类
-    /// </summary>
-    public enum CategoryType
-    {
-        [EnumItemDescription("一对一")]
-        OneToOne = 1,
-        [EnumItemDescription("班组")]
-        CalssGroup = 2,
-        [EnumItemDescription("游学")]
-        YouXue = 3,
-        [EnumItemDescription("其他")]
-        Other = 4,
-        [EnumItemDescription("无课收合作")]
-        WuKeShou = 5,
-    }
+    
 
     /// <summary>
     /// 产品状态
@@ -214,23 +199,6 @@ namespace PPTS.Data.Products
         /// </summary>
         [EnumItemDescription("已删除")]
         Deleted = 6
-    }
-
-    /// <summary>
-    /// 折扣类型
-    /// </summary>
-    public enum DiscountTypeDefine {
-
-        [EnumItemDescription("无折扣")]
-        None,
-        [EnumItemDescription("拓路")]
-        Tunland,
-        [EnumItemDescription("特殊")]
-        Special,
-        [EnumItemDescription("买赠")]
-        Present,
-        [EnumItemDescription("其它")]
-        Other
     }
 
 }

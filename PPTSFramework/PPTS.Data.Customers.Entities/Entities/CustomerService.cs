@@ -384,6 +384,17 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 下一处理岗类型（分客服专员，分客服经理，总客服经理...）
         /// </summary>
+        [ORFieldMapping("HandlerJobName")]
+        [DataMember]
+        public string HandlerJobName
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         [ORFieldMapping("HandlerJobType")]
         [DataMember]
 		public string HandlerJobType

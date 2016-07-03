@@ -1,6 +1,7 @@
 ﻿using MCS.Library.Caching;
 using MCS.Library.Data.Adapters;
 using MCS.Library.Data.Builder;
+using MCS.Library.Data.Configuration;
 using MCS.Library.Data.DataObjects;
 using MCS.Library.Passport;
 using MCS.Library.SOA.DataObjects;

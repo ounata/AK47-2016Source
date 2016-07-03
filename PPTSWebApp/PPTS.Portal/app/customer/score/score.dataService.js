@@ -76,9 +76,9 @@
         { name: '考试年级：', template: '<ppts-radiobutton-group category="grade" model="vm.criteria.scoreGrade" parent="vm.criteria.studyStage" show-all="true" async="false" />' },
         { name: '考试科目：', template: '<ppts-radiobutton-group category="examSubject" model="vm.criteria.subject" parent="vm.criteria.studyStage" show-all="true" async="false" />' },
         { name: '考试类型：', template: '<ppts-radiobutton-group category="scoreType" model="vm.criteria.scoreType" parent="vm.criteria.studyStage" show-all="true" async="false" />&nbsp;<span ng-show="vm.criteria.scoreType == 16"><input type="text" ng-model="vm.criteria.otherScoreTypeName" class="mcs-input-small" /></span>' },
-        { name: '录取院校类型：', template: '<ppts-radiobutton-group category="admissionType" model="vm.criteria.admissionType" parent="vm.criteria.scoreType" show-all="true" async="false" />', show: "vm.criteria.scoreType==6 || vm.criteria.scoreType==10 || vm.criteria.scoreType==14" },
-        { name: '学员类别：', template: '<ppts-radiobutton-group category="examCustomerType" model="vm.criteria.studentType" parent="vm.criteria.scoreType" show-all="true" async="false" />', show: "vm.criteria.scoreType == 14" },
-        { name: '成绩范围：', template: '<ppts-datarange min="vm.criteria.minPaperScore" max="vm.criteria.maxPaperScore" min-text="最低成绩" max-text="最高成绩" unit="分" css="col-xs-4 col-sm-4" />' }
+        { name: '录取院校类型：', template: '<ppts-radiobutton-group category="admissionType" model="vm.criteria.admissionType" parent="vm.criteria.scoreType" show-all="true" async="false" />', hide: "!(vm.criteria.scoreType==6 || vm.criteria.scoreType==10 || vm.criteria.scoreType==14)" },
+        { name: '学员类别：', template: '<ppts-radiobutton-group category="examCustomerType" model="vm.criteria.studentType" parent="vm.criteria.scoreType" show-all="true" async="false" />', hide: "vm.criteria.scoreType != 14" },
+        { name: '成绩范围：', template: '<mcs-datarange min="vm.criteria.minPaperScore" max="vm.criteria.maxPaperScore" min-text="最低成绩" max-text="最高成绩" unit="分" css="col-xs-4 col-sm-4" />' }
     ]);
 
     customer.registerValue('scoresListDataHeader', {
@@ -95,11 +95,8 @@
         }, {
             field: "customerName",
             name: "学生姓名",
-            template: '<a ui-sref="ppts.student-view.profiles({id:row.customerID,prev:\'ppts.score\'})">{{row.customerName}}</a>'
+            template: '<a ui-sref="ppts.student-view.score({id:row.customerID,prev:\'ppts.score\'})">{{row.customerName}}</a>'
         }, {
-            field: "customerCode",
-            name: "学员编号"
-        },  {
             field: "scoreGrade",
             name: "考试年级",
             template: '<span>{{ row.scoreGrade | grade | normalize }}</span>'
@@ -110,14 +107,11 @@
         }, {
             field: "scoreType",
             name: "考试类型",
-            template: '<span>{{ row.scoreType | scoreType | normalize }}</span>'
-        }, {
-            field: "examineMonth",
-            name: "考试月份",
-            template: '<span>{{ row.examineMonth | examMonth | normalize }}</span>'
+            template: '<span><a ui-sref="ppts.score-view({id: row.scoreID, prev: \'ppts.score\'})">{{ row.scoreType | scoreType | normalize }}</a><span>'
+
         }, {
             field: "subject",
-            name: "科目",
+            name: "考试科目",
             template: '<span>{{ row.subject | examSubject | normalize }}</span>'
         }, {
             field: "realScore",
@@ -143,9 +137,6 @@
             field: "teacherName",
             name: "任课教师"
         }, {
-            field: "teacherOACode",
-            name: "教师OA"
-        }, {
             field: "isStudyHere",
             name: "是否在学大辅导",
             template: '<span>{{ row.isStudyHere | ifElse }}</span>'
@@ -154,26 +145,8 @@
             name: "家长满意度",
             template: '<span>{{ row.satisficing | scoreSatisficing | normalize }}</span>'
         }, {
-            field: "educatorName",
-            name: "学管师"
-        }, {
-            field: "constantStaffName",
-            name: "咨询师"
-        }, {
             field: "customerStatus",
-            name: "当前状态"
-        }, {
-            field: "studentType",
-            name: "学员类型",
-            template: '<span>{{ row.studentType | examCustomerType | normalize }}</span>'
-        }, {
-            field: "admissionType",
-            name: "录取院校类别",
-            template: '<span>{{ row.admissionType | admissionType | normalize }}</span>'
-        }, {
-            field: "isKeyCollege",
-            name: "属985或211院校",
-            template: '<span>{{ row.isKeyCollege | ifElse }}</span>'
+            name: "学员状态"
         }],
         pager: {
             pageIndex: 1,
@@ -193,21 +166,21 @@
         }, {
             field: "teacherName",
             name: "任课教师",
-            template: '<span ng-if="row.canEdit"><ppts-select category="scoreTeacher" filter="{{row.subject}}" prop="subject" model="row.teacherID" value="row.teacherName" ng-show="row.subject != \'60\'" callback=" row.teacherOrgID=\'\';row.teacherOrgName=\'\'; " async="false" custom-style="width:150px;"/></span>'
+            template: '<span ng-if="row.canEdit"><mcs-select category="scoreTeacher" filter="{{row.subject}}" prop="subject" model="row.teacherID" value="row.teacherName" ng-show="row.subject != \'60\'" callback=" row.teacherOrgID=\'\';row.teacherOrgName=\'\'; " async="false" custom-style="width:150px;"/></span>'
                     + '<span ng-if="!row.canEdit">{{row.teacherName}}</span>'
                     + '<small><span ng-show="row.subject == \'60\'">总得分={{vm.totalRealScore()}}</span><br /><span ng-show="row.subject == \'60\'">总卷面分={{vm.totalPaperScore()}}</span></small>'
         },{
             field: "jobOrgShortName",
             name: "学科组",
-            template: '<span ng-if="row.canEdit"><ppts-select category="scoreTeacherOrgName" filter="{{row.teacherID}}" prop="teacherID" show-all="false" model="row.teacherOrgID" value="row.teacherOrgName" ng-show="row.subject != \'60\'" async="false" style="width:150px;"/></span>'
+            template: '<span ng-if="row.canEdit"><mcs-select category="scoreTeacherOrgName" filter="{{row.teacherID}}" prop="teacherID" is-dynamic="true" model="row.teacherOrgID" value="row.teacherOrgName" ng-show="row.subject != \'60\'" async="false" style="width:150px;"/></span>'
                     + '<span ng-if="!row.canEdit">{{row.teacherOrgName}}</span>'
         }, {
             field: 'realScore',
             name: '得分',
-            template: '<span ng-if="row.canEdit"><input type="text" ng-model="row.realScore" onafterpaste="mcs.util.limit(this)" onkeyup="mcs.util.limit(this)" class="mcs-input-small"/></span>'
+            template: '<span ng-if="row.canEdit"><mcs-input model="row.realScore" datatype="number" class="mcs-input-small" /></span>'
                     + '<span ng-if="!row.canEdit">'
                         + '<span ng-if="row.subject ==\'60\'">'
-                            + '<span ng-if="row.canEidt_totalScore"><input type="text" ng-model="row.realScore" onafterpaste="mcs.util.limit(this)" onkeyup="mcs.util.limit(this)" class="mcs-input-small"/></span>'
+                            + '<span ng-if="row.canEidt_totalScore"><mcs-input model="row.realScore" datatype="number" class="mcs-input-small"/></span>'
                             + '<span ng-if="!row.canEidt_totalScore">{{row.realScore}}</span>'
                         + '</span>'
                         + '<span ng-if="row.subject !=\'60\'">{{row.realScore}}</span>'
@@ -215,10 +188,10 @@
         }, {
             field: 'paperScore',
             name: '卷面分',
-            template: '<span ng-if="row.canEdit"><input type="text" ng-model="row.paperScore" onafterpaste="mcs.util.limit(this)" onkeyup="mcs.util.limit(this)" class="mcs-input-small"/></span>'
+            template: '<span ng-if="row.canEdit"><mcs-input model="row.paperScore" datatype="number" class="mcs-input-small"/></span>'
                     + '<span ng-if="!row.canEdit">'
                         + '<span ng-if="row.subject ==\'60\'">'
-                            + '<span ng-if="row.canEidt_totalScore"><input type="text" ng-model="row.paperScore" onafterpaste="mcs.util.limit(this)" onkeyup="mcs.util.limit(this)" class="mcs-input-small"/></span>'
+                            + '<span ng-if="row.canEidt_totalScore"><mcs-input model="row.paperScore" datatype="number" class="mcs-input-small"/></span>'
                             + '<span ng-if="!row.canEidt_totalScore">{{row.paperScore}}</span>'
                         + '</span>'
                         + '<span ng-if="row.subject !=\'60\'">{{row.paperScore}}</span>'
@@ -226,29 +199,29 @@
         }, {
             field: 'classRank',
             name: '班级名次',
-            template: '<span ng-if="row.canEdit"><input type="text" ng-model="row.classRank" onafterpaste="mcs.util.limit(this)" onkeyup="mcs.util.limit(this)" class="mcs-input-small"/></span>'
+            template: '<span ng-if="row.canEdit"><mcs-input model="row.classRank" datatype="int" class="mcs-input-small"/></span>'
                     + '<span ng-if="!row.canEdit">{{row.classRank}}</span>'
         }, {
             field: 'gradeRank',
             name: '年级名次',
-            template: '<span ng-if="row.canEdit"><input type="text" ng-model="row.gradeRank" onafterpaste="mcs.util.limit(this)" onkeyup="mcs.util.limit(this)" class="mcs-input-small"/></span>'
+            template: '<span ng-if="row.canEdit"><mcs-input model="row.gradeRank" datatype="int" class="mcs-input-small"/></span>'
                     + '<span ng-if="!row.canEdit">{{row.gradeRank}}</span>'
         }, {
             field: 'scoreChangeType',
             name: '成绩升降',
-            template: '<span ng-if="row.canEdit"><ppts-select category="scoreChangeType" model="row.scoreChangeType" async="false" custom-style="width:150px;"/></span>'
+            template: '<span ng-if="row.canEdit"><mcs-select category="scoreChangeType" model="row.scoreChangeType" async="false" custom-style="width:150px;"/></span>'
                     + '<span ng-if="!row.canEdit">{{row.scoreChangeType | scoreChangeType}}</span>'
         }, {
             field: 'satisficing',
             name: '家长满意度',
-            template: '<span ng-if="row.canEdit"><ppts-select category="scoreSatisficing" model="row.satisficing" async="false" custom-style="width:200px;"/></span>'
+            template: '<span ng-if="row.canEdit"><mcs-select category="scoreSatisficing" model="row.satisficing" async="false" custom-style="width:200px;"/></span>'
                     + '<span ng-if="!row.canEdit">{{row.satisficing | scoreSatisficing}}</span>'
         }, {
             field: 'isStudyHere',
             name: '是否在学大辅导',
             template: '<span ng-if="row.canEdit">'
-                        + '<span ng-if="row.subject !=\'60\'"><ppts-select category="ifElse" model="row.isStudyHere" async="false" custom-style="width:150px;"/></span>'
-                        + '<span ng-if="row.subject ==\'60\'"><input type="text" ng-model="vm.score.classPeoples | normalize" placeholder="班级人数" onafterpaste="mcs.util.limit(this)" onkeyup="mcs.util.limit(this)"/></span>'
+                        + '<span ng-if="row.subject !=\'60\'"><mcs-select category="ifElse" model="row.isStudyHere" async="false" custom-style="width:150px;"/></span>'
+                        + '<span ng-if="row.subject ==\'60\'"><mcs-input model="vm.score.classPeoples | normalize" placeholder="班级人数" datatype="int" /></span>'
                     + '</span>'
                     + '<span ng-if="!row.canEdit">'
                         + '<span ng-if="row.subject !=\'60\'">{{row.isStudyHere | ifElse}}</span>'
@@ -310,37 +283,9 @@
         function ($state, scoreDataService, dataSyncService, mcsDialogService) {
             var service = this;
 
-            // 配置成绩列表表头
-            service.configScoresListHeaders = function (vm, header) {
-                vm.data = header;
-
-                vm.data.pager.pageChange = function () {
-                    dataSyncService.initCriteria(vm);
-                    scoreDataService.getPagedScores(vm.criteria, function (result) {
-                        vm.data.rows = result.pagedData;
-                    });
-                }
-            };
-
             // 录入成绩表头
             service.configScoresEditHeaders = function (vm, header) {
                 vm.data = header;
-            };
-
-            service.initCustomerScoresList = function (vm, callback) {
-                dataSyncService.initCriteria(vm);
-                scoreDataService.getAllScores(vm.criteria, function (result) {
-                    vm.isLastDayOfMonth = result.isLastDayOfMonth;
-                    vm.data.rows = result.queryResult.pagedData;
-                    dataSyncService.injectDictData({
-                        c_codE_ABBR_Score_Satisficing: [{ key: '1', value: '对成绩满意' }, { key: '0', value: '对成绩不满意' }]
-                    });
-                    dataSyncService.injectPageDict(['ifElse']);
-                    dataSyncService.updateTotalCount(vm, result.queryResult);
-                    if (ng.isFunction(callback)) {
-                        callback();
-                    }
-                });
             };
 
             service.initWatchExps = function ($scope, vm, watchExps) {

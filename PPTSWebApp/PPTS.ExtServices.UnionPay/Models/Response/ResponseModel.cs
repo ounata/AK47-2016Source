@@ -6,10 +6,10 @@ namespace PPTS.ExtServices.UnionPay.Models.Response
     public class ResponseModel
     {
         /// <summary>
-        /// 成功或者失败的标识，0成功，1失败
+        /// 成功或者失败的标识，true成功，false失败
         /// </summary>
         [DataMember]
-        public string Flag
+        public bool Flag
         { get; set; }
 
         /// <summary>

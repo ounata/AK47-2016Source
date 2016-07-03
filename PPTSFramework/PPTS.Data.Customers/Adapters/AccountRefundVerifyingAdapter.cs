@@ -42,7 +42,7 @@ namespace PPTS.Data.Customers.Adapters
         private void InitData(AccountRefundVerifying data)
         {
             if (data.VerifyID.IsNullOrEmpty())
-                data.VerifyID = System.Guid.NewGuid().ToString();
+                data.VerifyID = UuidHelper.NewUuidString();
         }
     }
 }

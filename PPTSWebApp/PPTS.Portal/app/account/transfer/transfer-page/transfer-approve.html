@@ -1,123 +1,109 @@
-﻿<form class="form-horizontal">
-    <div class="widget-box">
-        <div class="widget-header">
-            <h4 class="col-sm-8">转让审批</h4>
-        </div>
-        <div class="widget-body">
-            <div class="clearfix form-actions mcs-form-actions">
-                <div>
-                    <mcs-button category="approve" text="通过" click="vm.approve()" ng-disabled="!vm.apply.canApprove"></mcs-button>
-                    <mcs-button category="approve" text="拒绝" click="vm.refuse()" ng-disabled="!vm.apply.canApprove"></mcs-button>
-                </div>
-            </div>      
-            <div class="alert alert-block alert-danger" ng-show="vm.errorMessage">
-                <button type="button" class="close" data-dismiss="alert">
-                    <i class="ace-icon fa fa-times"></i>
-                </button>
-                <i class="ace-icon fa fa-warning"></i>
-                {{vm.errorMessage}}
-            </div>
-            <div class="page-header">
-                <span>转出学员</span>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-6">
-                    <mcs-label text="当前校区：" css="col-sm-3" />
-                    <div class="col-sm-9">
-                        {{ vm.apply.campusName }}
+﻿<div class="portlet light">
+    <div class="portlet-body form">
+        <form class="form-horizontal form-bordered form-row-stripped" action="#" role="form" novalidate>
+            <div class="form-body">
+                <h4 class="form-section"><i class="ace-icon fa fa-th"></i> 审批内容<span class="section-helper">【转让】</span></h4>
+                <div class="form-group">
+                    <mcs-label text="当前校区" css="col-sm-3" />
+                    <div class="col-sm-6">
+                        <p class="form-control-static">
+                            {{ vm.apply.campusName }}
+                        </p>
                     </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-6">
-                    <mcs-label text="当前学员：" css="col-sm-3" />
-                    <div class="col-sm-9">
-                        {{ vm.apply.customerName }}（{{vm.apply.customerCode}}）
+                <div class="form-group">
+                    <mcs-label text="当前学员" css="col-sm-3" />
+                    <div class="col-sm-6">
+                        <p class="form-control-static">
+                            <a ui-sref="ppts.student-view.profiles({id:vm.apply.customerID,prev:\'ppts.accountTransfer-approve\'})">{{vm.apply.customerName}}</a>（{{vm.apply.customerCode}}）'
+                        </p>
                     </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-6">
-                    <mcs-label text="转让余额原因：" css="col-sm-3" />
-                    <div class="col-sm-9">
-                        {{ vm.apply.applyMemo }}
+                <div class="form-group">
+                    <mcs-label text="转让余额原因" css="col-sm-3" />
+                    <div class="col-sm-6">
+                        <p class="form-control-static">
+                            {{ vm.apply.applyMemo }}
+                        </p>
                     </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-6">
-                    <mcs-label text="提交申请时间：" css="col-sm-3" />
-                    <div class="col-sm-9">
-                        {{ vm.apply.applyTime | date:"yyyy-MM-dd HH:mm" }}
+                <div class="form-group">
+                    <mcs-label text="提交申请时间" css="col-sm-3" />
+                    <div class="col-sm-6">
+                        <p class="form-control-static">
+                            {{ vm.apply.applyTime | date:"yyyy-MM-dd HH:mm" }}
+                        </p>
                     </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-6">
-                    <mcs-label text="家长联系电话：" css="col-sm-3" />
-                    <div class="col-sm-9">
-                        {{ vm.customer.phoneNumber}}
+                <div class="form-group">
+                    <mcs-label text="家长联系电话" css="col-sm-3" />
+                    <div class="col-sm-6">
+                        <p class="form-control-static">
+                            {{ vm.customer.phoneNumber}}
+                        </p>
                     </div>
                 </div>
-            </div>
-            <div class="page-header">
-                <span>账户结算</span>
-            </div>
-            <table class="table table-bordered">
-                <tr>
-                    <td class="col-sm-3">账户编号</td>
-                    <td class="col-sm-3">可转让余额</td>
-                    <td class="col-sm-3">申请转让余额</td>
-                </tr>
-                <tr>
-                    <td>{{ vm.apply.accountCode }}</td>
-                    <td>{{ vm.apply.thatAccountMoney | currency:"￥" }}</td>
-                    <td>{{ vm.apply.transferMoney | currency:"￥" }}</td>
-                </tr>
-            </table>
-            <div class="page-header">
-                <span>转给学员</span>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-6">
-                    <mcs-label text="学员姓名：" css="col-sm-3" />
-                    <div class="col-sm-9">
-                        {{ vm.apply.bizCustomerName }}
+                账户结算：
+                <div class="form-group">
+                    <mcs-label text="" css="col-sm-3" />
+                    <div class="col-sm-6">
+                        <table class="table table-bordered">
+                            <tr>
+                                <td class="col-sm-3">账户编号</td>
+                                <td class="col-sm-3">可转让余额</td>
+                                <td class="col-sm-3">申请转让余额</td>
+                            </tr>
+                            <tr>
+                                <td>{{ vm.apply.accountCode }}</td>
+                                <td>{{ vm.apply.thatAccountMoney | currency:"￥" }}</td>
+                                <td>{{ vm.apply.transferMoney | currency:"￥" }}</td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-6">
-                    <mcs-label text="学员编号：" css="col-sm-3" />
-                    <div class="col-sm-9">
-                        {{vm.apply.bizCustomerCode}}
+                转至学员：
+                <div class="form-group">
+                    <mcs-label text="学员姓名" css="col-sm-3" />
+                    <div class="col-sm-6">
+                        <p class="form-control-static">
+                            {{ vm.apply.bizCustomerName }}
+                        </p>
                     </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-6">
-                    <mcs-label text="主监护人：" css="col-sm-3" />
-                    <div class="col-sm-9">
-                        {{vm.bizCustomer.parentName}}
+                <div class="form-group">
+                    <mcs-label text="学员编号" css="col-sm-3" />
+                    <div class="col-sm-6">
+                        <p class="form-control-static">
+                            {{vm.apply.bizCustomerCode}}
+                        </p>
                     </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-6">
-                    <mcs-label text="主监护人联系电话：" css="col-sm-3" />
-                    <div class="col-sm-9">
-                        {{vm.bizCustomer.PhoneNumber}}
+                <div class="form-group">
+                    <mcs-label text="主监护人" css="col-sm-3" />
+                    <div class="col-sm-6">
+                        <p class="form-control-static">
+                            {{vm.bizCustomer.parentName}}
+                        </p>
                     </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-6">
-                    <mcs-label text="校区名称：" css="col-sm-3" />
-                    <div class="col-sm-9">
-                        {{ vm.apply.bizCampusName }}
+                <div class="form-group">
+                    <mcs-label text="主监护人联系电话" css="col-sm-3" />
+                    <div class="col-sm-6">
+                        <p class="form-control-static">
+                            {{vm.bizCustomer.PhoneNumber}}
+                        </p>
                     </div>
                 </div>
+                <div class="form-group">
+                    <mcs-label text="校区名称" css="col-sm-3" />
+                    <div class="col-sm-6">
+                        <p class="form-control-static">
+                            {{ vm.apply.bizCampusName }}
+                        </p>
+                    </div>
+                </div>
+                <mcs-workflow model="vm.clientProcess" />
             </div>
-        </div>
+        </form>
     </div>
-</form>
+</div>

@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MCS.Library.Core;
 
 namespace PPTS.Data.Customers.Executors
 {
@@ -83,7 +84,7 @@ namespace PPTS.Data.Customers.Executors
                 apply.CustomerID = customer.CustomerID;
                 apply.CustomerCode = customer.CustomerCode;
                 apply.CustomerName = customer.CustomerName;
-                apply.ApplyID = Guid.NewGuid().ToString().ToUpper();
+                apply.ApplyID = UuidHelper.NewUuidString();
 
                 apply.ApplyTime = SNTPClient.AdjustedTime;
                 apply.ApplyStatus = ApplyStatusDefine.Approved;

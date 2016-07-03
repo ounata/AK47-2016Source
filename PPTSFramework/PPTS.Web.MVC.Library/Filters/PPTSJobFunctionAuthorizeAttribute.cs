@@ -29,14 +29,23 @@ namespace PPTS.Web.MVC.Library.Filters
 
         protected override bool IsAuthorized(DeluxePrincipal principal, string functions)
         {
-            bool result = false;
-
             PPTSJob job = DeluxeIdentity.CurrentUser.GetCurrentJob();
 
-            if (job != null)
-                result = DeluxePrincipal.ParseRoleDescription(functions, (appName, function) => job.Functions.Contains(function));
+            HashSet<string> matchedFunctions = principal.MatchedJobFunctions();
 
-            return result;
+            if (job != null)
+            {
+                //将匹配到的功能记录下来
+                DeluxePrincipal.ParseRoleDescription(functions, (appName, function) =>
+                {
+                    if (job.Functions.Contains(function))
+                        matchedFunctions.Add(function);
+
+                    return false;
+                });
+            }
+
+            return matchedFunctions.Count > 0;
         }
     }
 }

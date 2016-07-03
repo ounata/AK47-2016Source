@@ -80,7 +80,7 @@ namespace MCS.Library.Test.TimeZoneRel
         }
 
         [TestMethod]
-        public void MinValueConvertTest()
+        public void MinValueFromUtcConvertTest()
         {
             TimeZoneContext.Current.CurrentTimeZone = TimeZoneInfo.CreateCustomTimeZone("TimeZoneInfoContext", TimeSpan.FromMinutes(480), "TimeZoneInfoContext", "TimeZoneInfoContext");
 
@@ -93,6 +93,22 @@ namespace MCS.Library.Test.TimeZoneRel
             Console.WriteLine(localTime);
 
             Assert.AreEqual(DateTime.MinValue, localTime);
+        }
+
+        [TestMethod]
+        public void MinValueToUtcConvertTest()
+        {
+            TimeZoneContext.Current.CurrentTimeZone = TimeZoneInfo.CreateCustomTimeZone("TimeZoneInfoContext", TimeSpan.FromMinutes(480), "TimeZoneInfoContext", "TimeZoneInfoContext");
+
+            DateTime localTime = DateTime.MinValue;
+
+            localTime = DateTime.SpecifyKind(localTime, DateTimeKind.Local);
+
+            DateTime utcTime = TimeZoneContext.Current.ConvertTimeToUtc(localTime);
+
+            Console.WriteLine(utcTime);
+
+            Assert.AreEqual(DateTime.MinValue, utcTime);
         }
     }
 }

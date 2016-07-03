@@ -12,23 +12,28 @@
                 'scoresDataViewService',
                 'scoresListDataHeader',
                 'scoresAdvanceSearchItems',
-                function ($state, $scope, $stateParams, util, dataSyncService, mcsDialogService, scoreDataService, scoresDataViewService, scoresListDataHeader, searchItems) {
+                'exportExcelService',
+                function ($state, $scope, $stateParams, util, dataSyncService, mcsDialogService, scoreDataService, scoresDataViewService, scoresListDataHeader, searchItems, exportExcelService) {
                     var vm = this;
 
                     // 配置数据表头 
-                    scoresDataViewService.configScoresListHeaders(vm, scoresListDataHeader);
+                    dataSyncService.configDataHeader(vm, scoresListDataHeader, scoreDataService.getPagedScores);
 
-                    // 搜索
+                    // 页面初始化加载或重新搜索时查询
                     vm.search = function () {
-                        scoresDataViewService.initCustomerScoresList(vm, function () {
+                        dataSyncService.initDataList(vm, scoreDataService.getAllScores, function (result) {
                             vm.searchItems = searchItems;
+                            dataSyncService.injectDynamicDict('ifElse,scoreSatisficing');
                             scoresDataViewService.initWatchExps($scope, vm, [
                                   { watchExp: 'vm.criteria.scoreType', selectedValue: 16, watch: 'otherScoreTypeName' }
                             ]);
+
+                            vm.isLastDayOfMonth = result.isLastDayOfMonth;
                             scoresDataViewService.fillGradeParentKey();
-                            $scope.$broadcast('dictionaryReady');
-                        });
-                    }
+                            // $scope.$broadcast('dictionaryReady');
+                        })
+                    };
+
                     vm.search();
 
                     // 录入成绩
@@ -66,12 +71,32 @@
 
                     // 批量添加成绩
                     vm.batchAdd = function () {
-                        $state.go('ppts.score-batch-add');
+                        if (vm.data.rowsSelected.length >= 1) {
+                            vm.errorMessage = "单个学员成绩录入，请点击“录入成绩”按钮";
+                            return;
+                        }
+                        else {
+                            $state.go('ppts.score-batch-add');
+                        }
                     };
 
                     // 导出
                     vm.export = function () {
-                        mcs.util.postMockForm(ppts.config.customerApiBaseUrl + 'api/customerscores/exportallScores', vm.criteria);
+                        vm.maxExportCount = 3000;
+                        if (vm.criteria.pageParams.totalCount < vm.maxExportCount) {
+                            var dlg = mcsDialogService.confirm({
+                                title: '提示',
+                                message: '您将导出共' + vm.criteria.pageParams.totalCount + '条记录，请确认是否要导出？'
+                            });
+                            dlg.result.then(function () {
+                                exportExcelService.export(ppts.config.customerApiBaseUrl + 'api/customerscores/exportallScores', vm.criteria);
+                            });
+                        } else {
+                            mcsDialogService.info({
+                                title: '提示',
+                                message: '内容超过' + vm.maxExportCount + '条以上，无法正常导出，请缩小范围后再尝试!'
+                            });
+                        }
                     };
 
                 }]);

@@ -81,7 +81,7 @@ namespace MCS.Library.SOA.DataObjects
             return result;
         }
 
-        public UserTaskCollection LoadUserTasks(string tableName, IConnectiveSqlClause wBuilder, OrderBySqlClauseBuilder orderByBuilder, int count)
+        public UserTaskCollection LoadUserTasks(string tableName, IConnectiveSqlClause wBuilder, OrderBySqlClauseBuilder orderByBuilder, int count, bool nolock = false)
         {
             UserTaskCollection result = new UserTaskCollection();
             string top = string.Empty;
@@ -91,6 +91,9 @@ namespace MCS.Library.SOA.DataObjects
 
             if (wBuilder.IsEmpty == false)
             {
+                if (nolock)
+                    tableName += " (NOLOCK)";
+
                 string sql = string.Format("SELECT {0} * FROM {1} WHERE {2}",
                     top,
                     tableName,
@@ -317,7 +320,7 @@ namespace MCS.Library.SOA.DataObjects
         {
             taskID.NullCheck("taskID");
 
-            string sql = "UPDATE WF.USER_ACCOMPLISHED_TASK SET READ_TIME = GETDATE() WHERE TASK_GUID = " + TSqlBuilder.Instance.CheckQuotationMark(taskID, true);
+            string sql = "UPDATE WF.USER_ACCOMPLISHED_TASK SET READ_TIME = GETUTCDATE() WHERE TASK_GUID = " + TSqlBuilder.Instance.CheckQuotationMark(taskID, true);
 
             DbHelper.RunSql(sql, GetConnectionName());
         }
@@ -330,7 +333,7 @@ namespace MCS.Library.SOA.DataObjects
         {
             taskID.NullCheck("taskID");
 
-            string sql = "UPDATE WF.USER_TASK SET READ_TIME = GETDATE() WHERE TASK_GUID = " + TSqlBuilder.Instance.CheckQuotationMark(taskID, true);
+            string sql = "UPDATE WF.USER_TASK SET READ_TIME = GETUTCDATE() WHERE TASK_GUID = " + TSqlBuilder.Instance.CheckQuotationMark(taskID, true);
 
             DbHelper.RunSql(sql, GetConnectionName());
         }

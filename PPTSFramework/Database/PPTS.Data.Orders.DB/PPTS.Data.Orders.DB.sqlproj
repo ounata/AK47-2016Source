@@ -109,6 +109,9 @@
     <Build Include="OM\Views\v_DebookOrderItems.sql" />
     <Build Include="OM\Views\v_OrderItems.sql" />
     <Build Include="MT\Tables\CourseRelationAuthorizations.sql" />
+    <Build Include="OM\Tables\AssetConsumes.sql" />
+    <Build Include="OM\Views\v_AssetConsumes.sql" />
+    <Build Include="OM\Tables\FinancialAssignMonthlyIncome.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PPTS.Data.Order.Local.Dev.DB.publish.xml" />

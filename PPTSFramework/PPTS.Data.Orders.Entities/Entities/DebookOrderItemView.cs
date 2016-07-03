@@ -3,16 +3,36 @@ using System.Runtime.Serialization;
 using MCS.Library.Data.DataObjects;
 using MCS.Library.Data.Mapping;
 using PPTS.Data.Common.Entities;
-
+using PPTS.Data.Common.Authorization;
 
 namespace PPTS.Data.Orders.Entities
 {
+
     /// <summary>
     /// 退订明细视图
     /// </summary>
     [Serializable]
     [ORTableMapping("OM.v_DebookOrderItems")]
     [DataContract]
+
+    #region 数据范围权限(存入识别)
+    [EntityAuth(RecordType = RecordType.Order)]
+    #endregion 
+
+    #region 数据范围权限(数据读取权限)
+
+    [CustomerRelationScope(Name = "退订记录查看(客户关系)", Functions = "退订管理列表", RecordType = CustomerRecordType.Customer)]
+    [OwnerRelationScope(Name = "退订记录查看", Functions = "退订管理列表", RecordType = RecordType.Order)]
+
+    [RecordOrgScope(Name = "退订记录查看-本部门", Functions = "退订管理列表-本部门", OrgType = OrgType.Department, RecordType = RecordType.Order)]
+    [RecordOrgScope(Name = "退订记录查看-本校区", Functions = "退订管理列表-本校区", OrgType = OrgType.Campus, RecordType = RecordType.Order)]
+    [RecordOrgScope(Name = "退订记录查看-本分公司", Functions = "退订管理列表-本分公司", OrgType = OrgType.Branch, RecordType = RecordType.Order)]
+    [RecordOrgScope(Name = "退订记录查看-全国", Functions = "退订管理列表-全国", OrgType = OrgType.HQ, RecordType = RecordType.Order)]
+
+    [CustomerRelationScope(Name = "退订记录编辑(客户关系)", Functions = "退订", RecordType = CustomerRecordType.Customer)]
+    [OwnerRelationScope(Name = "退订记录编辑", Functions = "退订", RecordType = RecordType.Order)]
+
+    #endregion
     public class DebookOrderItemView : DebookOrderItem
     {
         #region DebookOrder
@@ -66,6 +86,7 @@ namespace PPTS.Data.Orders.Entities
         /// </summary>
         [ORFieldMapping("CustomerID")]
         [DataMember]
+        [CustomerFieldMapping("CustomerID")]
         public string CustomerID
         {
             get;
@@ -122,6 +143,17 @@ namespace PPTS.Data.Orders.Entities
         [ORFieldMapping("SubmitterName")]
         [DataMember]
         public string SubmitterName
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 提交人岗位名称
+        /// </summary>
+        [ORFieldMapping("SubmitterJobName")]
+        [DataMember]
+        public string SubmitterJobName
         {
             get;
             set;
@@ -196,6 +228,18 @@ namespace PPTS.Data.Orders.Entities
             get;
             set;
         }
+        
+        /// <summary>
+        /// 产品类型
+        /// </summary>
+        [ORFieldMapping("CategoryType")]
+        [DataMember]
+        [ConstantCategory("c_codE_ABBR_Product_CategoryType")]
+        public string CategoryType
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// 产品编码
@@ -218,6 +262,7 @@ namespace PPTS.Data.Orders.Entities
             get;
             set;
         }
+
 
         /// <summary>
 		/// 实际价格
@@ -253,6 +298,18 @@ namespace PPTS.Data.Orders.Entities
         }
 
         /// <summary>
+        /// 订购数量
+        /// </summary>
+        [ORFieldMapping("OrderAmount")]
+        [DataMember]
+        public decimal OrderAmount
+        {
+            get;
+            set;
+        }
+        
+
+        /// <summary>
         /// 已确认金额（课程资产与非课程资产用）
         /// </summary>
         [ORFieldMapping("ConfirmedMoney")]
@@ -263,7 +320,32 @@ namespace PPTS.Data.Orders.Entities
             set;
         }
 
+
+        /// <summary>
+        /// 资产编码
+        /// </summary>
+        [ORFieldMapping("AssetCode")]
+        [DataMember]
+        public string AssetCode
+        {
+            get;
+            set;
+        }
+
         #endregion
+
+
+        /// <summary>
+        /// 订购金额
+        /// </summary>
+        [NoMapping]
+        public decimal BookMoney { get { return RealPrice * RealAmount; } }
+
+        /// <summary>
+        /// 退订数量(赠送)
+        /// </summary>
+        [NoMapping]
+        public string DebookAmountAndPreset { get { return string.Format("{0}({1})",(int)DebookAmount, (int)PresentAmountOfDebook); } }
     }
 
     [Serializable]

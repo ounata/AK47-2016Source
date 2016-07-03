@@ -110,7 +110,6 @@
     <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="Model\POSRecordModel.cs" />
     <Compile Include="Model\StatementModel.cs" />
-    <Compile Include="Model\UnionPaySourceType.cs" />
     <Compile Include="ProcessCSVFile\AnalyzeCSVFile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\POSRecordsUpdateService.svc.cs">

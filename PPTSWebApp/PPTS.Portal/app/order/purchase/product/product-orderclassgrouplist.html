@@ -1,18 +1,24 @@
-﻿<ppts-dynamic-content template="quick-search.tpl.html">
+﻿
+
+此订单为 {{vm.customer.customerName}}({{vm.customer.customerCode}}) 的订购单
+
+
+<ppts-dynamic-content template="quick-search.tpl.html">
     <div class="row">
         <div class="col-md-4">
-            <ppts-select-branch model="vm.criteria.campusIDs" />
+            <!--<ppts-select-branch model="vm.criteria.campusIDs" />-->
+            <ppts-organization branch="vm.criteria.branch" campus="vm.criteria.campusID" required-level="1" disabled-level="vm.disabledlevel" />
         </div>
         <div class="col-md-4">
-            <ppts-select category="subject" model="vm.criteria.subject" caption="科目" css="mcs-padding-0" />
+            <mcs-select category="subject" model="vm.criteria.subject" caption="科目" css="mcs-padding-0" />
         </div>
         <div class="col-md-4">
-            <ppts-select category="grade" model="vm.criteria.grade" caption="年级" css="mcs-padding-0" />
+            <mcs-select category="grade" model="vm.criteria.grade" caption="年级" css="mcs-padding-0" />
         </div>
     </div>
     <div class="row">
         <div class="col-md-4">
-            <ppts-select category="duration" model="vm.criteria.duration" caption="课时时长" css="mcs-padding-0" />
+            <mcs-select category="duration" model="vm.criteria.duration" caption="课时时长" css="mcs-padding-0" />
         </div>
         <div class="col-md-4">
             <mcs-input placeholder="产品名称" css="mcs-input-search mcs-width-full" model="vm.criteria.productName" />
@@ -21,15 +27,16 @@
     </div>
 </ppts-dynamic-content>
 
-<!-- /结束：订购列表.查询条件 -->
-<!-- #开始：订购列表.工具条 -->
 <div class="mcs-panel-toolbar">
 
-    <!--<mcs-button category="edit" text="放入订单清单"></mcs-button>-->
     <mcs-button category="edit" text="查看订购清单" click="vm.showShoppingCart()"></mcs-button>
 
 </div>
-<!-- /结束：订购列表.工具条 -->
-<!-- #开始：订购列表.数据表格 -->
+
+<div class="col-sm-12">
+    <div class="form-group row warning pull-right">
+        列表中红色字体的产品不遵循客户折扣率
+    </div>
+</div>
+
 <mcs-datatable data="vm.data" />
-<!-- /结束：订购列表.数据表格 -->

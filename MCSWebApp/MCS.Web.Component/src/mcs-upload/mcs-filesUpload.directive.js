@@ -8,30 +8,37 @@
 
             return {
                 restrict: 'A',
-                templateUrl: '../src/tpl/upload.tpl.html',
+                templateUrl: mcs.app.config.mcsComponentBaseUrl + '/src/tpl/upload.tpl.html',
                 scope: {
                     filesAmount: '=?',
                     pattern: '@?',
                     model: '=?',
                     url: '@',
+                    errorMessage: '@',
                     downloadUrl: '@',
                     moduleName: '@',
                     resourceId: '@',
                     readonly: '=?'
 
                 },
-                link: function($scope, iElm, iAttrs, controller) {
+                link: function($scope, iElm, iAttrs, formCtrl) {
 
                     $scope.filesUpload = [];
 
-                    $scope.editFile = function(file) {
-                        file.method = "edit";
-
-
+                    $scope.statusEnum = {
+                        inserted: 1,
+                        updated: 2,
+                        deleted: 3
                     };
 
+                    $scope.fileStatusFilter = function(e) {
+                        return e.status != $scope.statusEnum.deleted;
+                    };
+
+
+
                     $scope.delecteFile = function(file) {
-                        file.method = "delete";
+                        file.status = $scope.statusEnum.deleted;
 
                     };
 
@@ -44,7 +51,6 @@
 
                     $scope.uploadFiles = function(files) {
 
-
                         angular.forEach(files, function(file) {
 
                             file.upload = Upload.upload({
@@ -55,7 +61,7 @@
                                         resourceID: $scope.resourceId,
                                         originalName: file.name,
                                         title: file.title,
-                                        method: file.method
+                                        status: file.status
 
 
                                     }),
@@ -66,16 +72,15 @@
                             file.upload.then(function(response) {
                                 $timeout(function() {
                                     mcs.util.removeByObject(files, file);
-                                    response.data[0].method = 'edit';
+                                    response.data[0].status = $scope.statusEnum.inserted;
 
                                     $scope.model.push(response.data[0]);
                                 });
                             }, function(response) {
-                                if (response.status > 0) {
-                                    $scope.errorMsg = response.status + ': ' + response.data;
+
+                                $scope.errorMsg = '上传失败';
 
 
-                                }
                             }, function(evt) {
                                 file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
                             });
@@ -88,10 +93,15 @@
 
 
                     $scope.fileSelect = function(files) {
+
+
                         files.forEach(function(file, index) {
-                            file.method = 'add';
+                            file.status = $scope.statusEnum.inserted;
+                            file.title = file.name;
 
                         });
+
+                        $scope.uploadFiles(files);
                     };
 
 

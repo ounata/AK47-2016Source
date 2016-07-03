@@ -3,14 +3,16 @@
         ppts.config.dataServiceConfig.unsubscribeCourseDataService], function (helper) {
 
             helper.registerController('orderListUnsubscribeController', [
-                '$scope', '$state', '$stateParams', 'dataSyncService', 'purchaseCourseDataService','unsubscribeCourseDataService',
-                function ($scope, $state, $stateParams, dataSyncService, purchaseCourseDataService, unsubscribeCourseDataService) {
+                '$scope', '$state', '$stateParams', 'dataSyncService', 'mcsValidationService', 'purchaseCourseDataService', 'unsubscribeCourseDataService',
+                function ($scope, $state, $stateParams, dataSyncService, mcsValidationService, purchaseCourseDataService, unsubscribeCourseDataService) {
+
+                    mcsValidationService.init($scope);
+
                     var vm = this;
-                    vm.item = { order: { submitTime:new Date()}, item: {} };
+                    vm.item = { order: { submitTime: new Date() }, item: {} };
                     var id = vm.item.orderItemID = $stateParams.id;
-                    
-                    vm.applicant = function () { return ppts.user.name };
-                    
+
+
 
                     vm.data = {
                         //selection: 'radio',
@@ -45,17 +47,18 @@
                         orderBy: [{ dataField: 'CreateTime', sortDirection: 1 }]
                     }
 
+
                     vm.submit = function () {
 
-
+                        if (!mcsValidationService.run($scope)) { return; }
 
                         unsubscribeCourseDataService.unsubscribe(vm.item, function (entity) {
                             $state.go('ppts.purchase');
                         });
 
                     };
-
-
+                    vm.applicant = function () { return ppts.user.name };
+                    
 
                     purchaseCourseDataService.getOrderItem(id, function (result) {
 
@@ -63,9 +66,25 @@
 
                         var entity = result.entity;
 
-
                         //买赠
-                        if (entity.presentID != "") {
+                        if (entity.orderType == "2") {
+
+                            vm.debookTotalMoney = function () {
+                                return (entity.realAmount - entity.confirmedAmount) * entity.realPrice;
+                            };
+
+                            //剩余赠送数量
+                            vm.remainPresentCount = function (row) {
+                                return row.confirmedAmount > row.orderAmount ? row.presentAmount - (row.confirmedAmount - row.orderAmount) : row.presentAmount;
+                            };
+
+                            //退订金额
+                            vm.debookMoney = function (row) {
+                                vm.item.item.debookAmount = row.realAmount - row.confirmedAmount;
+                                return vm.item.item.debookAmount * row.realPrice;
+                            };
+
+
                             vm.data.headers = vm.data.headers.concat([{
                                 field: "confirmedAmount",
                                 name: "已使用订购数量",
@@ -78,13 +97,32 @@
                                         + '({{ row.confirmedAmount > row.orderAmount ? 0: row.assignedAmount > ( row.orderAmount - row.confirmedAmount )? (row.orderAmount - row.confirmedAmount):row.assignedAmount  }})'
                             }, {
                                 name: "剩余赠送数量(排课数量)",
-                                template: '{{ row.confirmedAmount > row.orderAmount ? row.presetAmount -(row.confirmedAmount - row.orderAmount ) :row.presetAmount  }}'
+                                template: '{{ vm.remainPresentCount(row)  }}'
                                         + '({{ row.confirmedAmount > row.orderAmount ? row.assignedAmount-(row.orderAmount - row.confirmedAmount) : 0 }})'
                             }, {
-                                name: "申请退掉数量",
-                                template: '{{ row.debookedAmount  }}'
+                                name: "申请退掉数量(退赠送数量)",
+                                template: '{{ row.realAmount - row.confirmedAmount  }}({{ vm.remainPresentCount(row) }})'
+                            }, {
+                                name: "已使用保留数量对应的金额",
+                                template: '{{ row.realAmount * row.realPrice - row.confirmedMoney - row.realPrice * row.debookedAmount |currency }}'
+                            }, {
+                                name: "退订金额",
+                                template: '{{ vm.debookMoney(row) |currency }}'
                             }]);
+
                         } else {
+
+                            vm.debookTotalMoney = function () {
+                                return vm.item.item.debookAmount * entity.realPrice;
+                            };
+
+                            vm.customValidate = function (row) {
+                                var result = row.amount  >= vm.item.item.debookAmount && vm.item.item.debookAmount > 0;
+                                row.errorRowMessage = '输入有误!';
+                                row.validValue = result;
+                                $scope.$apply('discountData');
+                                return result;
+                            };
 
                             //1对1 班组
                             if (entity.categoryType == 1 || entity.categoryType == 2) {
@@ -92,25 +130,34 @@
                                     field: "confirmedAmount",
                                     name: "已使用数量",
                                 }, {
-                                    //field: "assignedAmount",
                                     name: "剩余数量（排课数量）",
-                                    template: '{{row.orderAmount - row.confirmedAmount}}({{row.assignedAmount}})'
+                                    template: '{{ row.amount }}({{row.assignedAmount}})'
                                 }, {
                                     name: "申请退掉数量",
-                                    //template: '<input ng-model="vm.item.item.debookAmount" positive/>'
-                                    template: '<mcs-input model="vm.item.item.debookAmount" datatype="int"/>'
+                                    template: '<span ng-class=\'{"has-error":!( row.validValue == undefined ? true: row.validValue)}\'><mcs-input model="vm.item.item.debookAmount" datatype="int"  validate="vm.customValidate(row)" required /><div class=\'help-inline\' ng-if="!row.validValue">{{row.errorRowMessage}}</div></span>'
                                 }, {
                                     name: "已使用及保留数量对应的金额",
-                                    template: '{{ (row.realAmount - row.confirmedAmount)*row.realPrice  | currency}}'
+                                    template: '{{ row.amount * row.realPrice  | currency}}'
                                 }, {
                                     name: "退订金额",
                                     template: '{{ (vm.item.item.debookAmount||0)*row.realPrice  | currency}}'
                                 }]);
                             } else {
+
+                                //退订金额
+                                vm.debookMoney = function (row) {
+                                    vm.item.item.debookAmount = row.amount ;
+                                    return vm.item.item.debookAmount * row.realPrice;
+                                };
+
+                                vm.debookTotalMoney = function () {
+                                    return row.amount * entity.realPrice;
+                                };
+
                                 //其他 、游学
-                                vm.data.headers = vm.data.headers.concat([ {
+                                vm.data.headers = vm.data.headers.concat([{
                                     name: "退订金额",
-                                    template: '{{ (vm.item.item.debookAmount||0)*row.realPrice  | currency}}'
+                                    template: '{{ vm.debookMoney(row)  | currency}}'
                                 }]);
                             }
                         }

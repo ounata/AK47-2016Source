@@ -2,36 +2,35 @@
     <button type="button" class="close" data-dismiss="alert" ng-click="vm.close()">
         <i class="ace-icon fa fa-times"></i>
     </button>
-    <!--<h4 class="modal-title">查看现有家长，勾选查询结果，确认亲属关系</h4>-->
-    <h4 class="modal-title">{{ vm.title }}</h4>
-</div>
-<div class="mcs-panel-search well well-sm">
-    <div class="portlet-body mcs-padding-5">
-        <ppts-search placeholder="输入家长姓名，联系方式进行查询" click="vm.search()" model="vm.criteria.keyword" css="mcs-width-full"/>
+    <h4 class="modal-title">查找<span class="important">{{ vm.customer.customerName }}</span>的家长，勾选查询结果，确认亲属关系</h4>
+    <div class="mcs-panel-search well well-sm">
+        <div class="portlet-body mcs-padding-5">
+            <ppts-search placeholder="输入家长姓名，联系方式进行查询" click="vm.search()" model="vm.criteria.keyword" css="mcs-width-full" />
+        </div>
     </div>
 </div>
-
 <div class="modal-body">
-    <mcs-datatable data="vm.data" />
+    <div style="height:300px;overflow-y:auto;">
+        <mcs-datatable data="vm.data" />
+    </div>
     <div class="profile-info-row" ng-show="vm.type=='confirm'">
         <div class="profile-info-name"> 亲属关系 </div>
         <div class="profile-info-value">
             <div class="customer-relation-container">
                 <div class="col-sm-12 mcs-padding-0 mcs-margin-bottom-2">
-                    <div class="col-sm-4 mcs-padding-0"><input class="mcs-readonly-input" ng-model="vm.customer.customerName" onkeydown="return false;" style="width:88%;background:none;" />是</div>
-                    <div class="col-sm-4 mcs-padding-0"><input class="mcs-readonly-input" ng-model="vm.parent.parentName" onkeydown="return false;" style="width:88%;background:none;" />的</div>
-                    <div class="col-sm-4 mcs-padding-0"><ppts-select data="vm.customerRoles" model="vm.customerRole" callback="selectCustomerRole(item, model)" css="mcs-padding-0" caption="子女关系" /></div>
+                    <div class="col-sm-4 mcs-padding-0"><input class="mcs-readonly-input" ng-readonly="true" ng-model="vm.customer.customerName" onkeydown="return false;" onpaste="return false;" oncontextmenu="return false;" style="width:88%;background:none !important;" />是</div>
+                    <div class="col-sm-4 mcs-padding-0"><input class="mcs-readonly-input" ng-readonly="true" ng-model="vm.parent.parentName" onkeydown="return false;" onpaste="return false;" oncontextmenu="return false;" style="width:88%;background:none !important;" />的</div>
+                    <div class="col-sm-4 mcs-padding-0"><mcs-select data="vm.customerRoles" model="vm.customerRole" callback="selectCustomerRole(item, model)" css="mcs-padding-0" caption="子女关系" /></div>
                 </div>
                 <div class="col-sm-12 mcs-padding-0">
-                    <div class="col-sm-4 mcs-padding-0"><input class="mcs-readonly-input" ng-model="vm.parent.parentName" onkeydown="return false;" style="width:88%;background:none;" />是</div>
-                    <div class="col-sm-4 mcs-padding-0"><input class="mcs-readonly-input" ng-model="vm.customer.customerName" onkeydown="return false;" style="width:88%;background:none;" />的</div>
-                    <div class="col-sm-4 mcs-padding-0"><ppts-select data="vm.parentRoles" model="vm.parentRole" disabled="!(vm.parent.gender && vm.customer.gender && vm.customerRole && vm.parentRoles.length > 1)" css="mcs-padding-0" caption="家属关系" /></div>
+                    <div class="col-sm-4 mcs-padding-0"><input class="mcs-readonly-input" ng-readonly="true" ng-model="vm.parent.parentName" onkeydown="return false;" onpaste="return false;" oncontextmenu="return false;" style="width:88%;background:none !important;" />是</div>
+                    <div class="col-sm-4 mcs-padding-0"><input class="mcs-readonly-input" ng-readonly="true" ng-model="vm.customer.customerName" onkeydown="return false;" onpaste="return false;" oncontextmenu="return false;" style="width:88%;background:none !important;" />的</div>
+                    <div class="col-sm-4 mcs-padding-0"><mcs-select data="vm.parentRoles" model="vm.parentRole" disabled="!(vm.parent.gender && vm.customer.gender && vm.customerRole && vm.parentRoles.length > 1)" css="mcs-padding-0" caption="家属关系" /></div>
                 </div>
                 <p class="help-block"></p>
             </div>
         </div>
     </div>
-
     <div class="alert alert-block alert-danger" ng-show="vm.errorMessage && !vm.data.rowsSelected.length">
         <button type="button" class="close" data-dismiss="alert">
             <i class="ace-icon fa fa-times"></i>
@@ -41,7 +40,7 @@
     </div>
 </div>
 <div class="modal-footer">
-    <mcs-button category="ok" click="vm.add()"/>
-    <mcs-button category="add" text="新建家长" click="vm.new()" ng-hide="$state.includes('ppts.customer-add')"/>
+    <mcs-button category="ok" click="vm.add()" ppts-functions="添加孩子家长" />
+    <mcs-button category="add" text="新建家长" ppts-functions="添加孩子家长" click="vm.new()" ng-hide="$state.includes('ppts.customer-add')" />
     <mcs-button category="close" click="vm.close()" />
 </div>

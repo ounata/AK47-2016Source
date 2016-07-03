@@ -21,7 +21,7 @@
                         <mcs-label required="true" text="产品分类" css="col-sm-3" />
                         <div class="col-sm-6">
                             <div class="form-control-static mcs-padding-0">
-                                <ppts-select category="categoryCustom" model="vm.m[loadtype].product.catalog" caption="产品分类" css="col-sm-6 mcs-padding-0" required />
+                                <mcs-select category="categoryCustom" model="vm.m[loadtype].product.catalog" caption="产品分类" css="col-sm-6 mcs-padding-0" required />
                             </div>
                             <span class="text-left info" ng-bind-html="description"></span>
                         </div>
@@ -32,13 +32,7 @@
                     <div class="form-group horizontal">
                         <mcs-label required="true" text="分帐比例" css="col-sm-3" />
                         <div class="col-sm-6">
-                            <label class="control-label">合作方</label>
-                            <mcs-input model="vm.m[loadtype].product.partnerName" css="input-width-120" uib-tooltip="合作方名称" placeholder="合作方简称" maxlength="20" required />
-                            <label class="control-label">占订购金额的</label>
-                            <mcs-input model="vm.m[loadtype].product.partnerRatio" css="input-width-100" uib-tooltip="分成比例" placeholder="分成比例" required between="1,100" />
-                            <label class="control-label">
-                                %, 学大占订购金额的{{ (1- (vm.m[loadtype].product.partnerRatio/100) )*100  }}% 则合作单价为{{ vm.m[loadtype].product.productPrice* (1- (vm.m[loadtype].product.partnerRatio/100) ) }}元/期。
-                            </label>
+                            <productpartner-directive></productpartner-directive>
                         </div>
                     </div>
                 </div>
@@ -48,7 +42,7 @@
                         <mcs-label text="产品年级" css="col-sm-3" />
                         <div class="col-sm-6">
                             <div class="form-control-static mcs-padding-0">
-                                <ppts-select category="grade" model="vm.m[loadtype].product.grade" caption="产品年级" css="col-sm-6 mcs-padding-0"/>
+                                <mcs-select category="grade" model="vm.m[loadtype].product.grade" caption="产品年级" css="col-sm-6 mcs-padding-0" />
                             </div>
                         </div>
                     </div>
@@ -58,7 +52,7 @@
                         <mcs-label text="产品科目" css="col-sm-3" />
                         <div class="col-sm-6">
                             <div class="form-control-static mcs-padding-0">
-                                <ppts-select category="subject" model="vm.m[loadtype].product.subject" caption="产品科目" css="col-sm-6 mcs-padding-0"/>
+                                <mcs-select category="subject" model="vm.m[loadtype].product.subject" caption="产品科目" css="col-sm-6 mcs-padding-0" />
                             </div>
                         </div>
                     </div>
@@ -67,7 +61,9 @@
                     <div class="form-group horizontal">
                         <mcs-label text="研发机构" css="col-sm-3" />
                         <div class="col-sm-6">
-                            <ppts-select-branch model="vm.m[loadtype].xxx" />
+                            <div class="form-control-static mcs-padding-0">
+                                <ppts-branch branch="vm.m[loadtype].product.rdOrgID" selected="vm.rdOrg" />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -75,11 +71,11 @@
                     <div class="form-group horizontal">
                         <mcs-label text="产品名称" css="col-sm-3" />
                         <div class="col-sm-6">
-                            <span ng-if="loadtype!='youxue'">
-                                <mcs-input model="vm.m[loadtype].product.productName" placeholder="产品名称" maxlength="6" />
+                            <span ng-if=" loadtype!='youxue' && loadtype!='dailizhaosheng' ">
+                                <mcs-input model="vm.m[loadtype].product.productName" placeholder="产品名称" css="col-sm-12" maxlength="6" />
                             </span>
-                            <span ng-if="loadtype=='youxue'">
-                                <mcs-input model="vm.m[loadtype].product.productName" placeholder="产品名称" maxlength="15" />
+                            <span ng-if="loadtype=='youxue' || loadtype=='dailizhaosheng'">
+                                <mcs-input model="vm.m[loadtype].product.productName" placeholder="产品名称" css="col-sm-12" maxlength="15" />
                             </span>
                         </div>
                     </div>
@@ -88,8 +84,8 @@
                     <div class="form-group horizontal">
                         <mcs-label required="true" text="产品简介" css="col-sm-3" />
                         <div class="col-sm-6 mcs-margin-top-10">
-                            <textarea class="form-control" rows="7" class="form-control" id="textArea" ng-model="vm.m[loadtype].product.productMemo" maxlength="400" required></textarea>
-                            <span class="text-left info">不允许超过400个字符，已经输入{{ vm.calcCharCount() }}个</span>
+                            <textarea class="form-control" rows="7" class="form-control" id="textArea" ng-model="vm.m[loadtype].product.productMemo" maxlength="400" minlength="5"  placeholder="请输入产品描述，不少于5个字 。" required></textarea>
+                            <span class="text-left info">请输入产品描述，不少于5个字 。不允许超过400个字符，已经输入{{ vm.calcCharCount() }}个</span>
                         </div>
                     </div>
                 </div>
@@ -98,9 +94,11 @@
                         <mcs-label required="true" text="产品单价" css="col-sm-3" />
                         <div class="col-sm-6">
                             <div class="form-control-static mcs-padding-0">
-                                <mcs-input model="vm.m[loadtype].product.productPrice" css="col-sm-6 mcs-margin-right-10" uib-tooltip="请正确填写产品的基本报价，将用于数据分析" placeholder="产品的基本报价" required /><label class="control-label">元/课时</label>
+                                <mcs-input model="vm.m[loadtype].product.productPrice" css="col-sm-6 mcs-margin-right-10" uib-popover="请正确填写产品的基本报价，将用于数据分析" placeholder="产品的基本报价" datatype="int" min="0" max="9999999.99" required /><label class="control-label">{{tabs[loadtype].priceTip}}</label>
                             </div>
-                            <span class="text-left info">产品单价：产品的基本报价，将用于数据分析，请正确填写</span>
+                            <span class="text-left info" ng-show="!vm.isPartner()">产品单价：产品的基本报价</span>
+                            <span class="text-left info" ng-show="vm.isPartner()">产品单价：产品需要记录的基本报价；非促销类产品订购时，以此单价为准</span>
+                            <span class="text-left info">以上价格也会用于数据分析，请正确填写。</span>
                         </div>
                     </div>
                 </div>
@@ -109,9 +107,11 @@
                         <mcs-label required="true" text="目标单价" css="col-sm-3" />
                         <div class="col-sm-6">
                             <div class="form-control-static mcs-padding-0">
-                                <mcs-input model="vm.m[loadtype].product.targetPrice" css="col-sm-6 mcs-margin-right-10" uib-tooltip="请正确填写完成预算任务的平均单价，将用于数据分析" placeholder="完成预算任务的平均单价" required /><label class="control-label">元/课时</label>
+                                <mcs-input model="vm.m[loadtype].product.targetPrice" css="col-sm-6 mcs-margin-right-10" uib-popover="请正确填写完成预算任务的平均单价，将用于数据分析" placeholder="完成预算任务的平均单价" datatype="int" min="0" max="9999999.99" required /><label class="control-label">{{tabs[loadtype].priceTip}}</label>
                             </div>
-                            <span class="text-left info">目标单价：完成预算任务的平均单价，将用于数据分析，请正确填写</span>
+                            <span class="text-left info" ng-show="!vm.isPartner()">目标单价：完成预算任务的平均订购单价</span>
+                            <span class="text-left info" ng-show="vm.isPartner()">目标单价：能完成预算任务的平均订购单价，每个阶段可能不一样</span>
+                            <span class="text-left info">以上价格也会用于数据分析，请正确填写。</span>
                         </div>
                     </div>
                 </div>
@@ -135,32 +135,38 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row" ng-show=" loadtype=='shiwu' ||loadtype=='xuni' ||loadtype=='feiyong' ">
                     <div class="form-group horizontal">
                         <mcs-label required="true" text="成本费用" css="col-sm-3" />
                         <div class="col-sm-6">
                             <div class="form-control-static mcs-padding-0">
-                                <mcs-input type="number" min="0" model="vm.m[loadtype].product.productCost" />
+                                <mcs-input model="vm.m[loadtype].product.productCost" css="col-sm-6" datatype="int" min="0" required />
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="form-group horizontal">
-                        <mcs-label text="产品启/止售时间" css="col-sm-3" />
+                        <mcs-label required="true" text="产品启/止售时间" css="col-sm-3" />
                         <div class="col-sm-6">
                             <div class="form-control-static">
-                                <ppts-daterangepicker start-date="vm.m[loadtype].product.startDate" end-date="vm.m[loadtype].product.endDate" required />
+                                <mcs-daterangepicker start-date="vm.m[loadtype].product.startDate" end-date="vm.m[loadtype].product.endDate" required />
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="form-group horizontal">
-                        <mcs-label text="收入确认启/止时间" css="col-sm-3" />
-                        <div class="col-sm-6">
-                            <div class="form-control-static">
-                                <ppts-daterangepicker start-date="vm.m[loadtype].product.confirmStartDate" end-date="vm.m[loadtype].product.confirmEndDate" required />
+                        <mcs-label required="true" text="收入确认启/止时间" css="col-sm-3" />
+                        <div class="col-sm-8">
+                            <div class="form-control-static mcs-padding-0">
+                                <mcs-select css="col-sm-3" data="vm.confirmStagings" model="vm.m[loadtype].product.confirmMode" async="false" required />
+                            </div>
+                            <div class="form-control-static mcs-padding-0" ng-show="vm.m[loadtype].product.confirmMode == 1">
+                                <mcs-daterangepicker start-date="vm.m[loadtype].product.confirmStartDate" end-date="vm.m[loadtype].product.confirmEndDate" required />
+                            </div>
+                            <div class="form-control-static mcs-padding-0" ng-show="vm.m[loadtype].product.confirmMode == 2">
+                                <label class="control-label">分</label><mcs-input model="vm.m[loadtype].product.confirmStaging" datatype="int" required /><label class="control-label">个自然月自动确认。(每月收入=实际订购金额 x学大占比 / N，N为填写的月份数)</label>
                             </div>
                         </div>
                     </div>
@@ -183,7 +189,7 @@
                     </div>
 
                 </div>
-                <div class="row">
+                <div class="row" ng-show="vm.m[loadtype].product.tunlandAllowed ==1">
                     <div class="form-group horizontal">
                         <mcs-label text="" css="col-sm-3" />
                         <div class="col-sm-6">
@@ -195,7 +201,7 @@
                     <div class="form-group horizontal">
                         <mcs-label text="实际订购金额比原订购金额少" css="col-sm-3" />
                         <div class="col-sm-6">
-                            <mcs-input type="number" min="0" model="vm.m[loadtype].product.promotionQuota" css="col-sm-2" required /><label>元以下（包括此金额），可直接订购，无需审批</label>
+                            <mcs-input model="vm.m[loadtype].product.promotionQuota" css="col-sm-2" datatype="int" min="0" required /><label>元以下（包括此金额），可直接订购，无需审批</label>
                         </div>
                     </div>
                 </div>

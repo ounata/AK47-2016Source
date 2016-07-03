@@ -7,9 +7,9 @@
     </div>
     <div class="modal-body">
         <div class="form-group">
-            <span class="col-sm-4 control-label no-padding-right" style="padding-top:8px">我申请将<span class="required" uib-tooltip="{{vm.customerNames}}"> {{vm.displayNames}} </span>划转给：</span>
+            <span class="col-sm-4 control-label no-padding-right" style="padding-top:8px">我申请将<span class="required" uib-popover="{{vm.customerNames}}" popover-trigger="mouseenter"> {{vm.displayNames}} </span>划转给：</span>
             <div class="col-sm-8">
-                <ppts-organization branch="vm.transferResources.branch" campus="vm.transferResources.campus" selected="vm.transferResources.selected"  required-level="1"/>
+                <ppts-organization branch="vm.transferResources.branch" campus="vm.transferResources.campus" selected="vm.transferResources.selected" required/>
             </div>
         </div>
         <div class="form-group">

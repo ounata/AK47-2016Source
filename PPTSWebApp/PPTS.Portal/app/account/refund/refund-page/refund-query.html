@@ -6,20 +6,17 @@
         <div class="col-md-6">
             <ppts-select-branch model="vm.criteria.campusIDs" />
         </div>
-        <div class="col-md-3">
-            <mcs-input placeholder="学员/家长姓名" model="vm.criteria.customerOrParentName" css="mcs-input-search mcs-width-full" />
-        </div>
-        <div class="col-md-3">
-            <mcs-input placeholder="学员编号" model="vm.criteria.customerCode" css="mcs-input-search mcs-width-full" />
+        <div class="col-md-6">
+            <mcs-input placeholder="请输入学员、家长姓名，学员编号，家长联系电话进行查询" uib-popover="请输入学员、家长姓名，学员编号，家长联系电话进行查询" model="vm.criteria.searchText" css="mcs-input-search mcs-width-full" />
         </div>
     </div>
 </ppts-dynamic-content>
 <!-- 工具栏 -->
 <ppts-dynamic-content template="toolbar.tpl.html">
-    <mcs-dropdown-button title="确 认" items="vm.verifyMenus" icon="check" category="success"></mcs-dropdown-button>
-    <mcs-button category="approve" text="对 账" click="vm.check()"></mcs-button>
-    <mcs-button category="print" text="打印凭证" click="vm.showPrint()"></mcs-button>
-    <mcs-button category="export"></mcs-button>
+    <mcs-dropdown-button title="确 认" items="vm.verifyMenus" icon="check" category="success" ppts-job-functions="待分出纳确认-本分公司,待分财务确认-本分公司,待分区域财务确认-本分公司"></mcs-dropdown-button>
+    <mcs-button category="approve" text="对 账" click="vm.check()" ppts-job-functions="退款对账-本分公司"></mcs-button>
+    <mcs-button category="print" text="打印凭证" click="vm.showPrint()" ppts-job-functions="打印退费凭证-本人,打印退费凭证-本校区,打印退费凭证-本分公司"></mcs-button>
+    <mcs-button category="export" click="vm.export()" ppts-job-functions="退费管理导出"></mcs-button>
 </ppts-dynamic-content>
 <!-- 数据表格 -->
-<mcs-datatable data="vm.data" />
+<mcs-datatable data="vm.data" condition="vm.criteria" />

@@ -164,7 +164,7 @@ namespace MCS.Library.SOA.DataObjects.Security.Locks
 			WhereSqlClauseBuilder wBuilder = ORMapping.GetWhereSqlClauseBuilderByPrimaryKey(lockData, mappingInfo);
 
 			if (forceOverride == false)
-				wBuilder.AppendItem("LockTime", "DATEADD(SECOND, -EffectiveTime, GETDATE())", "<", true);
+				wBuilder.AppendItem("LockTime", "DATEADD(SECOND, -EffectiveTime, GETUTCDATE())", "<", true);
 
 			StringBuilder sql = new StringBuilder();
 

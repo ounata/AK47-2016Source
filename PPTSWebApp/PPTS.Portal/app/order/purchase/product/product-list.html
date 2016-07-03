@@ -1,5 +1,5 @@
 ﻿<!--查看订单-->
-
+此订单为 {{vm.customer.customerName}}({{vm.customer.customerCode}}) 的订购单
 
 <div class="mcs-panel-search well well-sm">
     <div class="portlet">
@@ -17,38 +17,42 @@
         </div>
     </div>
 </div>
-<!-- /结束：订购列表.查询条件 -->
-<!-- #开始：订购列表.工具条 -->
-<div class="mcs-panel-toolbar">
 
-    <mcs-button category="edit" text="继续选购" click="vm.goBuy()"></mcs-button>
-    <mcs-button category="edit" text="删除已购产品" click="vm.delete()" ng-disabled="vm.data.rowsSelected.length<1"></mcs-button>
-    <mcs-button category="add" text="提交审批" click="vm.submit()" ng-disabled="vm.data.rowsSelected.length<1"></mcs-button>
+<ppts-dynamic-content template="toolbar.tpl.html">
+    <mcs-button icon="shopping-cart" text="继续选购" click="vm.goBuy()"></mcs-button>
+    <mcs-button category="delete" text="删除已购产品" click="vm.delete()"></mcs-button>
+    <mcs-button category="submit" text="提交审批" click="vm.submit()"></mcs-button>
+</ppts-dynamic-content>
 
-</div>
-<!-- /结束：订购列表.工具条 -->
-<!-- #开始：数据表格 -->
-<div class="form-group row" style="color:red;">
-    列表中红色字体的产品不遵循客户折扣率
-</div>
-<mcs-datatable data="vm.data" />
-<!-- /结束：数据表格 -->
-
-<div class="form-group row">
-    总产品原价：{{ vm.totalOriginalMoney() | currency}}
-    总订购金额：{{ vm.totalMoney() | currency}}
-</div>
-<div class="form-group row">
-    <label class="control-label col-sm-3">
-        本次订购关联的缴费单：
-    </label>
-    <div class="col-sm-8">
-        <ppts-select category="chargePayment" model="vm.chargeApplyId" caption="选择关联缴费单" class="col-sm-8" />
+<div class="col-sm-12">
+    <div class="form-group row warning pull-right">
+        <span ng-show="orderType!=2">列表中红色字体的产品不遵循客户折扣率</span>
+        <span ng-show="orderType==2">买赠订购的产品不遵循客户折扣率</span>
     </div>
 </div>
 
-<div class="form-group row" ng-show="vm.showPursueReason()">
-    <ppts-select category="orderSpecialType" model="vm.specialType" caption="申请原因" class="col-sm-3" />
+
+<mcs-datatable data="vm.data" />
+
+<div class="col-sm-12">
+    <div class="form-group row pull-left" ng-show="orderType!=2" >客户折扣率：{{ vm.account.data.rowsSelected[0].discountRate }}</div>
+    <div class="form-group row pull-right">
+        总产品原价：{{ vm.totalOriginalMoney() | currency}}
+        总订购金额：{{ vm.totalMoney() | currency}}
+    </div>
+</div>
+
+<div class="form-group row ">
+    <label class="control-label col-sm-2">
+        本次订购关联的缴费单：
+    </label>
+    <div class="col-sm-8">
+        <mcs-select caption="选择关联缴费单" data="vm.chargePayments" model="vm.chargeApplyId" async="false" css="col-sm-8" />
+    </div>
+</div>
+
+<div class="form-group row" ng-show="orderType==1" >
+    <mcs-select category="orderSpecialType" model="vm.specialType" caption="请选择申请0折原因" class="col-sm-3" disabled="vm.hasZeroDiscount()" />
     <div class="col-sm-8">
         <textarea ng-model="vm.specialMemo" ng-disabled="vm.specialType==1" />
     </div>

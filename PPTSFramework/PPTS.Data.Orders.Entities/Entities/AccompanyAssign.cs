@@ -119,7 +119,21 @@ namespace PPTS.Data.Orders.Entities
             get;
             set;
         }
-    
+
+        [ORFieldMapping("TeacherJobOrgID")]
+        [DataMember]
+        public string TeacherJobOrgID { get; set; }
+
+
+        [ORFieldMapping("TeacherJobOrgName")]
+        [DataMember]
+        public string TeacherJobOrgName { get; set; }
+
+        [ORFieldMapping("ISFullTimeTeacher")]
+        [DataMember]
+        public int? ISFullTimeTeacher { get; set; }
+
+
         /// 创建人ID
         [ORFieldMapping("CreatorID")]
         [DataMember]

@@ -22,11 +22,16 @@ namespace PPTS.Data.Products.Executors
 
 
         public string ProductId { set; get; }
+        
+        public string[] CampusIDs { set; get; }
 
-        /// <summary>
-        /// 启售时间
-        /// </summary>
-        public DateTime Date { set; get; }
+        ///// <summary>
+        ///// 启售时间
+        ///// </summary>
+        //public DateTime Date { set; get; }
+
+        public System.Collections.Generic.IEnumerable<Product> Model { set; get; }
+
 
         public string[] ProductIds { set; get; }
 
@@ -37,14 +42,21 @@ namespace PPTS.Data.Products.Executors
         protected override object DoOperation(DataExecutionContext<UserOperationLogCollection> context)
         {
 
-            if (OperationType == "StopSell") { return ProductAdapter.Instance.StopSellProduct(ProductId); }
-            if (OperationType == "DelaySell") { return ProductAdapter.Instance.DelaySellProduct(ProductId, Date); }
-            //if (OperationType == "StartSell") { return ProductAdapter.Instance.StartSellProduct(ProductId, Date); }
-
-            if (OperationType == "GetProducts")
+            if (OperationType == "StopSell")
             {
-                return ProductViewAdapter.Instance.LoadByInBuilder(new MCS.Library.Data.Adapters.InLoadingCondition() { DataField = "ProductId", BuilderAction = (builder) => { builder.AppendItem(ProductIds); } });
+                return ProductAdapter.Instance.StopSellProduct(Model, CampusIDs);
             }
+            if (OperationType == "DelaySell") {
+                ProductAdapter.Instance.DelaySellProduct(Model, CampusIDs);
+                return true;
+            }
+
+            //if (OperationType == "StartSell") { return ProductAdapter.Instance.StartSellProduct(Model); }
+
+            //if (OperationType == "GetProducts")
+            //{
+            //    return ProductViewAdapter.Instance.LoadByInBuilder(new MCS.Library.Data.Adapters.InLoadingCondition() { DataField = "ProductId", BuilderAction = (builder) => { builder.AppendItem(ProductIds); } });
+            //}
 
             if (OperationType == "GetProductView")
             {
@@ -54,22 +66,20 @@ namespace PPTS.Data.Products.Executors
                 ProductSalaryRuleCollection salaryRules = null;
                 ProductPermissionCollection permissions = null;
 
-                ProductViewAdapter.Instance.LoadByProductIDInContext(ProductId, collection =>
+                ProductViewAdapter.Instance.LoadByProductIDInContext(ProductId, CampusIDs, collection =>
                 {
                     productView = collection.FirstOrNull();
                 });
-                ProductExOfCourseAdapter.Instance.LoadByProductIDInContext(ProductId, collection =>
+                ProductExOfCourseAdapter.Instance.LoadByProductIDInContext(ProductId, CampusIDs, collection =>
                 {
                     exOfCourse = collection.FirstOrNull();
                 });
-                ProductSalaryRuleAdapter.Instance.LoadByProductIDInContext(ProductId, collection => { salaryRules = collection; });
+                ProductSalaryRuleAdapter.Instance.LoadByProductIDInContext(ProductId, CampusIDs, collection => { salaryRules = collection; });
 
-                ProductPermissionAdapter.Instance.LoadByProductIDInContext(ProductId, collection => { permissions = collection; });
+                ProductPermissionAdapter.Instance.LoadByProductIDInContext(ProductId, CampusIDs, collection => { permissions = collection; });
 
-                using (var currentContext = ProductExOfCourseAdapter.Instance.GetDbContext())
-                {
-                    currentContext.ExecuteDataSetSqlInContext();
-                }
+                PPTS.Data.Products.ConnectionDefine.GetDbContext().DoAction(db => db.ExecuteDataSetSqlInContext());
+                
                 FillProductView(productView, exOfCourse, salaryRules, permissions);
 
                 return true;
@@ -78,14 +88,13 @@ namespace PPTS.Data.Products.Executors
             if (OperationType == "DelProduct")
             {
 
-                ProductAdapter.Instance.DeleteInContext(builder => builder.AppendItem("ProductID", ProductId));
-                ProductExOfCourseAdapter.Instance.DeleteInContext(builder => builder.AppendItem("ProductID", ProductId));
-                ProductSalaryRuleAdapter.Instance.DeleteInContext(builder => builder.AppendItem("ProductID", ProductId));
+                
+                ProductAdapter.Instance.DeleteInConetxt(ProductIds, CampusIDs);
+                //ProductExOfCourseAdapter.Instance.DeleteInContext(b => { b = builder; });
+                //ProductSalaryRuleAdapter.Instance.DeleteInContext(b => { b = builder; });
 
-                using (var currentContext = ProductAdapter.Instance.GetDbContext())
-                {
-                    currentContext.ExecuteNonQuerySqlInContext();
-                }
+                PPTS.Data.Products.ConnectionDefine.GetDbContext().DoAction(db => db.ExecuteNonQuerySqlInContext());
+                
                 return true;
             }
 

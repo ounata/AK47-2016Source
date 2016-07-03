@@ -1,30 +1,9 @@
 ﻿<!-- #开始：教学服务会.快速查询条件 -->
-<!--<div class="mcs-panel-search well well-sm">
-    <div class="portlet">
-        <div class="portlet-title line">
-            <div class="caption">
-                <label class="quick-search"><i class="ace-icon fa fa-search bigger-125"></i> 快速查询</label>
-            </div>
-        </div>
-        <div class="portlet-body">
-            <div class="profile-info-row">
-                <div class="profile-info-name">会议日期：</div>
-                <div class="profile-info-value">
-                    <ppts-daterangepicker start-date="vm.criteria.meetingTimeStart" end-date="vm.criteria.meetingTimeEnd" />
-                </div>
-            </div>
-            <ppts-select category="meetingType" model="vm.criteria.meetingType" caption="会议类型" class="col-sm-3" />
-            <ppts-select category="satisfaction" model="vm.criteria.satisfaction" caption="家长满意度" class="col-sm-3" />
-            <mcs-input placeholder="会议组织人" model="vm.criteria.organizerName" />
-            <mcs-button category="search" click="vm.search()" size="medium" />
-        </div>
-        <mcs-button category="add" click="vm.search()" size="medium" />
-    </div>
-</div>-->
+
 <ppts-dynamic-content template="quick-search.tpl.html">
     <div class="row">
         <div class="col-md-6">
-            <ppts-daterangepicker start-date="vm.criteria.meetingTimeStart" end-date="vm.criteria.meetingTimeEnd" css="mcs-width-full mcs-padding-0"/>
+            <mcs-daterangepicker start-date="vm.criteria.meetingTimeStart" end-date="vm.criteria.meetingTimeEnd" css="mcs-width-full mcs-padding-0"/>
         </div>
         <div class="col-md-6">
             <mcs-input placeholder="会议组织人" model="vm.criteria.organizerName" css="mcs-input-search mcs-width-full"/>
@@ -32,10 +11,10 @@
     </div>
     <div class="row">
         <div class="col-md-6">
-            <ppts-select category="meetingType" model="vm.criteria.meetingType" css="mcs-padding-0" caption="会议类型" />
+            <mcs-select category="meetingType" model="vm.criteria.meetingType" css="mcs-padding-0" caption="会议类型" />
         </div>
         <div class="col-md-6">
-            <ppts-select category="satisfaction" model="vm.criteria.satisfaction" css="mcs-padding-0" caption="家长满意度" />
+            <mcs-select category="satisfaction" model="vm.criteria.satisfaction" css="mcs-padding-0" caption="家长满意度" />
         </div>
     </div>
 </ppts-dynamic-content>
@@ -45,5 +24,5 @@
     <mcs-button category="add" text="新增会议" click="vm.add()"></mcs-button>
 </div>
 <!-- #开始：教学服务会.数据表格 -->
-<mcs-datatable data="vm.data" />
+<mcs-datatable data="vm.data"  condition="vm.criteria" />
 <!-- /结束：教学服务会.数据表格 -->

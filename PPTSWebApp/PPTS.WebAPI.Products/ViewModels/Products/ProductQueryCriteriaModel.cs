@@ -1,17 +1,54 @@
 ﻿using System;
+using MCS.Library.Core;
 using MCS.Library.Data.Builder;
 using MCS.Library.Data.Mapping;
 using MCS.Library.Data;
+using System.Collections.Generic;
 
 namespace PPTS.WebAPI.Products.ViewModels.Products
 {
     public class ProductQueryCriteriaModel
     {
-        [NoMapping]
-        public string[] CampusIDs { get; set; }
+        public ProductQueryCriteriaModel() { campusidList = new List<string>(); }
 
-        [InConditionMapping("Category")]
-        public string[] Categories { get; set; }
+        [NoMapping]
+        private List<string> campusidList { set; get; }
+
+        [NoMapping]
+        public string CampusID
+        {
+            set
+            {
+                (value.IsNullOrWhiteSpace()).FalseAction(() =>
+                {
+                    campusidList.Contains(value).FalseAction(() =>
+                    {
+                        campusidList.Add(value);
+                    });
+                });
+            }
+        }
+
+        [NoMapping]
+        public string[] CampusIDs
+        {
+            get { return campusidList.ToArray(); }
+            set
+            {
+                if (value != null)
+                {
+                    value.ForEach(s =>
+                    {
+                        campusidList.Contains(s).FalseAction(() => { campusidList.Add(s); });
+                    });
+                }
+            }
+        }
+
+        
+
+        [ConditionMapping("CategoryType")]
+        public string CategoryType { get; set; }
 
         [ConditionMapping("CreatorName")]
         public string CreatorName { get; set; }
@@ -26,7 +63,7 @@ namespace PPTS.WebAPI.Products.ViewModels.Products
         public string PeriodDuration { get; set; }
 
         [ConditionMapping("ProductName", EscapeLikeString = true, Prefix = "%", Postfix = "%", Operation = "LIKE")]
-        public string Name { get; set; }
+        public string ProductName { get; set; }
 
         [ConditionMapping("ProductCode", Operation = "=")]
         public string ProductCode { get; set; }
@@ -73,8 +110,9 @@ namespace PPTS.WebAPI.Products.ViewModels.Products
                     {
                         SelectedGrades[SelectedGrades.Length] = value;
                     }
-                    else {
-                        SelectedGrades= new string[] { value };
+                    else
+                    {
+                        SelectedGrades = new string[] { value };
                     }
                 }
             }
@@ -129,7 +167,7 @@ namespace PPTS.WebAPI.Products.ViewModels.Products
 
         [InConditionMapping("CourseLevel")]
         public string[] SelectedCourseLevels { set; get; }
-        
+
 
 
         [ConditionMapping("MinPeoples", Operation = ">=")]

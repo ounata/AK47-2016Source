@@ -1,11 +1,18 @@
 ﻿using System;
 using MCS.Library.Data.Mapping;
 using MCS.Library.Data;
+using MCS.Library.Core;
 
 namespace PPTS.WebAPI.Customers.ViewModels.PotentialCustomers
 {
     public class PotentialCustomerQueryCriteriaModel
     {
+        /// <summary>
+        /// 来源潜客or市场查询
+        /// </summary>
+        [NoMapping]
+        public string From { get; set; }
+
         /// <summary>
         /// 机构ID
         /// </summary>
@@ -133,22 +140,98 @@ namespace PPTS.WebAPI.Customers.ViewModels.PotentialCustomers
         public string MarketName { get; set; }
 
         /// <summary>
-        /// 建档人姓名
-        /// </summary>
-        [ConditionMapping("CreatorName", EscapeLikeString = true, Prefix = "%", Postfix = "%", Operation = "LIKE")]
-        public string CreatorName { get; set; }
-
-        /// <summary>
         /// 有效/无效客户
         /// </summary>
         [NoMapping]
         public string IsValids { get; set; }
 
         /// <summary>
+        /// 归属关系
+        /// </summary>
+        [NoMapping]
+        public string[] Belongs { get; set; }
+
+        /// <summary>
+        /// 归属人姓名
+        /// </summary>
+        [NoMapping]
+        public string BelongName { get; set; }
+
+        /// <summary>
+        /// 建档关系
+        /// </summary>
+        [InConditionMapping("CreatorJobType")]
+        public int[] Creation { get; set; }
+
+        /// <summary>
+        /// 建档人姓名
+        /// </summary>
+        [ConditionMapping("CreatorName")]
+        public string CreatorName { get; set; }
+
+        /// <summary>
+        /// 建档部门
+        /// </summary>
+        [NoMapping]
+        public string Dept { get; set; }
+
+        /// <summary>
+        /// 建档部门
+        /// </summary>
+        [NoMapping]
+        public string DeptParam { get { return Dept == "-1" ? "" : Dept; } set { } }
+
+        /// <summary>
         /// 客户状态
         /// </summary>
         [NoMapping]
         public string CustomerStatus { get { return IsValids == "-1" ? "" : IsValids; } set { } }
+
+        #region 市场相关
+
+        /// <summary>
+        /// 充值日期
+        /// </summary>
+        [NoMapping]
+        public DateTime PayTimeStart { get; set; }
+
+        [NoMapping]
+        public DateTime PayTimeStartUTC { get { return TimeZoneContext.Current.ConvertTimeToUtc(PayTimeStart); } set { } }
+
+        /// <summary>
+        /// 充值日期
+        /// </summary>
+        [NoMapping]
+        public DateTime PayTimeEnd { get; set; }
+
+        [NoMapping]
+        public DateTime PayTimeEndUTC { get { return TimeZoneContext.Current.ConvertTimeToUtc(PayTimeEnd); } set { } }
+
+        /// <summary>
+        /// 充值金额
+        /// </summary>
+        [NoMapping]
+        public decimal PayAmountMin { get; set; }
+
+        /// <summary>
+        /// 充值金额
+        /// </summary>
+        [NoMapping]
+        public decimal PayAmountMax { get; set; }
+
+        /// <summary>
+        /// 客户分类
+        /// </summary>
+        [NoMapping]
+        public string CustomerType { get; set; }
+
+        /// <summary>
+        /// 客户分类
+        /// </summary>
+        [NoMapping]
+        public string CustomerTypeParam { get { return CustomerType == "-1" ? "" : CustomerType; } set { } }
+
+        #endregion
 
         [NoMapping]
         public PageRequestParams PageParams

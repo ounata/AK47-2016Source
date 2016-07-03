@@ -77,10 +77,32 @@ namespace PPTS.Data.Customers.Entities
             set;
 		}
 
-		/// <summary>
-		/// 教师类型（全职，兼职）
-		/// </summary>
-		[ORFieldMapping("TeacherType")]
+        /// <summary>
+        /// 教师岗位ID
+        /// </summary>
+        [ORFieldMapping("TeacherJobID")]
+        [DataMember]
+        public string TeacherJobID
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 教师岗位名称
+        /// </summary>
+        [ORFieldMapping("TeacherJobName")]
+        [DataMember]
+        public string TeacherJobName
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 教师类型（全职，兼职）
+        /// </summary>
+        [ORFieldMapping("TeacherType")]
         [ConstantCategory("Common_TeacherType")]
         [DataMember]
 		public string TeacherType

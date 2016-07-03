@@ -9,18 +9,21 @@ using MCS.Library.Principal;
 using PPTS.Data.Common.Security;
 using MCS.Library.OGUPermission;
 using MCS.Web.MVC.Library.Filters;
+using PPTS.WebAPI.Customers.ViewModels.Students;
+using PPTS.Data.Customers.Adapters;
+
 namespace PPTS.WebAPI.Customers.ViewModels.CustomerVisits
 {
     [ApiPassportAuthentication]
     public class CreatableVisitBatchModel
     {
 
-        public CustomerVisit CustomerVisit
+        public CustomerVisitModel CustomerVisit
         {
             get; set;
         }
 
-        public CustomerVisitCollection CustomerVisits
+        public CustomerVisitModelCollection CustomerVisits
         {
             get; set;
         }
@@ -181,6 +184,17 @@ namespace PPTS.WebAPI.Customers.ViewModels.CustomerVisits
 
         public CreatableVisitBatchModel()
         {
+        }
+
+        public static StudentModel GetStudentByID(string studentID)
+        {
+            StudentModel student = new StudentModel();
+
+            GenericCustomerAdapter<StudentModel, List<StudentModel>>.Instance.LoadInContext(studentID, customer => student = customer);
+
+            CustomerServiceAdapter.Instance.GetDbContext().DoAction(context => context.ExecuteDataSetSqlInContext());
+
+            return student;
         }
     }
 }

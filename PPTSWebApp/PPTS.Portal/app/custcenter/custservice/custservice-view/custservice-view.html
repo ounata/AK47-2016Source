@@ -7,8 +7,12 @@
     <div class="clearfix form-actions mcs-form-actions">
         <!-- #开始：保存客服.工具栏 -->
         <div class="mcs-panel-toolbar col-sm-offset-3">
-            <mcs-button category="edit" ppts-job-functions="编辑客服信息" ng-hide="vm.customerService.serviceStatus == 2 || vm.customerService.handlerJobType !=''" click="$state.go('ppts.custservice-edit',{id:vm.customerService.serviceID})"></mcs-button>
+            <!--<mcs-button category="edit" ppts-job-functions="编辑客服信息" ng-hide="vm.customerService.serviceStatus == 2 || vm.customerService.handlerJobType !=''" click="$state.go('ppts.custservice-edit',{id:vm.customerService.serviceID})"></mcs-button>
             <mcs-button icon="female" css="btn-success" text="转下一受理人" ppts-job-functions="转下一受理人" ng-hide="vm.customerService.serviceStatus == 2 || vm.customerService.handlerJobType !=''" click="$state.go('ppts.custservice-nextProcess',{id:vm.customerService.serviceID})"></mcs-button>
+            <mcs-button category="submit" text="解决受理" click="vm.overProcess()"></mcs-button>
+            <mcs-button category="submit" text="结束流程" click="vm.overProcess()"></mcs-button>-->
+            <mcs-button category="edit" ppts-job-functions="编辑客服信息" click="vm.edit()"></mcs-button>
+            <mcs-button icon="female" css="btn-success" text="转下一受理人" ppts-job-functions="转下一受理人" click="vm.nextPerson();"></mcs-button>
             <mcs-button category="submit" text="解决受理" click="vm.overProcess()"></mcs-button>
             <mcs-button category="submit" text="结束流程" click="vm.overProcess()"></mcs-button>
         </div>
@@ -19,7 +23,7 @@
                 <tr></tr>
                 <tr class="row">
                     <td class="col-sm-2 text-right">
-                        <label>
+                        <label class="control-label">
                             学生姓名：
                         </label>
                     </td>
@@ -69,10 +73,10 @@
                         <label>{{vm.customerService.complaintTimes | complaintTimes }}</label>
                     </td>
                     <td class="col-sm-2 text-right">
-                        <label class="control-label">投诉升级：</label>
+                        <label class="control-label">客诉升级：</label>
                     </td>
                     <td class="col-sm-4">
-                        <label>{{ vm.customerService.complaintLevel | complaintLevel }}</label>
+                        <label>{{ vm.customerService.complaintUpgrade | complaintUpgrade }}</label>
                     </td>
                 </tr>
                 <tr class="row" ng-hide="vm.customerService.serviceType != 3">
@@ -89,16 +93,11 @@
                         <label>{{vm.customerService.consultMemo }}</label>
                     </td>
                 </tr>
-
-            </tbody>
-        </table>
-        <table class="table">
-            <tbody>
                 <tr class="row">
                     <td class="col-sm-2 text-right">
                         <label>客服受理详细情况：</label>
                     </td>
-                    <td>
+                    <td colspan="3">
                         <label>{{vm.customerService.acceptMemo}}</label>
                     </td>
                 </tr>
@@ -106,7 +105,7 @@
                     <td class="col-sm-2 text-right">
                         <label>诉求：</label>
                     </td>
-                    <td>
+                    <td colspan="3">
                         <label>{{vm.customerService.appealMemo}}</label>
                     </td>
                 </tr>
@@ -114,7 +113,7 @@
                     <td class="col-sm-2 text-right">
                         <label>处理建议：</label>
                     </td>
-                    <td>
+                    <td colspan="3">
                         <label>{{vm.customerService.handleAdvice}}</label>
                     </td>
                 </tr>
@@ -122,12 +121,13 @@
                     <td class="col-sm-2 text-right">
                         <label>备注：</label>
                     </td>
-                    <td>
+                    <td colspan="3">
                         <label>{{vm.customerService.serviceMemo}}</label>
                     </td>
                 </tr>
             </tbody>
         </table>
+        
         <div class="page-header">
             <span>受理信息</span>
         </div>

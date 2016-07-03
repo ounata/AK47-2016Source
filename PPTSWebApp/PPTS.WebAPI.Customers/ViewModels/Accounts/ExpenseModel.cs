@@ -60,7 +60,7 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
 
         private static ExpenseModel Load(CustomerExpenseRelation e)
         {
-            ExpenseModel model = AutoMapper.Mapper.DynamicMap<ExpenseModel>(e);
+            ExpenseModel model = e.ProjectedAs<ExpenseModel>();
             model.CanReturn = true;
             return model;
         }

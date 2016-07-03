@@ -21,16 +21,6 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
     public class ChargePaymentModel
     {
         /// <summary>
-        /// 支付时间
-        /// </summary>
-        [DataMember]
-        public DateTime PayTime
-        {
-            set;
-            get;
-        }
-
-        /// <summary>
         /// 付款人（默认学员姓名）
         /// </summary>
         [DataMember]
@@ -90,6 +80,48 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
             get;
         }
 
+        /// <summary>
+        /// 当前时间
+        /// </summary>
+        [DataMember]
+        public DateTime NowTime
+        {
+            get
+            {
+                return SNTPClient.AdjustedTime.Date;
+            }
+        }
+
+        /// <summary>
+        /// 支付时间
+        /// </summary>
+        [DataMember]
+        public DateTime PayTime
+        {
+            set;
+            get;
+        }
+
+        /// <summary>
+        /// 收款时间允许的开始时间
+        /// </summary>
+        [DataMember]
+        public DateTime PayStartTime
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 收款允许的结束时间
+        /// </summary>
+        [DataMember]
+        public DateTime PayEndTime
+        {
+            get;
+            set;
+        }
+        
         List<ChargePaymentItemModel> _item = new List<ChargePaymentItemModel>();
         /// <summary>
         /// 缴费支付表
@@ -120,7 +152,16 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
             this.PayeeName = user.DisplayName;
             this.PayeeJobID = user.GetCurrentJob().ID;
             this.PayeeJobName = user.GetCurrentJob().Name;
-            this.PayTime = SNTPClient.AdjustedTime;
+            this.PayTime = SNTPClient.AdjustedTime.Date;
+
+            DateTime thisDate = this.PayTime;
+            DateTime thatDate = thisDate.AddMonths(-1);
+            GlobalArgs args = ConfigsCache.GetGlobalArgs();
+            if (args.IsClosedToAcccount(thatDate))
+                this.PayStartTime = thisDate.AddDays(-1 * thisDate.Day + 1);
+            else
+                this.PayStartTime = thatDate.AddDays(-1 * thatDate.Day + 1);
+            this.PayEndTime = thisDate;
         }
 
         public static ChargePaymentModel Load(string applyID)
@@ -131,7 +172,7 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
             {
                 model.PaidMoney += payment.PayMoney;
 
-                ChargePaymentItemModel item = AutoMapper.Mapper.DynamicMap<ChargePaymentItemModel>(payment);
+                ChargePaymentItemModel item = payment.ProjectedAs<ChargePaymentItemModel>();
                 model.Items.Add(item);
             }
             return model;

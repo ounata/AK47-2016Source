@@ -1,4 +1,5 @@
-﻿using MCS.Library.Principal;
+﻿using MCS.Library.Passport;
+using MCS.Library.Principal;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -33,7 +34,7 @@ namespace MCS.Web.MVC.Library.Filters
 
         protected override bool IsAuthorized(HttpActionContext actionContext)
         {
-            bool result = this.Enabled == false;
+            bool result = (this.Enabled == false || RolesDefineConfig.GetConfig().Enabled == false);
 
             if (result == false)
             {

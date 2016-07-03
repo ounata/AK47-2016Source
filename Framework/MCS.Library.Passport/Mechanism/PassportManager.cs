@@ -104,9 +104,9 @@ namespace MCS.Library.Passport
         /// 从Cookie中得到Ticket
         /// </summary>
         /// <returns><see cref="ITicket"/> 对象。</returns>
-        public static ITicket GetTicket(out bool fromCookie)
+        public static ITicket GetTicket(out TicketSource tickedSource)
         {
-            fromCookie = false;
+            tickedSource = TicketSource.Unknown;
 
             Common.CheckHttpContext();
 
@@ -116,18 +116,31 @@ namespace MCS.Library.Passport
 
             if (PassportClientSettings.GetConfig().Method == TicketTransferMethod.HttpPost
                         && string.Compare(context.Request.HttpMethod, "POST", true) == 0)
+            {
+                tickedSource = TicketSource.FromForm; 
                 ticket = Ticket.LoadFromForm();
+            }
             else
+            {
+                tickedSource = TicketSource.FromUrl;
                 ticket = Ticket.LoadFromUrl();
+            }
 
             if (IsTicketValid(ticket) == false)
             {
-                ticket = Ticket.LoadFromCookie();	//从Cookie中加载Ticket
+                tickedSource = TicketSource.FromHeader;
+                ticket = Ticket.LoadFromHeader();
 
-                if (ticket != null)
+                if (IsTicketValid(ticket) == false)
                 {
-                    fromCookie = true;
-                    Trace.WriteLine(string.Format("从cookie中找到用户{0}的ticket", ticket.SignInInfo.UserID), "PassportSDK");
+                    tickedSource = TicketSource.FromCookie;
+
+                    ticket = Ticket.LoadFromCookie();   //从Cookie中加载Ticket
+
+                    if (ticket != null)
+                        Trace.WriteLine(string.Format("从cookie中找到用户{0}的ticket", ticket.SignInInfo.UserID), "PassportSDK");
+                    else
+                        tickedSource = TicketSource.Unknown;
                 }
             }
 
@@ -185,7 +198,7 @@ namespace MCS.Library.Passport
         /// </summary>
         /// <param name="returnUrl">认证通过后重定向地址</param>
         /// <returns>登录或是注销url</returns>
-        public static string GetLogOnOrLogOffUrl(string returnUrl)
+        public static string GetLogOnOrLogOffUrl(string returnUrl = "")
         {
             return GetLogOnOrLogOffUrl(returnUrl, true, true);
         }
@@ -200,10 +213,16 @@ namespace MCS.Library.Passport
         public static string GetLogOnOrLogOffUrl(string returnUrl, bool logOffAutoRedirect, bool logOffAll)
         {
             Common.CheckHttpContext();
+
+            if (returnUrl.IsNullOrEmpty())
+                returnUrl = UriHelper.RemoveUriParams(HttpContext.Current.Request.Url.ToString(), "t");
+
+            returnUrl = ChangeToAbsoluteUrl(returnUrl);
+
             string strResult = string.Empty;
 
-            bool fromCookie = false;
-            ITicket ticket = GetTicket(out fromCookie);
+            TicketSource ticketSource = TicketSource.Unknown;
+            ITicket ticket = GetTicket(out ticketSource);
 
             HttpContext context = HttpContext.Current;
             HttpRequest request = context.Request;
@@ -269,7 +288,7 @@ namespace MCS.Library.Passport
                 if (strKey != PassportManager.TicketParamName)
                 {
                     ExceptionHelper.TrueThrow<AuthenticateException>(
-                        Array.Exists<string>(PassportManager.ReservedParams, delegate(string data)
+                        Array.Exists<string>(PassportManager.ReservedParams, delegate (string data)
                         {
                             return string.Compare(strKey, data, true) == 0;
                         }),
@@ -321,8 +340,8 @@ namespace MCS.Library.Passport
             Common.CheckHttpContext();
             HttpContext context = HttpContext.Current;
 
-            bool fromCookie = false;
-            ITicket ticket = GetTicket(out fromCookie);
+            TicketSource ticketSource = TicketSource.Unknown;
+            ITicket ticket = GetTicket(out ticketSource);
 
             if (IsTicketValid(ticket) == false)
             {
@@ -331,9 +350,12 @@ namespace MCS.Library.Passport
             }
             else
             {
+                //票据合法
                 ticket.SaveToCookie();
+                ticket.SaveToHeader();
 
-                if (fromCookie == false)
+                //如果不是来源于cookie，说明来源于url。是从认证页面post过来的，直接转到应用页面即可。
+                if (ticketSource != TicketSource.FromCookie && ticketSource != TicketSource.FromHeader)
                 {
                     if (PassportClientSettings.GetConfig().Method == TicketTransferMethod.HttpPost
                         && string.Compare(context.Request.HttpMethod, "POST", true) == 0)
@@ -482,14 +504,26 @@ namespace MCS.Library.Passport
 
             if (TenantContext.Current.Enabled)
                 parameters.Add(TenantExtensions.TenantCodeParamName, TenantContext.Current.TenantCode);
-            //string result = "?ru=" + HttpUtility.UrlEncode(strReturlUrl)
-            //                + "&to=" + HttpUtility.UrlEncode(clientConfig.AppSignInTimeout.ToString())
-            //                + "&aid=" + HttpUtility.UrlEncode(clientConfig.AppID)
-            //                + "&ip=" + HttpUtility.UrlEncode(request.UserHostAddress)
-            //                + "&lou=" + HttpUtility.UrlEncode(GetLogOffCallBackUrl().ToString())
-            //                + "&m=" + HttpUtility.UrlEncode(clientConfig.Method.ToString());
 
             return "?" + parameters.ToUrlParameters(true);
+        }
+
+        /// <summary>
+		/// 将需要返回的url变成绝对路径的url（如果本来是绝对地址，则忽略）
+		/// </summary>
+		/// <param name="ru"></param>
+		/// <returns></returns>
+		private static string ChangeToAbsoluteUrl(string ru)
+        {
+            string result = ru;
+
+            Uri rUri = new Uri(ru, UriKind.RelativeOrAbsolute);
+
+            if (rUri.IsAbsoluteUri == false)
+                result = HttpContext.Current.Request.Url.GetComponents(UriComponents.SchemeAndServer, UriFormat.SafeUnescaped)
+                    + Path.Combine("/", ru.ToString());
+
+            return result;
         }
         #endregion 私有方法
     }

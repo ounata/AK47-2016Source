@@ -19,6 +19,11 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
     [DataContract]
     public class AccountModel : Account
     {
+        public AccountModel()
+        {
+            this.DiscountRate = 1;
+        }
+
         /// <summary>
         /// 当前已排定课时数量
         /// </summary>
@@ -88,6 +93,17 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
         }
 
         /// <summary>
+        /// 根据学员ID获取合同账户信息
+        /// </summary>
+        /// <param name="customerID"></param>
+        /// <returns></returns>
+        public static AccountModel LoadContractByCustomerID(string customerID)
+        {
+            List<AccountModel> models = LoadByCustomerID(customerID);
+            return models.Where(x => x.AccountType == AccountTypeDefine.Contract).SingleOrDefault();
+        }
+
+        /// <summary>
         /// 根据学员ID获取可充值的账户
         /// </summary>
         /// <param name="customerID"></param>
@@ -105,13 +121,55 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
         }
 
         /// <summary>
-        /// 根据学员ID获取非零账户
+        /// 获取账户总的价值
         /// </summary>
         /// <param name="customerID"></param>
         /// <returns></returns>
-        public static List<AccountModel> LoadNonZeroByCustomerID(string customerID)
+        public static decimal GetAccountTotalValue(string customerID)
         {
-            return LoadByCustomerID(customerID, false, false);
+            List<AccountModel> models = LoadByCustomerID(customerID);
+            return models.Sum(x => x.AccountValue);
+        }
+
+        /// <summary>
+        /// 为转让获取账户信息
+        /// </summary>
+        /// <param name="customerID"></param>
+        /// <returns></returns>
+        public static List<AccountModel> Load4TransferByCustomerID(string customerID)
+        {
+            List<AccountModel> models = new List<AccountModel>();
+            AccountCollection accounts = AccountAdapter.Instance.LoadCollectionByCustomerID(customerID);
+            foreach (Account account in accounts)
+            {
+                if (account.AccountMoney != 0)
+                {
+                    AccountModel model = BuildAssetMoney(account, false);
+                    models.Add(model);
+                }
+            }
+            return models.OrderByDescending(x => x.CreateTime).ToList();
+        }
+
+        /// <summary>
+        /// 为退费获取账户列表
+        /// </summary>
+        /// <param name="customerID"></param>
+        /// <returns></returns>
+        public static List<AccountModel> Load4RefundByCustomerID(string customerID)
+        {
+            List<AccountModel> models = new List<AccountModel>();
+            AccountCollection accounts = AccountAdapter.Instance.LoadCollectionByCustomerID(customerID);
+            foreach (Account account in accounts)
+            {
+                if (account.AccountMoney != 0)
+                {
+                    AccountModel model = BuildAssetMoney(account, true);
+                    if (model.AssetMoney == 0)
+                        models.Add(model);
+                }
+            }
+            return models.OrderByDescending(x => x.CreateTime).ToList();
         }
 
         /// <summary>
@@ -121,30 +179,19 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
         /// <returns></returns>
         public static List<AccountModel> LoadByCustomerID(string customerID)
         {
-            return LoadByCustomerID(customerID, false);
-        }
-        public static List<AccountModel> LoadByCustomerID(string customerID, bool isRefund)
-        {
-            return LoadByCustomerID(customerID, isRefund, true);
-        }
-        public static List<AccountModel> LoadByCustomerID(string customerID, bool isRefund, bool nonZero)
-        {
             List<AccountModel> models = new List<AccountModel>();
             AccountCollection accounts = AccountAdapter.Instance.LoadCollectionByCustomerID(customerID);
             foreach (Account account in accounts)
             {
-                if (!nonZero || account.AccountMoney != 0)
-                {
-                    AccountModel model = BuildAssetMoney(account, isRefund);
-                    models.Add(model);
-                }
+                AccountModel model = BuildAssetMoney(account, false);
+                models.Add(model);
             }
-            return models;
+            return models.OrderByDescending(x => x.CreateTime).ToList();
         }
 
         private static AccountModel BuildAssetMoney(Account account, bool isRefund)
         {
-            AccountModel model = AutoMapper.Mapper.DynamicMap<AccountModel>(account);
+            AccountModel model = account.ProjectedAs<AccountModel>();
             AssetStatisticQueryResult asset = PPTSAssetQueryServiceProxy.Instance.QueryAssetStatisticByAccountID(account.AccountID);
             if (asset != null)
             {

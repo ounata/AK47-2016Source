@@ -15,6 +15,11 @@ using System;
 using PPTS.Data.Products.Executors;
 using MCS.Web.MVC.Library.Filters;
 using MCS.Library.Principal;
+using PPTS.Web.MVC.Library.Filters;
+using PPTS.WebAPI.Products.Common;
+using PPTS.Data.Common;
+using MCS.Web.MVC.Library.Models.Workflow;
+using MCS.Web.MVC.Library.ApiCore;
 
 namespace PPTS.WebAPI.Products.Controllers
 {
@@ -28,11 +33,7 @@ namespace PPTS.WebAPI.Products.Controllers
 
         #region 班组订购
 
-        /// <summary>
-        /// 查询，第一次。第一页，下载字典
-        /// </summary>
-        /// <param name="criteria">查询条件</param>
-        /// <returns>返回带字典的潜客数据列表</returns>
+        [PPTSJobFunctionAuthorize("PPTS:订购")]
         [HttpPost]
         public QueryClassGroupQueryResult GetClassGroupProducts(QueryClassGroupCriteriaModel criteria)
         {
@@ -40,16 +41,13 @@ namespace PPTS.WebAPI.Products.Controllers
             dataSource.CampusIDs = criteria.CampusIDs;
 
             return new QueryClassGroupQueryResult
-            {   QueryResult= dataSource.Query(criteria.PageParams, criteria, criteria.OrderBy),
+            {
+                QueryResult = dataSource.Query(criteria.PageParams, criteria, criteria.OrderBy),
                 Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(OrderClassGroupProductView)),
             };
         }
 
-        /// <summary>
-        /// 查询，翻页或排序。不下载字典
-        /// </summary>
-        /// <param name="criteria">查询条件</param>
-        /// <returns>返回不带字典的潜客数据列表</returns>
+        [PPTSJobFunctionAuthorize("PPTS:订购")]
         [HttpPost]
         public PagedQueryResult<OrderClassGroupProductView, OrderClassGroupProductViewCollection> GetPagedClassGroupProducts(QueryClassGroupCriteriaModel criteria)
         {
@@ -64,106 +62,131 @@ namespace PPTS.WebAPI.Products.Controllers
         #region api/Products/getallProducts
 
 
-        /// <summary>
-        /// 查询，第一次。第一页，下载字典
-        /// </summary>
-        /// <param name="criteria">查询条件</param>
-        /// <returns>返回带字典的潜客数据列表</returns>
+        [PPTSJobFunctionAuthorize("PPTS:资产兑换,订购,产品管理列表（产品详情）,产品管理列表（产品详情）-本校区,产品管理列表（产品详情）-本分公司,产品管理列表（产品详情）-全国")]
         [HttpPost]
         public ProductQueryResult GetAllProducts(ProductQueryCriteriaModel criteria)
         {
             var dataSource = ProductViewDataSource.Instance;
-            dataSource.CampusIDs = criteria.CampusIDs;
+            dataSource.CampusIDs = DeluxeIdentity.CurrentUser.PermisstionFilter(criteria.CampusIDs);
+            //dataSource.CampusIDs = criteria.CampusIDs;
             return new ProductQueryResult
             {
                 QueryResult = dataSource.Query(criteria.PageParams, criteria, criteria.OrderBy),
                 Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(ProductView)),
-                Categories = CategoryAdapter.Instance.LoadAll()
             };
         }
 
 
-
-        /// <summary>
-        /// 查询，翻页或排序。不下载字典
-        /// </summary>
-        /// <param name="criteria">查询条件</param>
-        /// <returns>返回不带字典的潜客数据列表</returns>
+        [PPTSJobFunctionAuthorize("PPTS:资产兑换,订购,产品管理列表（产品详情）,产品管理列表（产品详情）-本校区,产品管理列表（产品详情）-本分公司,产品管理列表（产品详情）-全国")]
         [HttpPost]
         public PagedQueryResult<ProductView, ProductViewCollection> GetPagedProducts(ProductQueryCriteriaModel criteria)
         {
             var dataSource = ProductViewDataSource.Instance;
-            dataSource.CampusIDs = criteria.CampusIDs;
+            dataSource.CampusIDs = DeluxeIdentity.CurrentUser.PermisstionFilter(criteria.CampusIDs);
             return dataSource.Query(criteria.PageParams, criteria, criteria.OrderBy);
         }
 
+        [PPTSJobFunctionAuthorize("PPTS:产品管理列表（产品详情）,产品管理列表（产品详情）-本校区,产品管理列表（产品详情）-本分公司,产品管理列表（产品详情）-全国")]
         [HttpGet]
         public ProductViewModel GetProduct(string id)
         {
-            return ProductViewModel.GetProducViewtById(id);
+            return ProductViewModel.GetProducViewtById(id, DeluxeIdentity.CurrentUser.PermisstionFilter());
         }
 
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="ids"></param>
-        /// <returns></returns>
         [HttpPost]
-        public ProductViewCollectionModel GetProducts(string[] ids)
+        public dynamic GetProductByWorkflow(dynamic wfParams)
         {
-            return ProductViewCollectionModel.GetProductViewCollectionByIds(ids);
+            WfClientSearchParameters p = new WfClientSearchParameters();
+
+            p.ResourceID = wfParams.resourceID;
+            p.ActivityID = wfParams.activityID;
+            p.ProcessID = wfParams.processID;
+
+            var model = ProductViewModel.GetProducViewtById(p.ResourceID, null);
+            return new { ClientProcess = WfClientProxy.GetClientProcess(p), Model = model };
         }
+
+
+        ///// <summary>
+        ///// 
+        ///// </summary>
+        ///// <param name="ids"></param>
+        ///// <returns></returns>
+        //[HttpPost]
+        //public ProductViewCollectionModel GetProducts(string[] ids)
+        //{
+        //    return ProductViewCollectionModel.GetProductViewCollectionByIds(ids);
+        //}
 
 
         #endregion
 
         #region api/Products/createProduct-CopyProduct
 
+        [PPTSJobFunctionAuthorize("PPTS:新建/删除/止售/延期产品-本分公司")]
         [HttpGet]
         public ProductModel CreateProduct(int type = 1)
         {
             return ProductModel.ToCreateableProductModel((CategoryType)type); ;
         }
-        
+
+        [PPTSJobFunctionAuthorize("PPTS:新建/删除/止售/延期产品-本分公司")]
         [HttpPost]
         public IHttpActionResult SubmitProduct(ProductModel model)
         {
+            model.CampusIDs = DeluxeIdentity.CurrentUser.PermisstionFilter(model.CampusIDs);
             model.CurrentUser = DeluxeIdentity.CurrentUser;
-            
-            return Ok( new ProductExecutor(model) { NeedValidation=true }.Execute());
-            
+            return Ok(new AddProductExecutor(model) { NeedValidation = true }.Execute());
+
         }
 
+        [PPTSJobFunctionAuthorize("PPTS:新建/删除/止售/延期产品-本分公司")]
         [HttpGet]
         public ProductViewModel CopyProduct(string id)
         {
-            return ProductViewModel.GetProducViewtById(id).FillCatalogs().Empty();
+            return ProductViewModel.GetProducViewtById(id, DeluxeIdentity.CurrentUser.PermisstionFilter()).FillCatalogs().Empty();
         }
 
         #endregion
 
-        [HttpGet]
-        public IHttpActionResult StopSellProduct(string id)
-        {
-            var result = new PPTSProductExecutor("StopSell") { ProductId = id }.Execute();
-            return Ok(new {EndDate= result });
-        }
-
-
+        [PPTSJobFunctionAuthorize("PPTS:新建/删除/止售/延期产品-本分公司")]
         [HttpPost]
-        public IHttpActionResult DelayProduct(dynamic param)
+        public IHttpActionResult StopSellProduct(StopSellProductModel model)
         {
-            return Ok(new PPTSProductExecutor("DelaySell") { ProductId = param.id, Date = param.endDate }.Execute());
+            model.CurrentUser = DeluxeIdentity.CurrentUser;
+            var result = new PPTSProductExecutor("StopSell")
+            {
+                Model = model.FillProduct().Model,
+                CampusIDs = DeluxeIdentity.CurrentUser.PermisstionFilter()
+            }.Execute();
+            return Ok(new { EndDate = result });
         }
 
+        [PPTSJobFunctionAuthorize("PPTS:新建/删除/止售/延期产品-本分公司")]
         [HttpPost]
-        public IHttpActionResult DelProduct(string []ids)
+        public IHttpActionResult DelayProduct(DelayProductModel model)
         {
-            return Ok( new PPTSProductExecutor("DelProduct") { ProductId = string.Join( ",", ids) }.Execute());
+            model.CurrentUser = DeluxeIdentity.CurrentUser;
+            return Ok(new PPTSProductExecutor("DelaySell")
+            {
+                Model = model.FillProduct().Model,
+                CampusIDs = DeluxeIdentity.CurrentUser.PermisstionFilter()
+            }.Execute());
         }
 
-        
+        [PPTSJobFunctionAuthorize("PPTS:新建/删除/止售/延期产品-本分公司")]
+        [HttpPost]
+        public IHttpActionResult DelProduct(string[] ids)
+        {
+            return Ok(new PPTSProductExecutor("DelProduct")
+            {
+                ProductIds = ids,
+                CampusIDs = DeluxeIdentity.CurrentUser.PermisstionFilter()
+            }.Execute());
+        }
+
+
 
     }
 

@@ -2,11 +2,13 @@
         ppts.config.dataServiceConfig.accountTransferDataService],
         function (account) {
             account.registerController('accountTransferEditController', [
-                '$scope', '$state', '$stateParams', '$location', 'mcsDialogService', 'accountTransferDataService',
-                function ($scope, $state, $stateParams, $location, mcsDialogService, accountDataService) {
+                '$scope', '$state', '$stateParams', '$location', 'mcsDialogService', 'mcsValidationService', 'accountTransferDataService',
+                function ($scope, $state, $stateParams, $location, mcsDialogService, mcsValidationService,  accountDataService) {
                     var vm = this;
                     vm.page = $location.$$search.prev;
                     vm.customerID = $stateParams.id;
+
+                    mcsValidationService.init($scope);
 
                     vm.account = {
                         selection: 'radio',
@@ -36,13 +38,14 @@
                     }
                     // 页面初始化加载或重新搜索时查询
                     vm.init = function () {
+
                         accountDataService.getTransferApplyByCustomerID(vm.customerID, function (result) {
                             vm.apply = result.apply
                             vm.assert = result.assert;
                             vm.customer = result.customer;
                             vm.account.rows = result.accounts;
                             vm.errorMessage = result.assert.message;
-
+                            
                             if (vm.account.rows.length == 1) {
                                 vm.account.rows[0].selected = true;
                                 vm.account.rowsSelected.push({ accountID: vm.account.rows[0].accountID })
@@ -112,10 +115,20 @@
 
                             vm.apply.transferMoney = row.accountMoney;
                         }
-                    });
+                    }, true);
 
                     //新增转让单
                     vm.save = function () {
+
+                        if (typeof (vm.errorMessage) != 'undefined' && vm.errorMessage != null && vm.errorMessage != '') {
+
+                            mcsDialogService.error({ title: '警告', message: vm.errorMessage });
+                            return;
+                        }
+                        if (!mcsValidationService.run($scope))
+                            return;
+                        if (isNaN(vm.apply.transferMoney))
+                            return;
 
                         var currentRow = vm.getCurrentRow();
                         if (currentRow == null) {
@@ -123,7 +136,7 @@
                             mcsDialogService.error({ title: '警告', message: '请选择要转让的账户' });
                             return;
                         }
-                        if (vm.apply.transferMoney == 'undefined') {
+                        if (typeof(vm.apply.transferMoney) == 'undefined') {
 
                             mcsDialogService.error({ title: '警告', message: '请输入合法的转让金额' });
                             return;
@@ -138,7 +151,16 @@
                             mcsDialogService.error({ title: '警告', message: '转让金额不能大于可转金额' });
                             return;
                         }
-                        mcsDialogService.confirm({ title: '确认', message: '是否确认提交审批？' })
+                        if (!vm.apply.bizCustomerCode) {
+
+                            mcsDialogService.error({ title: '警告', message: '请指定转入学员' });
+                            return;
+                        }
+                        var msg = '转出学员：' + vm.apply.customerName
+                            + '，转入学员：' + vm.apply.bizCustomerName
+                            + '，转让金额：' + vm.apply.transferMoney
+                            + '；是否确定提交审批？'                   
+                        mcsDialogService.confirm({ title: '确认', message: msg })
                            .result.then(function () {
                                accountDataService.saveTransferApply(vm.apply, function () {
                                    $state.go(vm.page);

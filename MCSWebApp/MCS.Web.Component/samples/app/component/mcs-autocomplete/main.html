@@ -32,16 +32,23 @@
                 <div class="col-sm-12">
                     <h3 class="header smaller lighter green">应用范例</h3>
                     <div class="well well-sm form-group">
-                        <tags-input class="mcs-tags-input-sm from-control" add-from-autocomplete-only="true" max-tags="1" add-on-space="true" add-on-enter="true" ng-model="vm.teachers" key-property="teacherId" display-property="name" placeholder="姓名">
+                        <ppts-auto-complete async="true" param="{                    
+                    maxCount: 10,
+                    listMark: 15
+                }" placeholder="姓名" full-path="fullPath" ng-model="vm.teachers" max-tags="2" display-property="name" key="fullPath" remote-data="http://localhost/MCSWebApp/MCS.Web.API/api/UserGraph/query" />
+                        {{vm.teachers}}
+                        <ppts-auto-complete placeholder="姓名" full-path="fullPath" ng-model="vm.students" result-filter="vm.filetr" display-property="name" key="teacherId" data="vm.tags" />
+                        <!--   <tags-input class="mcs-tags-input-sm from-control" ng-blur="vm.tagBlur()" text="vm.text" on-tag-added="vm.tagChanged($tag)" max-tags="1" add-on-space="true" add-on-enter="true" ng-model="vm.teachers" key-property="teacherId" display-property="name" placeholder="姓名">
                             <auto-complete min-length="1" select-first-match="true" source="vm.queryTeacherList($query)"></auto-complete>
-                        </tags-input>
-                        <tags-input class="" add-from-autocomplete-only="true" max-tags="1" add-on-space="true" add-on-enter="true" ng-model="vm.Teachers" key-property="id" display-property="name" placeholder="账号或姓名">
-                            <auto-complete min-length="1" template="my-custom-template" display-property="fullPath" source="vm.queryStudentList($query)"></auto-complete>
-                        </tags-input>
+                        </tags-input> -->
+                        <!--  <tags-input max-tags="1" add-from-autocomplete-only="true" min-length="1" ng-model="vm.Teachers" key-property="id" display-property="name" placeholder="账号或姓名">
+                            <auto-complete min-length="1" display-property="fullPath" source="vm.queryStudentList($query)"></auto-complete>
+                        </tags-input> -->
                     </div>
                     <ul>
                         <li ng-repeat="t in vm.teachers ">
                             <span>{{t.name}}</span>
+                            <span>{{t.id}}</span>
                         </li>
                     </ul>
                     <h4>与树控件配合的使用说明:</h4>
@@ -53,9 +60,9 @@
                     <div class="code_box code_skin0 ">
                         <article id="content " class="markdown-body ">
                             <h4>HTML</h4>
-                            <div class="codehilite "><pre> <span class="p ">&lt;</span><span class="nt ">tags-input</span> <span class="na ">class</span><span class="o ">=</span><span class="s ">&quot;mcs-tags-input-lg&quot;</span> <span class="na ">ng-disable</span><span class="o ">=</span><span class="s ">&quot;true&quot;</span> <span class="na ">ng-model</span><span class="o ">=</span><span class="s ">&quot;vm.teachers&quot;</span> <span class="na ">key-property</span><span class="o ">=</span><span class="s ">&quot;teacherId&quot;</span> <span class="na ">display-property</span><span class="o ">=</span><span class="s ">&quot;name&quot;</span> <span class="na ">placeholder</span><span class="o ">=</span><span class="s ">&quot;姓名&quot;</span><span class="p ">&gt;</span>
-    <span class="p ">&lt;</span><span class="nt ">auto-complete</span> <span class="na ">min-length</span><span class="o ">=</span><span class="s ">&quot;1&quot;</span> <span class="na ">source</span><span class="o ">=</span><span class="s ">&quot;vm.queryTeacherList($query)&quot;</span><span class="p ">&gt;&lt;/</span><span class="nt ">auto-complete</span><span class="p ">&gt;</span>
-  <span class="p ">&lt;/</span><span class="nt ">tags-input</span><span class="p ">&gt;</span>
+                            <div class="codehilite"><pre>  本地数据：  <span class="nt">&lt;ppts-auto-complete</span> <span class="na">placeholder=</span><span class="s">&quot;姓名&quot;</span> <span class="na">ng-model=</span><span class="s">&quot;vm.students&quot;</span> <span class="na">display-property=</span><span class="s">&quot;name&quot;</span> <span class="na">key=</span><span class="s">&quot;teacherId&quot;</span> <span class="na">data=</span><span class="s">&quot;vm.tags&quot;</span> <span class="nt">/&gt;</span>
+
+    异步数据：<span class="nt">&lt;ppts-auto-complete</span> <span class="na">async=</span><span class="s">&quot;true&quot;</span> <span class="na">param=</span><span class="s">&quot;{maxCount: 10,listMark: 15}&quot;</span> <span class="na">placeholder=</span><span class="s">&quot;姓名&quot;</span> <span class="na">full-path=</span><span class="s">&quot;fullPath&quot;</span> <span class="na">ng-model=</span><span class="s">&quot;vm.teachers&quot;</span> <span class="na">max-tags=</span><span class="s">&quot;2&quot;</span> <span class="na">display-property=</span><span class="s">&quot;name&quot;</span> <span class="na">key=</span><span class="s">&quot;id&quot;</span> <span class="na">remote-data=</span><span class="s">&quot;http://localhost/MCSWebApp/MCS.Web.API/api/UserGraph/query&quot;</span> <span class="nt">/&gt;</span>
 </pre></div>
                             <h4>JS</h4>
                             <div class="codehilite "><pre><span class="p ">(</span><span class="kd ">function</span> <span class="p ">()</span> <span class="p ">{</span>

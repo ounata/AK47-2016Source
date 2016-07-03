@@ -43,8 +43,14 @@ namespace PPTS.Data.Customers.Executors
         public void PrepareApprove()
         {
             CustomerTransferApply apply = CustomerTransferApplyAdapter.Instance.LoadByApplyID(this.BillID);
+            this.PrepareApprove(apply);
+        }
+        public void PrepareApprove(CustomerTransferApply apply)
+        {
             if (apply == null)
                 throw new Exception(string.Format("转学申请单ID为[{0}]的记录不存在", this.BillID));
+
+            this.BillID = apply.ApplyID;
 
             Customer customer = CustomerAdapter.Instance.Load(apply.CustomerID);
             if (customer == null)
@@ -70,7 +76,6 @@ namespace PPTS.Data.Customers.Executors
                     this.Accounts.Add(account);
             }
         }
-
         //构建折扣率
         private Account FillDiscountRate(Account account, List<DiscountItem> discountItems)
         {

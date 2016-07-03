@@ -9,53 +9,53 @@ using System.Xml.Linq;
 
 namespace MCS.Library.SOA.DataObjects.Workflow
 {
-	[Serializable]
-	[ORTableMapping("WF.PROCESS_DIMENSIONS")]
+    [Serializable]
+    [ORTableMapping("WF.PROCESS_DIMENSIONS")]
     [TenantRelativeObject]
-	public class WfProcessDimension
-	{
-		[ORFieldMapping("PROCESS_ID", PrimaryKey = true)]
-		public string ProcessID
-		{
-			get;
-			set;
-		}
+    public class WfProcessDimension
+    {
+        [ORFieldMapping("PROCESS_ID", PrimaryKey = true)]
+        public string ProcessID
+        {
+            get;
+            set;
+        }
 
-		[ORFieldMapping("DATA")]
-		public string Data
-		{
-			get;
-			set;
-		}
+        [ORFieldMapping("DATA")]
+        public string Data
+        {
+            get;
+            set;
+        }
 
-		[ORFieldMapping("UPDATE_TIME")]
-		[SqlBehavior(BindingFlags = ClauseBindingFlags.Select | ClauseBindingFlags.Update | ClauseBindingFlags.Where, DefaultExpression = "GETDATE()")]
-		public DateTime UpdateTime
-		{
-			get;
-			set;
-		}
+        [ORFieldMapping("UPDATE_TIME", UtcTimeToLocal = true)]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.Select | ClauseBindingFlags.Update | ClauseBindingFlags.Where, DefaultExpression = "GETUTCDATE()")]
+        public DateTime UpdateTime
+        {
+            get;
+            set;
+        }
 
-		public static WfProcessDimension FromProcess(IWfProcess process)
-		{
-			process.NullCheck("process");
+        public static WfProcessDimension FromProcess(IWfProcess process)
+        {
+            process.NullCheck("process");
 
-			WfProcessDimension result = new WfProcessDimension();
+            WfProcessDimension result = new WfProcessDimension();
 
-			result.ProcessID = process.ID;
+            result.ProcessID = process.ID;
 
-			XElement xml = XElement.Parse("<Process/>");
+            XElement xml = XElement.Parse("<Process/>");
 
-			((ISimpleXmlSerializer)process).ToXElement(xml, string.Empty);
+            ((ISimpleXmlSerializer)process).ToXElement(xml, string.Empty);
 
-			result.Data = xml.ToString();
+            result.Data = xml.ToString();
 
-			return result;
-		}
-	}
+            return result;
+        }
+    }
 
-	[Serializable]
-	public class WfProcessDimensionCollection : EditableDataObjectCollectionBase<WfProcessDimension>
-	{
-	}
+    [Serializable]
+    public class WfProcessDimensionCollection : EditableDataObjectCollectionBase<WfProcessDimension>
+    {
+    }
 }

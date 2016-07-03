@@ -28,7 +28,12 @@ namespace MCS.Library.Core
 			public object MemberInfo;
 			public System.Type AttributeType;
 			public bool Inherited;
-		}
+
+            public override int GetHashCode()
+            {
+                return this.MemberInfo.GetHashCode() ^ this.AttributeType.GetHashCode() ^ this.Inherited.GetHashCode();
+            }
+        }
 
 		private static Dictionary<AttrDictEntry, Attribute> dictionary = new Dictionary<AttrDictEntry, Attribute>();
 
@@ -54,13 +59,15 @@ namespace MCS.Library.Core
 
 			lock (AttributeHelper.dictionary)
 			{
-				if (AttributeHelper.dictionary.ContainsKey(key))
-					result = (T)AttributeHelper.dictionary[key];
-				else
-				{
-					result = (T)Attribute.GetCustomAttribute(element, attrType);
-					AttributeHelper.dictionary[key] = result;
-				}
+                Attribute data = null;
+
+                if (AttributeHelper.dictionary.TryGetValue(key, out data) == false)
+                {
+                    data = (T)Attribute.GetCustomAttribute(element, attrType);
+                    AttributeHelper.dictionary.Add(key, data);
+                }
+
+                result = (T)data;
 			}
 
 			return result;

@@ -16,6 +16,7 @@ using MCS.Web.MVC.Library.ApiCore;
 using System.Data;
 using System.Linq;
 using System;
+using PPTS.Web.MVC.Library.Filters;
 
 namespace PPTS.WebAPI.Customers.Controllers
 {
@@ -30,8 +31,7 @@ namespace PPTS.WebAPI.Customers.Controllers
         /// <param name="criteria">查询条件</param>
         /// <returns>返回带字典的潜客数据列表</returns>
         [HttpPost]
-        //[ApiPassportAuthentication]
-        //[PPTSJobFunctionAuthorize(3")]
+        [PPTSJobFunctionAuthorize("PPTS:回访管理列表（学员视图-回访、回访详情）,回访管理列表（学员视图-回访、回访详情）-本部门,回访管理列表（学员视图-回访、回访详情）-本校区,回访管理列表（学员视图-回访、回访详情）-本分公司,回访管理列表（学员视图-回访、回访详情）全国")]
         public CustomerVisitQueryResult GetAllCustomerVisits(CustomerVisitQueryCriteriaModel criteria)
         {
             return new CustomerVisitQueryResult
@@ -47,9 +47,7 @@ namespace PPTS.WebAPI.Customers.Controllers
         /// <param name="criteria">查询条件</param>
         ///Class1.cs <returns>返回不带字典的客服数据列表</returns>
         [HttpPost]
-        //[ApiPassportAuthentication]
-        //[PPTSFunctionAuthorize("PPTS:f1,f2,f3")]
-        //[PPTSJobFunctionAuthorize("PPTS:客服列表查看,jf2,jf3")]
+        [PPTSJobFunctionAuthorize("PPTS:回访管理列表（学员视图-回访、回访详情）,回访管理列表（学员视图-回访、回访详情）-本部门,回访管理列表（学员视图-回访、回访详情）-本校区,回访管理列表（学员视图-回访、回访详情）-本分公司,回访管理列表（学员视图-回访、回访详情）全国")]
         public PagedQueryResult<CustomerVisitModel, CustomerVisitModelCollection> GetPagedCustomerVisits(CustomerVisitQueryCriteriaModel criteria)
         {
             return CustomerVisitDataSource.Instance.LoadCustomerVisit(criteria.PageParams, criteria, criteria.OrderBy);
@@ -85,6 +83,7 @@ namespace PPTS.WebAPI.Customers.Controllers
         }
 
         [HttpPost]
+        [PPTSJobFunctionAuthorize("PPTS:录入/编辑回访")]
         public void CreateCustomerVisit(CreatableCustomerVisitModel model)
         {
             AddCustomerVisitExecutor executor = new AddCustomerVisitExecutor(model);
@@ -93,6 +92,7 @@ namespace PPTS.WebAPI.Customers.Controllers
         }
 
         [HttpPost]
+        [PPTSJobFunctionAuthorize("PPTS:录入/编辑回访")]
         public void AddVisitBatch(CreatableVisitBatchModel model)
         {
             AddCustomerVisitBatchExecutor executor = new AddCustomerVisitBatchExecutor(model);
@@ -109,6 +109,7 @@ namespace PPTS.WebAPI.Customers.Controllers
             return EditableCustomerVisitModel.Load(id);
         }
 
+        [PPTSJobFunctionAuthorize("PPTS:录入/编辑回访")]
         public void UpdateCustomerVisit(EditableCustomerVisitModel model)
         {
             EditableStudentVisitExecutor executor = new EditableStudentVisitExecutor(model);
@@ -127,6 +128,7 @@ namespace PPTS.WebAPI.Customers.Controllers
         #region api/customerservices/exportcustVisits
 
         [HttpPost]
+        [PPTSJobFunctionAuthorize("PPTS:回访管理列表（学员视图-回访、回访详情）,回访管理列表（学员视图-回访、回访详情）-本部门,回访管理列表（学员视图-回访、回访详情）-本校区,回访管理列表（学员视图-回访、回访详情）-本分公司,回访管理列表（学员视图-回访、回访详情）全国")]
         public HttpResponseMessage ExportCustomerVisit([ModelBinder(typeof(FormBinder))]CustomerVisitQueryCriteriaModel criteria)
         {
             var wb = WorkBook.CreateNew();
@@ -135,6 +137,7 @@ namespace PPTS.WebAPI.Customers.Controllers
             criteria.PageParams.PageIndex = 0;
             criteria.PageParams.PageSize = 0;
             var pageData = CustomerVisitDataSource.Instance.LoadCustomerVisit(criteria.PageParams, criteria, criteria.OrderBy);
+            tableDesp.AllColumns.Add(new TableColumnDescription(new DataColumn("学员机构", typeof(string))) { PropertyName = "CampusName" });
             tableDesp.AllColumns.Add(new TableColumnDescription(new DataColumn("学员姓名", typeof(string))) { PropertyName = "CustomerName" });
             tableDesp.AllColumns.Add(new TableColumnDescription(new DataColumn("学员编号", typeof(string))) { PropertyName = "CustomerCode" });
             tableDesp.AllColumns.Add(new TableColumnDescription(new DataColumn("家长姓名", typeof(string))) { PropertyName = "ParentName" });

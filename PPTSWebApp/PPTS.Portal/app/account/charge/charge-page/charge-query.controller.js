@@ -2,95 +2,18 @@
         ppts.config.dataServiceConfig.accountChargeDataService],
         function (account) {
             account.registerController('accountChargeQueryController', [
-                '$scope', '$state', 'mcsDialogService', 'dataSyncService', 'accountChargeDataService', 'chargeQueryAdvanceSearchItems',
-                function ($scope, $state, mcsDialogService, dataSyncService, accountDataService, searchItems) {
+                '$scope', '$state', 'mcsDialogService', 'dataSyncService', 'accountChargeDataService', 'chargeQueryTable', 'chargeQueryAdvanceSearchItems',
+                function ($scope, $state, mcsDialogService, dataSyncService, accountDataService, chargeQueryTable, searchItems) {
                     var vm = this;
-
-                    vm.data = {
-                        selection: 'radio',
-                        rowsSelected: [],
-                        keyFields: ['applyID'],
-                        headers: [{
-                            field: "customerName",
-                            name: "学员姓名",
-                            template: '<span>{{row.customerName}}</span>'
-                        }, {
-                            field: "customerCode",
-                            name: "学员编号",
-                            template: '<span>{{row.customerCode}}</span>'
-                        }, {
-                            field: "parentName",
-                            name: "家长姓名",
-                            template: '<span>{{row.parentName}}</span>'
-                        }, {
-                            field: "applyNo",
-                            name: "缴费单号",
-                            template: '<span><a ui-sref="ppts.accountCharge-view.info({applyID:row.applyID,prev:\'ppts.accountCharge-query\'})">{{row.applyNo}}</span>'
-                        }, {
-                            field: "chargeType",
-                            name: "充值类型",
-                            template: '<span>{{row.chargeType | chargeType}}</span>'
-                        }, {
-                            field: "payStatus",
-                            name: "充值状态",
-                            template: '<span>{{row.payStatus | payStatus}}</span>'
-                        }, {
-                            field: "auditStatus",
-                            name: "审核状态",
-                            template: '<span>{{row.auditStatus | chargeAuditStatus}}</span>'
-                        }, {
-                            field: "chargeMoney",
-                            name: "充值金额",
-                            template: '<span>{{row.chargeMoney | currency:"￥"}}</span>'
-                        }, {
-                            field: "thisDiscountBase",
-                            name: "折扣基数",
-                            template: '<span>{{row.thisDiscountBase | currency:"￥"}}</span>'
-                        }, {
-                            field: "thisDiscountRate",
-                            name: "折扣率",
-                            template: '<span>{{row.thisDiscountRate | number:"2"}}</span>'
-                        }, {
-                            field: "campusName",
-                            name: "校区",
-                            template: '<span>{{row.campusName}}</span>'
-                        }, {
-                            field: "applierName",
-                            name: "申请人",
-                            template: '<span>{{row.applierName}}</span>'
-                        }, {
-                            field: "applierJobName",
-                            name: "申请人岗位",
-                            template: '<span>{{row.applierJobName}}</span>'
-                        }, {
-                            field: "customerGrade",
-                            name: "当时年级",
-                            template: '<span>{{row.customerGrade | grade}}</span>'
-                        }],
-                        pager: {
-                            pageIndex: 1,
-                            pageSize: ppts.config.pageSizeItem,
-                            totalCount: -1,
-                            pageChange: function () {
-                                dataSyncService.initCriteria(vm);
-                                customerDataService.queryPagedChargeApplyList(vm.criteria, function (result) {
-                                    vm.data.rows = result.pagedData;
-                                });
-                            }
-                        },
-                        orderBy: [{ dataField: 'applyTime', sortDirection: 1 }]
-                    }
+                    
+                    // 配置数据表头 
+                    dataSyncService.configDataHeader(vm, chargeQueryTable, accountDataService.queryPagedChargeApplyList);
 
                     // 页面初始化加载或重新搜索时查询
                     vm.search = function () {
-
-                        dataSyncService.initCriteria(vm);
-                        accountDataService.queryChargeApplyList(vm.criteria, function (result) {
-                            vm.data.rows = result.queryResult.pagedData;
+                        dataSyncService.initDataList(vm, accountDataService.queryChargeApplyList, function () {
                             vm.searchItems = searchItems;
-                            dataSyncService.injectDictData();
-                            dataSyncService.injectPageDict(['people']);
-                            dataSyncService.updateTotalCount(vm, result.queryResult);
+                            dataSyncService.injectDynamicDict('relation,creation,dept');
                             $scope.$broadcast('dictionaryReady');
                         });
                     };
@@ -128,27 +51,52 @@
                     vm.audit = function () {
 
                         vm.errorMessage = null;
-                        var currentRow = vm.getCurrentRow();
-                        if (currentRow == null) {
-                            vm.errorMessage = "请选择一条要审核的记录";
+                        var applyIDs = [];
+                        for (var i = 0; i < vm.data.rows.length; i++) {
+                            for (var j = 0; j < vm.data.rowsSelected.length; j++) {
+                                if (vm.data.rows[i].applyID == vm.data.rowsSelected[j].applyID && vm.data.rows[i].canAudit) {
+                                    applyIDs.push(vm.data.rows[i].applyID);
+                                }
+                            }
+                        }
+                        if (applyIDs.length == 0) {
+                            vm.errorMessage = "只有付款完成未审核的记录才可审核，请选择需要审核的记录";
                             return;
                         }
-                        if (!currentRow.canAudit) {
-                            vm.errorMessage = "只有付款完成未审核的记录才可审核";
-                            return;
-                        }
-                        var applyID = currentRow.applyID;
+
                         mcsDialogService.create('app/account/charge/charge-page/charge-audit.html', {
                             controller: 'accountChargeAuditController',
                             params: {
-                                applyID: applyID
+                                auditCount: applyIDs.length
                             },
                             settings: {
                                 size: 'lg'
                             }
                         }).result.then(function () {
-                            vm.search();
+
+                            accountDataService.auditChargeApply(applyIDs, function () {
+                                vm.search();
+                            });
                         });
                     }
+
+                    vm.export = function () {
+                        if (vm.criteria.pageParams.totalCount < 50000) {
+                            var dlg = mcsDialogService.confirm({
+                                title: '提示',
+                                message: '您将导出共' + vm.criteria.pageParams.totalCount + '条记录，请确认是否要导出？'
+                            });
+                            dlg.result.then(function () {
+                                var url = ppts.config.customerApiBaseUrl + 'api/accounts/ExportAllCharges';
+                                mcs.util.postMockForm(url, vm.criteria);
+                            });                            
+                        } else {
+                            mcsDialogService.info({
+                                    title: '提示',
+                                    message: '内容超过5万条以上，无法正常导出，请缩小范围后再尝试!'
+                                }
+                            );
+                        }                        
+                    };
                 }]);
         });

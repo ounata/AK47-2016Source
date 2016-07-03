@@ -68,4 +68,43 @@
 
         return resource;
     }]);
+
+    schedule.registerValue('teacherUnAssignmentDataHeader', {
+        selection: 'radio',
+        rowsSelected: [],
+        keyFields: ['teacherID'],
+        headers: [{
+            field: "teacherName",
+            name: "教师姓名"
+        }, {
+            field: "teacherCode",
+            name: "员工编号"
+        }, {
+            field: "jobOrgName",
+            name: "学科组"
+        }, {
+            field: "isFullTime",
+            name: "岗位性质",
+            template: '<span>{{row.isFullTime | teacherType }}</span>'
+        }, {
+            field: "gender",
+            name: "性别",
+            template: '<span>{{row.gender | gender}}</span>'
+        }, {
+            field: "gradeMemo",
+            name: "授课年级",
+            template: '<span uib-popover="{{row.gradeMemo | grade_full}}" popover-trigger="mouseenter">{{row.gradeMemo | grade_full | truncate }}</span>',
+            headerCss: 'datatable-header-align-right',
+            sortable: false,
+            description: ''
+        }, {
+            field: "subjectMemo",
+            name: "授课科目",
+            template: '<span uib-popover="{{row.subjectMemo | subject_full}}" popover-trigger="mouseenter">{{row.subjectMemo | subject }}</span>',
+            headerCss: 'datatable-header-align-right',
+            sortable: false,
+            description: ''
+        }],
+        orderBy: [{ dataField: 'teacherCode', sortDirection: 1 }]
+    });
 });

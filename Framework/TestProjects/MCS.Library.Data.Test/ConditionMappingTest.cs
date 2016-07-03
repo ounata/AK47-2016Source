@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MCS.Library.Data.Test.DataObjects;
 using MCS.Library.Data.Mapping;
 using MCS.Library.Data.Builder;
+using MCS.Library.Expression;
 
 namespace MCS.Library.Data.Test
 {
@@ -34,7 +35,7 @@ namespace MCS.Library.Data.Test
             ConditionObject condition = new ConditionObject();
 
             condition.Subject = "Hello world !";
-            condition.FullTextTerm = "钱";
+            condition.FullTextTerm = "钱 金银 货币";
             condition.Gender = GenderType.Female;
             condition.StartTime = DateTime.Now.AddDays(-1);
             condition.EndTime = DateTime.Now.AddDays(1);

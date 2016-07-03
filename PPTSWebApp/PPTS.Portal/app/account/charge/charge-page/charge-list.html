@@ -1,10 +1,19 @@
-﻿<form class="form-horizontal">
-    <div class="widget-box">
-        <div class="widget-header">
-            <h4>学员 {{vm.customer.customerName}}（{{vm.customer.customerCode}}） 的充值记录</h4>
-        </div>
-        <div class="widget-body">
-            <mcs-datatable data="vm.data" />
-        </div>
+﻿
+<div class="portlet light">
+    <div class="portlet-body form">
+        <form class="form-horizontal" action="#" role="form" novalidate>
+            <div class="form-body">
+                <h4 class="form-section">
+                    <i class="ace-icon fa fa-th"></i> 学员<span class="important">【{{vm.customer.customerName}}({{vm.customer.customerCode}})】</span> 的充值记录
+                </h4>
+                <div class="row">
+                    <div class="form-group horizontal">
+                        <div class="col-sm-12" style="margin:15px;width:98%;">
+                            <mcs-datatable data="vm.data" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
-</form>
+</div>

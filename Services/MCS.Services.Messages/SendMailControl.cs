@@ -54,6 +54,8 @@ namespace MCS.Services.Messages
 					}
 				}
 
+                checkBoxEnableSSL.Checked = sp.EnableSsl;
+
 				if (sp.DefaultSender != null)
 					textBoxSignInAddress.Text = sp.DefaultSender.ToString();
 
@@ -80,7 +82,9 @@ namespace MCS.Services.Messages
 
 				message.From = smp.SmtpParams.DefaultSender;
 
-				EmailMessageAdapter.Instance.Send(message, smp.SmtpParams);
+                smp.SmtpParams.ToSmtpClient();
+
+                EmailMessageAdapter.Instance.Send(message, smp.SmtpParams, true);
 
 				ShowMessage("发送完成");
 			}
@@ -116,6 +120,7 @@ namespace MCS.Services.Messages
 
 			sp.ServerInfo = serverInfo;
 			sp.UseDefaultCredentials = serverInfo.AuthenticateType == AuthenticateType.Anonymous;
+            sp.EnableSsl = checkBoxEnableSSL.Checked;
 
 			if (textBoxSignInAddress.Text.IsNotEmpty())
 				sp.DefaultSender = EmailAddress.FromDescription(textBoxSignInAddress.Text);

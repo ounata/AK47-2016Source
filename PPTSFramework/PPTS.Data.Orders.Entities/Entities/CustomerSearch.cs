@@ -12,7 +12,7 @@ using MCS.Library.Data.Mapping;
 namespace PPTS.Data.Orders.Entities
 {
     [Serializable]
-    [ORTableMapping("CustomerSearch")]
+    [ORTableMapping("SM.CustomerSearch")]
     [DataContract]
     public class CustomerSearch
     {

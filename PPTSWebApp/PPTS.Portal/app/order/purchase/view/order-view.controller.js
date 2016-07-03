@@ -17,7 +17,8 @@
                     }, {
                         //field: "productName",
                         name: "班级名称",
-                        template: '<span>班级名称</span>',
+                        template: '<span ng-if="row.orderType==3"> {{ row.joinedClassName }}</span>'
+                                + '<span ng-if="row.orderType!=3">--</span>'
                     }, {
                         field: "catalogName",
                         name: "产品类型"
@@ -34,9 +35,8 @@
                         name: "课程级别",
                         template: '<span>{{row.courseLevel | courseLevel}}</span>'
                     }, {
-                        field: "periodDuration",
                         name: "时长（分钟）",
-                        template: '<span>{{row.periodDuration | period }}</span>'
+                        template: '<span>{{row.lessonDurationValue }}</span>'
                     }, {
                         field: "lessonCount",
                         name: "总课次",
@@ -50,9 +50,8 @@
                         name: "产品颗粒度",
                         template: '<span>{{ row.productUnit | unit }}</span>'
                     }, {
-                        field: "productPrice",
                         name: "产品单价（元）",
-                        template: '<span>{{row.productPrice | currency }}</span>',
+                        template: '<span>{{row.orderPrice | currency }}</span>',
                     }, {
                         name: "实际单价",
                         template: '{{ row.realPrice | currency }}'
@@ -98,11 +97,15 @@
                         
                         purchaseCourseDataService.getOrder({ orderId: orderId }, function (result) {
 
-                            console.log(result);
+                            //console.log(result);
 
                             vm.account = result.account;
                             vm.order = result.order;
-                            vm.chargePayment = result.chargePayment;
+
+                            if (result.chargePayment) {
+                                vm.chargePayment = mcs.util.format('{0} 付款日期：{1} 缴费金额：{2}元', result.chargePayment.applyNo, mcs.date.format(result.chargePayment.payTime), result.chargePayment.paidMoney);
+                            }
+                            //console.log(vm)
 
                             vm.data.rows = result.items;
                             $scope.$broadcast('dictionaryReady');

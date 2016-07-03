@@ -10,9 +10,20 @@
             </div>
             <div class="form-group">
                 <div class="col-sm-6">
+                    <mcs-label text="学生姓名" css="col-sm-3" />
+                    <div class="col-sm-9">
+                        <mcs-label text="{{vm.customerMeeting.customerName}}" />
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                </div>
+               
+            </div>
+            <div class="form-group">
+                <div class="col-sm-6">
                     <mcs-label text="会议组织人" css="col-sm-3" />
                     <div class="col-sm-9">
-                        <mcs-label text="{{vm.customerMeeting.organizerName}}"/>
+                        <mcs-label text="{{vm.customerMeeting.organizerName}}" />
                     </div>
                 </div>
                 <div class="col-sm-6">
@@ -20,18 +31,18 @@
             </div>
             <div class="form-group">
                 <div class="col-sm-6">
-                    <mcs-label required="true" text="会议日期" css="col-sm-3" />
+                    <mcs-label text="会议日期" css="col-sm-3" />
                     <div class="col-sm-9">
                         <mcs-label text="{{vm.customerMeeting.meetingTime | date:'yyyy-MM-dd HH:mm' }}" /> 至 <mcs-label text="{{vm.customerMeeting.meetingEndTime | date:'yyyy-MM-dd HH:mm'}}" />
                     </div>
                 </div>
                 <div class="col-sm-6">
-                   
+
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-6">
-                    <mcs-label required="true" text="会议时长" css="col-sm-3" />
+                    <mcs-label text="会议时长" css="col-sm-3" />
                     <div class="col-sm-9">
                         <mcs-label text="{{vm.customerMeeting.meetingDuration}}" />
                     </div>
@@ -41,7 +52,7 @@
             </div>
             <div class="form-group">
                 <div class="col-sm-6">
-                    <mcs-label required="true" text="下次开会时间" css="col-sm-3" />
+                    <mcs-label text="下次开会时间" css="col-sm-3" />
                     <div class="col-sm-9">
                         <mcs-label text="{{vm.customerMeeting.nextMeetingTime | date:'yyyy-MM-dd HH:mm'}}" />
                     </div>
@@ -51,7 +62,7 @@
             </div>
             <div class="form-group">
                 <div class="col-sm-6">
-                    <mcs-label required="true" text="会议主题" css="col-sm-3" />
+                    <mcs-label text="会议主题" css="col-sm-3" />
                     <div class="col-sm-9">
                         <mcs-label text="{{vm.customerMeeting.meetingTitle | meetingTitle}}" />
                     </div>
@@ -61,7 +72,7 @@
             </div>
             <div class="form-group">
                 <div class="col-sm-6">
-                    <mcs-label required="true" text="会议类型" css="col-sm-3" />
+                    <mcs-label text="会议类型" css="col-sm-3" />
                     <div class="col-sm-9">
                         <mcs-label text="{{vm.customerMeeting.meetingType | meetingType}}" />
                     </div>
@@ -71,31 +82,29 @@
             </div>
             <div class="form-group">
                 <div class="col-sm-6">
-                    <mcs-label required="true" text="会议参与人" css="col-sm-3" />
+                    <mcs-label text="会议参与人" css="col-sm-3" />
                     <div class="col-sm-9">
                         <mcs-label text="{{vm.customerMeeting.participants}}" />
-                      
+
                     </div>
                 </div>
                 <div class="col-sm-6"></div>
             </div>
             <div class="form-group">
                 <div class="col-sm-12">
-                    <div class="widget-box" style="margin:0 50px;">
-                        <div class="widget-header" style="">
-                            <h4 class="widget-title">对象及内容</h4>
-                        </div>
-                        <mcs-uicopy class="widget-body" data="vm.items" item-template-url="./app/customer/customermeeting/customermeeting-add/customermeeting-add-item.tpl.html">
-                        </mcs-uicopy>
-                    </div>
+                    <mcs-uicopy class="widget-body" data="vm.items" item-template-url="./app/customer/customermeeting/customermeeting-view/customermeeting-view-item.tpl.html" nodata-tip="无数据">
+                    </mcs-uicopy>
                 </div>
             </div>
+
             <div class="form-group">
                 <div class="col-sm-6">
                     <mcs-label text="上传附件" css="col-sm-3" />
                     <div class="col-sm-9">
-                        附近1</br>
-                        附近2</br>
+                        <span ng-repeat="m in vm.customerMeeting.materials">
+                            <a href="#" ng-click="vm.downloadFile(m)">附件{{ $index+1 }}</a><br>
+                        </span>
+
                     </div>
                 </div>
                 <div class="col-sm-6">
@@ -103,7 +112,7 @@
             </div>
             <div class="form-group">
                 <div class="col-sm-6">
-                    <mcs-label required="true" text="家长满意度" css="col-sm-3" />
+                    <mcs-label text="家长满意度" css="col-sm-3" />
                     <div class="col-sm-9">
                         <mcs-label text="{{vm.customerMeeting.satisficing | satisfaction}}" />
                     </div>

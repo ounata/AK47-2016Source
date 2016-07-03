@@ -20,6 +20,7 @@
 	[FullPinyin] NVARCHAR(255) NULL,
 	[CreatorID] NVARCHAR(36) NULL, 
     [CreatorName] NVARCHAR(255) NULL,
+	[LegalEntity]      NVARCHAR(255) NULL, 
     [Comment] NVARCHAR(255) NULL,
     CONSTRAINT [PK_SchemaOrganization] PRIMARY KEY CLUSTERED ([ID] ASC, [VersionStartTime] DESC)
 )

@@ -3,15 +3,16 @@
         ppts.config.dataServiceConfig.productDataService],
         function (product) {
             product.registerController('orderClassGroupController', [
-                '$scope', '$state', '$stateParams', 'dataSyncService', 'purchaseCourseDataService',
-                function ($scope, $state, $stateParams, dataSyncService, purchaseCourseDataService) {
+                '$scope', '$state','$location', '$stateParams', 'dataSyncService', 'utilService', 'purchaseCourseDataService',
+                function ($scope, $state, $location, $stateParams, dataSyncService, utilService, purchaseCourseDataService) {
+
                     var vm = this;
+                    vm.customer = $location.$$search;
+
                     var productId = $stateParams.productId;
                     var customerId = $stateParams.customerId;
-                    var productCampusId = $stateParams.productCampusId || 8;
+                    var productCampusId = $stateParams.productCampusId ;
 
-                    //查询条件
-                    vm.criteria = { productID: productId, className: '', };
 
                     vm.data = {
                         selection: 'checkbox',
@@ -42,35 +43,35 @@
                     }
 
 
-                    dataSyncService.initCriteria(vm);
                     vm.search = function () {
 
                         purchaseCourseDataService.getPagedClasses(vm.criteria, function (result) {
 
-                            console.log(result)
 
-                            vm.data.rows = result.pagedData;
-                            dataSyncService.updateTotalCount(vm, result.pagedData);
+                            vm.data.rows = result.pagedData; 
+                            dataSyncService.updateTotalCount(vm, result);
+
                             $scope.$broadcast('dictionaryReady');
-
-
 
                         });
 
                     };
-
-
-                    vm.goBack = function () { $state.go('ppts.purchaseClassGroupList', { customerId: customerId }); };
-
+                    vm.goBack = function () {
+                        var param =$.extend($stateParams, vm.customer);
+                        $state.go('ppts.purchaseClassGroupList', param);
+                    };
                     vm.buy = function () {
+
+                        if (!utilService.selectMultiRows(vm)) { return; }
                         var data = $(vm.data.rowsSelected).map(function (i, v) { return { productID: productId, customerID: customerId, classId: v.classID, orderType: 3, productCampusID: productCampusId }; }).toArray();
                         purchaseCourseDataService.addShoppingCart(data, function (entity) { console.log(entity); });
                     };
 
-                    vm.init = function () {
+                    var init = (function () {
+
+                        dataSyncService.initCriteria(vm);
                         vm.search();
-                    };
-                    vm.init();
+                    })();
 
 
 

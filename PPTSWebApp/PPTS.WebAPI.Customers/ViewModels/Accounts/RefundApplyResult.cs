@@ -1,4 +1,5 @@
 ﻿using MCS.Library.OGUPermission;
+using MCS.Web.MVC.Library.Models.Workflow;
 using PPTS.Data.Common;
 using PPTS.Data.Common.Adapters;
 using PPTS.Data.Common.Entities;
@@ -67,6 +68,16 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
         }
 
         /// <summary>
+        /// 客户端流程信息
+        /// </summary>
+        [DataMember]
+        public WfClientProcess ClientProcess
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// 根据学员获取
         /// </summary>
         /// <param name="customerID"></param>
@@ -75,7 +86,7 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
         {
             RefundApplyResult result = new RefundApplyResult();
             result.Customer = CustomerModel.Load(customerID, false);
-            result.Accounts = AccountModel.LoadByCustomerID(result.Customer.CustomerID, true, true);
+            result.Accounts = AccountModel.Load4RefundByCustomerID(result.Customer.CustomerID);
             result.Apply = RefundApplyModel.LoadByCustomerID(result.Customer);
             result.Assert = Validate(result.Customer, user);
 
@@ -104,7 +115,33 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
 
         public static AssertResult Validate(CustomerModel customer, IUser user)
         {
+#if DEBUG
             return new AssertResult();
+#else
+            PPTSJob job = user.GetCurrentJob();
+
+            if (job.JobType != JobTypeDefine.Consultant && job.JobType != JobTypeDefine.Educator)
+                return new AssertResult(false, "只有咨询师或学管师才可以给学员提交退费申请");
+
+            CustomerStaffRelationCollection collection = CustomerStaffRelationAdapter.Instance.LoadByCustomerID(customer.CustomerID);
+            if (job.JobType == JobTypeDefine.Consultant)
+            {
+                CustomerStaffRelation relation = collection.Find(x => x.RelationType == CustomerRelationType.Consultant);
+                if (relation == null)
+                    return new AssertResult(false, "请先给该学员分配咨询师再退费");
+                else if (job.ID != relation.StaffJobID)
+                    return new AssertResult(false, "只有该学员的咨询师才可以提交退费申请");
+            }
+            else if (job.JobType == JobTypeDefine.Educator)
+            {
+                CustomerStaffRelation relation = collection.Find(x => x.RelationType == CustomerRelationType.Educator);
+                if (relation == null)
+                    return new AssertResult(false, "请先给该学员分配学管师再退费");
+                else if (job.ID != relation.StaffJobID)
+                    return new AssertResult(false, "只有该学员的学管师才可以提交退费申请");
+            }
+            return new AssertResult();
+#endif
         }
     }
 }

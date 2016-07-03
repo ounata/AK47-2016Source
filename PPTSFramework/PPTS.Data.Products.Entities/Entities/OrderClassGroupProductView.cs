@@ -160,6 +160,21 @@ namespace PPTS.Data.Products.Entities
             set;
         }
 
+        /// <summary>
+        /// 是否允许买赠折扣
+        /// </summary>
+        [ORFieldMapping("TunlandAllowed")]
+        [DataMember]
+        public int TunlandAllowed { set; get; }
+
+
+        /// <summary>
+        /// 前端展示使用
+        /// </summary>
+        [NoMapping]
+        [DataMember]
+        public bool Highlight { get { return TunlandAllowed == 0; } }
+
     }
 
 

@@ -1,104 +1,123 @@
-﻿<form class="form-horizontal">
-    <div class="widget-box">
-        <div class="widget-header">
-            <h4 class="col-sm-8">退费申请详情</h4>
-        </div>
-        <div class="widget-body">
-            <div class="clearfix form-actions mcs-form-actions">
-                <div>
-                    <mcs-button category="cancel" click="vm.cancel()" text="返回"></mcs-button>
-                </div>
-            </div>
-            <div class="alert alert-block alert-danger" ng-show="vm.errorMessage">
-                <button type="button" class="close" data-dismiss="alert">
-                    <i class="ace-icon fa fa-times"></i>
-                </button>
-                <i class="ace-icon fa fa-warning"></i>
-                {{vm.errorMessage}}
-            </div>
-            <div class="page-header">
-                <span>退费信息</span>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-6">
-                    <mcs-label text="学员校区：" css="col-sm-3" />
-                    <div class="col-sm-9">
-                        {{ vm.apply.campusName }}
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-6">
-                    <mcs-label text="学员姓名：" css="col-sm-3" />
-                    <div class="col-sm-9">
-                        {{ vm.apply.customerName }}（{{vm.apply.customerCode}}）
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-6">
-                    <mcs-label text="退费原因：" css="col-sm-3" />
-                    <div class="col-sm-9">                        
-                        {{ vm.apply.applyMemo }}
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-6">
-                    <mcs-label text="提交申请时间：" css="col-sm-3" />
-                    <div class="col-sm-9">
-                        {{ vm.apply.applyTime | date:"yyyy-MM-dd Hh:mm" }}
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-6">
-                    <mcs-label text="申请人：" css="col-sm-3" />
-                    <div class="col-sm-9">
-                        {{vm.apply.applierName }}
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-6">
-                    <mcs-label text="家长联系电话：" css="col-sm-3" />
-                    <div class="col-sm-9">
-                        {{vm.customer.phoneNumber}}
-                    </div>
-                </div>
-            </div>
-            <table class="table table-bordered">
-                <tr>
-                    <td>可退金额</td>
-                    <td>申退金额</td>
-                    <td>退前折扣基数</td>
-                    <td>已消耗课时价值</td>
-                    <td>折扣返还</td>
-                    <td>应退金额</td>
-                </tr>
-                <tr>
-                    <td>{{ vm.apply.thatAccountMoney | currency:"￥" }}</td>
-                    <td>{{ vm.apply.applyRefundMoney | currency:"￥" }}</td>
-                    <td>{{ vm.apply.thatDiscountBase | currency:"￥" }}</td>
-                    <td>{{ vm.apply.consumptionValue | currency:"￥" }}</td>
-                    <td>{{ vm.apply.reallowanceMoney | currency:"￥" }}</td>
-                    <td>{{ vm.apply.oughtRefundMoney | currency:"￥" }}</td>
-                </tr>
-                <tr>
-                    <td colspan="9">
-                        差价补偿：{{vm.apply.compensateMoney | currency:"￥"}}，支付给客户的制度外退款：{{vm.apply.extraRefundMoney | currency:"￥"}}，实退金额：{{vm.apply.realRefundMoney | currency:"￥"}}
-                    </td>
-                </tr>
-            </table>
-            <div class="form-group">
-                <div class="col-sm-6">
-                    <mcs-label text="领款人：" css="col-sm-3" />
-                    <div class="col-sm-9">
-                        {{vm.apply.drawer}}
-                    </div>
-                </div>
-            </div>
-
+﻿<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            <span class="caption-subject bold"><i class="ace-icon fa"></i>退费申请详情</span>
         </div>
     </div>
-</form>
+    <div class="portlet-body form">
+        <form class="form-horizontal" action="#" role="form" novalidate>
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <mcs-button category="cancel" click="vm.cancel()" text="返回"></mcs-button>
+                    </div>
+                </div>
+            </div>
+            <div class="form-body">
+                <h4 class="form-section"><i class="ace-icon fa fa-th"></i> 退费信息</h4>
+                <div class="row">
+                    <div class="form-group horizontal bordered">
+                        <mcs-label text="学员校区" css="col-sm-3" />
+                        <div class="col-sm-6">
+                            <p class="form-control-static">
+                                {{ vm.apply.campusName }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group horizontal bordered">
+                        <mcs-label text="学员姓名" css="col-sm-3" />
+                        <div class="col-sm-6">
+                            <p class="form-control-static">
+                                {{ vm.apply.customerName }}（{{vm.apply.customerCode}}）
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group horizontal bordered">
+                        <mcs-label text="退费原因" css="col-sm-3" />
+                        <div class="col-sm-6">
+                            <p class="form-control-static">
+                                {{ vm.apply.applyMemo }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group horizontal bordered">
+                        <mcs-label text="提交申请时间" css="col-sm-3" />
+                        <div class="col-sm-6">
+                            <p class="form-control-static">
+                                {{ vm.apply.applyTime | date:"yyyy-MM-dd HH:mm" }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group horizontal bordered">
+                        <mcs-label text="申请人" css="col-sm-3" />
+                        <div class="col-sm-6">
+                            <p class="form-control-static">
+                                {{vm.apply.applierName }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group horizontal bordered">
+                        <mcs-label text="家长联系电话" css="col-sm-3" />
+                        <div class="col-sm-6">
+                            <p class="form-control-static">
+                                {{vm.customer.phoneNumber}}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group horizontal bordered">
+                        <mcs-label text="" css="col-sm-3" />
+                        <div class="col-sm-6">
+                            <p class="form-control-static">
+                                <table class="table table-bordered">
+                                    <tr>
+                                        <td>可退金额</td>
+                                        <td>申退金额</td>
+                                        <td>退前折扣基数</td>
+                                        <td>已消耗课时价值</td>
+                                        <td>折扣返还</td>
+                                        <td>应退金额</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ vm.apply.thatAccountMoney | currency:"￥" }}</td>
+                                        <td>{{ vm.apply.applyRefundMoney | currency:"￥" }}</td>
+                                        <td>{{ vm.apply.thatDiscountBase | currency:"￥" }}</td>
+                                        <td>{{ vm.apply.consumptionValue | currency:"￥" }}</td>
+                                        <td>{{ vm.apply.reallowanceMoney | currency:"￥" }}</td>
+                                        <td>{{ vm.apply.oughtRefundMoney | currency:"￥" }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="9">
+                                            差价补偿：{{vm.apply.compensateMoney | currency:"￥"}}，支付给客户的制度外退款：{{vm.apply.extraRefundMoney | currency:"￥"}}，实退金额：{{vm.apply.realRefundMoney | currency:"￥"}}
+                                        </td>
+                                    </tr>
+                                </table>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group horizontal bordered">
+                        <mcs-label text="领款人" css="col-sm-3" />
+                        <div class="col-sm-6">
+                            <p class="form-control-static">
+                                {{vm.apply.drawer}}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -79,9 +79,6 @@ ppts-daterangepicker.search .datepicker {
     margin-top:25px;
 
 }
-ppts-select {
-    padding: 0px;
-}
 .ppts-select-label {
     width:120px !important;
     height: 32px !important;
@@ -100,9 +97,6 @@ ppts-select {
     display: inline-block;
     padding-top: 0px;
 }
-.search-inline ppts-select {
-    padding-top: 0px !important;
-}
 ppts-select-branch.search{
     display:inline-block !important;
     vertical-align:middle;
@@ -117,9 +111,6 @@ ppts-select-branch.search div {
 .ppts-select-users {
     width: 200px;
     margin-left: 20px;
-}
-.ppts-select div {
-    width: 200px !important;
 }
 .ppts-select-md div {
     width: 260px !important;

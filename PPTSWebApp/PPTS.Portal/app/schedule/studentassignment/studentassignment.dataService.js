@@ -80,4 +80,40 @@
         
         return resource;
     }]);
+
+
+    schedule.registerValue('studentUnAssignmentDataHeader', {
+        selection: 'radio',
+        rowsSelected: [],
+        keyFields: ['customerID'],
+        headers: [{
+            field: "customerName",
+            name: "学员姓名"
+        }, {
+            field: "customerCode",
+            name: "学员编号"
+        }, {
+            field: "gender",
+            name: "性别",
+            template: '<span>{{row.gender | gender }}</span>'
+        }, {
+            field: "birthday",
+            name: "出生日期",
+            template: '<span>{{row.birthday | date:"yyyy-MM-dd" | normalize }}</span>'
+        }, {
+            field: "schoolName",
+            name: "在读学校"
+        }, {
+            field: "grade",
+            name: "当前年级",
+            template: '<span>{{row.grade | grade}}</span>'
+        }, {
+            field: "educatorName",
+            name: "学管师"
+        }, {
+            field: "assetOneToOneAmount",
+            name: "剩余数量"
+        }],
+        orderBy: [{ dataField: 'CustomerCode', sortDirection: 1 }]
+    });
 });

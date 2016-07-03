@@ -38,6 +38,13 @@ namespace PPTS.Security.Test
             return workbook.Sheets.Any;
         }
 
+        public static WorkSheet GetV17ExcelSheet()
+        {
+            WorkBook workbook = WorkBook.Load(ResourceHelper.GetResourceStream(Assembly.GetExecutingAssembly(), "PPTS.Security.Test.Contents.系统权限汇总v17-mini.xlsx"));
+
+            return workbook.Sheets.Any;
+        }
+
         public static WorkSheet GetMiniExcelSheet()
         {
             WorkBook workbook = WorkBook.Load(ResourceHelper.GetResourceStream(Assembly.GetExecutingAssembly(), "PPTS.Security.Test.Contents.系统权限汇总-mini.xlsx"));
@@ -77,7 +84,7 @@ namespace PPTS.Security.Test
 
         public static void InitGroups(IEnumerable<SCRole> roles)
         {
-            foreach(SCRole role in roles)
+            foreach (SCRole role in roles)
             {
                 SCGroup group = new SCGroup();
 
@@ -86,6 +93,38 @@ namespace PPTS.Security.Test
 
                 SCObjectOperations.Instance.AddGroup(group, SCOrganization.GetRoot());
             }
+        }
+
+        public static void InitOrganizations()
+        {
+            SCOrganization org0 = AddOrganization("组织A", SCOrganization.GetRoot());
+            SCOrganization org1 = AddOrganization("组织B", SCOrganization.GetRoot());
+
+            AddOrganization("组织00", org0);
+            AddOrganization("组织01", org0);
+
+            AddOrganization("组织10", org1);
+            AddOrganization("组织11", org1);
+
+            DBTimePointActionContext.Current.TimePoint = DateTime.MinValue;
+
+            org0.Name = "组织0";
+            SCObjectOperations.Instance.UpdateOrganization(org0);
+
+            org1.Name = "组织1";
+            SCObjectOperations.Instance.UpdateOrganization(org1);
+        }
+
+        private static SCOrganization AddOrganization(string name, SCOrganization parent)
+        {
+            SCOrganization org = new SCOrganization();
+
+            org.ID = UuidHelper.NewUuidString();
+            org.Name = org.DisplayName = org.CodeName = name;
+
+            SCObjectOperations.Instance.AddOrganization(org, parent);
+
+            return org;
         }
     }
 }

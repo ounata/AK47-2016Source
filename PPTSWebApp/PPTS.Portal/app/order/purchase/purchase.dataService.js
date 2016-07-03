@@ -1,6 +1,6 @@
-﻿define([ppts.config.modules.order], function (order) {
+﻿define([ppts.config.modules.order], function (helper) {
 
-    order.registerFactory('purchaseCourseDataService', ['$resource', function ($resource, dataService) {
+    helper.registerFactory('purchaseCourseDataService', ['$resource', function ($resource, dataService) {
 
         var resource = $resource(ppts.config.orderApiBaseUrl + 'api/purchase/:operation/:id',
             { operation: '@operation' },
@@ -20,6 +20,9 @@
         resource.getOrderItem = function (id, callback) {
             resource.post({ operation: 'GetOrderItemView' }, { id: id }, function (entity) { if (callback) { callback(entity); } });
         };
+
+
+
         //---------------------------------------------------------
 
 
@@ -90,6 +93,9 @@
             resource.post({ operation: 'ExchangeOrder' }, data, function (entity) { if (callback) { callback(entity); } });
         }
 
+        resource.getProduct = function (id, callback) {
+            resource.post({ operation: 'GetProductByID' }, { productId: id }, callback);
+        }
 
         //------------------------------------------------------------------
 
@@ -104,7 +110,38 @@
         }
 
         //------------------------------------------------------------------
+
+
+
+        //------------------------订购历史-------------------------
+
+        resource.getRecognizingIncome = function (itemID, callback) {
+            resource.query({ operation: 'GetRecognizingIncomeList', itemID: itemID }, callback);
+        }
+        resource.submitRecognizingIncome = function (data, callback) {
+            resource.post({ operation: 'AddRecognizingIncome' }, data, callback);
+        }
+        //
+
+        //------------------------------------------------------------------
+
+        resource.getAssetConsumeViews = function (criteria, success, error) {
+            resource.post({ operation: 'getAssetConsumeViews' }, criteria, success, error);
+        }
+
+        resource.getPageAssetConsumeViews = function (criteria, success, error) {
+            resource.post({ operation: 'getPageAssetConsumeViews' }, criteria, success, error);
+        }
+
+        //------------------------审批-------------------------
+
+        resource.getOrderByWorkflow = function (data, callback) {
+            resource.post({ operation: 'GetOrderByWorkflow' }, data, callback);
+        }
+        //---------------------------------------------------------
         return resource;
     }]);
+
+
 
 });

@@ -1,7 +1,10 @@
 ﻿using PPTS.Contracts.Customers.Models;
+using PPTS.Data.Common;
 using PPTS.Data.Common.Entities;
 using PPTS.Data.Customers.Entities;
+using PPTS.Data.Orders;
 using PPTS.Data.Orders.Entities;
+using PPTS.Data.Products;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -125,7 +128,7 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
         public StudentModel GetStudent(string teacherJobID, string campusID, Dictionary<string, IEnumerable<BaseConstantEntity>> dic)
         {
             StudentModel student = new StudentModel();
-            CustomerRelationByTeacherQueryResult result= PPTS.WebAPI.Orders.Service.CustomerService.GetCustomerRelationByTeacher(teacherJobID);
+            CustomerRelationByTeacherQueryResult result = PPTS.WebAPI.Orders.Service.CustomerService.GetCustomerRelationByTeacher(teacherJobID);
             if (result == null || result.CustomerCollection.Count() == 0)
                 return student;
             student.TeacherJobOrgID = result.TeacherJob.TeacherJob.JobOrgID;
@@ -175,6 +178,87 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
             #endregion
             return student;
         }
+
+
+        public void GetCourseCondition(AssignQCM qcm)
+        {
+            if (qcm.EndTime != DateTime.MinValue)
+            {
+                qcm.EndTime = qcm.EndTime.AddDays(1);
+            }
+
+            if (qcm.Subject != null && qcm.Subject != "18")
+            {
+                ///排除无效状态的
+                if (qcm.AssignStatus != null && qcm.AssignStatus.Length == 0)
+                {
+                    qcm.AssignStatus = new int[] { (int)AssignStatusDefine.Exception, (int)AssignStatusDefine.Finished };
+                }
+                ///如果没设置类型，则只取 一对一和班组
+                if (qcm.CategoryType != null && qcm.CategoryType.Length == 0)
+                {
+                    qcm.CategoryType = new string[] { ((int)CategoryType.OneToOne).ToString(), ((int)CategoryType.CalssGroup).ToString() };
+                }
+            }
+        }
+
+        public void GetCourseConditionAssign(AssignQCM criteriaQCM)
+        {
+            if (criteriaQCM.EndTime != DateTime.MinValue)
+            {
+                criteriaQCM.EndTime = criteriaQCM.EndTime.AddDays(1);
+            }
+            ///排除无效状态的
+            if (criteriaQCM.AssignStatus != null && criteriaQCM.AssignStatus.Length == 0)
+            {
+                criteriaQCM.AssignStatus = new int[] { (int)AssignStatusDefine.Assigned, (int)AssignStatusDefine.Exception, (int)AssignStatusDefine.Finished };
+            }
+            ///如果没设置类型，则只取 一对一和班组
+            if (criteriaQCM.CategoryType != null && criteriaQCM.CategoryType.Length == 0)
+            {
+                criteriaQCM.CategoryType = new string[] { ((int)CategoryType.OneToOne).ToString(), ((int)CategoryType.CalssGroup).ToString() };
+            }
+        }
+
+        public void GetProductCategoryType(Dictionary<string, IEnumerable<BaseConstantEntity>> dic)
+        {
+            ///处理查询条件   
+            string key = "c_codE_ABBR_Product_CategoryType";
+            foreach (var v in dic)
+            {
+                if (v.Key.ToLower() == key.ToLower())
+                {
+                    key = v.Key;
+                    System.Collections.Generic.List<BaseConstantEntity> ie = (System.Collections.Generic.List<BaseConstantEntity>)v.Value;
+                    var cc = from c in ie
+                             where (new[] { ((int)CategoryType.CalssGroup).ToString(), ((int)CategoryType.OneToOne).ToString() }).Contains(c.Key)
+                             select c;
+                    dic.Remove(key);
+                    dic.Add(key, cc);
+                    break;
+                }
+            }
+        }
+
+        public void GetCourseAssignStatus(Dictionary<string, IEnumerable<BaseConstantEntity>> dic)
+        {
+            string key = "C_CODE_ABBR_Course_AssignStatus";
+            foreach (var v in dic)
+            {
+                if (v.Key.ToLower() == key.ToLower())
+                {
+                    key = v.Key;
+                    System.Collections.Generic.List<BaseConstantEntity> ie = (System.Collections.Generic.List<BaseConstantEntity>)v.Value;
+                    var cc = from c in ie
+                             where (new[] { ((int)AssignStatusDefine.Exception).ToString(), ((int)AssignStatusDefine.Finished).ToString() }).Contains(c.Key)
+                             select c;
+                    dic.Remove(key);
+                    dic.Add(key, cc);
+                    break;
+                }
+            }
+        }
+
     }
 
     public class AssignQMBase
@@ -192,7 +276,8 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
         ///排课状态
         public string AssignStatus { get; set; }
         ///课时类型
-        public string AssignSource { get; set; }
+        //public string AssignSource { get; set; }
+        public string CategoryType { get; set; }
 
     }
 

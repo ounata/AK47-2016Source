@@ -26,22 +26,30 @@ namespace PPTS.WebAPI.Orders.Executors
 
         protected override void PrepareData(DataExecutionContext<UserOperationLogCollection> context)
         {
-            var order = Model.ToOrder();
-            var orderItem = Model.ToOrderItem();
-
-            Data.Orders.Adapters.OrdersAdapter.Instance.UpdateInContext(order);
-            Data.Orders.Adapters.OrderItemAdapter.Instance.UpdateInContext(orderItem);
-            Data.Orders.Adapters.GenericAssetAdapter<Asset, AssetCollection>.Instance.UpdateInContext(Model.ToExchangeAsset());
-            Data.Orders.Adapters.GenericAssetAdapter<Asset, AssetCollection>.Instance.UpdateInContext(Model.ToAsset());
+            Model.FillOrder()
+                .FillOrderItem();
 
             base.PrepareData(context);
-
+            
         }
 
         protected override void DoValidate(ValidationResults validationResults)
         {
             Model.Validate();
             base.DoValidate(validationResults);
+        }
+
+        protected override object DoOperation(DataExecutionContext<UserOperationLogCollection> context)
+        {
+
+            Data.Orders.Adapters.OrdersAdapter.Instance.UpdateInContext(Model.Order);
+            Data.Orders.Adapters.OrderItemAdapter.Instance.UpdateInContext(Model.Item);
+            Data.Orders.Adapters.GenericAssetAdapter<Asset, AssetCollection>.Instance.UpdateInContext(Model.ToExchangeAsset());
+            Data.Orders.Adapters.GenericAssetAdapter<Asset, AssetCollection>.Instance.UpdateInContext(Model.ToAsset());
+
+            Data.Orders.ConnectionDefine.GetDbContext().DoAction(db => db.ExecuteTimePointSqlInContext());
+
+            return null;
         }
 
     }

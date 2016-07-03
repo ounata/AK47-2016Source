@@ -13,7 +13,7 @@
     [CREATOR_ID]               NVARCHAR (36)   NULL,
     [CREATOR_USER_NAME]        NVARCHAR (64)   NULL,
     [LAST_UPLOAD_TAG]          NVARCHAR (36)   NOT NULL,
-    [CREATE_DATETIME]          DATETIME        CONSTRAINT [DF_MATERIAL_CREATE_DATETIME] DEFAULT (getdate()) NOT NULL,
+    [CREATE_DATETIME]          DATETIME        CONSTRAINT [DF_MATERIAL_CREATE_DATETIME] DEFAULT (GETUTCDATE()) NOT NULL,
     [MODIFY_TIME]              DATETIME        NULL,
     [WF_PROCESS_ID]            NVARCHAR (36)   NULL,
     [WF_ACTIVITY_ID]           NVARCHAR (36)   NULL,
@@ -95,7 +95,7 @@ EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'创建时�
 
 
 GO
-EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'修改时间', @level0type = N'SCHEMA', @level0name = N'WF', @level1type = N'TABLE', @level1name = N'MATERIAL', @level2type = N'COLUMN', @level2name = N'MODIFY_TIME';
+EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'修改时间(UTC)', @level0type = N'SCHEMA', @level0name = N'WF', @level1type = N'TABLE', @level1name = N'MATERIAL', @level2type = N'COLUMN', @level2name = N'MODIFY_TIME';
 
 
 GO

@@ -1,25 +1,32 @@
 ﻿define([ppts.config.modules.customer],
     function (customer) {
-        customer.registerController('studentViewController', ['$state', '$location',
-            function ($state, $location) {
+        customer.registerController('studentViewController', ['$state', '$stateParams', '$location',
+            function ($state, $stateParams, $location) {
+
                 var vm = this;
-                vm.page = 'ppts.student';
+                vm.page = $location.$$search.prev;
+                vm.customerId = $stateParams.id;
 
                 vm.tabs = [{
                     title: '基础信息',
                     active: true,
+                    permission: '',
                     menus: [{
                         url: 'ppts.student-view.profiles({prev:vm.page})',
-                        title: '基本信息'
+                        title: '基本信息',
+                        permission: ''
                     }, {
                         url: 'ppts.student-view.parents({prev:vm.page})',
-                        title: '学员家长'
+                        title: '学员家长',
+                        permission: ''
                     }, {
                         url: 'ppts.student-view.parent-new({prev:vm.page})',
-                        title: '新建家长'
+                        title: '新建家长',
+                        permission: ''
                     }, {
                         url: 'ppts.student-view.returnExpense({prev:vm.page})',
-                        title: '返还服务费'
+                        title: '返还服务费',
+                        permission: ''
                     }]
                 }, {
                     title: '接触信息',
@@ -47,6 +54,9 @@
                         url: 'ppts.student-view.account({prev:vm.page})',
                         title: '账户信息'
                     }, {
+                        url: 'ppts.student-view.accountRecordList({prev:vm.page})',
+                        title: '账户日志'
+                    }, {
                         url: 'ppts.student-view.accountChargeEdit({prev:vm.page,path:\'tabnew\'})',
                         title: '充值'
                     }, {
@@ -62,7 +72,7 @@
                         url: 'ppts.student-view.accountTransferList({prev:vm.page})',
                         title: '转让记录'
                     }, {
-			url: 'ppts.student-view.purchaseHistory({stuCode:1,prev:vm.page})',
+                        url: 'ppts.student-view.purchaseHistory({stuId:"' + vm.customerId + '",prev:vm.page})',
                         title: '订购历史'
                     }]
                 }, {
@@ -92,7 +102,7 @@
                         title: '退费预警'
                     }]
                 }];
-		console.log(vm);
+
                 vm.switchView = function (scope) {
                     angular.forEach(vm.tabs, function (tab) {
                         tab.active = false;

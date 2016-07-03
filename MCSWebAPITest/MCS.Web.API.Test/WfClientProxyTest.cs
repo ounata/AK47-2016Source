@@ -17,15 +17,15 @@ namespace MCS.Web.API.Test
             WfClientStartupParameters parameters = new WfClientStartupParameters()
             {
                 ProcessKey = "unittest",
-                UserLogonName = "zhangxiaoyan_2",
+                //UserLogonName = "zhangxiaoyan_2",
                 ResourceID = resourceID,
-                TaskTitle = "单元测试任务" + resourceID,
-                TaskUrl = "http://www.microsoft.com/?id=" + resourceID,
+                //TaskTitle = "单元测试任务" + resourceID,
+                //TaskUrl = "http://www.microsoft.com/?id=" + resourceID,
                 ProcessParameters = new System.Collections.Generic.Dictionary<string, object>()
             };
             parameters.ProcessParameters.Add("是否需要二级审批", false);
 
-            WFClientProcess process = WfClientProxy.Startup(parameters);
+            WfClientProcess process = WfClientProxy.Startup(parameters);
 
             string json = JsonConvert.SerializeObject(process);
 

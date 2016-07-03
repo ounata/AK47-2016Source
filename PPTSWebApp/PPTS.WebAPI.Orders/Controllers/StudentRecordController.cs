@@ -3,10 +3,13 @@ using MCS.Library.Data;
 using MCS.Library.OGUPermission;
 using MCS.Library.Principal;
 using PPTS.Data.Common.Adapters;
+using PPTS.Data.Common.Entities;
 using PPTS.Data.Common.Security;
 using PPTS.Data.Orders;
 using PPTS.Data.Orders.DataSources;
 using PPTS.Data.Orders.Entities;
+using PPTS.Data.Products;
+using PPTS.Web.MVC.Library.Filters;
 using PPTS.WebAPI.Orders.ViewModels.Assignment;
 using System;
 using System.Collections.Generic;
@@ -21,6 +24,7 @@ namespace PPTS.WebAPI.Orders.Controllers
         #region api/studentcourse/getStuClassRecord
         ///学员视图  上课记录查询列表
         [HttpPost]
+        [PPTSJobFunctionAuthorize("PPTS:学员视图-排课条件/课表/上课记录/班组班级")]
         public AssignQCR GetStuClassRecord(AssignQCM criteriaQCM)
         {
             criteriaQCM.CustomerID.NullCheck("学员ID不能为空");
@@ -35,23 +39,24 @@ namespace PPTS.WebAPI.Orders.Controllers
                 };
             }
             criteriaQCM.CampusID = new string[] { org.ID };
-            if (criteriaQCM.AssignStatus == null || criteriaQCM.AssignStatus.Length == 0)
-                criteriaQCM.AssignStatus = new int[] { (int)AssignStatusDefine.Exception, (int)AssignStatusDefine.Finished };
-            else if (criteriaQCM.AssignStatus[0] == (int)AssignStatusDefine.Assigned
-                || criteriaQCM.AssignStatus[0] == (int)AssignStatusDefine.Invalid
-                )
-            {
-                criteriaQCM.AssignStatus = new int[] { (int)AssignStatusDefine.Exception, (int)AssignStatusDefine.Finished };
-            }
+            var och = new OrderCommonHelper();
+            och.GetCourseCondition(criteriaQCM);
+            Dictionary<string, IEnumerable<BaseConstantEntity>> dic = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(Data.Orders.Entities.Assign));
+           
+            och.GetCourseAssignStatus(dic);
+            och.GetProductCategoryType(dic);
 
             return new AssignQCR()
             {
                 QueryResult = GenericOrderDataSource<Data.Orders.Entities.Assign, AssignCollection>.Instance.Query(criteriaQCM.PageParams, criteriaQCM, criteriaQCM.OrderBy),
-                Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(Data.Orders.Entities.Assign))
+                Dictionaries = dic
             };
         }
+
+       
         ///学员视图  上课记录查询列表翻页事件
         [HttpPost]
+        [PPTSJobFunctionAuthorize("PPTS:学员视图-排课条件/课表/上课记录/班组班级")]
         public PagedQueryResult<Data.Orders.Entities.Assign, AssignCollection> GetStuClassRecordPaged(AssignQCM criteriaQCM)
         {
             criteriaQCM.CustomerID.NullCheck("学员ID不能为空");
@@ -62,14 +67,10 @@ namespace PPTS.WebAPI.Orders.Controllers
                 return new PagedQueryResult<Data.Orders.Entities.Assign, AssignCollection>();
             }
             criteriaQCM.CampusID = new string[] { org.ID };
-            if (criteriaQCM.AssignStatus == null || criteriaQCM.AssignStatus.Length == 0)
-                criteriaQCM.AssignStatus = new int[] { (int)AssignStatusDefine.Exception, (int)AssignStatusDefine.Finished };
-            else if (criteriaQCM.AssignStatus[0] == (int)AssignStatusDefine.Assigned
-                || criteriaQCM.AssignStatus[0] == (int)AssignStatusDefine.Invalid
-                )
-            {
-                criteriaQCM.AssignStatus = new int[] { (int)AssignStatusDefine.Exception, (int)AssignStatusDefine.Finished };
-            }
+
+            var och = new OrderCommonHelper();
+            och.GetCourseCondition(criteriaQCM);
+
             return GenericOrderDataSource<Data.Orders.Entities.Assign, AssignCollection>.Instance.Query(criteriaQCM.PageParams, criteriaQCM, criteriaQCM.OrderBy);
         }
 

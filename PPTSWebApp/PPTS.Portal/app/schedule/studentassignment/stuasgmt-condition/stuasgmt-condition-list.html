@@ -1,7 +1,7 @@
 ﻿<!-- #开始：修改排课条件.工具栏 -->
 <div class="mcs-panel-toolbar">
-    <mcs-button category="edit" text="修改排课条件" click="vm.editAcc()"></mcs-button>
-    <mcs-button category="delete" text="删除排课条件" click="vm.deleteAcc()"></mcs-button>
+    <mcs-button category="edit"  ppts-functions="按钮-修改排课条件/删除排课条件-本校区" text="修改排课条件" click="vm.editAcc()"></mcs-button>
+    <mcs-button category="delete"  ppts-functions="按钮-修改排课条件/删除排课条件-本校区"  text="删除排课条件" click="vm.deleteAcc()"></mcs-button>
 </div>
 <div class="alert alert-block alert-danger" ng-show="vm.errorMessage">
     <button type="button" class="close" data-dismiss="alert">

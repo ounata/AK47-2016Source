@@ -26,7 +26,7 @@ CREATE INDEX [IX_SchemaRelationObjectsSnapshot_Current_ObjectID] ON [SC].[Schema
 
 GO
 
-CREATE INDEX [IX_SchemaRelationObjectsSnapshot_Current_FullPath] ON [SC].[SchemaRelationObjectsSnapshot_Current] ([FullPath], [VersionStartTime]) INCLUDE ([ObjectID])
+CREATE INDEX [IX_SchemaRelationObjectsSnapshot_Current_FullPath] ON [SC].[SchemaRelationObjectsSnapshot_Current] ([FullPath], [ParentSchemaType], [ChildSchemaType], [VersionStartTime]) INCLUDE ([ObjectID])
 
 GO
 

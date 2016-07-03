@@ -1,5 +1,8 @@
 ﻿<div class="input-group input-xlarge mcs-input-group {{css}}">
-    <mcs-input placeholder="选择潜在客户" model="model.customerName" onkeydown="return false;" css="form-control mcs-input-search" />
+    <mcs-input placeholder="选择潜在客户" model="model.customerName" submit-validate="true" onkeydown="return false;" onpaste="return false;" oncontextmenu="return false;" css="form-control mcs-input-search" style="height:36px;border-right:0"/>
+    <span class="input-group-addon mcs-noborder-left mcs-nobg" ng-click="clear()">
+        <i class="fa fa-remove bigger-110"></i>
+    </span>
     <span class="input-group-btn">
         <button class="btn btn-sm btn-info" type="button" ng-click="select()" style="height:34px;">
             <i class="ace-icon fa fa-check bigger-110"></i>

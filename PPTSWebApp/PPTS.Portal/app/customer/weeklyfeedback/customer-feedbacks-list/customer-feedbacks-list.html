@@ -23,12 +23,12 @@
                     <ppts-select-branch model="vm.criteria.orgIds"/>
                 </div>
                 <div class="search-inline">
-                    <ppts-select class="ppts-select-search" category="grade" model="vm.criteria.grades" caption="学生年级" />
-                    <ppts-select class="ppts-select-search" category="replyObject" model="vm.criteria.replyObject" caption="反馈对象"/>
+                    <mcs-select class="ppts-select-search" category="grade" model="vm.criteria.grades" caption="学生年级" />
+                    <mcs-select class="ppts-select-search" category="replyObject" model="vm.criteria.replyObject" caption="反馈对象"/>
                     </div>
                 </div>
             <div class="ppts-oneline-block">
-                <ppts-daterangepicker class="search" start-date="vm.criteria.meetingTimeStart" end-date="vm.criteria.meetingTimeEnd"/>
+                <mcs-daterangepicker class="search" start-date="vm.criteria.meetingTimeStart" end-date="vm.criteria.meetingTimeEnd"/>
 
                 <mcs-input class="search-input-middle-align" placeholder="员工姓名" model="vm.criteria.replierName"/>
                 <mcs-input class="search-input-middle-align" placeholder="学生姓名" model="vm.criteria.customerName"/>

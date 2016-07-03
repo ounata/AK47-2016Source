@@ -21,6 +21,16 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
     public class ChargeAllotModel
     {
         /// <summary>
+        /// 申请ID
+        /// </summary>
+        [DataMember]
+        public string ApplyID
+        {
+            set;
+            get;
+        }
+
+        /// <summary>
         /// 业绩分配总金额
         /// </summary>
         [DataMember]
@@ -35,6 +45,16 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
         /// </summary>
         [DataMember]
         public decimal TotalAmount
+        {
+            set;
+            get;
+        }
+
+        /// <summary>
+        /// 所报科目信息
+        /// </summary>
+        [DataMember]
+        public string[] Subjects
         {
             set;
             get;
@@ -60,15 +80,18 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
             }
         }
 
-        public static ChargeAllotModel Load(string applyID)
+        public static ChargeAllotModel Load(ChargeApplyModel apply)
         {
             ChargeAllotModel model = new ChargeAllotModel();
-            AccountChargeAllotCollection allots = AccountChargeAllotAdapter.Instance.LoadCollectionByApplyID(applyID);
+            model.ApplyID = apply.ApplyID;
+            model.Subjects = apply.ToSubjects();
+            AccountChargeAllotCollection allots = AccountChargeAllotAdapter.Instance.LoadCollectionByApplyID(apply.ApplyID);
             foreach (AccountChargeAllot allot in allots)
             {
                 model.TotalAmount += allot.AllotAmount;
                 model.TotalMoney += allot.AllotMoney;
-                ChargeAllotItemModel item = AutoMapper.Mapper.DynamicMap<ChargeAllotItemModel>(allot);
+                ChargeAllotItemModel item = allot.ProjectedAs<ChargeAllotItemModel>();
+                item.TeacherJobs = TeacherJobModel.Load(apply.CampusID, item.TeacherID);
                 model.Items.Add(item);
             }
             return model;

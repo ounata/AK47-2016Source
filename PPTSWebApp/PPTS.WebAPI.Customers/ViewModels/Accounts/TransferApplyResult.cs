@@ -1,4 +1,5 @@
 ﻿using MCS.Library.OGUPermission;
+using MCS.Web.MVC.Library.Models.Workflow;
 using PPTS.Data.Common;
 using PPTS.Data.Common.Adapters;
 using PPTS.Data.Common.Entities;
@@ -77,6 +78,17 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
         }
 
         /// <summary>
+        /// 客户端流程信息
+        /// </summary>
+        [DataMember]
+        public WfClientProcess ClientProcess
+        {
+            get;
+            set;
+        }
+
+
+        /// <summary>
         /// 根据学员获取
         /// </summary>
         /// <param name="customerID"></param>
@@ -85,7 +97,7 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
         {
             TransferApplyResult result = new TransferApplyResult();
             result.Customer = CustomerModel.Load(customerID, false);
-            result.Accounts = AccountModel.LoadNonZeroByCustomerID(result.Customer.CustomerID);
+            result.Accounts = AccountModel.Load4TransferByCustomerID(result.Customer.CustomerID);
             result.Apply = TransferApplyModel.LoadByCustomer(result.Customer);
             result.Assert = Validate(result.Customer.CustomerID, user);
 
@@ -108,6 +120,9 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
 
         public static AssertResult Validate(string customerID, IUser user)
         {
+#if DEBUG
+            return new AssertResult();
+#else
             PPTSJob job = user.GetCurrentJob();
             if (job.JobType != JobTypeDefine.Educator)
                 return new AssertResult(false, "只有学管师才可以提交转让申请");
@@ -117,11 +132,12 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
             {
                 CustomerStaffRelation relation = collection.Find(x => x.RelationType == CustomerRelationType.Educator);
                 if (relation == null)
-                    return new AssertResult(false, "请先给该学员分配学管师再提交转让申请");
+                    return new AssertResult(false, "请先给该学员分配学管师再转让");
                 else if (job.ID != relation.StaffJobID)
                     return new AssertResult(false, "只有该学员的学管师才可以提交转让申请");
             }
             return new AssertResult();
+#endif
         }
     }
 }

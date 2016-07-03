@@ -71,6 +71,10 @@
     <Reference Include="PPTS.Contracts.Proxies">
       <HintPath>..\..\PPTSBin\PPTS.Contracts.Proxies.dll</HintPath>
     </Reference>
+    <Reference Include="PPTS.Contracts.Search, Version=1.0.0.0, Culture=neutral, PublicKeyToken=62ea08f894871798, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\PPTSBin\PPTS.Contracts.Search.dll</HintPath>
+    </Reference>
     <Reference Include="PPTS.Data.Common">
       <HintPath>..\..\PPTSBin\PPTS.Data.Common.dll</HintPath>
     </Reference>
@@ -85,6 +89,7 @@
       <HintPath>..\..\PPTSBin\PPTS.Data.Products.Entities.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Transactions" />
@@ -96,6 +101,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Adapters\AccountChargeInvoicesAdapter.cs" />
+    <Compile Include="Adapters\AccountRecordAdapter.cs" />
+    <Compile Include="Adapters\FinancialIncomeAdapter.cs" />
+    <Compile Include="Adapters\FinancialRefundAdapter.cs" />
     <Compile Include="Adapters\PotentialCustomerParentPhoneAdapter.cs" />
     <Compile Include="Adapters\CustomerParentPhoneAdapter.cs" />
     <Compile Include="Adapters\CustomerTransferResourcesAdapter.cs" />
@@ -153,17 +162,14 @@
     <Compile Include="Adapters\CustomerStaffRelationAdapter.cs" />
     <Compile Include="Adapters\PotentialCustomerAdapter.cs" />
     <Compile Include="Adapters\VersionedCustomerAdapterBase.cs" />
-    <Compile Include="Authorization\CustomerOrgAuthorizationAdapter.cs" />
-    <Compile Include="Authorization\CustomerRelationAuthorizationAdaper.cs" />
-    <Compile Include="Authorization\ScopeAuthorization.cs" />
-    <Compile Include="Authorization\OwnerRelationAuthorizationAdapter.cs" />
-    <Compile Include="Authorization\RecordOrgAuthorizationAdapter.cs" />
     <Compile Include="Common\ConnectionDefine.cs" />
     <Compile Include="Common\Helper.cs" />
     <Compile Include="DataSources\GenericCustomerAuthDataSourse.cs" />
     <Compile Include="DataSources\GenericSearchDataSource.cs" />
     <Compile Include="DataSources\GenericCustomerDataSource.cs" />
     <Compile Include="Executors\AccountApproveRefundApplyExecutor.cs" />
+    <Compile Include="Executors\AccountDebitExecutor.cs" />
+    <Compile Include="Executors\AccountDebookExecutor.cs" />
     <Compile Include="Executors\AccountDeductAppliesExecutor.cs" />
     <Compile Include="Executors\AccountDeductAppliesModel.cs" />
     <Compile Include="Executors\StudentApproveTransferApplyExecutor.cs" />
@@ -175,6 +181,7 @@
     <Compile Include="Executors\PPTSCustomerExecutorBase.cs" />
     <Compile Include="Executors\PPTSEditCustomerExecutorBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service\UpdateCustomerSearchByCustomerTask.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MCS.Library.snk" />

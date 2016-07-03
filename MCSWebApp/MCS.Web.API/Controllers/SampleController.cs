@@ -187,6 +187,18 @@ namespace MCS.Web.API.Controllers
             return material.ProcessMaterialDownload();
         }
 
+       
+
+        [HttpPost]
+        public void UploadMaterialWriteDB(MaterialModelCollection materialCollection)
+        {
+            var c = materialCollection;
+            MaterialModelHelper helper = MaterialModelHelper.GetInstance("DataAccessTest");
+            helper.Update(c);
+
+           
+        }
+
         [HttpPost]
         public MaterialModelCollection UploadMaterial(HttpRequestMessage request)
         {
@@ -194,6 +206,8 @@ namespace MCS.Web.API.Controllers
             
             return request.ProcessMaterialUpload();
         }
+
+       
 
         
     }

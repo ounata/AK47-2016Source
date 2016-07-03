@@ -13,7 +13,7 @@ namespace PPTS.WebAPI.Orders.ViewModels.ClassGroup
     /// </summary>
     public class AssetsQueryResultModel
     {
-        public PagedQueryResult<AssetView, AssetViewCollection> QueryResult { get; set; }
+        public PagedQueryResult<OrderItemView, OrderItemViewCollection> QueryResult { get; set; }
     }
 
 }

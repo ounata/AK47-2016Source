@@ -1,5 +1,6 @@
 ﻿using MCS.Library.Data.DataObjects;
 using MCS.Library.Data.Mapping;
+using PPTS.Data.Common.Authorization;
 using PPTS.Data.Common.Entities;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,23 @@ using System.Threading.Tasks;
 
 namespace PPTS.Data.Customers.Entities
 {
+    #region 数据范围权限(存入识别)
+    [EntityAuth(RecordType = RecordType.CustomerRefundAlert)]
+    #endregion
+
+    #region 数据范围权限(数据读取权限)
+
+    [OwnerRelationScope(Name = "学员视图-停课休学/退费预警", Functions = "学员视图-停课休学/退费预警", RecordType = RecordType.CustomerRefundAlert)]
+    [RecordOrgScope(Name = "学员视图-停课休学/退费预警-本部门", Functions = "学员视图-停课休学/退费预警-本部门", OrgType = Common.Authorization.OrgType.Department, RecordType = RecordType.CustomerRefundAlert)]
+    [RecordOrgScope(Name = "学员视图-停课休学/退费预警-本校区", Functions = "学员视图-停课休学/退费预警-本校区", OrgType = Common.Authorization.OrgType.Campus, RecordType = RecordType.CustomerRefundAlert)]
+    [RecordOrgScope(Name = "学员视图-停课休学/退费预警-本分公司", Functions = "学员视图-停课休学/退费预警-本分公司", OrgType = Common.Authorization.OrgType.Branch, RecordType = RecordType.CustomerRefundAlert)]
+    [RecordOrgScope(Name = "学员视图-停课休学/退费预警-全国", Functions = "学员视图-停课休学/退费预警-全国", OrgType = Common.Authorization.OrgType.HQ, RecordType = RecordType.CustomerRefundAlert)]
+
+    #endregion
+
+    [OwnerRelationScope(Name = "新增/编辑退费预警", Functions = "新增/编辑退费预警", ActionType = ActionType.Edit, RecordType = RecordType.CustomerRefundAlert)]
+    [CustomerRelationScope(Name = "新增/编辑退费预警", Functions = "新增/编辑退费预警", ActionType = ActionType.Edit, RecordType = CustomerRecordType.Customer)]
+
     /// <summary>
     /// 退费预警实体类
     /// </summary>

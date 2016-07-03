@@ -4,6 +4,10 @@ using MCS.Library.Core;
 using PPTS.Data.Common.Security;
 using PPTS.Data.Common.DataSources;
 using PPTS.Data.Common.Entities;
+using PPTS.Data.Customers.Entities;
+using PPTS.Data.Customers.Adapters;
+using System.Collections.Generic;
+using MCS.Web.MVC.Library.Models;
 
 namespace PPTS.WebAPI.Common.Controllers
 {
@@ -28,6 +32,18 @@ namespace PPTS.WebAPI.Common.Controllers
             }
 
             return new SelectionItemCollection();
+        }
+
+        [HttpPost]
+        public SchoolCollection GetSchools(UserGraphSearchParams searchParams)
+        {
+            return SchoolAdapter.Instance.LoadSchools(searchParams.SearchTerm, searchParams.MaxCount);
+        }
+
+        [HttpPost]
+        public List<string> GetAddress(UserGraphSearchParams searchParams)
+        {
+            return ParentAdapter.Instance.LoadAddress(searchParams.SearchTerm, searchParams.MaxCount);
         }
     }
 }

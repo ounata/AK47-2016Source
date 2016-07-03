@@ -13,7 +13,7 @@ namespace PPTS.Data.Customers.Adapters
 {
     public class CustomerServiceItemsAdapter : CustomerAdapterBase<CustomerServiceItem, CustomerServiceItemCollection>
     {
-        public new static CustomerServiceItemsAdapter Instance = new CustomerServiceItemsAdapter();
+        public static CustomerServiceItemsAdapter Instance = new CustomerServiceItemsAdapter();
 
         private CustomerServiceItemsAdapter()
         {
@@ -28,6 +28,11 @@ namespace PPTS.Data.Customers.Adapters
         public void LoadInContext(string ItemID, Action<CustomerServiceItemCollection> action)
         {
             this.LoadInContext(new WhereLoadingCondition(builder => builder.AppendItem("ItemID", ItemID)), action);
+        }
+
+        public CustomerServiceItemCollection LoadCollectionByServiceID(string serviceID)
+        {
+            return this.Load(builder => builder.AppendItem("ServiceID", serviceID));
         }
     }
 }

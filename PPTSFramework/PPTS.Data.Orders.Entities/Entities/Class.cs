@@ -1,6 +1,7 @@
 using MCS.Library.Core;
 using MCS.Library.Data.DataObjects;
 using MCS.Library.Data.Mapping;
+using PPTS.Data.Common.Authorization;
 using PPTS.Data.Common.Entities;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,22 @@ namespace PPTS.Data.Orders.Entities
 	[Serializable]
     [ORTableMapping("OM.Classes")]
     [DataContract]
-	public class Class : IEntityWithCreator, IEntityWithModifier
+
+    #region 数据范围权限(存入识别)
+    [EntityAuth(RecordType = RecordType.Class)]
+    #endregion
+
+    #region 数据范围权限(数据读取权限)
+    [RecordOrgScope(Name = "班级管理（按钮查看班级、按钮查看学生）-本校区", Functions = "班级管理（按钮查看班级、按钮查看学生）-本校区", RelationType = RelationType.Owner, RecordType = RecordType.Class)]
+    [RecordOrgScope(Name = "班级管理（按钮查看班级、按钮查看学生）-本分公司", Functions = "班级管理（按钮查看班级、按钮查看学生）-本分公司", RelationType = RelationType.Owner, RecordType = RecordType.Class)]
+    [RecordOrgScope(Name = "班级管理（按钮查看班级、按钮查看学生）-全国", Functions = "班级管理（按钮查看班级、按钮查看学生）-全国", RelationType = RelationType.Owner, RecordType = RecordType.Class)]
+    #endregion
+
+    #region 数据范围权限(编辑操作权限)
+    [RecordOrgScope(Name = "按钮新增班级（编辑课表/更换教师/增加学生/删除班级/移出班级）-本校区", Functions = "按钮新增班级（编辑课表/更换教师/增加学生/删除班级/移出班级）-本校区", OrgType = Common.Authorization.OrgType.Campus, ActionType = ActionType.Edit, RecordType = RecordType.Class)]
+    #endregion
+
+    public class Class : IEntityWithCreator, IEntityWithModifier
     {		
 		public Class()
 		{
@@ -81,6 +97,7 @@ namespace PPTS.Data.Orders.Entities
 		/// 班级ID
 		/// </summary>
 		[ORFieldMapping("ClassID", PrimaryKey=true)]
+        [KeyFieldMapping("ClassID")]
         [DataMember]
 		public string ClassID
 		{

@@ -28,6 +28,11 @@
             resource.query({ operation: 'GetTransferApplyByApplyID', id: id }, success, error);
         }
 
+        //根据工作流参数获取转让信息
+        resource.getTransferApplyByWorkflow = function (wfParams, success, error) {
+            resource.post({ operation: 'GetTransferApplyByWorkflow' }, wfParams, success, error);
+        }
+
         //保存转让申请
         resource.saveTransferApply = function (apply, success, error) {
             resource.post({ operation: 'SaveTransferApply' }, apply, success, error);

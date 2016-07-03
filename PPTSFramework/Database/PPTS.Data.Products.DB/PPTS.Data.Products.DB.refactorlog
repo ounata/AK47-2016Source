@@ -546,4 +546,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="CampusID" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="a8fb6519-feab-4cc9-b9e5-6b4338ae156d" ChangeDateTime="06/01/2016 07:51:51">
+    <Property Name="ElementName" Value="[PM].[PresentPermissions].[CapmusID]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[PM].[PresentPermissions]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="CampusID" />
+  </Operation>
 </Operations>

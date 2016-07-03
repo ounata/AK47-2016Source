@@ -1,0 +1,52 @@
+﻿<div class="portlet light">
+    <div class="portlet-body form">
+        <form class="form-horizontal form-bordered form-row-stripped" action="#" role="form" novalidate>
+            <div class="form-body">
+                <h4 class="form-section"><i class="ace-icon fa fa-th"></i> 审批內容<span class="section-helper">【学员解冻】</span></h4>
+                <div class="form-group">
+                    <mcs-label text="学生编号" css="col-md-3" />
+                    <div class="col-md-9">
+                        <p class="form-control-static">{{ vm.thaw.customerCode }}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="学生姓名" css="col-md-3" />
+                    <div class="col-md-9">
+                        <p class="form-control-static">{{ vm.thaw.customerName }}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="学生当前所在校区" css="col-md-3" />
+                    <div class="col-md-9">
+                        <p class="form-control-static">{{ vm.thaw.campusName }}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="申请人" css="col-md-3" />
+                    <div class="col-md-9">
+                        <p class="form-control-static">{{ vm.thaw.applyName }}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="申请解冻原因" css="col-md-3" />
+                    <div class="col-md-9">
+                        <p class="form-control-static">{{ vm.thaw.reasonType | thawReasonType }}</p>
+                    </div>
+                </div>
+                <div class="form-group" ng-show="vm.thaw.reasonType == 3">
+                    <mcs-label text="内容描述" css="col-md-3" />
+                    <div class="col-md-9">
+                        <p class="form-control-static">{{ vm.thaw.thawReason }}</p>
+                    </div>
+                </div>
+                <div class="form-group mcs-noborder" ng-show="vm.attachmentData.rows.length > 0">
+                    <mcs-label text="附件" css="col-md-3" />
+                    <div class="col-md-9">
+                        <mcs-datatable data="vm.attachmentData" />
+                    </div>
+                </div>
+                <mcs-workflow model="vm.clientProcess" callbacks="vm.callbacks" />
+            </div>
+        </form>
+    </div>
+</div>

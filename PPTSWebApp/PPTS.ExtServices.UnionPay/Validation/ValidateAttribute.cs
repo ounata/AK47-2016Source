@@ -23,5 +23,10 @@ namespace PPTS.ExtServices.UnionPay.Validation
         /// 错误信息
         /// </summary>
         public string ErrorMessage { get; set; }
+
+        /// <summary>
+        /// 日期时间格式
+        /// </summary>
+        public string DateFormat { get; set; }
     }
 }

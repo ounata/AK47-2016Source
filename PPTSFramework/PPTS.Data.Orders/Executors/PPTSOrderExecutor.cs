@@ -18,20 +18,22 @@ namespace PPTS.Data.Orders.Executors
 
         }
 
-        public string OrderId { set; get; }
-        public Dictionary<string,object> EditPaymentParams;
+        //public string OrderId { set; get; }
+        //public Dictionary<string,object> EditPaymentParams;
+
+        public Data.Orders.Entities.Order Order { set; get; }
+
+        public string[] CampusIDs { set; get; }
 
         protected override object DoOperation(DataExecutionContext<UserOperationLogCollection> context)
         {
             if(OperationType == "EditPayment")
             {
-                EditPaymentParams.NullCheck("EditPaymentParams");
-                
-                OrdersAdapter.Instance.Update(OrderId, EditPaymentParams);
-                
+                Order.NullCheck("Order");
+                OrdersAdapter.Instance.ModifyChargeApply(Order, CampusIDs);
             }
             return null;
-            //throw new NotImplementedException();
+
         }
 
 

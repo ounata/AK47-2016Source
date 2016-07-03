@@ -1,82 +1,88 @@
-﻿<div class="clearfix form-actions mcs-form-actions">
-    <div class="col-md-offset-3 col-md-9">
-        <mcs-button category="edit" click="vm.edit()"></mcs-button>
+﻿<div class="portlet light">
+    <div class="portlet-body form">
+        <form class="form-horizontal form-bordered form-row-stripped" action="#" role="form" novalidate>
+            <div class="form-actions noborder">
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <mcs-button category="edit" click="vm.edit()" ppts-job-functions="{{vm.isCustomer?"编辑潜客信息,编辑潜客信息-本部门" : "修改家长、学员非关键信息,修改家长、学员关键信息-本分公司"}}"></mcs-button>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <h4 class="form-section">
+                    <i class="ace-icon fa fa-th"></i> {{vm.isCustomer?"潜客":"学员"}}<span class="important">【{{vm.customerName}}】</span>的家长信息
+                    <span class="section-helper"> (<i class="ace-icon fa fa-star red bigger-70" /> ：必填项，<i class="ace-icon fa fa-caret-up red" /> ：充值所需项，<i class="ace-icon fa fa-square red bigger-70" /> ：关键信息，签约后只能分审核经理修改)</span>
+                </h4>
+                <div class="col-md-12">
+                    <ppts-dynamic-content template="toolbar.tpl.html"></ppts-dynamic-content>
+                    <mcs-datatable data="vm.data" />
+                </div>
+            </div>
+            <div class="form-body" ng-show="vm.parent">
+                <div class="form-group horizontal bordered">
+                    <mcs-label text="家长姓名" icons="caret-up,star,square" css="col-md-3" />
+                    <div class="col-md-4">
+                        <p class="form-control-static">{{ vm.parent.parentName }}</p>
+                    </div>
+                </div>
+                <div class="form-group horizontal bordered">
+                    <mcs-label text="家长性别" css="col-md-3" />
+                    <div class="col-md-4">
+                        <p class="form-control-static">{{ vm.parent.gender | gender | normalize }}</p>
+                    </div>
+                </div>
+                <div class="form-group horizontal bordered">
+                    <mcs-label text="亲属关系" icons="caret-up" css="col-md-3" />
+                    <div class="col-md-4">
+                        <p class="form-control-static">
+                            <span ng-if="vm.parent.gender==1">{{ vm.parent.parentRole | parentMale }}</span>
+                            <span ng-if="vm.parent.gender==2">{{ vm.parent.parentRole | parentFemale }}</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="form-group horizontal bordered">
+                    <mcs-label text="是否主监护人" css="col-md-3" />
+                    <div class="col-md-4">
+                        <p class="form-control-static">{{ vm.parent.isPrimary | ifElse }}</p>
+                    </div>
+                </div>
+                <div class="form-group horizontal bordered">
+                    <mcs-label text="主要联系方式" icons="caret-up,star" css="col-md-3" />
+                    <div class="col-md-4">
+                        <p class="form-control-static">{{ vm.parent.primaryPhone.phoneNumber }}</p>
+                    </div>
+                </div>
+                <div class="form-group horizontal bordered">
+                    <mcs-label text="辅助联系方式" css="col-md-3" />
+                    <div class="col-md-4">
+                        <p class="form-control-static">{{ vm.parent.secondaryPhone.phoneNumber }}</p>
+                    </div>
+                </div>
+                <div class="form-group horizontal bordered">
+                    <mcs-label text="现住址" css="col-md-3" />
+                    <div class="col-md-4">
+                        <p class="form-control-static">{{ vm.parent.addressDetail }}</p>
+                    </div>
+                </div>
+                <div class="form-group horizontal bordered">
+                    <mcs-label text="家长Email" css="col-md-3" />
+                    <div class="col-md-4">
+                        <p class="form-control-static">{{ vm.parent.email }}</p>
+                    </div>
+                </div>
+                <div class="form-group horizontal bordered">
+                    <mcs-label text="{{ vm.parent.idType | idtype }}" icons="square" css="col-md-3"/>
+                    <div class="col-md-4">
+                        <p class="form-control-static">{{ vm.parent.idNumber }}</p>
+                    </div>
+                </div>
+                <div class="form-group horizontal bordered">
+                    <mcs-label text="家庭年总收入" css="col-md-3" />
+                    <div class="col-md-4">
+                        <p class="form-control-static"><span ng-if="vm.parent.income > 0">{{ vm.parent.income | income }}</span></p>
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
-
-<div class="alert alert-block alert-danger" ng-show="vm.errorMessage">
-    <button type="button" class="close" data-dismiss="alert">
-        <i class="ace-icon fa fa-times"></i>
-    </button>
-    <i class="ace-icon fa fa-warning"></i>
-    {{vm.errorMessage}}
-</div>
-<mcs-datatable data="vm.data" />
-
-<div class="profile-user-info profile-user-info-striped mcs-user-profile" ng-hide="!vm.data.rows">
-    <div class="profile-info-row">
-        <div class="profile-info-name"> 家长姓名 </div>
-        <div class="profile-info-value">
-            <span>{{ vm.parent.parentName }}</span>
-        </div>
-    </div>
-    <div class="profile-info-row">
-        <div class="profile-info-name"> 家长性别 </div>
-        <div class="profile-info-value">
-            <span>{{ vm.parent.gender | gender }}</span>
-        </div>
-    </div>
-    <div class="profile-info-row">
-        <div class="profile-info-name"> 亲属关系 </div>
-        <div class="profile-info-value">
-            <span ng-if="vm.parent.gender==1">{{ vm.parent.parentRole | parentMale }}</span>
-            <span ng-if="vm.parent.gender==2">{{ vm.parent.parentRole | parentFemale }}</span>
-        </div>
-    </div>
-    <div class="profile-info-row">
-        <div class="profile-info-name"> 是否主监护人 </div>
-        <div class="profile-info-value">
-            <span>{{ vm.parent.isPrimary | ifElse }}</span>
-        </div>
-    </div>
-    <div class="profile-info-row">
-        <div class="profile-info-name"> 联系方式1 </div>
-        <div class="profile-info-value">
-            <span>{{ vm.parent.primaryPhone.phoneNumber }}</span>
-        </div>
-    </div>
-    <div class="profile-info-row">
-        <div class="profile-info-name"> 联系方式2 </div>
-        <div class="profile-info-value">
-            <span>{{ vm.parent.secondaryPhone.phoneNumber }}</span>
-        </div>
-    </div>
-    <div class="profile-info-row">
-        <div class="profile-info-name"> 现住址 </div>
-        <div class="profile-info-value">
-            <span>{{  }}</span>
-        </div>
-    </div>
-    <div class="profile-info-row">
-        <div class="profile-info-name"> 家长Email </div>
-        <div class="profile-info-value">
-            <span>{{ vm.parent.email }}</span>
-        </div>
-    </div>
-    <div class="profile-info-row">
-        <div class="profile-info-name"> 
-            <span ng-if="vm.parent.idType != ''"> {{ vm.parent.idType | idtype }} </span>
-            <span ng-if="vm.parent.idType == ''"> 身份证 </span>
-        </div>
-        <div class="profile-info-value">
-            <span>{{ vm.parent.idNumber }}</span>
-        </div>
-    </div>
-    <div class="profile-info-row">
-        <div class="profile-info-name"> 家庭年总收入 </div>
-        <div class="profile-info-value">
-            <span ng-if="vm.parent.income > 0">{{ vm.parent.income | income }}</span>
-        </div>
-    </div>
-</div>
-

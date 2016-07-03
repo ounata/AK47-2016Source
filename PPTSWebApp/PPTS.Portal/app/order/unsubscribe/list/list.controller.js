@@ -5,19 +5,19 @@
                 function ($scope, $state, dataSyncService, unsubscribeCourseDataService) {
                     var vm = this;
 
+
                     vm.search = function () {
+
                         if (vm.criteria.dateRange) {
                             var dateRange = dataSyncService.selectPageDict('dateRange', vm.criteria.dateRange);
                             vm.criteria.startDate = dateRange.start || vm.criteria.customStartDate;
                             vm.criteria.endDate = dateRange.end || vm.criteria.customEndDate;
                         }
 
-                        console.log(vm.criteria);
+                        //console.log(vm.criteria);
 
                         unsubscribeCourseDataService.getAllDebookOrders(vm.criteria, function (result) {
-
                             console.log(result);
-
                             vm.data.rows = result.queryResult.pagedData;
                             dataSyncService.updateTotalCount(vm, result.queryResult);
                             $scope.$broadcast('dictionaryReady');
@@ -28,26 +28,35 @@
                         mcs.util.postMockForm(ppts.config.orderApiBaseUrl + 'api/Unsubscribe/ExportDebookItemList', vm.criteria);
                     }
 
+                    var permisstionFilter = function () {
+                        //权限指定
+                        vm.criteria.branch = ppts.user.branchId;
+                        vm.criteria.campusID = ppts.user.campusId;
+                        if (ppts.user.branchId) { vm.disabledlevel = 1; }
+                        if (ppts.user.campusId) { vm.disabledlevel = 2; }
+                    };
 
                     var init = (function () {
 
                         //定义
                         vm.data = {
-                            selection: 'radio',
-                            rowsSelected: [],
-                            keyFields: ['orderID'],
+                            //selection: 'radio',
+                            //rowsSelected: [],
+                            //keyFields: ['orderID'],
                             headers: [{
                                 field: "customerName",
-                                name: "学生姓名",
+                                name: "学员姓名",
+                                template: '<a ui-sref="ppts.student-view.profiles({id:row.customerID,prev:\'ppts.student\'})">{{row.customerName}}</a>',
+                                //sortable: true
                             }, {
                                 field: "customerCode",
-                                name: "学生编号",
+                                name: "学员编号",
                             }, {
                                 field: "parentName",
                                 name: "家长姓名"
                             }, {
-                                field: "orderNo",
-                                name: "订单编号"
+                                name: "订单编号",
+                                template: '<a ui-sref="ppts.purchaseOrderView({orderId:row.orderID})">{{row.assetCode}}</a>',
                             }, {
                                 //field: "debookTime",
                                 name: "退订日期",
@@ -77,7 +86,7 @@
                             }, {
                                 //field: "realPrice",
                                 name: "退订数量（赠送）",
-                                template: '<span>{{ row.debookAmount }}({{row.presentAmountOfDebook}})</span>'                                        
+                                template: '<span>{{ row.debookAmount }}({{row.presentAmountOfDebook}})</span>'
                             }, {
                                 field: "debookMoney",
                                 name: "退订金额",
@@ -101,9 +110,8 @@
 
                         //初始化数据
                         dataSyncService.initCriteria(vm);
-
-                        dataSyncService.injectPageDict(['dateRange']);
-
+                        dataSyncService.injectDynamicDict('dateRange');
+                        permisstionFilter();
 
                         vm.search();
 

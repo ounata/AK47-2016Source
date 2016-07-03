@@ -2,8 +2,8 @@
         ppts.config.dataServiceConfig.studentAssignmentDataService],
         function (schedule) {
             schedule.registerController('stuAsgmtConditionController', [
-                '$scope', '$state', 'dataSyncService', 'studentassignmentDataService', '$stateParams', 'mcsDialogService',
-                function ($scope, $state, dataSyncService, studentassignmentDataService, $stateParams, mcsDialogService) {
+                '$scope', '$state', 'dataSyncService', 'studentassignmentDataService', '$stateParams', 'mcsDialogService', 'utilService',
+                function ($scope, $state, dataSyncService, studentassignmentDataService, $stateParams, mcsDialogService, utilService) {
                     var vm = this;
                     vm.customerID = $stateParams.id;
                     vm.criteria = vm.criteria || {};
@@ -61,7 +61,6 @@
                         dataSyncService.initCriteria(vm);
                         studentassignmentDataService.getACC(vm.criteria, function (result) {
                             vm.data.rows = result.queryResult.pagedData;
-                            dataSyncService.injectDictData();
                             dataSyncService.updateTotalCount(vm, result.queryResult);
                             $scope.$broadcast('dictionaryReady');
                         }, function (error) {
@@ -70,18 +69,29 @@
                     vm.init();
 
                     vm.editAcc = function () {
-                        if (vm.data.rowsSelected[0] == undefined) {
-                            vm.showMsg("请选择一个排课条件");
+                        //if (vm.data.rowsSelected[0] == undefined) {
+                        //    vm.showMsg("请选择一个排课条件");
+                        //    return;
+                        //}
+
+
+                        if (utilService.showMessage(vm, (vm.data.rowsSelected[0] == undefined), '请选择一个排课条件！')) {
                             return;
                         }
+
                         $state.go('ppts.accedit', { accid: vm.data.rowsSelected[0].conditionID,cid:vm.customerID });
                     };
 
                     vm.deleteAcc = function () {
-                        if (vm.data.rowsSelected[0] == undefined) {
-                            vm.showMsg("请选择一个排课条件");
+
+                        if (utilService.showMessage(vm, (vm.data.rowsSelected[0] == undefined), '请选择一个排课条件！')) {
                             return;
                         }
+
+                        //if (vm.data.rowsSelected[0] == undefined) {
+                        //    vm.showMsg("请选择一个排课条件");
+                        //    return;
+                        //}
 
                         studentassignmentDataService.deleteAssignCondition(vm.data.rowsSelected, function (result) {
                             if (result.msg != 'ok') {

@@ -28,6 +28,7 @@
                         获取选中项文本：<ppts-radiobutton-group category="grade" model="vm.selectGrade" value="vm.selectGradeName" async="false" /><br />
                         联动效果：<ppts-radiobutton-group category="stage" model="vm.selectStage" async="false" show-all="true" /><br />
                                 <ppts-radiobutton-group category="grade" model="vm.selectGrade" parent="vm.selectStage" async="false" /><br />
+                        禁用: <ppts-radiobutton-group category="grade" model="vm.selectGrade" async="false" disabled="true"/><br />
                         已选中: {{vm.selectGrade}}, {{vm.selectGradeName}}
                     </div>
                 </div>
@@ -43,6 +44,7 @@
                         获取选中项文本：&lt;ppts-radiobutton-group category="grade" model="vm.selectGrade" value="vm.selectGradeName" async="false" /&gt;&lt;br /&gt;
                         联动效果：&lt;ppts-radiobutton-group category="stage" model="vm.selectStage" async="false" show-all="true" /&gt;&lt;br /&gt;
 		                        &lt;ppts-radiobutton-group category="grade" model="vm.selectGrade" parent="vm.selectStage" async="false" /&gt;&lt;br /&gt;
+                        禁用: &lt;ppts-radiobutton-group category="grade" model="vm.selectGrade" async="false" disabled="true" /&gt;&lt;br /&gt;
                         已选中: {{vm.selectGrade}}, {{vm.selectGradeName}}
                         <code><b>Javascript</b></code><br />
                         angular.module('app.widget')
@@ -129,6 +131,13 @@
                                 <td>无</td>
                                 <td>&lt;ppts-radiobutton-group category="stage" model="vm.selectStage" async="false" show-all="true" /&gt;
 		                        &lt;ppts-radiobutton-group category="grade" model="vm.selectGrade" parent="vm.selectStage" async="false" /&gt;</td>
+                            </tr>
+                            <tr>
+                                <td><code>disabled</code></td>
+                                <td>禁用(可选)</td>
+                                <td>否</td>
+                                <td>false</td>
+                                <td>&lt;ppts-radiobutton-group category="grade" model="vm.selectGrade" async="false" disabled="true" /&gt;</td>
                             </tr>
                         </tbody>
                     </table>

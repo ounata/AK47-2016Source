@@ -6,18 +6,25 @@ using System.Reflection;
 
 namespace MCS.Library.Office.OpenXml.Word
 {
-    public class GeneralFormatter
+    public static class GeneralFormatter
     {
         public static string ToString(object o, string formatStr)
         {
-            Type type = o.GetType();
+            string result = string.Empty;
 
-            MethodInfo method = type.GetMethod("ToString", new Type[] { typeof(string) });
+            if (o != null)
+            {
+                Type type = o.GetType();
 
-            if (null == method)
-                return o.ToString();
+                MethodInfo method = type.GetMethod("ToString", new Type[] { typeof(string) });
 
-            return method.Invoke(o, new object[] { formatStr }).ToString();
+                if (null == method)
+                    result = o.ToString();
+                else
+                    result = method.Invoke(o, new object[] { formatStr }).ToString();
+            }
+
+            return result;
         }
     }
 }

@@ -1,6 +1,7 @@
 using MCS.Library.Core;
 using MCS.Library.Data.DataObjects;
 using MCS.Library.Data.Mapping;
+using PPTS.Data.Common.Authorization;
 using PPTS.Data.Common.Entities;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,13 @@ namespace PPTS.Data.Customers.Entities
     [Serializable]
     [ORTableMapping("CM.CustomerVisits")]
     [DataContract]
+
+    [CustomerRelationScope(Name = "回访管理（学员视图-回访、回访详情）", RelationType = RelationType.Educator, Functions = "回访管理列表（学员视图-回访、回访详情）", RecordType = CustomerRecordType.Customer)]
+    [CustomerRelationScope(Name = "录入/编辑回访", RelationType = RelationType.Educator, Functions = "录入/编辑回访", ActionType = ActionType.Edit, RecordType = CustomerRecordType.Customer)]
+    [OrgCustomerRelationScope(Name = "回访管理（学员视图-回访、回访详情）-本部门", Functions = "回访管理列表（学员视图-回访、回访详情）-本部门", RecordType = CustomerRecordType.Customer)]
+    [OrgCustomerRelationScope(Name = "回访管理列表（学员视图-回访、回访详情）-本校区", Functions = "回访管理列表（学员视图-回访、回访详情）-本校区", RecordType = CustomerRecordType.Customer)]
+    [OrgCustomerRelationScope(Name = "回访管理列表（学员视图-回访、回访详情）-本分公司", Functions = "回访管理列表（学员视图-回访、回访详情）-本分公司", RecordType = CustomerRecordType.Customer)]
+    [OrgCustomerRelationScope(Name = "回访管理列表（学员视图-回访、回访详情）全国", Functions = "回访管理列表（学员视图-回访、回访详情）全国", RecordType = CustomerRecordType.Customer)]
     public class CustomerVisit : IEntityWithCreator, IEntityWithModifier
     {
         public CustomerVisit()
@@ -162,6 +170,17 @@ namespace PPTS.Data.Customers.Entities
         [ORFieldMapping("NextVisitTime", UtcTimeToLocal = true)]
         [DataMember]
         public DateTime NextVisitTime
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 短信、邮件发送时间
+        /// </summary>
+        [ORFieldMapping("RemindTime", UtcTimeToLocal = true)]
+        [DataMember]
+        public DateTime RemindTime
         {
             get;
             set;

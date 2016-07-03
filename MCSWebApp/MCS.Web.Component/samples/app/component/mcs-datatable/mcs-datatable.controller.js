@@ -1,12 +1,51 @@
 ﻿(function() {
     angular.module('app.component').controller('MCSDatatableController', [
-        '$scope', '$q', '$timeout', 'printService', '$http', 'excelImportService',
-        function($scope, $q, $timeout, printService, $http, excelImportService) {
+        '$scope', '$q', '$timeout', 'printService', '$http', 'excelImportService', 'eventService',
+        function($scope, $q, $timeout, printService, $http, excelImportService, eventService) {
             var vm = this;
+
+
+            eventService.registerEvent('myEvent');
+
+            eventService.bind('myEvent', function(eventArgs) {
+
+                alert(eventArgs.name);
+
+            });
+
+            vm.fireEvent = function() {
+                eventService.fire('myEvent', {
+                    name: 'liucy'
+                });
+            };
 
             vm.reorder = function(field, direction) {
                 var a = direction;
 
+            };
+
+            vm.condition = {
+                name: 'tom',
+                age: 11
+            };
+
+
+
+            vm.lala = function() {
+                vm.data.rows = vm.page1Data;
+                vm.data.searching();
+
+
+            };
+
+            setTimeout(function() {
+                vm.lala();
+            }, 5500);
+
+
+
+            vm.search = function() {
+                vm.searching();
             };
 
             vm.importExcel = function() {
@@ -299,7 +338,7 @@
                         field: "money",
                         name: "账户",
                         headerCss: 'mcs-datatable-column-number',
-                        template: '<span ng-click="vm.show(row.money)" >click me!!{{row.money|currency}}</span>',
+                        template: '<span title="{{row.money}}" ng-click="vm.show(row.money)" >click me!!{{row.money|currency}}</span>',
                         sortable: true,
                         description: 'customer account'
                     },
@@ -398,7 +437,7 @@
                         template: '<a>hello</a>'
                     }
                 ],
-                rows: vm.page1Data,
+                rows: [],
                 pager: {
 
                     pagable: true,
@@ -408,6 +447,8 @@
                     pageChange: vm.pageChange
                 }
             }
+
+
         }
     ]);
 })();

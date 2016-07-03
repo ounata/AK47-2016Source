@@ -61,30 +61,36 @@
                 })();
 
                 vm.updatePresentStandardRank = function (row, index) {
-                    if (!row.presentStandard) return;
-                    var result = true;
-                    if (index == 0) {
-                        var next = presentData.rows[index + 1];
-                        if (!next.presentStandard) return;
-                        result = row.presentStandard < next.presentStandard;
-                    } else if (index == presentData.rows.length - 1) {
-                        var last = presentData.rows[index - 1];
-                        if (!last.presentStandard) {
-                            last.validStandard = false;
-                            return;
-                        }
-                        result = row.presentStandard > last.presentStandard;
-                    } else {
-                        var last = presentData.rows[index - 1];
-                        var next = presentData.rows[index + 1];
-                        if (!last.presentStandard) {
-                            last.validStandard = false;
-                            return;
-                        } else {
+                    vm.errorRowRankMessage = '购买数量需大于0';
+                    if (!(row.presentStandard + "")) return;
+                    var result = row.presentStandard != 0;
+                    row.validStandard = result;
+                    if (result)
+                        vm.errorRowRankMessage = '需小于上档大于下档';
+                    if (row.validStandard) {
+                        if (index == 0) {
+                            var next = presentData.rows[index + 1];
+                            if (next.presentStandard != "")
+                                result = row.presentStandard < next.presentStandard;
+                        } else if (index == presentData.rows.length - 1) {
+                            var last = presentData.rows[index - 1];
+                            if (!last.presentStandard) {
+                                last.validStandard = false;
+                                return;
+                            }
                             result = row.presentStandard > last.presentStandard;
-                            if (result) {
-                                if (next.presentStandard) {
-                                    result = row.presentStandard < next.presentStandard;
+                        } else {
+                            var last = presentData.rows[index - 1];
+                            var next = presentData.rows[index + 1];
+                            if (!last.presentStandard) {
+                                last.validStandard = false;
+                                return;
+                            } else {
+                                result = row.presentStandard > last.presentStandard;
+                                if (result) {
+                                    if (next.presentStandard) {
+                                        result = row.presentStandard < next.presentStandard;
+                                    }
                                 }
                             }
                         }
@@ -95,35 +101,41 @@
                 };
 
                 vm.updatePresentValueRank = function (row, index) {
-                    if (!row.presentValue) return;
-                    var result = true;
-                    if (index == 0) {
-                        var next = presentData.rows[index + 1];
-                        if (!next.presentValue) return;
-                        result = row.presentValue < next.presentValue;
-                    } else if (index == presentData.rows.length - 1) {
-                        var last = presentData.rows[index - 1];
-                        if (!last.presentValue) {
-                            last.validValue = false;
-                            return;
-                        }
-                        result = row.presentValue > last.presentValue;
-                    } else {
-                        var last = presentData.rows[index - 1];
-                        var next = presentData.rows[index + 1];
-                        if (!last.presentValue) {
-                            last.validValue = false;
-                            return;
-                        } else {
+                    vm.errorRowRankMessage = '赠送数量需大于0';
+                    if (!(row.presentValue + "")) return;
+                    var result = row.presentValue != 0;
+                    row.validStandard = result;
+                    if (result)
+                        vm.errorRowRankMessage = '需小于上档大于下档';
+                    if (row.validStandard) {
+                        if (index == 0) {
+                            var next = presentData.rows[index + 1];
+                            if (next.presentValue != "")
+                                result = row.presentValue < next.presentValue;
+                        } else if (index == presentData.rows.length - 1) {
+                            var last = presentData.rows[index - 1];
+                            if (!last.presentValue) {
+                                last.validStandard = false;
+                                return;
+                            }
                             result = row.presentValue > last.presentValue;
-                            if (result) {
-                                if (next.presentValue) {
-                                    result = row.presentValue < next.presentValue;
+                        } else {
+                            var last = presentData.rows[index - 1];
+                            var next = presentData.rows[index + 1];
+                            if (!last.presentValue) {
+                                last.validStandard = false;
+                                return;
+                            } else {
+                                result = row.presentValue > last.presentValue;
+                                if (result) {
+                                    if (next.presentValue) {
+                                        result = row.presentValue < next.presentValue;
+                                    }
                                 }
                             }
                         }
                     }
-                    row.validValue = result;
+                    row.validStandard = result;
                     $scope.$apply('presentData');
                     return result;
                 };
@@ -154,21 +166,25 @@
                 }
 
                 vm.save = function () {
-                    if (mcsValidationService.run($scope)) {
-                        for (var value in presentData.rows) {
-                            if (!presentData.rows[value].validStandard || !presentData.rows[value].validValue) {
-                                vm.errorMessage = '购买于赠送关系表填写的值验证不通过,请重新填写！';
-                                return;
-                            }
-                            if (presentData.rows[value].presentStandard && !presentData.rows[value].presentValue) {
-                                vm.errorMessage = '请将购买数量和赠送数量填写完整！';
-                                return;
-                            }
-                            if (!presentData.rows[value].presentStandard && presentData.rows[value].presentValue) {
-                                vm.errorMessage = '请将购买数量和赠送数量填写完整！';
-                                return;
-                            }
+                    if (presentData.rows[0].presentStandard == "" || presentData.rows[0].presentValue == "") {
+                        vm.errorMessage = '买赠表主要内容不得为空，请填写后再保存！';
+                        return;
+                    }
+                    for (var value in presentData.rows) {
+                        if (!presentData.rows[value].validStandard || !presentData.rows[value].validValue) {
+                            vm.errorMessage = '购买与赠送关系表填写的值验证不通过,请重新填写！';
+                            return;
                         }
+                        if (presentData.rows[value].presentStandard && !presentData.rows[value].presentValue) {
+                            vm.errorMessage = '购买数量和赠送数量应该配对，请填写后再提交审批！';
+                            return;
+                        }
+                        if (!presentData.rows[value].presentStandard && presentData.rows[value].presentValue) {
+                            vm.errorMessage = '购买数量和赠送数量应该配对，请填写后再提交审批！';
+                            return;
+                        }
+                    }
+                    if (mcsValidationService.run($scope)) {
                         var createPresentModel = { present: { startDate: vm.criteria.startDate }, presentPermissionsApplieCollection: [], presentItemCollection: presentData.rows };
                         for (var i in vm.criteria.campusIds) {
                             createPresentModel.presentPermissionsApplieCollection.push({ campusID: vm.criteria.campusIds[i] });

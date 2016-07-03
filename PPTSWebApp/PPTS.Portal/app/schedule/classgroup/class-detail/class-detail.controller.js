@@ -129,13 +129,13 @@
 
                             });
                         } else {
-                            mcsDialogService.error(
-                              { title: 'Error', message: "只能针对排定的课表进行编辑！" }
+                            mcsDialogService.info(
+                              { title: '提示', message: "只能针对排定的课表进行编辑！" }
                           )
                         }
                     } else {
-                        mcsDialogService.error(
-                              { title: 'Error', message: "请选中要修改的课次！" }
+                        mcsDialogService.info(
+                              { title: '提示', message: "请选中要修改的课次！" }
                           )
                     }
                 }
@@ -162,13 +162,13 @@
 
                             });
                         } else {
-                            mcsDialogService.error(
-                              { title: 'Error', message: "该节课不能更换教师！" }
+                            mcsDialogService.info(
+                              { title: '提示', message: "该节课不能更换教师！" }
                           );
                         }
                     } else {
-                        mcsDialogService.error(
-                              { title: 'Error', message: "请选择一节课！" }
+                        mcsDialogService.info(
+                              { title: '提示', message: "请选择一节课！" }
                           )
                     }
                 }
@@ -188,8 +188,8 @@
                     for (var i in vm.data.rows) {
                         var item = vm.data.rows[i];
                         if (item.lessonStatus != 1) {
-                            mcsDialogService.error(
-                              { title: 'Error', message: "所有课次状态为排定才可操作！" }
+                            mcsDialogService.info(
+                              { title: '提示', message: "所有课次状态为排定才可操作！" }
                           );
                             return;
                         }
@@ -237,8 +237,8 @@
 
                         });
                     } else {
-                        mcsDialogService.error(
-                             { title: 'Error', message: "请选择一节课！" }
+                        mcsDialogService.info(
+                             { title: '提示', message: "请选择一节课！" }
                          )
                     }
                 }

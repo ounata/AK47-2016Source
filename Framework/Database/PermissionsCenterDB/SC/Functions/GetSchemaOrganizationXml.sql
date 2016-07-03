@@ -10,7 +10,8 @@ CREATE FUNCTION [SC].[GetSchemaOrganizationXml]
 	@Address NVARCHAR(MAX),
 	@Description NVARCHAR(255),
 	@SimplePinyin NVARCHAR(32),
-	@FullPinyin NVARCHAR(255)
+	@FullPinyin NVARCHAR(255),
+	@LegalEntity NVARCHAR(255)
 )
 RETURNS XML
 AS
@@ -18,9 +19,9 @@ BEGIN
 	DECLARE @result XML
 
 	DECLARE @tempTable TABLE([ID] NVARCHAR(36), SchemaType NVARCHAR(32), Name NVARCHAR(255), DisplayName NVARCHAR(255), CodeName NVARCHAR(64), DepartmentType NVARCHAR(32),
-		ShortName NVARCHAR(64), [Address] NVARCHAR(MAX), [Description] NVARCHAR(255), [SimplePinyin] NVARCHAR(32), [FullPinyin] NVARCHAR(255))
+		ShortName NVARCHAR(64), [Address] NVARCHAR(MAX), [Description] NVARCHAR(255), [SimplePinyin] NVARCHAR(32), [FullPinyin] NVARCHAR(255), [LegalEntity] NVARCHAR(255))
 
-	INSERT INTO @tempTable([ID], SchemaType, Name, DisplayName, CodeName, DepartmentType, ShortName, [Address], [Description], [SimplePinyin], [FullPinyin])
+	INSERT INTO @tempTable([ID], SchemaType, Name, DisplayName, CodeName, DepartmentType, ShortName, [Address], [Description], [SimplePinyin], [FullPinyin], [LegalEntity])
 	SELECT @ID AS [ID],
 		'Organizations',
 		@Name AS Name,
@@ -31,7 +32,8 @@ BEGIN
 		@Address AS [Address],
 		@Description AS Comment,
 		@SimplePinyin,
-		@FullPinyin
+		@FullPinyin,
+		@LegalEntity
 
 	SELECT @result = 
 		(SELECT * FROM @tempTable AS [Object] FOR XML AUTO)

@@ -18,6 +18,7 @@
     [NewPeopleCount] INT NULL, 
     [NewPeopleBranchRank] INT NULL, 
     [NewPeopleCountryRank] INT NULL, 
+    [NewPeopleCountTask] INT NULL, 
     CONSTRAINT [PK_ConsultCampusPerfMonthSum] PRIMARY KEY NONCLUSTERED ([CampusID], [Year], [Month]) 
 )
 
@@ -202,3 +203,12 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level1name = N'ConsultCampusPerfMonthSum',
     @level2type = NULL,
     @level2name = NULL
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'新签人数任务数',
+    @level0type = N'SCHEMA',
+    @level0name = N'SM',
+    @level1type = N'TABLE',
+    @level1name = N'ConsultCampusPerfMonthSum',
+    @level2type = N'COLUMN',
+    @level2name = N'NewPeopleCountTask'

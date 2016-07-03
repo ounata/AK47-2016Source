@@ -12,6 +12,7 @@ using MCS.Library.Principal;
 using System.Collections.Generic;
 using System;
 using MCS.Library.Net.SNTP;
+using PPTS.Contracts.Search.Models;
 
 namespace PPTS.WebAPI.Customers.Executors
 {
@@ -30,6 +31,13 @@ namespace PPTS.WebAPI.Customers.Executors
 
         protected override object DoOperation(DataExecutionContext<UserOperationLogCollection> context)
         {
+            #region 把数据保存到队列去更新CustomerSearch
+            AccountAdapter.Instance.GetSqlContext().AfterActions.Add(() => UpdateCustomerSearchByCustomerTask.Instance.UpdateByCustomerInfoByTask(new CustomerSearchUpdateModel()
+            {
+                CustomerID = this.Model.Apply.CustomerID,
+                Type = CustomerSearchUpdateType.AccountTransferApply
+            }));
+            #endregion
             base.DoOperation(context);
             return this.Model.Apply;
         }
@@ -50,8 +58,8 @@ namespace PPTS.WebAPI.Customers.Executors
                 apply.ApplyStatus = ApplyStatusDefine.Refused;
             else if (model.IsFinalApprove)
                 apply.ApplyStatus = ApplyStatusDefine.Approved;
-            
-            account.AccountMoney = apply.ThisAccountMoney;
+
+            account.AccountMoney += apply.ThisAccountMoney - apply.ThatAccountMoney;
             account.DiscountID = apply.ThisDiscountID;
             account.DiscountCode = apply.ThisDiscountCode;
             account.DiscountBase = apply.ThisDiscountBase;
@@ -63,11 +71,12 @@ namespace PPTS.WebAPI.Customers.Executors
             if (bizAccount == null)
             {
                 bizAccount = new Account();
+                bizAccount.CustomerID = apply.BizCustomerID;
                 bizAccount.AccountID = apply.BizAccountID;
                 bizAccount.AccountCode = apply.BizAccountCode;
                 bizAccount.AccountType = apply.BizAccountType;
                 bizAccount.AccountStatus = AccountStatusDefine.Uncharged;
-                bizAccount.AccountMoney = apply.BizThisAccountMoney;
+                bizAccount.AccountMoney += apply.BizThisAccountMoney - apply.BizThatAccountMoney;
                 bizAccount.DiscountID = apply.BizThisDiscountID;
                 bizAccount.DiscountCode = apply.BizThisDiscountCode;
                 bizAccount.DiscountBase = apply.BizThisDiscountBase;

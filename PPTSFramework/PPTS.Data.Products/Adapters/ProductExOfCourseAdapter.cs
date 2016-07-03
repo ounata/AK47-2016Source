@@ -25,6 +25,14 @@ namespace PPTS.Data.Products.Adapters
             this.LoadInContext(new WhereLoadingCondition(builder => builder.AppendItem("ProductID", productId)), action);
         }
 
+        public void LoadByProductIDInContext(string productId,string[] campusIds, Action<ProductExOfCourseCollection> action)
+        {
+
+            if (campusIds == null) { LoadByProductIDInContext(productId, action); return; }
+            var sql = ProductPermissionAdapter.Instance.GetExsitsByCampusIdsSQL(productId, campusIds);
+            this.LoadInContext(new WhereLoadingCondition(builder => builder.AppendItem("ProductID", productId).AppendItem("exists", sql, "", true)), action);
+        }
+
         public void UpdateByProductIDInContext(string productId, ProductExOfCourse productExOfCourse)
         {
             productId.CheckStringIsNullOrEmpty("productId");

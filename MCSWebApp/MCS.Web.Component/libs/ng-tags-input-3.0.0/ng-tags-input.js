@@ -86,7 +86,7 @@
             };
 
             setTagText = function(tag, text) {
-                tag[options.displayProperty] = text;
+                tag[options.displayProperty] = text;               
             };
 
             tagIsValid = function(tag) {
@@ -120,10 +120,23 @@
                 setTagText(tag, tagText);
 
                 if (tagIsValid(tag)) {
+
+
+                    if ((self.items.length + 1) > (options.maxTags || 1)) {
+                        self.items.pop();
+                    }
+
                     self.items.push(tag);
-                    events.trigger('tag-added', {
-                        $tag: tag
-                    });
+                    if (options.addAnyInput) { //change by liucy
+                        //events.trigger('tag-addedwithanyinput', {
+                        //    $tag: tag
+                        //});
+                    } else {
+                        events.trigger('tag-added', {
+                            $tag: tag
+                        });
+                    }
+
                 } else if (tagText) {
                     events.trigger('invalid-tag', {
                         $tag: tag
@@ -213,6 +226,7 @@
                     replaceSpacesWithDashes: [Boolean, true],
                     minLength: [Number, 3],
                     maxLength: [Number, MAX_SAFE_INTEGER],
+                    addAnyInput: [Boolean, true], //add by liucy
                     addOnEnter: [Boolean, true],
                     addOnSpace: [Boolean, false],
                     addOnComma: [Boolean, true],
@@ -238,6 +252,11 @@
                     var input = $element.find('input');
 
                     return {
+                        //add by liucy
+                        removeLastTag: function() {
+                            $scope.tagList.items.pop();
+
+                        },
                         addTag: function(tag) {
                             return $scope.tagList.add(tag);
                         },
@@ -330,6 +349,17 @@
                     scope.disabled = value;
                 });
 
+                if (scope.$parent.css || scope.$parent.$parent.css) {
+                    var css = scope.$parent.css || scope.$parent.$parent.css;
+                    element.find('.host').addClass(css);
+                }
+
+                if (scope.$parent.customStyle || scope.$parent.$parent.customStyle) {
+                    var style = element.find('.host').attr('style');
+                    style += scope.$parent.customStyle || scope.$parent.$parent.customStyle;
+                    element.find('.host').attr('style', style);
+                }
+
                 scope.eventHandlers = {
                     input: {
                         keydown: function($event) {
@@ -382,6 +412,7 @@
 
                 events
                     .on('tag-added', scope.onTagAdded)
+                    .on('tag-added-withanyinput', scope.onTagAddedWithAnyInput) //add by liucy
                     .on('invalid-tag', scope.onInvalidTag)
                     .on('tag-removed', scope.onTagRemoved)
                     .on('tag-clicked', scope.onTagClicked)
@@ -431,13 +462,14 @@
                         addKeys[KEYS.comma] = options.addOnComma;
                         addKeys[KEYS.space] = options.addOnSpace;
 
-                        shouldAdd = !options.addFromAutocompleteOnly && addKeys[key];
+                        shouldAdd = (!options.addFromAutocompleteOnly || options.addAnyInput) && addKeys[key]; //change by liucy
                         shouldRemove = (key === KEYS.backspace || key === KEYS.delete) && tagList.selected;
                         shouldEditLastTag = key === KEYS.backspace && scope.newTag.text().length === 0 && options.enableEditingLastTag;
                         shouldSelect = (key === KEYS.backspace || key === KEYS.left || key === KEYS.right) && scope.newTag.text().length === 0 && !options.enableEditingLastTag;
 
                         if (shouldAdd) {
                             tagList.addText(scope.newTag.text());
+                            scope.text = ''; //add by liucy
                         } else if (shouldEditLastTag) {
                             var tag;
 
@@ -458,7 +490,7 @@
                         }
 
                         if (shouldAdd || shouldSelect || shouldRemove || shouldEditLastTag) {
-                            event.preventDefault();
+                            event.preventDefault(); //change by liucy
                         }
                     })
                     .on('input-paste', function(event) {
@@ -704,6 +736,7 @@
                     var added = false;
 
                     if (suggestionList.selected) {
+                        tagsInput.removeLastTag(); //add by liucy
                         tagsInput.addTag(angular.copy(suggestionList.selected));
                         suggestionList.reset();
                         tagsInput.focusInput();

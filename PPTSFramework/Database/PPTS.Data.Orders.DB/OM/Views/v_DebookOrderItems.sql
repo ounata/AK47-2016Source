@@ -1,6 +1,7 @@
 ﻿
 CREATE VIEW [OM].[v_DebookOrderItems]
 AS
+
 SELECT  OM.DebookOrders.CampusID, OM.DebookOrders.CampusName, OM.DebookOrders.ParentID, 
                    OM.DebookOrders.ParentName, OM.DebookOrders.CustomerID, OM.DebookOrders.CustomerCode, 
                    OM.DebookOrders.CustomerName, OM.DebookOrders.DebookID, OM.DebookOrders.DebookNo, 
@@ -18,7 +19,12 @@ SELECT  OM.DebookOrders.CampusID, OM.DebookOrders.CampusName, OM.DebookOrders.Pa
                    OM.v_OrderItems.ItemID AS OrderItemID, OM.v_OrderItems.ItemNo AS OrderItemNo, OM.v_OrderItems.ProductID, 
                    OM.v_OrderItems.ProductCode, OM.v_OrderItems.ProductName, OM.v_OrderItems.OrderPrice, 
                    OM.v_OrderItems.OrderAmount, OM.v_OrderItems.PresentAmount, OM.v_OrderItems.RealPrice, 
-                   OM.v_OrderItems.RealAmount, OM.v_OrderItems.ConfirmedAmount, OM.v_OrderItems.ConfirmedMoney
+                   OM.v_OrderItems.RealAmount, OM.v_OrderItems.ConfirmedAmount, OM.v_OrderItems.ConfirmedMoney, 
+                   OM.v_OrderItems.ProductUnit, OM.v_OrderItems.ProductUnitName, OM.v_OrderItems.Grade, 
+                   OM.v_OrderItems.GradeName, OM.v_OrderItems.Subject, OM.v_OrderItems.SubjectName, OM.v_OrderItems.Catalog, 
+                   OM.v_OrderItems.CatalogName, OM.v_OrderItems.Category, OM.v_OrderItems.CategoryName, 
+                   OM.v_OrderItems.CategoryType, OM.v_OrderItems.CategoryTypeName, OM.v_OrderItems.CourseLevel, 
+                   OM.v_OrderItems.CourseLevelName, OM.v_OrderItems.LessonDuration, OM.v_OrderItems.LessonDurationValue
 FROM      OM.DebookOrders INNER JOIN
                    OM.DebookOrderItems ON OM.DebookOrders.DebookID = OM.DebookOrderItems.DebookID INNER JOIN
                    OM.v_OrderItems ON OM.DebookOrderItems.AssetID = OM.v_OrderItems.AssetID

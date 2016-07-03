@@ -4,8 +4,10 @@ using MCS.Library.Data.Executors;
 using MCS.Library.Principal;
 using MCS.Library.SOA.DataObjects;
 using PPTS.Data.Common.Security;
+using PPTS.Data.Common.Service;
 using PPTS.Data.Customers.Adapters;
 using PPTS.Data.Customers.Executors;
+using PPTS.WebAPI.Customers.ViewModels.CustomerVisits;
 using PPTS.WebAPI.Customers.ViewModels.PotentialCustomers;
 using System;
 using System.Collections.Generic;
@@ -28,14 +30,46 @@ namespace PPTS.WebAPI.Customers.Executors
         protected override void PrepareData(DataExecutionContext<UserOperationLogCollection> context)
         {
             base.PrepareData(context);
-            
+            IList<CTUser> cUsersList = new List<CTUser>();
+
             foreach (var cusStaff in Model.CustomerStaffRelations)
             {
-                cusStaff.FillCreator();
+                //删选老师
+                if (!cUsersList.Contains(EditCustomerStaffRelationsModel.GetUser(cusStaff.StaffID)))
+                {
+                    cUsersList.Add(EditCustomerStaffRelationsModel.GetUser(cusStaff.StaffID));
+                }
+                cusStaff.FillCreator();                
                 CustomerStaffRelationAdapter.Instance.UpdateInContext(cusStaff);
             }
-        }
 
+            //发送短信和邮件
+            foreach (var c in cUsersList)
+            {
+                foreach (int mt in Model.MessageType)
+                {
+                    switch (mt)
+                    {
+                        case (int)RemainType.Email:
+
+                            EmailMessage emailMessage = new EmailMessage(c.Email,
+                                "分配咨询师提醒",
+                                EditCustomerTransferResourcesModel.GenericContextMessage(RemainType.Email, c.Name));
+                            EmailMessageAdapter.Instance.Insert(emailMessage);
+                            break;
+                        case (int)RemainType.Message:
+                            SMSTask.Instance.SendSMSWithAdTask(c.Mobile,
+                                EditCustomerTransferResourcesModel.GenericContextMessage(RemainType.Message, c.Name), "PPTS");
+                            break;
+                    }
+                }
+            }
+           
+        }
+        /// <summary>
+        /// 更新带版本时间的表必须重写这个方法
+        /// </summary>
+        /// <param name="dbContext"></param>
         protected override void ExecuteNonQuerySqlInContext(DbContext dbContext)
         {
             dbContext.ExecuteTimePointSqlInContext();

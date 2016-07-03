@@ -20,7 +20,7 @@ namespace PPTS.WebAPI.Products.Executors.Tests
             MCS.Library.Principal.DeluxeIdentity di = new MCS.Library.Principal.DeluxeIdentity(OGUExtensions.GetUserByOAName("zhangxiaoyan_2"));
             DeluxePrincipal dp = new DeluxePrincipal(di);
             Thread.CurrentPrincipal = dp;
-            RefusedPresentExecutor executor = new RefusedPresentExecutor("a2923d2c-e6f3-84f8-485e-9cb56c0599ab");
+            RefusedPresentExecutor executor = new RefusedPresentExecutor("0c23f353-bad1-9a65-4994-dd49aeea344b");
             executor.Execute();
         }
     }

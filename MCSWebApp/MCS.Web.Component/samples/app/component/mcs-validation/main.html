@@ -37,7 +37,7 @@
                                 <!-- NAME -->
                                 <div class="form-group has-feedback" ng-class="{ 'has-error' : userForm.name.$invalid && !userForm.name.$pristine }">
                                     <label>Name</label>
-                                    <input uib-tooltip="hello" type="text" title="{{userForm.name.$invalid && !userForm.name.$pristine?vm.validation.name:''}}" name="name" class="form-control" ng-model="user.name" required>
+                                    <input uib-popover="hello" popover-trigger="mouseenter" type="text" title="{{userForm.name.$invalid && !userForm.name.$pristine?vm.validation.name:''}}" name="name" class="form-control" ng-model="user.name" required>
                                     <span ng-show="userForm.name.$invalid && !userForm.name.$pristine" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
                                     <p ng-show="userForm.name.$invalid && !userForm.name.$pristine" class="help-block">You name is required.</p>
                                 </div>

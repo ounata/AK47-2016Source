@@ -63,7 +63,7 @@
             field: "alertStatus",
             name: "当前状态",
             template: '<span>{{ row.alertStatus | refundAlertStatus }}</span>',
-        }],
+        }], 
         pager: {
             pageIndex: 1,
             pageSize: ppts.config.pageSizeItem,
@@ -92,7 +92,7 @@
             dataSyncService.initCriteria(vm);
             refundAlertdataService.getAllRefundAlerts(vm.criteria, function (result) {
                 vm.data.rows = result.queryResult.pagedData;
-                dataSyncService.injectPageDict(['dateRange', 'people', 'ifElse']);
+                dataSyncService.injectDynamicDict('dateRange,dept,ifElse');
                 dataSyncService.updateTotalCount(vm, result.queryResult);
                 if (ng.isFunction(callback)) {
                     callback();
@@ -104,7 +104,7 @@
         service.initCreateRefundAlertInfo = function (vm, state, callback) {
             refundAlertdataService.getRefundAlertForCreate(state.id, function (result) {
                 vm.criteria = result.refundAlert;
-                dataSyncService.injectPageDict(['ifElse']);
+                dataSyncService.injectDynamicDict('ifElse');
                 if (ng.isFunction(callback)) {
                     callback();
                 }
@@ -146,7 +146,7 @@
         service.initEditRefundAlertInfo = function (vm, callback) {
             refundAlertdataService.getRefundAlertForUpdate(vm.alertID, function (result) {
                 vm.refundAlert = result.refundAlert;
-                dataSyncService.injectPageDict(['ifElse']);
+                dataSyncService.injectDynamicDict('ifElse');
                 if (ng.isFunction(callback)) {
                     callback();
                 }

@@ -1,12 +1,12 @@
 ﻿using MCS.Library.Core;
 using MCS.Library.Data.Mapping;
+using MCS.Library.OGUPermission;
+using PPTS.Data.Common;
+using PPTS.Data.Common.Security;
 using PPTS.Data.Customers.Entities;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
-using System.Web;
 
 namespace PPTS.WebAPI.Customers.ViewModels.PotentialCustomers
 {
@@ -18,45 +18,22 @@ namespace PPTS.WebAPI.Customers.ViewModels.PotentialCustomers
         /// </summary>
         [NoMapping]
         [DataMember]
-        public Phone PrimaryPhone
-        {
-            get;
-            set;
-        }
-
+        public Phone PrimaryPhone { get; set; }
         /// <summary>
         /// 辅助联系方式
         /// </summary>
         [DataMember]
-        public Phone SecondaryPhone
-        {
-            get;
-            set;
-        }
-
+        public Phone SecondaryPhone { get; set; }
         /// <summary>
-        /// 转介绍员工信息
+        /// 建档部门
         /// </summary>
-        [NoMapping]
         [DataMember]
-        public string ReferralStaffInfo
-        {
-            get
-            {
-                string referralStaff = this.ReferralStaffName;
-
-                if (this.ReferralStaffJobName.IsNotEmpty())
-                {
-                    referralStaff += "(" + this.ReferralStaffJobName;
-
-                    if (this.ReferralStaffOACode.IsNotEmpty())
-                        referralStaff += " " + this.ReferralStaffOACode;
-
-                    referralStaff += ")";
-                }
-                return referralStaff;
-            }
-        }
+        public string CreatorOrgName { get; set; }
+        /// <summary>
+        /// 所在学校
+        /// </summary>
+        [DataMember]
+        public string SchoolName { get; set; }
 
         public string ToSearchContent()
         {
@@ -70,5 +47,19 @@ namespace PPTS.WebAPI.Customers.ViewModels.PotentialCustomers
 
             return strB.ToString();
         }
+
+        public static PPTSJobCollection GetStaffJobs(string staffOA)
+        {
+            PPTSJobCollection jobs = new PPTSJobCollection();
+            if (!string.IsNullOrEmpty(staffOA))
+            {
+                IUser user = OGUExtensions.GetUserByOAName(staffOA);
+                if (user != null)
+                    jobs = user.Jobs();
+            }
+            return jobs;
+        }
+
     }
+
 }

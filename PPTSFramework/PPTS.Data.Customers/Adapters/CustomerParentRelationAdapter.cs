@@ -18,14 +18,13 @@ namespace PPTS.Data.Customers.Adapters
             customerID.CheckStringIsNullOrEmpty("customerID");
             parentID.CheckStringIsNullOrEmpty("parentID");
 
-            return this.Load(builder => builder.AppendItem("CustomerID", customerID).AppendItem("ParentID", parentID), DateTime.MinValue).SingleOrDefault();
+            return this.Load(builder => builder.AppendItem("CustomerID", customerID).AppendItem("ParentID", parentID), DateTime.MinValue).FirstOrDefault();
         }
-        public CustomerParentRelation LoadPrimary(string customerID, string parentID)
+        public CustomerParentRelation LoadPrimary(string customerID)
         {
             customerID.CheckStringIsNullOrEmpty("customerID");
-            parentID.CheckStringIsNullOrEmpty("parentID");
 
-            return this.Load(builder => builder.AppendItem("CustomerID", customerID).AppendItem("ParentID", parentID).AppendItem("IsPrimary", 1), DateTime.MinValue).SingleOrDefault();
+            return this.Load(builder => builder.AppendItem("CustomerID", customerID).AppendItem("IsPrimary", 1), DateTime.MinValue).FirstOrDefault();
         }
         public CustomerParentRelationCollection Load(string customerID)
         {

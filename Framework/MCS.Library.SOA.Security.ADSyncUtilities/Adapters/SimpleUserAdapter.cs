@@ -7,6 +7,7 @@ using MCS.Library.Data.Builder;
 using MCS.Library.SOA.DataObjects;
 using MCS.Library.SOA.DataObjects.Schemas.Adapters;
 using MCS.Library.SOA.DataObjects.Security.Adapters;
+using MCS.Library.Data.Configuration;
 
 namespace MCS.Library.SOA.Security.ADSyncUtilities.Adapters
 {

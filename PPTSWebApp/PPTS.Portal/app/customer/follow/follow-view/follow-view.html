@@ -2,21 +2,21 @@
 <ppts-dynamic-content template="quick-search.tpl.html">
     <div class="row">
         <div class="col-md-6">
-            <ppts-daterangepicker start-date="vm.criteria.followStartTime" end-date="vm.criteria.followEndTime" css="mcs-width-full"></ppts-daterangepicker>
+            <mcs-daterangepicker start-date="vm.criteria.followStartTime" end-date="vm.criteria.followEndTime" css="mcs-width-full"></mcs-daterangepicker>
         </div>
         <div class="col-md-6">
-            <ppts-select caption="跟进方式" category="followType" model="vm.criteria.followType" css="mcs-padding-0" async="true" />
+            <mcs-select caption="跟进方式" category="followType" model="vm.criteria.followType" css="mcs-padding-0" async="true" />
         </div>
     </div>
     <div class="row">
         <div class="col-md-4">
-            <ppts-select caption="跟进对象" category="followObject" model="vm.criteria.followObject" css="mcs-padding-0" async="true" />
+            <mcs-select caption="跟进对象" category="followObject" model="vm.criteria.followObject" css="mcs-padding-0" async="true" />
         </div>
         <div class="col-md-4">
-            <ppts-select caption="跟进后阶段" category="followStage" model="vm.criteria.followStage" css="mcs-padding-0" async="true" />
+            <mcs-select caption="跟进后阶段" category="followStage" model="vm.criteria.followStage" css="mcs-padding-0" async="true" />
         </div>
         <div class="col-md-4">
-            <ppts-select caption="购买意愿" category="purchaseIntention" model="vm.criteria.purchaseIntention" css="mcs-padding-0" async="true" />
+            <mcs-select caption="购买意愿" category="purchaseIntention" model="vm.criteria.purchaseIntention" css="mcs-padding-0" async="true" />
         </div>
     </div>
 </ppts-dynamic-content>

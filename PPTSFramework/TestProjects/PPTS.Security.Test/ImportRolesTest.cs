@@ -1,4 +1,5 @@
-﻿using MCS.Library.Data;
+﻿using MCS.Library.Core;
+using MCS.Library.Data;
 using MCS.Library.Office.OpenXml.Excel;
 using MCS.Library.SOA.DataObjects.Security;
 using MCS.Library.SOA.DataObjects.Security.Adapters;
@@ -24,12 +25,15 @@ namespace PPTS.Security.Test
         {
             DataTable table = PrepareDataTableFromSheet();
 
-            table.OutputColumns();
-            table.OutputRowsInfo();
+            //table.OutputColumns();
+            //table.OutputRowsInfo();
+            Console.WriteLine(table.Rows[51]["大区教管负责人"]);
+            Console.WriteLine(table.Rows[52]["大区教管负责人"]);
+            Console.WriteLine(table.Rows[53]["大区教管负责人"]);
 
-            Assert.AreEqual("【客户管理】-潜客", table.Rows[0]["模块"].ToString());
-            Assert.AreEqual("Y", table.Rows[201]["合规稽查总监"].ToString());
-            Assert.AreEqual("缴费单管理列表", table.Rows[66]["权限点/数据权限"].ToString());
+            Assert.AreEqual("新增潜在客户", table.Rows[0]["权限点/数据权限"].ToString());
+            Assert.AreEqual("Y", table.Rows[50]["大区教管负责人"].ToString());
+            Assert.AreEqual("分配学管师-本校区", table.Rows[64]["权限点/数据权限"].ToString());
         }
 
         [TestMethod]
@@ -37,11 +41,11 @@ namespace PPTS.Security.Test
         {
             DataTable table = PrepareDataTableFromSheet();
 
-            SCRolesAndPermissions rolesAndPermissions = table.GetRolesAndPermissions();
+            SCRolesAndPermissions rolesAndPermissions = table.GetRolesAndPermissions(new SCPermissionCollection());
 
             SCRoleCollection roles = rolesAndPermissions.Roles;
 
-            Assert.AreEqual(table.Columns.Count - 3, roles.Count);
+            Assert.AreEqual(table.Columns.Count - 2, roles.Count);
 
             Console.WriteLine(roles.Find(role => role.CodeName == "校教育咨询师").CurrentPermissions.Count);
             Assert.IsTrue(roles.Find(role => role.CodeName == "校教育咨询师").CurrentPermissions.Count > 1);
@@ -49,8 +53,8 @@ namespace PPTS.Security.Test
             Console.WriteLine(roles.Find(role => role.CodeName == "校学习管理师").CurrentPermissions.Count);
             Assert.IsTrue(roles.Find(role => role.CodeName == "校学习管理师").CurrentPermissions.Count > 1);
 
-            Console.WriteLine(roles.Find(role => role.CodeName == "审计总监").CurrentPermissions.Count);
-            Assert.AreEqual(0, roles.Find(role => role.CodeName == "审计总监").CurrentPermissions.Count);
+            Console.WriteLine(roles.Find(role => role.CodeName == "审计专员").CurrentPermissions.Count);
+            Assert.AreEqual(0, roles.Find(role => role.CodeName == "审计专员").CurrentPermissions.Count);
         }
 
         [TestMethod]
@@ -63,7 +67,7 @@ namespace PPTS.Security.Test
             roles.Output();
             Console.WriteLine(roles.Count);
 
-            Assert.AreEqual(table.Columns.Count - 3, roles.Count);
+            Assert.AreEqual(table.Columns.Count - 2, roles.Count);
         }
 
         [TestMethod]
@@ -71,7 +75,7 @@ namespace PPTS.Security.Test
         {
             DataTable table = PrepareDataTableFromSheet();
 
-            SCPermissionCollection permissions = RolesFunctionsImporter.GetPermissions(table);
+            SCPermissionCollection permissions = RolesFunctionsImporter.GetPermissions(table, new SCPermissionCollection());
 
             permissions.Output();
             Console.WriteLine(permissions.Count);
@@ -104,7 +108,7 @@ namespace PPTS.Security.Test
 
             DataTable table = PrepareDataTableFromSheet();
 
-            SCPermissionCollection permissions = RolesFunctionsImporter.GetPermissions(table);
+            SCPermissionCollection permissions = RolesFunctionsImporter.GetPermissions(table, new SCPermissionCollection());
 
             SCApplication app = DataHelper.GetApplication();
 
@@ -170,6 +174,8 @@ namespace PPTS.Security.Test
 
             app.UpdateImportedRoles(roles);
 
+            DBTimePointActionContext.Current.TimePoint = DateTime.MinValue;
+
             app = DataHelper.GetApplication();
 
             SCRole lastRole = roles.Last();
@@ -191,7 +197,7 @@ namespace PPTS.Security.Test
 
             DataTable table = PrepareDataTableFromMiniSheet();
 
-            SCPermissionCollection permissions = RolesFunctionsImporter.GetPermissions(table);
+            SCPermissionCollection permissions = RolesFunctionsImporter.GetPermissions(table, new SCPermissionCollection());
 
             SCApplication app = DataHelper.GetApplication();
             int originalCount = app.CurrentPermissions.Count;
@@ -210,7 +216,7 @@ namespace PPTS.Security.Test
 
             DataTable table = PrepareDataTableFromMiniSheet();
 
-            SCPermissionCollection permissions = RolesFunctionsImporter.GetPermissions(table);
+            SCPermissionCollection permissions = RolesFunctionsImporter.GetPermissions(table, new SCPermissionCollection());
 
             SCApplication app = DataHelper.GetApplication();
             int originalCount = app.CurrentPermissions.Count;
@@ -232,12 +238,14 @@ namespace PPTS.Security.Test
 
             DataTable table = PrepareDataTableFromMiniSheet();
 
-            SCPermissionCollection permissions = RolesFunctionsImporter.GetPermissions(table);
+            SCPermissionCollection permissions = RolesFunctionsImporter.GetPermissions(table, new SCPermissionCollection());
 
             SCApplication app = DataHelper.GetApplication();
             int originalCount = app.CurrentPermissions.Count;
 
             app.UpdateImportedPermissions(permissions);
+
+            DBTimePointActionContext.Current.TimePoint = DateTime.MinValue;
 
             app = DataHelper.GetApplication();
 
@@ -260,7 +268,7 @@ namespace PPTS.Security.Test
 
             DataTable table = PrepareDataTableFromMiniSheet();
 
-            SCRolesAndPermissions rolesAndPermissions = table.GetRolesAndPermissions();
+            SCRolesAndPermissions rolesAndPermissions = table.GetRolesAndPermissions(new SCPermissionCollection());
 
             SCRoleCollection roles = rolesAndPermissions.Roles;
             SCPermissionCollection permissions = rolesAndPermissions.Permissions;
@@ -293,7 +301,7 @@ namespace PPTS.Security.Test
 
             DataTable table = PrepareDataTableFromMiniSheet();
 
-            SCRolesAndPermissions rolesAndPermissions = table.GetRolesAndPermissions();
+            SCRolesAndPermissions rolesAndPermissions = table.GetRolesAndPermissions(new SCPermissionCollection());
 
             SCRoleCollection roles = rolesAndPermissions.Roles;
             SCPermissionCollection permissions = rolesAndPermissions.Permissions;
@@ -306,6 +314,8 @@ namespace PPTS.Security.Test
             app = DataHelper.GetApplication();
 
             app.UpdateImportedPermissionsInRoles(roles);
+
+            DBTimePointActionContext.Current.TimePoint = DateTime.MinValue;
 
             app = DataHelper.GetApplication();
 
@@ -330,7 +340,7 @@ namespace PPTS.Security.Test
 
             DataTable table = PrepareDataTableFromMiniSheet();
 
-            SCRolesAndPermissions rolesAndPermissions = table.GetRolesAndPermissions();
+            SCRolesAndPermissions rolesAndPermissions = table.GetRolesAndPermissions(new SCPermissionCollection());
 
             SCRoleCollection roles = rolesAndPermissions.Roles;
             SCPermissionCollection permissions = rolesAndPermissions.Permissions;
@@ -343,6 +353,8 @@ namespace PPTS.Security.Test
             app = DataHelper.GetApplication();
 
             app.UpdateImportedPermissionsInRoles(roles);
+
+            DBTimePointActionContext.Current.TimePoint = DateTime.MinValue;
 
             app = DataHelper.GetApplication();
 
@@ -369,7 +381,7 @@ namespace PPTS.Security.Test
 
             DataTable table = PrepareDataTableFromMiniSheet();
 
-            SCRolesAndPermissions rolesAndPermissions = table.GetRolesAndPermissions();
+            SCRolesAndPermissions rolesAndPermissions = table.GetRolesAndPermissions(new SCPermissionCollection());
 
             SCRoleCollection roles = rolesAndPermissions.Roles;
             SCPermissionCollection permissions = rolesAndPermissions.Permissions;
@@ -404,7 +416,7 @@ namespace PPTS.Security.Test
 
             DataTable table = PrepareDataTableFromMiniSheet();
 
-            SCRolesAndPermissions rolesAndPermissions = table.GetRolesAndPermissions();
+            SCRolesAndPermissions rolesAndPermissions = table.GetRolesAndPermissions(new SCPermissionCollection());
 
             SCRoleCollection roles = rolesAndPermissions.Roles;
             SCPermissionCollection permissions = rolesAndPermissions.Permissions;
@@ -435,9 +447,34 @@ namespace PPTS.Security.Test
             Assert.AreEqual(0, app.CurrentRoles.Find(role => role.CodeName == "审计总监").CurrentPermissions.Count);
         }
 
+        [TestMethod]
+        public void V17SpecialTest()
+        {
+            DataHelper.ResetData();
+
+            DataTable table = PrepareDataTableFromV17Sheet();
+
+            SCRolesAndPermissions rolesAndPermissions = table.GetRolesAndPermissions(new SCPermissionCollection());
+
+            SCRole edCon = rolesAndPermissions.Roles.Find(role => role.CodeName == "校教育咨询师");
+
+            Assert.IsNotNull(edCon);
+
+            Assert.IsNotNull(edCon.CurrentPermissions.Find(p => p.CodeName == "新增跟进记录"));
+        }
+
         private static DataTable PrepareDataTableFromSheet()
         {
             WorkSheet sheet = DataHelper.GetExcelSheet();
+
+            DataTable table = RolesFunctionsImporter.BuildDataTableFromSheet(sheet);
+
+            return table;
+        }
+
+        private static DataTable PrepareDataTableFromV17Sheet()
+        {
+            WorkSheet sheet = DataHelper.GetV17ExcelSheet();
 
             DataTable table = RolesFunctionsImporter.BuildDataTableFromSheet(sheet);
 

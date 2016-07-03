@@ -14,7 +14,7 @@ namespace PPTS.Data.Customers.Adapters
 {
     public class CustomerServiceAdapter : CustomerAdapterBase<CustomerService, CustomerServiceCollection>  
     {
-        public new static CustomerServiceAdapter Instance = new CustomerServiceAdapter();
+        public static CustomerServiceAdapter Instance = new CustomerServiceAdapter();
 
         private CustomerServiceAdapter()
         {

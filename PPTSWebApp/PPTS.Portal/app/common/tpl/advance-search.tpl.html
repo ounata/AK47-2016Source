@@ -11,7 +11,7 @@
         <div class="panel-collapse collapse mcs-advance-search" id="advance-search">
             <div class="panel-body">
                 <div class="profile-user-info mcs-user-profile">
-                    <div class="profile-info-row" ng-repeat="item in vm.searchItems" ng-hide="{{item.hide}}" ng-show="{{item.show}}">
+                    <div class="profile-info-row" ng-repeat="item in vm.searchItems" ng-hide="{{item.hide}}">
                         <div class="profile-info-name">{{item.name}}</div>
                         <div class="profile-info-value" ppts-compile-html="item.template | trusted"></div>
                     </div>

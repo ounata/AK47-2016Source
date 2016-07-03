@@ -45,6 +45,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper">
+      <HintPath>..\..\ThirdPartComponent\Bin\AutoMapper.4.2.1\lib\net45\AutoMapper.dll</HintPath>
+    </Reference>
     <Reference Include="MCS.Library">
       <HintPath>..\..\Bin\MCS.Library.dll</HintPath>
     </Reference>
@@ -62,8 +65,15 @@
       <HintPath>..\..\Bin\MCS.Library.WcfExtensions.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="PPTS.Contracts.Customers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=62ea08f894871798, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\PPTSBin\PPTS.Contracts.Customers.dll</HintPath>
+    </Reference>
     <Reference Include="PPTS.Contracts.Orders">
       <HintPath>..\..\PPTSBin\PPTS.Contracts.Orders.dll</HintPath>
+    </Reference>
+    <Reference Include="PPTS.Contracts.Proxies">
+      <HintPath>..\..\PPTSBin\PPTS.Contracts.Proxies.dll</HintPath>
     </Reference>
     <Reference Include="PPTS.Data.Common">
       <HintPath>..\..\PPTSBin\PPTS.Data.Common.dll</HintPath>
@@ -71,12 +81,23 @@
     <Reference Include="PPTS.Data.Common.Entities">
       <HintPath>..\..\PPTSBin\PPTS.Data.Common.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="PPTS.Data.Customers.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=62ea08f894871798, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\PPTSBin\PPTS.Data.Customers.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="PPTS.Data.Orders">
       <HintPath>..\..\PPTSBin\PPTS.Data.Orders.dll</HintPath>
     </Reference>
     <Reference Include="PPTS.Data.Orders.Entities">
       <HintPath>..\..\PPTSBin\PPTS.Data.Orders.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="PPTS.Data.Products">
+      <HintPath>..\..\PPTSBin\PPTS.Data.Products.dll</HintPath>
+    </Reference>
+    <Reference Include="PPTS.Data.Products.Entities">
+      <HintPath>..\..\PPTSBin\PPTS.Data.Products.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -97,7 +118,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Services\AssetQueryService.svc" />
+    <Content Include="Services\ClassService.svc" />
+    <Content Include="Services\OrderScopeAuthorizationService.svc" />
     <Content Include="Services\OrderTransactionService.svc" />
+    <Content Include="Services\WorkflowService.svc" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -105,13 +129,21 @@
       <DependentUpon>AssetQueryService.svc</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\ClassService.svc.cs">
+      <DependentUpon>ClassService.svc</DependentUpon>
+    </Compile>
+    <Compile Include="Services\OrderScopeAuthorizationService.svc.cs">
+      <DependentUpon>OrderScopeAuthorizationService.svc</DependentUpon>
+    </Compile>
     <Compile Include="Services\OrderTransactionService.svc.cs">
       <DependentUpon>OrderTransactionService.svc</DependentUpon>
     </Compile>
+    <Compile Include="Services\WorkflowService.svc.cs">
+      <DependentUpon>WorkflowService.svc</DependentUpon>
+    </Compile>
+    <Compile Include="Service\CustomerService.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

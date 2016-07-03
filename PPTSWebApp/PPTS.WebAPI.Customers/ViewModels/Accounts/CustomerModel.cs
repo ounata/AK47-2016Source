@@ -5,6 +5,8 @@ using PPTS.Data.Common.Entities;
 using PPTS.Data.Customers.Entities;
 using PPTS.Data.Customers.Adapters;
 using PPTS.Data.Customers;
+using MCS.Library.Principal;
+using MCS.Library.OGUPermission;
 
 namespace PPTS.WebAPI.Customers.ViewModels.Accounts
 {
@@ -15,6 +17,27 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
     [DataContract]
     public class CustomerModel : IBasicCustomerInfo
     {
+        [DataMember]
+        public string OrgID
+        {
+            set;
+            get;
+        }
+
+        [DataMember]
+        public string OrgName
+        {
+            set;
+            get;
+        }
+
+        [DataMember]
+        public OrgTypeDefine OrgType
+        {
+            set;
+            get;
+        }
+
         /// <summary>
         /// 所在校区ID
         /// </summary>
@@ -108,6 +131,15 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
         }
 
         /// <summary>
+        /// 家长ID
+        /// </summary>
+        public string ParentID
+        {
+            set;
+            get;
+        }
+
+        /// <summary>
         /// 家长姓名
         /// </summary>
         [DataMember]
@@ -123,6 +155,16 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
         [DataMember]
         [ConstantCategory("C_CODE_ABBR_PARENTDICTIONARY")]
         public string ParentRole
+        {
+            set;
+            get;
+        }
+
+        /// <summary>
+        /// 家长身份证号
+        /// </summary>
+        [DataMember]
+        public string ParentIDNumber
         {
             set;
             get;
@@ -174,6 +216,9 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
             Customer customer = CustomerAdapter.Instance.Load(customerID);
             if (customer != null)
             {
+                model.OrgID = customer.CampusID;
+                model.OrgName = customer.CampusName;
+                model.OrgType = OrgTypeDefine.Campus;
                 model.CampusID = customer.CampusID;
                 model.CampusName = customer.CampusName;
                 model.CustomerID = customer.CustomerID;
@@ -184,22 +229,17 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
                 model.Gender = customer.Gender;
                 model.Grade = customer.Grade;
                 model.SchoolID = customer.SchoolID;
-
-                CustomerParentPhone parent = CustomerParentPhoneAdapter.Instance.Load(customerID);
-                if (parent != null)
-                {
-                    model.ParentName = parent.ParentName;
-                    model.PhoneNumber = parent.PhoneNumber;
-                    model.ParentRole = parent.ParentRole;
-                }
             }
             else
             {
                 PotentialCustomer potential = PotentialCustomerAdapter.Instance.Load(customerID);
                 if (potential != null)
                 {
-                    model.CampusID = potential.OrgID;
-                    model.CampusName = potential.OrgName;
+                    model.OrgID = potential.OrgID;
+                    model.OrgName = potential.OrgName;
+                    model.OrgType = potential.OrgType;
+                    model.CampusID = potential.CampusID;
+                    model.CampusName = potential.CampusName;
                     model.CustomerID = potential.CustomerID;
                     model.CustomerCode = potential.CustomerCode;
                     model.CustomerName = potential.CustomerName;
@@ -209,23 +249,32 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
                     model.Grade = potential.Grade;
                     model.SchoolID = potential.SchoolID;
                     model.IsPotential = true;
-
-                    PotentialCustomerParentPhone parent = PotentialCustomerParentPhoneAdapter.Instance.Load(customerID);
-                    if (parent != null)
-                    {
-                        model.ParentName = parent.ParentName;
-                        model.PhoneNumber = parent.PhoneNumber;
-                        model.ParentRole = parent.ParentRole;
-                    }
+                }
+            }
+            CustomerParentRelation relation = CustomerParentRelationAdapter.Instance.LoadPrimary(customerID);
+            if (relation != null)
+            {
+                model.ParentRole = relation.ParentRole;
+                Parent parent = ParentAdapter.Instance.Load(relation.ParentID);
+                if (parent != null)
+                {
+                    model.ParentID = parent.ParentID;
+                    model.ParentName = parent.ParentName;
+                    model.ParentIDNumber = parent.IDNumber;
+                }
+                Phone phone = PhoneAdapter.Instance.LoadPrimaryPhoneByOwnerID(relation.ParentID);
+                if (phone != null)
+                {
+                    model.PhoneNumber = CommonHelper.FilterPhoneNumber(phone.PhoneNumber, DeluxeIdentity.CurrentUser);
                 }
             }
             School school = SchoolAdapter.Instance.Load(model.SchoolID);
-            if(school != null)
+            if (school != null)
             {
                 model.SchoolName = school.SchoolName;
             }
             return model;
-        }    
+        }
 
         public static CustomerModel Load(string customerID)
         {

@@ -43,11 +43,11 @@
             name: "分公司"
         }, {
             field: "campusNames",
-            name: "所属校区",
-            template: '<span uib-tooltip="{{row.campusNames}}">{{row.campusNames | truncate}}</span>',
+            name: "校区",
+            template: '<span uib-popover="{{row.campusNames}}" popover-trigger="mouseenter">{{row.campusNames | truncate}}</span>',
         }, {
             field: "expenseType",
-            name: "服务费类型",
+            name: "综合服务费类型",
             template: '<span>{{ row.expenseType | serviceFeeType }}</span>'
         }, {
             field: "creatorName",
@@ -65,52 +65,14 @@
             name: "综合服务费",
             template: '<span>{{ row.expenseValue | currency }}</span>'
         }],
-        pager: {
-            pageIndex: 1,
-            pageSize: ppts.config.pageSizeItem,
-            totalCount: -1
-        },
         orderBy: [{ dataField: 'createTime', sortDirection: 1 }]
     });
-
-    infra.registerFactory('servicefeeDataViewService', ['servicefeeDataService', 'dataSyncService', 'servicefeeListDataHeader',
-        function (servicefeeDataService, dataSyncService, servicefeeListDataHeader) {
-            var service = this;
-
-            // 配置列表表头
-            service.configServiceFeeListHeaders = function (vm) {
-                vm.data = servicefeeListDataHeader;
-
-                vm.data.pager.pageChange = function () {
-                    dataSyncService.initCriteria(vm);
-                    servicefeeDataService.getPagedServiceFees(vm.criteria, function (result) {
-                        vm.data.rows = result.pagedData;
-                    });
-                }
-            };
-
-            // 初始化列表数据
-            service.initServiceFeeList = function (vm, callback) {
-                dataSyncService.initCriteria(vm);
-                servicefeeDataService.getAllServiceFees(vm.criteria, function (result) {
-                    //vm.dictionaries = result.dictionaries;
-                    vm.data.rows = result.queryResult.pagedData;
-                    dataSyncService.injectDictData();
-                    dataSyncService.updateTotalCount(vm, result.queryResult);
-                    if (ng.isFunction(callback)) {
-                        callback();
-                    }
-                });
-            };
-            return service;
-        }]);
 
     infra.registerFactory("servicefeeAddViewService", ['servicefeeDataService', 'dataSyncService', 
         function (servicefeeDataService, dataSyncService) {
             var service = this;
             service.configServiceFee = function (vm,callback) {
                 servicefeeDataService.loadDictionaries(function (result) {
-                    dataSyncService.injectDictData();
                     if (ng.isFunction(callback)) {
                         callback();
                     }
@@ -118,12 +80,11 @@
             }
             return service;
         }]);
-    infra.registerFactory("servicefeeEditViewService", ['servicefeeDataService', 'dataSyncService',
-       function (servicefeeDataService, dataSyncService) {
+    infra.registerFactory("servicefeeEditViewService", ['servicefeeDataService',
+       function (servicefeeDataService) {
            var service = this;
            service.configServiceFee = function (vm, callback) {
                servicefeeDataService.loadDictionaries(function (result) {
-                   dataSyncService.injectDictData();
                    servicefeeDataService.getExpense(vm.expense.expenseID, function (result) {
                        vm.expense = result.expense;
                        if (ng.isFunction(callback)) {

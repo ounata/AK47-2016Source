@@ -2,11 +2,15 @@
         ppts.config.dataServiceConfig.accountRefundDataService],
         function (account) {
             account.registerController('accountRefundEditController', [
-                '$scope', '$state', '$stateParams', '$location', 'mcsDialogService', 'accountRefundDataService',
-                function ($scope, $state, $stateParams, $location, mcsDialogService, accountDataService) {
+                '$scope', '$state', '$stateParams', '$location', 'mcsDialogService', 'mcsValidationService', 'dataSyncService', 'accountRefundDataService',
+                function ($scope, $state, $stateParams, $location, mcsDialogService, mcsValidationService, dataSyncService, accountDataService) {
                     var vm = this;
                     vm.page = $location.$$search.prev;
                     vm.customerID = $stateParams.id;
+                    vm.url = ppts.config.customerApiBaseUrl;
+
+                    mcsValidationService.init($scope);
+
 
                     vm.data = {
                         selection: 'checkbox',
@@ -15,40 +19,34 @@
                         headers: [{
                             field: "teacherOACode",
                             name: "OA账号",
-                            headerCss: "col-sm-2",
-                            template: '<span class="col-sm-2"><mcs-input model="row.teacherOACode" ng-blur="vm.fetchTeacher(row)" required="true" /></span>'
+                            template: '<span><mcs-input model="row.teacherOACode" ng-blur="vm.fetchTeacher(row)" required ng-disabled="{{!row.canEdit}}" /></span>'
                         }, {
                             field: "teacherName",
                             name: "教师姓名",
-                            headerCss: "col-sm-2",
                             template: '<span>{{row.teacherName}}</span>'
                         }, {
                             field: "subject",
                             name: "科目",
-                            headerCss: "col-sm-2",
-                            template: '<span><ppts-select category="subject" model="row.subject" caption="科目" async="false"  required="true"/></span>'
+                            template: '<span><mcs-select category="subject" model="row.subject" caption="科目" async="false" required /></span>'
                         }, {
                             field: "categoryType",
                             name: "产品类型",
-                            headerCss: "col-sm-2",
-                            template: '<span><ppts-select category="categoryType" model="row.categoryType" caption="产品类型"  async="false"  required="true"/></span>'
+                            template: '<span><mcs-select category="categoryType" model="row.categoryType" caption="产品类型" async="false" required /></span>'
                         }, {
                             name: "岗位",
-                            headerCss: "col-sm-1",
-                            template: '<span>校教学教师</span>'
+                            template: '<span><mcs-select category="teacherJobs_{{row.itemNo}}" model="row.teacherJobID" callback="vm.selectTeacherJob(item, model, row)" caption="岗位" ignore-async="true" required /></span>'
                         }, {
                             field: "teacherType",
                             name: "教师类型",
-                            headerCss: "col-sm-1",
-                            template: '<span><ppts-select category="teacherType" model="row.teacherType" caption="教师类型"  async="false"  required="true"/></span>'
+                            template: '<span>{{row.teacherType | teacherType}}</span>'
                         }, {
                             field: "allotMoney",
                             name: "金额",
-                            template: '<span><mcs-input model="row.allotMoney" type="number" ng-blur="vm.calcAllot()"  required="true"/></span>'
+                            template: '<span><mcs-input model="row.allotMoney" datatype="number" ng-blur="vm.calcAllot()" required currency less="0" great="999999" /></span>'
                         }, {
                             field: "allotAmount",
                             name: "课时",
-                            template: '<span><mcs-input model="row.allotAmount" type="number" ng-blur="vm.calcAllot()"  required="true"/></span>'
+                            template: '<span><mcs-input model="row.allotAmount" datatype="number" ng-blur="vm.calcAllot()" required positive less="0" great="999999" /></span>'
                         }],
                         pager: {
                             pagable: false
@@ -64,6 +62,7 @@
                             index = vm.data.rows[vm.data.rows.length - 1].sortNo + 1;
                         }
                         vm.data.rows.push({
+                            itemNo: mcs.util.newGuid(),
                             applyID: vm.apply.applyID,
                             sortNo: index,
                             teacherID: null,
@@ -73,7 +72,8 @@
                             subject: null,
                             categoryType: null,
                             allotAmount: null,
-                            allotMoney: null
+                            allotMoney: null,
+                            canEdit: true
                         });
                     }
 
@@ -83,17 +83,33 @@
                         vm.calcAllot();
                     }
 
-                    //获取老师信息
+                    vm.selectTeacherJob = function (item, model, row) {
+
+                        for (var i = 0; i < row.teacherJobs.length; i++) {
+                            if (row.teacherJobs[i].jobID == model) {
+                                row.teacherType = row.teacherJobs[i].teacherType;
+                                break;
+                            }
+                        }
+                    }
                     vm.fetchTeacher = function (row) {
                         if (row.teacherOACode && row.teacherOACode != '') {
-                            accountDataService.getTeacher(row.teacherOACode, function (result) {
+                            var campusID = vm.customer.campusID;
+                            accountDataService.getTeacher(campusID, row.teacherOACode, function (result) {
                                 row.teacherID = null;
                                 row.teacherName = null;
+                                row.teacherJobs = [];
                                 if (result) {
                                     row.teacherID = result.teacherID;
                                     row.teacherName = result.teacherName;
                                     row.teacherOACode = result.teacherOACode;
+                                    row.teacherJobs = result.teacherJobs;
+                                    row.teacherType = null;
+                                    row.canEdit = false;
                                 }
+
+                                dataSyncService.injectDynamicDict(row.teacherJobs, { key: 'jobID', value: 'jobName', category: 'teacherJobs', keyName: row.itemNo });
+                                $scope.$broadcast('dictionaryReady');
                             });
                         }
                     }
@@ -106,10 +122,10 @@
                         for (var i = 0; i < vm.apply.allot.items.length; i++) {
 
                             var item = vm.apply.allot.items[i];
-                            if (item.allotMoney) {
+                            if (item.allotMoney > 0) {
                                 totalMoney += item.allotMoney;
                             }
-                            if (item.allotAmount) {
+                            if (item.allotAmount > 0) {
                                 totalAmount += item.allotAmount;
                             }
                         }
@@ -136,7 +152,8 @@
                         }, {
                             field: "accountMoney",
                             name: "可退金额",
-                            template: '<span>{{row.accountMoney|currency:"￥"}}</span>'
+                            template: '<span>{{row.accountMoney|currency:"￥"}}</span>',
+                            description: "可退金额=可用金额"
                         }],
                         pager: {
                             pagable: false
@@ -146,7 +163,8 @@
                     // 页面初始化加载或重新搜索时查询
                     vm.init = function () {
                         accountDataService.getRefundApplyByCustomerID(vm.customerID, function (result) {
-                            vm.apply = result.apply
+                            vm.apply = result.apply;
+                            vm.apply.files = [];
                             vm.assert = result.assert;
                             vm.customer = result.customer;
                             vm.discount = result.discount;
@@ -159,6 +177,7 @@
                                 vm.account.rows[0].selected = true;
                                 vm.account.rowsSelected.push({ accountID: vm.account.rows[0].accountID })
                             }
+
                             $scope.$broadcast('dictionaryReady');
                         });
                     };
@@ -180,26 +199,28 @@
                         if (e && e.keyCode != 13) {
                             return;
                         }
+                        if (isNaN(vm.apply.inputRefundMoney))
+                            return;
                         var currentRow = vm.getCurrentRow();
                         if (currentRow == null) {
 
                             mcsDialogService.error({ title: '警告', message: '请选择要退费的账户' });
                             return;
                         }
-                        if (vm.apply.inputRefundMoney == 'undefined') {
+                        if (typeof(vm.apply.inputRefundMoney) == 'undefined') {
                             mcsDialogService.error({ title: '警告', message: '请输入合法的申退金额' });
                             return;
                         }
-                        if (vm.apply.inputRefundMoney <= 0) {
+                        if (vm.apply.inputRefundMoney < 0) {
 
-                            mcsDialogService.error({ title: '警告', message: '申退金额必须大于零' });
+                            mcsDialogService.error({ title: '警告', message: '申退金额不能小于零' });
                             return;
                         }
                         if (vm.apply.inputRefundMoney > currentRow.accountMoney) {
 
                             mcsDialogService.error({ title: '警告', message: '申退金额不能大于可退金额' });
                             return;
-                        }                        
+                        }
                         //消耗的课时价值(consumptionValue>=thatDiscountBase)当前折扣基数
                         if (vm.apply.consumptionValue >= vm.apply.thatDiscountBase) {
 
@@ -228,6 +249,8 @@
                     vm.calcData = function () {
                         if (!vm.apply)
                             return;
+                        if (vm.apply.applyRefundMoney == 0)
+                            vm.apply.compensateMoney = 0;
                         if (!vm.apply.compensateMoney || vm.apply.compensateMoney < 0)
                             vm.apply.compensateMoney = 0;
                         if (!vm.apply.extraRefundMoney || vm.apply.extraRefundMoney < 0)
@@ -252,7 +275,12 @@
                         //实退金额 = 应退金额-差价补偿+制度外退款
                         vm.apply.realRefundMoney = vm.apply.oughtRefundMoney - vm.apply.compensateMoney + vm.apply.extraRefundMoney;
                     }
-                    
+
+                    //监控申退金额
+                    $scope.$watch('vm.apply.applyRefundMoney', function () {
+                        vm.calcData();
+                    });
+
                     //监控差价补偿
                     $scope.$watch('vm.apply.compensateMoney', function () {
                         vm.calcData();
@@ -261,20 +289,15 @@
                     //监控制度外退费
                     $scope.$watch('vm.apply.extraRefundMoney', function () {
                         vm.calcData();
-                    });
+                    });                   
 
                     //监控账户的选择
                     $scope.$watch('vm.account.rowsSelected[0]', function () {
+                        if (!vm.canSave)
+                            return;
 
-                        vm.errorMessage = null;
-                        vm.canSave = true;
                         var row = vm.getCurrentRow();
                         if (row) {
-
-                            vm.canSave = (row.assetMoney == 0);
-                            if (!vm.canSave) {
-                                vm.errorMessage = "该账户订购资金不为0，请先进行退订再进行退费";
-                            }
 
                             vm.apply.accountID = row.accountID;
                             vm.apply.accountCode = row.accountCode;
@@ -292,10 +315,24 @@
                             vm.apply.applyRefundMoney = 0;                           //重置申退金额
                             vm.calcData();
                         }
-                    });
+                    },true);
+
+                    vm.upload = function () {
+                        if ($scope.form.files.$valid && vm.apply.files) {
+                            vm.uploadFiles(vm.apply.files);
+                        }
+                    };
 
                     //保存退费单
                     vm.save = function () {
+
+                        if (typeof (vm.errorMessage) != 'undefined' && vm.errorMessage != null && vm.errorMessage != '') {
+
+                            mcsDialogService.error({ title: '警告', message: vm.errorMessage });
+                            return;
+                        }
+                        if (!mcsValidationService.run($scope))
+                            return;
 
                         var currentRow = vm.getCurrentRow();
                         if (currentRow == null) {
@@ -308,14 +345,24 @@
                             mcsDialogService.error({ title: '警告', message: '请输入合法的申退金额' });
                             return;
                         }
-                        if (vm.apply.applyRefundMoney <= 0) {
+                        if (vm.apply.applyRefundMoney < 0) {
 
-                            mcsDialogService.error({ title: '警告', message: '申退金额必须大于零' });
+                            mcsDialogService.error({ title: '警告', message: '申退金额不能小于零' });
                             return;
                         }
                         if (vm.apply.applyRefundMoney > currentRow.accountMoney) {
 
                             mcsDialogService.error({ title: '警告', message: '申退金额不能大于可退金额' });
+                            return;
+                        }
+                        if (vm.apply.applyRefundMoney == 0 && vm.apply.extraRefundMoney == 0) {
+
+                            mcsDialogService.error({ title: '警告', message: '申退金额与制度外退款金额不能同时为零' });
+                            return;
+                        }
+                        if (vm.apply.extraRefundMoney > 0 && vm.apply.extraRefundType == '') {
+
+                            mcsDialogService.error({ title: '警告', message: '请选择制度外退款类型' });
                             return;
                         }
                         mcsDialogService.confirm({ title: '确认', message: '是否确认提交审批？' })

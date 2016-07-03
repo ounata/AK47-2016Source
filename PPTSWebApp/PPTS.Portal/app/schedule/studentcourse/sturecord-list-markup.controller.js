@@ -6,7 +6,7 @@
             function ($scope, studentassignmentDataService, studentCourseDataService, $uibModalInstance, mcsDialogService, dataSyncService, $stateParams) {
                 var vm = this;
                 //存储时间
-                vm.beginDate = ''; vm.beginHour = ''; vm.beginMinute = ''; vm.endHour = ''; vm.endMinute = '';
+                vm.beginDate = ''; vm.endDate = '';
                 vm.assignDuration = 0;
                 vm.showOrderSelect = false; vm.showSubjectSelect = false; vm.showGradeSelect = false; vm.showTchSelect = false;
 
@@ -15,20 +15,6 @@
                     if (parseInt(curValue) < 10)
                         return '0' + curValue;
                     return curValue;
-                };
-
-                /*小时*/
-                vm.courseHour = new Array();
-                for (i = 6; i <= 23; i += 1) {
-                    var t = vm.getDoubleStr(i)
-                    vm.courseHour.push({ key: t, value: t })
-                };
-
-                /*分钟*/
-                vm.courseMinute = new Array();
-                for (i = 0; i <= 55; i += 5) {
-                    var t = vm.getDoubleStr(i)
-                    vm.courseMinute.push({ key: t, value: t })
                 };
 
                 /*课时数*/
@@ -50,10 +36,10 @@
                         dataSyncService.injectDictData(mcs.util.mapping(vm.result.assignCondition, { key: 'conditionID', value: 'conditionName4Customer' }, 'AssignCondition'));
                         dataSyncService.injectDictData(mcs.util.mapping(vm.result.assignExtension, { key: 'assetID', value: 'assetName' }, 'Asset'));
                         dataSyncService.injectDictData(mcs.util.mapping(vm.courseAmount, { key: 'key', value: 'value' }, 'CourseAmount'));
-                        dataSyncService.injectDictData(mcs.util.mapping(vm.courseHour, { key: 'key', value: 'value' }, 'Hour'));
-                        dataSyncService.injectDictData(mcs.util.mapping(vm.courseMinute, { key: 'key', value: 'value' }, 'Minute'));
-                        dataSyncService.injectPageDict(['ifElse']);
+                        dataSyncService.injectDynamicDict('ifElse');
                         $scope.$broadcast('dictionaryReady');
+
+                        vm.selectAssignConditionClick({ key: "" });
                     });
                 };
 
@@ -85,13 +71,13 @@
 
                 /*选择排课条件*/
                 vm.selectAssignConditionClick = function (item) {
-                    //不等100，选择了一个已经存在的排课条件
-                    if (item.key != '100') {
+                    //不等空，选择了一个已经存在的排课条件
+                    if (item.key != "") {
                         //选项隐藏
                         vm.showOrderSelect = false; vm.showSubjectSelect = false; vm.showGradeSelect = false; vm.showTchSelect = false;
                         //重新初始化排课对象
                         vm.resetAssignExtension();
-                        vm.result.assign.assetID = '100';
+                        vm.result.assign.assetID = "";
                         //获取排课条件对象
                         var ac = vm.getAssignCondition(item.key);
                         //获取资产对象
@@ -117,7 +103,7 @@
                         //新建 重新初始化排课对象
                         vm.showOrderSelect = true; vm.showSubjectSelect = false; vm.showGradeSelect = false; vm.showTchSelect = false;
                         vm.resetAssignExtension();
-                        vm.result.assign.conditionID = '100';
+                        vm.result.assign.conditionID = "";
                     }
                 };
 
@@ -263,79 +249,82 @@
                 };
 
                 /*计算排课时间*/
-                vm.calcDurationValueBHClick = function (item) {
-                    vm.beginHour = item.value;
-                    calcDurationValue();
-                };
-                /*计算排课时间*/
-                vm.calcDurationValueBMClick = function (item) {
-                    vm.beginMinute = item.value;
-                    calcDurationValue();
-                };
-                /*计算排课时间*/
                 vm.calcDurationValueCAClick = function (item) {
-                    //vm.result.assign.realAmount = item.value;
                     vm.result.assign.amount = item.value;
                     calcDurationValue();
                 };
                 /*计算排课时间*/
                 calcDurationValue = function () {
-                    if (vm.beginHour == '' || vm.beginMinute == '' ||  vm.beginHour == null || vm.beginMinute == null )
+                    if (vm.beginDate == '' || vm.beginDate == null) 
                         return;
-
                     if (vm.result.assign.amount == '' || vm.result.assign.amount == 0 || vm.result.assign.amount == null)
                         return;
-
                     if (vm.result.assign.lessonDurationValue == '' || vm.result.assign.lessonDurationValue == 0 || vm.result.assign.lessonDurationValue == null)
                         return;
-
                     vm.result.assign.durationValue = vm.result.assign.lessonDurationValue;
-
-                    ///计算结束时间
-                    vm.endHour = '', vm.endMinute = '';
-
                     //实际上课时长  分钟   
                     var courseMinute = vm.result.assign.durationValue * vm.result.assign.amount;
-                    var curDate = new Date();
-                    var curDateHour = new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate(), vm.beginHour, vm.beginMinute, 0);
-                   
-                     curDate.setTime(curDateHour.getTime() + courseMinute * 60 * 1000);
-                 
-                     vm.endHour = vm.getDoubleStr(curDate.getHours());
-                     vm.endMinute = vm.getDoubleStr( curDate.getMinutes());
+                    vm.endDate = new Date(vm.beginDate);
+                    vm.endDate.setTime(vm.endDate.getTime() + courseMinute * 60 * 1000);   
                 };
+
+                vm.watchbeginDate = $scope.$watch('vm.beginDate', function (newValue, oldValue) {
+                    calcDurationValue();
+                });
 
                 /*保存补录的课时*/
                 vm.save = function () {
-                    if (!vm.beginDate) {
-                        vm.showMsg('请设置上课日期');
+                    var flag = true;
+                    var msg = "";
+                    if ((vm.result.assign.conditionID == "" || vm.result.assign.conditionID == null) && vm.result.assign.assetID == "") {
+                        msg += '请选择订单编号<br>';
+                        flag = false;
+                    }
+                    if (vm.result.assign.grade == '' || vm.result.assign.grade == null || vm.result.assign.grade == '0') {
+                        msg += "请选择上课年级，如没有待选项，请联系管理员！<br>";
+                        flag = false;
+                    };
+                    if (vm.result.assign.subject == '' || vm.result.assign.subject == null || vm.result.assign.subject == '0') {
+                        msg += "请选择上课科目，如没有待选项，请联系管理员！<br>";
+                        flag = false;
+                    };
+                    if (vm.result.assign.teacherID == '' || vm.result.assign.teacherID == null || vm.result.assign.teacherID == '0') {
+                        msg += "请选择上课教师，如没有待选项，请联系管理员！<br>";
+                        flag = false;
+                    };
+                    if (vm.beginDate == '' || vm.beginDate == null) {
+                        msg += "请设置上课时间！<br>";
+                        flag = false;
+                    }
+                    if (vm.result.assign.amount == '' || vm.result.assign.amount == 0 || vm.result.assign.amount == null) {
+                        msg += "请设置课时数！<br>";
+                        flag = false;
+                    };
+                    if (flag == false) {
+                        vm.showMsg(msg);
                         return false;
                     }
-                    if (vm.beginHour == '' || vm.beginMinute == '' || vm.endHour == '' || vm.endMinute == '' ||
-                        vm.beginHour == null || vm.beginMinute == null || vm.endHour == null || vm.endMinute == null) {
-                        vm.showMsg('请设置上课时间');
+                    var bdate = new Date(vm.beginDate);
+                    var edate = new Date(vm.endDate);
+
+                    var curDate = new Date();
+                    var minDate = new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate(), 0, 0, 0);
+                    minDate.setDate(minDate.getDate() - 29);
+
+                    var maxDate = new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate(), 0, 0, 0);
+
+                    if (vm.beginDate <= minDate) {                      
+                        vm.showMsg('上课时间不能小于等于:' + minDate.getFullYear() + "-" + vm.getDoubleStr((minDate.getMonth() + 1)) + "-" + vm.getDoubleStr(minDate.getDate()));
                         return false;
                     }
-                    var bdate = new Date(vm.beginDate.getFullYear(), vm.beginDate.getMonth(), vm.beginDate.getDate(), vm.beginHour, vm.beginMinute, 0);
-                    var edate = new Date(vm.beginDate.getFullYear(), vm.beginDate.getMonth(), vm.beginDate.getDate(), vm.endHour, vm.endMinute, 0);
-                    if (bdate >= edate) {
-                        vm.showMsg("上课结束时间不能小于开始时间，请重新设置");
+                    if (vm.beginDate > maxDate) {
+                        vm.showMsg('上课时间不能大于当前日期：' + curDate.getFullYear() + "-" + vm.getDoubleStr((curDate.getMonth() + 1)) + "-" +vm.getDoubleStr( curDate.getDate()));
                         return false;
-                    };
-                    if (vm.result.assign.grade == '' || vm.result.assign.grade == null) {
-                        vm.showMsg("请选择上课年级，如没有待选项，请联系管理员！");
-                        return false;
-                    };
-                    if (vm.result.assign.subject == '' || vm.result.assign.subject == null) {
-                        vm.showMsg("请选择上课科目，如没有待选项，请联系管理员！");
-                        return false;
-                    };
-                    if (vm.result.assign.teacherID == '' || vm.result.assign.teacherID == null) {
-                        vm.showMsg("请选择上课教师，如没有待选项，请联系管理员！");
-                        return false;
-                    };
+                    }
+
                     vm.result.assign.startTime = bdate;
                     vm.result.assign.endTime = edate;
+
                     if (vm.result.assign.copyAllowed == 0)
                         vm.result.assign.copyAllowed = false;
                     else
@@ -346,6 +335,9 @@
                             vm.showMsg(retValue.msg);
                             return;
                         }
+                        if (vm.watchbeginDate != null) {
+                            vm.watchbeginDate();
+                        }
                         $uibModalInstance.close("ok");
                     }, function (error) {
                         vm.showMsg(error.data.description);
@@ -353,6 +345,9 @@
                 };
 
                 vm.cancel = function () {
+                    if (vm.watchbeginDate != null) {
+                        vm.watchbeginDate();
+                    }
                     $uibModalInstance.dismiss('canceled');
                 };
 

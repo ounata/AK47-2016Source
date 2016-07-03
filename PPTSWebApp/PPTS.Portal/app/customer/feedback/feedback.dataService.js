@@ -60,9 +60,7 @@
             template: '<a ui-sref="ppts.student-view.profiles({id:row.customerId,prev:\'ppts.feedback\'})">{{row.customerName}}</a>'
         }, {
             field: "customerCode",
-            name: "学员编号",
-            //sortable: true,
-            //template: '<a ui-sref="ppts.student-view.profiles({id:row.customerId,prev:\'ppts.feedback\'})">{{row.customerCode}}</a>'
+            name: "学员编号"
         }, {
             field: "parentName",
             name: "家长姓名"
@@ -86,7 +84,7 @@
         {
             field: "replyContent",
             name: "反馈内容",
-            template: '<span uib-tooltip="{{row.replyContent}}">{{row.replyContent | truncate:10}}</span>'
+            template: '<span uib-popover="{{row.replyContent|tooltip:10}}" popover-trigger="mouseenter">{{row.replyContent | truncate:10}}</span>'
         }],
         pager: {
             pageIndex: 1,
@@ -95,34 +93,6 @@
         },
         orderBy: [{ dataField: 'replyTime', sortDirection: 1 }]
     });
-    customer.registerFactory('feedbackDataViewService', ['dataSyncService', 'feedbackListDataHeader', 'feedbackDataService',
-        function (dataSyncService, feedbackListDataHeader, feedbackDataService) {
-            var service = this;
-            //初始化
-            service.configFeedbackListHeaders = function (vm) {
-                vm.data = feedbackListDataHeader;
-                vm.data.pager.pageChange = function () {
-                    dataSyncService.initCriteria(vm);
-                    feedbackDataService.GetPagedCustomerRepliesList(vm.criteria, function (result) {
-                        vm.data.rows = result.pagedData;
-                    });
-                }
-            }
-
-            //查询
-            service.initFeedbackList = function (vm, callback) {
-                dataSyncService.initCriteria(vm);
-                feedbackDataService.GetCustomerRepliesList(vm.criteria, function (result) {
-                    vm.data.rows = result.queryResult.pagedData;
-                    dataSyncService.injectDictData();
-                    dataSyncService.updateTotalCount(vm, result.queryResult);
-                    if (ng.isFunction(callback)) {
-                        callback();
-                    }
-                });
-            }
-            return service;
-        }]);
 
     //联系家长
     customer.registerFactory('feedbackAddDataViewService', ['feedbackDataService',  function (feedbackDataService) {
@@ -161,15 +131,13 @@
             service.initData = function (vm, callback) {
                 //初始化词典
                 feedbackDataService.loadDictionaries(function (result) {
-                    //vm.dictionaries = result.dictionaries;
-                    dataSyncService.injectDictData();
                     //填充选项卡
                     var replyObjects = ppts.dict[ppts.config.dictMappingConfig.replyObject];
                     for (var index in replyObjects) {
                         vm.tabs.push({
                             title: replyObjects[index].value,
                             key: replyObjects[index].key,
-                            active: index == 0
+                            active: index == 1
                         });
                     }
                     //加载数据到第一个选项卡
@@ -177,7 +145,7 @@
                     if (vm.criteria) {
                         vm.criteria.replyObjects = [];
                         if (!vm.criteria.replyObject) {
-                            vm.criteria.replyObjects.push(vm.tabs[0].key);
+                            vm.criteria.replyObjects.push(vm.tabs[1].key);
                         }
                         else {
                             //控制搜索查询选项卡变动
@@ -190,10 +158,11 @@
                             vm.criteria.replyObjects.push(vm.criteria.replyObject);
                         }
                     }
+                    vm.criteria = vm.criteria || {};
+                    vm.criteria.pageParams = vm.criteria.pageParams || {};
+                    vm.criteria.pageParams.pageIndex = 1;
                     feedbackDataService.GetCustomerRepliesList(vm.criteria, function (result) {
                         vm.data.rows = result.queryResult.pagedData;
-                        //vm.dictionaries = result.dictionaries;
-                        //dataSyncService.injectDictData();
                         vm.data.pager.totalCount = result.queryResult.totalCount;
                         //dataSyncService.updateTotalCount(vm, result.queryResult);
                         if (ng.isFunction(callback)) {

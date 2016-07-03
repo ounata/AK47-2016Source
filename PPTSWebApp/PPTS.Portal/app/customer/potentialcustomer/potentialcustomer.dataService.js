@@ -6,7 +6,8 @@
             { operation: '@operation', id: '@id' },
             {
                 'post': { method: 'POST' },
-                'query': { method: 'GET', isArray: false }
+                'query': { method: 'GET', isArray: false },
+                'fetch': { method: 'GET', isArray: true }
             });
 
         resource.getAllCustomers = function (criteria, success, error) {
@@ -37,6 +38,10 @@
             resource.query({ operation: 'getCustomerInfo', id: id }, success, error);
         }
 
+        resource.getStaffByOA = function (staffOA, success, error) {
+            resource.fetch({ operation: 'getStaffByOA', staffOA: staffOA }, success, error);
+        };
+
         resource.getCustomerByCode = function (customerCode, success, error) {
             resource.query({ operation: 'getCustomerByCode', customerCode: customerCode }, success, error);
         };
@@ -47,6 +52,10 @@
 
         resource.getTeacherRelations = function (criteria, success, error) {
             resource.post({ operation: 'getTeacherRelations' }, criteria, success, error);
+        };
+
+        resource.getPagedTeacherRelations = function (criteria, success, error) {
+            resource.post({ operation: 'getPagedTeacherRelations' }, criteria, success, error);
         };
 
         resource.getPagedStaffRelations = function (criteria, success, error) {
@@ -106,33 +115,38 @@
         resource.createCustomerStaffRelations = function (model, success, error) {
             resource.post({ operation: 'createCustomerStaffRelations' }, model, success, error);
         };
+        resource.getImportHistory = function (model, success, error) {
+            resource.post({ operation: 'getImportHistory' }, model, success, error);
+        };
         return resource;
     }]);
 
     customer.registerValue('customerRelationType', {
-        creator: '0', // 建档关系
         consultant: '1', // 1 咨询关系: 学生, 销售（咨询师）
         educator: '2', // 2 学管关系：学生, 学管（班主任）
         teacher: '3', // 3 教学关系: 学生, 老师
         callcenter: '4', // 4 电销关系: 学生, 坐席人员
-        market: '5' // 5 市场关系: 学生, 市场专员
+        market: '5', // 5 市场关系: 学生, 市场专员
+        creator: '10' // 建档关系
     });
 
     customer.registerValue('customerAdvanceSearchItems', [
         { name: '入学年级：', template: '<ppts-checkbox-group category="grade" model="vm.criteria.entranceGrades" async="false"/>' },
-        { name: '建档日期：', template: '<ppts-daterangepicker start-date="vm.criteria.createTimeStart" end-date="vm.criteria.createTimeEnd" width="41.5%" css="mcs-margin-left-10"/>' },
+        { name: '建档日期：', template: '<mcs-daterangepicker start-date="vm.criteria.createTimeStart" end-date="vm.criteria.createTimeEnd" width="41.5%" css="mcs-margin-left-10"/>' },
         { name: '跟进阶段：', template: '<ppts-checkbox-group category="followStage" model="vm.criteria.followStages" async="false"/>' },
         { name: '客户级别：', template: '<ppts-checkbox-group category="customerLevel" model="vm.criteria.customerLevels" width="60px" async="false"/>' },
-        { name: '未跟进时长：', template: '<ppts-radiobutton-group category="period" model="vm.followPeriodValue" show-all="true" async="false" css="mcs-padding-left-10"/> <span ng-show="vm.followPeriodValue == 5"><input type="text" ng-model="vm.followDays" class="mcs-input-small" onkeyup="mcs.util.limit(this)" onafterpaste="mcs.util.limit(this)"/>天未跟进</span>' },
-        { name: '在读学校：', template: '<mcs-input model="vm.criteria.schoolName" css="mcs-margin-left-10" custom-style="width:40%"/>' },
-        { name: '家庭住址：', template: '<mcs-input model="vm.criteria.addressDetail" css="mcs-margin-left-10" custom-style="width:40%"/>' },
+        { name: '未跟进时长：', template: '<ppts-radiobutton-group category="period" model="vm.criteria.followPeriodValue" show-all="true" async="false" css="mcs-padding-left-10"/> <span ng-show="vm.criteria.followPeriodValue == 5"><input type="text" ng-model="vm.followDays" class="mcs-input-small" onkeyup="mcs.util.limit(this)" onafterpaste="mcs.util.limit(this)"/>天未跟进</span>' },
+        { name: '在读学校：', template: '<ppts-school name="vm.criteria.schoolName" css="mcs-padding-left-10 mcs-width-half"/>' },
+        { name: '家庭住址：', template: '<ppts-address model="vm.criteria.addressDetail" only="false" css="mcs-padding-left-10 mcs-width-half"/>' },
         { name: '信息来源：', template: '<ppts-checkbox-group category="source" model="vm.criteria.sourceMainType" parent="0" async="false"/>' },
         { name: '信息来源二：', template: '<ppts-checkbox-group category="source" model="vm.criteria.sourceSubType" parent="vm.criteria.sourceMainType" ng-show="vm.criteria.sourceMainType.length==1" async="false"/>', hide: 'vm.criteria.sourceMainType.length!=1' },
-        { name: '归属坐席：', template: '<ppts-radiobutton-group category="assignment" model="vm.criteria.isAssignCallcenter" show-all="true" async="false" css="mcs-padding-left-10"/> <mcs-input placeholder="坐席姓名" model="vm.criteria.callcenterName" custom-style="width:28%" ng-disabled="vm.criteria.isAssignCallcenter==0"/>' },
-        { name: '归属咨询师：', template: '<ppts-radiobutton-group category="assignment" model="vm.criteria.isAssignConsultant" show-all="true" async="false" css="mcs-padding-left-10"/> <mcs-input placeholder="咨询师姓名" model="vm.criteria.consultantName" custom-style="width:28%" ng-disabled="vm.criteria.isAssignConsultant==0"/>' },
-        { name: '归属市场专员：', template: '<ppts-radiobutton-group category="assignment" model="vm.criteria.isAssignMarket" show-all="true" async="false" css="mcs-padding-left-10"/> <mcs-input placeholder="市场专员姓名" model="vm.criteria.marketName" custom-style="width:28%" ng-disabled="vm.criteria.isAssignMarket==0"/>' },
-        { name: '建档人：', template: '<ppts-checkbox-group category="people" model="vm.criteria.creatorJobs" async="false" css="mcs-padding-left-10"/> <mcs-input placeholder="建档人姓名" model="vm.criteria.creatorName" custom-style="width:28%"/>' },
-        { name: '有效/无效客户：', template: '<ppts-radiobutton-group category="valid" model="vm.criteria.isValids" show-all="true" async="false" css="mcs-padding-left-10"/>' }
+        { name: '归属坐席：', template: '<ppts-radiobutton-group category="assignment" model="vm.criteria.isAssignCallcenter" show-all="true" async="false" css="mcs-padding-left-10"/> <mcs-input placeholder="坐席姓名" uib-popover="坐席姓名" model="vm.criteria.callcenterName" css="mcs-margin-left-5" custom-style="width:35%" ng-disabled="vm.criteria.isAssignCallcenter==0"/>' },
+        { name: '归属咨询师：', template: '<ppts-radiobutton-group category="assignment" model="vm.criteria.isAssignConsultant" show-all="true" async="false" css="mcs-padding-left-10"/> <mcs-input placeholder="咨询师姓名" uib-popover="咨询师姓名" model="vm.criteria.consultantName" css="mcs-margin-left-5" custom-style="width:35%" ng-disabled="vm.criteria.isAssignConsultant==0"/>' },
+        { name: '归属市场专员：', template: '<ppts-radiobutton-group category="assignment" model="vm.criteria.isAssignMarket" show-all="true" async="false" css="mcs-padding-left-10"/> <mcs-input placeholder="市场专员姓名" uib-popover="市场专员姓名" model="vm.criteria.marketName" css="mcs-margin-left-5" custom-style="width:35%" ng-disabled="vm.criteria.isAssignMarket==0"/>' },
+        { name: '有效/无效客户：', template: '<ppts-radiobutton-group category="valid" model="vm.criteria.isValids" show-all="true" async="false" css="mcs-padding-left-10"/>' },
+        { name: '归属关系：', template: '<ppts-checkbox-group category="relation" model="vm.criteria.belongs" async="false" css="mcs-padding-left-10"/><mcs-input placeholder="归属人姓名" model="vm.criteria.belongName" uib-popover="归属人姓名" popover-trigger="mouseenter" custom-style="width:28%"/>' },
+        { name: '建档关系：', template: '<ppts-checkbox-group category="creation" model="vm.criteria.creation" async="false" css="mcs-padding-left-10"/><mcs-input placeholder="建档人姓名" model="vm.criteria.creatorName" uib-popover="建档人姓名" popover-trigger="mouseenter" custom-style="width:28%"/>' },
+        { name: '查询部门：', template: '<ppts-radiobutton-group category="dept" model="vm.criteria.dept" show-all="true" async="false" css="mcs-padding-left-10"/>' }
     ]);
 
     customer.registerValue('customerListDataHeader', {
@@ -142,19 +156,17 @@
         headers: [{
             field: "customerName",
             name: "学员姓名",
-            template: '<a ui-sref="ppts.customer-view.profiles({id:row.customerID,prev:\'ppts.customer\'})">{{row.customerName}}</a>',
-            sortable: true
+            template: '<a ui-sref="ppts.customer-view.profiles({id:row.customerID,prev:\'ppts.customer\'})">{{row.customerName}}</a>'
         }, {
             field: "customerCode",
-            name: "学员编号",
-            template: '<a ui-sref="ppts.customer-view.profiles({id:row.customerID,prev:\'ppts.customer\'})">{{row.customerCode}}</a>',
+            name: "学员编号"
         }, {
             field: "parentName",
             name: "家长姓名"
         }, {
             field: "grade",
             name: "当前年级",
-            template: '<span>{{row.entranceGrade | grade | normalize}}</span>'
+            template: '<span>{{row.grade | grade | normalize}}</span>'
         }, {
             field: "sourceMainType",
             name: "信息来源",
@@ -165,19 +177,21 @@
         }, {
             field: "createTime",
             name: "建档日期",
-            template: '<span>{{row.createTime | date:"yyyy-MM-dd HH:mm:ss" | normalize}}</span>'
+            template: '<span>{{row.createTime | date:"yyyy-MM-dd" | normalize}}</span>'
         }, {
             field: "creatorName",
             name: "建档人"
         }, {
-            field: "creatorName",
+            field: "createJobName",
             name: "建档人岗位"
         }, {
             field: 'consultantStaff',
             name: "归属咨询师"
         }, {
             field: "followedCount",
-            name: "跟进次数"
+            name: "跟进次数",
+            template: '<a ng-show="row.followedCount" ui-sref="ppts.customer-view.follows({id:row.customerID,prev:\'ppts.customer\'})">{{row.followedCount}}</a>' +
+                      '<span ng-show="!row.followedCount">{{row.followedCount}}</span>'
         }, {
             field: "followTime",
             name: "最后一次跟进时间",
@@ -202,46 +216,37 @@
             name: "下次沟通时间",
             template: '<span>{{row.nextFollowTime | date:"yyyy-MM-dd" | normalize}}</span>'
         }],
-        pager: {
-            pageIndex: 1,
-            pageSize: ppts.config.pageSizeItem,
-            totalCount: -1
-        },
         orderBy: [{ dataField: 'PotentialCustomers.CreateTime', sortDirection: 1 }]
     });
 
-    customer.registerFactory('customerDataViewService', ['$state', 'customerDataService', 'dataSyncService', 'mcsDialogService', 'customerRelationType',
-        function ($state, customerDataService, dataSyncService, mcsDialogService, customerRelationType) {
-            var service = this;
+    customer.registerValue('parentSelectHeaders', {
+        selection: 'radio',
+        rowsSelected: [],
+        keyFields: ['parentID', 'parentName', 'gender'],
+        headers: [{
+            field: "parentName",
+            name: "家长姓名"
+        }, {
+            field: "gender",
+            name: "性别",
+            template: '<span>{{ row.gender | gender }}</span>'
+        }, {
+            name: "家长手机",
+            template: '<span ng-if="row.primaryPhone.phoneNumber != \'\'">{{ row.primaryPhone.phoneNumber }}</span><span ng-if="row.secondaryPhone.phoneNumber != \'\'"> {{ row.secondaryPhone.phoneNumber }}</span>'
+        }, {
+            field: "createTime",
+            name: "建档时间",
+            template: '<span>{{ row.createTime | date:"yyyy-MM-dd" | normalize }}</span>'
+        }],
+        pager: {
+            pageSize: 10
+        },
+        orderBy: [{ dataField: 'Parents.CreateTime', sortDirection: 1 }]
+    });
 
-            // 配置潜客列表表头
-            service.configCustomerListHeaders = function (vm, header) {
-                vm.data = header;
-
-                vm.data.pager.pageChange = function () {
-                    dataSyncService.initCriteria(vm);
-                    customerDataService.getPagedCustomers(vm.criteria, function (result) {
-                        vm.data.rows = result.pagedData;
-                    });
-                }
-            };
-
-            // 初始化潜客列表
-            service.initCustomerList = function (vm, callback) {
-                dataSyncService.initCriteria(vm);
-                customerDataService.getAllCustomers(vm.criteria, function (result) {
-                    vm.data.rows = result.queryResult.pagedData;
-                    dataSyncService.injectDictData({
-                        c_codE_ABBR_Customer_Assign: [{ key: 0, value: '未分配' }, { key: 1, value: '已分配' }],
-                        c_codE_ABBR_Customer_Valid: [{ key: 0, value: '无效客户' }, { key: 1, value: '有效客户' }]
-                    });
-                    dataSyncService.injectPageDict(['people', 'period', 'ifElse']);
-                    dataSyncService.updateTotalCount(vm, result.queryResult);
-                    if (ng.isFunction(callback)) {
-                        callback();
-                    }
-                });
-            };
+    customer.registerFactory('customerDataViewService', ['$state', 'customerDataService', 'dataSyncService', 'mcsDialogService', 'customerRelationType', 'mcsValidationService',
+        function ($state, customerDataService, dataSyncService, mcsDialogService, customerRelationType, mcsValidationService) {
+            var service = this;        
 
             service.initDatePeriod = function ($scope, vm, watchExps) {
                 if (!watchExps && !watchExps.length) return;
@@ -249,7 +254,7 @@
                     (function () {
                         var temp = index, exp = watchExps[index];
                         $scope.$watch(exp.watchExp, function (value) {
-                            var period = dataSyncService.selectPageDict('period', vm[exp.selectedValue]);
+                            var period = dataSyncService.selectPageDict('period', vm.criteria[exp.selectedValue]);
                             if (period) {
                                 vm.criteria[exp.end] = period.end || ((!value || value == '-1') ? null : mcs.date.lastDay(-value));
                             }
@@ -283,13 +288,10 @@
                     rowsSelected: [],
                     keyFields: ['customerID', 'customerName', 'parentName', 'grade', 'consultantStaff', 'consultant', 'Market'],
                     headers: [{
-                        field: "orgName",
-                        name: "校区",
-                        sortable: true
-                    }, {
                         field: "customerName",
                         name: "学员姓名",
-                        sortable: true
+                        sortable: true,
+                        template: '<a ui-sref="ppts.customer-view.profiles({id:row.customerID,prev:\'ppts.customer\'})">{{row.customerName}}</a>'
                     }, {
                         field: "customerCode",
                         name: "学员编号"
@@ -297,20 +299,19 @@
                         field: "parentName",
                         name: "家长姓名"
                     }, {
+                        field: "orgName",
+                        name: "在读学校"
+                    }, {
                         field: "grade",
                         name: "当前年级",
                         template: '<span>{{row.entranceGrade | grade}}</span>'
                     }, {
                         field: "consultantStaff",
                         name: "咨询师"
-                    }, {
-                        field: "primaryPhone",
-                        name: "家长联系方式"
-                    }
-                    ],
+                    }],
                     pager: {
                         pageIndex: 1,
-                        pageSize: ppts.config.pageSizeItem,
+                        pageSize: 10,
                         totalCount: -1,
                         pageChange: function () {
                             dataSyncService.initCriteria(vm, false);
@@ -338,10 +339,10 @@
             // 初始化新增潜客信息
             service.initCreateCustomerInfo = function (orginalParent, vm, callback) {
                 customerDataService.getCustomerForCreate(function (result) {
-                    orginalParent = result.primaryParent;
-                    dataSyncService.injectPageDict(['ifElse']);
+                    orginalParent = result.parent;
+                    dataSyncService.injectDynamicDict('ifElse');
                     dataSyncService.setDefaultValue(vm.customer, result.customer, ['idType', 'subjectType', 'vipType']);
-                    dataSyncService.setDefaultValue(vm.parent, result.primaryParent, 'idType');
+                    dataSyncService.setDefaultValue(vm.parent, result.parent, 'idType');
                     if (ng.isFunction(callback)) {
                         callback();
                     }
@@ -407,18 +408,15 @@
             service.configStaffRelationHeaders = function (vm) {
                 vm.data = {
                     headers: [{
-                        field: "createTime",
+                        field: "versionStartTime",
                         name: "开始时间",
-                        template: '<span>{{ row.createTime | date:"yyyy-MM-dd" }}</span>'
+                        template: '<span>{{ row.versionStartTime | date:"yyyy-MM-dd" | normalize}}</span>'
                     }, {
-                        field: "createTime",
+                        field: "versionEndTime",
                         name: "结束时间",
-                        template: '<span>{{ row.createTime | date:"yyyy-MM-dd" }}</span>'
+                        template: '<span>{{ row.versionEndTime | date:"yyyy-MM-dd" | normalize}}</span>'
                     }, {
-                        field: "orgName",
-                        name: "所属分公司"
-                    }, {
-                        field: "orgName",
+                        field: "staffJobOrgName",
                         name: "所属校区"
                     }, {
                         field: "staffJobName",
@@ -440,7 +438,7 @@
                         }
                     },
                     orderBy: [{
-                        dataField: 'CreateTime', sortDirection: 1
+                        dataField: 'VersionEndTime', sortDirection: 1
                     }]
                 }
             };
@@ -473,7 +471,7 @@
                     vm.customerIds.push(item.customerID);
                 });
 
-                dataSyncService.injectPageDict(['messageType']);
+                dataSyncService.injectDynamicDict('messageType');
 
                 if (ng.isFunction(callback)) {
                     callback();
@@ -500,7 +498,7 @@
                     vm.customerIds.push(item.customerID);
                 });
 
-                dataSyncService.injectPageDict(['messageType']);
+                dataSyncService.injectDynamicDict('messageType');
 
                 customerDataService.getTransferResources(vm.customerIds, function (result) {
                     // 初始化分公司和校区下拉框
@@ -514,7 +512,7 @@
                     params: {
                         customerID: customerID
                     },
-                    settings: { size: 'lg' }
+                    settings: { backdrop: 'static', size: 'lg' }
                 });
             };
 
@@ -528,7 +526,7 @@
                     }, {
                         field: "createTime",
                         name: "操作日期",
-                        template: '<span>{{ row.createTime | date:"yyyy-MM-dd" }}</span>'
+                        template: '<span>{{ row.createTime | date:"yyyy-MM-dd" | normalize }}</span>'
                     }, {
                         field: "orgName",
                         name: "所属机构",
@@ -541,7 +539,7 @@
                         field: "staffJobName",
                         name: "教师姓名",
                         template: '<span ng-if="row.applyType==0">{{ row.newTeacherName }}</span>'
-                                + '<span ng-if="row.applyType==1">{{ row.oldTeacherName }}>{{ row.newTeacherName }}</span>'
+                                + '<span ng-if="row.applyType==1">{{ row.oldTeacherName }}->{{ row.newTeacherName }}</span>'
                                 + '<span ng-if="row.applyType==2">{{ row.oldTeacherName }}</span>'
                     }],
                     pager: {
@@ -550,7 +548,7 @@
                         totalCount: -1,
                         pageChange: function () {
                             dataSyncService.initCriteria(vm);
-                            customerDataService.getPagedStaffRelations(vm.criteria, function (result) {
+                            customerDataService.getPagedTeacherRelations(vm.criteria, function (result) {
                                 vm.data.rows = result.pagedData;
                             });
                         }
@@ -562,13 +560,126 @@
             };
 
             // 加载归属教师弹出框
-            service.getTeacherRelationsInfo = function (vm, data) {
+            service.getTeacherRelationsInfo = function (vm) {
                 dataSyncService.initCriteria(vm);
                 vm.criteria.customerID = vm.customerID;
                 customerDataService.getTeacherRelations(vm.criteria, function (result) {
                     vm.data.rows = result.queryResult.pagedData;
                     dataSyncService.updateTotalCount(vm, result.queryResult);
                 });
+            };
+
+            // 获取当前归属咨询 学管 坐席 市场专员
+            service.getRelationInfo = function (vm, staffRelations) {
+                if (mcs.util.isArray(staffRelations)) {
+                    var relationFilter = function (relationType) {
+                        var result = staffRelations.filter(function (item) {
+                            return item.relationType == relationType;
+                        });
+                        return result && result.length ? result[0] : {};
+                    };
+                    vm.consultantName = relationFilter(customerRelationType.consultant).staffName || '';
+                    vm.educatorName = relationFilter(customerRelationType.educator).staffName || '';
+                    vm.callcenterName = relationFilter(customerRelationType.callcenter).staffName || '';
+                    vm.marketName = relationFilter(customerRelationType.market).staffName || '';
+                    vm.creatorOrgName = relationFilter(customerRelationType.creator).staffJobOrgName || '';
+                }
+            };
+
+            // 批量导入客户资源
+            service.importCustomers = function () {
+                mcsDialogService.create('app/customer/potentialcustomer/customer-import/customer-import.tpl.html', {
+                    controller: 'customerImportController',
+                    settings: { backdrop: 'static', size: 'lg' }
+                });
+            };
+
+            // 上传历史
+            service.importHistory = function () {
+                mcsDialogService.create('app/customer/potentialcustomer/customer-import/customer-import-history.tpl.html', {
+                    controller: 'customerImportHistoryController',
+                    settings: {
+                        backdrop: 'static', size: 'lg'
+                    }
+                });
+            };
+
+            // 上传历史列表
+            service.getImportHistory = function (vm) {
+                dataSyncService.initCriteria(vm);
+                customerDataService.getImportHistory(vm.criteria, function (result) {
+                    vm.data.rows = result.queryResult.pagedData;
+                    dataSyncService.updateTotalCount(vm, result.queryResult);
+                });
+            };
+
+            // 配置上传历史表头
+            service.configImportHistoryHeaders = function (vm) {
+                vm.data = {
+                    headers: [{
+                        field: "activityName",
+                        name: "文件名"
+                    }, {
+                        field: "operatorName",
+                        name: "上传人",
+                        template: '<span>{{ row.operator.name  }}</span>'
+                    }, {
+                        field: "operationDateTime",
+                        name: "上传时间",
+                        template: '<span>{{ row.operationDateTime | date:"yyyy-MM-dd HH:mm:ss"  }}</span>'
+                    }, {
+                        field: "operationName",
+                        name: "导入详情",
+                        template: '<span title="{{row.operationDescription}}" >{{row.operationName}}</span>',
+                    }],
+                    pager: {
+                        pageIndex: 1,
+                        pageSize: ppts.config.pageSizeItem,
+                        totalCount: -1,
+                        pageChange: function () {
+                            dataSyncService.initCriteria(vm);
+                            customerDataService.getImportHistory(vm.criteria, function (result) {
+                                vm.data.rows = result.queryResult.pagedData;
+                            });
+                        }
+                    },
+                    orderBy: [{
+                        dataField: 'OPERATE_DATETIME', sortDirection: 1
+                    }]
+                }
+            };
+
+            // 身份证号码验证
+            service.isIdCard = function (idType, idNumber, targetID) {
+                var valid = true;
+                if (idType == 1 && idNumber && idNumber.trim() != '') {
+                    valid = mcs.util.isIdCard(idNumber);
+                }
+                mcsValidationService.check($(targetID), {
+                    validate: valid
+                });
+                return valid;
+            };
+
+            // 获取现住址详细地址
+            service.getAddressDetail = function (vm) {
+                var addressArray = [];
+                if (vm.selected) {
+                    var selected = vm.selected.value.split(',');
+                    if (vm.parent.province) {
+                        addressArray.push(selected[0]);
+                    }
+                    if (vm.parent.city) {
+                        addressArray.push(selected[1]);
+                    }
+                    if (vm.parent.county) {
+                        addressArray.push(selected[2]);
+                    }
+                    if (vm.parent.streetName) {
+                        addressArray.push(vm.parent.streetName);
+                    }
+                }
+                return addressArray.join('');
             };
 
             return service;
@@ -578,71 +689,19 @@
         var service = this;
 
         // 添加已有家长
-        service.popupParentAdd = function (vm, title, type, callback) {
+        service.popupParentAdd = function (vm, type, callback) {
             mcsDialogService.create('app/customer/potentialcustomer/customer-parent-add/parent-add.tpl.html', {
                 controller: 'customerParentAddController',
                 params: {
-                    title: title,
                     type: type,
                     customer: vm.customer
                 },
                 settings: {
+                    backdrop: 'static',
                     size: 'lg'
                 }
             }).result.then(function (parent) {
                 vm.parent = parent;
-                if (ng.isFunction(callback)) {
-                    callback();
-                }
-            });
-        };
-
-        // 配置添加已有家长Table表头
-        service.configParentAddHeaders = function (vm) {
-            vm.data = {
-                selection: 'radio',
-                rowsSelected: [],
-                keyFields: ['parentID', 'parentName', 'gender'],
-                headers: [{
-                    field: "parentName",
-                    name: "家长姓名"
-                }, {
-                    field: "gender",
-                    name: "性别",
-                    template: '<span>{{ row.gender | gender }}</span>'
-                }, {
-                    name: "家长手机",
-                    template: '<span ng-if="row.primaryPhone.phoneNumber != \'\'">{{ row.primaryPhone.phoneNumber }}</span><span ng-if="row.secondaryPhone.phoneNumber != \'\'"> {{ row.secondaryPhone.phoneNumber }}</span>'
-                }, {
-                    field: "createTime",
-                    name: "建档时间",
-                    template: '<span>{{ row.createTime | date:"yyyy-MM-dd" }}</span>'
-                }],
-                pager: {
-                    pageIndex: 1,
-                    pageSize: ppts.config.pageSizeItem,
-                    totalCount: -1,
-                    pageChange: function () {
-                        dataSyncService.initCriteria(vm);
-                        customerDataService.getPagedParents(vm.criteria, function (result) {
-                            vm.data.rows = result.pagedData;
-                        });
-                    }
-                },
-                orderBy: [{ dataField: 'a.CreateTime', sortDirection: 1 }]
-            }
-        };
-
-        // 加载家长弹出框
-        service.getAllParents = function (vm, data, callback) {
-            dataSyncService.initCriteria(vm);
-            vm.title = data.title;
-            vm.type = data.type;
-            vm.customer = data.customer;
-            vm.parent = {};
-            customerDataService.getAllParents(vm.criteria, function (result) {
-                vm.data.rows = result.queryResult.pagedData;
-                dataSyncService.updateTotalCount(vm, result.queryResult);
                 if (ng.isFunction(callback)) {
                     callback();
                 }
@@ -658,7 +717,7 @@
 
             $scope.$watchCollection('vm.data.rowsSelected', function () {
                 if (vm.type == 'add') return;
-                var selectedRows = vm.data.rowsSelected;
+                var selectedRows = vm.data ? vm.data.rowsSelected : 0;
                 if (selectedRows && selectedRows.length == 1) {
                     vm.parent = selectedRows[0];
                 }

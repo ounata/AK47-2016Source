@@ -33,6 +33,18 @@ namespace PPTS.Data.Customers.Adapters
         }
 
         /// <summary>
+        /// 根据客户ID信息进行加载
+        /// </summary>
+        /// <param name="customerID"></param>
+        /// <returns></returns>
+        public CustomerStaffRelation LoadByCustomerID(string customerID, CustomerRelationType relationType)
+        {
+            customerID.CheckStringIsNullOrEmpty("customerID");
+
+            return this.Load(builder => builder.AppendItem("CustomerID", customerID).AppendItem("RelationType", (int)relationType), DateTime.MinValue).FirstOrDefault();
+        }
+
+        /// <summary>
         /// 在上下文中根据客户ID信息进行加载
         /// </summary>
         /// <param name="customerID"></param>

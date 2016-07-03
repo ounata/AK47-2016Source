@@ -12,12 +12,13 @@ namespace MCS.Library.Expression
         /// 分析表达式，
         /// </summary>
         /// <param name="expression">表达式</param>
+        /// <param name="throwParseException">是否抛出分析的异常，默认为true</param>
         /// <returns>分析结果</returns>
         /// <remarks>
         /// 对传入的表达式进行分析
         /// <code source="..\Framework\TestProjects\DeluxeWorks.Library.Test\Expression\ExpressionParserTest.cs" region="parse" lang="cs" title="调用分析表达式的函数" />
         /// </remarks>
-        public static ParseResult Parse(string expression)
+        public static ParseResult Parse(string expression, bool throwParseException = true)
         {
             ParseResult result = null;
 
@@ -26,10 +27,14 @@ namespace MCS.Library.Expression
                 ParsingContext context = new ParsingContext(expression);
 
                 context.OutputIdentifiers = true;
+                context.ThrowParseException = throwParseException;
                 ExpTreeNode tree = ExpressionParser.instance.DoExpression(context);
 
                 if (context.CurrentChar != '\0')
-                    throw ParsingException.NewParsingException(ParseError.peInvalidOperator, context.Position, context.CurrentChar.ToString());
+                {
+                    if (context.ThrowParseException)
+                        throw ParsingException.NewParsingException(ParseError.peInvalidOperator, context.Position, context.CurrentChar.ToString());
+                }
 
                 result = new ParseResult(tree, context.Identifiers);
             }

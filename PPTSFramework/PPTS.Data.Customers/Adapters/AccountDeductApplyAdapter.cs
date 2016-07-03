@@ -42,7 +42,7 @@ namespace PPTS.Data.Customers.Adapters
         private void InitData(AccountDeductApply data)
         {
             if (data.ApplyID.IsNullOrEmpty())
-                data.ApplyID = System.Guid.NewGuid().ToString();
+                data.ApplyID = UuidHelper.NewUuidString();
             if (data.ApplyNo.IsNullOrEmpty())
                 data.ApplyNo = Helper.GetApplyNo("KJ");
         }

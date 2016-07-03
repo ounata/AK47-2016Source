@@ -1,0 +1,117 @@
+﻿
+<style type="text/css">
+    #indicatorArea {
+        width: 600px;
+        height: 200px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        margin-left: 100px;
+    }
+
+    #file {
+        width: 400px;
+    }
+
+    #progress {
+        width: 0px;
+        height: 20px;
+        margin-top: 5px;
+        background-color: orange;
+    }
+</style>
+
+<div>
+    <form id="uploadForm" name="uploadForm" target="statusFrame" action={{vm.action}} method="post" enctype="multipart/form-data">
+
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="alert" ng-click="vm.close()">
+                <i class="ace-icon fa fa-times"></i>
+            </button>
+            <h4 class="modal-title">批量导入客户资源</h4>
+        </div>
+
+        <div class="modal-body">
+            <div class="row">
+                <div class="form-group horizontal">
+                    <mcs-label required="true" text="选择文件：" css="col-sm-3" />
+                    <div class="col-sm-6">
+                        <input id="file" onchange="getFile()" title="选择要上传的文件" type="file" name="excel" accept=".xlsx" />
+                        <div id="fields"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group horizontal">
+                    <mcs-label required="true" text="此批客户数量的信息来源：" css="col-sm-3" />
+                    <div class="col-sm-6">
+                        <ppts-source main="vm.sourceMainType" sub="vm.sourceSubType" required-level="2" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group horizontal">
+                    <mcs-label text="此批客户数据交接给：" css="col-sm-3" />
+                    <div class="col-sm-6">
+                        <ppts-organization branch="vm.branchID" campus="vm.campusID" selected="vm.selected" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group horizontal">
+                    <div class="col-sm-12 mcs-margin-left-10" style="width:98%;">
+                        <div class="center warning mcs-margin-top-5 mcs-margin-bottom-2">请确认客户数据已按照下列示范规则填写。请注意，每次最多只能上传300个客户。
+                            <a href="app/common/tpl/导入客户模板.xlsx">下载导入客户数量模板</a>
+                        </div>
+                        <div data="vm.data">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered table-hover" style="overflow-x: auto;">
+                                    <thead class="thin-border-bottom">
+                                        <tr>
+                                            <th><mcs-label required="true"></mcs-label> 学员姓名</th>
+                                            <th>当前所在学校</th>
+                                            <th>当前所在年级</th>
+                                            <th>文理科</th>
+                                            <th>学员性别</th>
+                                            <th><mcs-label required="true"></mcs-label> 家长姓名</th>
+                                            <th>家长性别</th>
+                                            <th><mcs-label required="true"></mcs-label> 家长联系电话</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>张晓莎</td>
+                                            <td>十一学校</td>
+                                            <td>小学四年级</td>
+                                            <td>理科</td>
+                                            <td>男</td>
+                                            <td>李晓梅</td>
+                                            <td>男</td>
+                                            <td>13922003322</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <mcs-button category="upload" type="button" click="vm.submitForm()"></mcs-button>
+            <mcs-button category="history" text="上传历史" click="vm.viewHistory()"></mcs-button>
+            <mcs-button category="close" click="vm.close()" />
+        </div>
+
+    </form>
+    <div id="log">
+        <iframe id="statusFrame" name="statusFrame" width="100%" height="0px" frameborder="0"></iframe>
+        <div id="indicatorArea">
+            <p>当前进度：<span id="progressTxt"></span></p>
+            <div id="progress">
+            </div>
+            <div id="logArea">
+            </div>
+        </div>
+    </div>
+</div>

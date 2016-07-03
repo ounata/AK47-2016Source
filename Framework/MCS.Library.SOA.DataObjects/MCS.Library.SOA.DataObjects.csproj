@@ -151,7 +151,6 @@
     <Compile Include="Common\RelativeTicket.cs" />
     <Compile Include="Common\RelativeTicketSettings.cs" />
     <Compile Include="Common\WorkflowObjectBase.cs" />
-    <Compile Include="Configuration\ConnectionNameMappingSettings.cs" />
     <Compile Include="Configuration\EnumSettings.cs" />
     <Compile Include="Configuration\FixedTimeTaskSettings.cs" />
     <Compile Include="Configuration\ObjectToPropertySettings.cs" />
@@ -699,6 +698,7 @@
     <Compile Include="Workflow\Descriptors\WfDescriptorBase.cs" />
     <Compile Include="Workflow\Descriptors\WfDescriptorException.cs" />
     <Compile Include="Workflow\Interfaces\IWfProcessPersist.cs" />
+    <Compile Include="Workflow\Runtime\Extensions.cs" />
     <Compile Include="Workflow\Runtime\WfActivityBase_Dynamic.cs" />
     <Compile Include="Workflow\Runtime\WfActivityBase_Return.cs" />
     <Compile Include="Workflow\Runtime\WfBranchProcessStatistics.cs" />

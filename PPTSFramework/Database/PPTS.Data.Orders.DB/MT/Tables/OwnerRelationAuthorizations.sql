@@ -8,7 +8,7 @@
     [OwnerType] NVARCHAR(32) NOT NULL, 
     [CreateTime] DATETIME NULL DEFAULT getutcdate(), 
     [ModifyTime] DATETIME NULL DEFAULT getutcdate(), 
-    CONSTRAINT [PK_OwnerRelationAuthorizations] PRIMARY KEY ([ObjectType], [OwnerID], [OwnerType]) 
+    CONSTRAINT [PK_OwnerRelationAuthorizations] PRIMARY KEY ([ObjectType], [ObjectID], [OwnerID], [OwnerType]) 
 )
 
 GO
@@ -85,4 +85,4 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level2name = N'ModifyTime'
 GO
 
-CREATE INDEX [IX_OwnerRelationAuthorizations_01] ON [MT].[OwnerRelationAuthorizations] ([ObjectID], [ObjectType], [OwnerID], [OwnerType])
+CREATE INDEX [IX_OwnerRelationAuthorizations_01] ON [MT].[OwnerRelationAuthorizations] ([ObjectType], [OwnerID], [OwnerType])

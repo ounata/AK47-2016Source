@@ -17,17 +17,30 @@ define([ppts.config.modules.customer,
                     mcsValidationService.init($scope);
                     vm.id = $stateParams.visitId;
 
+
                     (function () {
                         customerVisitDataViewService.initCreateCustomerVisitInfo(vm, function () {
-                            dataSyncService.injectPageDict(['messageType']);
+                            dataSyncService.injectDynamicDict('messageType');
                             $scope.$broadcast('dictionaryReady');
                         });
                     })();
+
+                    vm.error = function () {
+                        mcsDialogService.error({
+                            title: 'Error',
+                            message: '提醒时间要小于回访时间'
+                        }
+
+
+                        );
+                    }
 
                     customerVisitDataService.getCustomerVisitInfo(vm.id, function (result) {
 
                         vm.customerVisit = result.customerVisit;
                         vm.customer = result.customer;
+
+                        //vm.tempVisitTime = result.customerVisit.visitTime;
                     });
 
                     // 取消
@@ -36,9 +49,14 @@ define([ppts.config.modules.customer,
                     };
 
                     vm.edit = function () {
+                        if (vm.customerVisit.remindTime > vm.customerVisit.visitTime) {
+                            vm.error();
+                            return;
+                        }
                         if (mcsValidationService.run($scope)) {
                             customerVisitDataService.editCustomerVisit({
-                                customerVisit: vm.customerVisit
+                                customerVisit: vm.customerVisit,
+                                selectType: vm.customerVisit.selectType
                             }, function () {
                                 $state.go('ppts.student-view.visits', { prev: 'ppts.student' });
                             });

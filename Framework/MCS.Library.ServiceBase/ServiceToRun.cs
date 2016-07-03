@@ -3,7 +3,9 @@ using MCS.Library.Logging;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Configuration.Install;
 using System.Diagnostics;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
@@ -49,7 +51,7 @@ Arguments:
             }
             else
             {
-                InitServiceArguments(ArgumentsParser.Parse(args));
+                StringDictionary arguments = InitServiceArguments(ArgumentsParser.Parse(args));
 
                 try
                 {
@@ -129,7 +131,7 @@ Arguments:
             RemotingConfiguration.RegisterWellKnownServiceType(typeof(ThreadStatusService), "MCS.Library.Services.ThreadStatusService", WellKnownObjectMode.Singleton);
         }
 
-        private static void InitServiceArguments(StringDictionary arguments)
+        private static StringDictionary InitServiceArguments(StringDictionary arguments)
         {
             ServiceArguments sa = ServiceArguments.Current;
 
@@ -144,6 +146,8 @@ Arguments:
                 sa.ServiceName = ServiceMainSettings.SERVICE_NAME;
 
             sa.Port = arguments["port"];
+
+            return arguments;
         }
     }
 

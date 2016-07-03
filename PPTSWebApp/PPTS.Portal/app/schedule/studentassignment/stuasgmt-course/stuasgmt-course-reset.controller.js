@@ -9,7 +9,6 @@
                     vm.init = function () {
                         studentassignmentDataService.resetAssignInit(function (retValue) {
                             vm.result = retValue;
-                            $scope.$broadcast('dictionaryReady');
                         });
                     };
                     vm.init();
@@ -27,19 +26,28 @@
                         var flag = true;
                         for (var i in vm.resetModel) {
                             var mm = vm.resetModel[i];
-                            if (mm.reDate == '' || mm.reHour == '' || mm.reMinute == '') {
+                            if (mm.reDate == '' || mm.reDate == null) {
                                 flag = false;
                                 vm.showMsg('有调整日期未设置');
                                 break;
                             };
-                            var resetStartDateTime = new Date(mm.reDate.getFullYear(), mm.reDate.getMonth(), mm.reDate.getDate(), mm.reHour, mm.reMinute, 0);
+                            var resetStartDateTime = new Date(mm.reDate);
                             if (vm.result.allowDateTime <= resetStartDateTime) {
                                 flag = false;
-                                vm.showMsg('从当日算起，调整日期不能超过10日！');
+                                vm.showMsg('从当日算起，调整日期不能超过：' + vm.result.allowDateTime.getFullYear()
+                                    + "-" + vm.getDoubleStr(vm.result.allowDateTime.getMonth() + 1)
+                                    + "-" + vm.getDoubleStr(vm.result.allowDateTime.getDate()));
                                 break;
                             };
                         };
                         return flag;
+                    };
+
+                    /*格式化数字*/
+                    vm.getDoubleStr = function (curValue) {
+                        if (parseInt(curValue) < 10)
+                            return '0' + curValue;
+                        return curValue;
                     };
 
                     vm.showMsg = function (msg) {

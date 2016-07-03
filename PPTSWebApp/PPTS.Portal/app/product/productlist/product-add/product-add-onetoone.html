@@ -20,22 +20,17 @@
                     <div class="form-group horizontal">
                         <mcs-label required="true" text="产品分类" css="col-sm-3" />
                         <div class="col-sm-6">
-                            <ppts-select category="categoryCustom" model="vm.m.onetoone.product.catalog" caption="产品分类" css="col-sm-6 mcs-padding-0" required />
+                            <mcs-select category="categoryCustom" model="vm.m.onetoone.product.catalog" caption="产品分类" css="col-sm-6 mcs-padding-0" required />
                         </div>
                     </div>
                 </div>
 
+                <!-- 合作 -->
                 <div class="row" ng-show="vm.isPartner()">
                     <div class="form-group horizontal">
                         <mcs-label required="true" text="分帐比例" css="col-sm-3" />
                         <div class="col-sm-6">
-                            <label class="control-label">合作方</label>
-                            <mcs-input model="vm.m[loadtype].product.partnerName" css="input-width-120" uib-tooltip="合作方名称" placeholder="合作方简称" maxlength="20" required />
-                            <label class="control-label">占订购金额的</label>
-                            <mcs-input model="vm.m[loadtype].product.partnerRatio" css="input-width-100" uib-tooltip="分成比例" placeholder="分成比例"  required between="1,100"/>
-                            <label class="control-label">
-                                %, 学大占订购金额的{{ (1- (vm.m[loadtype].product.partnerRatio/100) )*100  }}% 则合作单价为{{ vm.m[loadtype].product.productPrice* (1- (vm.m[loadtype].product.partnerRatio/100) ) }}元/期。
-                            </label>
+                            <productpartner-directive></productpartner-directive>
                         </div>
                     </div>
                 </div>
@@ -43,42 +38,21 @@
                     <div class="form-group horizontal">
                         <mcs-label required="true" text="薪酬规则" css="col-sm-3" />
                         <div class="col-sm-6">
-                            <div class="form-control-static mcs-padding-0">
-                                <label class="control-label label-100">咨询师提成：</label>
-                                <br />
-                                <ppts-radiobutton-group category="commission_custom" model="vm.zxs" />
-                                <mcs-input model="vm.m[loadtype].salaryRules[0].moneyPerPeriod" css="input-width-120" ng-disabled="vm.zxs==0" required  positive/>
-                                <label class="control-label">元，或每小时课酬</label>
-                                <mcs-input model="vm.m[loadtype].salaryRules[0].moneyPerHour" css="input-width-120" ng-disabled="vm.zxs==0" required  positive/><label class="control-label">元核算。</label>
-                            </div>
-                            <div class="form-control-static mcs-padding-0">
-                                <label class="control-label label-100">学管师提成：</label>
-                                <br />
-                                <ppts-radiobutton-group category="commission_custom" model="vm.xgs" />
-                                <mcs-input model="vm.m[loadtype].salaryRules[1].moneyPerPeriod" css="input-width-120" ng-disabled="vm.xgs==0" required  positive/>
-                                <label class="control-label">元，或每小时课酬</label>
-                                <mcs-input model="vm.m[loadtype].salaryRules[1].moneyPerHour" css="input-width-120" ng-disabled="vm.xgs==0" required  positive/><label class="control-label">元核算。</label>
-                            </div>
-                            <div class="form-control-static mcs-padding-0">
-                                <label class="control-label label-100">教师课时收入：</label>
-                                <br />
-                                <ppts-radiobutton-group category="commission_custom" model="vm.js" />
-                                <mcs-input model="vm.m[loadtype].salaryRules[2].moneyPerPeriod" css="input-width-120" ng-disabled="vm.js==0" required />
-                                <label class="control-label">元，或每小时课酬</label>
-                                <mcs-input model="vm.m[loadtype].salaryRules[2].moneyPerHour" css="input-width-120" ng-disabled="vm.js==0" required /><label class="control-label">元核算。</label>
-                            </div>
+                            <productsalary-directive></productsalary-directive>
                         </div>
                     </div>
                 </div>
+                <!-- 合作 -->
+
                 <div class="row">
                     <div class="form-group horizontal">
                         <mcs-label required="true" text="产品名称" css="col-sm-3" />
                         <div class="col-sm-6">
-                            <ppts-select category="grade" css="col-sm-2 mcs-padding-left-0" model="vm.m.onetoone.product.grade" caption="年级" required />
-                            <div class="col-sm-2 mcs-padding-left-0" uib-tooltip="科目为选填项，不选择默认“通科”"><ppts-select category="subject" css="mcs-padding-0" model="vm.m.onetoone.product.subject" caption="产品科目" /></div>
-                            <ppts-select category="duration" css="col-sm-2 mcs-padding-left-0" model="vm.m.onetoone.exOfCourse.periodDuration" caption="单个时长" required />
-                            <ppts-select category="courseLevel" css="col-sm-3 mcs-padding-left-0" model="vm.m.onetoone.exOfCourse.courseLevel" caption="课程级别" required />
-                            <ppts-select category="coachType" css="col-sm-3 mcs-padding-0" model="vm.m.onetoone.exOfCourse.coachType" caption="辅导类型" required />
+                            <mcs-select category="grade" css="col-sm-2 mcs-padding-left-0" model="vm.m.onetoone.product.grade" caption="年级" required />
+                            <div class="col-sm-2 mcs-padding-left-0" uib-popover="科目为选填项，不选择默认“通科”"><mcs-select category="subject" css="mcs-padding-0" model="vm.m.onetoone.product.subject" caption="产品科目" /></div>
+                            <mcs-select category="duration" css="col-sm-2 mcs-padding-left-0" model="vm.m.onetoone.exOfCourse.periodDuration" caption="单个时长" required />
+                            <mcs-select category="courseLevel" css="col-sm-3 mcs-padding-left-0" model="vm.m.onetoone.exOfCourse.courseLevel" caption="课程级别" required />
+                            <mcs-select category="coachType" css="col-sm-3 mcs-padding-0" model="vm.m.onetoone.exOfCourse.coachType" caption="辅导类型" required />
                             <span class="text-left info">科目为选填项，不选择默认“通科”，不限制年级 例：高中三年级 30分 3A</span>
                         </div>
                     </div>
@@ -87,7 +61,7 @@
                     <div class="form-group horizontal">
                         <mcs-label required="true" text="产品简介" css="col-sm-3" />
                         <div class="col-sm-6 mcs-margin-top-10">
-                            <textarea class="form-control" rows="7" class="form-control" id="textArea" ng-model="vm.m.onetoone.product.productMemo" maxlength="400" required></textarea>
+                            <textarea class="form-control" rows="7" class="form-control" id="textArea" ng-model="vm.m.onetoone.product.productMemo" maxlength="400" minlength="5" placeholder="请输入产品描述，不少于5个字 。"  required></textarea>
                             <span class="text-left info">不允许超过400个字符，已经输入{{ vm.calcCharCount() }}个</span>
                         </div>
                     </div>
@@ -97,9 +71,11 @@
                         <mcs-label required="true" text="产品单价" css="col-sm-3" />
                         <div class="col-sm-6">
                             <div class="form-control-static mcs-padding-0">
-                                <mcs-input model="vm.m.onetoone.product.productPrice" css="col-sm-6 mcs-margin-right-10" uib-tooltip="请正确填写产品的基本报价，将用于数据分析" placeholder="产品的基本报价" required positive/><label class="control-label">元/课时</label>
+                                <mcs-input model="vm.m.onetoone.product.productPrice" css="col-sm-6 mcs-margin-right-10" uib-popover="请正确填写产品的基本报价，将用于数据分析" placeholder="产品的基本报价" type="number" min="0" max="9999999.99" required /><label class="control-label">元/课时</label>
                             </div>
-                            <span class="text-left info">产品单价：产品的基本报价，将用于数据分析，请正确填写</span>
+                            <span class="text-left info" ng-show="!vm.isPartner()">产品单价：产品的基本报价</span>
+                            <span class="text-left info" ng-show="vm.isPartner()">产品单价：产品需要记录的基本报价；非促销类产品订购时，以此单价为准</span>
+                            <span class="text-left info">以上价格也会用于数据分析，请正确填写。</span>
                         </div>
                     </div>
                 </div>
@@ -108,9 +84,11 @@
                         <mcs-label required="true" text="目标单价" css="col-sm-3" />
                         <div class="col-sm-6">
                             <div class="form-control-static mcs-padding-0">
-                                <mcs-input model="vm.m.onetoone.product.targetPrice" css="col-sm-6 mcs-margin-right-10" uib-tooltip="请正确填写完成预算任务的平均单价，将用于数据分析" placeholder="完成预算任务的平均单价" required positive/><label class="control-label">元/课时</label>
+                                <mcs-input model="vm.m.onetoone.product.targetPrice" css="col-sm-6 mcs-margin-right-10" uib-popover="请正确填写完成预算任务的平均单价，将用于数据分析" placeholder="完成预算任务的平均单价" type="number" min="0" max="9999999.99" required /><label class="control-label">元/课时</label>
                             </div>
-                            <span class="text-left info">目标单价：完成预算任务的平均单价，将用于数据分析，请正确填写</span>
+                            <span class="text-left info" ng-show="!vm.isPartner()">目标单价：完成预算任务的平均订购单价</span>
+                            <span class="text-left info" ng-show="vm.isPartner()">目标单价：能完成预算任务的平均订购单价，每个阶段可能不一样</span>
+                            <span class="text-left info">以上价格也会用于数据分析，请正确填写。</span>
                         </div>
                     </div>
                 </div>

@@ -64,9 +64,9 @@ EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'操作人PA
 
 
 GO
-EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'开始时间', @level0type = N'SCHEMA', @level0name = N'WF', @level1type = N'TABLE', @level1name = N'PROCESS_CURRENT_ACTIVITIES', @level2type = N'COLUMN', @level2name = N'START_TIME';
+EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'开始时间(UTC)', @level0type = N'SCHEMA', @level0name = N'WF', @level1type = N'TABLE', @level1name = N'PROCESS_CURRENT_ACTIVITIES', @level2type = N'COLUMN', @level2name = N'START_TIME';
 
 
 GO
-EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'结束时间', @level0type = N'SCHEMA', @level0name = N'WF', @level1type = N'TABLE', @level1name = N'PROCESS_CURRENT_ACTIVITIES', @level2type = N'COLUMN', @level2name = N'END_TIME';
+EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'结束时间(UTC)', @level0type = N'SCHEMA', @level0name = N'WF', @level1type = N'TABLE', @level1name = N'PROCESS_CURRENT_ACTIVITIES', @level2type = N'COLUMN', @level2name = N'END_TIME';
 

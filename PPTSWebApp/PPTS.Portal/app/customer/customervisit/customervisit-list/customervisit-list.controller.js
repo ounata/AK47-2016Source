@@ -15,11 +15,20 @@ define([ppts.config.modules.customer,
                 function ($state,$scope, customerVisitDataService, customerVisitDataViewService, dataSyncService) {
                     var vm = this;
 
+                    var syNow = new Date();
+                    var year = syNow.getFullYear();        //年
+                    var month = syNow.getMonth() + 1;     //月
+                    var day = syNow.getDate();
+                    var startDate = new Date(new Date(year + "-" + month + "-" + 1).getTime());
+                    var endDate = new Date(new Date(year + "-" + month + "-" + day).getTime());
+                    vm.timeStart = startDate;
+                    vm.timeEnd = endDate;
                     // 配置客户服务列表表头
                     customerVisitDataViewService.configCustomerVisitListHeaders(vm);
 
                     // 页面初始化加载或重新搜索时查询
                     vm.search = function () {
+
                         customerVisitDataViewService.initCustomerVisitList(vm, function () {
 
                             dataSyncService.injectDictData({

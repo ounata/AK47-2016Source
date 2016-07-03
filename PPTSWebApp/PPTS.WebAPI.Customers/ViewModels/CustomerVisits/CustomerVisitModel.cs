@@ -27,6 +27,9 @@ namespace PPTS.WebAPI.Customers.ViewModels.CustomerVisits
         [DataMember]
         public string CustomerCode { get; set; }
 
+        [DataMember]
+        public int SelectType { get; set; }
+
         public void FillAccepter(IUser user)
         {
             this.VisitorID = user.ID;

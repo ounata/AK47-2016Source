@@ -13,24 +13,25 @@ namespace MCS.Library.SOA.DataObjects.Security.Actions
 	{
 		public static void InvalidateAllCache()
 		{
-			string[] cacheQueueType = {
-										"MCS.Library.OGUPermission.OguObjectIDCache, MCS.Library.OGUPermission", 
-										"MCS.Library.OGUPermission.OguObjectFullPathCache, MCS.Library.OGUPermission", 
-										"MCS.Library.OGUPermission.OguObjectLogOnNameCache, MCS.Library.OGUPermission",
-										"PermissionCenter.Extensions.PCServiceMethodCache, PermissionCenterServices"
-									  };
+            //string[] cacheQueueType = {
+            //							"MCS.Library.OGUPermission.OguObjectIDCache, MCS.Library.OGUPermission", 
+            //							"MCS.Library.OGUPermission.OguObjectFullPathCache, MCS.Library.OGUPermission", 
+            //							"MCS.Library.OGUPermission.OguObjectLogOnNameCache, MCS.Library.OGUPermission",
+            //							"PermissionCenter.Extensions.PCServiceMethodCache, PermissionCenterServices"
+            //						  };
 
-			CacheNotifyData[] data = new CacheNotifyData[cacheQueueType.Length];
+            //CacheNotifyData[] data = new CacheNotifyData[cacheQueueType.Length];
 
-			for (int i = 0; i < cacheQueueType.Length; i++)
-			{
-				data[i] = new CacheNotifyData();
-				data[i].CacheQueueTypeDesp = cacheQueueType[i];
-				data[i].NotifyType = CacheNotifyType.Clear;
-			}
+            //for (int i = 0; i < cacheQueueType.Length; i++)
+            //{
+            //	data[i] = new CacheNotifyData();
+            //	data[i].CacheQueueTypeDesp = cacheQueueType[i];
+            //	data[i].NotifyType = CacheNotifyType.Clear;
+            //}
+            CacheNotifyData[] data = CacheNotifyData.FromSettings("permissionCenter", CacheNotifyType.Clear);
 
-			UdpCacheNotifier.Instance.SendNotify(data);
-            MmfCacheNotifier.Instance.SendNotify(data);
+            UdpCacheNotifier.Instance.SendNotifyAsync(data);
+            MmfCacheNotifier.Instance.SendNotifyAsync(data);
 		}
 	}
 }

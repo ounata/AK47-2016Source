@@ -14,8 +14,7 @@
                 //    c_codE_ABBR_EditCourseType: [{ key: '0', value: '仅修改此次课' }, { key: '1', value: '从当前课次至最后课次都修改' }]
                 //});
 
-                dataSyncService.injectPageDict(['ifElse']);
-                dataSyncService.injectPageDict(['week']);
+                dataSyncService.injectDynamicDict('ifElse,week');
 
                 //关闭窗口
                 vm.close = function () {

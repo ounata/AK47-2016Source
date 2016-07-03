@@ -2,100 +2,23 @@
         ppts.config.dataServiceConfig.accountRefundDataService],
         function (account) {
             account.registerController('accountRefundQueryController', [
-                '$scope', '$state', 'mcsDialogService', 'dataSyncService', 'accountRefundDataService', 'refundQueryAdvanceSearchItems',
-                function ($scope, $state, mcsDialogService, dataSyncService, accountDataService, searchItems) {
+                '$scope', '$state', 'mcsDialogService', 'dataSyncService', 'accountRefundDataService', 'refundQueryTable', 'refundQueryAdvanceSearchItems',
+                function ($scope, $state, mcsDialogService, dataSyncService, accountDataService, refundQueryTable, searchItems) {
                     var vm = this;
 
-                    vm.data = {
-                        selection: 'checkbox',
-                        rowsSelected: [],
-                        keyFields: ['applyID'],
-                        headers: [{
-                            field: "customerName",
-                            name: "学员姓名",
-                            template: '<span>{{row.customerName}}</span>'
-                        }, {
-                            field: "customerCode",
-                            name: "学员编号",
-                            template: '<span>{{row.customerCode}}</span>'
-                        }, {
-                            field: "thatAccountMoney",
-                            name: "账户总额",
-                            template: '<span>{{row.thatAccountMoney | currency:"￥"}}</span>'
-                        }, {
-                            field: "oughtRefundMoney",
-                            name: "应退金额",
-                            template: '<span>{{row.oughtRefundMoney | currency:"￥"}}</span>'
-                        }, {
-                            field: "realRefundMoney",
-                            name: "实退金额",
-                            template: '<span>{{row.realRefundMoney | currency:"￥"}}</span>'
-                        }, {
-                            field: "drawer",
-                            name: "领款人",
-                            template: '<span>{{row.drawer}}</span>'
-                        }, {
-                            field: "applierName",
-                            name: "申请人",
-                            template: '<span>{{row.applierName}}</span>'
-                        }, {
-                            field: "applierJobName",
-                            name: "申请人岗位",
-                            template: '<span>{{row.applierJobName}}</span>'
-                        }, {
-                            field: "campusName",
-                            name: "申请校区",
-                            template: '<span>{{row.campusName}}</span>'
-                        }, {
-                            field: "approveTime",
-                            name: "业务终审日期",
-                            template: '<span>{{row.approveTime | date:"yyyy-MM-dd" | normalize }}</span>'
-                        }, {
-                            field: "verifyTime",
-                            name: "财务终审日期",
-                            template: '<span>{{row.verifyTime | date:"yyyy-MM-dd" | normalize }}</span>'
-                        }, {
-                            field: "checkStatus",
-                            name: "对账状态",
-                            template: '<span ng-class="{1: \'ppts-checked-color\', 0: \'ppts-unchecked-color\'}[{{row.checkStatus}}]">{{row.checkStatus | checkStatus}}</span>'
-                        }, {
-                            field: "verifyStatus",
-                            name: "退款状态",
-                            template: '{{row.verifyStatus | refundVerifyStatus}}</span>'
-                        }, {
-                            field: "applyNo",
-                            name: "退款申请详情",
-                            template: '<span><a ui-sref="ppts.accountRefund-info({id:row.applyID,prev:\'ppts.accountRefund-query\'})">退款申请详情</span>'
-                        }],
-                        pager: {
-                            pageIndex: 1,
-                            pageSize: ppts.config.pageSizeItem,
-                            totalCount: -1,
-                            pageChange: function () {
-                                dataSyncService.initCriteria(vm);
-                                customerDataService.queryPagedRefundApplyList(vm.criteria, function (result) {
-                                    vm.data.rows = result.pagedData;
-                                });
-                            }
-                        },
-                        orderBy: [{ dataField: 'applyTime', sortDirection: 1 }]
-                    }
+                    // 配置数据表头 
+                    dataSyncService.configDataHeader(vm, refundQueryTable, accountDataService.queryPagedRefundApplyList);
 
                     // 页面初始化加载或重新搜索时查询
                     vm.search = function () {
-
-                        dataSyncService.initCriteria(vm);
-                        accountDataService.queryRefundApplyList(vm.criteria, function (result) {
-                            vm.data.rows = result.queryResult.pagedData;
+                        dataSyncService.initDataList(vm, accountDataService.queryRefundApplyList, function () {
                             vm.searchItems = searchItems;
-                            dataSyncService.injectDictData();
-                            dataSyncService.injectPageDict(['people']);
-                            dataSyncService.updateTotalCount(vm, result.queryResult);
+                            dataSyncService.injectDynamicDict('applierJobType');
                             $scope.$broadcast('dictionaryReady');
                         });
                     };
                     vm.search();
-
+                    
                     vm.getCurrentRow = function () {
 
                         if (vm.data.rowsSelected.length == 1) {
@@ -158,9 +81,9 @@
                     };
 
                     vm.verifyMenus = [
-                        { text: '分出纳确认', click: vm.doVerify },
-                        { text: '分财务确认', click: vm.doVerify },
-                        { text: '分区域确认', click: vm.doVerify }
+                        { text: '分出纳确认', click: vm.doVerify, permission: '待分出纳确认-本分公司' },
+                        { text: '分财务确认', click: vm.doVerify, permission: '待分财务确认-本分公司' },
+                        { text: '分区域确认', click: vm.doVerify, permission: '待分区域财务确认-本分公司' }
                     ];
 
                     //退费单确认
@@ -185,6 +108,7 @@
                                             vm.data.rows[i].verifierJobName = result.verifierJobName;
                                             vm.data.rows[i].verifierName = result.verifierName;
                                             vm.data.rows[i].verifyTime = result.verifyTime;
+                                            vm.data.rows[i].verifyStatus = result.verifyStatus;
 
                                             vm.data.rows[i].cashierCanVerify = result.cashierCanVerify;
                                             vm.data.rows[i].financeCanVerify = result.financeCanVerify;
@@ -246,5 +170,24 @@
                             //do nothing
                         });
                     }
+
+                    vm.export = function () {
+                        if (vm.criteria.pageParams.totalCount < 50000) {
+                            var dlg = mcsDialogService.confirm({
+                                title: '提示',
+                                message: '您将导出共' + vm.criteria.pageParams.totalCount + '条记录，请确认是否要导出？'
+                            });
+                            dlg.result.then(function () {
+                                var url = ppts.config.customerApiBaseUrl + 'api/accounts/ExportAllRefundApply';
+                                mcs.util.postMockForm(url, vm.criteria);
+                            });
+                        } else {
+                            mcsDialogService.info({
+                                title: '提示',
+                                message: '内容超过5万条以上，无法正常导出，请缩小范围后再尝试!'
+                            }
+                            );
+                        }
+                    };
                 }]);
         });

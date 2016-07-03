@@ -1,6 +1,7 @@
 using MCS.Library.Core;
 using MCS.Library.Data.DataObjects;
 using MCS.Library.Data.Mapping;
+using PPTS.Data.Common.Authorization;
 using PPTS.Data.Common.Entities;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,10 @@ namespace PPTS.Data.Customers.Entities
     [Serializable]
     [ORTableMapping("CM.CustomerStaffRelations", "CM.CustomerStaffRelations_Current")]
     [DataContract]
-    public class CustomerStaffRelation : IVersionDataObjectWithoutID, IEntityWithCreator, IEntityWithModifier
+    [CustomerRelationScope(Name = "潜客信息编辑", Functions = "分配市场专员", ActionType = ActionType.Edit, RecordType = CustomerRecordType.Customer)]
+    [CustomerRelationScope(Name = "潜客信息编辑-本部门", Functions = "分配咨询师-本部门", RecordType = CustomerRecordType.Customer)]
+    [CustomerRelationScope(Name = "潜客信息编辑-本部门", Functions = "分配坐席-本部门", ActionType = ActionType.Edit, RecordType = CustomerRecordType.Customer)]
+    public class CustomerStaffRelation : IVersionDataObjectWithoutID, IEntityWithCreator
     {
         public CustomerStaffRelation()
         {
@@ -107,40 +111,7 @@ namespace PPTS.Data.Customers.Entities
         {
             get;
             set;
-        }
-
-        /// <summary>
-        /// 创建者ID
-        /// </summary>
-        [NoMapping]
-        //[SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update)]
-        [DataMember]
-        public string ModifierID
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 创建者名称
-        /// </summary>
-        [NoMapping]
-        //[SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update)]
-        [DataMember]
-        public string ModifierName
-        {
-            get;
-            set;
-        }
-
-        [NoMapping]
-        //[SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update, DefaultExpression = "GETUTCDATE()", ForceUseDefaultExpression = true)]
-        [DataMember]
-        public DateTime ModifyTime
-        {
-            get;
-            set;
-        }
+        }        
 
         /// <summary>
         /// 创建者ID
@@ -168,6 +139,7 @@ namespace PPTS.Data.Customers.Entities
         /// 创建时间
         /// </summary>
         [ORFieldMapping("CreateTime", UtcTimeToLocal = true)]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.Select | ClauseBindingFlags.Where)]
         [DataMember]
         public DateTime CreateTime
         {

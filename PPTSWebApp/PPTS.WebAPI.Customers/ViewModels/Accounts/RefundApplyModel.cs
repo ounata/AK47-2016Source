@@ -1,5 +1,7 @@
-﻿using MCS.Library.Net.SNTP;
+﻿using MCS.Library.Core;
+using MCS.Library.Net.SNTP;
 using MCS.Library.OGUPermission;
+using MCS.Web.MVC.Library.Models;
 using PPTS.Contracts.Orders.Models;
 using PPTS.Contracts.Proxies;
 using PPTS.Data.Common;
@@ -22,6 +24,14 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
     [DataContract]
     public class RefundApplyModel : AccountRefundApply
     {
+
+        /// <summary>
+        /// 附件集合
+        /// </summary>
+        [DataMember]
+        public MaterialModelCollection Files { get; set; }
+
+
         /// <summary>
         /// 业绩分派表
         /// </summary>
@@ -111,8 +121,11 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
             AccountModel account = AccountModel.LoadByAccountID(this.AccountID, true);
             if (account == null)
                 throw new Exception(string.Format("账户ID为[{0}]的信息不存在", this.AccountID));
+#if !DEBUG
             if (account.AssetMoney != 0)
                 throw new Exception("订购资金余额不为0，无法退费");
+#endif
+            this.ApplyNo = Helper.GetApplyNo("TF");
 
             this.AccountID = account.AccountID;
             this.AccountCode = account.AccountCode;
@@ -124,7 +137,7 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
             this.ThatAccountMoney = account.AccountMoney;
 
             //课时消耗价值
-            this.ConsumptionValue = account.ConsumptionValue;            
+            this.ConsumptionValue = account.ConsumptionValue;
             //新的账户余额=以前的账户余额-申退金额
             this.ThisAccountMoney = this.ThatAccountMoney - this.ApplyRefundMoney;
             //新的账户价值=以前的账户价值-申退金额
@@ -141,8 +154,13 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
             }
             else
             {
+                if(string.IsNullOrEmpty(account.RefundDiscountID))
+                    throw new Exception("数据存在问题，存在充值记录没有指定折扣表");
+
                 decimal discountBase = this.ThatDiscountBase - this.ApplyRefundMoney;
-                RefundReallowanceResult result = RefundReallowanceResult.GetReallowance(account.AccountID, account.RefundDiscountID, discountBase,  account.ReallowanceStartTime);
+                RefundReallowanceResult result = RefundReallowanceResult.GetReallowance(account.AccountID, account.RefundDiscountID, discountBase, account.ReallowanceStartTime);
+                if (string.IsNullOrEmpty(result.DiscountID))
+                    throw new Exception(string.Format("折扣ID{0}不存在", account.RefundDiscountID));
 
                 this.ThisDiscountID = result.DiscountID;
                 this.ThisDiscountCode = result.DiscountCode;
@@ -155,6 +173,10 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
             //实退金额 = 应退金额-差价补偿+制度外退款
             this.RealRefundMoney = this.OughtRefundMoney - this.CompensateMoney + this.ExtraRefundMoney;
 
+            //如果没有制度外退款，制度外退款类型为空
+            if (this.ExtraRefundMoney <= 0)
+                this.ExtraRefundType = string.Empty;
+
             if (clientRealRefundMoney != this.RealRefundMoney)
                 throw new Exception("数据校验不合法，请重新再操作一次");
         }
@@ -163,17 +185,21 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
         {
             ConfigArgs args = ConfigsCache.GetArgs(this.CampusID);
             AccountChargeApply charge = AccountChargeApplyAdapter.Instance.LoadNewSignByCustomerID(this.CustomerID);
+            //对于老合同学员没有新签记录，默认是正常退费
             if (charge == null)
-                throw new Exception("尚未找到新签记录，无法执行退费");
-            DateTime currentDate = SNTPClient.AdjustedTime.Date; //当前日期
-            DateTime newSignDate = charge.PayTime.Date;          //新签日期
+                this.RefundType = RefundTypeDefine.Regular;
             //查找到当前有无上课记录
             AssetStatisticQueryResult result = PPTSAssetQueryServiceProxy.Instance.QueryAssetStatisticByCustomerID(this.CustomerID);
-            //新签后?天内未上课是坏账退费
-            if (newSignDate.AddDays(args.AccountRefundTypeJudgeDays) >= currentDate && result.ConfirmedAmount == 0)
-                this.RefundType = RefundTypeDefine.Irregular;
-            else
-                this.RefundType = RefundTypeDefine.Regular;
+            if (charge != null)
+            {
+                DateTime currentDate = SNTPClient.AdjustedTime.Date; //当前日期
+                DateTime newSignDate = charge.PayTime.Date;          //新签日期
+                                                                     //新签后?天内未上课是坏账退费
+                if (newSignDate.AddDays(args.AccountRefundTypeJudgeDays) >= currentDate && result.ConfirmedAmount == 0)
+                    this.RefundType = RefundTypeDefine.Irregular;
+                else
+                    this.RefundType = RefundTypeDefine.Regular;
+            }
             //是否有课时
             this.IsPeriodRefund = (result.ConfirmedAmount != 0);
             //是否是制度外退费
@@ -190,7 +216,7 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
         public static RefundApplyModel LoadByCustomerID(CustomerModel customer)
         {
             RefundApplyModel model = new RefundApplyModel();
-            model.ApplyID = Guid.NewGuid().ToString().ToUpper();
+            model.ApplyID = UuidHelper.NewUuidString();
             model.CampusID = customer.CampusID;
             model.CampusName = customer.CampusName;
             model.CustomerID = customer.CustomerID;
@@ -211,8 +237,8 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
             AccountRefundApply apply = AccountRefundApplyAdapter.Instance.LoadByApplyID(applyID);
             if (apply != null)
             {
-                RefundApplyModel model = AutoMapper.Mapper.DynamicMap<RefundApplyModel>(apply);
-                model.Allot = RefundAllotModel.Load(apply.ApplyID);
+                RefundApplyModel model = apply.ProjectedAs<RefundApplyModel>();
+                model.Allot = RefundAllotModel.Load(model);
                 return model;
             }
             return null;

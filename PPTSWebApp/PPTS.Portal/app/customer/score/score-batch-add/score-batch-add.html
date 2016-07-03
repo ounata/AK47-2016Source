@@ -10,37 +10,47 @@
                         <mcs-button type="submit" category="save" click="vm.save()"></mcs-button>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="row">
                     <div class="col-sm-3">
-                        <mcs-label required="true" text="学年度：" css="col-sm-6" />
-                        <div class="col-sm-6 mcs-padding-0">
-                            <ppts-select category="studyYear" model="vm.criteria.studyYear" caption="学年度" css="mcs-padding-0" />
+                        <div class="form-group">
+                            <mcs-label required="true" text="学年度" css="col-sm-6" />
+                            <div class="col-sm-6 mcs-padding-0">
+                                <mcs-select category="studyYear" model="vm.criteria.studyYear" caption="学年度" required css="mcs-padding-0" />
+                            </div>
                         </div>
                     </div>
                     <div class="col-sm-3">
-                        <mcs-label required="true" text="学期：" css="col-sm-6" />
-                        <div class="col-sm-6 mcs-padding-0">
-                            <ppts-select category="studyTerm" model="vm.criteria.studyTerm" caption="学期" css="mcs-padding-0" />
+                        <div class="form-group">
+                            <mcs-label required="true" text="学期" css="col-sm-6" />
+                            <div class="col-sm-6 mcs-padding-0">
+                                <mcs-select category="studyTerm" model="vm.criteria.studyTerm" caption="学期" required css="mcs-padding-0" />
+                            </div>
                         </div>
                     </div>
                     <div class="col-sm-3">
-                        <mcs-label required="true" text="学段：" css="col-sm-6" />
-                        <div class="col-sm-6 mcs-padding-0">
-                            <ppts-select category="studyStage" model="vm.criteria.studyStage" caption="学段" css="mcs-padding-0" />
+                        <div class="form-group">
+                            <mcs-label required="true" text="学段" css="col-sm-6" />
+                            <div class="col-sm-6 mcs-padding-0">
+                                <mcs-select category="studyStage" model="vm.criteria.studyStage" caption="学段" required css="mcs-padding-0" />
+                            </div>
                         </div>
                     </div>
                     <div class="col-sm-3">
-                        <mcs-label required="true" text="考试年级：" css="col-sm-6" />
-                        <div class="col-sm-6 mcs-padding-0">
-                            <ppts-select category="grade" model="vm.criteria.scoreGrade" filter="{{vm.criteria.studyStage}}" prop="parentKey" caption="考试年级" css="mcs-padding-0" />
+                        <div class="form-group">
+                            <mcs-label required="true" text="考试年级" css="col-sm-6" />
+                            <div class="col-sm-6 mcs-padding-0">
+                                <mcs-select category="grade" model="vm.criteria.scoreGrade" filter="{{vm.criteria.studyStage}}" prop="parentKey" caption="考试年级" required css="mcs-padding-0" />
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="row">
                     <div class="col-sm-3">
-                        <mcs-label required="true" text="考试类型：" css="col-sm-6" />
-                        <div class="col-sm-6 mcs-padding-0">
-                            <ppts-select category="scoreType" model="vm.criteria.scoreType" filter="{{vm.criteria.studyStage}}" prop="parentKey" caption="考试类型" css="mcs-padding-0" />
+                        <div class="form-group">
+                            <mcs-label required="true" text="考试类型" css="col-sm-6" />
+                            <div class="col-sm-6 mcs-padding-0">
+                                <mcs-select category="scoreType" model="vm.criteria.scoreType" filter="{{vm.criteria.studyStage}}" prop="parentKey" caption="考试类型" required css="mcs-padding-0" />
+                            </div>
                         </div>
                     </div>
                     <div class="col-sm-3">

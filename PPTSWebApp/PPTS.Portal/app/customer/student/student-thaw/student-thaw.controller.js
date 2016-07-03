@@ -2,57 +2,39 @@
         ppts.config.dataServiceConfig.studentDataService],
         function (customer) {
             customer.registerController('studentThawController', [
-                '$scope', '$stateParams', '$uibModalInstance', 'Upload', 'studentDataViewService', 'mcsDialogService',
-                function ($scope, $stateParams, $uibModalInstance, Upload, studentDataViewService, mcsDialogService) {
+                '$scope', '$stateParams', 'dataSyncService', '$uibModalInstance', 'Upload', 'studentDataViewService', 'studentDataService', 'mcsDialogService', 'data', 'mcsValidationService',
+                function ($scope, $stateParams, dataSyncService, $uibModalInstance, Upload, studentDataViewService, studentDataService, mcsDialogService, customerData, mcsValidationService) {
                     var vm = this;
-
+                    mcsValidationService.init($scope);
                     // 页面初始化加载
                     (function () {
+                        vm.criteria = {};
+                        vm.criteria.files = [];
+                        vm.criteria.customerID = $stateParams.id;
+                        vm.criteria.customerCode = customerData.customer.customerCode;
+                        vm.criteria.customerName = customerData.customer.customerName;
+                        vm.criteria.campusName = customerData.customer.campusName;
+                        dataSyncService.injectDynamicDict('thawReasonType');
                         $scope.$broadcast('dictionaryReady');
-                        //studentDataViewService.initCreateStopAlertInfo(vm, $stateParams, function () {
-                        //    $scope.$broadcast('dictionaryReady');
-                        //});
                     })();
 
                     vm.cancel = function () {
                         $uibModalInstance.dismiss('Canceled');
                     };
 
-                    vm.save = function () {
-                        vm.criteria.customerID = $stateParams.id;
-                        studentDataViewService.createStopAlertInfo(vm, function () {
-                            $uibModalInstance.close();
-                        });
+                    vm.upload = function () {
+                        if ($scope.form.files.$valid && vm.criteria.files) {
+                            vm.uploadFiles(vm.criteria.files);
+                        }
                     };
 
-                    //vm.submit = function () {
-                    //    if ($scope.form.files.$valid && vm.files) {
-                    //        vm.uploadFiles(vm.files);
-                    //    }
-                    //};
-
-                    // for multiple files:
-                    vm.uploadFiles = function (files) {
-                        if (files && files.length) {
-                            for (var i = 0; i < files.length; i++) {
-                                Upload.upload({
-                                    url: 'upload',
-                                    data: {
-                                        file: files[i]
-                                    }
-                                })
-
-                                .then(function (resp) {
-                                    vm.msg = 'Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data;
-                                }, function (resp) {
-                                    vm.msg = 'Error status: ' + resp.status;
-                                }, function (evt) {
-                                    vm.files.progress = parseInt(100.0 * evt.loaded / evt.total);
-                                })
-                                .catch(function () {
-                                });
-                            }
+                    vm.save = function () {
+                        if (mcsValidationService.run($scope)) {
+                            studentDataService.studentThawSave(vm.criteria, function () {
+                                $uibModalInstance.close();
+                            });
                         }
-                    }
+                    };
+                    vm.url = ppts.config.customerApiBaseUrl;
                 }]);
         });

@@ -1,8 +1,10 @@
 ﻿using MCS.Library.Core;
 using MCS.Library.Data.Executors;
+using MCS.Library.Net.SNTP;
 using MCS.Library.Principal;
 using MCS.Library.SOA.DataObjects;
 using PPTS.Data.Common.Executors;
+using PPTS.Data.Common.Security;
 using PPTS.Data.Products.Adapters;
 using PPTS.Data.Products.Entities;
 using PPTS.WebAPI.Products.ViewModels.ServiceFees;
@@ -23,7 +25,7 @@ namespace PPTS.WebAPI.Products.Executors
         protected override void PrepareData(DataExecutionContext<UserOperationLogCollection> context)
         {
             base.PrepareData(context);
-            DateTime now = DateTime.Now;
+            DateTime now = SNTPClient.AdjustedLocalTime;
             string[] campus = Model.expense.CampusIDs.Split(',');
             string[] campuNames = Model.expense.CampusNames.Split(',');
             if (string.IsNullOrEmpty(Model.expense.ExpenseID))
@@ -63,6 +65,19 @@ namespace PPTS.WebAPI.Products.Executors
                 ExpensePermissionAdapter.Instance.UpdateInContext(ePermission);
             }
 
+        }
+        protected override object DoOperation(DataExecutionContext<UserOperationLogCollection> context)
+        {
+            #region 生成数据权限范围数据
+            //PPTS.Data.Common.Authorization.ScopeAuthorization<Expense>
+            //   .GetInstance(PPTS.Data.Products.ConnectionDefine.PPTSProductConnectionName)
+            //   .UpdateAuthInContext(DeluxeIdentity.CurrentUser.GetCurrentJob()
+            //   , DeluxeIdentity.CurrentUser.GetCurrentJob().Organization()
+            //   , this.Model.expense.ExpenseID
+            //   , PPTS.Data.Common.Authorization.RelationType.Owner);
+            #endregion 生成数据权限范围数据
+
+            return base.DoOperation(context);
         }
     }
 }

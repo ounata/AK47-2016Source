@@ -1,0 +1,19 @@
+﻿<div class="input-daterange input-group mcs-input-group input-xxlarge large mcs-padding-left-10 {{css}}" ng-style="customStyle">
+    <input class="form-control data-range" ng-model="min" ng-model-options="{ updateOn: 'blur' }" ng-class="{'mcs-noborder-right':!disabled}" name="min" type="text" ng-disabled="disabled" placeholder="{{minText}}" style="text-align:left;">
+    <span class="input-group-addon mcs-noborder-left mcs-border-right mcs-nobg" ng-show="!disabled">
+        <i class="fa fa-remove bigger-110"></i>
+    </span>
+    <span class="input-group-addon mcs-noborder-left" ng-if="unit.length">
+        {{unit}}
+    </span>
+    <span class="input-group-addon mcs-noborder-right" ng-class="{'mcs-border-left':unit.length}">
+        <i class="ace-icon fa fa-arrow-right icon-on-right"></i>
+    </span>
+    <input class="form-control data-range" ng-model="max" ng-model-options="{ updateOn: 'blur' }" ng-class="{'mcs-noborder-right':!disabled}" name="max" type="text" ng-disabled="disabled" placeholder="{{maxText}}" style="text-align:left;">
+    <span class="input-group-addon mcs-noborder-left mcs-border-right mcs-nobg" ng-show="!disabled">
+        <i class="fa fa-remove bigger-110"></i>
+    </span>
+    <span class="input-group-addon mcs-border-right" ng-if="unit.length"">
+        {{unit}}
+    </span>
+</div>

@@ -6,6 +6,8 @@ using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using System.Net.Http.Formatting;
 using System.Web.Http;
+using System.Web.Http.Validation;
+using MCS.Web.MVC.Library.Providers;
 
 namespace PPTS.WebAPI.Products
 {
@@ -22,6 +24,7 @@ namespace PPTS.WebAPI.Products
                 defaults: new { id = RouteParameter.Optional }
             );
 
+            config.Services.Replace(typeof(IBodyModelValidator), new MCSBodyModelValidator());
 
             config.Formatters.Clear();
             config.Formatters.Add(new JsonMediaTypeFormatter());

@@ -9,18 +9,18 @@ Post-Deployment Script Template
                SELECT * FROM [$(TableName)]					
 --------------------------------------------------------------------------------------
 */
-IF NOT EXISTS(SELECT TOP 1 * FROM [MT].[Categories])
-BEGIN
-	TRUNCATE TABLE [MT].[Categories]
+--IF NOT EXISTS(SELECT TOP 1 * FROM [MT].[Categories])
+--BEGIN
+	--TRUNCATE TABLE [MT].[Categories]
 
-	EXECUTE [MT].[InitCategories]
-END
+	--EXECUTE [MT].[InitCategories]
+--END
 
-GO
+--GO
 
-IF NOT EXISTS(SELECT TOP 1 * FROM [MT].[Constants])
-BEGIN
-	TRUNCATE TABLE [MT].[Constants]
+--IF NOT EXISTS(SELECT TOP 1 * FROM [MT].[Constants])
+--BEGIN
+	--TRUNCATE TABLE [MT].[Constants]
 
-	EXECUTE [MT].[InitConstants]
-END
+	--EXECUTE [MT].[InitConstants]
+--END

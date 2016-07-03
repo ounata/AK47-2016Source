@@ -230,8 +230,8 @@ namespace MCS.Library.SOA.DataObjects
         /// <summary>
         /// 操作时间
         /// </summary>
-        [ORFieldMapping("OPERATE_DATETIME")]
-        [SqlBehavior(DefaultExpression = "GETDATE()")]
+        [ORFieldMapping("OPERATE_DATETIME", UtcTimeToLocal = true)]
+        [SqlBehavior(DefaultExpression = "GETUTCDATE()")]
         public DateTime? OperationDateTime
         {
             get

@@ -5,7 +5,7 @@
     [PROGRAM_NAME]     NVARCHAR (64) NULL,
     [PROCESS_NAME]     NVARCHAR (64) NULL,
     [DATA]             XML           NULL,
-    [CREATE_TIME]      DATETIME      CONSTRAINT [DF_PROCESS_DESCRIPTORS_CREATE_TIME] DEFAULT (getdate()) NULL,
+    [CREATE_TIME]      DATETIME      CONSTRAINT [DF_PROCESS_DESCRIPTORS_CREATE_TIME] DEFAULT (GETUTCDATE()) NULL,
     [CREATOR_ID]       NVARCHAR (36) NULL,
     [CREATOR_NAME]     NVARCHAR (64) NULL,
     [MODIFY_TIME]      DATETIME      NULL,
@@ -56,7 +56,7 @@ EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'创建人�
 
 
 GO
-EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'修改时间', @level0type = N'SCHEMA', @level0name = N'WF', @level1type = N'TABLE', @level1name = N'PROCESS_DESCRIPTORS', @level2type = N'COLUMN', @level2name = N'MODIFY_TIME';
+EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'修改时间(UTC)', @level0type = N'SCHEMA', @level0name = N'WF', @level1type = N'TABLE', @level1name = N'PROCESS_DESCRIPTORS', @level2type = N'COLUMN', @level2name = N'MODIFY_TIME';
 
 
 GO
@@ -82,7 +82,7 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level2name = N'TENANT_CODE'
 GO
 EXEC sp_addextendedproperty @name = N'MS_Description',
-    @value = N'导入时间',
+    @value = N'导入时间(UTC)',
     @level0type = N'SCHEMA',
     @level0name = N'WF',
     @level1type = N'TABLE',

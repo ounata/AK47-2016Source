@@ -9,7 +9,7 @@ namespace PPTS.Data.Customers.Adapters
 {
     public class CustomerSchoolRelationAdapter : CustomerAdapterBase<CustomerSchoolRelation, CustomerSchoolRelationCollection>
     {
-        public new static CustomerSchoolRelationAdapter Instance = new CustomerSchoolRelationAdapter();
+        public static readonly CustomerSchoolRelationAdapter Instance = new CustomerSchoolRelationAdapter();
 
         private CustomerSchoolRelationAdapter()
         {

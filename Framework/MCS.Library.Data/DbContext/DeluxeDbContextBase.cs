@@ -256,12 +256,7 @@ namespace MCS.Library.Data
                 for (int i = 0; i < result.Tables.Count; i++)
                 {
                     if (i < sqlContext.TableActions.Count)
-                    {
-                        TableAction ta = sqlContext.TableActions[i];
-
-                        if (ta.Action != null)
-                            ta.Action(result.Tables[i]);
-                    }
+                        sqlContext.TableActions[i].DoAction(result.Tables[i]);
                 }
             },
             clearSqlAfterExecute);
@@ -346,9 +341,13 @@ namespace MCS.Library.Data
 
                 if (sql.IsNotEmpty() && dbAction != null)
                 {
+                    sqlContext.BeforeActions.DoActions();
+
                     Database db = DatabaseFactory.Create(this);
 
                     dbAction(refConnection, db, sql);
+
+                    sqlContext.AfterActions.DoActions();
 
                     if (clearSqlAfterExecute)
                         sqlContext.ClearSqlInContext();

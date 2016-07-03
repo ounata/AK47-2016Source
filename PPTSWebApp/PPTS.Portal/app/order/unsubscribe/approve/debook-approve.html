@@ -1,0 +1,58 @@
+﻿<div class="modal-header">
+    <button type="button" class="close" data-dismiss="alert" ng-click="vm.close()">
+        <i class="ace-icon fa fa-times"></i>
+    </button>
+    <h4 class="modal-title">订购单退订金额详情</h4>
+</div>
+
+<form name="productCreateForm_1" class="form-horizontal">
+    <div class="widget-main no-padding">
+        <div class="clearfix form-actions mcs-form-actions">
+            <div class=" col-md-offset-3 col-md-9">
+                <mcs-button category="submit" click="vm.submit()"></mcs-button>
+            </div>
+        </div>
+        <div class="from-group row">
+            <mcs-label text="学员姓名" class="col-sm-2" />
+            <div class="col-sm-4">{{vm.entity.customerName}}</div>
+        </div>
+        <div class="from-group row">
+            <mcs-label text="学员编号" class="col-sm-2" />
+            <div class="col-sm-4">{{vm.entity.customerCode}}</div>
+        </div>
+        <div class="from-group row">
+            <mcs-label text="订单编号" class="col-sm-2" />
+            <div class="col-sm-4">{{vm.entity.orderNo}}</div>
+        </div>
+        <div class="from-group row">
+            <mcs-label required="true" text="退订单原因" class="col-sm-2" />
+            <div class="col-sm-4">
+                <!--<textarea ng-model="vm.item.order.debookMemo" required />-->
+            </div>
+        </div>
+        <div class="from-group row">
+            <mcs-label required="true" text="客户提交申请时间" class="col-sm-2" />
+            <div class="col-sm-4">{{ vm.item.order.submitTime | date:"yyyy-MM-dd"}}</div>
+        </div>
+        <div class="from-group row">
+            <mcs-label required="true" text="家长联系方式" class="col-sm-2" />
+            <div class="col-sm-4">
+                <mcs-input placeholder="家长联系方式" model="vm.item.order.contactTel" datatype="int" maxlength="11" required />
+            </div>
+        </div>
+
+    </div>
+    <mcs-datatable data="vm.data" />
+</form>
+
+<!--<div class="modal-body">
+    <mcs-datatable data="vm.data"  />
+</div>-->
+
+<div class="row">
+    <div class="form-group horizontal bordered">
+        <div class="col-md-12">
+            <mcs-workflow model="vm.clientProcess" approve-callback="vm.approve(vm.clientProcess)" reject-callback="vm.reject(vm.clientProcess)" />
+        </div>
+    </div>
+</div>

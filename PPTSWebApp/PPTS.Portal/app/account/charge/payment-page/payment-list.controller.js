@@ -15,43 +15,35 @@
                         headers: [{
                             field: "payMoney",
                             name: "本次收款金额",
-                            headerCss: "col-sm-2",
                             template: '<span>{{row.payMoney | currency:"￥"}}</span>'
                         }, {
                             field: "payer",
                             name: "付款人",
-                            headerCss: "col-sm-1",
                             template: '<span>{{row.payer}}</span>'
                         }, {
                             field: "subject",
                             name: "收款日期",
-                            headerCss: "col-sm-1",
-                            template: '<span>{{row.payTime | date:"yyyy-MM-dd"}}</span>'
+                            template: '<span>{{row.payTime | date:"yyyy-MM-dd" | normalize}}</span>'
                         }, {
                             field: "payeeName",
                             name: "收款人",
-                            headerCss: "col-sm-1",
                             template: '<span>{{row.payeeName}}</span>'
                         }, {
                             field: "payType",
                             name: "收款类型",
-                            headerCss: "col-sm-2",
                             template: '<span>{{row.payType | payType}}</span>'
                         }, {
                             field: "payNo",
-                            name: "付款单号",
-                            headerCss: "col-sm-3",
+                            name: "收款编号",
                             template: '<span>{{row.payNo}}</span>'
+                        }, {
+                            field: "payTicket",
+                            name: "流水号",
+                            template: '<span>{{row.payTicket}}</span>'
                         }, {
                             field: "printStatus",
                             name: "收据状态",
-                            headerCss: "col-sm-1",
                             template: '<span>{{row.printStatus | printStatus}}</span>'
-                        }, {
-                            field: "payStatus",
-                            name: "付款状态",
-                            headerCss: "col-sm-1",
-                            template: '<span>{{row.payStatus | payStatus}}</span>'
                         }],
                         pager: {
                             pagable: false

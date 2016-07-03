@@ -1,4 +1,5 @@
 ﻿using MCS.Library.OGUPermission;
+using MCS.Web.MVC.Library.Models.Workflow;
 using PPTS.Data.Common;
 using PPTS.Data.Common.Adapters;
 using PPTS.Data.Common.Entities;
@@ -58,6 +59,16 @@ namespace PPTS.WebAPI.Customers.ViewModels.Students
         }
 
         /// <summary>
+        /// 客户端流程信息
+        /// </summary>
+        [DataMember]
+        public WfClientProcess ClientProcess
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// 根据学员获取
         /// </summary>
         /// <param name="customerID"></param>
@@ -87,8 +98,9 @@ namespace PPTS.WebAPI.Customers.ViewModels.Students
 
         public static AssertResult Validate(string customerID, IUser user)
         {
+#if DEBUG
             return new AssertResult();
-
+#else
             PPTSJob job = user.GetCurrentJob();
             if (job.JobType != JobTypeDefine.Educator)
                 return new AssertResult(false, "只有学管师才可以提交转学申请");
@@ -103,6 +115,7 @@ namespace PPTS.WebAPI.Customers.ViewModels.Students
                     return new AssertResult(false, "只有该学员的学管师才可以提交转学申请");
             }
             return new AssertResult();
+#endif
         }
     }
 }

@@ -15,8 +15,8 @@ namespace PPTS.Data.Common.Authorization
     {
         [EnumItemDescription("读操作")]
         Read = 0,
-        [EnumItemDescription("写操作")]
-        Write = 1
+        [EnumItemDescription("编辑操作")]
+        Edit = 1
     }
 
     /// <summary>
@@ -30,15 +30,15 @@ namespace PPTS.Data.Common.Authorization
         Consultant = JobTypeDefine.Consultant,
         [EnumItemDescription("学管关系")]
         Educator = JobTypeDefine.Educator,
-        //[EnumItemDescription("教师关系")]
-        //Teacher = JobTypeDefine.Teacher,
+        [EnumItemDescription("教师关系")]
+        Teacher = JobTypeDefine.Teacher,
         [EnumItemDescription("坐席关系")]
         Callcenter = JobTypeDefine.Callcenter,
         [EnumItemDescription("市场关系")]
         Marketing = JobTypeDefine.Marketing,
 
     }
-    
+
     /// <summary>
     /// 机构类型
     /// </summary>
@@ -83,12 +83,12 @@ namespace PPTS.Data.Common.Authorization
         /// <summary>
         /// 潜客记录
         /// </summary>
-        [EnumItemDescription("潜客记录")]
-        PotentialCustomer =1,
+        //[EnumItemDescription("潜客记录")]
+        //PotentialCustomer =1,
         /// <summary>
         /// 学员记录
         /// </summary>
-        [EnumItemDescription("学员记录")]
+        [EnumItemDescription("潜客/学员均使用该记录记录")]
         Customer = 2
     }
 
@@ -110,9 +110,9 @@ namespace PPTS.Data.Common.Authorization
     public enum RecordType
     {
         #region 客户管理部分
-        [EnumItemDescription("潜客记录")]
-        PotentialCustomer = CustomerRecordType.PotentialCustomer,
-        [EnumItemDescription("学员记录")]
+        //[EnumItemDescription("潜客记录")]
+        //PotentialCustomer = CustomerRecordType.PotentialCustomer,
+        [EnumItemDescription("潜客/学员均使用该记录")]
         Customer = CustomerRecordType.Customer,
         [EnumItemDescription("家长记录")]
         Parent = 3,
@@ -124,23 +124,35 @@ namespace PPTS.Data.Common.Authorization
         CustomerVerify = 6,
         [EnumItemDescription("回访记录")]
         CustomerVisit = 7,
-        [EnumItemDescription("反馈记录")]
+        [EnumItemDescription("周反馈记录")]
         CustomerReply = 8,
         [EnumItemDescription("客服记录")]
         CustomerService = 9,
+        [EnumItemDescription("成绩记录")]
+        CustomerScores = 10,
+        [EnumItemDescription("停课/休学记录")]
+        CustomerStopAlert=11,
+        [EnumItemDescription("学员退费预警记录")]
+        CustomerRefundAlert=12,
         #endregion
 
         #region 账户部分
-        [EnumItemDescription("账户")]
+        [EnumItemDescription("账户记录")]
         Account = 21,
-        [EnumItemDescription("缴费单")]
+        [EnumItemDescription("缴费记录")]
         AccountChargeApply = 22,
-        [EnumItemDescription("退费单")]
-        AccountRefundApply = 23,
-        [EnumItemDescription("转让申请单")]
-        AccountTransferApply = 24,
+        [EnumItemDescription("收款记录")]
+        AccountChargePayment = 23,
+        [EnumItemDescription("退费记录")]
+        AccountRefundApply = 24,
+        [EnumItemDescription("转让申请记录")]
+        AccountTransferApply = 25,
         [EnumItemDescription("刷卡记录")]
-        POSRecord = 25,
+        POSRecord = 26,
+        [EnumItemDescription("收款业绩分配记录")]
+        AccountChargeAllot=27,
+        [EnumItemDescription("退费责任分配记录")]
+        AccountRefundAllot = 28,
         #endregion
 
         #region 资产部分
@@ -156,12 +168,14 @@ namespace PPTS.Data.Common.Authorization
         [EnumItemDescription("课时(排课)记录")]
         Assign = CourseRecordType.Assign,
         [EnumItemDescription("班组记录")]
-        Classe = 62,
+        Class = 62,
+        [EnumItemDescription("排课条件记录")]
+        AssignConditions = 63,
         #endregion
 
         #region 产品部分
         [EnumItemDescription("产品记录")]
-        Product =81,
+        Product = 81,
         [EnumItemDescription("拓路折扣规则记录")]
         Discount = 82,
         [EnumItemDescription("服务费规则记录")]

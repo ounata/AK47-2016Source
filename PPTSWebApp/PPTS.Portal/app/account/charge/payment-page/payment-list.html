@@ -1,23 +1,24 @@
-﻿<form class="form-horizontal">
-    <div class="widget-box">
-        <div class="widget-header">
-            <h4 class="col-sm-8">学员{{vm.customer.customerName}}{{vm.customer.customerCode}}，缴费单号{{vm.apply.applyNo}}</h4>
-            <div class="col-sm-4">
-                <h6>
-                    <span>业绩归属:{{vm.customer.campusName}}</span>
-                    <span>充值类型:{{vm.apply.chargeType | chargeType}}</span>
-                    <span>状态:{{vm.apply.payStatus | payStatus}}</span>
-                    <span>申请人:{{vm.apply.applierName}}</span>
-                    <span>岗位:{{vm.apply.applierJobName}}</span>
-                </h6>
-            </div>
+﻿<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            <span class="caption-subject bold"><i class="ace-icon fa"></i>学员<span class="important">【{{vm.customer.customerName}}({{vm.customer.customerCode}})】</span>，缴费单编号{{vm.apply.applyNo}}</span>
         </div>
-        <div class="widget-body">
-            <div class="clearfix form-actions mcs-form-actions">
-                <div>
-                    <mcs-button category="add" click="vm.goEdit()" text="登记付款" ng-disabled="!vm.apply.canEditPayment" ng-show="vm.showAddButton"></mcs-button>
-                    <mcs-button category="edit" click="vm.goEdit()" text="编辑付款" ng-disabled="!vm.apply.canEditPayment" ng-show="!vm.showAddButton"></mcs-button>
-                    <mcs-button category="print" click="vm.showPrint()" text="打印收据"></mcs-button>
+        <div class="caption pull-right">
+            <span class="caption-subject bold">业绩归属: <span class="important">{{vm.customer.campusName}}</span></span>
+            <span class="caption-subject bold">充值类型: <span class="important">{{vm.apply.chargeType | chargeType}}</span></span>
+            <span class="caption-subject bold">状态: <span class="important">{{vm.apply.payStatus | payStatus}}</span></span>
+            <span class="caption-subject bold">申请人: <span class="important">{{vm.apply.applierName}}</span></span>
+            <span class="caption-subject bold">岗位: <span class="important">{{vm.apply.applierJobName}}</span></span>
+        </div>
+    </div>
+    <div class="portlet-body form">
+        <form class="form-horizontal" action="#" role="form" novalidate>
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <mcs-button category="add" click="vm.goEdit()" text="登记付款" ng-disabled="!vm.apply.canEditPayment" ng-show="vm.showAddButton" ppts-job-functions="按钮-添加付款-本校区"></mcs-button>
+                        <mcs-button category="print" click="vm.showPrint()" text="打印收据" ppts-job-functions="按钮-打印收据,按钮-打印收据-本校区"></mcs-button>
+                    </div>
                 </div>
             </div>
             <div class="alert alert-block alert-danger" ng-show="vm.errorMessage">
@@ -27,14 +28,16 @@
                 <i class="ace-icon fa fa-warning"></i>
                 {{vm.errorMessage}}
             </div>
-            <mcs-datatable data="vm.data" />
-            <div class="col-sm-12 text-right">
-                <div class="col-sm-10">
-                </div>
-                <div class="col-sm-2">
-                    <mcs-label text="金额总计：" />{{ vm.apply.payment.paidMoney | currency:"￥" }}
+            <div class="form-body">
+                <div class="row">
+                    <div class="form-group horizontal">
+                        <div class="col-sm-12" style="margin:15px;width:98%;">
+                            <mcs-datatable data="vm.data" />
+                            <span class="pull-right">金额总计：{{ vm.apply.payment.paidMoney | currency:"￥" }}</span>
+                        </div>
+                    </div>
                 </div>
             </div>
-            </div>
+        </form>
     </div>
-</form>
+</div>

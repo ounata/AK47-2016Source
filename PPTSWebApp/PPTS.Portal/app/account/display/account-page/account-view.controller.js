@@ -3,7 +3,7 @@
         function (account) {
             account.registerController('accountController', [
                 '$scope', '$state', '$location', '$stateParams', 'accountDisplayDataService',
-                function ($scope, $state, $location, $stateParams, accountDisplayDataService) {
+                function ($scope, $state, $location, $stateParams, accountDataService) {
                     var vm = this;
                     vm.page = $location.$$search.prev;
 
@@ -21,7 +21,7 @@
                         }, {
                             field: "accountType",
                             name: "账户类型",
-                            template: '<span>{{row.accountType|accountType}}</span>'
+                            template: '<span>{{row.accountType | accountType}}</span>'
                         }, {
                             field: "discountBase",
                             name: "折扣基数",
@@ -45,7 +45,7 @@
                         }, {
                             field: "accountStatus",
                             name: "状态",
-                            template: '<span>{{row.accountStatus|accountStatus}}</span>'
+                            template: '<span>{{row.accountStatus | accountStatus}}</span>'
                         }],
                         pager: {
                             pagable: false
@@ -54,7 +54,7 @@
                     }
                     // 页面初始化加载或重新搜索时查询
                     vm.init = function () {
-                        accountDisplayDataService.getAccountList(vm.customerID, function (result) {
+                        accountDataService.getAccountList(vm.customerID, function (result) {
                             vm.customer = result.customer;
                             vm.data.rows = result.items;
 

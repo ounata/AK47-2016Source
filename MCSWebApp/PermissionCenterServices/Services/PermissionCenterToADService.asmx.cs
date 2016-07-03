@@ -1,7 +1,10 @@
 ﻿using MCS.Library.Core;
 using MCS.Library.SOA.Security.ADSyncUtilities;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Web;
@@ -55,11 +58,11 @@ namespace PermissionCenter.Services
         }
 
         [WebMethod]
-        public string LongWaiting(int minite)
+        public string LongWaiting(int minutes)
         {
             EventLog.WriteEntry("PermissionCenter", "开始LongWaiting");
 
-            for (int i = minite * 2 - 1; i >= 0; i--)
+            for (int i = minutes * 2 - 1; i >= 0; i--)
             {
                 Thread.Sleep(30 * 1000);
                 EventLog.WriteEntry("PermissionCenter", "仍在继续 LongWaiting");
@@ -68,6 +71,22 @@ namespace PermissionCenter.Services
             EventLog.WriteEntry("PermissionCenter", "结束LongWaiting");
 
             return "OK";
+        }
+
+        [WebMethod]
+        public DictionaryEntry[] ReturnDictionary(string callerID)
+        {
+            Hashtable ht = new Hashtable();
+
+            ht["callerID"] = callerID;
+            ht["now"] = DateTime.Now;
+
+            List<DictionaryEntry> entries = new List<DictionaryEntry>();
+
+            foreach (DictionaryEntry entry in ht)
+                entries.Add(entry);
+
+            return entries.ToArray();
         }
     }
 }

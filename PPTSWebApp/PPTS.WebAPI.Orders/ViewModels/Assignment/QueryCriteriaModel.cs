@@ -15,10 +15,12 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
         [ConditionMapping("TeacherName", EscapeLikeString = true, Prefix = "%", Postfix = "%", Operation = "LIKE")]
         public string TeacherName { get; set; }
 
-        [ConditionMapping("GradeMemo", EscapeLikeString = true, Prefix = "%", Postfix = "%", Operation = "LIKE")]
+        //[ConditionMapping("GradeMemo", EscapeLikeString = true, Prefix = "%", Postfix = "%", Operation = "LIKE")]
+        [NoMapping]
         public string GradeMemo { get; set; }
 
-        [ConditionMapping("SubjectMemo", EscapeLikeString = true, Prefix = "%", Postfix = "%", Operation = "LIKE")]
+        //[ConditionMapping("SubjectMemo", EscapeLikeString = true, Prefix = "%", Postfix = "%", Operation = "LIKE")]
+        [NoMapping]
         public string SubjectMemo { get; set; }
 
         //[ConditionMapping("IsFullTime")]
@@ -97,8 +99,8 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
         [InConditionMapping("AssignStatus")]
         public int[] AssignStatus { get; set; }
 
-        [InConditionMapping("AssignSource")]
-        public int[] AssignSource { get; set; }
+        [InConditionMapping("CategoryType")]
+        public string[] CategoryType { get; set; }
 
         [ConditionMapping("CustomerCode")]
         public string CustomerCode { get; set; }
@@ -112,13 +114,13 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
         [ConditionMapping("Grade")]
         public string Grade { get; set; }
 
+        [ConditionMapping("AssetCode", EscapeLikeString = true, Prefix = "%", Postfix = "%", Operation = "LIKE")]
+        public string AssetCode { get; set; }
+
         #endregion
 
         [InConditionMapping("CampusID")]
         public string[] CampusID { get; set; }
-
-        [ConditionMapping("AssetCode", EscapeLikeString = true, Prefix = "%", Postfix = "%", Operation = "LIKE")]
-        public string AssetCode { get; set; }
 
         public AssignQCM()
         {

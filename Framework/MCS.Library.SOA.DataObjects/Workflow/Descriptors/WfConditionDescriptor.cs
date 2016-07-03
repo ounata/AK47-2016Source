@@ -132,6 +132,16 @@ namespace MCS.Library.SOA.DataObjects.Workflow
 				}
 			}
 		}
+
+        public T GetRuntimeParameterValue<T>(string key, T defaultValue)
+        {
+            T result = defaultValue;
+
+            if (this.Owner != null && this.Owner.ProcessInstance != null)
+                result = this.Owner.ProcessInstance.ApplicationRuntimeParameters.GetValue(key, defaultValue);
+
+            return result;
+        }
 		#region ISimpleXmlSerializer Members
 
 		void ISimpleXmlSerializer.ToXElement(XElement element, string refNodeName)

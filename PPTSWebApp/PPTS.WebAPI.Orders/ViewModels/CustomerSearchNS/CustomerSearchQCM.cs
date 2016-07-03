@@ -30,13 +30,13 @@ namespace PPTS.WebAPI.Orders.ViewModels.CustomerSearchNS
         [ConditionMapping("CampusID")]
         public string CampusID { get; set; }
 
-        /////一对一剩余课次数
-        //[ConditionMapping("AssetOneToOneAmount", Operation = ">", DefaultValueUsage = DefaultValueUsageType.UseDefaultValue)]
-        //public int AssetOneToOneAmount { get; set; }
+        ///一对一剩余课次数
+        [ConditionMapping("AssetOneToOneAmount", Operation = ">", DefaultValueUsage = DefaultValueUsageType.UseDefaultValue)]
+        public int AssetOneToOneAmount { get; set; }
 
         public CustomerSearchQCM()
         {
-           // this.AssetOneToOneAmount = 0;
+           this.AssetOneToOneAmount = 0;
         }
 
 

@@ -90,7 +90,7 @@
 
 
                     vm.save = function () {
-                        purchaseCourseDataService.editPayment(vm.post);
+                        purchaseCourseDataService.editPayment(vm.post, function () { $state.go('ppts.purchase'); });
                     };
                     vm.cancel = function () { $window.history.back(); };
 

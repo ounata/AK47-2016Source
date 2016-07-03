@@ -1,8 +1,10 @@
-﻿using MCS.Library.OGUPermission;
+﻿using MCS.Library.Data;
+using MCS.Library.Data.Builder;
+using MCS.Library.OGUPermission;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PPTS.Data.Common;
+using PPTS.Data.Common.Authorization;
 using PPTS.Data.Common.Security;
-using PPTS.Data.Customers.Authorization;
 using PPTS.Data.Customers.Entities;
 using System;
 using System.Collections.Generic;
@@ -15,105 +17,291 @@ namespace PPTS.Data.Customers.Test
     [TestClass]
     public class CustomerScopeAuthorizationTest
     {
+        #region 验证操作
         [TestMethod]
-        public void ReadAuthorizationExistBuiderSQLTest()
+        public void ReadAuthorizationExistBuilderSQLTest()
         {
-            IUser user = OGUExtensions.GetUserByOAName("zhangxiaoyan_2");
+            IUser user = GetUserInfo();
             PPTSJobCollection jobs = user.Jobs();
-            if (jobs.Count > 0)
-            {
-                jobs[0].Functions.Clear();
-                jobs[0].Functions.Add("a");
-                jobs[0].Functions.Add("b");
-                jobs[0].Functions.Add("h");
-                jobs[0].Functions.Add("ewww");
-                string sql = ScopeAuthorization<Customer>.Instance.ReadAuthorizationExistBuiderSQL(jobs[0], "CustomerID", "CustomerID", jobs[0].Functions.ToList());
-                Console.Write(sql);
+            foreach(PPTSJob job in jobs)
+            {   //18-Org
+                string sql = ScopeAuthorization<PotentialCustomer>.GetInstance(ConnectionDefine.PPTSCustomerConnectionName).ReadAuthExistsBuilder(job, "CustomerID", "CustomerID", job.Functions.ToList()).ToSqlString(TSqlBuilder.Instance);
+                Console.WriteLine(sql);
             }
-            //Assert.IsTrue(result);
         }
 
         [TestMethod]
-        public void ReadAuthorizationExistBuiderSQLTest2()
+        public void ReadStaffAuthorizationExistBuilderSQLTest()
         {
-            IUser user = OGUExtensions.GetUserByOAName("zhangxiaoyan_2");
+            IUser user = GetUserInfo();
             PPTSJobCollection jobs = user.Jobs();
-            if (jobs.Count > 0)
+            foreach (PPTSJob job in jobs)
             {
-                jobs[0].Functions.Clear();
-                jobs[0].Functions.Add("a");
-                jobs[0].Functions.Add("b");
-                jobs[0].Functions.Add("h");
-                jobs[0].Functions.Add("ewww");
-                string sql = ScopeAuthorization<Customer>.Instance.ReadAuthorizationExistBuiderSQL(jobs[0], jobs[0].Functions.ToList());
-                Console.Write(sql);
-            }
-
-        }
-
-        [TestMethod]
-        public void GetFirstAuthorizationOrgTest()
-        {
-            IUser user = OGUExtensions.GetUserByOAName("zhangxiaoyan_2");
-            PPTSJobCollection jobs = user.Jobs();
-            if (jobs.Count > 0)
-            {
-                jobs[7].Functions.Clear();
-                jobs[7].Functions.Add("a");
-                jobs[7].Functions.Add("b");
-                jobs[7].Functions.Add("h");
-                jobs[7].Functions.Add("ewww");
-                IOrganization org = ScopeAuthorization<Customer>.Instance.GetFirstAuthorizationOrg(jobs[7], jobs[7].Functions.ToList());
-                Assert.IsNotNull(org);
-                Console.Write(org.Name);
-            }
-
-
-        }
-
-        [TestMethod]
-        public void ReadAuthorizationWhereBuiderSQLTest()
-        {
-            IUser user = OGUExtensions.GetUserByOAName("zhangxiaoyan_2");
-            PPTSJobCollection jobs = user.Jobs();
-            if (jobs.Count > 0)
-            {
-                jobs[7].Functions.Clear();
-                jobs[7].Functions.Add("a");
-                jobs[7].Functions.Add("b");
-                jobs[7].Functions.Add("h");
-                jobs[7].Functions.Add("ewww");
-                string sql = ScopeAuthorization<Customer>.Instance.ReadAuthorizationWhereBuiderSQL(jobs[7], "CustomerID", "CustomerID", jobs[7].Functions.ToList());
-                Console.Write(sql);
+                //18-Org
+                string sql = ScopeAuthorization<PotentialCustomer>.GetInstance(ConnectionDefine.PPTSCustomerConnectionName).ReadAuthExistsBuilder(user, job.Organization(), "CustomerID", "CustomerID", job.Functions.ToList()).ToSqlString(TSqlBuilder.Instance);
+                Console.WriteLine(sql);
             }
         }
 
         [TestMethod]
         public void HasReadAuthorizationTest()
         {
-            IUser user = OGUExtensions.GetUserByOAName("zhangxiaoyan_2");
+            IUser user = GetUserInfo();
             PPTSJobCollection jobs = user.Jobs();
-            if (jobs.Count > 0)
+            foreach (PPTSJob job in jobs)
             {
-                jobs[0].Functions.Clear();
-                jobs[0].Functions.Add("a");
-                jobs[0].Functions.Add("b");
-                jobs[0].Functions.Add("h");
-                jobs[0].Functions.Add("ewww");
-                bool result = ScopeAuthorization<Customer>.Instance.HasReadAuthorization(jobs[0], "CustomerID", "CustomerID", jobs[0].Functions.ToList());
+                bool result = ScopeAuthorization<PotentialCustomer>.GetInstance(ConnectionDefine.PPTSCustomerConnectionName).HasReadAuth(job, "CustomerID", "CustomerID", job.Functions.ToList());
+                Console.WriteLine(result);
+            }
+        }
+
+        [TestMethod]
+        public void HasReadStaffAuthorizationTest()
+        {
+            IUser user = GetUserInfo();
+            PPTSJobCollection jobs = user.Jobs();
+            foreach (PPTSJob job in jobs)
+            {
+                bool result = ScopeAuthorization<PotentialCustomer>.GetInstance(ConnectionDefine.PPTSCustomerConnectionName).HasReadAuth(user, job.Organization(), "CustomerID", "CustomerID", job.Functions.ToList());
                 Console.Write(result);
             }
         }
 
         [TestMethod]
-        public void ExistReadRelationAuthorizationSQLTest()
+        public void HasEditStaffAuthorizationTest()
         {
-            List<string> jobFunctions = new List<string>();
-            jobFunctions.Add("a");
-            jobFunctions.Add("am");
-            jobFunctions.Add("yy");
-            //string sql= CustomerScopeAuthorization<Customer>.Instance.ExistReadRelationAuthorizationSQL("jobID", jobFunctions);
-            //Console.WriteLine(sql);
+            IUser user = GetUserInfo();
+            PPTSJobCollection jobs = user.Jobs();
+            foreach (PPTSJob job in jobs)
+            {
+                bool result = ScopeAuthorization<PotentialCustomer>.GetInstance(ConnectionDefine.PPTSCustomerConnectionName).HasEditAuth(user, job.Organization(), "CustomerID", "CustomerID", job.Functions.ToList());
+                Console.Write(result);
+            }
         }
+        #endregion 验证操作
+
+        #region 更新操作
+        [TestMethod]
+        public void UpdateAuthTest()
+        {
+            IUser user = GetUserInfo();
+            PPTSJobCollection jobs = user.Jobs();
+            RecordInfo ri = GetRecordCunstomerInfo();
+            if (jobs.Count > 0)
+            {
+                ScopeAuthorization<Customer>.GetInstance(ConnectionDefine.PPTSCustomerConnectionName).UpdateAuth(jobs[0], jobs[0].Organization(), ri.RecordID, ri.RecordType);
+                Common.Entities.CustomerRelationAuthorizationCollection ras = CustomerRelationAuthorizationAdaper.GetInstance(ConnectionDefine.PPTSCustomerConnectionName).Load(builder => builder.AppendItem("OwnerID", ri.RecordID));
+                ras.ForEach(modle => { Console.WriteLine(modle.ObjectType); Console.WriteLine(modle.OwnerType); Console.WriteLine(modle.CreateTime); Console.WriteLine(modle.ModifyTime); });
+                Console.WriteLine();
+                Common.Entities.CustomerOrgAuthorizationCollection oas = CustomerOrgAuthorizationAdapter.GetInstance(ConnectionDefine.PPTSCustomerConnectionName).Load(builder => builder.AppendItem("OwnerID", ri.RecordID));
+                oas.ForEach(modle => { Console.WriteLine(modle.ObjectType); Console.WriteLine(modle.RelationType); Console.WriteLine(modle.OwnerType); Console.WriteLine(modle.CreateTime); Console.WriteLine(modle.ModifyTime); });
+            }
+        }
+
+        [TestMethod]
+        public void UpdateAuthInContextTest()
+        {
+            IUser user = GetUserInfo();
+            PPTSJobCollection jobs = user.Jobs();
+            RecordInfo ri = GetRecordCunstomerInfo();
+            if (jobs.Count > 0)
+            {
+                ScopeAuthorization<Customer>.GetInstance(ConnectionDefine.PPTSCustomerConnectionName).UpdateAuthInContext(jobs[0], jobs[0].Organization(), ri.RecordID, ri.RecordType);
+                DbContext.GetContext(ConnectionDefine.PPTSCustomerConnectionName).ExecuteNonQuerySqlInContext();
+
+                Common.Entities.CustomerRelationAuthorizationCollection ras = CustomerRelationAuthorizationAdaper.GetInstance(ConnectionDefine.PPTSCustomerConnectionName).Load(builder => builder.AppendItem("OwnerID", ri.RecordID));
+                ras.ForEach(modle => { Console.WriteLine(modle.ObjectType); Console.WriteLine(modle.OwnerType); Console.WriteLine(modle.CreateTime); Console.WriteLine(modle.ModifyTime); });
+                Console.WriteLine();
+                Common.Entities.CustomerOrgAuthorizationCollection oas = CustomerOrgAuthorizationAdapter.GetInstance(ConnectionDefine.PPTSCustomerConnectionName).Load(builder => builder.AppendItem("OwnerID", ri.RecordID));
+                oas.ForEach(modle => { Console.WriteLine(modle.ObjectType); Console.WriteLine(modle.RelationType); Console.WriteLine(modle.OwnerType); Console.WriteLine(modle.CreateTime); Console.WriteLine(modle.ModifyTime); });
+            }
+        }
+
+        [TestMethod]
+        public void UpdateRecordAuthTest()
+        {
+            IUser user = GetUserInfo();
+            PPTSJobCollection jobs = user.Jobs();
+            RecordInfo ri = GetRecordAccountInfo();
+            if (jobs.Count > 0)
+            {
+                ScopeAuthorization<Account>.GetInstance(ConnectionDefine.PPTSCustomerConnectionName).UpdateAuth(jobs[0], jobs[0].Organization(), ri.RecordID, ri.RecordType);
+                Common.Entities.OwnerRelationAuthorizationCollection ras = OwnerRelationAuthorizationAdapter.GetInstance(ConnectionDefine.PPTSCustomerConnectionName).Load(builder => builder.AppendItem("OwnerID", ri.RecordID));
+                ras.ForEach(modle => { Console.WriteLine(modle.ObjectType); Console.WriteLine(modle.OwnerType); Console.WriteLine(modle.CreateTime); Console.WriteLine(modle.ModifyTime); });
+                Console.WriteLine();
+                Common.Entities.RecordOrgAuthorizationCollection oas = RecordOrgAuthorizationAdapter.GetInstance(ConnectionDefine.PPTSCustomerConnectionName).Load(builder => builder.AppendItem("OwnerID", ri.RecordID));
+                oas.ForEach(modle => { Console.WriteLine(modle.ObjectType); Console.WriteLine(modle.RelationType); Console.WriteLine(modle.OwnerType); Console.WriteLine(modle.CreateTime); Console.WriteLine(modle.ModifyTime); });
+            }
+        }
+
+        [TestMethod]
+        public void UpdateRecordAuthInContextTest()
+        {
+            IUser user = GetUserInfo();
+            PPTSJobCollection jobs = user.Jobs();
+            RecordInfo ri = GetRecordAccountInfo();
+            if (jobs.Count > 0)
+            {
+                ScopeAuthorization<Account>.GetInstance(ConnectionDefine.PPTSCustomerConnectionName).UpdateAuthInContext(jobs[0], jobs[0].Organization(), ri.RecordID, ri.RecordType);
+                DbContext.GetContext(ConnectionDefine.PPTSCustomerConnectionName).ExecuteNonQuerySqlInContext();
+
+                Common.Entities.OwnerRelationAuthorizationCollection ras = OwnerRelationAuthorizationAdapter.GetInstance(ConnectionDefine.PPTSCustomerConnectionName).Load(builder => builder.AppendItem("OwnerID", "1"));
+                ras.ForEach(modle => { Console.WriteLine(modle.ObjectType); Console.WriteLine(modle.OwnerType); Console.WriteLine(modle.CreateTime); Console.WriteLine(modle.ModifyTime); });
+                Console.WriteLine();
+                Common.Entities.RecordOrgAuthorizationCollection oas = RecordOrgAuthorizationAdapter.GetInstance(ConnectionDefine.PPTSCustomerConnectionName).Load(builder => builder.AppendItem("OwnerID", "1"));
+                oas.ForEach(modle => { Console.WriteLine(modle.ObjectType); Console.WriteLine(modle.RelationType); Console.WriteLine(modle.OwnerType); Console.WriteLine(modle.CreateTime); Console.WriteLine(modle.ModifyTime); });
+            }
+        }
+
+        [TestMethod]
+        public void UpdateRecordStaffAuthTest()
+        {
+            IUser user = GetUserInfo();
+            PPTSJobCollection jobs = user.Jobs();
+
+            RecordInfo ri = GetRecordCunstomerInfo();
+            if (jobs.Count > 0)
+            {
+                ScopeAuthorization<Account>.GetInstance(ConnectionDefine.PPTSCustomerConnectionName).UpdateAuth(user, jobs[0].Organization(), ri.RecordID, ri.RecordType);
+                Common.Entities.OwnerRelationAuthorizationCollection ras = OwnerRelationAuthorizationAdapter.GetInstance(ConnectionDefine.PPTSCustomerConnectionName).Load(builder => builder.AppendItem("OwnerID", "1"));
+                ras.ForEach(modle => { Console.WriteLine(modle.ObjectType); Console.WriteLine(modle.OwnerType); Console.WriteLine(modle.CreateTime); Console.WriteLine(modle.ModifyTime); });
+                Console.WriteLine();
+                Common.Entities.RecordOrgAuthorizationCollection oas = RecordOrgAuthorizationAdapter.GetInstance(ConnectionDefine.PPTSCustomerConnectionName).Load(builder => builder.AppendItem("OwnerID", "1"));
+                oas.ForEach(modle => { Console.WriteLine(modle.ObjectType); Console.WriteLine(modle.RelationType); Console.WriteLine(modle.OwnerType); Console.WriteLine(modle.CreateTime); Console.WriteLine(modle.ModifyTime); });
+            }
+        }
+
+        [TestMethod]
+        public void UpdateRecordStaffAuthInContextTest()
+        {
+            IUser user = GetUserInfo();
+
+            PPTSJobCollection jobs = user.Jobs();
+            RecordInfo ri = GetRecordCunstomerInfo();
+            if (jobs.Count > 0)
+            {
+                ScopeAuthorization<Account>.GetInstance(ConnectionDefine.PPTSCustomerConnectionName).UpdateAuthInContext(user, jobs[0].Organization(), ri.RecordID, ri.RecordType);
+                DbContext.GetContext(ConnectionDefine.PPTSCustomerConnectionName).ExecuteNonQuerySqlInContext();
+
+                Common.Entities.OwnerRelationAuthorizationCollection ras = OwnerRelationAuthorizationAdapter.GetInstance(ConnectionDefine.PPTSCustomerConnectionName).Load(builder => builder.AppendItem("OwnerID", ri.RecordID));
+                ras.ForEach(modle => { Console.WriteLine(modle.ObjectType); Console.WriteLine(modle.OwnerType); Console.WriteLine(modle.CreateTime); Console.WriteLine(modle.ModifyTime); });
+                Console.WriteLine();
+                Common.Entities.RecordOrgAuthorizationCollection oas = RecordOrgAuthorizationAdapter.GetInstance(ConnectionDefine.PPTSCustomerConnectionName).Load(builder => builder.AppendItem("OwnerID", ri.RecordID));
+                oas.ForEach(modle => { Console.WriteLine(modle.ObjectType); Console.WriteLine(modle.RelationType); Console.WriteLine(modle.OwnerType); Console.WriteLine(modle.CreateTime); Console.WriteLine(modle.ModifyTime); });
+            }
+        }
+
+        [TestMethod]
+        public void UpdateUpdateJobCollectionAuthTest()
+        {
+            IUser user = GetTeacherUserInfo();
+
+            PPTSJobCollection jobs = user.Jobs();
+            RecordInfo ri = GetRecordCunstomerInfo();
+            if (jobs.Count > 0)
+            {
+                ScopeAuthorization<Customer>.GetInstance(ConnectionDefine.PPTSCustomerConnectionName).UpdateAuthByJobCollection(jobs.Select(job=>job.ID).ToList(), ri.RecordID, ri.RecordType,RelationType.Teacher);
+                DbContext.GetContext(ConnectionDefine.PPTSCustomerConnectionName).ExecuteNonQuerySqlInContext();
+
+                Common.Entities.CustomerRelationAuthorizationCollection ras = CustomerRelationAuthorizationAdaper.GetInstance(ConnectionDefine.PPTSCustomerConnectionName).Load(builder => builder.AppendItem("OwnerID", ri.RecordID));
+                ras.ForEach(modle => { Console.WriteLine(modle.ObjectType); Console.WriteLine(modle.OwnerType); Console.WriteLine(modle.CreateTime); Console.WriteLine(modle.ModifyTime); });
+                Console.WriteLine();
+                Common.Entities.CustomerOrgAuthorizationCollection oas = CustomerOrgAuthorizationAdapter.GetInstance(ConnectionDefine.PPTSCustomerConnectionName).Load(builder => builder.AppendItem("OwnerID", ri.RecordID));
+                oas.ForEach(modle => { Console.WriteLine(modle.ObjectType); Console.WriteLine(modle.RelationType); Console.WriteLine(modle.OwnerType); Console.WriteLine(modle.CreateTime); Console.WriteLine(modle.ModifyTime); });
+            }
+        }
+
+        [TestMethod]
+        public void InitAuthTest()
+        {
+            IUser user = GetUserInfo();
+                        
+            PPTSJobCollection jobs = user.Jobs();
+            RecordInfo ri = GetRecordCunstomerInfo();
+
+            if (jobs.Count > 0)
+            {
+                ScopeAuthorization<Customer>.GetInstance(ConnectionDefine.PPTSCustomerConnectionName).InitAuth(jobs[0].Organization(), ri.RecordID, ri.RecordType);
+                Common.Entities.CustomerRelationAuthorizationCollection ras = CustomerRelationAuthorizationAdaper.GetInstance(ConnectionDefine.PPTSCustomerConnectionName).Load(builder => builder.AppendItem("OwnerID", ri.RecordID));
+                ras.ForEach(modle => { Console.WriteLine(modle.ObjectType); Console.WriteLine(modle.OwnerType); Console.WriteLine(modle.CreateTime); Console.WriteLine(modle.ModifyTime); });
+                Console.WriteLine();
+                Common.Entities.CustomerOrgAuthorizationCollection oas = CustomerOrgAuthorizationAdapter.GetInstance(ConnectionDefine.PPTSCustomerConnectionName).Load(builder => builder.AppendItem("OwnerID", ri.RecordID));
+                oas.ForEach(modle => { Console.WriteLine(modle.ObjectType); Console.WriteLine(modle.RelationType); Console.WriteLine(modle.OwnerType); Console.WriteLine(modle.CreateTime); Console.WriteLine(modle.ModifyTime); });
+            }
+        }
+
+        [TestMethod]
+        public void InitAuthInContextTest()
+        {
+            IUser user = GetUserInfo();
+            PPTSJobCollection jobs = user.Jobs();
+            RecordInfo ri = GetRecordCunstomerInfo();
+            if (jobs.Count > 0)
+            {
+                ScopeAuthorization<Customer>.GetInstance(ConnectionDefine.PPTSCustomerConnectionName).InitAuth(jobs[0].Organization(), ri.RecordID, ri.RecordType);
+                DbContext.GetContext(ConnectionDefine.PPTSCustomerConnectionName).ExecuteNonQuerySqlInContext();
+
+                Common.Entities.CustomerRelationAuthorizationCollection ras = CustomerRelationAuthorizationAdaper.GetInstance(ConnectionDefine.PPTSCustomerConnectionName).Load(builder => builder.AppendItem("OwnerID", "1"));
+                ras.ForEach(modle => { Console.WriteLine(modle.ObjectType); Console.WriteLine(modle.OwnerType); Console.WriteLine(modle.CreateTime); Console.WriteLine(modle.ModifyTime); });
+                Console.WriteLine();
+                Common.Entities.CustomerOrgAuthorizationCollection oas = CustomerOrgAuthorizationAdapter.GetInstance(ConnectionDefine.PPTSCustomerConnectionName).Load(builder => builder.AppendItem("OwnerID", "1"));
+                oas.ForEach(modle => { Console.WriteLine(modle.ObjectType); Console.WriteLine(modle.RelationType); Console.WriteLine(modle.OwnerType); Console.WriteLine(modle.CreateTime); Console.WriteLine(modle.ModifyTime); });
+            }
+        }
+
+        [TestMethod]
+        public void Test()
+        {
+            InSqlClauseBuilder insql = new InSqlClauseBuilder();
+            insql.DataField = "aaa";
+            insql.AppendItem(new string[] { "111", "222" });
+
+            WhereSqlClauseBuilder whereBuilder = new WhereSqlClauseBuilder();
+            whereBuilder.AppendItem("ObjectID", "")
+               .AppendItem("OwnerID", "")
+                .AppendItem("OwnerType", "")
+                .AppendItem("OwnerType","(1,2,3)","IN",true)
+                .AppendItem("", insql.ToSqlString(TSqlBuilder.Instance), "",true);
+            //SqlCaluseBuilderItemInOperator inss = new SqlCaluseBuilderItemInOperator();
+            //inss.Data = new string[] { "111" };
+            //whereBuilder.Add(inss);
+            Console.Write(whereBuilder.ToSqlString(TSqlBuilder.Instance));
+        }
+        #endregion 更新操作
+
+        private IUser GetUserInfo()
+        {
+            return OGUExtensions.GetUserByOAName("zhangxiaoyan_2");
+        }
+
+        private IUser GetTeacherUserInfo()
+        {
+            return OGUExtensions.GetUserByOAName("jiakun");
+        }
+
+        private RecordInfo GetRecordAccountInfo()
+        {
+            return new RecordInfo()
+            {
+                RecordID = "1",
+                RecordType = RecordType.Account
+            };
+        }
+
+        private RecordInfo GetRecordCunstomerInfo()
+        {
+            return new RecordInfo()
+            {
+                RecordID = "1",
+                RecordType = RecordType.Customer
+            };
+        }
+    }
+
+    public class RecordInfo
+    {
+        public string RecordID { get; set; }
+
+        public RecordType RecordType { get; set; }
     }
 }

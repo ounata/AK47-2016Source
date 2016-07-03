@@ -24,9 +24,11 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 客户的ID
         /// </summary>
+        #region 数据范围权限
+        [KeyFieldMapping("CustomerID")]
+        [CustomerFieldMapping("CustomerID")]
+        #endregion 
         [ORFieldMapping("CustomerID", PrimaryKey = true)]
-        [KeyFiledMapping("CustomerID")]
-        [CustomerFiledMapping("CustomerID")]
         [DataMember]
         public string CustomerID
         {
@@ -315,7 +317,7 @@ namespace PPTS.Data.Customers.Entities
         /// </summary>
         [ORFieldMapping("IsStudyAgain")]
         [DataMember]
-        public bool IsStudyAgain
+        public int IsStudyAgain
         {
             get;
             set;
@@ -343,6 +345,18 @@ namespace PPTS.Data.Customers.Entities
         {
             get;
             set;
+        }
+
+        /// <summary>
+        /// 建档人岗位类型
+        /// </summary>
+        [ORFieldMapping("CreatorJobType")]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update)]
+        [DataMember]
+        public JobTypeDefine CreatorJobType
+        {
+            set;
+            get;
         }
 
         /// <summary>

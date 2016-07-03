@@ -13,11 +13,17 @@ namespace PPTS.WebAPI.Orders.ViewModels.Purchase
     public class OrderModel
     {
         public OrderModel() {
-            Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(OrderItemView));
+            Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(OrderItemView), typeof(Product));
         }
 
         public Order Order { set; get; }
-        public OrderItemCollection Items { set; get; }
+
+        public object Items { get { if (_Items != null) { return _Items; }return _ItemViews; } }
+
+        private OrderItemViewCollection _ItemViews { set; get; }
+        private OrderItemCollection _Items { set; get; }
+
+
         public Data.Customers.Entities.Account Account { set; get; }
 
         public Data.Customers.Entities.AccountChargeApply ChargePayment { set;get;}
@@ -26,12 +32,24 @@ namespace PPTS.WebAPI.Orders.ViewModels.Purchase
 
         public Dictionary<string, IEnumerable<BaseConstantEntity>> Dictionaries { set; get; }
 
-        public static OrderModel FillOrderByOrderId(string orderId)
+        public static OrderModel FillOrderAndItemByOrderId(string orderId, string[] campusIds)
         {
             var model = new OrderModel();
 
-            OrdersAdapter.Instance.LoadInContext(new MCS.Library.Data.Adapters.WhereLoadingCondition(builder => builder.AppendItem("OrderID", orderId)), collection => { model.Order = collection.SingleOrDefault(); });
-            OrderItemAdapter.Instance.LoadInContext(new MCS.Library.Data.Adapters.WhereLoadingCondition(builder => builder.AppendItem("OrderID", orderId)), collection => { model.Items = collection; });
+            OrdersAdapter.Instance.LoadInContext(orderId, campusIds, collection => { model.Order = collection.SingleOrDefault(); });
+            OrderItemAdapter.Instance.LoadInContext(orderId, campusIds, collection => { model._Items = collection; });
+
+            using (var dbContext = PPTS.Data.Orders.ConnectionDefine.GetDbContext()) { dbContext.ExecuteDataSetSqlInContext(); }
+
+            return model;
+        }
+
+        public static OrderModel FillOrderAndItemViewByOrderId(string orderId,string[]campusIds)
+        {
+            var model = new OrderModel();
+
+            OrdersAdapter.Instance.LoadInContext(orderId, campusIds, collection => { model.Order = collection.SingleOrDefault(); });
+            OrderItemViewAdapter.Instance.LoadInContext(orderId, campusIds, collection => { model._ItemViews = collection; });
 
             using (var dbContext = PPTS.Data.Orders.ConnectionDefine.GetDbContext()) { dbContext.ExecuteDataSetSqlInContext(); }
 

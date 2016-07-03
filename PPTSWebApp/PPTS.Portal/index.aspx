@@ -12,6 +12,12 @@
     <script src="app/common/config/ppts.startup.js"></script>
 </head>
 <body class="no-skin navbar-fixed" ng-controller="appController as vm">
+    <!-- BEGIN PAGE SPINNER -->
+    <div id="ppts-spinner-loading" class="spinner">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+    </div>
     <input runat="server" type="hidden" id="configData"/>
     <div ui-view></div>
 </body>

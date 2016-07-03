@@ -5,6 +5,8 @@
 	[AllotID] NVARCHAR(36) NOT NULL DEFAULT newid(), 
     [TeacherID] NVARCHAR(50) NULL, 
     [TeacherName] NCHAR(10) NULL, 
+    [TeacherJobID] NVARCHAR(36) NULL, 
+    [TeacherJobName] NVARCHAR(64) NULL, 
     [TeacherType] NVARCHAR(32) NULL, 
     [TeacherOACode] NVARCHAR(36) NULL, 
     [Subject] NVARCHAR(36) NULL, 
@@ -128,3 +130,21 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level2type = N'COLUMN',
     @level2name = N'SortNo'
 GO
+
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'教师岗位ID',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'AccountRefundAllots',
+    @level2type = N'COLUMN',
+    @level2name = N'TeacherJobID'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'教师岗位名称',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'AccountRefundAllots',
+    @level2type = N'COLUMN',
+    @level2name = N'TeacherJobName'

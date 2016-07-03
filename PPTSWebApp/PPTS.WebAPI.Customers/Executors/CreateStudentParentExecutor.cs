@@ -20,7 +20,7 @@ namespace PPTS.WebAPI.Customers.Executors
         /// </summary>
         /// <param name="model"></param>
         /// <param name="dataAction"></param>
-        public CreateStudentParentExecutor(CreatableParentModel model)
+        public CreateStudentParentExecutor(CreatableParentModel model) 
             : base(model, null)
         {
             model.NullCheck("model");

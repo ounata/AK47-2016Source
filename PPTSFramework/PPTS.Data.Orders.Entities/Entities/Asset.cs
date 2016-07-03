@@ -60,7 +60,7 @@ namespace PPTS.Data.Orders.Entities
         /// </summary>
         [ORFieldMapping("AssetType")]
         [DataMember]
-        public string AssetType
+        public AssetTypeDefine AssetType
         {
             get;
             set;
@@ -71,7 +71,18 @@ namespace PPTS.Data.Orders.Entities
         /// </summary>
         [ORFieldMapping("AssetRefType")]
         [DataMember]
-        public string AssetRefType
+        public AssetRefTypeDefine AssetRefType
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 资产来源PID（订单ID）
+        /// </summary>
+        [ORFieldMapping("AssetRefPID")]
+        [DataMember]
+        public string AssetRefPID
         {
             get;
             set;

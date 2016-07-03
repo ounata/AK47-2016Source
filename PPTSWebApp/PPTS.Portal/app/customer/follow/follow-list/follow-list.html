@@ -4,14 +4,11 @@
 <!-- #开始：跟进记录列表.快速查询条件 -->
 <ppts-dynamic-content template="quick-search.tpl.html">
     <div class="row">
-        <div class="col-md-4">
-            <ppts-select-branch model="vm.criteria.orgIds" />
+        <div class="col-md-6">
+            <ppts-select-branch branch-id="vm.criteria.branchIDs" campus-ids="vm.criteria.campusIDs" />
         </div>
-        <div class="col-md-4">
-            <mcs-input placeholder="咨询师姓名" uib-tooltip="咨询师姓名" model="vm.criteria.staffName" css="mcs-input-search mcs-width-full" />
-        </div>
-        <div class="col-md-4">
-            <mcs-input placeholder="输入学员、家长姓名，学员编号，联系方式进行查询" uib-tooltip="学员、家长姓名，学员编号，联系方式" model="vm.criteria.keyword" css="mcs-input-search mcs-width-full" />
+        <div class="col-md-6">
+            <mcs-input placeholder="输入学员、家长姓名，学员编号，联系方式进行查询" uib-popover="学员、家长姓名，学员编号，联系方式" model="vm.criteria.keyword" css="mcs-input-search mcs-width-full" />
         </div>
     </div>
 </ppts-dynamic-content>

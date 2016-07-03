@@ -5,15 +5,18 @@ var ppts = ppts || mcs.app;
     ppts.name = 'ppts';
     ppts.version = '1.0';
     ppts.user = ppts.user || {};
+    ppts.enum = ppts.enum || {};
 
     ppts.config = {
-        pageSizeItem: 20,
+        pageSizeItem: 20, // Datatable每页的数量
+        taskDisplayItem: 5, // 待办任务在右上角显示的数量
+        taskQueryInterval: 30 * 1000, // 待办任务轮询的周期(半分钟)
         datePickerFormat: 'yyyy-mm-dd',
-        datetimePickerFormat: 'yyyy-mm-dd hh:ii:ss',
+        datetimePickerFormat: 'yyyy-mm-dd hh:ii:00',
         datePickerLang: 'zh-CN',
         modules: {
             dashboard: 'app/dashboard/ppts.dashboard',
-            auditing: 'app/auditing/ppts.auditing',
+            task: 'app/task/ppts.task',
             customer: 'app/customer/ppts.customer',
             account: 'app/account/ppts.account',
             product: 'app/product/ppts.product',
@@ -21,21 +24,11 @@ var ppts = ppts || mcs.app;
             schedule: 'app/schedule/ppts.schedule',
             infra: 'app/infra/ppts.infra',
             custcenter: 'app/custcenter/ppts.custcenter',
-            contract: 'app/contract/ppts.contract',
+            query: 'app/query/ppts.query',
         },
         dictMappingConfig: {
             // 公共相关
-            dateRange: 'c_codE_ABBR_dateRange',
-            people: 'c_codE_ABBR_people',
-            relation: 'c_codE_ABBR_relation',
-            period: 'c_codE_ABBR_period',
-            ifElse: 'c_codE_ABBR_ifElse',
-            messageType: 'c_codE_ABBR_messageType',
-            week: 'c_codE_ABBR_week',
             region: 'c_codE_ABBR_LOCATION',
-            orgType: 'Common_OrgType',
-            teacherType: 'Common_TeacherType',
-            applyStatus: 'Common_ApplyStatus',
             grade: 'c_codE_ABBR_CUSTOMER_GRADE',
             gender: 'c_codE_ABBR_GENDER',
             idtype: 'c_codE_ABBR_BO_Customer_CertificateType',
@@ -47,8 +40,6 @@ var ppts = ppts || mcs.app;
             parent: 'c_codE_ABBR_PARENTDICTIONARY',
             child: 'c_codE_ABBR_CHILDDICTIONARY',
             source: 'c_codE_ABBR_BO_Customer_Source',
-            assignment: 'c_codE_ABBR_Customer_Assign',
-            valid: 'c_codE_ABBR_Customer_Valid',
             contactType: 'c_codE_ABBR_Customer_CRM_NewContactType',
             // 学年
             academicYear: 'c_codE_ABBR_ACDEMICYEAR',
@@ -128,6 +119,10 @@ var ppts = ppts || mcs.app;
             payStatus: 'c_codE_ABBR_account_PayStatus',
             //支付类型
             payType: 'c_codE_ABBR_account_PayType',
+            //发票状态
+            invoiceStatus: 'c_codE_ABBR_Account_InvoiceStatus',
+            //发票状态
+            invoiceRecordStatus: 'c_codE_ABBR_Account_InvoiceRecordStatus',
 
             /*
             * 成绩相关
@@ -269,8 +264,9 @@ var ppts = ppts || mcs.app;
             post: 'c_codE_ABBR_Order_Post',
             //特殊折扣原因
             orderSpecialType: 'c_codE_ABBR_Order_SpecialType',
-	    //订单类型
+            //订单类型
             orderType: 'c_codE_ABBR_Order_OrderType',
+            consumeType: 'c_codE_ABBR_Order_ConsumeType',
 
             /*
             * 客服相关
@@ -282,11 +278,6 @@ var ppts = ppts || mcs.app;
             complaintTimes: 'c_codE_ABBR_customer_ComplaintTimes',
             complaintLevel: 'c_codE_ABBR_customer_ComplaintLevel',
             complaintUpgrade: 'c_codE_ABBR_customer_ComplaintUpgrade',
-            /*客服下一个处理人字典*/
-            headquarters: 'c_codE_ABBR_Headquarters_Service',
-            update: 'c_codE_ABBR_Update_Service',
-            updateHeadquarters: 'c_codE_ABBR_Update_Headquarters_Service',
-            branch: 'c_codE_ABBR_Branch_Service',
 
             /*回访相关*/
             visitType: 'c_codE_ABBR_BO_Customer_ReturnInfoType',
@@ -302,8 +293,8 @@ var ppts = ppts || mcs.app;
             serviceFeeType: 'c_codE_ABBR_ServiceFee_ServiceType'
         },
         dataServiceConfig: {
-            // Auditing Services
-            auditingDataService: 'app/auditing/auditinglist/auditing.dataService',
+            // Task Services
+            taskDataService: 'app/task/task.dataService',
 
             // Customer Services
             customerService: 'app/customer/ppts.customer.service',
@@ -366,11 +357,105 @@ var ppts = ppts || mcs.app;
             // CustCenter Services
             custserviceDataService: 'app/custcenter/custservice/custservice.dataService',
 
-            // Contract Services
-            contractListDataService: 'app/contract/contractlist/contractlist.dataService',
-            payListDataService: 'app/contract/paylist/paylist.dataService',
-            refundListDataService: 'app/contract/refundlist/refundlist.dataService',
-        }
+            // Query Services
+            accountQueryService: 'app/query/account/account-query.service',
+            assignQueryService: 'app/query/assign/assign-query.service',
+            orderQueryService: 'app/query/order/order-query.service',
+            studentQueryService: 'app/query/student/student-query.service',
+            taskQueryService: 'app/query/task/task-query.service'
+        },
+        sidebarMenusConfig: [{
+            name: '首页', icon: 'home', route: 'ppts.dashboard', active: true
+        }, {
+            name: '审批管理', icon: 'check-square-o',
+            children: [
+                { name: '待办列表', route: 'ppts.userTask' },
+                { name: '已办列表', route: 'ppts.completedTask' },
+                { name: '通知列表', route: 'ppts.notify' },
+                { name: '流程表单', route: 'ppts.workflow' }
+            ]
+        }, {
+            name: '客户管理', icon: 'user',
+            permission: '潜客管理,潜客管理-本部门,潜客管理-本校区,潜客管理-本分公司,潜客管理-全国,市场资源,市场资源-本部门,市场资源-本校区,市场资源-本分公司,市场资源-全国,跟进管理（学员视图-跟进记录跟进记录详情）,跟进管理（学员视图-跟进记录跟进记录详情）-本部门,跟进管理（学员视图-跟进记录跟进记录详情）-本校区,跟进管理（学员视图-跟进记录跟进记录详情）-本分公司,跟进管理（跟进记录详情）-全国,上门管理,上门管理-本部门,上门管理-本校区,上门管理-本分公司,上门管理-全国,学员管理,学员管理-本部门,学员管理-本校区,学员管理-本分公司,学员管理-全国,回访管理（学员视图-回访、回访详情）,回访管理（学员视图-回访、回访详情）-本部门,回访管理（学员视图-回访、回访详情）-本校区,回访管理（学员视图-回访、回访详情）-本分公司,回访管理（学员视图-回访、回访详情）全国,成绩管理（学员视图-成绩）,成绩管理（学员视图-成绩、成绩详情）-本部门,成绩管理（学员视图-成绩、成绩详情）-本校区,成绩管理（学员视图-成绩、成绩详情）-本分公司,成绩管理（学员视图-成绩、成绩详情）-全国,教学服务会管理（学员视图-教学服务会、详情查看）,教学服务会管理（学员视图-教学服务会、详情查看）-本部门,教学服务会管理（学员视图-教学服务会、详情查看）-本校区,教学服务会管理（学员视图-教学服务会、详情查看）-本分公司,教学服务会管理（学员视图-教学服务会、详情查看）-全国,学大反馈管理（学员视图-家校互动）,学大反馈管理（学员视图-家校互动）-本部门,学大反馈管理（学员视图-家校互动）-本校区,学大反馈管理（学员视图-家校互动）-本分公司,学大反馈管理（学员视图-家校互动）-全国',
+            children: [
+               { name: '潜客管理', route: 'ppts.customer', permission: '潜客管理,潜客管理-本部门,潜客管理-本校区,潜客管理-本分公司,潜客管理-全国' },
+               { name: '市场资源', route: 'ppts.market', permission: '市场资源,市场资源-本部门,市场资源-本校区,市场资源-本分公司,市场资源-全国' },
+               { name: '跟进管理', route: 'ppts.follow', permission: '跟进管理（学员视图-跟进记录跟进记录详情）,跟进管理（学员视图-跟进记录跟进记录详情）-本部门,跟进管理（学员视图-跟进记录跟进记录详情）-本校区,跟进管理（学员视图-跟进记录跟进记录详情）-本分公司,跟进管理（跟进记录详情）-全国' },
+               { name: '上门管理', route: 'ppts.customerverify', permission: '上门管理,上门管理-本部门,上门管理-本校区,上门管理-本分公司,上门管理-全国' },
+               { name: '学员管理', route: 'ppts.student', permission: '学员管理,学员管理-本部门,学员管理-本校区,学员管理-本分公司,学员管理-全国' },
+               { name: '回访管理', route: 'ppts.customervisit', permission: '回访管理（学员视图-回访、回访详情）,回访管理（学员视图-回访、回访详情）-本部门,回访管理（学员视图-回访、回访详情）-本校区,回访管理（学员视图-回访、回访详情）-本分公司,回访管理（学员视图-回访、回访详情）全国' },
+               { name: '成绩管理', route: 'ppts.score', permission: '成绩管理（学员视图-成绩）,成绩管理（学员视图-成绩、成绩详情）-本部门,成绩管理（学员视图-成绩、成绩详情）-本校区,成绩管理（学员视图-成绩、成绩详情）-本分公司,成绩管理（学员视图-成绩、成绩详情）-全国' },
+               { name: '教学服务会', route: 'ppts.customermeeting', permission: '教学服务会管理（学员视图-教学服务会、详情查看）,教学服务会管理（学员视图-教学服务会、详情查看）-本部门,教学服务会管理（学员视图-教学服务会、详情查看）-本校区,教学服务会管理（学员视图-教学服务会、详情查看）-本分公司,教学服务会管理（学员视图-教学服务会、详情查看）-全国' },
+               { name: '学大反馈', route: 'ppts.feedback', permission: '学大反馈管理（学员视图-家校互动）,学大反馈管理（学员视图-家校互动）-本部门,学大反馈管理（学员视图-家校互动）-本校区,学大反馈管理（学员视图-家校互动）-本分公司,学大反馈管理（学员视图-家校互动）-全国' }
+            ]
+        }, {
+            name: '缴费管理', icon: 'credit-card',
+            permission: '缴费单管理（缴费单详情）,缴费单管理（缴费单详情）-本部门,缴费单管理（缴费单详情）-本校区,缴费单管理（缴费单详情）-本分公司,缴费单管理（缴费单详情）-全国,收款管理,收款管理-本部门,收款管理-本校区,收款管理-本分公司,收款管理-全国,退费管理,退费管理-本部门,退费管理-本校区,退费管理-本分公司,退费管理-全国',
+            children: [
+               { name: '缴费单管理', route: 'ppts.accountCharge-query', permission: '缴费单管理（缴费单详情）,缴费单管理（缴费单详情）-本部门,缴费单管理（缴费单详情）-本校区,缴费单管理（缴费单详情）-本分公司,缴费单管理（缴费单详情）-全国' },
+               { name: '收款管理', route: 'ppts.accountChargePayment-query', permission: '收款管理,收款管理-本部门,收款管理-本校区,收款管理-本分公司,收款管理-全国' },
+               { name: '退费管理', route: 'ppts.accountRefund-query', permission: '退费管理,退费管理-本部门,退费管理-本校区,退费管理-本分公司,退费管理-全国' }
+            ]
+        }, {
+            name: '订购管理', icon: 'shopping-bag',
+            permission: '订购管理列表（订购单详情）,订购管理列表（订购单详情）-本部门,订购管理列表（订购单详情）-本校区,订购管理列表（订购单详情）-本分公司,订购管理列表（订购单详情）-全国,退订管理列表,退订管理列表-本部门,退订管理列表-本校区,退订管理列表-本分公司,退订管理列表-全国',
+            children: [
+               { name: '订购列表', route: 'ppts.purchase', permission: '订购管理列表（订购单详情）,订购管理列表（订购单详情）-本部门,订购管理列表（订购单详情）-本校区,订购管理列表（订购单详情）-本分公司,订购管理列表（订购单详情）-全国' },
+               { name: '退订列表', route: 'ppts.unsubscribe', permission: '退订管理列表,退订管理列表-本部门,退订管理列表-本校区,退订管理列表-本分公司,退订管理列表-全国' }
+            ]
+        }, {
+            name: '排课管理', icon: 'calendar',
+            permission: '客户课表管理列表（打印课表）,客户课表管理列表（打印课表）-本部门,客户课表管理列表（打印课表）-本校区,客户课表管理列表（打印课表）-本分公司,客户课表管理列表（打印课表）-全国,按学员排课-本校区,按教师排课-本校区,教师课表,教师课表-本部门,教师课表-本校区,教师课表-本分公司,教师课表-全国,班级管理（按钮查看班级、按钮查看学生）-本校区,班级管理（按钮查看班级、按钮查看学生）-本分公司,班级管理（按钮查看班级、按钮查看学生）-全国,教师上课记录（打印上课记录）,教师上课记录（打印上课记录）-本部门,教师上课记录（打印上课记录）-本校区,教师上课记录（打印上课记录）-本分公司,教师上课记录（打印）-全国,按学员排课-本校区,按教师排课-本校区,班级管理（按钮查看班级、按钮查看学生）-本校区,班级管理（按钮查看班级、按钮查看学生）-本分公司,班级管理（按钮查看班级、按钮查看学生）-全国,教师课时量查询,教师上课记录（打印上课记录）,教师上课记录（打印上课记录）-本部门,教师上课记录（打印上课记录）-本校区,教师上课记录（打印上课记录）-本分公司,教师上课记录（打印）-全国,教师查看-教师课表',
+            children: [
+               { name: '客户课表', route: 'ppts.studentcourse', permission: '客户课表管理列表（打印课表）,客户课表管理列表（打印课表）-本部门,客户课表管理列表（打印课表）-本校区,客户课表管理列表（打印课表）-本分公司,客户课表管理列表（打印课表）-全国' },
+               { name: '按学员排课', route: 'ppts.schedule', permission: '按学员排课-本校区' },
+               { name: '按教师排课', route: 'ppts.schedule-tchasgmt', permission: '按教师排课-本校区' },
+               { name: '教师课表打印', route: 'ppts.teachercourse', permission: '教师课表,教师课表-本部门,教师课表-本校区,教师课表-本分公司,教师课表-全国' },
+               { name: '班级管理', route: 'ppts.classgroup', permission: '班级管理（按钮查看班级、按钮查看学生）-本校区,班级管理（按钮查看班级、按钮查看学生）-本分公司,班级管理（按钮查看班级、按钮查看学生）-全国' },
+               { name: '教师课时量', route: 'ppts.classgroupcourse', permission: '教师课时量查询' },
+               { name: '教师上课记录', route: 'ppts.teachercourserecord', permission: '教师上课记录（打印上课记录）,教师上课记录（打印上课记录）-本部门,教师上课记录（打印上课记录）-本校区,教师上课记录（打印上课记录）-本分公司,教师上课记录（打印）-全国' },
+               { name: '教师个人课表', route: 'ppts.tchcoursepsn', permission: '教师查看-教师课表' }
+            ]
+        }, {
+            name: '产品管理', icon: 'suitcase',
+            permission: '产品管理列表（产品详情）,产品管理列表（产品详情）-本校区,产品管理列表（产品详情）-本分公司,产品管理列表（产品详情）-全国',
+            children: [
+               { name: '产品列表', route: 'ppts.product', permission: '产品管理列表（产品详情）,产品管理列表（产品详情）-本校区,产品管理列表（产品详情）-本分公司,产品管理列表（产品详情）-全国' }
+            ]
+        }, {
+            name: '基础数据', icon: 'gear',
+            permission: '字典管理,折扣表管理-本分公司,折扣表管理-全国,综合服务费管理-本分公司,综合服务费管理-全国,买赠表管理-本分公司,买赠表管理-全国,校区维护-本分公司,信息来源维护',
+            children: [
+               { name: '字典管理', route: 'ppts.dictionary', permission: '字典管理' },
+               { name: '折扣表管理', route: 'ppts.discount', permission: '折扣表管理-本分公司,折扣表管理-全国' },
+               { name: '综合服务费管理', route: 'ppts.servicefee', permission: '综合服务费管理-本分公司,综合服务费管理-全国' },
+               { name: '买赠表管理', route: 'ppts.present', permission: '买赠表管理-本分公司,买赠表管理-全国' },
+               { name: '校区维护', route: 'ppts.school', permission: '校区维护-本分公司' },
+               { name: '信息来源维护', route: 'ppts.source', permission: '信息来源维护' }
+            ]
+        }, {
+            name: '客服中心', icon: 'microphone',
+            permission: '客户服务管理（客服详情）,客户服务管理（客服详情）-本部门,客户服务管理（客服详情）-本校区,客户服务管理（客服详情）-本分公司,客户服务管理（客服详情）-全国',
+            children: [
+               { name: '客户服务', route: 'ppts.custservice', permission: '客户服务管理（客服详情）,客户服务管理（客服详情）-本部门,客户服务管理（客服详情）-本校区,客户服务管理（客服详情）-本分公司,客户服务管理（客服详情）-全国' }
+            ]
+        }, {
+            name: '综合查询', icon: 'search',
+            children: [
+              { name: '全部待办查询', route: 'ppts.query-task', permission: '' },
+               { name: '学员信息列表查询', route: 'ppts.query-student-list', permission: '' },
+               { name: '缴费单查询', route: 'ppts.query-charge', permission: '' },
+               { name: '收款列表查询', route: 'ppts.query-payment', permission: '' },
+               { name: '退款列表查询', route: 'ppts.query-refund', permission: '' },
+               { name: 'POS刷卡列表查询', route: 'ppts.query-posrecord', permission: '' },
+               { name: '班组班级列表查询', route: 'ppts.query-class-group', permission: '' },
+               { name: '学员课时量查询', route: 'ppts.query-student-course', permission: '' },
+               { name: '教师课时量查询', route: 'ppts.query-teacher-course', permission: '' },
+               { name: '订购列表查询', route: 'ppts.query-order-list', permission: '' },
+               { name: '课时兑换列表查询', route: 'ppts.query-order-exchange', permission: '' },
+               { name: '库存单价查询', route: 'ppts.query-order-stock', permission: '' }
+            ]
+        }]
     };
 
     // 读取配置文件
@@ -384,20 +469,24 @@ var ppts = ppts || mcs.app;
 
     var initConfig = function () {
         window.onload = function () {
-            var configData = sessionStorage.getItem('configData');
-            if (!configData) {
-                var parameters = document.getElementById('configData');
-                sessionStorage.setItem('configData', parameters.value);
-                configData = sessionStorage.getItem('configData');
-                parameters.value = '';
+            //var configData = sessionStorage.getItem('configData');
+            //if (!configData) {
+            //    var parameters = document.getElementById('configData');
+            //    sessionStorage.setItem('configData', parameters.value);
+            //    configData = sessionStorage.getItem('configData');
+            //    parameters.value = '';
+            //}
+
+            if (document.getElementById('configData').value) {
+                var config = JSON.parse(document.getElementById('configData').value);
+
+                initConfigSection(config.pptsWebAPIs);
+
+                mcs.app.config.timeStamp = config.timestamp;
+
+                mcs.app.config.mcsComponentBaseUrl = ppts.config.mcsComponentBaseUrl;
+                mcs.app.config.pptsComponentBaseUrl = ppts.config.pptsComponentBaseUrl;
             }
-
-            var config = JSON.parse(configData);
-
-            initConfigSection(config.pptsWebAPIs);
-
-            mcs.app.config.mcsComponentBaseUrl = ppts.config.mcsComponentBaseUrl;
-            mcs.app.config.pptsComponentBaseUrl = ppts.config.pptsComponentBaseUrl;
 
             loadAssets();
         };
@@ -409,9 +498,6 @@ var ppts = ppts || mcs.app;
                 //<!--#bootstrap基础样式-->
                 'libs/bootstrap-3.3.5/css/bootstrap',
                 //<!--#datetime组件样式-->
-                'libs/date-time-3.0.0/css/datepicker',
-                'libs/date-time-3.0.0/css/bootstrap-timepicker',
-                'libs/date-time-3.0.0/css/daterangepicker',
                 'libs/date-time-3.0.0/css/bootstrap-datetimepicker',
                 //<!--#ztree组件样式-->
                 'libs/zTree-3.5.22/css/metroStyle/metroStyle',
@@ -430,7 +516,9 @@ var ppts = ppts || mcs.app;
                 'libs/mcs-jslib-1.0.0/component/mcs.component',
                 //<!--下拉框样式-->
                 'libs/angular-ui-select-0.13.2/dist/select2',
-                'libs/angular-dialog-service-5.3.0/dist/dialogs.min'
+                'libs/angular-dialog-service-5.3.0/dist/dialogs.min',
+                //<!--消息提示框-->
+                'libs/gritter-1.7.4/jquery.gritter'
             ], localCssFiles: [
                 //<!--#网站主样式-->
                 'assets/styles/site'

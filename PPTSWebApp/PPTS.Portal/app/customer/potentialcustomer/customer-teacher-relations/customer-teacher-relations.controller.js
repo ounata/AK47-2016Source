@@ -9,12 +9,12 @@
             'customerDataService',
             function ($scope, $uibModalInstance, customerDataViewService, data, customerDataService) {
                 var vm = this;
-
+                
                 // init
                 vm.init = function () {
                     vm.customerID = data.customerID;
                     customerDataViewService.configTeacherRelationsHeaders(vm);
-                    customerDataViewService.getTeacherRelationsInfo(vm, data);
+                    customerDataViewService.getTeacherRelationsInfo(vm);
                 };
                 vm.init();
 

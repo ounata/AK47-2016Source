@@ -31,19 +31,7 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
                 return this.PayStatus == PayStatusDefine.Paid;
             }
         }
-
-        /// <summary>
-        /// 支付金额大写
-        /// </summary>
-        [DataMember]
-        public string PayMoneyText
-        {
-            get
-            {
-                return Data.Common.Helper.MoneyToCapital(this.PayMoney);
-            }
-        }
-
+        
         /// <summary>
         /// 百万位
         /// </summary>

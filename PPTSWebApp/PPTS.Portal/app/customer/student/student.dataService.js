@@ -54,6 +54,10 @@
             resource.query({ operation: 'AssertAccountCharge', customerID: customerID }, success, error);
         }
 
+        resource.assertStudentTransfer = function (customerID, success, error) {
+            resource.query({ operation: 'AssertStudentTransfer', customerID: customerID }, success, error);
+        }
+
         resource.assignTeacher = function (model, success, error) {
             resource.post({ operation: 'assignTeacher' }, model, success, error);
         }
@@ -84,6 +88,11 @@
             resource.query({ operation: 'GetStudentTransferApplyByApplyID', id: id }, success, error);
         }
 
+        //根据工作流信息获取转学信息
+        resource.getStudentTransferApplyByWorkflow = function (wfParams, success, error) {
+            resource.post({ operation: 'GetStudentTransferApplyByWorkflow' }, wfParams, success, error);
+        }
+
         //保存转学申请
         resource.saveStudentTransferApply = function (apply, success, error) {
             resource.post({ operation: 'SaveStudentTransferApply' }, apply, success, error);
@@ -96,36 +105,52 @@
             resource.post({ operation: 'ApproveStudentTransferApply' }, apply, success, error);
         }
 
+        //解冻
+        resource.studentThawSave = function (model, success, error) {
+            resource.save({ operation: 'SaveMaterial' }, model, success, error);
+        }
+
+        //查看解冻
+        resource.ShowStudentThaw = function (criteria, success, error) {
+            resource.post({ operation: 'GetMaterial' }, criteria, success, error);
+        }
+
+        resource.downloadMaterial = function (criteria, success, error) {
+            resource.post({ operation: 'DownloadMaterial' }, criteria, success, error);
+        }
+
         return resource;
     }]);
 
     customer.registerValue('studentAdvanceSearchItems', [
         { name: '当前年级：', template: '<ppts-checkbox-group category="grade" model="vm.criteria.grade" async="false"/>' },
-        { name: '建档日期：', template: '<ppts-daterangepicker start-date="vm.criteria.createTimeStart" end-date="vm.criteria.createTimeEnd" width="41.5%" css="mcs-margin-left-10"/>' },
-        { name: '首次签约日期：', template: '<ppts-daterangepicker start-date="vm.criteria.firstSignTimeStart" end-date="vm.criteria.firstSignTimeEnd" width="41.5%" css="mcs-margin-left-10"/>' },
-        { name: '账户价值：', template: '<ppts-datarange min="vm.criteria.accountAmountStart" max="vm.criteria.accountAmountEnd" min-text="账户价值起" max-text="账户价值止" width="42%" css="mcs-padding-left-10"/>' },
-        { name: '可用金额：', template: '<ppts-datarange min="vm.criteria.avaiableAmountStart" max="vm.criteria.avaiableAmountEnd" min-text="可用金额起" max-text="可用金额止" width="42%" css="mcs-padding-left-10"/>' },
-        { name: '剩余课时：', template: '<ppts-datarange min="vm.criteria.assetAmountStart" max="vm.criteria.AssetAmountEnd" min-text="剩余课时起" max-text="剩余课时止" unit="个" width="42%" css="mcs-padding-left-10"/>' },
-        { name: '学员类型：', template: '<ppts-radiobutton-group category="studentType" model="vm.criteria.customerType" show-all="true" async="false" css="mcs-padding-left-10" />' },
+        { name: '建档日期：', template: '<mcs-daterangepicker start-date="vm.criteria.createTimeStart" end-date="vm.criteria.createTimeEnd" width="41%" css="mcs-margin-left-10"/>' },
+        { name: '首次签约日期：', template: '<mcs-daterangepicker start-date="vm.criteria.firstSignTimeStart" end-date="vm.criteria.firstSignTimeEnd" width="41%" css="mcs-margin-left-10"/>' },
+        { name: '账户价值：', template: '<mcs-datarange min="vm.criteria.accountAmountStart" max="vm.criteria.accountAmountEnd" min-text="账户价值起" max-text="账户价值止" width="41.8%"/>' },
+        { name: '可用金额：', template: '<mcs-datarange min="vm.criteria.avaiableAmountStart" max="vm.criteria.avaiableAmountEnd" min-text="可用金额起" max-text="可用金额止" width="41.8%"/>' },
+        { name: '剩余课时：', template: '<mcs-datarange min="vm.criteria.assetAmountStart" max="vm.criteria.assetAmountEnd" min-text="剩余课时起" max-text="剩余课时止" unit="个" width="41.8%"/>' },
+        { name: '学员状态：', template: '<ppts-radiobutton-group category="studentType" model="vm.criteria.customerType" show-all="true" async="false" css="mcs-padding-left-10" />' },
         {
-          name: '', template:'<ppts-radiobutton-group category="studentValid" model="vm.criteria.validType" show-all="true" async="false" css="mcs-padding-left-10" ng-show="vm.criteria.customerType==1" />' +
-                             '<ppts-radiobutton-group category="studentAttend" model="vm.criteria.attendType" show-all="true" async="false" css="mcs-padding-left-10" ng-show="vm.criteria.customerType==2" style="display:block"/>' +
-                             '<ppts-radiobutton-group category="studentCancel" model="vm.criteria.stopType" show-all="true" async="false" css="mcs-padding-left-10" ng-show="vm.criteria.customerType==3" style="display:block"/>' +
-                             '<ppts-radiobutton-group category="studentSuspend" model="vm.criteria.suspendType" show-all="true" async="false" css="mcs-padding-left-10" ng-show="vm.criteria.customerType==4" style="display:block"/>' +
-                             '<ppts-radiobutton-group category="studentCompleted" model="vm.criteria.completedType" show-all="true" async="false" css="mcs-padding-left-10" ng-show="vm.criteria.customerType==5" style="display:block"/>' +
-                             '<ppts-radiobutton-group category="studentAttendRange" model="vm.selectedAttendRange" show-all="true" async="false" css="mcs-padding-left-10" ng-show="vm.criteria.customerType==2"/>' +
-                             '<ppts-radiobutton-group category="studentRange" model="vm.selectedRange" show-all="true" async="false" css="mcs-padding-left-10" ng-show="vm.criteria.customerType>2"/>', hide: 'vm.criteria.customerType.length!=1'
+            name: '', template: '<ppts-radiobutton-group category="studentValid" model="vm.criteria.validType" show-all="true" async="false" css="mcs-padding-left-10" ng-show="vm.criteria.customerType==1" />' +
+                               '<ppts-radiobutton-group category="studentAttend" model="vm.criteria.attendType" show-all="true" async="false" css="mcs-padding-left-10" ng-show="vm.criteria.customerType==2" style="display:block"/>' +
+                               '<ppts-radiobutton-group category="studentCancel" model="vm.criteria.stopType" show-all="true" async="false" css="mcs-padding-left-10" ng-show="vm.criteria.customerType==3" style="display:block"/>' +
+                               '<ppts-radiobutton-group category="studentSuspend" model="vm.criteria.suspendType" show-all="true" async="false" css="mcs-padding-left-10" ng-show="vm.criteria.customerType==4" style="display:block"/>' +
+                               '<ppts-radiobutton-group category="studentCompleted" model="vm.criteria.completedType" show-all="true" async="false" css="mcs-padding-left-10" ng-show="vm.criteria.customerType==5" style="display:block"/>' +
+                               '<ppts-radiobutton-group category="studentAttendRange" model="vm.selectedAttendRange" async="false" css="mcs-padding-left-10" ng-show="vm.criteria.customerType==2"/>' +
+                               '<ppts-radiobutton-group category="studentRange" model="vm.selectedRange" async="false" css="mcs-padding-left-10" ng-show="vm.criteria.customerType>2"/>', hide: 'vm.criteria.customerType.length!=1'
         },
         { name: '据最后上课时长：', template: '<ppts-radiobutton-group category="lastCourseType" model="vm.criteria.lastCourseType" show-all="true" async="false" css="mcs-margin-left-10"/>' },
-        { name: '信息来源：', template: '<ppts-checkbox-group category="source" model="vm.criteria.sourceMainType" parent="0" async="false"/>'},
+        { name: '信息来源：', template: '<ppts-checkbox-group category="source" model="vm.criteria.sourceMainType" parent="0" async="false"/>' },
         { name: '信息来源二：', template: '<ppts-checkbox-group category="source" model="vm.criteria.sourceSubType" parent="vm.criteria.sourceMainType" ng-show="vm.criteria.sourceMainType.length==1" async="false"/>', hide: 'vm.criteria.sourceMainType.length!=1' },
-        { name: '客户级别：', template: '<ppts-checkbox-group category="customerLevel" model="vm.criteria.customerLevels" async="false" width="60px"/>' },
-        { name: '有过转介绍的学员：', template: '<ppts-datarange min="vm.criteria.referralCountStart" max="vm.criteria.referralCountEnd" datatype="int" min-text="转介绍过学员的个数" max-text="转介绍过学员的个数" unit="个" width="42%" css="mcs-padding-left-10"/>' },
+        { name: 'VIP客户：', template: '<ppts-checkbox-group category="vipLevel" model="vm.criteria.vipLevels" async="false" width="60px"/>' },
+        { name: '有过转介绍的学员：', template: '<mcs-datarange min="vm.criteria.referralCountStart" max="vm.criteria.referralCountEnd" datatype="int" min-text="转介绍过学员的个数" max-text="转介绍过学员的个数" unit="个" width="42%" css="mcs-padding-left-10"/>' },
         { name: '高三毕业库学员：', template: '<ppts-radiobutton-group category="graduated" model="vm.criteria.graduatedParam" show-all="true" async="false" css="mcs-margin-left-10"/>' },
-        { name: '建档人：', template: '<ppts-checkbox-group category="people" model="vm.criteria.creatorJobs" async="false"/> <mcs-input placeholder="建档人姓名" model="vm.criteria.creatorName" />' },
-        { name: '关联关系：', template: '<ppts-checkbox-group category="relation" model="vm.criteria.creatorRelations" async="false"/>' }
+        { name: '归属关系：', template: '<ppts-checkbox-group category="relation" model="vm.criteria.belongs" async="false" css="mcs-padding-left-10"/><mcs-input placeholder="归属人姓名" model="vm.criteria.belongName" uib-popover="归属人姓名" popover-trigger="mouseenter" custom-style="width:28%"/>' },
+        { name: '建档关系：', template: '<ppts-checkbox-group category="creation" model="vm.criteria.creation" async="false" css="mcs-padding-left-10"/><mcs-input placeholder="建档人姓名" model="vm.criteria.creatorName" uib-popover="建档人姓名" popover-trigger="mouseenter" custom-style="width:28%"/>' },
+        { name: '查询部门：', template: '<ppts-radiobutton-group category="dept" model="vm.criteria.dept" show-all="true" async="false" css="mcs-padding-left-10"/>' },
+        { name: '在读学校：', template: '<ppts-school name="vm.criteria.schoolName" css="mcs-padding-left-10 mcs-width-half"/>' },
     ]);
-    
+
     customer.registerValue('studentListDataHeader', {
         selection: 'checkbox',
         rowsSelected: [],
@@ -145,12 +170,12 @@
             name: "首次签约日期",
             template: '<span>{{row.firstSignTime | date:"yyyy-MM-dd" | normalize}}</span>'
         }, {
-            field: "schoolName",
+            field: "customerSchoolName",
             name: "在读学校"
         }, {
             field: "grade",
             name: "当前年级",
-            template: '<span ng-if="row.grade > 0">{{ row.grade | grade }}</span>'
+            template: '<span>{{ row.grade | grade | normalize}}</span>'
         }, {
             field: "consultantName",
             name: "归属咨询师"
@@ -186,55 +211,12 @@
             name: "距最后上课",
             sortable: true
         }],
-        pager: {
-            pageIndex: 1,
-            pageSize: ppts.config.pageSizeItem,
-            totalCount: -1
-        },
-        orderBy: [{ dataField: 'CreateTime', sortDirection: 0 }]
+        orderBy: [{ dataField: 'CreateTime', sortDirection: 1 }]
     });
 
     customer.registerFactory('studentDataViewService', ['$state', 'studentDataService', 'dataSyncService', 'mcsDialogService', 'studentListDataHeader',
         function ($state, studentDataService, dataSyncService, mcsDialogService, studentListDataHeader) {
             var service = this;
-
-            // 配置学员列表表头
-            service.configStudentListHeaders = function (vm) {
-                vm.data = studentListDataHeader;
-                vm.data.pager.pageChange = function () {
-                    dataSyncService.initCriteria(vm);
-                    studentDataService.getPagedStudents(vm.criteria, function (result) {
-                        vm.data.rows = result.pagedData;
-                    });
-                }
-            };
-
-            // 初始化学员列表
-            service.initStudentList = function (vm, callback) {
-                dataSyncService.initCriteria(vm);
-                studentDataService.getAllStudents(vm.criteria, function (result) {
-                    vm.data.rows = result.queryResult.pagedData;
-                    dataSyncService.injectDictData({
-                        c_codE_ABBR_Customer_Graduated: [{ key: 0, value: '今年新入库学员' }, { key: 1, value: '历史入库学员' }],
-                        c_codE_ABBR_Customer_LastCourseType: [{ key: 0, value: '按最后上课时间判断时长' }, { key: 1, value: '未上过课按付款时间判断时长' }]
-                    });
-                    dataSyncService.injectDictData({
-                        c_codE_ABBR_Student_Type: [{ key: '1', value: '有效学员', tooltip: '账户价值金额>=200，或剩余课时>=1；最后一次上课时间据查询时间或付款时间<=180天，不含高三毕业库中的学生' }, { key: '2', value: '上课学员', tooltip: '最后一次上课/付款时间据查询时间<=30天的学员' }, { key: '3', value: '停课学员', tooltip: '账户价值>=200，或剩余课时>=1；最后一次上课/付款时间据查询时间>=31天，<=180天的学员（不含高三毕业库学生）' }, { key: '4', value: '休学学员', tooltip: '账户价值>=200，或剩余课时>=1；最后一次上课/付款时间据查询时间>180天的学员（不含高三毕业库学生）' }, { key: '5', value: '结课学员', tooltip: '账户价值<200，且剩余课时<1的学员' }, { key: '6', value: '无订单学员', tooltip: '账户价值>=200且剩余课时=0的学员' }],
-                        c_codE_ABBR_Student_Valid: [{ key: '1', value: '1对1有效', tooltip: '有效学员中有1对1剩余课时的学员' }, { key: '2', value: '班组有效', tooltip: '有效学员中有班组剩余课时的学员' }, { key: '3', value: '非课收有效', tooltip: '有效学员中有非课收剩余课时的学员' }],
-                        c_codE_ABBR_Student_Attend: [{ key: '1', value: '1对1上课', tooltip: '上课学员中发生过1对1课时的学员' }, { key: '2', value: '班组上课', tooltip: '上课学员中发生过班组课时的学员' }, { key: '3', value: '非课收上课', tooltip: '上课学员中发生过非课收的学员' }],
-                        c_codE_ABBR_Student_Cancel: [{ key: '1', value: '1对1停课', tooltip: '停课学员中有1对1剩余课时' }, { key: '2', value: '班组停课', tooltip: '停课学员中有班组剩余课时' }],
-                        c_codE_ABBR_Student_Suspend: [{ key: '1', value: '1对1休学', tooltip: '休学学员中有1对1剩余课时' }, { key: '2', value: '班组休学', tooltip: '休学学员中有班组剩余课时' }],
-                        c_codE_ABBR_Student_Completed: [{ key: '1', value: '上课结课', tooltip: '没有退费记录，有“已上”上课记录' }, { key: '2', value: '退费结课', tooltip: '只要有退费记录，且“分区域财务经理审批通过”，就算退费结课' }, { key: '3', value: '转让结课', tooltip: '没有退费记录，没有“已上”上课记录，有转出记录' }],
-                        c_codE_ABBR_Student_Attend_Range: [{ key: '2', value: '1个月内上过课' }],
-                        c_codE_ABBR_Student_Range: [{ key: '1', value: '本月新增' }]
-                    });
-                    dataSyncService.injectPageDict(['people', 'relation']);
-                    dataSyncService.updateTotalCount(vm, result.queryResult);
-                    if (ng.isFunction(callback)) {
-                        callback();
-                    }
-                });
-            };
 
             // 初始化日期范围
             service.initDateRange = function ($scope, vm, watchExps) {
@@ -279,9 +261,30 @@
                     vm.customerIds.push(item.customerID);
                 });
 
-                dataSyncService.injectPageDict(['messageType']);
+                dataSyncService.injectDynamicDict('messageType');
             };
 
             return service;
         }]);
+
+    customer.registerValue('thawData', {
+        customAction: 'edit',
+        rowsSelected: [],
+        keyFields: ['resourceID'],
+        headers: [{
+            field: 'fileName',
+            name: '文件名',
+            headerCss: 'datatable-header',
+            template: '<label class="ppts-datatable-solidlineheight">{{row.fileName}}</label>'
+        },
+        {
+            field: 'downLoad',
+            name: '点击下载',
+            headerCss: 'datatable-header',
+            template: '<a ng-click="row.downLoad()" style="cursor:pointer">点击下载</a>'
+        }],
+        pager: {
+            pagable: false,
+        }
+    });
 });

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{D7051330-A2B5-4B3F-9A90-86D51A92085E}"
 EndProject
@@ -18,10 +18,27 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPTS.Data.Customers.Entities", "..\PPTS.Data.Customers.Entities\PPTS.Data.Customers.Entities.csproj", "{33E530F9-6028-4884-BF6A-4F01CCAF4A84}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPTS.Data.Customers.Test", "..\TestProjects\PPTS.Data.Customers.Test\PPTS.Data.Customers.Test.csproj", "{F72C0601-64EA-4B74-9D3B-C35152100C51}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4313DE1E-738F-477D-B7FD-B237E9116670} = {4313DE1E-738F-477D-B7FD-B237E9116670}
+		{96802A24-2E16-4B0E-83BE-AC8A54E19155} = {96802A24-2E16-4B0E-83BE-AC8A54E19155}
+		{7905642F-4630-4D16-AF40-CB1FB70D516F} = {7905642F-4630-4D16-AF40-CB1FB70D516F}
+		{8B8AB24B-A8F7-420C-834E-52517F178D30} = {8B8AB24B-A8F7-420C-834E-52517F178D30}
+		{0414177E-283E-4E91-8032-37228B715F16} = {0414177E-283E-4E91-8032-37228B715F16}
+		{FAE1D0A1-6BF2-47A1-8C62-109F00A15E86} = {FAE1D0A1-6BF2-47A1-8C62-109F00A15E86}
+		{33E530F9-6028-4884-BF6A-4F01CCAF4A84} = {33E530F9-6028-4884-BF6A-4F01CCAF4A84}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPTS.Data.Common.Test", "..\TestProjects\PPTS.Data.Common.Test\PPTS.Data.Common.Test.csproj", "{E00B4D6D-5437-44F0-BC09-84E340FEF8A0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCS.Library.Data", "..\..\Framework\MCS.Library.Data\MCS.Library.Data.csproj", "{4313DE1E-738F-477D-B7FD-B237E9116670}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebAPI", "WebAPI", "{1B99F97C-A529-48F9-A83A-C9D34A92B48A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPTS.WebAPI.Customers", "..\..\PPTSWebApp\PPTS.WebAPI.Customers\PPTS.WebAPI.Customers.csproj", "{CE7CE1AF-FBD4-4187-9091-211E51BC1517}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPTS.Data.Orders", "..\PPTS.Data.Orders\PPTS.Data.Orders.csproj", "{8B8AB24B-A8F7-420C-834E-52517F178D30}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCS.Library.SOA.DataObjects", "..\..\Framework\MCS.Library.SOA.DataObjects\MCS.Library.SOA.DataObjects.csproj", "{7905642F-4630-4D16-AF40-CB1FB70D516F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -72,6 +89,24 @@ Global
 		{4313DE1E-738F-477D-B7FD-B237E9116670}.DELUXEWORKSTEST|Any CPU.Build.0 = DELUXEWORKSTEST|Any CPU
 		{4313DE1E-738F-477D-B7FD-B237E9116670}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4313DE1E-738F-477D-B7FD-B237E9116670}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE7CE1AF-FBD4-4187-9091-211E51BC1517}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE7CE1AF-FBD4-4187-9091-211E51BC1517}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE7CE1AF-FBD4-4187-9091-211E51BC1517}.DELUXEWORKSTEST|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE7CE1AF-FBD4-4187-9091-211E51BC1517}.DELUXEWORKSTEST|Any CPU.Build.0 = Debug|Any CPU
+		{CE7CE1AF-FBD4-4187-9091-211E51BC1517}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE7CE1AF-FBD4-4187-9091-211E51BC1517}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B8AB24B-A8F7-420C-834E-52517F178D30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B8AB24B-A8F7-420C-834E-52517F178D30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B8AB24B-A8F7-420C-834E-52517F178D30}.DELUXEWORKSTEST|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B8AB24B-A8F7-420C-834E-52517F178D30}.DELUXEWORKSTEST|Any CPU.Build.0 = Debug|Any CPU
+		{8B8AB24B-A8F7-420C-834E-52517F178D30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B8AB24B-A8F7-420C-834E-52517F178D30}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7905642F-4630-4D16-AF40-CB1FB70D516F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7905642F-4630-4D16-AF40-CB1FB70D516F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7905642F-4630-4D16-AF40-CB1FB70D516F}.DELUXEWORKSTEST|Any CPU.ActiveCfg = Debug|Any CPU
+		{7905642F-4630-4D16-AF40-CB1FB70D516F}.DELUXEWORKSTEST|Any CPU.Build.0 = Debug|Any CPU
+		{7905642F-4630-4D16-AF40-CB1FB70D516F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7905642F-4630-4D16-AF40-CB1FB70D516F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -84,38 +119,53 @@ Global
 		{F72C0601-64EA-4B74-9D3B-C35152100C51} = {273F849D-E1FD-414F-B6C5-EA861C4BB1A5}
 		{E00B4D6D-5437-44F0-BC09-84E340FEF8A0} = {273F849D-E1FD-414F-B6C5-EA861C4BB1A5}
 		{4313DE1E-738F-477D-B7FD-B237E9116670} = {FF3D18BA-0CD7-4DBA-BEC3-34E25AF7CC64}
+		{CE7CE1AF-FBD4-4187-9091-211E51BC1517} = {1B99F97C-A529-48F9-A83A-C9D34A92B48A}
+		{8B8AB24B-A8F7-420C-834E-52517F178D30} = {D7051330-A2B5-4B3F-9A90-86D51A92085E}
+		{7905642F-4630-4D16-AF40-CB1FB70D516F} = {FF3D18BA-0CD7-4DBA-BEC3-34E25AF7CC64}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 8
+		SccNumberOfProjects = 11
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://10.1.56.70:8080/tfs/pptsv2.0
-		SccProjectUniqueName0 = ..\\PPTS.Data.Common\\PPTS.Data.Common.csproj
-		SccProjectTopLevelParentUniqueName0 = PPTS.Data.Auth.sln
-		SccProjectName0 = ../PPTS.Data.Common
-		SccLocalPath0 = ..\\PPTS.Data.Common
-		SccProjectUniqueName1 = ..\\PPTS.Data.Common.Entities\\PPTS.Data.Common.Entities.csproj
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = ..\\PPTS.Data.Common\\PPTS.Data.Common.csproj
 		SccProjectTopLevelParentUniqueName1 = PPTS.Data.Auth.sln
-		SccProjectName1 = ../PPTS.Data.Common.Entities
-		SccLocalPath1 = ..\\PPTS.Data.Common.Entities
-		SccProjectUniqueName2 = PPTS.Data.Customers.csproj
+		SccProjectName1 = ../PPTS.Data.Common
+		SccLocalPath1 = ..\\PPTS.Data.Common
+		SccProjectUniqueName2 = ..\\PPTS.Data.Common.Entities\\PPTS.Data.Common.Entities.csproj
 		SccProjectTopLevelParentUniqueName2 = PPTS.Data.Auth.sln
-		SccLocalPath2 = .
-		SccProjectUniqueName3 = ..\\PPTS.Data.Customers.Entities\\PPTS.Data.Customers.Entities.csproj
+		SccProjectName2 = ../PPTS.Data.Common.Entities
+		SccLocalPath2 = ..\\PPTS.Data.Common.Entities
+		SccProjectUniqueName3 = PPTS.Data.Customers.csproj
 		SccProjectTopLevelParentUniqueName3 = PPTS.Data.Auth.sln
-		SccProjectName3 = ../PPTS.Data.Customers.Entities
-		SccLocalPath3 = ..\\PPTS.Data.Customers.Entities
-		SccProjectUniqueName4 = ..\\TestProjects\\PPTS.Data.Customers.Test\\PPTS.Data.Customers.Test.csproj
+		SccLocalPath3 = .
+		SccProjectUniqueName4 = ..\\PPTS.Data.Customers.Entities\\PPTS.Data.Customers.Entities.csproj
 		SccProjectTopLevelParentUniqueName4 = PPTS.Data.Auth.sln
-		SccProjectName4 = ../TestProjects/PPTS.Data.Customers.Test
-		SccLocalPath4 = ..\\TestProjects\\PPTS.Data.Customers.Test
-		SccProjectUniqueName5 = ..\\TestProjects\\PPTS.Data.Common.Test\\PPTS.Data.Common.Test.csproj
+		SccProjectName4 = ../PPTS.Data.Customers.Entities
+		SccLocalPath4 = ..\\PPTS.Data.Customers.Entities
+		SccProjectUniqueName5 = ..\\TestProjects\\PPTS.Data.Customers.Test\\PPTS.Data.Customers.Test.csproj
 		SccProjectTopLevelParentUniqueName5 = PPTS.Data.Auth.sln
-		SccProjectName5 = ../TestProjects/PPTS.Data.Common.Test
-		SccLocalPath5 = ..\\TestProjects\\PPTS.Data.Common.Test
-		SccProjectUniqueName6 = ..\\..\\Framework\\MCS.Library.Data\\MCS.Library.Data.csproj
+		SccProjectName5 = ../TestProjects/PPTS.Data.Customers.Test
+		SccLocalPath5 = ..\\TestProjects\\PPTS.Data.Customers.Test
+		SccProjectUniqueName6 = ..\\TestProjects\\PPTS.Data.Common.Test\\PPTS.Data.Common.Test.csproj
 		SccProjectTopLevelParentUniqueName6 = PPTS.Data.Auth.sln
-		SccProjectName6 = ../../Framework/MCS.Library.Data
-		SccLocalPath6 = ..\\..\\Framework\\MCS.Library.Data
-		SccLocalPath7 = .
+		SccProjectName6 = ../TestProjects/PPTS.Data.Common.Test
+		SccLocalPath6 = ..\\TestProjects\\PPTS.Data.Common.Test
+		SccProjectUniqueName7 = ..\\..\\Framework\\MCS.Library.Data\\MCS.Library.Data.csproj
+		SccProjectTopLevelParentUniqueName7 = PPTS.Data.Auth.sln
+		SccProjectName7 = ../../Framework/MCS.Library.Data
+		SccLocalPath7 = ..\\..\\Framework\\MCS.Library.Data
+		SccProjectUniqueName8 = ..\\..\\PPTSWebApp\\PPTS.WebAPI.Customers\\PPTS.WebAPI.Customers.csproj
+		SccProjectTopLevelParentUniqueName8 = PPTS.Data.Auth.sln
+		SccProjectName8 = ../../PPTSWebApp/PPTS.WebAPI.Customers
+		SccLocalPath8 = ..\\..\\PPTSWebApp\\PPTS.WebAPI.Customers
+		SccProjectUniqueName9 = ..\\PPTS.Data.Orders\\PPTS.Data.Orders.csproj
+		SccProjectTopLevelParentUniqueName9 = PPTS.Data.Auth.sln
+		SccProjectName9 = ../PPTS.Data.Orders
+		SccLocalPath9 = ..\\PPTS.Data.Orders
+		SccProjectUniqueName10 = ..\\..\\Framework\\MCS.Library.SOA.DataObjects\\MCS.Library.SOA.DataObjects.csproj
+		SccProjectTopLevelParentUniqueName10 = PPTS.Data.Auth.sln
+		SccProjectName10 = ../../Framework/MCS.Library.SOA.DataObjects
+		SccLocalPath10 = ..\\..\\Framework\\MCS.Library.SOA.DataObjects
 	EndGlobalSection
 EndGlobal

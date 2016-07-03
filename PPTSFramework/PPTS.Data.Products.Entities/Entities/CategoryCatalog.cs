@@ -46,6 +46,13 @@ namespace PPTS.Data.Products.Entities
         public string CatalogName { set; get; }
 
         /// <summary>
+        /// 产品类型编码
+        /// </summary>
+        [ORFieldMapping("Category")]
+        [DataMember]
+        public string Category { set; get; }
+
+        /// <summary>
         /// 是否有合作
         /// </summary>
         [ORFieldMapping("HasPartner")]
@@ -117,6 +124,12 @@ namespace PPTS.Data.Products.Entities
     [DataContract]
     public class CategoryCatalogCollection : EditableDataObjectCollectionBase<CategoryCatalog>
     {
+        public CategoryCatalogCollection Where(Func<CategoryCatalog,bool> fun)
+        {
+            var result = new CategoryCatalogCollection();
+            this.ForEach(m => { if (fun(m)) { result.Add(m); } });
+            return result;
+        }
     }
 
 

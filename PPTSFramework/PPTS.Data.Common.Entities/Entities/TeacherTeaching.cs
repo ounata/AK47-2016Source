@@ -13,7 +13,7 @@ namespace PPTS.Data.Common.Entities
 	/// 教学教学表（老师教授-科目-年级）
 	/// </summary>
 	[Serializable]
-    [ORTableMapping("TeacherTeachings")]
+    [ORTableMapping("MT.TeacherTeachings")]
     [DataContract]
 	public class TeacherTeaching
 	{		

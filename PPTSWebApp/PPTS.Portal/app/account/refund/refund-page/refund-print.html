@@ -5,24 +5,63 @@
         </button>
         <h4 class="modal-title">打印退费凭证</h4>
     </div>
-    <div class="modal-body">
+    <div class="modal-body" id="printArea">
          <table class="table table-bordered">
                 <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td colspan="4">学大教育专用退费凭证</td>
                 </tr>
+             <tr>
+                 <td>学生姓名</td>
+                 <td>{{vm.customer.customerName}}</td>
+                 <td>学生编号</td>
+                 <td>{{vm.customer.customerCode}}</td>
+             </tr>
+             <tr>
+                 <td>申请人</td>
+                 <td>{{vm.apply.applierName}}</td>
+                 <td>家长联系方式</td>
+                 <td>{{vm.customer.phoneNumber}}</td>
+             </tr>
+             <tr>
+                 <td>提交申请日期</td>
+                 <td>{{vm.apply.applyTime | date:"yyyy-MM-dd" | normalize}}</td>
+                 <td>可退金额</td>
+                 <td>{{vm.apply.thatAccountMoney}}</td>
+             </tr>
+             <tr>
+                 <td>申请退款金额</td>
+                 <td>{{vm.apply.applyRefundMoney}}</td>
+                 <td>当前折扣基数</td>
+                 <td>{{vm.apply.thatDiscountBase}}</td>
+             </tr>
+             <tr>
+                 <td>已消耗课时价值</td>
+                 <td>{{vm.apply.consumptionValue}}</td>
+                 <td>折扣返还</td>
+                 <td>{{vm.apply.reallowanceMoney}}</td>
+             </tr>
+             <tr>
+                 <td>应退金额</td>
+                 <td>{{vm.apply.oughtRefundMoney}}</td>
+                 <td>实退金额</td>
+                 <td>{{vm.apply.realRefundMoney}}</td>
+             </tr>
+             <tr>
+                 <td>退费原因</td>
+                 <td colspan="3">{{vm.apply.applyMemo}}</td>
+             </tr>
+             <tr>
+                 <td colspan="2">
+                     经办人签字：
+                 </td>
+                 <td colspan="2">
+                     收款人签字：
+                 </td>
+             </tr>
          </table>
     </div>
     <div class="modal-footer">
-        <mcs-button category="print" click="vm.save()"></mcs-button>
+        <mcs-button category="print" click="vm.print()"></mcs-button>
         <mcs-button category="close" click="vm.close()"></mcs-button>
     </div>
 </form>

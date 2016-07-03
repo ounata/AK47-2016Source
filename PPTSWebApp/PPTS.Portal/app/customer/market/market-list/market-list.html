@@ -8,7 +8,7 @@
             <ppts-select-branch model="vm.criteria.orgIds" />
         </div>
         <div class="col-md-6">
-            <mcs-input placeholder="输入学员、家长姓名，学员编号，联系方式进行查询" uib-tooltip="学员、家长姓名，学员编号，联系方式" model="vm.criteria.keyword" css="mcs-input-search mcs-width-full" />
+            <mcs-input placeholder="输入学员、家长姓名，学员编号，联系方式进行查询" uib-popover="学员、家长姓名，学员编号，联系方式" model="vm.criteria.keyword" css="mcs-input-search mcs-width-full" />
         </div>
     </div>
 </ppts-dynamic-content>
@@ -17,6 +17,7 @@
 <ppts-dynamic-content template="toolbar.tpl.html">
     <mcs-button icon="mail-forward" css="btn-yellow" text="划转资源" ppts-job-functions="划转资源" click="vm.transfer()"></mcs-button>
     <mcs-button icon="user" css="btn-success" text="分配市场专员" ppts-job-functions="分配市场专员" click="vm.assign(vm.relationType.market)"></mcs-button>
+    <mcs-button category="add" text="批量导入资源" ppts-job-functions="批量导入潜在客户" click="vm.import()"></mcs-button>
 </ppts-dynamic-content>
 <!-- /结束：市场潜客列表.工具栏 -->
 <!-- #开始：市场潜客列表.数据表格 -->

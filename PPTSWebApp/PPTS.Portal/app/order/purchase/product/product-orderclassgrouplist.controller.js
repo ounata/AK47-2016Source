@@ -3,9 +3,12 @@
         ppts.config.dataServiceConfig.productDataService],
         function (product) {
         	product.registerController('orderClassGroupListController', [
-                '$scope', '$state', '$stateParams', 'dataSyncService', 'purchaseCourseDataService', 'productDataService',
-                function ($scope, $state, $stateParams, dataSyncService, purchaseCourseDataService, productDataService) {
+                '$scope', '$state', '$location', '$stateParams', 'dataSyncService', 'mcsDialogService', 'purchaseCourseDataService', 'productDataService',
+                function ($scope, $state, $location, $stateParams, dataSyncService, mcsDialogService, purchaseCourseDataService, productDataService) {
+
                     var vm = this;
+                    vm.customer = $location.$$search;
+
                     var campusId = $stateParams.campusId;
                     var customerId = $stateParams.customerId;
 
@@ -26,7 +29,7 @@
                 			//field: "productName",
                 			name: "可插班班级数量",
                 		    //template: '<span>{{row.classCount }}</span>'
-                			template: '<a ui-sref="ppts.purchaseClassGroup({customerId:'+customerId+' ,productId:row.productID ,listType:3})">{{row.classCount}}</a>'
+                			template: '<a href="javascript:;" ng-click="vm.showClassList(row)" >{{row.classCount}}</a>'
                 		}, {
                 		    field: "catalogName",
                 		    name: "产品类型",
@@ -73,8 +76,15 @@
                 		orderBy: [{ dataField: 'CreateTime', sortDirection: 1 }]
                 	}
 
+                	vm.showClassList = function (row) {
 
-                	dataSyncService.initCriteria(vm);
+                	    if (vm.criteria.campusID == '') { mcsDialogService.error({ title: '错误', message: '没有选择校区不允许进行操作！' }); return; }
+
+                	    var param = $.extend({ productId: row.productID, listType: 3, productCampusId: vm.criteria.campusID }, vm.customer);
+                	    param = $.extend(param, $stateParams);
+
+                	    $state.go('ppts.purchaseClassGroup', param);
+                	};
                 	vm.search = function () {
 
                 	    productDataService.getClassGroupProducts(vm.criteria, function (result) {
@@ -89,20 +99,31 @@
 
                 		});
 
-                	};
-
+                	}; 
                 	vm.showShoppingCart = function () {
-                	    $state.go('ppts.purchaseOrderList', { listType: 3, customerId: customerId, campusId: campusId });
+
+                	    var param = $.extend({ listType: 3 }, vm.customer);
+                	    param = $.extend(param, $stateParams);
+
+                	    $state.go('ppts.purchaseOrderList', param);
                 	};
 
-                	vm.init = function () {
+                	var init = (function () {
+
+                	    dataSyncService.initCriteria(vm);
+                	    vm.criteria.productStatus = 4;
+
+                	    //权限指定
+                	    vm.criteria.branch = ppts.user.branchId;
+                	    vm.criteria.campusID = ppts.user.campusId;
+
+                	    if (ppts.user.branchId) { vm.disabledlevel = 1; }
+                	    if (ppts.user.campusId) { vm.disabledlevel = 2; }
+
+                	    
                 		vm.search();
-                	};
-                	vm.init();
+                	})();
 
-
-
-                	
 
                 }]);
         });

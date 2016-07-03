@@ -11,6 +11,7 @@ using MCS.Library.Core;
 using MCS.Web.MVC.Library.Filters;
 using MCS.Library.Principal;
 using PPTS.Data.Common.Security;
+using PPTS.Web.MVC.Library.Filters;
 
 namespace PPTS.WebAPI.Customers.Controllers
 {
@@ -25,8 +26,14 @@ namespace PPTS.WebAPI.Customers.Controllers
         /// <param name="criteria">查询条件</param>
         /// <returns>返回带字典的跟进记录列表</returns>
         [HttpPost]
+        [PPTSJobFunctionAuthorize("PPTS:跟进管理（学员视图-跟进记录跟进记录详情）,跟进管理（学员视图-跟进记录跟进记录详情）-本部门,跟进管理（学员视图-跟进记录跟进记录详情）-本校区,跟进管理（学员视图-跟进记录跟进记录详情）-本分公司,跟进管理（跟进记录详情）-全国")]
         public FollowQueryResult GetAllFollows(FollowQueryCriteriaModel criteria)
         {
+            if (criteria.QueryDepts != null && criteria.QueryDepts.Length != 0)
+            {
+                //获取部门ID
+                criteria.QueryDeptID = DeluxeIdentity.CurrentUser.GetCurrentJob().GetParentOrganizationByType(DepartmentType.Department).ID;
+            }
             return new FollowQueryResult
             {
                 QueryResult = CustomerFollowDataSource.Instance.LoadCustomerFollow(criteria.PageParams, criteria, criteria.OrderBy),
@@ -40,6 +47,7 @@ namespace PPTS.WebAPI.Customers.Controllers
         /// <param name="criteria">查询条件</param>
         /// <returns>返回不带字典的跟进记录列表</returns>
         [HttpPost]
+        [PPTSJobFunctionAuthorize("PPTS:跟进管理（学员视图-跟进记录跟进记录详情）,跟进管理（学员视图-跟进记录跟进记录详情）-本部门,跟进管理（学员视图-跟进记录跟进记录详情）-本校区,跟进管理（学员视图-跟进记录跟进记录详情）-本分公司,跟进管理（跟进记录详情）-全国")]
         public PagedQueryResult<FollowQueryModel, CustomerFollowQueryCollection> GetPagedFollows(FollowQueryCriteriaModel criteria)
         {
             return CustomerFollowDataSource.Instance.LoadCustomerFollow(criteria.PageParams, criteria, criteria.OrderBy);
@@ -55,6 +63,7 @@ namespace PPTS.WebAPI.Customers.Controllers
         /// <param name="isPotential"></param>
         /// <returns></returns>
         [HttpGet]
+        [PPTSJobFunctionAuthorize("PPTS:新增跟进记录")]
         public CreatableFollowModel CreateFollow(string customerId, bool isPotential)
         {
             return CreatableFollowModel.CreateFollow(customerId, isPotential);
@@ -65,8 +74,14 @@ namespace PPTS.WebAPI.Customers.Controllers
         /// </summary>
         /// <param name="model">跟进记录实体类</param>
         [HttpPost]
+        [PPTSJobFunctionAuthorize("PPTS:新增跟进记录")]
         public void CreateFollow(CreatableFollowModel model)
         {
+            #region 写入权限验证
+            PPTS.Data.Common.Authorization.ScopeAuthorization<CustomerFollow>
+               .GetInstance(Data.Customers.ConnectionDefine.PPTSCustomerConnectionName).CheckEditAuth("", model.Follow.CustomerID);
+            #endregion
+
             model.Follow.CreatorID = DeluxeIdentity.CurrentUser.ID;
             model.Follow.CreatorName = DeluxeIdentity.CurrentUser.DisplayName;
             model.Follow.FollowerJobID = DeluxeIdentity.CurrentUser.GetCurrentJob().ID;
@@ -92,18 +107,12 @@ namespace PPTS.WebAPI.Customers.Controllers
         #region api/customerfollows/viewfollow
 
         [HttpGet]
+        [PPTSJobFunctionAuthorize("PPTS:跟进管理（学员视图-跟进记录跟进记录详情）,跟进管理（学员视图-跟进记录跟进记录详情）-本部门,跟进管理（学员视图-跟进记录跟进记录详情）-本校区,跟进管理（学员视图-跟进记录跟进记录详情）-本分公司,跟进管理（跟进记录详情）-全国")]
         public ViewFollowModel ViewFollow(string followId)
         {
             return ViewFollowModel.LoadFollowModel(followId);
         }
 
-        //[HttpPost]
-        //public void UpdateFollow(EditableFollowModel model)
-        //{
-        //    EditCustomerFollowExecutor executor = new EditCustomerFollowExecutor(model);
-
-        //    executor.Execute();
-        //}
         #endregion
     }
 }

@@ -19,19 +19,20 @@ define([ppts.config.modules.customer,
                 function ($scope, $state, $location, $stateParams, dataSyncService, feedbackDataService, feedbackViewDataViewService) {
                     var vm = this;
                     vm.tabs = [];
-
+                    if (!vm.criteria) vm.criteria = {};
                     switch ($stateParams.prev) {
                         case "ppts.feedback": //来源学大反馈
-                            if (!vm.criteria) vm.criteria = {};
-                            vm.customerId = $stateParams.customerId;
+                           
+                            vm.customerId = $stateParams.customerId || $stateParams.id;
                             //vm.criteria.replyID = $stateParams.replyID;
-                            vm.criteria.replyTimeEnd = new Date(parseInt($stateParams.replyTime));
-                            vm.criteria.customerId = $stateParams.customerId;
+                            vm.criteria.replyTimeEnd =""!=$stateParams.replyTime? new Date(parseInt($stateParams.replyTime)):null;
+                            vm.criteria.customerId = vm.customerId;
+                            vm.fromRouteName = "ppts.student-view.feedbacks";
                             break;
                         default:
-                            if (!vm.criteria) vm.criteria = {};
                             vm.customerId = $stateParams.id;
                             vm.criteria.customerId = $stateParams.id;
+                            vm.fromRouteName = "ppts.feedback-view";
                             break;
                     }
 
@@ -48,14 +49,12 @@ define([ppts.config.modules.customer,
                         }
                         feedbackDataService.GetCustomerRepliesList(vm.criteria, function (result) {
                             vm.data.rows = result.queryResult.pagedData;
-                            //vm.dictionaries = result.dictionaries;
-                            dataSyncService.injectDictData();
                             vm.data.pager.totalCount = result.queryResult.totalCount;
                             $scope.$broadcast('dictionaryReady');
                         });
                     }
                     vm.add = function () {
-                        $state.go('ppts.feedback-add', { id: vm.customerId, prev: $stateParams.prev });
+                        $state.go('ppts.feedback-add', { id: vm.customerId, prev: $stateParams.prev});
                     }
                     vm.search = function () {
                         vm.tabs = [];

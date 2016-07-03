@@ -58,7 +58,7 @@ namespace MCS.Library.SOA.DataObjects.Security
 		{
 			this.InnerSort = ((ISCRelationContainer)parent).GetCurrentMaxInnerSort() + 1;
 
-			string parentGlobalSort = "000000";
+			string parentGlobalSort = "0000000000";
 			string parentFullPath = ((ISCQualifiedNameObject)parent).GetQualifiedName();
 
 			if (parent.ID == SCOrganization.GetRoot().ID)
@@ -85,7 +85,7 @@ namespace MCS.Library.SOA.DataObjects.Security
 			else
 				this.FullPath = childName;
 
-			this.GlobalSort = parentGlobalSort + string.Format("{0:000000}", this.InnerSort);
+			this.GlobalSort = parentGlobalSort + string.Format("{0:0000000000}", this.InnerSort);
 		}
 
 		/// <summary>

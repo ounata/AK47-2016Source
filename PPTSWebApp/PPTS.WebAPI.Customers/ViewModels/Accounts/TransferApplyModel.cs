@@ -1,4 +1,5 @@
-﻿using MCS.Library.Net.SNTP;
+﻿using MCS.Library.Core;
+using MCS.Library.Net.SNTP;
 using MCS.Library.OGUPermission;
 using PPTS.Data.Common;
 using PPTS.Data.Common.Security;
@@ -65,22 +66,34 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
         /// </summary>
         public void Prepare(IUser user)
         {
+            this.ApplyNo = Helper.GetApplyNo("ZR");
+
             this.BuildAccount();
 
             //转入学员账户相关信息
             ConfigArgs args = ConfigsCache.GetArgs(this.BizCampusID);
-            //不是合同账户并且是拓路1的校区，则获取原来的账户，否则构建新的账户
-            if (this.AccountType == AccountTypeDefine.Contract
-                || args.DiscountSchema == DiscountSchemaDefine.Schema2)
+            //拓路2的校区构建新的账户
+            if (args.IsTulandDiscountSchema2)
             {
                 this.BuildNewBizAccount();
             }
-            else
+            else if(this.AccountType == AccountTypeDefine.Contract)
             {
+                //如果转入方没有老的合同账户，则新建合同账户
+                AccountModel bizAccount = AccountModel.LoadContractByCustomerID(this.BizCustomerID);
+                if (bizAccount != null)
+                    this.BuildOldBizAccount(bizAccount);
+                else
+                    this.BuildNewBizAccount();
+            }
+            else
+            { 
                 //如果转入方没有可充值的账户，则新建账户
                 AccountModel bizAccount = AccountModel.LoadChargableByCustomerID(this.BizCustomerID);
                 if (bizAccount != null)
                     this.BuildOldBizAccount(bizAccount);
+                else
+                    this.BuildNewBizAccount();
             }
         }
 
@@ -129,6 +142,10 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
         private void BuildNewBizAccount()
         {
             DiscountResult result = DiscountResult.CalcDiscount(this.BizCampusID, this.TransferMoney);
+            if (string.IsNullOrEmpty(result.DiscountID))
+                throw new Exception("转入校区的折扣表不存在");
+            this.BizAccountID = this.ApplyID;
+            this.BizAccountCode = Helper.GetAccountCode();
             this.BizAccountType = this.AccountType;
             this.BizThisDiscountID = result.DiscountID;
             this.BizThisDiscountCode = result.DiscountCode;
@@ -146,7 +163,7 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
         public static TransferApplyModel LoadByCustomer(CustomerModel customer)
         {
             TransferApplyModel model = new TransferApplyModel();
-            model.ApplyID = Guid.NewGuid().ToString().ToUpper();
+            model.ApplyID = UuidHelper.NewUuidString();
             model.CampusID = customer.CampusID;
             model.CampusName = customer.CampusName;
             model.CustomerID = customer.CustomerID;
@@ -166,7 +183,7 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
             AccountTransferApply apply = AccountTransferApplyAdapter.Instance.LoadByApplyID(applyID);
             if (apply != null)
             {
-                TransferApplyModel model = AutoMapper.Mapper.DynamicMap<TransferApplyModel>(apply);
+                TransferApplyModel model = apply.ProjectedAs<TransferApplyModel>();
                 return model;
             }
             return null;

@@ -99,21 +99,21 @@ namespace MCS.Library.SOA.DataObjects.Workflow
             set;
         }
 
-        [ORFieldMapping("START_TIME")]
+        [ORFieldMapping("START_TIME", UtcTimeToLocal = true)]
         public DateTime StartTime
         {
             get;
             set;
         }
 
-        [ORFieldMapping("END_TIME")]
+        [ORFieldMapping("END_TIME", UtcTimeToLocal = true)]
         public DateTime EndTime
         {
             get;
             set;
         }
 
-        [ORFieldMapping("CREATE_TIME")]
+        [ORFieldMapping("CREATE_TIME", UtcTimeToLocal = true)]
         [SqlBehavior(BindingFlags = ClauseBindingFlags.Select | ClauseBindingFlags.Where)]
         public DateTime CreateTime
         {

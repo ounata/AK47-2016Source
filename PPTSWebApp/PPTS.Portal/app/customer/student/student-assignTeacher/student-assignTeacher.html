@@ -5,37 +5,39 @@
         </button>
         <h4 class="modal-title">分配教师</h4>
     </div>
-    <uib-tabset>
-        <uib-tab heading="分配教师">
-            <div class="modal-body">
+    <div class="modal-body">
+        <uib-tabset>
+            <uib-tab heading="分配教师">
                 <div class="from-group">
-                    <span class="col-sm-3 control-label no-padding-right">我申请将 [{{vm.customerName}}] 分配给：</span>
-                    <div class="col-sm-9">
-                        <tags-input class="lg" ng-disable="true" ng-model="vm.teachers" key-property="teacherID" display-property="viewName" placeholder="教师姓名">
-                            <auto-complete min-length="1" source="vm.queryTeacherList($query)"></auto-complete>
-                        </tags-input>
+                    <span class="col-sm-4 control-label no-padding-right">我申请将<span class="important" uib-popover="{{vm.customerName.join('、')}}" popover-trigger="mouseenter">【{{vm.customerName.length>1?vm.customerName[0]+"...":vm.customerName[0]}}】</span>分配给：</span>
+                    <div class="col-sm-8">
+                        <mcs-select category="teacher" model="vm.teacher" style="margin:0px; " class="" />
                     </div>
                 </div>
                 <div class="from-group">
-                    <span class="col-sm-3 control-label no-padding-right">通知处理人：</span>
-                    <div class="col-sm-9">
-                        <ppts-checkbox-group category="sendEmailSMS" model="vm.sendEmailSMS" async="false" />
+                    <span class="col-sm-4 control-label no-padding-right">通知处理人：</span>
+                    <div class="col-sm-8">
+                        <ppts-checkbox-group category="messageType" model="vm.sendEmailSMS" style="margin-left:4px;" show-all="false" async="false" />
                     </div>
                 </div>
-                <div  class="from-group">
-                    <mcs-button class="dialog-button" category="save" click="vm.assignTeacher()" />
-                    <mcs-button class="dialog-button" category="close" click="vm.close()" />
+                <div class="from-group">
+                    <mcs-button class="dialog-button" category="save" text="确定" click="vm.assignTeacher()" />
+                    <mcs-button class="dialog-button" category="close" text="关闭" click="vm.close()" />
                 </div>
-            </div>
-            
-        </uib-tab>
-        <uib-tab heading="调换/调出">
-            <div class="modal-body">
-                <div>
-                    <mcs-datatable data="vm.data" />
+            </uib-tab>
+            <uib-tab heading="调换/调出" ng-show="vm.customerName.length == 1">
+                <div class="modal-body">
+                    <div>
+                        <mcs-datatable data="vm.data" />
+                    </div>
+                    <div class="from-group">
+                        <span class="col-sm-3 control-label no-padding-right">通知处理人：</span>
+                        <div class="col-sm-9">
+                            <ppts-checkbox-group category="messageType" model="vm.sendEmailSMS_" show-all="false" async="false" />
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </uib-tab>
-    </uib-tabset>
-
+            </uib-tab>
+        </uib-tabset>
+    </div>
 </form>

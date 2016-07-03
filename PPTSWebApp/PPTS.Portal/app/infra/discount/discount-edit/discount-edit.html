@@ -21,7 +21,7 @@
                     <div class="form-group horizontal">
                         <mcs-label required="true" text="启用日期" css="col-sm-3" />
                         <div class="col-sm-4">
-                            <ppts-datepicker model="vm.criteria.startDate" class="inline-ppts-datepicker" required />
+                            <mcs-datepicker model="vm.criteria.startDate" class="inline-mcs-datepicker" required />
                         </div>
                     </div>
                 </div>
@@ -45,14 +45,17 @@
                         <div class="col-sm-6 col-md-6">
                             <div style="text-align:center; background-color:#ccc; padding:10px 0 10px 0; font-size:14px;">
                                 充值折扣关系
-                                <a class="btn btn-link" ng-click="vm.addRow()" uib-tooltip="新增充值折扣关系"><i class="ace-icon fa fa-plus bigger-110"></i></a>
-                                <a class="btn btn-link" ng-click="vm.removeRow()" uib-tooltip="移除充值折扣关系"><i class="ace-icon fa fa-minus bigger-110"></i></a>
+                                <a class="btn btn-link" ng-click="vm.addRow()" style="float:right;"><i class="fa fa-plus" aria-hidden="true"></i>添加充值折扣关系</a>
                             </div>
-                            <mcs-datatable data="vm.relationData" />
+                            <div style="overflow:auto; height:456px;">
+                                <mcs-datatable data="vm.relationData" />
+                            </div>
                         </div>
                         <div class="col-sm-6 col-md-6">
                             <div style="text-align:center; background-color:#ccc; padding:14px 0 14px 0; font-size:14px;">校区及使用状态</div>
-                            <mcs-datatable data="vm.campusData" />
+                            <div style="overflow:auto; height:456px;">
+                                <mcs-datatable data="vm.campusData" />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -60,16 +63,19 @@
                     <span>温馨提示：</span>
                 </div>
                 <div class="row">
-                    <span>1. 充值额每档只需填写该档最高金额；</span>
+                    <span>1. 请在输入框内输入数字，充值额单位：万元，折扣精确到0.01；</span>
                 </div>
                 <div class="row">
-                    <span>2. 每档充值额填写后会自动显示为大于等于前面金额，小于后面金额的样式。如[0,1),“[“代表大于等于，”]”代表小于，充值额为1万元时取下一档折扣率；</span>
+                    <span>2. 充值额每档只需填写该档最高金额；</span>
                 </div>
                 <div class="row">
-                    <span>3. 最后一档充值额只需填写比前一档高的金额即可，系统会自动显示为前一档最高金额到无穷大的样式；</span>
+                    <span>3. 每档充值额填写后会自动显示为大于等于前面金额，小于后面金额的样式。如[0,1),“[“代表大于等于，”]”代表小于，充值额为1万元时取下一档折扣率；</span>
                 </div>
                 <div class="row">
-                    <span>4. 校区显示该折扣表提交时所有选择的校区，已停用表示：该校区已经不再使用当前折扣表；如果一个校区重复提交并审批通过未到启用日期的折扣表，有可能导致结束日期早于启用日期。</span>
+                    <span>4. 最后一档充值额只需填写比前一档高的金额即可，系统会自动显示为前一档最高金额到无穷大的样式；</span>
+                </div>
+                <div class="row">
+                    <span>5. 校区显示该折扣表提交时所有选择的校区，已停用表示：该校区已经不再使用当前折扣表；如果一个校区重复提交并审批通过未到启用日期的折扣表，有可能导致结束日期早于启用日期。</span>
                 </div>
             </div>
         </form>

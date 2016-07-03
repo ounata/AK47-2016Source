@@ -14,8 +14,8 @@
             template: '<div class="page-list">' +
                 '<ul class="pagination" ng-show="conf.totalCount > 0">' +
                 '<li ng-class="{disabled: conf.pageIndex == 1}" ng-click="prevPage()" style="cursor:pointer;"><span>&laquo;</span></li>' +
-                '<li ng-repeat="item in pageList track by $index" ng-class="{active: item == conf.pageIndex, separate: item == \'...\'}" ' +
-                'ng-click="changepageIndex(item)" style="cursor:pointer;">' +
+                '<li ng-repeat="item in pageList track by $index"  ng-class="{active: item == conf.pageIndex, separate: item == \'...\'}" ' +
+                'ng-click="item != conf.pageIndex?changepageIndex(item):null" style="cursor:pointer;">' +
                 '<span>{{ item }}</span>' +
                 '</li>' +
                 '<li ng-class="{disabled: conf.pageIndex == conf.numberOfPages}" ng-click="nextPage()" style="cursor:pointer;"><span>&raquo;</span></li>' +

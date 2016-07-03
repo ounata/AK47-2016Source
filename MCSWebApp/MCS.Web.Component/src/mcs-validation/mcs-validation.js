@@ -1,12 +1,12 @@
-﻿(function () {
+﻿(function() {
     'use strict';
 
-    mcs.ng.service('mcsValidationService', ['mcsValidationRules', 'mcsValidationMessageConfig', '$parse', function (rules, config, $parse) {
+    mcs.ng.service('mcsValidationService', ['mcsValidationRules', 'mcsValidationMessageConfig', '$parse', '$timeout', function(rules, config, $parse, $timeout) {
         var service = this;
 
-        var checkValidationResult = function (elem, options) {
+        var checkValidationResult = function(elem, options) {
             var opts = $.extend({
-                errorMessage: config.general,
+                errorMessage: elem.attr('data-validation-custom-message') || config.general,
                 validate: true
             }, options);
 
@@ -25,7 +25,7 @@
                 } else {
                     elem.addClass('has-error');
                     elem.parent().find('.control-label').addClass('has-error');
-                    message.text(opts.errorMessage).css('visibility', 'visible');
+                    message.addClass('has-error').text(opts.errorMessage).css('visibility', 'visible');
                 }
             } else {
                 var message = parent.find('.help-block');
@@ -50,23 +50,20 @@
             }
 
             // 设置已经过验证（如果启用提交时验证则不需要设置验证结果）
-            if (!mcs.util.hasAttr(elem, 'submit-validate')) {
+            if (!mcs.util.hasAttr(elem, 'submit-validate') || !mcs.util.hasAttr(elem, 'ignore-hidden')) {
                 elem.attr('data-validate-result', opts.validate);
             }
 
             return opts.validate;
         };
 
-        var filterValidationElems = function (form, callback) {
+        var filterValidationElems = function(form, callback) {
             // 查找页面中需要进行验证的元素
             var elems = !form ? $('input, select, textarea') : $('input, select, textarea', form);
-            elems.each(function () {
+            elems.each(function() {
                 var $this = $(this);
                 // 如果是隐藏域或文件输入或父级隐藏则不参与验证
-                if ($this.is(':hidden') && !($this.is('select') && $this.next().hasClass('select2-container'))
-                    || $this.is(':file')
-                    || $this.closest('.form-group').is(':hidden')
-                    || !mcs.util.hasAttrs($this, rules)) {
+                if ($this.is(':hidden') && !mcs.util.hasAttr($this, 'ignore-hidden') && !($this.is('select') && $this.next().hasClass('select2-container')) || $this.is(':file') || $this.closest('.form-group').is(':hidden') || !mcs.util.hasAttrs($this, rules)) {
                     return true;
                 }
                 //如果当前元素从未验证过则参与验证，否则将维持原状
@@ -78,7 +75,11 @@
             });
         };
 
-        service.validate = function (elem, scope) {
+        service.check = function(elem, options) {
+            return checkValidationResult(elem, options);
+        };
+
+        service.validate = function(elem, scope) {
             var validationResult = true;
 
             // 如不包含任何验证规则，则不参与验证
@@ -88,7 +89,7 @@
             if (validationResult && mcs.util.hasAttr(elem, 'required')) {
                 var cascading = elem.is('select') && elem.parent().siblings().not(':hidden').length > 0;
                 validationResult = checkValidationResult(elem, {
-                    errorMessage: elem.attr('data-validation-required-message') || function () {
+                    errorMessage: elem.attr('data-validation-required-message') || function() {
                         if (elem.is(':checkbox') || elem.is(':radio')) {
                             return config.selected;
                         } else if (elem.is('select')) {
@@ -97,16 +98,16 @@
                             return config.required;
                         }
                     }(),
-                    validate: function () {
+                    validate: function() {
                         if (elem.is(':checkbox')) {
-                            return scope.model == undefined ? elem.parent().parent().find(':checkbox:checked').length > 0 : scope.model.length > 0;
+                            return scope.model == undefined ? elem.closest('label').parent().find(':checkbox:checked').length > 0 : scope.model.length > 0;
                         } else if (elem.is(':radio')) {
-                            return scope.model == undefined ? elem.parent().parent().find(':radio:checked').length > 0 : !!scope.model;
+                            return scope.model == undefined ? elem.closest('label').parent().find(':radio:checked').length > 0 : !!scope.model;
                         } else if (elem.is('select')) {
                             if (cascading) {
                                 // 如果是级联框
                                 var selected = true;
-                                elem.parent().not(':hidden').find('select[required]').each(function () {
+                                elem.parent().not(':hidden').find('select[required]').each(function() {
                                     var $this = $(this);
                                     if ($.trim($this.find('option:selected').val()).length == 0) {
                                         selected = false;
@@ -116,12 +117,12 @@
                                 return selected;
                             } else {
                                 // 如果是单选框
-                                return scope.model == undefined ? $.trim(elem.find('option:selected').val()) > 0 : !!scope.model;
+                                return scope.model == undefined ? $.trim(elem.find('option:selected').val()).length > 0 : !!scope.model;
                             }
                         } else if (mcs.util.hasClasses(elem, 'date-picker data-range')) {
                             // 对日期范围，数据范围控件单独处理
                             var valid = true;
-                            elem.each(function () {
+                            elem.each(function() {
                                 var $this = $(this);
                                 if ($.trim($this.val()).length == 0) {
                                     valid = false;
@@ -144,9 +145,9 @@
                     if (requiredLevel > 0) {
                         validationResult = checkValidationResult(elem, {
                             errorMessage: elem.attr('data-validation-required-message') || mcs.util.format(config.requiredLevel, requiredLevel),
-                            validate: function () {
+                            validate: function() {
                                 var selected = true;
-                                elem.parent().not(':hidden').find('select[required-level]').each(function (index) {
+                                elem.parent().not(':hidden').find('select[required-level]').each(function(index) {
                                     var $this = $(this);
                                     if ($.trim($this.find('option:selected').val()).length == 0) {
                                         selected = false;
@@ -279,18 +280,20 @@
             }
             //validate
             if (validationResult && mcs.util.hasAttr(elem, 'validate')) {
-                return $parse(elem.attr('validate'))(scope);
+                $timeout(function() {
+                    return skipRequiredValidation || scope.$eval(elem.attr('validate'));
+                }, 200, true);
             }
 
             return validationResult;
         };
 
-        service.init = function (scope, form) {
+        service.init = function(scope, form) {
             // 查找页面中需要进行验证的元素
-            scope.$on('$viewContentLoaded', function (event) {
-                filterValidationElems(form, function (elem) {
+            scope.$on('$viewContentLoaded', function(event) {
+                filterValidationElems(form, function(elem) {
                     if (elem.is(':input[type=text]') || elem.is('textarea')) {
-                        elem.blur(function () {
+                        elem.blur(function() {
                             service.validate(elem, scope);
                         });
                     }
@@ -298,9 +301,9 @@
             });
         };
         // 提交整个页面时开始触发
-        service.run = function (scope, form) {
+        service.run = function(scope, form) {
             // 查找页面中需要进行验证的元素
-            filterValidationElems(form, function (elem) {
+            filterValidationElems(form, function(elem) {
                 if ((elem.is(':input[type=text]') || elem.is('textarea')) && !mcs.util.hasClasses(elem, 'date-picker date-timepicker data-range')) {
                     elem.blur();
                 } else {
@@ -348,6 +351,7 @@
         between: '输入数据项应在{0}和{1}之间！',
         phone: '输入数据项不是合法电话！',
         email: '输入数据项不是合法电子邮件！',
-        idcard: '输入数据项不是合法身份证号！'
+        idcard: '输入数据项不是合法身份证号！',
+        custom: '输入数据项不合法！'
     });
 })();

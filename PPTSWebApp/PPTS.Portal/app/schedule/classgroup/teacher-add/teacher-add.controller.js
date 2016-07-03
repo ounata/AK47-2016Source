@@ -63,7 +63,7 @@
                         {
                             field: "gradeMemo",
                             name: "教师授课年级",
-                            template: '<span uib-tooltip="{{row.gradeMemo | grade_full}}">{{row.gradeMemo | grade}}</span>',
+                            template: '<span uib-popover="{{row.gradeMemo | grade_full}}" popover-trigger="mouseenter">{{row.gradeMemo | grade}}</span>',
                             headerCss: 'datatable-header-align-right',
                             sortable: false,
                             description: ''
@@ -71,7 +71,7 @@
                         {
                             field: "subjectMemo",
                             name: "教师授课科目",
-                            template: '<span uib-tooltip="{{row.subjectMemo | subject_full}}">{{row.subjectMemo | subject}}</span>',
+                            template: '<span uib-popover="{{row.subjectMemo | subject_full}}" popover-trigger="mouseenter">{{row.subjectMemo | subject}}</span>',
                             headerCss: 'datatable-header-align-right',
                             sortable: false,
                             description: ''

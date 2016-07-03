@@ -117,6 +117,30 @@
                 parent: 'ppts.servicefee'
             },
             dependencies: ['app/infra/servicefee/servicefee-edit/servicefee-edit.controller']
+        }).loadRoute($stateProvider, {
+            name: 'ppts.present-workflow',
+            url: '/present/present-workflow?processID&activityID&resourceID',
+            templateUrl: 'app/infra/present/present-workflow/present-workflow.html',
+            controller: 'presentWorkflowController',
+            breadcrumb: {
+                label: '买赠表审批',
+                parent: 'ppts'
+            },
+            dependencies: [
+                           'app/infra/present/present-workflow/present-workflow.controller'
+            ]
+        }).loadRoute($stateProvider, {
+            name: 'ppts.discount-workflow',
+            url: '/discount/discount-workflow?processID&activityID&resourceID',
+            templateUrl: 'app/infra/discount/discount-workflow/discount-workflow.html',
+            controller: 'discountWorkflowController',
+            breadcrumb: {
+                label: '折扣表审批',
+                parent: 'ppts'
+            },
+            dependencies: [
+                           'app/infra/discount/discount-workflow/discount-workflow.controller'
+            ]
         });
     });
 

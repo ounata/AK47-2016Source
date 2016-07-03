@@ -35,13 +35,12 @@ namespace MCS.Library.SOA.DataObjects.Workflow
         [ORFieldMapping("CREATOR_NAME")]
         public string CreatorName { get; set; }
 
-        [ORFieldMapping("CREATE_TIME")]
+        [ORFieldMapping("CREATE_TIME", UtcTimeToLocal = true)]
         public DateTime CreateTime { get; set; }
 
         [ORFieldMapping("AVAILABLE")]
         public bool Available { get; set; }
     }
-
 
     [Serializable]
     [XElementSerializable]

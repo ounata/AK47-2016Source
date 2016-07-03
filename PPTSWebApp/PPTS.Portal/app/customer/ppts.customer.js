@@ -18,7 +18,9 @@
             },
             dependencies: ['app/customer/potentialcustomer/customer-list/customer-list.controller',
                            'app/customer/potentialcustomer/customer-staff-relations/customer-staff-relations.controller',
-                           'app/customer/potentialcustomer/customer-transfer/customer-transfer.controller']
+                           'app/customer/potentialcustomer/customer-transfer/customer-transfer.controller',
+                           'app/customer/potentialcustomer/customer-import/customer-import.controller',
+                           'app/customer/potentialcustomer/customer-import/customer-import-history.controller']
         }).loadRoute($stateProvider, {
             name: 'ppts.market',
             url: '/customer/market',
@@ -30,7 +32,9 @@
             },
             dependencies: ['app/customer/market/market-list/market-list.controller',
                            'app/customer/potentialcustomer/customer-staff-relations/customer-staff-relations.controller',
-                           'app/customer/potentialcustomer/customer-transfer/customer-transfer.controller']
+                           'app/customer/potentialcustomer/customer-transfer/customer-transfer.controller',
+                           'app/customer/potentialcustomer/customer-import/customer-import.controller',
+                            'app/customer/potentialcustomer/customer-import/customer-import-history.controller']
         }).loadRoute($stateProvider, {
             name: 'ppts.customer-add',
             url: '/customer/add',
@@ -61,6 +65,7 @@
             dependencies: ['app/customer/potentialcustomer/customer-info/customer-info.controller',
                            'app/customer/potentialcustomer/customer-parent-add/parent-add.controller',
                            'app/customer/potentialcustomer/customer-staff-relations/customer-staff-relations.controller',
+                           'app/customer/potentialcustomer/customer-teacher-relations/customer-teacher-relations.controller',
                            'app/customer/potentialcustomer/customer-add/ppts.customer.relation',
                            'app/customer/student/student-thaw/student-thaw.controller']
         }).loadRoute($stateProvider, {
@@ -72,7 +77,8 @@
                 label: '修改潜客'
             },
             dependencies: ['app/customer/potentialcustomer/customer-edit/customer-edit.controller',
-                           'app/customer/potentialcustomer/customer-staff-relations/customer-staff-relations.controller']
+                           'app/customer/potentialcustomer/customer-staff-relations/customer-staff-relations.controller',
+                           'app/customer/potentialcustomer/customer-teacher-relations/customer-teacher-relations.controller']
         }).loadRoute($stateProvider, {
             name: 'ppts.customer-view.parents',
             url: '/parents?prev=:page',
@@ -182,6 +188,19 @@
                            'app/customer/customervisit/customervisit-addBatch/customervisit-addBatch.controller'
             ]
         }).loadRoute($stateProvider, {
+            name: 'ppts.student-thaw-view',
+            url: '/student/student-thaw-view?processID&activityID&resourceID',
+            templateUrl: 'app/customer/student/student-thaw-view/student-thaw-view.html',
+            controller: 'studentThawViewController',
+            breadcrumb: {
+                label: '学员解冻审批',
+                parent: 'ppts'
+            },
+            dependencies: ['app/customer/student/student-list/student-list.controller',
+                           'app/customer/student/student-thaw-view/student-thaw-view.controller',
+
+            ]
+        }).loadRoute($stateProvider, {
             name: 'ppts.student-view.stopalerts',
             url: '/stopalerts?prev=:page',
             templateUrl: 'app/customer/stopalerts/stop-list/stop-list.html',
@@ -241,7 +260,8 @@
                 label: '修改学员'
             },
             dependencies: ['app/customer/potentialcustomer/customer-edit/customer-edit.controller',
-                           'app/customer/potentialcustomer/customer-staff-relations/customer-staff-relations.controller']
+                           'app/customer/potentialcustomer/customer-staff-relations/customer-staff-relations.controller',
+                           'app/customer/potentialcustomer/customer-teacher-relations/customer-teacher-relations.controller']
         }).loadRoute($stateProvider, {
             name: 'ppts.student-view.parents-edit',
             url: '/parents/:parentId?prev=:page',
@@ -359,18 +379,25 @@
             templateUrl: 'app/account/display/account-page/account-view.html',
             controller: 'accountController',
             breadcrumb: {
-                label: '账户信息',
-                parent: 'ppts.student'
+                label: '账户信息'
             },
             dependencies: ['app/account/display/account-page/account-view.controller']
+        }).loadRoute($stateProvider, {
+            name: 'ppts.student-view.accountRecordList',
+            url: '/account/record?prev=:page',
+            templateUrl: 'app/account/display/account-page/account-record.html',
+            controller: 'accountRecordController',
+            breadcrumb: {
+                label: '账户日志'
+            },
+            dependencies: ['app/account/display/account-page/account-record.controller']
         }).loadRoute($stateProvider, {
             name: 'ppts.student-view.accountChargeEdit',
             url: '/account/charge/edit/:path?prev=:page',
             templateUrl: 'app/account/charge/charge-page/charge-edit.html',
             controller: 'accountChargeEditController',
             breadcrumb: {
-                label: '充值',
-                parent: 'ppts.student'
+                label: '充值'
             },
             dependencies: ['app/account/charge/charge-page/charge-edit.controller']
         }).loadRoute($stateProvider, {
@@ -379,19 +406,62 @@
             templateUrl: 'app/account/transfer/transfer-page/transfer-edit.html',
             controller: 'accountTransferEditController',
             breadcrumb: {
-                label: '转让',
-                parent: 'ppts.student'
+                label: '转让'
             },
             dependencies: ['app/account/transfer/transfer-page/transfer-edit.controller']
 
+        }).loadRoute($stateProvider, {
+            name: 'ppts.student-view.accountRefundEdit',
+            url: '/account/refund/edit?prev=:page',
+            templateUrl: 'app/account/refund/refund-page/refund-edit.html',
+            controller: 'accountRefundEditController',
+            breadcrumb: {
+                label: '退费'
+            },
+            dependencies: ['app/account/refund/refund-page/refund-edit.controller']
+        }).loadRoute($stateProvider, {
+            name: 'ppts.student-view.accountChargeList',
+            url: '/account/charge/list?prev=:page',
+            templateUrl: 'app/account/charge/charge-page/charge-list.html',
+            controller: 'accountChargeListController',
+            breadcrumb: {
+                label: '充值记录'
+            },
+            dependencies: ['app/account/charge/charge-page/charge-list.controller']
+        }).loadRoute($stateProvider, {
+            name: 'ppts.student-view.accountTransferList',
+            url: '/account/transfer/list?prev=:page',
+            templateUrl: 'app/account/transfer/transfer-page/transfer-list.html',
+            controller: 'accountTransferListController',
+            breadcrumb: {
+                label: '转让记录'
+            },
+            dependencies: ['app/account/transfer/transfer-page/transfer-list.controller']
+        }).loadRoute($stateProvider, {
+            name: 'ppts.student-view.returnExpense',
+            url: '/account/return/edit?prev=:page',
+            templateUrl: 'app/account/return/return-page/return-edit.html',
+            controller: 'accountReturnEditController',
+            breadcrumb: {
+                label: '返还服务费'
+            },
+            dependencies: ['app/account/return/return-page/return-edit.controller']
+        }).loadRoute($stateProvider, {
+            name: 'ppts.studentTransfer-approve',
+            url: '/student/transfer/approve?processID&activityID&resourceID',
+            templateUrl: 'app/customer/student/student-transfer/student-transfer-approve.html',
+            controller: 'studentTransferApproveController',
+            breadcrumb: {
+                label: '转学审批'
+            },
+            dependencies: ['app/customer/student/student-transfer/student-transfer-approve.controller']
         }).loadRoute($stateProvider, {
             name: 'ppts.student-view.stuAsgmtConditionEdit',
             url: '/schedule/stuasgmt/condition?prev=:page',
             templateUrl: 'app/schedule/studentassignment/stuasgmt-condition/stuasgmt-condition-list.html',
             controller: 'stuAsgmtConditionController',
             breadcrumb: {
-                label: '排课条件',
-                parent: 'ppts.student'
+                label: '排课条件'
             },
             dependencies: ['app/schedule/studentassignment/stuasgmt-condition/stuasgmt-condition-list.controller']
         }).loadRoute($stateProvider, {
@@ -400,8 +470,7 @@
             templateUrl: 'app/schedule/studentassignment/stuasgmt-course/stuasgmt-course.html',
             controller: 'stuAsgmtCourseController',
             breadcrumb: {
-                label: '课表',
-                parent: 'ppts.student'
+                label: '课表'
             },
             dependencies: ['app/schedule/studentassignment/stuasgmt-course/stuasgmt-course.controller'
                   , 'app/schedule/studentassignment/stuasgmt-add/stuasgmt-add.controller'
@@ -414,71 +483,28 @@
             templateUrl: 'app/schedule/studentcourse/sturecord-list.html',
             controller: 'stucrsListController',
             breadcrumb: {
-                label: '上课记录',
-                parent: 'ppts.student'
+                label: '上课记录'
             },
             dependencies: ['app/schedule/studentcourse/sturecord-list.controller'
               , 'app/schedule/studentcourse/sturecord-list-markup.controller'
              , 'app/schedule/studentassignment/stuasgmt-add/stuasgmt-add.controller']
 
         }).loadRoute($stateProvider, {
-            name: 'ppts.student-view.accountRefundEdit',
-            url: '/account/refund/edit?prev=:page',
-            templateUrl: 'app/account/refund/refund-page/refund-edit.html',
-            controller: 'accountRefundEditController',
-            breadcrumb: {
-                label: '退费',
-                parent: 'ppts.student'
-            },
-            dependencies: ['app/account/refund/refund-page/refund-edit.controller']
-        }).loadRoute($stateProvider, {
             name: 'ppts.student-view.classList',
             url: '/class/list?prev=:page',
             templateUrl: 'app/schedule/classgroup/customerClass-list/customerClass-list.html',
             controller: 'customerClassListController',
             breadcrumb: {
-                label: '班级列表',
-                parent: 'ppts.student'
+                label: '班级列表'
             },
             dependencies: ['app/schedule/classgroup/customerClass-list/customerClass-list.controller']
         }).loadRoute($stateProvider, {
-            name: 'ppts.student-view.accountChargeList',
-            url: '/account/charge/list?prev=:page',
-            templateUrl: 'app/account/charge/charge-page/charge-list.html',
-            controller: 'accountChargeListController',
-            breadcrumb: {
-                label: '充值记录',
-                parent: 'ppts.student'
-            },
-            dependencies: ['app/account/charge/charge-page/charge-list.controller']
-        }).loadRoute($stateProvider, {
-            name: 'ppts.student-view.accountTransferList',
-            url: '/account/transfer/list?prev=:page',
-            templateUrl: 'app/account/transfer/transfer-page/transfer-list.html',
-            controller: 'accountTransferListController',
-            breadcrumb: {
-                label: '转让记录',
-                parent: 'ppts.student'
-            },
-            dependencies: ['app/account/transfer/transfer-page/transfer-list.controller']
-        }).loadRoute($stateProvider, {
-            name: 'ppts.student-view.returnExpense',
-            url: '/account/return/edit?prev=:page',
-            templateUrl: 'app/account/return/return-page/return-edit.html',
-            controller: 'accountReturnEditController',
-            breadcrumb: {
-                label: '服务费返还',
-                parent: 'ppts.student'
-            },
-            dependencies: ['app/account/return/return-page/return-edit.controller']
-        }).loadRoute($stateProvider, {
             name: 'ppts.student-view.purchaseHistory',
-            url: '/order/purchase/history/:stuCode?prev=:page',
+            url: '/order/purchase/history/:stuId?prev=:page',
             templateUrl: 'app/order/purchase/history/order-history.html',
             controller: 'orderHistoryController',
             breadcrumb: {
-                label: '订购历史',
-                parent: 'ppts.student'
+                label: '订购历史'
             },
             dependencies: ['app/order/purchase/history/order-history.controller']
         }).loadRoute($stateProvider, {
@@ -534,8 +560,7 @@
             templateUrl: 'app/customer/score/score-view/score-stu-view.tpl.html',
             controller: 'studentScoreViewController',
             breadcrumb: {
-                label: '考试成绩',
-                parent: 'ppts.student'
+                label: '考试成绩'
             },
             dependencies: ['app/customer/score/score-view/score-stu-view.controller']
         }).loadRoute($stateProvider, {
@@ -544,7 +569,7 @@
             templateUrl: 'app/customer/follow/follow-view/follow-view.html',
             controller: 'followViewController',
             breadcrumb: {
-                label: '我的跟进记录',
+                label: '我的跟进记录'
             },
             dependencies: ['app/customer/follow/follow-view/follow-view.controller']
         }).loadRoute($stateProvider, {

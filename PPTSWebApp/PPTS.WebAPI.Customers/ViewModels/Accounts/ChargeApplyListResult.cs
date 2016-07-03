@@ -65,9 +65,10 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
             result.Customer = CustomerModel.Load(customerID);
             foreach (AccountChargeApply apply in AccountChargeApplyAdapter.Instance.LoadCollectionByCustomerID(customerID))
             {
-                ChargeApplyModel model = AutoMapper.Mapper.DynamicMap<ChargeApplyModel>(apply);
+                ChargeApplyModel model = apply.ProjectedAs<ChargeApplyModel>();
                 result.Items.Add(model);
             }
+            result.Items = result.Items.OrderByDescending(x => x.ApplyTime).ToList();
             result.Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(CustomerModel)
                 , typeof(ChargeApplyModel));
             return result;

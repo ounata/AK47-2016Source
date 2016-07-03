@@ -45,11 +45,11 @@ namespace PPTS.WebAPI.Customers.ViewModels.Feedback
             set;
         }
         //[InConditionMapping("cReplies.ReplyObject")]
-        //public string ReplyType
-        //{
-        //    get;
-        //    set;
-        //}
+        public string ReplyType
+        {
+            get;
+            set;
+        }
 
         [InConditionMapping("ReplyObject1")]
         public string[] ReplyObjects
@@ -69,15 +69,30 @@ namespace PPTS.WebAPI.Customers.ViewModels.Feedback
             get;
             set;
         }
-        [ConditionMapping("ReplyTime", Operation = ">=")]
-        public DateTime ReplyTimeStart {
-            set;get;
+        private string replyTimeStart;
+        [ConditionMapping("ReplyTime", Operation = ">=", UtcTimeToLocal = true)]
+        public string ReplyTimeStart {
+            set
+            {
+                replyTimeStart = value;
+
+            }
+            get { return replyTimeStart; }
         }
 
-        [ConditionMapping("ReplyTime", Operation = "<=")]
-        public DateTime ReplyTimeEnd
+        private string replyTimeEnd;
+        [ConditionMapping("ReplyTime", Operation = "<=", UtcTimeToLocal = true)]
+        public string ReplyTimeEnd
         {
-            set; get;
+            set
+            {
+                if (!string.IsNullOrEmpty(value))
+                {
+                    replyTimeEnd = Convert.ToDateTime(value).ToShortDateString() + " 23:59";
+                }
+
+            }
+            get { return replyTimeEnd; }
         }
         [NoMapping]
         public string ReplyID { set; get; }

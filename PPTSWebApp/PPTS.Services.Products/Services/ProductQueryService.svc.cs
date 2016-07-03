@@ -9,6 +9,7 @@ using System.Text;
 using PPTS.Data.Products.Entities;
 using MCS.Library.WcfExtensions;
 using PPTS.Contracts.Products.Models;
+using PPTS.Data.Products.Adapters;
 
 namespace PPTS.Services.Products.Services
 {
@@ -17,6 +18,31 @@ namespace PPTS.Services.Products.Services
     /// </summary>
     public class ProductQueryService : IProductQueryService
     {
+        /// <summary>
+        /// 是否允许手工确认
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <returns></returns>
+        [WfJsonFormatter]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        public bool IsAssetConfirm(string productId)
+        {
+            return ProductAdapter.Instance.IsAssetConfirm(productId);
+        }
+
+        /// <summary>
+        /// 是否 存在校区 在 产品列表中
+        /// </summary>
+        /// <param name="campusIds"></param>
+        /// <param name="productIds"></param>
+        /// <returns></returns>
+        [WfJsonFormatter]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        public bool IsExistsCampusInProduct(string[] campusIds, string[] productIds)
+        {
+            return ProductPermissionAdapter.Instance.IsExistsCampusInProduct(campusIds, productIds);
+        }
+
         /// <summary>
         /// 根据产品id集合返回对应的产品视图信息
         /// </summary>

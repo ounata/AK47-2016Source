@@ -13,7 +13,7 @@ namespace PPTS.Data.Customers.Adapters
 {
     public class CustomerVisitAdapter : CustomerAdapterBase<CustomerVisit, CustomerVisitCollection>
     {
-        public new static CustomerVisitAdapter Instance = new CustomerVisitAdapter();
+        public static readonly CustomerVisitAdapter Instance = new CustomerVisitAdapter();
 
         private CustomerVisitAdapter()
         {

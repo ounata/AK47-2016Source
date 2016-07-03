@@ -34,6 +34,17 @@ namespace PPTS.Contracts.Proxies
         }
 
         /// <summary>
+        /// 通过折扣ID获得折扣表配置信息
+        /// </summary>
+        /// <param name="campusID">校区ID</param>
+        /// <returns></returns>
+        public DiscountQueryResult QueryDiscountByDiscountID(string discountID)
+        {
+            DiscountQueryResult discountQueryResult = this.SingleCall(action => action.QueryDiscountByDiscountID(discountID));
+            return discountQueryResult;
+        }
+
+        /// <summary>
         /// 通过校区ID获得服务费信息
         /// </summary>
         /// <param name="campusID">校区ID</param>

@@ -12,6 +12,7 @@ using MCS.Library.Principal;
 using System.Collections.Generic;
 using System;
 using MCS.Library.Net.SNTP;
+using PPTS.Contracts.Search.Models;
 
 namespace PPTS.WebAPI.Customers.Executors
 {
@@ -30,6 +31,14 @@ namespace PPTS.WebAPI.Customers.Executors
 
         protected override object DoOperation(DataExecutionContext<UserOperationLogCollection> context)
         {
+            #region 把数据保存到队列去更新CustomerSearch
+            AccountAdapter.Instance.GetSqlContext().AfterActions.Add(() => UpdateCustomerSearchByCustomerTask.Instance.UpdateByCustomerInfoByTask(new CustomerSearchUpdateModel()
+            {
+                CustomerID = this.Model.Apply.CustomerID,
+                Type = CustomerSearchUpdateType.AccountTransferApply
+            }));
+            #endregion
+
             base.DoOperation(context);
             return this.Model.Apply;
         }

@@ -9,9 +9,10 @@
                 model: '=',
                 defaultKey: '@'
             },          
-            template: '<label class="checkbox-inline" ng-repeat="item in data" ng-class="{\'all\':item.key==-1}" ng-style="customStyle"><input type="checkbox" class="ace" ng-checked="model && model.indexOf(item.key)!=-1" ng-click="change(item, $event)"><span class="lbl"></span> {{item.value}}</label>',
+            template: '<label class="checkbox-inline" ng-repeat="item in data" ng-class="{\'all\':item.key==-1}" ng-style="customStyle" uib-popover="{{item.value | tooltip:6}}" popover-trigger="mouseenter"><input type="checkbox" class="ace" ng-checked="model && model.indexOf(item.key)!=-1" ng-disabled="disabled" ng-click="change(item, $event)"><span class="lbl"></span> {{item.value | truncate:6}}</label>',
             controller: function ($scope) {
                 $scope.defaultKey = $scope.defaultKey || '-1';
+                $scope.disabled = mcs.util.bool($scope.$parent.disabled);
                 $scope.change = function (item, event) {
                     $scope.model = $scope.model || [];
                     if (item.key == $scope.defaultKey) {
@@ -35,13 +36,12 @@
                 }
             },
             link: function ($scope, $elem) {
-                $scope.$watch('$parent.required', function () {
-                    if ($scope.$parent.required) {
+                $scope.$watch('data', function (value) {
+                    if (value && $scope.$parent.required) {
                         $elem.find(':checkbox').attr('required', 'required');
                     }
                 });
             }
         }
     }]);
-
 })();

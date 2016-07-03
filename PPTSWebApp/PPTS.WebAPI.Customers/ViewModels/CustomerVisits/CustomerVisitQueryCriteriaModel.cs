@@ -24,25 +24,25 @@ namespace PPTS.WebAPI.Customers.ViewModels.CustomerVisits
         /// <summary>
         /// 时间类型
         /// </summary>
-        [ConditionMapping("TimeType")]
+        [ConditionMapping("cv.TimeType")]
         public int TimeType { get; set; }
 
         /// <summary>
         /// 回访时间
         /// </summary>
-        [ConditionMapping("VisitTime", Operation = ">=")]
+        [ConditionMapping("cv.VisitTime", Operation = ">=", UtcTimeToLocal = true)]
         public DateTime VisitTimeStart { get; set; }
 
-        [ConditionMapping("VisitTime", Operation = "<", AdjustDays = 1)]
+        [ConditionMapping("cv.VisitTime", Operation = "<", UtcTimeToLocal = true, AdjustDays = 1)]
         public DateTime VisitTimeEnd { get; set; }
 
         /// <summary>
         /// 预计下次回访时间
         /// </summary>
-        [ConditionMapping("NextVisitTime", Operation = ">=")]
+        [ConditionMapping("NextVisitTime", Operation = ">=", UtcTimeToLocal = true)]
         public DateTime NextVisitTimeStart { get; set; }
 
-        [ConditionMapping("NextVisitTime", Operation = "<", AdjustDays = 1)]
+        [ConditionMapping("NextVisitTime", Operation = "<", UtcTimeToLocal = true, AdjustDays = 1)]
         public DateTime NextVisitTimeEnd { get; set; }
 
         /// <summary>

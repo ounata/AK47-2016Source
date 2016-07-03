@@ -10,13 +10,13 @@ namespace PPTS.WebAPI.Customers.ViewModels.CustomerMeetings
     public class CustomerMeetingQueryModel : CustomerMeeting
     {
         [DataMember]
-        public long CustomerId { set; get; }
+        public string CustomerId { set; get; }
 
         /// <summary>
         /// 学员姓名
         /// </summary>
         [DataMember]
-        public string CustomerName { get; set; }
+        public new string CustomerName { get; set; }
 
         /// <summary>
         /// 学员编号

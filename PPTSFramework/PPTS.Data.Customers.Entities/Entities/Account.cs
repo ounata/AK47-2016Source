@@ -59,7 +59,7 @@ namespace PPTS.Data.Customers.Entities
         /// 账户类型（合同账户，拓路账户）
         /// </summary>
         [ORFieldMapping("AccountType")]
-        [ConstantCategory(Category = "Account_AccountType")]
+        [ConstantCategory("Account_AccountType")]
         [DataMember]
         public AccountTypeDefine AccountType
         {
@@ -82,7 +82,7 @@ namespace PPTS.Data.Customers.Entities
         /// 账户状态（可充值，不可充值）
         /// </summary>
         [ORFieldMapping("AccountStatus")]
-        [ConstantCategory(Category = "Account_AccountStatus")]
+        [ConstantCategory("Account_AccountStatus")]
         [DataMember]
         public AccountStatusDefine AccountStatus
         {

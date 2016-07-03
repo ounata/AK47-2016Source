@@ -1,54 +1,70 @@
-﻿<form class="form-horizontal" novalidate>
-    <div class="widget-body">
-        <div class="widget-main no-padding">
-            <div class="clearfix form-actions mcs-form-actions" style="margin-bottom:15px">
-                <div class="col-md-offset-3 col-md-9">
-                    <mcs-button type="submit" category="save" click="vm.addCustomerreplies()"></mcs-button>
-                    <mcs-button category="cancel" click="vm.cancel()"></mcs-button>
-                </div>
-            </div>
+﻿<div class="portlet light bordered">
+    <div class="portlet-title">
+        <div class="caption">
+            <span class="caption-subject bold"><i class="ace-icon fa fa-plus"></i>  联系家长</span>
+            <span class="caption-helper">(<span class="required"> * </span>表示必填字段)</span>
         </div>
-        <div class="form-control">
-            <div class="col-md-1">被访学员:</div>
-            <div class="col-md-5">{{vm.parentName}}</div>
-
-
-            <div class="col-md-1">学员家长:</div>
-            <div class="col-md-5">{{vm.customerName}}</div>
-        </div>
-        <div class="tabbable">
-            <ul class="nav nav-tabs padding-2 tab-color-blue background-blue padding-top-2" id="myTab4">
-                <li class="active">
-                    <a data-toggle="tab" href="#weekFeedback">周反馈</a>
-                </li>
-
-                <li class="">
-                    <a data-toggle="tab" href="#replyParent">回复家长</a>
-                </li>
-            </ul>
-
-            <div class="tab-content padding-4">
-                <div id="weekFeedback" class="tab-pane active">
-                    <textarea class="form-control" placeholder="请输入内容...." rows="5" id="textArea"
-                              ng-model="vm.weekFeedback" maxlength="500" required></textarea>
-                    <span class="span-memo pull-right">
-                        最多输入500字,您还能输入<span style="color:red">{{vm.weekFeedbackMemo}}</span>
-                        字!
-                    </span>
-                </div>
-
-                <div id="replyParent" class="tab-pane">
-                    <textarea class="form-control" placeholder="请输入内容...." rows="5" id="textArea"
-                              ng-model="vm.replyParent" maxlength="500" required></textarea>
-                    <span class="span-memo pull-right">
-                        最多输入500字,您还能输入<span style="color:red">{{vm.replyParentMemo}}</span>
-                        字!
-                    </span>
-                </div>
-                
-            </div>
-        </div>
-        
-        
     </div>
-</form>
+    <div class="portlet-body form">
+        <form class="form-horizontal" action="#" role="form" novalidate>
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <mcs-button category="save" click="vm.addCustomerreplies()"></mcs-button>
+                        <mcs-button category="cancel" click="vm.cancel()"></mcs-button>
+                    </div>
+                </div>
+            </div>
+            <div class="form-body">
+                <h4 class="form-section"><i class="ace-icon fa fa-th"></i> 联系人信息</h4>
+                <div class="row">
+                    <div class="form-group horizontal">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-5">
+                            被访学员: &nbsp;&nbsp;
+                            <mcs-label text="{{vm.parentName}}" />
+                        </div>
+                        <div class="col-md-5">学员家长: &nbsp;&nbsp; <mcs-label text="{{vm.customerName}}" /></div>
+                        <div class="col-md-1"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group horizontal">
+                        <div class="col-sm-12">
+                            <div class="tabbable" style="padding:0 15px;">
+                                <ul class="nav nav-tabs padding-2 tab-color-blue background-blue padding-top-2" id="myTab4">
+                                    <li class="active">
+                                        <a data-toggle="tab" href="#weekFeedback">周反馈</a>
+                                    </li>
+                                    <li class="">
+                                        <a data-toggle="tab" href="#replyParent">回复家长</a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content" style="padding:3px 3px 10px 3px;height:170px;">
+                                    <div id="weekFeedback" class="tab-pane active">
+                                        <!--<textarea class="form-control" placeholder="请输入内容...." rows="5" id="weekFeedbackContent" data-validation-required-message="请填写周反馈内容！"
+                                                  ng-model="vm.weekFeedback" maxlength="500" ignore-hidden="true" required></textarea>-->
+                                        <textarea class="form-control" placeholder="请输入内容...." rows="5" id="weekFeedbackContent" data-validation-required-message="请填写周反馈内容！"
+                                                  ng-model="vm.weekFeedback" maxlength="500"></textarea>
+                                        <span class="span-memo pull-right">
+                                            最多输入500字,您还能输入<span class="important">{{vm.weekFeedbackMemo}}</span>字!
+                                        </span>
+                                        <span class="help-block"></span>
+                                    </div>
+                                    <div id="replyParent" class="tab-pane">
+                                        <textarea class="form-control" placeholder="请输入内容...." rows="5" id="replyParentContent" data-validation-required-message="请填写回复家长内容！"
+                                                  ng-model="vm.replyParent" maxlength="500"></textarea>
+                                        <span class="span-memo pull-right">
+                                            最多输入500字,您还能输入<span class="important">{{vm.replyParentMemo}}</span>字!
+                                        </span>
+                                        <span class="help-block"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

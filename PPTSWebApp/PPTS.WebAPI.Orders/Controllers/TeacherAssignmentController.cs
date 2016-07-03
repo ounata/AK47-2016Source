@@ -17,6 +17,9 @@ using MCS.Library.OGUPermission;
 using MCS.Library.Principal;
 using PPTS.Data.Common.Security;
 using PPTS.Contracts.Customers.Models;
+using PPTS.Data.Products;
+using PPTS.Web.MVC.Library.Filters;
+using PPTS.WebAPI.Orders.Service;
 
 namespace PPTS.WebAPI.Orders.Controllers
 {
@@ -28,87 +31,48 @@ namespace PPTS.WebAPI.Orders.Controllers
 
         /// 按教师排课，获取选择教师的列表数据
         [HttpPost]
-        public TeacherQCR GetTeacherList(TeacherQCM criteria)
+        [PPTSJobFunctionAuthorize("PPTS:按教师排课-本校区")]
+        public TeacherQCR GetTeacherList(TeacherQCM qcm)
         {
-            IOrganization organ = DeluxeIdentity.CurrentUser.GetCurrentJob().GetParentOrganizationByType(DepartmentType.Campus);
-            if (organ == null)
-            {
-                return new TeacherQCR()
-                {
-                    QueryResult = new PagedQueryResult<TeacherJobView, TeacherJobViewCollection>(),
-                    Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(TeacherJobView))
-                };
-            }
-            criteria.CampusID = organ.ID;
-            if (!string.IsNullOrEmpty(criteria.GradeMemo) && criteria.GradeMemo.Contains("41"))
-                criteria.GradeMemo = string.Empty;
-
-            return new TeacherQCR()
-            {
-                QueryResult = GenericMetaDataSource<TeacherJobView, TeacherJobViewCollection>.Instance.Query(criteria.PageParams, criteria, criteria.OrderBy),
-                Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(TeacherJobView))
-            };
+            TeacherQCR result = new TeacherQCR();
+            result.LoadData(qcm);
+            return result;
         }
 
         /// 按教师排课，获取选择教师的列表数据（支持翻页事件）
         [HttpPost]
-        public PagedQueryResult<TeacherJobView, TeacherJobViewCollection> GetTeacherListPaged(TeacherQCM criteria)
+        [PPTSJobFunctionAuthorize("PPTS:按教师排课-本校区")]
+        public PagedQueryResult<TeacherJobView, TeacherJobViewCollection> GetTeacherListPaged(TeacherQCM qcm)
         {
-            IOrganization organ = DeluxeIdentity.CurrentUser.GetCurrentJob().GetParentOrganizationByType(DepartmentType.Campus);
-            if (organ == null)
-            {
-                return new PagedQueryResult<TeacherJobView, TeacherJobViewCollection>();
-            }
-            criteria.CampusID = organ.ID;
-            if (!string.IsNullOrEmpty(criteria.GradeMemo) && criteria.GradeMemo.Contains("41"))
-                criteria.GradeMemo = string.Empty;
-            return GenericMetaDataSource<TeacherJobView, TeacherJobViewCollection>.Instance.Query(criteria.PageParams, criteria, criteria.OrderBy);
+            TeacherQCR result = new TeacherQCR();
+            result.LoadDataPaged(qcm);
+            return result.QueryResult;
         }
+        
         #endregion
 
         #region api/teacherassignment/getTeacherWeekCourse
         ///按照教师排课，初始化教师周视图页面数据
         [HttpPost]
-        public dynamic GetTeacherWeekCourse(TeacherAssignQM qConditon)
+        [PPTSJobFunctionAuthorize("PPTS:按教师排课-本校区")]
+        public AssignWeekViewModel GetTeacherWeekCourse(TeacherAssignQM qm)
         {
-            qConditon.StartTime = qConditon.StartTime.Date;
-            qConditon.EndTime = qConditon.EndTime.Date;
-
-            AssignCollection ac = AssignsAdapter.Instance.LoadCollection(AssignTypeDefine.ByTeacher, qConditon.TeacherJobID, qConditon.StartTime, qConditon.EndTime, false);
-
-            var acLst = from r in ac
-                        where (r.AssignStatus == AssignStatusDefine.Assigned || r.AssignStatus == AssignStatusDefine.Finished ||
-                        r.AssignStatus == AssignStatusDefine.Exception)
-                        && (r.AssignSource == AssignSourceDefine.Automatic || r.AssignSource == AssignSourceDefine.Manual)
-                        select r;
-
-            if (acLst != null && !string.IsNullOrEmpty(qConditon.AssignStatus) && qConditon.AssignStatus != "-1")
-                acLst = acLst.Where(p => p.AssignStatus == (AssignStatusDefine)Convert.ToInt32(qConditon.AssignStatus));
-            if (acLst != null && !string.IsNullOrEmpty(qConditon.AssignSource) && qConditon.AssignSource != "-1")
-                acLst = acLst.Where(p => p.AssignSource == (AssignSourceDefine)Convert.ToInt32(qConditon.AssignSource));
-            if (acLst != null && !string.IsNullOrEmpty(qConditon.Grade) && qConditon.Grade != "41")
-                acLst = acLst.Where(p => p.Grade == qConditon.Grade);
-            if (acLst != null && !string.IsNullOrEmpty(qConditon.CustomerName))
-                acLst = acLst.Where(p => p.CustomerName.Contains(qConditon.CustomerName));
-
-            Dictionary<string, IEnumerable<BaseConstantEntity>> dic = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(Data.Orders.Entities.Assign));
-
-            return new
-            {
-                result = acLst,
-                Dictionaries = dic
-            };
+            AssignWeekViewModel result = new AssignWeekViewModel();
+            result.LoadDataByTeacher(qm);
+            return result;
         }
         ///按照教师排课，为周视图页面获取指定教师当前月排课统计数据
         [HttpPost]
-        public dynamic GetCurMonthStat(TeacherAssignQM qConditon)
+        [PPTSJobFunctionAuthorize("PPTS:按教师排课-本校区")]
+        public dynamic GetCurMonthStat(TeacherAssignQM qm)
         {
             DateTime sdate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
             DateTime edate = new DateTime(DateTime.Now.Year, DateTime.Now.Month + 1, 1);
-            AssignCollection ac = AssignsAdapter.Instance.LoadCollection(AssignTypeDefine.ByTeacher, qConditon.TeacherJobID, sdate, edate, false);
+            AssignCollection ac = AssignsAdapter.Instance.LoadCollection(AssignTypeDefine.ByTeacher, qm.TeacherJobID, sdate, edate, false);
             string teacherName = string.Empty;
             if (ac.Count > 0)
                 teacherName = ac[0].TeacherName;
+               
             var c1 = ac.Where(p => p.AssignStatus == AssignStatusDefine.Assigned).Count();
             var c2 = ac.Where(p => p.AssignStatus == AssignStatusDefine.Finished).Count();
             var result = new { TeacherName = teacherName, AssignedCourse = c1, FinishedCourse = c2 };
@@ -119,91 +83,28 @@ namespace PPTS.WebAPI.Orders.Controllers
         #region api/teacherassignment/createAssign
         ///按教师排课，新增排课时，初始化排课页面数据
         [HttpPost]
-        public InitDataByTchCAQR InitCreateAssign(TeacherAssignQM queryModel)
+        [PPTSJobFunctionAuthorize("PPTS:按钮-新增/取消/复制/调动课表-本校区")]
+        public AssignByTeacherModel InitCreateAssign(TeacherAssignQM qm)
         {
-            AssignConditionCollection acc = AssignConditionAdapter.Instance.LoadCollection(AssignTypeDefine.ByTeacher, queryModel.TeacherID, queryModel.TeacherJobID);
-            acc.Insert(0, new AssignCondition() { ConditionID = "100", ConditionName4Customer = "新建", ConditionName4Teacher = "新建" });
-
-            IOrganization org = DeluxeIdentity.CurrentUser.GetCurrentJob().GetParentOrganizationByType(DepartmentType.Campus);
-            if (org == null)
-            {
-                return new InitDataByTchCAQR()
-                {
-                    AssignCondition = acc,
-                    Student = new StudentModel(),
-                };
-            }
-
-            var dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(Data.Orders.Entities.Assign));
-
-            ///从服务中获取教师指定的学员列表
-            StudentModel cust = GetCustomerByTchID(queryModel.TeacherJobID, org.ID, dictionaries);
-            InitDataByTchCAQR result = new InitDataByTchCAQR()
-            {
-                AssignCondition = acc,
-                Student = cust,
-            };
-
-            TeacherJobView tjv = TeacherJobViewAdapter.Instance.Load(queryModel.TeacherJobID);
-            if (tjv == null)
-                throw new Exception(string.Format("未能查找到岗位ID：{0}的教师信息", queryModel.TeacherJobID));
-
-            result.Assign.TeacherID = tjv.TeacherID;
-            result.Assign.TeacherName = tjv.TeacherName;
-            result.Assign.TeacherJobID = tjv.JobID;
-            result.Assign.TeacherJobOrgID = tjv.JobOrgID;
-            result.Assign.TeacherJobOrgName = tjv.JobOrgName;
-            result.Assign.IsFullTimeTeacher = tjv.IsFullTime;
-
-            result.Assign.CampusID = org.ID;
-            result.Assign.CampusName = org.Name;
+            AssignByTeacherModel result = new AssignByTeacherModel();
+            result.LoadData(qm);
             return result;
         }
-        ///根据教师ID及教师岗位，获分配给教师的学员信息
-        private StudentModel GetCustomerByTchID(string teacherJobID, string campusID, Dictionary<string, IEnumerable<BaseConstantEntity>> dic)
-        {
-            // CustomerCampusID = "18-Org", CustomerCampusName = "北京分公司方庄校区" 
-
-            var student = new OrderCommonHelper().GetStudent(teacherJobID, campusID, dic);
-
-            //student.TeacherJobOrgID = "6306-Org";
-            //student.TeacherJobOrgName = "北京分公司方庄校区校教学部文科组";
-
-            //student.Student.Add(new KeyValue() { Key = "3797053", Value = "李泓辰", Field01 = "S131124000281" });
-            //student.Student.Add(new KeyValue() { Key = "1723232", Value = "张启凡", Field01 = "S121014000179" });
-            //student.Student.Add(new KeyValue() { Key = "3783587", Value = "孙磊", Field01 = "S131117000755" });
-
-            //student.Grade = new List<KeyValue>();
-            //student.Grade.Add(new KeyValue { Key = "21", Value = "初中一年级" });
-            //student.Grade.Add(new KeyValue { Key = "22", Value = "初中二年级" });
-            //student.Grade.Add(new KeyValue { Key = "16", Value = "小学六年级" });
-
-            //student.GradeSubjectRela = new Dictionary<string, IList<KeyValue>>();
-            //student.GradeSubjectRela.Add("21",new List<KeyValue>());
-            //student.GradeSubjectRela["21"].Add(new KeyValue() { Key="3",Value= "英语" });
-
-            //student.GradeSubjectRela.Add("22", new List<KeyValue>());
-            //student.GradeSubjectRela["22"].Add(new KeyValue() { Key = "3", Value = "英语" });
-
-            //student.GradeSubjectRela.Add("16", new List<KeyValue>());
-            //student.GradeSubjectRela["16"].Add(new KeyValue() { Key = "3", Value = "英语" });
-
-            return student;
-        }
-
+     
         ///按教师排课，当学员下拉框发生改变时，加载对应资产
-        ///1. 指定了科目和年级的资产
-        ///2. 通用资产，没有具体指定科目或者年级
+        ///1. 指定了科目和年级的资产 2. 通用资产，没有具体指定科目或者年级
         [HttpPost]
-        public SimpleAssetViewCollection GetAssetByCustomerID(CrumbsQM queryModel)
+        [PPTSJobFunctionAuthorize("PPTS:按钮-新增/取消/复制/调动课表-本校区")]
+        public SimpleAssetViewCollection GetAssetByCustomerID(CrumbsQM qm)
         {
-            string customerID = queryModel.CustomerID;
+            string customerID = qm.CustomerID;
             AssetViewCollection avm = AssetViewAdapter.Instance.LoadCollection(customerID);
             return new SimpleAssetViewCollection { Result = avm };
         }
 
         ///按教师排课，当选择已经存在的排课条件时，根据资产ID加载资产
         [HttpPost]
+        [PPTSJobFunctionAuthorize("PPTS:按钮-新增/取消/复制/调动课表-本校区")]
         public SimpleAssetView GetAssetByAssetID(CrumbsQM queryModel)
         {
             string customerID = queryModel.CustomerID;
@@ -215,44 +116,45 @@ namespace PPTS.WebAPI.Orders.Controllers
 
         ///保存排课条件
         [HttpPost]
+        [PPTSJobFunctionAuthorize("PPTS:按钮-新增/取消/复制/调动课表-本校区")]
         public dynamic CreateAssign(AssignSuperModel asm)
         {
             AssignAddExecutor ac = new AssignAddExecutor(asm);
             var result = ac.Execute();
+            AssignTaskService.UpdateCustomerSearchInfo(ac.Model.CustomerID);
             return new { assignID = ac.Model.AssignID };
         }
         #endregion
 
         #region api/teacherassignment/cancelAssign
-        /// <summary>
+
         /// 按教师排课，取消排课
-        /// </summary>
-        /// <param name="model"></param>
-        /// 
         [HttpPost]
+        [PPTSJobFunctionAuthorize("PPTS:按钮-新增/取消/复制/调动课表-本校区")]
         public void CancelAssign(AssignCollection model)
         {
             AssignCancelExecutor executor = new AssignCancelExecutor(model);
             executor.Execute();
+            AssignTaskService.UpdateCustomerSearchInfo(executor.CustomerIDTask);
         }
+        
         #endregion
 
         #region api/teacherassignment/copyAssign
-        /// <summary>
         /// 按教师排课,复制排课
-        /// </summary>
-        /// <param name="result"></param>
-        /// 
         [HttpPost]
-        public void CopyAssign(AssignCopyQM queryModel)
+        [PPTSJobFunctionAuthorize("PPTS:按钮-新增/取消/复制/调动课表-本校区")]
+        public dynamic CopyAssign(AssignCopyQM qm)
         {
-            queryModel.CustomerID = string.Empty;
-            queryModel.SrcDateStart = queryModel.SrcDateStart.Date;
-            queryModel.SrcDateEnd = queryModel.SrcDateEnd.Date;
-            queryModel.DestDateStart = queryModel.DestDateStart.Date;
-            queryModel.DestDateEnd = queryModel.DestDateEnd.Date;
-            AssignCopyExecutor ace = new AssignCopyExecutor(queryModel);
+            qm.CustomerID = string.Empty;
+            qm.SrcDateStart = qm.SrcDateStart.Date;
+            qm.SrcDateEnd = qm.SrcDateEnd.Date;
+            qm.DestDateStart = qm.DestDateStart.Date;
+            qm.DestDateEnd = qm.DestDateEnd.Date;
+            AssignCopyExecutor ace = new AssignCopyExecutor(qm);
             ace.Execute();
+            AssignTaskService.UpdateCustomerSearchInfo(ace.CustomerIDTask);
+            return new { Msg = ace.Msg };
         }
         #endregion
 
@@ -260,67 +162,64 @@ namespace PPTS.WebAPI.Orders.Controllers
 
         ///按教师排课 调整课表获取初始化数据
         [HttpPost]
+        [PPTSJobFunctionAuthorize("PPTS:按钮-新增/取消/复制/调动课表-本校区")]
         public dynamic InitResetAssign()
         {
-            Dictionary<string, IEnumerable<BaseConstantEntity>> dic = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(Data.Orders.Entities.Assign));
             var allowDateTime = DateTime.Now.Date.AddDays(10);
             var result = new
             {
                 AllowDateTime = allowDateTime,
-                Dictionaries = dic
             };
             return result;
         }
 
         ///按教师排课, 调整课表
         [HttpPost]
-        public void ResetAssign(IList<AssignResetQM> queryModel)
+        [PPTSJobFunctionAuthorize("PPTS:按钮-新增/取消/复制/调动课表-本校区")]
+        public void ResetAssign(IList<AssignResetQM> qm)
         {
-            AssignResetExecutor executor = new AssignResetExecutor(queryModel);
+            AssignResetExecutor executor = new AssignResetExecutor(qm);
             executor.Execute();
         }
         #endregion
 
         #region api/studentassignment/getSCLV
-        /// <summary>
+
         /// 按教师排课，列表视图， 获取排课列表视图数据
-        /// </summary>
-        /// <param name="acQM"></param>
-        /// <returns></returns>
-        /// 
         [HttpPost]
-        public AssignQCR GetSCLV(AssignQCM criteria)
+        [PPTSJobFunctionAuthorize("PPTS:按教师排课-本校区")]
+        public AssignQCR GetSCLV(AssignQCM qcm)
         {
-            criteria.CustomerID = string.Empty;
-            criteria.TeacherName = string.Empty;
+            qcm.CustomerID = string.Empty;
+            qcm.TeacherName = string.Empty;
+            var och = new OrderCommonHelper();
+            och.GetCourseConditionAssign(qcm);
 
             Dictionary<string, IEnumerable<BaseConstantEntity>> dic = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(Data.Orders.Entities.Assign));
-            ///处理查询条件   
-            //dic = new OrderCommonHelper().GetWCAS(dic);
+            ///处理查询条件
+            och.GetProductCategoryType(dic);
 
-            criteria.AssignStatus = new[] { (int)AssignStatusDefine.Assigned, (int)AssignStatusDefine.Finished, (int)AssignStatusDefine.Exception };
             AssignQCR result = new AssignQCR
             {
-                QueryResult = GenericOrderDataSource<Data.Orders.Entities.Assign, AssignCollection>.Instance.Query(criteria.PageParams, criteria, criteria.OrderBy),
+                QueryResult = GenericOrderDataSource<Data.Orders.Entities.Assign, AssignCollection>.Instance.Query(qcm.PageParams, qcm, qcm.OrderBy),
                 Dictionaries = dic
             };
             return result;
         }
-        /// <summary>
-        /// 按教师排课，列表视图， 获取排课列表视图数据(分页事件)
-        /// </summary>
-        /// <param name="criteria"></param>
-        /// <returns></returns>
-        /// 
-        [HttpPost]
-        public PagedQueryResult<Data.Orders.Entities.Assign, AssignCollection> GetPagedSCLV(AssignQCM criteria)
-        {
-            criteria.CustomerID = string.Empty;
-            criteria.TeacherName = string.Empty;
 
-            criteria.AssignStatus = new[] { (int)AssignStatusDefine.Assigned, (int)AssignStatusDefine.Finished, (int)AssignStatusDefine.Exception };
-            return GenericOrderDataSource<Data.Orders.Entities.Assign, AssignCollection>.Instance.Query(criteria.PageParams, criteria, criteria.OrderBy);
+        /// 按教师排课，列表视图， 获取排课列表视图数据(分页事件)
+        [HttpPost]
+        [PPTSJobFunctionAuthorize("PPTS:按教师排课-本校区")]
+        public PagedQueryResult<Data.Orders.Entities.Assign, AssignCollection> GetPagedSCLV(AssignQCM qcm)
+        {
+            qcm.CustomerID = string.Empty;
+            qcm.TeacherName = string.Empty;
+            var och = new OrderCommonHelper();
+            och.GetCourseConditionAssign(qcm);
+
+            return GenericOrderDataSource<Data.Orders.Entities.Assign, AssignCollection>.Instance.Query(qcm.PageParams, qcm, qcm.OrderBy);
         }
+
         #endregion
 
     }

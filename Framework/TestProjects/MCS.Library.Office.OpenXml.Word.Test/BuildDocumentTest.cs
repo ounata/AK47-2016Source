@@ -51,8 +51,8 @@ namespace MCS.Library.Office.OpenXml.Word.Test
                          PropertyCollection=new DCTDataPropertyCollection()
                          {
                              new DCTSimpleProperty(){ TagID="毕业日期", Value = DateTime.Now, FormatString="yyyy-MM-dd"},
-                             new DCTSimpleProperty(){ TagID="毕业院校",Value="XX3学校", FormatString=""},
-                             new DCTSimpleProperty(){ TagID="专业",Value="XX3专业",FormatString=""}
+                             new DCTSimpleProperty(){ TagID="毕业院校", Value = "XX3学校", FormatString = ""},
+                             new DCTSimpleProperty(){ TagID="专业", Value = "XX3专业", FormatString = ""}
                          }
                     }
                 }

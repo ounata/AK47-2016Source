@@ -14,21 +14,17 @@
                 var vm = this;
 
                 // 配置数据表头 
-                scoresDataViewService.configScoresListHeaders(vm, scoresListDataHeader);
+                // scoresDataViewService.configScoresListHeaders(vm, scoresListDataHeader);
+                dataSyncService.configDataHeader(vm, scoresListDataHeader, scoreDataService.getPagedScores);
 
-                // 初始化
-                (function () {
+                vm.search = function () {
                     dataSyncService.initCriteria(vm);
                     vm.criteria.customerID = $stateParams.id;
-                    scoreDataService.getScoresForStudent(vm.criteria, function (result) {
-                        vm.data.rows = result.queryResult.pagedData;
-                        dataSyncService.injectDictData({
-                            c_codE_ABBR_Score_Satisficing: [{ key: '1', value: '对成绩满意' }, { key: '0', value: '对成绩不满意' }]
-                        });
-                        dataSyncService.injectPageDict(['ifElse']);
-                        dataSyncService.updateTotalCount(vm, result.queryResult);
-                    });
-                })();
+                    dataSyncService.initDataList(vm, scoreDataService.getScoresForStudent, function (result) {
+                        dataSyncService.injectDynamicDict('ifElse,scoreSatisficing');
+                    })
+                };
+                vm.search();
 
                 // 录入
                 vm.add = function () {

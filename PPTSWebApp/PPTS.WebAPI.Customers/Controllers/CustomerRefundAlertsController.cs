@@ -4,6 +4,7 @@ using MCS.Web.MVC.Library.Filters;
 using PPTS.Data.Common.Adapters;
 using PPTS.Data.Common.Security;
 using PPTS.Data.Customers.Entities;
+using PPTS.Web.MVC.Library.Filters;
 using PPTS.WebAPI.Customers.DataSources;
 using PPTS.WebAPI.Customers.Executors;
 using PPTS.WebAPI.Customers.ViewModels.RefundAlerts;
@@ -27,11 +28,12 @@ namespace PPTS.WebAPI.Customers.Controllers
         /// <param name="criteria">查询条件</param>
         /// <returns>返回带字典的跟进记录列表</returns>
         [HttpPost]
+        [PPTSJobFunctionAuthorize("PPTS:学员视图-停课休学/退费预警,学员视图-停课休学/退费预警-本部门,学员视图-停课休学/退费预警-本校区,学员视图-停课休学/退费预警-本分公司,学员视图-停课休学/退费预警-全国")]
         public RefundAlertQueryResult GetAllRefundAlerts(RefundAlertCrieriaModel criteria)
         {
             return new RefundAlertQueryResult
             {
-                QueryResult = CustomerRefundAlertDataSource.Instance.LoadCustomerStopAlerts(criteria.PageParams, criteria, criteria.OrderBy),
+                QueryResult = CustomerRefundAlertDataSource.Instance.LoadCustomerRefundAlerts(criteria.PageParams, criteria, criteria.OrderBy),
                 Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(CustomerRefundAlerts), typeof(RefundAlertCreateModel))
             };
         }
@@ -42,9 +44,10 @@ namespace PPTS.WebAPI.Customers.Controllers
         /// <param name="criteria">查询条件</param>
         /// <returns>返回不带字典的跟进记录列表</returns>
         [HttpPost]
+        [PPTSJobFunctionAuthorize("PPTS:学员视图-停课休学/退费预警,学员视图-停课休学/退费预警-本部门,学员视图-停课休学/退费预警-本校区,学员视图-停课休学/退费预警-本分公司,学员视图-停课休学/退费预警-全国")]
         public PagedQueryResult<RefundAlertQueryModel, RefundAlertQueryCollection> GetPagedRefundAlerts(RefundAlertCrieriaModel criteria)
         {
-            return CustomerRefundAlertDataSource.Instance.LoadCustomerStopAlerts(criteria.PageParams, criteria, criteria.OrderBy);
+            return CustomerRefundAlertDataSource.Instance.LoadCustomerRefundAlerts(criteria.PageParams, criteria, criteria.OrderBy);
         }
 
         #endregion
@@ -66,8 +69,14 @@ namespace PPTS.WebAPI.Customers.Controllers
         /// </summary>
         /// <param name="model"></param>
         [HttpPost]
+        [PPTSJobFunctionAuthorize("新增/编辑退费预警")]
         public void CreateRefundAlert(RefundAlertCreateModel model)
         {
+            #region 写入权限验证
+            PPTS.Data.Common.Authorization.ScopeAuthorization<CustomerRefundAlerts>
+               .GetInstance(Data.Customers.ConnectionDefine.PPTSCustomerConnectionName).CheckEditAuth("", model.RefundAlert.CustomerID);
+            #endregion
+
             model.RefundAlert.OperatorID = DeluxeIdentity.CurrentUser.ID;
             model.RefundAlert.OperatorJobID = DeluxeIdentity.CurrentUser.GetCurrentJob().ID;
             model.RefundAlert.OperatorJobName = DeluxeIdentity.CurrentUser.GetCurrentJob().Name;
@@ -93,6 +102,7 @@ namespace PPTS.WebAPI.Customers.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet]
+        [PPTSJobFunctionAuthorize("新增/编辑退费预警")]
         public RefundAlertEditModel IsCurrentMonthAlert(string id)
         {
             RefundAlertEditModel editModel = new RefundAlertEditModel();
@@ -105,8 +115,14 @@ namespace PPTS.WebAPI.Customers.Controllers
         /// </summary>
         /// <param name="model"></param>
         [HttpPost]
+        [PPTSJobFunctionAuthorize("新增/编辑退费预警")]
         public void UpdateRefundAlert(RefundAlertEditModel model)
         {
+            #region 写入权限验证
+            PPTS.Data.Common.Authorization.ScopeAuthorization<CustomerRefundAlerts>
+               .GetInstance(Data.Customers.ConnectionDefine.PPTSCustomerConnectionName).CheckEditAuth(model.RefundAlert.AlertID, model.RefundAlert.CustomerID);
+            #endregion
+
             model.RefundAlert.OperatorID = DeluxeIdentity.CurrentUser.ID;
             model.RefundAlert.OperatorJobID = DeluxeIdentity.CurrentUser.GetCurrentJob().ID;
             model.RefundAlert.OperatorJobName = DeluxeIdentity.CurrentUser.GetCurrentJob().Name;

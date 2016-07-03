@@ -58,6 +58,11 @@
     var progressTxt = document.getElementById('progressTxt');
     var fields = document.getElementById('fields');
 
+    function setApiUrl(url) {
+        var form = document.getElementById('uploadForm');
+        form.setAttribute('action', url);
+    }
+
 
 
     function setParam(param) {

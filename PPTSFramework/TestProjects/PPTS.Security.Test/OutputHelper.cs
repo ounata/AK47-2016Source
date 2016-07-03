@@ -31,5 +31,19 @@ namespace PPTS.Security.Test
         {
             permissions.ForEach(p => Console.WriteLine("Permission CodeName: {0}", p.CodeName));
         }
+
+        public static void OutputOrgRecursively(this SCOrganization parent)
+        {
+            SCRelationObject relation = parent.CurrentParentRelations.FirstOrDefault();
+            string fullPath = relation != null ? relation.FullPath : string.Empty;
+
+            Console.WriteLine("Name: {0}, FullPath: {1}", parent.Name, fullPath);
+
+            foreach(SCBase child in parent.CurrentChildren)
+            {
+                if (child is SCOrganization)
+                    OutputOrgRecursively((SCOrganization)child);
+            }
+        }
     }
 }

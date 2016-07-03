@@ -4,6 +4,7 @@ using MCS.Web.MVC.Library.Filters;
 using PPTS.Data.Common.Adapters;
 using PPTS.Data.Common.Security;
 using PPTS.Data.Customers.Entities;
+using PPTS.Web.MVC.Library.Filters;
 using PPTS.WebAPI.Customers.DataSources;
 using PPTS.WebAPI.Customers.Executors;
 using PPTS.WebAPI.Customers.ViewModels.CustomerFollows;
@@ -27,12 +28,13 @@ namespace PPTS.WebAPI.Customers.Controllers
         /// <param name="criteria">查询条件</param>
         /// <returns>返回带字典的跟进记录列表</returns>
         [HttpPost]
+        [PPTSJobFunctionAuthorize("PPTS:上门管理,上门管理-本部门,上门管理-本校区,上门管理-本分公司,上门管理-全国")]
         public CustomerVerifyQueryResult GetAllCustomerVerifies(CustomerVerifyQueryCriteriaModel criteria)
         {
             return new CustomerVerifyQueryResult
             {
                 QueryResult = CustomerVerifiesDataSource.Instance.LoadCustomerVerify(criteria.PageParams, criteria, criteria.OrderBy),
-                Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(CustomerVerify))
+                Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(CustomerVerifyQueryModel))
             };
         }
 
@@ -42,6 +44,7 @@ namespace PPTS.WebAPI.Customers.Controllers
         /// <param name="criteria">查询条件</param>
         /// <returns>返回不带字典的跟进记录列表</returns>
         [HttpPost]
+        [PPTSJobFunctionAuthorize("PPTS:上门管理,上门管理-本部门,上门管理-本校区,上门管理-本分公司,上门管理-全国")]
         public PagedQueryResult<CustomerVerifyQueryModel, CustomerVerifiesQueryCollection> GetPagedCustomerVerifies(CustomerVerifyQueryCriteriaModel criteria)
         {
             return CustomerVerifiesDataSource.Instance.LoadCustomerVerify(criteria.PageParams, criteria, criteria.OrderBy);
@@ -64,8 +67,14 @@ namespace PPTS.WebAPI.Customers.Controllers
         }
 
         [HttpPost]
+        [PPTSJobFunctionAuthorize("PPTS:新增上门记录")]
         public void SaveCustomerVerify(CustomerVerifyModel model)
         {
+            #region 写入权限验证
+            PPTS.Data.Common.Authorization.ScopeAuthorization<CustomerVerify>
+               .GetInstance(Data.Customers.ConnectionDefine.PPTSCustomerConnectionName).CheckEditAuth("", model.CustomerID);
+            #endregion
+
             AddCustomerVerifyExecutor executor = new AddCustomerVerifyExecutor(model);
             executor.Execute();
         }

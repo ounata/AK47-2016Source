@@ -189,15 +189,24 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 创建时间
         /// </summary>
-        [ORFieldMapping("CreateTime")]
+        [ORFieldMapping("CreateTime", UtcTimeToLocal = true)]
         [DataMember]
         public DateTime CreateTime
         {
             get;
             set;
         }
+        /// <summary>
+        /// 是否校区
+        /// </summary>
+        [NoMapping]
+        [DataMember]
+        public bool IsCampus
+        {
+            get;
+            set;
+        }
 
-      
     }
 
     [Serializable]

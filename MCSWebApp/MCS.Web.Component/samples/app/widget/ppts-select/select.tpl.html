@@ -1,7 +1,0 @@
-﻿<ui-select ng-model="model" theme="selectize" class="{{css}}" style="{{style}}" 
-           on-select="onSelectCallback($item, $model)" ng-disabled="disabled">
-    <ui-select-match placeholder="{{caption}}">{{$select.selected.value}}</ui-select-match>
-    <ui-select-choices repeat="item.key as item in data | props: {value: $select.search}">
-        <span ng-bind-html="item.value | highlight: $select.search"></span>
-    </ui-select-choices>
-</ui-select>

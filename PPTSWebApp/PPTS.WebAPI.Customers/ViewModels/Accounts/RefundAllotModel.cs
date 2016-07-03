@@ -60,15 +60,16 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
             }
         }
 
-        public static RefundAllotModel Load(string applyID)
+        public static RefundAllotModel Load(RefundApplyModel apply)
         {
             RefundAllotModel model = new RefundAllotModel();
-            AccountRefundAllotCollection allots = AccountRefundAllotAdapter.Instance.LoadCollectionByApplyID(applyID);
+            AccountRefundAllotCollection allots = AccountRefundAllotAdapter.Instance.LoadCollectionByApplyID(apply.ApplyID);
             foreach (AccountRefundAllot allot in allots)
             {
                 model.TotalAmount += allot.AllotAmount;
                 model.TotalMoney += allot.AllotMoney;
-                RefundAllotItemModel item = AutoMapper.Mapper.DynamicMap<RefundAllotItemModel>(allot);
+                RefundAllotItemModel item = allot.ProjectedAs<RefundAllotItemModel>();
+                item.TeacherJobs = TeacherJobModel.Load(apply.CampusID, item.TeacherID);
                 model.Items.Add(item);
             }
             return model;

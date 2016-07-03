@@ -16,12 +16,16 @@
             resource.post({ operation: 'getPagedPresents' }, criteria, success, error);
         }
 
+        resource.getPresentForCreate = function (success, error) {
+            resource.query({ operation: 'getCurrentBranchName' }, success, error);
+        }
+
         resource.createPresent = function (model, success, error) {
             resource.save({ operation: 'createPresent' }, model, success, error);
         };
 
-        resource.getPresentForView = function (success, error) {
-            resource.query({ operation: 'getCurrentBranchName' }, success, error);
+        resource.getPresentForView = function (presentId,success, error) {
+            resource.query({ presentId: presentId }, { operation: 'getPresentDetial' }, success, error);
         }
 
         resource.getDeletePresent = function (criteria, success, error) {
@@ -30,6 +34,10 @@
 
         resource.getDisablePresent = function (criteria, success, error) {
             resource.post({ operation: 'disablePresent' }, criteria, success, error);
+        }
+
+        resource.getPresentWorkflowInfo = function (criteria, success, error) {
+            resource.post({ operation: 'getPresentWorkflowInfo' }, criteria, success, error);
         }
 
         return resource;
@@ -46,13 +54,13 @@
             name: "买赠表编码",
             template: '<a ui-sref="ppts.present-view({presentId:row.presentID})">{{row.presentCode}}</a>',
         }, {
-            field: "ownOrgName",
+            field: "branchName",
             name: "分公司",
-            template: '<span>{{row.ownOrgName}}</span>',
+            template: '<span>{{row.branchName}}</span>',
         }, {
             field: "startDate",
             name: "启用时间",
-            template: '<span>{{row.startDate}}</span>'
+            template: '<span>{{row.startDate  | date:"yyyy-MM-dd"  | normalize }}</span>'
         }, {
             field: "presentStatus",
             name: "状态",
@@ -60,19 +68,19 @@
         }, {
             field: "submitterName",
             name: "提交人",
-            template: '<span>{{ row.submitterName }}</span>',
+            template: '<span uib-popover="{{row.submitterName | tooltip:4}}" popover-trigger="mouseenter">{{ row.submitterName | truncate:4 }}</span>',
         }, {
             field: "approverName",
             name: "终审人",
-            template: '<span>{{ row.alertStatus | refundAlertStatus }}</span>',
+            template: '<span>{{ row.approverName  }}</span>',
         }, {
             field: "approveTime",
             name: "审批通过时间",
-            template: '<span>{{ row.approveTime | date:"yyyy-MM-dd"}}</span>',
+            template: '<span>{{ row.approveTime | date:"yyyy-MM-dd"  | normalize }}</span>',
         }, {
             field: "createTime",
             name: "创建日期",
-            template: '<span>{{ row.createTime | date:"yyyy-MM-dd" }}</span>',
+            template: '<span>{{ row.createTime | date:"yyyy-MM-dd"  | normalize }}</span>',
         }],
         pager: {
             pageIndex: 1,
@@ -118,12 +126,14 @@
         {
             field: 'presentStandard',
             name: '购买数量',
-            template: '<span ng-class=\'{"has-error":!row.validStandard}\'><mcs-input model="row.presentStandard" validate="vm.updatePresentStandardRank(row, $index)" datatype="int" custom-style="width:40%"/><span class=\'help-inline\' ng-if="!row.validStandard">需大于上一档小于下一档!</span></span>'
+            headerCss: 'datatable-header',
+            template: '<span ng-class=\'{"has-error":!row.validStandard}\'><mcs-input model="row.presentStandard" class="input-width-100" validate="vm.updatePresentStandardRank(row, $index)" self-validate="true" datatype="int" custom-style="width:40%"/><span class=\'help-inline\' ng-if="!row.validStandard">{{row.errorStandardMessage}}</span></span>'
         },
         {
             field: 'presentValue',
             name: '赠送数量',
-            template: '<span ng-class=\'{"has-error":!row.validValue}\'><mcs-input model="row.presentValue" validate="vm.updatePresentValueRank(row, $index)" datatype="int" custom-style="width:40%"/><span class=\'help-inline\' ng-if="!row.validValue">需小于上一档大于下一档!</span></span>'
+            headerCss: 'datatable-header',
+            template: '<span ng-class=\'{"has-error":!row.validValue}\'><mcs-input model="row.presentValue" class="input-width-100" validate="vm.updatePresentValueRank(row, $index)" self-validate="true" datatype="int" custom-style="width:40%"/><span class=\'help-inline\' ng-if="!row.validValue">{{row.errorValueMessage}}</span></span>'
         }],
         pager: {
             pagable: false,
@@ -166,17 +176,6 @@
     function (presentDataService, dataSyncService, presentMaximum) {
         var service = this;
 
-        // 配置买赠表列表表头
-        service.configPresentListHeaders = function (vm, header) {
-            vm.data = header;
-            vm.data.pager.pageChange = function () {
-                dataSyncService.initCriteria(vm);
-                presentDataService.getPagedPresents(vm.criteria, function (result) {
-                    vm.data.rows = result.pagedData;
-                });
-            }
-        };
-
         service.configPresentAddDataTable = function (vm, data, campusData) {
             vm.relationData = data;
             vm.campusData = campusData;
@@ -192,8 +191,9 @@
                         endTime: (campuses.endTimes ? campuses.endTimes[index] : '-')
                     });
                 }
-                if (rowCount < presentMaximum) {
-                    for (var i = 0; i < presentMaximum - rowCount; i++) {
+                var relationDataLength = (vm.relationData.rows.length > presentMaximum ? vm.relationData.rows.length : presentMaximum);
+                if (rowCount < relationDataLength) {
+                    for (var i = 0; i < relationDataLength - rowCount; i++) {
                         vm.campusData.rows.push({
                             campusName: '',
                             usedState: '-',
@@ -201,28 +201,17 @@
                         });
                     }
                 } else {
-                    for (var i = 0; i < rowCount - presentMaximum; i++) {
+                    for (var i = 0; i < rowCount - relationDataLength; i++) {
                         vm.relationData.rows.push({
                             stall: vm.relationData.rows.length + 1,
-                            presentStandard: 0,
-                            presentValue: 0.0
+                            discountStandard: '',
+                            discountValue: '',
+                            validValue: true,
+                            validStandard: true
                         });
                     }
                 }
             }
-        };
-
-        // 初始化买赠表列表数据
-        service.initPresentList = function (vm, callback) {
-            dataSyncService.initCriteria(vm);
-            presentDataService.getAllPresents(vm.criteria, function (result) {
-                vm.data.rows = result.queryResult.pagedData;
-                dataSyncService.injectPageDict(['dateRange', 'people', 'ifElse']);
-                dataSyncService.updateTotalCount(vm, result.queryResult);
-                if (ng.isFunction(callback)) {
-                    callback();
-                }
-            });
         };
 
         return service;

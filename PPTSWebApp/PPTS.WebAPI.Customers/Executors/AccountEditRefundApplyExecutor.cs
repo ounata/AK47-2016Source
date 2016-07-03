@@ -13,6 +13,7 @@ using System.Linq;
 using MCS.Library.OGUPermission;
 using MCS.Library.Principal;
 using PPTS.Data.Customers.Executors;
+using MCS.Web.MVC.Library.Models;
 
 namespace PPTS.WebAPI.Customers.Executors
 {
@@ -29,10 +30,23 @@ namespace PPTS.WebAPI.Customers.Executors
             model.NullCheck("model");            
         }
 
+        protected override object DoOperation(DataExecutionContext<UserOperationLogCollection> context)
+        {
+            #region 生成数据权限范围数据
+            PPTS.Data.Common.Authorization.ScopeAuthorization<AccountRefundApply>
+               .GetInstance(PPTS.Data.Customers.ConnectionDefine.PPTSCustomerConnectionName)
+               .UpdateAuthInContext(DeluxeIdentity.CurrentUser.GetCurrentJob()
+               , DeluxeIdentity.CurrentUser.GetCurrentJob().Organization()
+               , this.Model.ApplyID
+               , PPTS.Data.Common.Authorization.RelationType.Owner);
+            #endregion 生成数据权限范围数据
+
+            return base.DoOperation(context);
+        }
         private void Init(RefundApplyModel apply)
         {
             if (apply.ApplyID.IsNullOrEmpty())
-                apply.ApplyID = Guid.NewGuid().ToString().ToUpper();
+                apply.ApplyID = UuidHelper.NewUuidString();
 
             apply.FillCreator();
             apply.FillModifier();
@@ -63,7 +77,7 @@ namespace PPTS.WebAPI.Customers.Executors
                 else
                 {
                     item.ApplyID = apply.ApplyID;
-                    item.AllotID = Guid.NewGuid().ToString().ToUpper();
+                    item.AllotID = UuidHelper.NewUuidString();
                 }
             }
         }
@@ -77,6 +91,11 @@ namespace PPTS.WebAPI.Customers.Executors
             AccountRefundAllotAdapter.Instance.DeleteInContext(builder => builder.AppendItem("ApplyID", this.Model.ApplyID));
             foreach (RefundAllotItemModel itemModel in this.Model.Allot.Items)
                 AccountRefundAllotAdapter.Instance.UpdateInContext(itemModel);
+
+
+            MaterialModelHelper helper = MaterialModelHelper.GetInstance(CustomerMeetingAdapter.Instance.ConnectionName);
+            if (this.Model.Files != null && this.Model.Files.Count > 0)
+                helper.Update(this.Model.Files);
         }
         
         /// <summary>

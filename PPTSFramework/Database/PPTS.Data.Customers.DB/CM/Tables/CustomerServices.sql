@@ -32,6 +32,7 @@
     [IsUpgradeHandle] INT NOT NULL DEFAULT 0, 
     [HandlerID] NVARCHAR(36) NULL, 
     [HandlerName] NVARCHAR(64) NULL, 
+    [HandlerJobName] NVARCHAR(64) NULL, 
     [HandlerJobType] NVARCHAR(32) NULL, 
     [HandleAdvice] NVARCHAR(MAX) NULL, 
     [IsSendEmail] INT NULL DEFAULT 0, 
@@ -142,13 +143,13 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level2name = N'AccepterJobName'
 GO
 EXEC sp_addextendedproperty @name = N'MS_Description',
-    @value = N'下一个处理人岗类型（分客服专员，分客服经理，总客服经理...）',
+    @value = N'下一个处理人岗名称（分客服专员，分客服经理，总客服经理...）',
     @level0type = N'SCHEMA',
     @level0name = N'CM',
     @level1type = N'TABLE',
     @level1name = N'CustomerServices',
     @level2type = N'COLUMN',
-    @level2name = 'HandlerJobType'
+    @level2name = 'HandlerJobName'
 GO
 EXEC sp_addextendedproperty @name = N'MS_Description',
     @value = N'处理人邮箱',
@@ -485,3 +486,12 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level1name = N'CustomerServices',
     @level2type = N'COLUMN',
     @level2name = N'HandleAdvice'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'下一个处理人岗位类型',
+    @level0type = N'SCHEMA',
+    @level0name = N'CM',
+    @level1type = N'TABLE',
+    @level1name = N'CustomerServices',
+    @level2type = N'COLUMN',
+    @level2name = 'HandlerJobType'

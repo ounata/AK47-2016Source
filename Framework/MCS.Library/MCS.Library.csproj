@@ -171,6 +171,9 @@
     <Compile Include="Cache\CacheModule.cs" />
     <Compile Include="Cache\CacheItemInfo.cs" />
     <Compile Include="Cache\CacheQueueInfo.cs" />
+    <Compile Include="Cache\Configuration\CacheNotifyGroupConfigurationElement.cs" />
+    <Compile Include="Cache\Configuration\CacheNotifySettings.cs" />
+    <Compile Include="Cache\Configuration\CacheNotifyQueueConfigurationElement.cs" />
     <Compile Include="Cache\Dependency\CacheNotifierSettings.cs" />
     <Compile Include="Cache\Dependency\CacheNotifyData.cs" />
     <Compile Include="Cache\Dependency\CacheNotifyDataMap.cs" />
@@ -225,6 +228,7 @@
     <Compile Include="Configuration\ConfigurationBroker_ExtraLoad.cs" />
     <Compile Include="Configuration\ConfigurationExceptions.cs" />
     <Compile Include="Configuration\ConfigurationExtension.cs" />
+    <Compile Include="Configuration\ConnectionStringConfigurationElement.cs" />
     <Compile Include="Configuration\DeluxeConfigurationSection.cs" />
     <Compile Include="Configuration\IdentityConfigSettings.cs" />
     <Compile Include="Configuration\IdentityConfigurationElement.cs" />
@@ -414,6 +418,7 @@
     <Compile Include="Reflection\DynamicFieldDelegation.cs" />
     <Compile Include="Reflection\DynamicFieldValueAccessor.cs" />
     <Compile Include="Reflection\DynamicHelper.cs" />
+    <Compile Include="Reflection\DynamicHelper_AccessValue.cs" />
     <Compile Include="Reflection\DynamicMemberValueAccessorBase.cs" />
     <Compile Include="Reflection\DynamicMemberDelegationBase.cs" />
     <Compile Include="Reflection\DynamicPropertyDelegation.cs" />

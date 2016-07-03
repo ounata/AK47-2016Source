@@ -45,6 +45,7 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
             }
         }
 
+        [DataMember]
         public IDictionary<string, IEnumerable<BaseConstantEntity>> Dictionaries
         {
             get;
@@ -55,7 +56,7 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
         {
             AccountListResult result = new AccountListResult();
             result.Customer = CustomerModel.Load(customerID);
-            result.Items.AddRange(AccountModel.LoadByCustomerID(customerID));
+            result.Items.AddRange(AccountModel.LoadByCustomerID(customerID));        
 
             result.Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(CustomerModel)
                 , typeof(AccountModel));

@@ -1,6 +1,7 @@
 using MCS.Library.Core;
 using MCS.Library.Data.DataObjects;
 using MCS.Library.Data.Mapping;
+using PPTS.Data.Common.Authorization;
 using PPTS.Data.Common.Entities;
 using System;
 using System.Collections.Generic;
@@ -49,6 +50,7 @@ namespace PPTS.Data.Orders.Entities
 		/// </summary>
 		[ORFieldMapping("ItemID", PrimaryKey=true)]
         [DataMember]
+        [KeyFieldMapping("ItemID")]
 		public string ItemID
 		{
 			get;
@@ -212,6 +214,28 @@ namespace PPTS.Data.Orders.Entities
         }
 
         /// <summary>
+        /// 产品分类(二级)
+        /// </summary>
+        [ORFieldMapping("Category")]
+        [DataMember]
+        public string Category
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 产品分类名称(二级)
+        /// </summary>
+        [ORFieldMapping("CategoryName")]
+        [DataMember]
+        public string CategoryName
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// 产品类型代码（一级）
         /// </summary>
         [ORFieldMapping("CategoryType")]
@@ -279,6 +303,38 @@ namespace PPTS.Data.Orders.Entities
             get;
             set;
         }
+
+
+        /// <summary>
+        /// 课次数量（班组用）
+        /// </summary>
+        [ORFieldMapping("LessonCount")]
+        [DataMember]
+        public int LessonCount { set; get; }
+
+        /// <summary>
+        /// 课时时长代码 （通用）
+        /// </summary>
+        [ORFieldMapping("PeriodDuration")]
+        [DataMember]
+        [ConstantCategory("c_codE_ABBR_BO_ProductDuration")]
+        public string PeriodDuration { set; get; }
+
+        /// <summary>
+        /// 课时时长 （通用）
+        /// </summary>
+        [ORFieldMapping("PeriodDurationValue")]
+        [DataMember]
+        public int PeriodDurationValue { set; get; }
+
+        /// <summary>
+        /// 课次课时数 （班组用）
+        /// </summary>
+        [ORFieldMapping("PeriodsOfLesson")]
+        [DataMember]
+        public int PeriodsOfLesson { set; get; }
+
+        
 
         /// <summary>
         /// 原始价格

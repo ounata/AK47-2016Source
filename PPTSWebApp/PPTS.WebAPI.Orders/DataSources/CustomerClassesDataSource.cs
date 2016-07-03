@@ -1,7 +1,9 @@
 ﻿using MCS.Library.Data;
 using MCS.Library.Data.Builder;
-using MCS.Library.Data.Mapping;
+using MCS.Library.Data.DataObjects;
+using MCS.Library.SOA.DataObjects;
 using PPTS.Data.Orders.DataSources;
+using PPTS.Data.Orders.Entities;
 using PPTS.WebAPI.Orders.ViewModels.ClassGroup;
 using System;
 using System.Collections.Generic;
@@ -35,7 +37,17 @@ namespace PPTS.WebAPI.Orders.DataSources
 
         }
 
+        protected override void OnBuildQueryCondition(QueryCondition qc)
+        {
 
+            #region 数据权限加工
+            qc.WhereClause = PPTS.Data.Common.Authorization.ScopeAuthorization<Class>
+                .GetInstance(PPTS.Data.Orders.ConnectionDefine.PPTSOrderConnectionName)
+                .ReadAuthExistsBuilder("Classes", qc.WhereClause).ToSqlString(TSqlBuilder.Instance);
+            #endregion
+
+            base.OnBuildQueryCondition(qc);
+        }
 
 
 

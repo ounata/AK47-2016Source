@@ -65,8 +65,40 @@ angular.module('app', [
             })
             .state('autoComplete', {
                 url: '/autoComplete',
+                templateUrl: 'app/component/mcs-autocomplete/main-new.html',
+                controller: 'MCSAutoCompleteController',
+                controllerAs: 'vm'
+            })
+            .state('autoCompleteold', {
+                url: '/autoCompleteold',
                 templateUrl: 'app/component/mcs-autocomplete/main.html',
                 controller: 'MCSAutoCompleteController',
+                controllerAs: 'vm'
+            })
+            .state('mcsdatarange', {
+                url: '/mcs-datarange',
+                templateUrl: 'app/component/mcs-datarange/main.html',
+                controller: 'MCSDatarangeController',
+                controllerAs: 'vm'
+            }).state('mcsselect', {
+                url: '/mcs-select',
+                templateUrl: 'app/component/mcs-select/main.html',
+                controller: 'MCSSelectController',
+                controllerAs: 'vm'
+            }).state('mcsdatepicker', {
+                url: '/mcs-datepicker',
+                templateUrl: 'app/component/mcs-datepicker/main.html',
+                controller: 'MCSDatepickerController',
+                controllerAs: 'vm'
+            }).state('mcsdaterangepicker', {
+                url: '/mcs-daterangepicker',
+                templateUrl: 'app/component/mcs-daterangepicker/main.html',
+                controller: 'MCSDaterangepickerController',
+                controllerAs: 'vm'
+            }).state('mcsdatetimepicker', {
+                url: '/mcs-datetimepicker',
+                templateUrl: 'app/component/mcs-datetimepicker/main.html',
+                controller: 'MCSDatetimepickerController',
                 controllerAs: 'vm'
             })
             .state('cascadingSelect', {
@@ -131,8 +163,13 @@ angular.module('app', [
                 controller: 'routeController',
                 controllerAs: 'vm'
             })
-
-        .state('tree', {
+            .state('workflow', {
+                url: '/workflow',
+                templateUrl: 'app/component/mcs-workflow/main.html',
+                controller: 'MCSWorkflowController',
+                controllerAs: 'vm'
+            })
+            .state('tree', {
                 url: '/tree',
                 templateUrl: 'app/component/mcs-tree/main.html',
                 controller: 'MCSTreeController',
@@ -181,11 +218,6 @@ angular.module('app', [
             templateUrl: 'app/issue/date-serialize.html',
             controller: 'MCSDateSerializeController',
             controllerAs: 'vm'
-        }).state('pptsdatarange', {
-            url: '/ppts-datarange',
-            templateUrl: 'app/widget/ppts-datarange/main.html',
-            controller: 'PPTSDatarangeController',
-            controllerAs: 'vm'
         }).state('pptscheckboxgroup', {
             url: '/ppts-checkbox-group',
             templateUrl: 'app/widget/ppts-checkbox-group/main.html',
@@ -195,26 +227,6 @@ angular.module('app', [
             url: '/ppts-radiobutton-group',
             templateUrl: 'app/widget/ppts-radiobutton-group/main.html',
             controller: 'PPTSRadiobuttonGroupController',
-            controllerAs: 'vm'
-        }).state('pptsselect', {
-            url: '/ppts-select',
-            templateUrl: 'app/widget/ppts-select/main.html',
-            controller: 'PPTSSelectController',
-            controllerAs: 'vm'
-        }).state('pptsdatepicker', {
-            url: '/ppts-datepicker',
-            templateUrl: 'app/widget/ppts-datepicker/main.html',
-            controller: 'PPTSDatepickerController',
-            controllerAs: 'vm'
-        }).state('pptsdaterangepicker', {
-            url: '/ppts-daterangepicker',
-            templateUrl: 'app/widget/ppts-daterangepicker/main.html',
-            controller: 'PPTSDaterangepickerController',
-            controllerAs: 'vm'
-        }).state('pptsdatetimepicker', {
-            url: '/ppts-datetimepicker',
-            templateUrl: 'app/widget/ppts-datetimepicker/main.html',
-            controller: 'PPTSDatetimepickerController',
             controllerAs: 'vm'
         }).state('workflow-startup', {
             url: '/workflow-startup',
@@ -237,7 +249,7 @@ angular.module('app', [
         //$httpProvider.defaults.headers.put['Content-Type'] = 'application/x-www-form-urlencoded';
         //$httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
-        $httpProvider.defaults.transformResponse.unshift(function (data, headers) {
+        $httpProvider.defaults.transformResponse.unshift(function(data, headers) {
             if (mcs.util.isString(data)) {
                 var JSON_PROTECTION_PREFIX = /^\)\]\}',?\n/;
                 var APPLICATION_JSON = 'application/json';

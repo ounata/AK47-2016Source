@@ -4,33 +4,39 @@
 <!-- #开始：成绩列表.快速查询条件 -->
 <ppts-dynamic-content template="quick-search.tpl.html">
     <div class="row">
-        <div class="col-md-8">
-            <ppts-select-branch model="vm.criteria.orgIds" />
+        <div class="col-md-3">
+            <ppts-select-branch model="vm.criteria.campusIDs" />
         </div>
-        <div class="col-md-4">
-            <mcs-input placeholder="员工OA" uib-tooltip="员工OA" css="mcs-input-search mcs-width-full" model="vm.criteria.staffOA" />
+        <div class="col-md-3">{{vm.criteria.campusIDs}}
+            <mcs-input placeholder="学员姓名" uib-popover="学生姓名" css="mcs-input-search mcs-width-full" model="vm.criteria.customerName" />
+        </div>
+        <div class="col-md-3">
+            <mcs-input placeholder="教师姓名" uib-popover="教师姓名" css="mcs-input-search mcs-width-full" model="vm.criteria.teacherName" />
+        </div>
+        <div class="col-md-3">
+            <mcs-input placeholder="教师OA" uib-popover="教师OA" css="mcs-input-search mcs-width-full" model="vm.criteria.teacherOA" />
         </div>
     </div>
     <div class="row">
         <div class="col-md-4">
-            <mcs-input placeholder="学员姓名" uib-tooltip="学生姓名" css="mcs-input-search mcs-width-full" model="vm.criteria.customerName" />
+            <mcs-input placeholder="校教育咨询师姓名" uib-popover="校教育咨询师姓名" css="mcs-input-search mcs-width-full" model="vm.criteria.consultantName" />
         </div>
         <div class="col-md-4">
-            <mcs-input placeholder="教师姓名" uib-tooltip="教师姓名" css="mcs-input-search mcs-width-full" model="vm.criteria.teacherName" />
+            <mcs-input placeholder="校学习管理师姓名" uib-popover="校学习管理师姓名" css="mcs-input-search mcs-width-full" model="vm.criteria.educatorName" />
         </div>
         <div class="col-md-4">
-            <mcs-input placeholder="员工姓名" uib-tooltip="员工姓名" css="mcs-input-search mcs-width-full" model="vm.criteria.staffName" />
+            <mcs-input placeholder="员工OA" uib-popover="员工OA" css="mcs-input-search mcs-width-full" model="vm.criteria.staffOA" />
         </div>
     </div>
 </ppts-dynamic-content>
 <!-- /结束：成绩列表.快速查询条件 -->
 <!-- #开始：成绩列表.工具栏 -->
 <ppts-dynamic-content template="toolbar.tpl.html">
-    <mcs-button category="add" text="录入成绩" click="vm.add()"></mcs-button>
-    <mcs-button category="edit" text="编辑成绩" click="vm.edit()"></mcs-button>
-    <mcs-button category="add" text="批量录入成绩" click="vm.batchAdd()"></mcs-button>
-    <mcs-button category="view" text="查看成绩" click="vm.view()"></mcs-button>
-    <mcs-button category="export" click="vm.export()"></mcs-button>
+    <mcs-button category="add" text="录入成绩" ppts-job-functions="录入/批量录入/编辑成绩" click="vm.add()"></mcs-button>
+    <mcs-button category="edit" text="编辑成绩" ppts-job-functions="录入/批量录入/编辑成绩" click="vm.edit()"></mcs-button>
+    <mcs-button category="add" text="批量录入成绩" ppts-job-functions="录入/批量录入/编辑成绩" click="vm.batchAdd()"></mcs-button>
+    <mcs-button category="view" text="查看成绩" ppts-job-functions="成绩管理（学员视图-成绩）,成绩管理（学员视图-成绩、成绩详情）-本部门,成绩管理（学员视图-成绩、成绩详情）-本校区,成绩管理（学员视图-成绩、成绩详情）-本分公司,成绩管理（学员视图-成绩、成绩详情）-全国" click="vm.view()"></mcs-button>
+    <mcs-button category="export" ppts-job-functions="导出成绩" click="vm.export()"></mcs-button>
 </ppts-dynamic-content>
 <!-- /结束：成绩列表.工具栏 -->
 <!-- #开始：成绩列表.数据表格 -->

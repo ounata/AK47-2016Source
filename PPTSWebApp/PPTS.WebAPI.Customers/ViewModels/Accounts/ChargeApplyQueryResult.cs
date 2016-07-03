@@ -1,5 +1,7 @@
 ﻿using MCS.Library.Data;
+using PPTS.Data.Common.Adapters;
 using PPTS.Data.Common.Entities;
+using PPTS.WebAPI.Customers.DataSources;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +27,13 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
             get;
             set;
         }
-    }
-         
+
+        public static ChargeApplyQueryResult Query(ChargeApplyQueryCriteriaModel criteria)
+        {
+            ChargeApplyQueryResult result = new ChargeApplyQueryResult();
+            result.QueryResult = AccountChargeApplyDataSource.Instance.QueryResult(criteria.PageParams, criteria, criteria.OrderBy); ;
+            result.Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(ChargeApplyQueryModel), typeof(ChargeApplyQueryCriteriaModel));
+            return result;
+        }
+    }         
 }

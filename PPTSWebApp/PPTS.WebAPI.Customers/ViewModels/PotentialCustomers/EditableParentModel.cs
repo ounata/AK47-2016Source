@@ -1,34 +1,22 @@
-﻿using PPTS.Data.Common.Entities;
+﻿using System.Collections.Generic;
+using MCS.Library.Data.Mapping;
+using PPTS.Data.Common.Entities;
 using PPTS.Data.Customers.Entities;
-using System.Collections.Generic;
 
 namespace PPTS.WebAPI.Customers.ViewModels.PotentialCustomers
 {
     public class EditableParentModel
     {
-        public PotentialCustomer Customer
-        {
-            get;
-            set;
-        }
+        [NoMapping]
+        public bool isCustomer { get { return true; } }
 
-        public ParentModel Parent
-        {
-            get;
-            set;
-        }
+        public PotentialCustomerModel Customer { get; set; }
 
-        public CustomerParentRelation CustomerParentRelation
-        {
-            get;
-            set;
-        }
+        public ParentModel Parent { get; set; }
 
-        public IDictionary<string, IEnumerable<BaseConstantEntity>> Dictionaries
-        {
-            get;
-            set;
-        }
+        public CustomerParentRelation CustomerParentRelation { get; set; }
+
+        public IDictionary<string, IEnumerable<BaseConstantEntity>> Dictionaries { get; set; }
 
         public EditableParentModel()
         {

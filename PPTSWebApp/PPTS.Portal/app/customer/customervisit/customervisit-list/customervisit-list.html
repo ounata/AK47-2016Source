@@ -5,41 +5,41 @@
             <ppts-select-branch model="vm.criteria.orgIds" />
         </div>
         <div class="col-md-4">
-            <ppts-daterangepicker start-date="vm.timeStart" end-date="vm.timeEnd" css="mcs-width-full mcs-padding-0"/>
+            <mcs-select category="timeType" model="vm.timeType" caption="时间类型" css="mcs-padding-0" />
         </div>
         <div class="col-md-4">
-            <ppts-select category="timeType" model="vm.timeType" caption="时间类型" css="mcs-padding-0"/>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-4">
-            <ppts-select category="satisficing" model="vm.criteria.satisficing" caption="家长满意度" css="mcs-padding-0"/>
-        </div>
-        <div class="col-md-4">
-            <ppts-select category="visitWay" model="vm.criteria.visitWay" caption="回访方式" css="mcs-padding-0"/>
-        </div>
-        <div class="col-md-4">
-            <ppts-select category="visitType" model="vm.criteria.visitType" caption="回访类型" css="mcs-padding-0"/>
+            <mcs-daterangepicker start-date="vm.timeStart" end-date="vm.timeEnd" css="mcs-width-full mcs-padding-0"/>
         </div>
     </div>
     <div class="row">
         <div class="col-md-4">
-            <mcs-input placeholder="学员姓名" uib-tooltip="学员姓名" css="mcs-input-search mcs-width-full" model="vm.criteria.customerName"/>
+            <mcs-select category="satisficing" model="vm.criteria.satisficing" caption="家长满意度" css="mcs-padding-0"/>
         </div>
         <div class="col-md-4">
-            <mcs-input placeholder="学员编号" uib-tooltip="学员姓名" css="mcs-input-search mcs-width-full" model="vm.criteria.customerCode"/>
+            <mcs-select category="visitWay" model="vm.criteria.visitWay" caption="回访方式" css="mcs-padding-0"/>
         </div>
         <div class="col-md-4">
-            <mcs-input placeholder="回访人" uib-tooltip="回访人" css="mcs-input-search mcs-width-full" model="vm.criteria.visitorName"/>
+            <mcs-select category="visitType" model="vm.criteria.visitType" caption="回访类型" css="mcs-padding-0"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <mcs-input placeholder="学员姓名" uib-popover="学员姓名" css="mcs-input-search mcs-width-full" model="vm.criteria.customerName"/>
+        </div>
+        <div class="col-md-4">
+            <mcs-input placeholder="学员编号" uib-popover="学员编号" css="mcs-input-search mcs-width-full" model="vm.criteria.customerCode"/>
+        </div>
+        <div class="col-md-4">
+            <mcs-input placeholder="回访人" uib-popover="回访人" css="mcs-input-search mcs-width-full" model="vm.criteria.visitorName"/>
         </div>
     </div>
 </ppts-dynamic-content>
 <!-- /结束：客户回访列表.快速查询条件 -->
 <!-- #开始：客户服务列表.工具栏 -->
 <ppts-dynamic-content template="toolbar.tpl.html">
-    <mcs-button category="export" text="导出升级" click="vm.export()"></mcs-button>
+    <mcs-button category="export" text="导出" click="vm.export()"></mcs-button>
 </ppts-dynamic-content>
 <!-- /结束：客户服务列表.工具栏 -->
 <!-- #开始：客户服务列表.数据表格 -->
-<mcs-datatable data="vm.data" />
+<mcs-datatable data="vm.data" condition="vm.criteria"/>
 <!-- /结束：客户服务列表.数据表格 -->

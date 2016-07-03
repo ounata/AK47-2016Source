@@ -1,6 +1,7 @@
 using MCS.Library.Core;
 using MCS.Library.Data.DataObjects;
 using MCS.Library.Data.Mapping;
+using PPTS.Data.Common.Authorization;
 using PPTS.Data.Common.Entities;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,23 @@ using System.Runtime.Serialization;
 
 namespace PPTS.Data.Customers.Entities
 {
+    #region 数据范围权限(存入识别)
+    [EntityAuth(RecordType = RecordType.CustomerVerify)]
+    #endregion
+
+    #region 数据范围权限(数据读取权限)
+
+    [OwnerRelationScope(Name = "上门管理", Functions = "上门管理", RecordType = RecordType.CustomerVerify)]
+    [RecordOrgScope(Name = "上门管理-本部门", Functions = "上门管理-本部门", OrgType = Common.Authorization.OrgType.Department, RecordType = RecordType.CustomerVerify)]
+    [RecordOrgScope(Name = "上门管理-本校区", Functions = "上门管理-本校区", OrgType = Common.Authorization.OrgType.Campus, RecordType = RecordType.CustomerVerify)]
+
+    [RecordOrgScope(Name = "上门管理-本分公司", Functions = "上门管理-本分公司", OrgType = Common.Authorization.OrgType.Branch, RecordType = RecordType.CustomerVerify)]
+    [RecordOrgScope(Name = "上门管理-全国", Functions = "上门管理-全国", OrgType = Common.Authorization.OrgType.HQ, RecordType = RecordType.CustomerVerify)]
+
+    #endregion
+    [OwnerRelationScope(Name = "新增上门记录", Functions = "新增上门记录", ActionType = ActionType.Edit, RecordType = RecordType.CustomerVerify)]
+    [CustomerRelationScope(Name = "新增上门记录", Functions = "新增上门记录", ActionType = ActionType.Edit, RecordType = CustomerRecordType.Customer)]
+
     /// <summary>
     /// This object represents the properties and methods of a CustomerVerify.
     /// 客户上门确认表
@@ -72,6 +90,17 @@ namespace PPTS.Data.Customers.Entities
         [ORFieldMapping("VerifyTime")]
         [DataMember]
         public DateTime VerifyTime
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 预计上门时间
+        /// </summary>
+        [ORFieldMapping("PlanVerifyTime")]
+        [DataMember]
+        public DateTime PlanVerifyTime
         {
             get;
             set;

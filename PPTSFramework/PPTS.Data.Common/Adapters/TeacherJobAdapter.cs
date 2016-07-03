@@ -13,17 +13,22 @@ using PPTS.Data.Common.Entities;
 
 namespace PPTS.Data.Common.Adapters
 {
-	public class TeacherJobAdapter : UpdatableAndLoadableAdapterBase<TeacherJob, TeacherJobCollection>
-	{
-		public static readonly TeacherJobAdapter Instance = new TeacherJobAdapter();
+    public class TeacherJobAdapter : UpdatableAndLoadableAdapterBase<TeacherJob, TeacherJobCollection>
+    {
+        public static readonly TeacherJobAdapter Instance = new TeacherJobAdapter();
 
-		private TeacherJobAdapter()
-		{
-		}
-        
+        private TeacherJobAdapter()
+        {
+        }
+
         protected override string GetConnectionName()
         {
             return ConnectionDefine.PPTSMetaDataConnectionName;
         }
-	}
+
+        public TeacherJobCollection LoadCollectionByTeacherID(string campusID, string teacherID)
+        {
+            return this.Load(builder => builder.AppendItem("CampusID", campusID).AppendItem("TeacherID", teacherID));
+        }
+    }
 }

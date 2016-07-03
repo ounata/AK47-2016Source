@@ -6,19 +6,22 @@
             '$scope',
             '$stateParams',
             'customerService',
+            'dataSyncService',
             'customerDataViewService',
             'customerParentService',
             'customerRelationType',
             'mcsDialogService',
-            function ($scope, $stateParams, customerService, customerDataViewService, customerParentService, relationType, mcsDialogService) {
+            function ($scope, $stateParams, customerService, dataSyncService, customerDataViewService, customerParentService, relationType, mcsDialogService) {
                 var vm = this;
 
                 // 页面初始化加载
                 customerService.handle('init', function (result) {
                     vm.customer = result.customer;
                     vm.parent = result.parent;
-                    vm.customerStaffRelation = result.customerStaffRelation;
+                    vm.isCustomer = result.isCustomer || false;
+                    customerDataViewService.getRelationInfo(vm, result.customerStaffRelations);
 
+                    dataSyncService.injectDynamicDict('ifElse');
                     $scope.$broadcast('dictionaryReady');
                 });
 
@@ -37,11 +40,7 @@
 
                 // 添加孩子家长
                 vm.parentAdd = function () {
-                    var title = '查找 ' + vm.customer.customerName + ' 的家长，勾选查询结果，确认亲属关系';
-                    customerParentService.popupParentAdd(vm, title, 'confirm', function () {
-                        // 仅针对parent
-                        customerParentService.syncParentDict();
-                    });
+                    customerParentService.popupParentAdd(vm, 'confirm');
                 }
 
                 // 编辑
@@ -54,10 +53,16 @@
                     mcsDialogService.create('app/customer/student/student-thaw/student-thaw.html', {
                         controller: 'studentThawController',
                         params: {
-                            customerID: $stateParams.id
+                            //customerID: $stateParams.id,
+                            //customerCode: vm.customer.customerCode,
+                            //customerName: vm.customer.customerName
+                            customer: vm.customer
+                        },
+                        settings: {
+                            size: 'lg'//md
                         }
                     }).result.then(function () {
-                       // vm.init();
+                        // vm.init();
                     });
                 }
             }]);

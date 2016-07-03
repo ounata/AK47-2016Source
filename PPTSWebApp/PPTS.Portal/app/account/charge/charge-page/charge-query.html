@@ -3,36 +3,22 @@
 <!-- 快速查询条件 -->
 <ppts-dynamic-content template="quick-search.tpl.html">
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-4">
             <ppts-select-branch model="vm.criteria.campusIDs" />
         </div>
-        <div class="col-md-3">
-            <mcs-input placeholder="缴费单号" uib-tooltip="缴费单号" css="mcs-input-search mcs-width-full" model="vm.criteria.applyNo" />
+        <div class="col-md-4">
+            <mcs-input placeholder="请输入学员、家长姓名，学员编号，家长联系电话进行查询" uib-popover="请输入学员、家长姓名，学员编号，家长联系电话进行查询" css="mcs-input-search mcs-width-full" model="vm.criteria.searchText" />
         </div>
-        <div class="col-md-3">
-            <mcs-input placeholder="学员编号" uib-tooltip="学员编号" css="mcs-input-search mcs-width-full" model="vm.criteria.customerCode" />
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-3">
-            <mcs-input placeholder="学员/家长姓名" uib-tooltip="学员/家长姓名" css="mcs-input-search mcs-width-full" model="vm.criteria.customerOrParentName" />
-        </div>
-        <div class="col-md-3">
-            <mcs-input placeholder="家长联系方式" uib-tooltip="家长联系方式" css="mcs-input-search mcs-width-full" model="vm.criteria.phoneNumber" />
-        </div>
-        <div class="col-md-3">
-            <mcs-input placeholder="咨询师" uib-tooltip="咨询师" css="mcs-input-search mcs-width-full" model="vm.criteria.consultantName" />
-        </div>
-        <div class="col-md-3">
-            <mcs-input placeholder="学管师" uib-tooltip="学管师" css="mcs-input-search mcs-width-full" model="vm.criteria.educatorName" />
+        <div class="col-md-4">
+            <mcs-input placeholder="缴费单编号" uib-popover="缴费单号" css="mcs-input-search mcs-width-full" model="vm.criteria.applyNo" />
         </div>
     </div>
 </ppts-dynamic-content>
 <!-- 工具栏 -->
 <ppts-dynamic-content template="toolbar.tpl.html">
-    <mcs-button category="edit" text="编辑业绩归属" click="vm.edit()"></mcs-button>
+    <mcs-button category="edit" text="编辑业绩归属" click="vm.edit()" ppts-job-functions="按钮-编辑业绩分配,按钮-编辑业绩分配-本校区,按钮-编辑业绩分配-本分公司"></mcs-button>
     <mcs-button category="approve" text="缴费单审核" click="vm.audit()"></mcs-button>
-    <mcs-button category="export"></mcs-button>
+    <mcs-button category="export" click="vm.export()"></mcs-button>
 </ppts-dynamic-content>
 <!-- 数据表格 -->
-<mcs-datatable data="vm.data" />
+<mcs-datatable data="vm.data" condition="vm.criteria" />

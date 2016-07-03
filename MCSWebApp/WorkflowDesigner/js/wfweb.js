@@ -1096,9 +1096,11 @@
     };
 
     WFWeb.Utils.checkInputKey = function (key) {
-        var reg = /^(\w)+$/
+        //不进行中英文判断。沈峥修改
+        //var reg = /^(\w)+$/
 
-        return reg.test(key);
+        //return reg.test(key);
+        return true;
     };
 })();
 

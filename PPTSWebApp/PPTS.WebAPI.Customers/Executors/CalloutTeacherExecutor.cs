@@ -29,6 +29,7 @@ namespace PPTS.WebAPI.Customers.Executors
 
             Model.ID = UuidHelper.NewUuidString();
             Model.CustomerTeacherRelationID = ctr.ID;
+            Model.ApplyType = "2";
             Model.FillCreator();
             CustomerTeacherAssignApplyAdapter.Instance.UpdateInContext(Model);
         }

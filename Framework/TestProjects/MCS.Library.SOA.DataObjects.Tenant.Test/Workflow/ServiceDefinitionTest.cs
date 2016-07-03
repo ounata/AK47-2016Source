@@ -69,6 +69,21 @@ namespace MCS.Library.SOA.DataObjects.Tenant.Test.Workflow
         }
 
         [TestMethod]
+        public void EnterActivityServiceWithReturnValueTest()
+        {
+            IWfProcessDescriptor processDesp = ProcessHelper.CreateSimpleProcessDescriptor();
+
+            ((WfActivityDescriptor)processDesp.InitialActivity).EnterEventExecuteServiceKeys = "PCReturnDictionary,PCGetVersion";
+            IWfProcess process = processDesp.StartupProcessByExecutor(new Dictionary<string, object>() { { "callerID", "EnterActivity" } });
+
+            DateTime now = process.ApplicationRuntimeParameters.GetValue("now", DateTime.MinValue);
+
+            Assert.AreNotEqual(DateTime.MinValue, now);
+
+            Assert.AreEqual("EnterActivity", process.ApplicationRuntimeParameters.GetValue("callerID", string.Empty));
+        }
+
+        [TestMethod]
         public void LeaveActivityServiceTest()
         {
             IWfProcessDescriptor processDesp = ProcessHelper.CreateSimpleProcessDescriptor();

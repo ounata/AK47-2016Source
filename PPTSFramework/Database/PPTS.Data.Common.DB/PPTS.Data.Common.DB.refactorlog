@@ -140,4 +140,130 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="JobOrgShortName" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="c1e42d17-ae62-4324-b7c3-119082657482" ChangeDateTime="06/26/2016 15:34:57">
+    <Property Name="ElementName" Value="[MT].[MutexSettings].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[MT].[MutexSettings]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="MutexAction" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="d5e71970-f55c-44a1-80ef-4eae044a8fa3" ChangeDateTime="06/26/2016 15:35:39">
+    <Property Name="ElementName" Value="[MT].[MutexSettings].[MutexActionName]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[MT].[MutexSettings]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="MutexAction" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="fd746f9d-5c66-4e35-b50e-ea43334cbe90" ChangeDateTime="06/26/2016 15:36:19">
+    <Property Name="ElementName" Value="[MT].[MutexSettings].[MutexAction]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[MT].[MutexSettings]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="MutexActionText" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="828e8d15-baf4-41d6-ac67-0c09c34929d1" ChangeDateTime="06/26/2016 15:37:32">
+    <Property Name="ElementName" Value="[MT].[MutexRecords].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[MT].[MutexRecords]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="ActionKey" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="885a2c08-01fc-4912-ae2f-41ad8ea8817c" ChangeDateTime="06/26/2016 15:39:06">
+    <Property Name="ElementName" Value="[MT].[MutexRecords].[BizAction]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[MT].[MutexRecords]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="BizActionText" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="946afe6e-20e6-43a1-a7d5-a61816a27b9f" ChangeDateTime="06/26/2016 15:39:11">
+    <Property Name="ElementName" Value="[MT].[MutexRecords].[Action]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[MT].[MutexRecords]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="BizAction" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="9d3a9c42-4177-44cd-a48c-76e951b06e30" ChangeDateTime="06/26/2016 15:39:15">
+    <Property Name="ElementName" Value="[MT].[MutexRecords].[ActionKey]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[MT].[MutexRecords]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="BizKey" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="37bae67b-f7a5-48f2-8860-4f3288e9ae4d" ChangeDateTime="06/26/2016 15:40:16">
+    <Property Name="ElementName" Value="[MT].[MutexRecords].[BizActionStatus]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[MT].[MutexRecords]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Timeout" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="559d1262-895e-462d-8b8f-976a08fb6f74" ChangeDateTime="06/26/2016 15:41:50">
+    <Property Name="ElementName" Value="[MT].[MutexRecords].[Timeout]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[MT].[MutexRecords]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="ExpireTime" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="f7d5952a-c592-42b3-a0e6-2b9deb5309e2" ChangeDateTime="06/26/2016 15:44:00">
+    <Property Name="ElementName" Value="[MT].[MutexSettings].[MutexAction]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[MT].[MutexSettings]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="BizAction" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="8aa420c0-40c2-4f74-9033-2e7a8ad3eba5" ChangeDateTime="06/26/2016 15:44:05">
+    <Property Name="ElementName" Value="[MT].[MutexSettings].[MutexActionText]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[MT].[MutexSettings]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="BizActionText" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="eeb3c6bf-6d27-41f4-b449-98559e77cff4" ChangeDateTime="06/26/2016 15:44:11">
+    <Property Name="ElementName" Value="[MT].[MutexSettings].[MutexStatus]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[MT].[MutexSettings]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="BizActionStatus" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="114029b0-5558-43c3-83bf-1609c851c35c" ChangeDateTime="06/26/2016 15:44:17">
+    <Property Name="ElementName" Value="[MT].[MutexSettings].[MutexStatusText]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[MT].[MutexSettings]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="BizActionStatusText" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="a3bc95c5-3514-4a5d-890a-e49d8b7563dc" ChangeDateTime="06/26/2016 15:44:55">
+    <Property Name="ElementName" Value="[MT].[MutexSettings].[BizActionStatus]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[MT].[MutexSettings]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="MutexAction" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="4bfed5dc-8327-423f-b17f-a4fe40da0684" ChangeDateTime="06/26/2016 15:45:11">
+    <Property Name="ElementName" Value="[MT].[MutexSettings].[BizActionStatusText]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[MT].[MutexSettings]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="MutexActionText" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="769c5f89-33aa-4f7f-9ff7-65739b5530c3" ChangeDateTime="06/26/2016 15:51:13">
+    <Property Name="ElementName" Value="[MT].[Constants].[CreatedTime]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[MT].[Constants]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="CreateTime" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="bee3b38a-e87f-4e38-b1ba-88a11e1b6400" ChangeDateTime="06/26/2016 16:03:04">
+    <Property Name="ElementName" Value="[MT].[MutexRecords].[BizKey]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[MT].[MutexRecords]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="MutexKey" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="81cf4f2e-76ca-449c-ab56-54e05d3bbd4c" ChangeDateTime="07/01/2016 01:22:26">
+    <Property Name="ElementName" Value="[MT].[ConfigOrgs].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[MT].[ConfigOrgs]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="OrgID" />
+  </Operation>
 </Operations>

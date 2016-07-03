@@ -1,14 +1,18 @@
-﻿<form class="form-horizontal">
-    <div class="widget-box">
-        <div class="widget-header">
-            <h4 class="col-sm-8">转让</h4>
+﻿<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            <span class="caption-subject bold"><i class="ace-icon fa"></i>转让</span>
         </div>
-        <div class="widget-body">
-            <div class="clearfix form-actions mcs-form-actions">
-                <div>
-                    <mcs-button category="submit" click="vm.save()" ng-disabled="!vm.assert.ok"></mcs-button>
+    </div>
+    <div class="portlet-body form">
+        <form class="form-horizontal" action="#" role="form" novalidate>
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <mcs-button category="submit" click="vm.save()" ng-disabled="!vm.assert.ok" ppts-job-functions="转让"></mcs-button>
+                    </div>
                 </div>
-            </div>      
+            </div>
             <div class="alert alert-block alert-danger" ng-show="vm.errorMessage">
                 <button type="button" class="close" data-dismiss="alert">
                     <i class="ace-icon fa fa-times"></i>
@@ -16,79 +20,98 @@
                 <i class="ace-icon fa fa-warning"></i>
                 {{vm.errorMessage}}
             </div>
-            <div class="page-header">
-                <span>账户列表</span>
-            </div>      
-            <!-- 账户列表 -->
-            <mcs-datatable data="vm.account" />
-            <div class="page-header">
-                <span>转让信息</span>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-6">
-                    <mcs-label text="当前校区：" css="col-sm-3" />
-                    <div class="col-sm-9">
-                        {{ vm.apply.campusName }}
+            <div class="form-body">
+                <h4 class="form-section"><i class="ace-icon fa fa-th"></i> 账户列表</h4>
+                <div class="row">
+                    <div class="form-group horizontal">
+                        <div class="col-sm-12" style="margin:15px;width:98%;">
+                            <mcs-datatable data="vm.account" />
+                        </div>
+                    </div>
+                </div>
+                <h4 class="form-section"><i class="ace-icon fa fa-th"></i> 转让信息 <span class="section-helper">(<i class="ace-icon fa red" /> * 表示必填项)</span></h4>
+                <div class="row">
+                    <div class="form-group horizontal bordered">
+                        <mcs-label text="当前校区" css="col-sm-3" />
+                        <div class="col-sm-6">
+                            <p class="form-control-static">
+                                {{ vm.apply.campusName }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group horizontal bordered">
+                        <mcs-label text="当前学员" css="col-sm-3" />
+                        <div class="col-sm-6">
+                            <p class="form-control-static">
+                                {{ vm.apply.customerName }}（{{vm.apply.customerCode}}）
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group horizontal bordered">
+                        <mcs-label required="true" text="转让金额" css="col-sm-3" />
+                        <div class="col-sm-6">
+                            <p class="form-control-static">
+                                <mcs-input model="vm.apply.transferMoney" datatype="number" required currency less="0" great="9999999" />元
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group horizontal bordered">
+                        <mcs-label required="true" text="转至学员" css="col-sm-3" />
+                        <div class="col-sm-6">
+                            <p class="form-control-static">
+                                <mcs-input model="vm.bizCustomerCode" placeholder="请输入学员编号" ng-keyup="vm.fetchCustomer($event)" required />
+                                <mcs-button text="验证" size="medium" click="vm.fetchCustomer()"></mcs-button>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group horizontal bordered">
+                        <mcs-label text="校区名称" css="col-sm-3" />
+                        <div class="col-sm-6">
+                            <p class="form-control-static">
+                                {{ vm.apply.bizCampusName }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group horizontal bordered">
+                        <mcs-label text="学员编号" css="col-sm-3" />
+                        <div class="col-sm-6">
+                            <p class="form-control-static">
+                                {{vm.apply.bizCustomerCode}}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group horizontal bordered">
+                        <mcs-label text="学员姓名" css="col-sm-3" />
+                        <div class="col-sm-6">
+                            <p class="form-control-static">
+                                {{ vm.apply.bizCustomerName }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group horizontal bordered">
+                        <mcs-label required="true" text="转让原因" css="col-sm-3" />
+                        <div class="col-sm-6">
+                            <p class="form-control-static">
+                                <textarea class="form-control" ng-model="vm.apply.applyMemo" rows="4" maxlength="255" required style="resize: none;"></textarea>
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="form-group">
-                <div class="col-sm-6">
-                    <mcs-label text="当前学员：" css="col-sm-3" />
-                    <div class="col-sm-9">
-                        {{ vm.apply.customerName }}（{{vm.apply.customerCode}}）
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-6">
-                    <mcs-label text="转让金额：" css="col-sm-3" />
-                    <div class="col-sm-9">
-                        <mcs-input model="vm.apply.transferMoney" type="Number" number-length="7" minnum="1" maxnum="9999999" />元
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-6">
-                    <mcs-label text="转至学员：" css="col-sm-3" />
-                    <div class="col-sm-9">
-                        <mcs-input model="vm.bizCustomerCode" placeholder="请输入学员编号" ng-keyup="vm.fetchCustomer($event)" />
-                        <mcs-button text="验证" size="medium" click="vm.fetchCustomer()"></mcs-button>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-6">
-                    <mcs-label text="校区名称：" css="col-sm-3" />
-                    <div class="col-sm-9">
-                        {{ vm.apply.bizCampusName }}
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-6">
-                    <mcs-label text="学员编号：" css="col-sm-3" />
-                    <div class="col-sm-9">
-                        {{vm.apply.bizCustomerCode}}
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-6">
-                    <mcs-label text="学员姓名：" css="col-sm-3" />
-                    <div class="col-sm-9">
-                        {{ vm.apply.bizCustomerName }}
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-6">
-                    <mcs-label text="转让原因：" css="col-sm-3" />
-                    <div class="col-sm-9">
-                        <textarea class="autosize-transition form-control" ng-model="vm.apply.applyMemo" style="overflow-x: hidden; overflow-y: auto;word-wrap: break-word; resize: none; height: 100px;"></textarea>
-                    </div>
-                </div>
-            </div>
-        </div>
+        </form>
     </div>
-</form>
+</div>

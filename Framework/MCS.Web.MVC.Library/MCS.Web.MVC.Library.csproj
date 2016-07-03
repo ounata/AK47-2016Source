@@ -85,10 +85,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\ThirdPartComponent\Bin\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
     </Reference>
-    <Reference Include="System.Web.Mvc, Version=4.0.0.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\ThirdPartComponent\Bin\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
-    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -103,13 +99,14 @@
     <Compile Include="Configuration\JsonDotNetConvertersSettings.cs" />
     <Compile Include="Converters\JavascriptOguObjectConverter.cs" />
     <Compile Include="Converters\JavascriptUpwardDatetimeConverter.cs" />
+    <Compile Include="DataSources\UserAccomplishedTaskDataSource.cs" />
+    <Compile Include="DataSources\UserTaskDataSource.cs" />
     <Compile Include="Filters\ApiExceptionFilterAttribute.cs" />
     <Compile Include="Filters\ApiPassportAuthenticationAttribute.cs" />
     <Compile Include="Filters\ApiPermissionAuthorizeAttribute.cs" />
     <Compile Include="Filters\ApiRoleAuthorizeAttribute.cs" />
     <Compile Include="Filters\ApiAuthorizeAttributeBase.cs" />
     <Compile Include="Filters\PassportAuthenticationFailureResult.cs" />
-    <Compile Include="Filters\PassportAuthorizeAttribute.cs" />
     <Compile Include="ModelBinder\FormBinder.cs" />
     <Compile Include="Models\ConverterExtentions.cs" />
     <Compile Include="Models\Enumerations.cs" />
@@ -123,17 +120,34 @@
     <Compile Include="Models\UserGraphSearchParams.cs" />
     <Compile Include="Models\UserGraphTreeNode.cs" />
     <Compile Include="Models\UserGraphTreeParams.cs" />
-    <Compile Include="Models\UserTask\UserTask.cs" />
-    <Compile Include="Models\UserTask\UserTaskSearchParams.cs" />
+    <Compile Include="Models\UserTasks\UserAccomplishedTaskModel.cs" />
+    <Compile Include="Models\UserTasks\UserTaskCountAndSimpleListModel.cs" />
+    <Compile Include="Models\UserTasks\UserTaskCountModel.cs" />
+    <Compile Include="Models\UserTasks\UserTaskModel.cs" />
+    <Compile Include="Models\UserTasks\UserTaskModelHelper.cs" />
+    <Compile Include="Models\UserTasks\UserTaskQueryCriteria.cs" />
+    <Compile Include="Models\UserTasks\UserTaskSearchParams.cs" />
+    <Compile Include="Models\Workflow\IWfClientSearchParameters.cs" />
+    <Compile Include="Models\Workflow\WfClientDynamicProcessCancelParameters.cs" />
+    <Compile Include="Models\Workflow\WfClientOpinion.cs" />
+    <Compile Include="Models\Workflow\WfClientUserResourceDescriptorParameters.cs" />
     <Compile Include="Models\Workflow\WfClientActivityHistory.cs" />
     <Compile Include="Models\Workflow\WfClientCancelParameters.cs" />
+    <Compile Include="Models\Workflow\WfClientDynamicProcessMovetoParameters.cs" />
+    <Compile Include="Models\Workflow\WfClientActivityDescriptorParameters.cs" />
+    <Compile Include="Models\Workflow\WfClientSaveParameters.cs" />
     <Compile Include="Models\Workflow\WfClientSearchParameters.cs" />
     <Compile Include="Models\Workflow\WfClientActivity.cs" />
-    <Compile Include="Models\Workflow\WFClientProcess.cs" />
+    <Compile Include="Models\Workflow\WfClientProcess.cs" />
     <Compile Include="Models\Workflow\WfClientMovetoParameters.cs" />
+    <Compile Include="Models\Workflow\WfClientDynamicProcessStartupParameters.cs" />
     <Compile Include="Models\Workflow\WfClientStartupParameters.cs" />
+    <Compile Include="Models\Workflow\WfClientUISwitches.cs" />
+    <Compile Include="Models\Workflow\WfClientStartupFreeStepsParameters.cs" />
+    <Compile Include="Models\Workflow\WfClientWithdrawParameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\InMemoryMultipartFormDataStreamProvider.cs" />
+    <Compile Include="Providers\MCSBodyModelValidator.cs" />
     <Compile Include="Providers\ScriptProgressResponser.cs" />
   </ItemGroup>
   <ItemGroup>

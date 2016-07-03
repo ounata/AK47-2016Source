@@ -1,21 +1,20 @@
-﻿<ppts-dynamic-content template="quick-search.tpl.html">
+﻿
+此订单为 {{vm.customer.customerName}}({{vm.customer.customerCode}}) 的订购单
+
+<ppts-dynamic-content template="quick-search.tpl.html">
     <div class="row">
         <div class="col-md-4">
-            <mcs-input placeholder="班级名称"  css="mcs-input-search mcs-width-full"  model="vm.criteria.className" />
+            <mcs-input placeholder="班级名称" css="mcs-input-search mcs-width-full" model="vm.criteria.className" />
         </div>
     </div>
 </ppts-dynamic-content>
 
 
-<!-- /结束：订购列表.查询条件 -->
-<!-- #开始：订购列表.工具条 -->
-<div class="mcs-panel-toolbar">
 
+<ppts-dynamic-content template="toolbar.tpl.html">
     <mcs-button category="add" text="放入订单清单" click="vm.buy()"></mcs-button>
-    <mcs-button category="cancel" click="vm.goBack()"></mcs-button>
+    <mcs-button category="cancel" text="返回" click="vm.goBack()" ></mcs-button>
+</ppts-dynamic-content>
 
-</div>
-<!-- /结束：订购列表.工具条 -->
-<!-- #开始：订购列表.数据表格 -->
+
 <mcs-datatable data="vm.data" />
-<!-- /结束：订购列表.数据表格 -->

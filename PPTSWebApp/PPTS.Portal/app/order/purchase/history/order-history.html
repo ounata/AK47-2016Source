@@ -1,11 +1,16 @@
 ﻿
-<!-- #开始：订购列表.工具条 -->
-<div class="mcs-panel-toolbar">
-    <mcs-button category="edit" text="退订" ng-disabled="vm.data.rowsSelected.length!=1" click="vm.unsubscribe()"></mcs-button>
-    <mcs-dropdown-button title="资产兑换" items="vm.dropdowns" ng-disabled="vm.data.rowsSelected.length!=1"></mcs-dropdown-button>
-    <mcs-button category="edit" text="确认非上课课收入" ng-disabled="vm.data.rowsSelected.length!=1" click="vm.recognizingIncome()"></mcs-button>
-</div>
-<!-- /结束：订购列表.工具条 -->
-<!-- #开始：订购列表.数据表格 -->
+<ppts-dynamic-content template="toolbar.tpl.html">
+    <mcs-button category="edit" text="退订" click="vm.unsubscribe()" ppts-job-functions="退订"></mcs-button>
+    <mcs-dropdown-button title="资产兑换" items="vm.dropdowns" ppts-job-functions="资产兑换"></mcs-dropdown-button>
+    <mcs-button category="edit" text="确认非上课课收入" click="vm.recognizingIncome()"></mcs-button>
+</ppts-dynamic-content>
 <mcs-datatable data="vm.data" />
-<!-- /结束：订购列表.数据表格 -->
+
+<br/>
+<div class="red">
+    备注：
+    <br />
+    1、如果是买赠就是红色的，非买赠订购是蓝色的;
+    <br/>
+    2、“确认收入”功能，只针对，非授课类产品，需直接确认收，将计入到“DASH-非授课课收”
+</div>

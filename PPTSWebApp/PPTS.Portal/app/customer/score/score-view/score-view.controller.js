@@ -23,10 +23,7 @@
                         vm.scoreItems = result.scoreItems;
                         result.scoreItems.forEach(function (item) { item.classPeoples = result.score.classPeoples; });
                         vm.data.rows = result.scoreItems;
-                        dataSyncService.injectDictData({
-                            c_codE_ABBR_Score_Satisficing: [{ key: '1', value: '对成绩满意' }, { key: '0', value: '对成绩不满意' }]
-                        });
-                        dataSyncService.injectPageDict(['ifElse']);
+                        dataSyncService.injectDynamicDict('ifElse,scoreSatisficing');
                         scoresDataViewService.fillGradeParentKey();
                         $scope.$broadcast('dictionaryReady');
                     });

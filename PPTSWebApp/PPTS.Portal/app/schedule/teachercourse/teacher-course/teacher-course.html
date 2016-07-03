@@ -2,35 +2,35 @@
 <ppts-dynamic-content template="quick-search.tpl.html">
     <div class="row">
         <div class="col-md-12">
-            <ppts-daterangepicker start-date="vm.criteria.startTime" end-date="vm.criteria.endTime" />
+            <mcs-daterangepicker start-date="vm.criteria.startTime" end-date="vm.criteria.endTime" />
         </div>
     </div>
     <div class="row">
         <div class="col-md-3">
-            <mcs-input placeholder="分公司" uib-tooltip="分公司" css="mcs-input-search mcs-width-full" model="vm.result.company.displayName" />
+            <mcs-input placeholder="分公司" uib-popover="分公司" css="mcs-input-search mcs-width-full" readonly="true" model="vm.result.company.displayName" />
         </div>
         <div class="col-md-3">
-            <mcs-input placeholder="校区" uib-tooltip="校区" css="mcs-input-search mcs-width-full" model="vm.result.campus.displayName" />
+            <mcs-input placeholder="校区" uib-popover="校区" css="mcs-input-search mcs-width-full" readonly="true" model="vm.result.campus.displayName" />
         </div>
         <div class="col-md-3">
-            <mcs-input placeholder="教师姓名" uib-tooltip="教师姓名" css="mcs-input-search mcs-width-full" model="vm.criteria.teacherName" />
+            <mcs-input placeholder="教师姓名" uib-popover="教师姓名" css="mcs-input-search mcs-width-full" model="vm.criteria.teacherName" />
         </div>
         <div class="col-md-3">
-            <mcs-input placeholder="教师OA" uib-tooltip="教师OA" css="mcs-input-search mcs-width-full" model="vm.criteria.accountID" />
+            <mcs-input placeholder="教师OA" uib-popover="教师OA" css="mcs-input-search mcs-width-full" model="vm.criteria.accountID" />
         </div>
     </div>
     <div class="row">
         <div class="col-md-3">
-            <ppts-select caption="学科组" category="" model="" css="mcs-padding-0" />
+            <mcs-select caption="学科组" category="" model="" css="mcs-padding-0" />
         </div>
         <div class="col-md-3">
-            <ppts-select caption="上课年级" category="grade" model="vm.criteria.grade" css="mcs-padding-0" />
+            <mcs-select caption="上课年级" category="grade" model="vm.criteria.grade" css="mcs-padding-0" />
         </div>
         <div class="col-md-3">
-            <ppts-select caption="上课科目" category="subject" model="vm.criteria.subject" css="mcs-padding-0" />
+            <mcs-select caption="上课科目" category="subject" model="vm.criteria.subject" css="mcs-padding-0" />
         </div>
         <div class="col-md-3">
-            <ppts-select caption="岗位性质" category="teacherType" model="vm.criteria.isFullTimeTeacher" css="mcs-padding-0" />
+            <mcs-select caption="岗位性质" category="teacherType" model="vm.criteria.isFullTimeTeacher" css="mcs-padding-0" />
         </div>
     </div>
 </ppts-dynamic-content>

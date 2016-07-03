@@ -1,6 +1,7 @@
 using MCS.Library.Core;
 using MCS.Library.Data.DataObjects;
 using MCS.Library.Data.Mapping;
+using PPTS.Data.Common.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -69,6 +70,7 @@ namespace PPTS.Data.Customers.Entities
         /// 流水时间
         /// </summary>
         [ORFieldMapping("RecordTime", UtcTimeToLocal = true)]
+        [SqlBehavior(DefaultExpression = "GETUTCDATE()")]
         [DataMember]
         public DateTime RecordTime
         {
@@ -80,8 +82,9 @@ namespace PPTS.Data.Customers.Entities
         /// 流水类型（收入，支出）
         /// </summary>
         [ORFieldMapping("RecordType")]
+        [ConstantCategory("C_CODE_ABBR_account_RecordType")]
         [DataMember]
-        public string RecordType
+        public AccountRecordType RecordType
         {
             get;
             set;
@@ -109,12 +112,36 @@ namespace PPTS.Data.Customers.Entities
             set;
         }
 
+
+
         /// <summary>
         /// 业务单号
         /// </summary>
         [ORFieldMapping("BillNo")]
         [DataMember]
         public string BillNo
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 业务关联ID（例如退订单关联订购单）
+        /// </summary>
+        [ORFieldMapping("BillRelateID")]
+        [DataMember]
+        public string BillRelateID
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 业务关联单号
+        /// </summary>
+        [ORFieldMapping("BillRelateNo")]
+        [DataMember]
+        public string BillRelateNo
         {
             get;
             set;

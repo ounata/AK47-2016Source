@@ -67,7 +67,8 @@ namespace PPTS.WebAPI.Orders.Executors
             ///挑选允许调整的记录
             if (ac != null)
             {
-                assignCollection = ac.Where(p => (p.AssignStatus == Data.Orders.AssignStatusDefine.Assigned || p.AssignStatus == Data.Orders.AssignStatusDefine.Exception));
+                assignCollection = ac.Where(p => (p.AssignStatus == Data.Orders.AssignStatusDefine.Assigned 
+                || p.AssignStatus == Data.Orders.AssignStatusDefine.Exception));
             }
             //创建新的记录
             foreach (var m in assignCollection)
@@ -78,7 +79,7 @@ namespace PPTS.WebAPI.Orders.Executors
                 if (mm == null)
                     continue;
                 System.TimeSpan ts = m.EndTime.Subtract(m.StartTime);
-                m.StartTime = mm.ReDate.Date.AddHours(System.Convert.ToDouble(mm.ReHour)).AddMinutes(System.Convert.ToDouble(mm.ReMinute));
+                m.StartTime = mm.ReDate;
                 m.EndTime = m.StartTime.Add(ts);
             }
             return assignCollection;

@@ -10,59 +10,59 @@
                     var type = $scope.type = $stateParams.type;
                     var productId = $stateParams.productid;
 
-                    
-
                     vm.data = {
                         headers: [{
-                            field: "orderNo",
+                            field: "assetCode",
                             name: "订单编号",
                         }, {
                             field: "productName",
                             name: "资产名称",
                         }, {
                             name: "剩余需兑换数量（已排课）",
-                            template: '<span>{{ row.amount }}</span>'
+                            template: '<span>{{ row.realAmount - row.confirmedAmount - row.debookedAmount }}({{row.assignedAmount}})</span>'
                         }, {
-                            field: "orderPrice",
+                            field: "realPrice",
                             name: "购买单价",
                         }],
                         pager: {
-                            pageable:false
+                            pageable: false
                         },
                         orderBy: [{ dataField: 'CreateTime', sortDirection: 1 }]
                     }
-                    
 
 
-                    vm.goBack = function () { $state.go('ppts.purchaseExchange', { itemid: itemId,type:type }); };
+
+                    vm.goBack = function () {
+                        $state.go('ppts.purchaseExchange-' + type, $stateParams);
+                    };
                     vm.save = function () {
 
-                        purchaseCourseDataService.exchangeOrder({ itemId: itemId, productId:productId,type:type }, function (entity) { console.log(entity); });
+                        purchaseCourseDataService.exchangeOrder({ itemId: itemId, productId: productId, type: type }, function (entity) { $state.go('ppts.purchase'); });
 
                     };
 
 
-                    
+
                     var init = (function () {
 
-                        if (type == 1) {
+                        if (type == "one") {
                             vm.data.headers = vm.data.headers.concat([{
-                                name: "愿购买单价享受折扣",
-                                template: '<span>{{row.realPrice/row.orderPrice }}</span>'
+                                field: "discountRate",
+                                name: "原购买单价享受折扣",
                             }, {
-                                name: "新产品单价",
-                                template: '<span>{{ vm.product.productPrice }}</span>'
+                                name: "新产品原单价",
+                                template: '{{ row.showProductPrice() | currency }}'
                             }, {
                                 name: "新产品折扣后单价",
-                                template: '<span>{{ (row.realPrice/row.orderPrice) * vm.product.productPrice }}</span>'
+                                template: '{{ row.showProductDiscountPrice(row) | currency }}'
                             }, {
                                 name: "兑换新产品数量",
-                                template: '<span>{{ row.amount *( row.orderPrice / ((row.realPrice/row.orderPrice) * vm.product.productPrice)) }}</span>'
+                                template: '{{ row.showExchangeCount(row)  }}'
                             }, {
-                                name: "资产兑换日期",
-                                template: '<span>{{ row.exchangeDate | date:"yyyy-MM-dd"}}</span>'
+                                name: "兑换资产日期",
+                                template: '{{ row.exchangeDate | date:"yyyy-MM-dd" }}'
                             }]);
-                        } else if (type == 2) {
+                        } else if (type == "two") {
                             vm.data.headers = vm.data.headers.concat([{
                                 name: "新产品单价",
                                 template: '<span>{{ vm.product.productPrice }}</span>'
@@ -85,6 +85,13 @@
 
                             vm.customer = { customerName: result.orderItem.customerName, customerCode: result.orderItem.customerCode };
                             vm.product = result.product;
+
+                            if (type == "one") {
+
+                                result.asset['showProductPrice'] = function () { return vm.product.productPrice; };
+                                result.asset['showProductDiscountPrice'] = function (row) { return vm.product.productPrice * row.discountRate; };
+                                result.asset['showExchangeCount'] = function (row) { return (row.realAmount - row.confirmedAmount - row.debookedAmount) * row.realPrice / row.showProductDiscountPrice(row); };
+                            }
 
                             result.asset['exchangeDate'] = new Date();
 

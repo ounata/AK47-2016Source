@@ -22,7 +22,7 @@
                         vm.customer = result.customer;
                         vm.pCustomer = result.pCustomer;
 
-                        dataSyncService.injectPageDict(['ifElse']);
+                        dataSyncService.injectDynamicDict('ifElse');
 
                         $scope.$broadcast('dictionaryReady');
                         console.log(result);

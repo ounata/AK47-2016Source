@@ -3,13 +3,13 @@ define([ppts.config.modules.schedule,
         ppts.config.dataServiceConfig.teacherCourseDataService],
         function (schedule) {
             schedule.registerController('tchCourseListController', [
-            '$scope', 'teacherCourseDataService', 'printService', 'dataSyncService',
-            function ($scope, teacherCourseDataService, printService, dataSyncService) {
+            '$scope', 'teacherCourseDataService', 'printService',
+            function ($scope, teacherCourseDataService, printService) {
                 var vm = this;
 
                 vm.criteria = vm.criteria || {};
-                vm.criteria.startTime = '2016-05-30';
-                vm.criteria.endTime = '2016-06-05';
+                vm.criteria.startTime = '';
+                vm.criteria.endTime = '';
                 vm.criteria.subject = '';
                 vm.criteria.grade = '';
                 vm.criteria.isFullTimeTeacher = '';
@@ -21,7 +21,6 @@ define([ppts.config.modules.schedule,
                 vm.init = function () {
                     teacherCourseDataService.initTchWeekCourse(vm.criteria, function (data) {
                         vm.result = data;
-                        dataSyncService.injectDictData();
                         $scope.$broadcast('dictionaryReady');
                     });
                 };

@@ -15,6 +15,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
@@ -43,8 +44,7 @@ namespace MCS.Web.MVC.Library.ApiCore
 
                 request.Content.IsMimeMultipartContent("form-data").FalseThrow("上传请求的格式不正确");
 
-                InMemoryMultipartFormDataStreamProvider provider =
-                    request.Content.ReadAsMultipartAsync<InMemoryMultipartFormDataStreamProvider>(new InMemoryMultipartFormDataStreamProvider()).Result;
+                InMemoryMultipartFormDataStreamProvider provider = InMemoryMultipartFormDataStreamProvider.GetProvider(request);
 
                 bool needContinue = true;
 
@@ -93,21 +93,18 @@ namespace MCS.Web.MVC.Library.ApiCore
                         GetMaterialContentPersistManager(material.ID, destFileInfo);
 
             Stream stream = persistManager.GetMaterialContent(material.ID);
-            
-                result.Content = new StreamContent(stream);
 
-                result.Content.Headers.ContentType =
-                    new MediaTypeHeaderValue(GetFileContentType(material.OriginalName));
+            result.Content = new StreamContent(stream);
 
-                result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("Attachment")
-                {
-                    FileName = HttpContext.Current.EncodeFileNameByBrowser(material.OriginalName)
-                };
+            result.Content.Headers.ContentType =
+                new MediaTypeHeaderValue(GetFileContentType(material.OriginalName));
 
+            result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("Attachment")
+            {
+                FileName = HttpContext.Current.EncodeFileNameByBrowser(material.OriginalName)
+            };
 
-           
             return result;
-
         }
 
         public static MaterialModelCollection ProcessMaterialUpload(this HttpRequestMessage request)
@@ -116,8 +113,7 @@ namespace MCS.Web.MVC.Library.ApiCore
 
             request.Content.IsMimeMultipartContent("form-data").FalseThrow("上传请求的格式不正确");
 
-            InMemoryMultipartFormDataStreamProvider provider =
-                request.Content.ReadAsMultipartAsync<InMemoryMultipartFormDataStreamProvider>(new InMemoryMultipartFormDataStreamProvider()).Result;
+            InMemoryMultipartFormDataStreamProvider provider = InMemoryMultipartFormDataStreamProvider.GetProvider(request);
 
             string mumJson = provider.FormData.GetValue("materialUploadModel", string.Empty);
 
@@ -149,15 +145,12 @@ namespace MCS.Web.MVC.Library.ApiCore
 
                 MaterialModel material = uploadModel.GenerateMaterial();
 
-               
-
                 IMaterialContentPersistManager persistManager = GetMaterialContentPersistManager(material.ID,
                     GetTempUploadFilePath(material.ID, uploadModel.RootPathName, uploadModel.OriginalName));
 
                 persistManager.SaveTempMaterialContent(material.ID, fileContent.ReadAsStreamAsync().Result);
 
-                //write DB
-                var content = UploadMaterialWriteDB(material);
+
 
                 materials.Add(material);
             }
@@ -165,7 +158,7 @@ namespace MCS.Web.MVC.Library.ApiCore
             return materials;
         }
 
-        public static MaterialContent UploadMaterialWriteDB(MaterialModel model)
+        public static MaterialContent UploadMaterialWriteDB(MaterialModel model, string DBName)
         {
             MaterialModel material = model;
 
@@ -173,7 +166,7 @@ namespace MCS.Web.MVC.Library.ApiCore
 
             materials.Add(material);
 
-            MaterialModelHelper helper = MaterialModelHelper.GetInstance("DataAccessTest");
+            MaterialModelHelper helper = MaterialModelHelper.GetInstance(DBName);
 
             helper.Update(materials);
 

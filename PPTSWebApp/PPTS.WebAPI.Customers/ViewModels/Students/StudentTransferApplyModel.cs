@@ -1,4 +1,5 @@
-﻿using MCS.Library.Net.SNTP;
+﻿using MCS.Library.Core;
+using MCS.Library.Net.SNTP;
 using MCS.Library.OGUPermission;
 using PPTS.Contracts.Orders.Models;
 using PPTS.Contracts.Proxies;
@@ -23,6 +24,26 @@ namespace PPTS.WebAPI.Customers.ViewModels.Students
     [DataContract]
     public class StudentTransferApplyModel : CustomerTransferApply
     {
+        /// <summary>
+        /// 学员编码
+        /// </summary>
+        [DataMember]
+        public string CustomerCode
+        {
+            set;
+            get;
+        }
+
+        /// <summary>
+        /// 学员名称
+        /// </summary>
+        [DataMember]
+        public string CustomerName
+        {
+            set;
+            get;
+        }
+
         /// <summary>
         /// 初始化提交人信息
         /// </summary>
@@ -63,6 +84,22 @@ namespace PPTS.WebAPI.Customers.ViewModels.Students
             this.ApplyStatus = status;
         }
 
+        private List<string> _accountIDs = new List<string>();
+        public List<string> AccountIDs
+        {
+            set
+            {
+                if (value == null)
+                    _accountIDs.Clear();
+                else
+                    _accountIDs = value;
+            }
+            get
+            {
+                return _accountIDs;
+            }
+        }
+
         /// <summary>
         /// 准备数据
         /// </summary>
@@ -74,6 +111,7 @@ namespace PPTS.WebAPI.Customers.ViewModels.Students
             }
             //获取所有的账户列表进行判定
             AssetStatisticQueryResult asset = PPTSAssetQueryServiceProxy.Instance.QueryAssetStatisticByCustomerID(this.CustomerID);
+#if !DEBUG
             if (asset != null && asset.AssignedAmount != 0)
             {
                 throw new Exception("存在排课记录，无法转学，请首先取消排课记录");
@@ -92,6 +130,9 @@ namespace PPTS.WebAPI.Customers.ViewModels.Students
             {
                 throw new Exception("存在未消耗的订购记录，无法转学，请首先退订");
             }
+#endif
+            foreach (Account account in AccountAdapter.Instance.LoadCollectionByCustomerID(this.CustomerID))
+                this.AccountIDs.Add(account.AccountID);
 
             IOrganization campus = OguMechanismFactory.GetMechanism().GetObjects<IOrganization>(SearchOUIDType.Guid, this.CampusID).SingleOrDefault();
             IOrganization branch = campus.GetUpperDataScope().GetParentOrganizationByType(DepartmentType.Branch);
@@ -113,10 +154,12 @@ namespace PPTS.WebAPI.Customers.ViewModels.Students
         public static StudentTransferApplyModel LoadByCustomer(CustomerModel customer)
         {
             StudentTransferApplyModel model = new StudentTransferApplyModel();
-            model.ApplyID = Guid.NewGuid().ToString().ToUpper();
+            model.ApplyID = UuidHelper.NewUuidString();
             model.CampusID = customer.CampusID;
             model.CampusName = customer.CampusName;
             model.CustomerID = customer.CustomerID;
+            model.CustomerCode = customer.CustomerCode;
+            model.CustomerName = customer.CustomerName;
             return model;
         }
 
@@ -130,7 +173,13 @@ namespace PPTS.WebAPI.Customers.ViewModels.Students
             CustomerTransferApply apply = CustomerTransferApplyAdapter.Instance.LoadByApplyID(applyID);
             if (apply != null)
             {
-                StudentTransferApplyModel model = AutoMapper.Mapper.DynamicMap<StudentTransferApplyModel>(apply);
+                StudentTransferApplyModel model = apply.ProjectedAs<StudentTransferApplyModel>();
+                CustomerModel customer = CustomerModel.Load(model.CustomerID);
+                if (customer != null)
+                {
+                    model.CustomerCode = customer.CustomerCode;
+                    model.CustomerName = customer.CustomerName;
+                }
                 return model;
             }
             return null;

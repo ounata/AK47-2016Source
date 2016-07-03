@@ -186,6 +186,17 @@ namespace PPTS.Data.Customers.Entities
         }
 
         /// <summary>
+        /// 街道名称
+        /// </summary>
+        [ORFieldMapping("StreetName")]
+        [DataMember]
+        public string StreetName
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// 详细地址描述
         /// </summary>
         [ORFieldMapping("AddressDetail")]

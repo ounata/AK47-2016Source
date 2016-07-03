@@ -18,6 +18,9 @@ namespace PPTS.ExtServices.UnionPay
             // 在应用程序启动时运行的代码
             
             GlobalConfiguration.Configure(WebApiConfig.Register);
+            FilterConfig.RegisterGloablFilters(GlobalFilters.Filters);
         }
+
+        
     }
 }

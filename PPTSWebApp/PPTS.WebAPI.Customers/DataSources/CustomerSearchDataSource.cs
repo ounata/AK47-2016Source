@@ -9,6 +9,7 @@ using System;
 using MCS.Library.Data.Builder;
 using MCS.Library.Data.Mapping;
 using PPTS.Data.Customers;
+using System.Text;
 
 namespace PPTS.WebAPI.Customers.DataSources
 {
@@ -37,23 +38,55 @@ namespace PPTS.WebAPI.Customers.DataSources
 
         protected override void OnBuildQueryCondition(QueryCondition qc)
         {
-            qc.SelectFields = @"CampusID,CustomerID,CustomerName, CustomerCode, ParentName, FirstSignTime, SchoolName, Grade, EducatorName, ConsultantName, 
-                                ISNULL(AccountContractConfirmedAmount+AssetOneToOneAmount,0)+ISNULL(AssetClassAmount,0)+ISNULL(AssetOneToOneConfirmedAmount,0)+ISNULL(AssetClassConfirmedAmount,0) AS AssignedAmount,
-                                ISNULL(AssetOneToOneAmount,0)+ISNULL(AssetClassAmount,0)+ISNULL(AssetOtherAmount,0) AS AssetRemainAmount,
-                                ISNULL(AssetOneToOneMoney,0)+ISNULL(AssetClassMoney,0)+ISNULL(AssetOtherMoney,0)+ISNULL(AccountMoney,0) AS AccountMoney,
-                                ISNULL(AssetOneToOneMoney,0)+ISNULL(+AssetClassMoney,0)+ISNULL(+AssetOtherMoney,0) AS OrderMoney,
-                                ISNULL(AccountMoney,0) AS AvaiableMoney,
-                                DATEDIFF(DAY, AssignTime, GETUTCDATE()) AS LastAssignDays";
+            string assignedAmount = "ISNULL(AccountContractConfirmedAmount+AssetOneToOneAmount,0)+ISNULL(AssetClassAmount,0)+ISNULL(AssetOneToOneConfirmedAmount,0)+ISNULL(AssetClassConfirmedAmount,0)"; // 签约课时
+            string assetRemainAmount = "ISNULL(AssetOneToOneAmount,0)+ISNULL(AssetClassAmount,0)+ISNULL(AssetOtherAmount,0)"; // 剩余课时
+            string accountMoney = "ISNULL(AssetOneToOneMoney,0)+ISNULL(AssetClassMoney,0)+ISNULL(AssetOtherMoney,0)+ISNULL(AccountMoney,0)"; // 账户价值
+            string orderMoney = "ISNULL(AssetOneToOneMoney,0)+ISNULL(+AssetClassMoney,0)+ISNULL(+AssetOtherMoney,0)"; // 订购资金余额
+            string avaiableMoney = "ISNULL(AccountMoney,0)"; // 可用金额
+
+            qc.SelectFields = string.Format(
+                @" CampusID,CustomerID,CustomerName, CustomerCode, ParentName, FirstSignTime, CustomerSchoolName, Grade, EducatorName, ConsultantName, 
+                   {0} AS AssignedAmount, 
+                   {1} AS AssetRemainAmount, 
+                   {2} AS AccountMoney,
+                   {3} AS OrderMoney, 
+                   {4} AS AvaiableMoney,
+                   DATEDIFF(DAY, AssignTime, GETUTCDATE()) AS LastAssignDays",
+                assignedAmount, assetRemainAmount, accountMoney, orderMoney, avaiableMoney);
+
             qc.FromClause = @" SM.CustomerSearch ";
 
-            switch (qc.OrderByClause)
+            string[] order = qc.OrderByClause.ToLower().Split(new char[] { ' ' });
+            string orderByField = order[0];
+            string orderDirection = order.Length == 2 ? order[1] : "ASC";
+            switch (orderByField)
             {
-                case "assignedAmount DESC":
-                    qc.OrderByClause = " AccountContractConfirmedAmount+AssetOneToOneAmount+AssetClassAmount+AssetOneToOneConfirmedAmount+AssetClassConfirmedAmount DESC";
+                case "assignedamount":
+                    qc.OrderByClause = string.Format(@" {0} {1} ", assignedAmount, orderDirection);
+                    break;
+                case "assetremainamount":
+                    qc.OrderByClause = string.Format(@" {0} {1} ", assetRemainAmount, orderDirection);
+                    break;
+                case "accountmoney":
+                    qc.OrderByClause = string.Format(@" {0} {1} ", accountMoney, orderDirection);
+                    break;
+                case "ordermoney":
+                    qc.OrderByClause = string.Format(@" {0} {1} ", orderMoney, orderDirection);
+                    break;
+                case "avaiablemoney":
+                    qc.OrderByClause = string.Format(@" {0} {1} ", avaiableMoney, orderDirection);
+                    break;
+                case "lastassigndays":
+                    qc.OrderByClause = string.Format(@" AssignTime {0} ", orderDirection);
                     break;
                 default:
                     break;
             }
+            #region 数据权限加工
+            qc.WhereClause = PPTS.Data.Common.Authorization.ScopeAuthorization<Customer>
+                .GetInstance(Data.Customers.ConnectionDefine.PPTSSearchConnectionName)
+                .ReadAuthExistsBuilder(null, qc.WhereClause).ToSqlString(TSqlBuilder.Instance);
+            #endregion
             base.OnBuildQueryCondition(qc);
         }
 
@@ -64,6 +97,15 @@ namespace PPTS.WebAPI.Customers.DataSources
         private string BuildQueryCondition(StudentQueryCriteriaModel condition)
         {
             string sqlBuilder = string.Empty;
+
+            #region 学员、家长姓名，学员编号，家长联系电话
+            string customersFulltextbuilder = string.Empty;
+            if (!string.IsNullOrEmpty(condition.KeyWord))
+            {
+                customersFulltextbuilder = string.Format(
+                    @" and CONTAINS(SearchContent, N'""{0}""')", condition.KeyWord.EncodeString());
+            }
+            #endregion
 
             #region 学员状态
 
@@ -145,17 +187,16 @@ namespace PPTS.WebAPI.Customers.DataSources
                     customerStatusBuilder = " and " + dateTypeBuilder_Attend;
                     if (condition.AttendType != -1) // 上课学员二级
                     {
-                        if (condition.AttendType == (byte)AttendDefine.OneToOneAttend)
+                        if (condition.AttendType == (byte)AttendDefine.OneToOneAttend) // 1对1上课
                         {
+                            customerStatusBuilder += string.Format(@" and (DATEDIFF(DD,OneToOneLastClassTime,GETUTCDATE()) <= {0}) ", minDays);
                         }
-                        else if (condition.AttendType == (byte)AttendDefine.ClassAttend)
+                        else if (condition.AttendType == (byte)AttendDefine.ClassAttend) // 班组上课
                         {
-                        }
-                        else if (condition.AttendType == (byte)AttendDefine.OtherAttend)
-                        {
+                            customerStatusBuilder += string.Format(@" and (DATEDIFF(DD,GroupLastClassTime,GETUTCDATE()) <= {0}) ", minDays);
                         }
                     }
-                    if (condition.StatusStartTimeUTC != null && condition.StatusEndTimeUTC != null) // 本月上课
+                    if (condition.StatusStartTimeUTC != null && condition.StatusEndTimeUTC != null && condition.StatusStartTimeUTC != DateTime.MinValue && condition.StatusEndTimeUTC != DateTime.MinValue) // 本月上课
                     {
                         customerStatusBuilder += string.Format(
                             @" and ( (AssignTime is not null and AssignTime between '{0}' and '{1}') 
@@ -176,7 +217,7 @@ namespace PPTS.WebAPI.Customers.DataSources
                             customerStatusBuilder += " and ISNULL(AssetClassAmount,0)>0";
                         }
                     }
-                    if (condition.StatusStartTimeUTC != null && condition.StatusEndTimeUTC != null) // 本月新增
+                    if (condition.StatusStartTimeUTC != null && condition.StatusEndTimeUTC != null && condition.StatusStartTimeUTC != DateTime.MinValue && condition.StatusEndTimeUTC != DateTime.MinValue) // 本月新增
                     {
                         customerStatusBuilder += string.Format(
                             @" and ( (AssignTime is not null and DATEDIFF(DD,AssignTime,'{0}')<=30 and DATEDIFF(DD,AssignTime,'{1}')>30)  
@@ -197,7 +238,7 @@ namespace PPTS.WebAPI.Customers.DataSources
                             customerStatusBuilder += " and ISNULL(AssetClassAmount,0)>0";
                         }
                     }
-                    if (condition.StatusStartTimeUTC != null && condition.StatusEndTimeUTC != null) // 本月新增休学
+                    if (condition.StatusStartTimeUTC != null && condition.StatusEndTimeUTC != null && condition.StatusStartTimeUTC != DateTime.MinValue && condition.StatusEndTimeUTC != DateTime.MinValue) // 本月新增休学
                     {
                         customerStatusBuilder += string.Format(
                             @" and( (AssignTime is not null and DATEDIFF(DD,AssignTime,'{0}')<=180 and DATEDIFF(DD,AssignTime,'{1}')>180 )
@@ -211,28 +252,31 @@ namespace PPTS.WebAPI.Customers.DataSources
                     {
                         if (condition.CompletedType == (byte)CompletedDefine.ConsumeCompleted) // 消耗结课：没有退费记录，有“已上”上课记录
                         {
-                            customerStatusBuilder += @" and (LastAccountRefundTime is null and AssignTime is not null) ";
+                            // customerStatusBuilder += @" and (LastAccountRefundTime is null and AssignTime is not null) ";
+                            customerStatusBuilder += string.Format(@" and CompleteType = {0}", (byte)CompletedDefine.ConsumeCompleted);
                         }
                         else if (condition.CompletedType == (byte)CompletedDefine.ReturnCompleted) // 退费结课：只要有退费记录，且“分区域财务经理审批通过”，就算退费结课
                         {
-                            customerStatusBuilder += @" and (LastAccountRefundTime is not null) ";
+                            // customerStatusBuilder += @" and (LastAccountRefundTime is not null) ";
+                            customerStatusBuilder += string.Format(@" and CompleteType = {0}", (byte)CompletedDefine.ReturnCompleted);
                         }
                         else if (condition.CompletedType == (byte)CompletedDefine.TransferCompleted) // 转让结课：没有退费记录，没有“已上”上课记录，有转出记录
                         {
-                            customerStatusBuilder += @" and (LastAccountRefundTime is null and AssignTime is null and LastAccountTransferOutTime is not null) ";
+                            // customerStatusBuilder += @" and (LastAccountRefundTime is null and AssignTime is null and LastAccountTransferOutTime is not null) ";
+                            customerStatusBuilder += string.Format(@" and CompleteType = {0}", (byte)CompletedDefine.TransferCompleted);
                         }
                     }
-                    if (condition.StatusStartTimeUTC != null && condition.StatusEndTimeUTC != null) // 本月新增结课
+                    if (condition.StatusStartTimeUTC != null && condition.StatusEndTimeUTC != null && condition.StatusStartTimeUTC != DateTime.MinValue && condition.StatusEndTimeUTC != DateTime.MinValue) // 本月新增结课
                     {
-                        // ...
+                        customerStatusBuilder += string.Format(@" and CompleteTime >= '{0}'", condition.StatusStartTimeUTC);
                     }
                 }
                 else if (condition.CustomerType == (byte)CustomerTypeDefine.NoOrder) // 无订单学员：账户价值>=200且剩余课时=0的学员
                 {
                     customerStatusBuilder = string.Format(@" and ({0}>=200 and {1}=0)", accountAmount, avaiableAmount);
-                    if (condition.StatusStartTimeUTC != null && condition.StatusEndTimeUTC != null) // 本月新增无订单
+                    if (condition.StatusStartTimeUTC != null && condition.StatusEndTimeUTC != null && condition.StatusStartTimeUTC != DateTime.MinValue && condition.StatusEndTimeUTC != DateTime.MinValue) // 本月新增无订单：在本月1号零点至使用当天时间点之间有过充值但未有订购单的学员
                     {
-                        // ...
+                        customerStatusBuilder += string.Format(@" and (LastAccountChargeApplyTime >= '{0}' and (isnull(LastOrderTime,'1900-01-01 00:00:00')<'{0}')) ", condition.StatusStartTimeUTC);
                     }
                 }
             }
@@ -251,7 +295,51 @@ namespace PPTS.WebAPI.Customers.DataSources
             }
             #endregion
 
-            sqlBuilder = graduateBuilder + customerStatusBuilder;
+            #region 归属关系
+            string belongsBuilder = string.Empty;
+            if (condition.Belongs != null && condition.Belongs.Length > 0)
+            {
+                string belongTypes = string.Empty;
+                string belongNames = string.Empty;
+                foreach (var item in condition.Belongs)
+                {
+                    if (item == (byte)CustomerRelationType.Consultant)
+                    {
+                        belongTypes = string.IsNullOrEmpty(belongTypes) ? " ConsultantJobID<>0 " : belongTypes + " or ConsultantJobID<>0 ";
+                        if (!string.IsNullOrEmpty(condition.BelongName))
+                            belongNames = string.IsNullOrEmpty(belongNames) ? string.Format(@" ConsultantName=N'{0}' ", condition.BelongName) : belongNames + string.Format(@" or ConsultantName=N'{0}' ", condition.BelongName);
+                    }
+                    else if (item == (byte)CustomerRelationType.Educator)
+                    {
+                        belongTypes = string.IsNullOrEmpty(belongTypes) ? " EducatorJobID<>0 " : belongTypes + " or EducatorJobID<>0 ";
+                        if (!string.IsNullOrEmpty(condition.BelongName))
+                            belongNames = string.IsNullOrEmpty(belongNames) ? string.Format(@" EducatorName=N'{0}' ", condition.BelongName) : belongNames + string.Format(@" or EducatorName=N'{0}' ", condition.BelongName);
+                    }
+                    else if (item == (byte)CustomerRelationType.Callcenter)
+                    {
+                        belongTypes = string.IsNullOrEmpty(belongTypes) ? " CallCenterJobID<>0 " : belongTypes + " or CallCenterJobID<>0 ";
+                        if (!string.IsNullOrEmpty(condition.BelongName))
+                            belongNames = string.IsNullOrEmpty(belongNames) ? string.Format(@" CallCenterName=N'{0}' ", condition.BelongName) : belongNames + string.Format(@" or CallCenterName=N'{0}' ", condition.BelongName);
+                    }
+                    else if (item == (byte)CustomerRelationType.Market)
+                    {
+                        belongTypes = string.IsNullOrEmpty(belongTypes) ? " MarketingJobID<>0 " : belongTypes + " or MarketingJobID<>0 ";
+                        if (!string.IsNullOrEmpty(condition.BelongName))
+                            belongNames = string.IsNullOrEmpty(belongNames) ? string.Format(@" MarketingName=N'{0}' ", condition.BelongName) : belongNames + string.Format(@" or MarketingName=N'{0}' ", condition.BelongName);
+                    }
+                }
+                belongTypes = string.IsNullOrEmpty(belongTypes) ? "" : string.Format(" and ({0})", belongTypes);
+                belongNames = string.IsNullOrEmpty(belongNames) ? "" : string.Format(" and ({0})", belongNames);
+                belongsBuilder = belongTypes + belongNames;
+            }
+            else if (!string.IsNullOrEmpty(condition.BelongName))
+            {
+                belongsBuilder = string.Format(
+                    @" and (ConsultantName=N'{0}' or EducatorName=N'{0}' or CallCenterName=N'{0}' or MarketingName=N'{0}') ", condition.BelongName.EncodeString());
+            }
+            #endregion
+
+            sqlBuilder = customersFulltextbuilder + graduateBuilder + customerStatusBuilder + belongsBuilder;
 
             return sqlBuilder;
         }

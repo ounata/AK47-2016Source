@@ -9,13 +9,14 @@
 // -------------------------------------------------
 #endregion
 
-using System;
-using System.Xml;
-using System.Text;
-using System.Collections.Generic;
 using MCS.Library;
-using MCS.Library.Data;
 using MCS.Library.Core;
+using MCS.Library.Data;
+using MCS.Library.Data.Configuration;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Xml;
 
 namespace MCS.Library.SOA.DataObjects
 {

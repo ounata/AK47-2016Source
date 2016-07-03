@@ -32,6 +32,19 @@ namespace PPTS.Services.Products.Services
 
         [WfJsonFormatter]
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        public DiscountQueryResult QueryDiscountByDiscountID(string discountID)
+        {
+            DiscountQueryResult discountQueryResult = new DiscountQueryResult();
+            discountQueryResult.Discount = DiscountAdapter.Instance.LoadByDiscountID(discountID);
+            if (discountQueryResult.Discount != null)
+            {
+                discountQueryResult.DiscountItemCollection = DiscountItemAdapter.Instance.Load(builder => builder.AppendItem("DiscountID", discountQueryResult.Discount.DiscountID)).ToList();
+            }
+            return discountQueryResult;
+        }
+
+        [WfJsonFormatter]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         public ExpenseQueryResult QueryExpenseByCampusID(string campusID)
         {
             ExpenseQueryResult queryResult = new ExpenseQueryResult();

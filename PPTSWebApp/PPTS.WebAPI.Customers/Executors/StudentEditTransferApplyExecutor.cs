@@ -32,7 +32,7 @@ namespace PPTS.WebAPI.Customers.Executors
         private void Init(StudentTransferApplyModel apply)
         {
             if (apply.ApplyID.IsNullOrEmpty())
-                apply.ApplyID = Guid.NewGuid().ToString().ToUpper();
+                apply.ApplyID = UuidHelper.NewUuidString();
 
             apply.FillCreator();
             apply.FillModifier();

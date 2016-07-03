@@ -6,6 +6,8 @@ using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using System.Net.Http.Formatting;
 using System.Web.Http;
+using System.Web.Http.Validation;
+using MCS.Web.MVC.Library.Providers;
 
 namespace PPTS.WebAPI.Orders
 {
@@ -21,6 +23,8 @@ namespace PPTS.WebAPI.Orders
                 routeTemplate: "api/{controller}/{action}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
+            config.Services.Replace(typeof(IBodyModelValidator), new MCSBodyModelValidator());
 
 
             config.Formatters.Clear();

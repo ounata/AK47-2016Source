@@ -93,42 +93,4 @@ namespace MCS.Library.SOA.DataObjects.UserTaskPlugin
         }
 
     }
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34230")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://tempuri.org/")]
-    public partial class DictionaryEntry
-    {
-
-        private object keyField;
-
-        private object valueField;
-
-        /// <remarks/>
-        public object Key
-        {
-            get
-            {
-                return this.keyField;
-            }
-            set
-            {
-                this.keyField = value;
-            }
-        }
-
-        /// <remarks/>
-        public object Value
-        {
-            get
-            {
-                return this.valueField;
-            }
-            set
-            {
-                this.valueField = value;
-            }
-        }
-    }
 }

@@ -5,7 +5,10 @@ namespace PPTS.WebAPI.Customers.ViewModels.Parents
 {
     public class ParentsSearchQueryCriteriaModel
     {
-        [ConditionMapping("", Template = "CONTAINS(b.*, ${Data}$)")]
+        [NoMapping]
+        public string CustomerID { get; set; }
+
+        [NoMapping]
         public string Keyword { get; set; }
 
         [NoMapping]

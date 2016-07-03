@@ -1,22 +1,24 @@
-﻿<form class="form-horizontal">
-    <div class="widget-box">
-        <div class="widget-header">
-            <h4 class="col-sm-8">您正在为{{vm.customer.customerName}}{{vm.customer.customerCode}}充值<span ng-show="vm.apply.applyNo">，缴费单号{{vm.apply.applyNo}}</span></h4>
-            <div class="col-sm-4">
-                <h6>
-                    <span>业绩归属:{{vm.customer.campusName}}</span>
-                    <span>充值类型:{{vm.apply.chargeType | chargeType}}</span>
-                    <span>申请人:{{vm.apply.applierName}}</span>
-                    <span>岗位:{{vm.apply.applierJobName}}</span>
-                </h6>
-            </div>
+﻿<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            <span class="caption-subject bold"><i class="ace-icon fa"></i> 您正在为<span class="important">【{{vm.customer.customerName}}({{vm.customer.customerCode}})】</span>充值<span ng-show="vm.apply.applyNo">，缴费单编号{{vm.apply.applyNo}}</span></span>
         </div>
-        <div class="widget-body">
-            <div class="clearfix form-actions mcs-form-actions">
-                <div>
-                    <mcs-button type="submit" category="save" click="vm.save()" ng-disabled="!vm.assert.ok"></mcs-button>
-                    <mcs-button category="delete" click="vm.delete()" ng-show="vm.apply.applyNo" ng-disabled="!vm.assert.ok"></mcs-button>
-                    <mcs-button category="cancel" click="vm.cancel()" ng-show="vm.showCancel"></mcs-button>
+        <div class="caption pull-right">
+            <span class="caption-subject bold">业绩归属: <span class="important">{{vm.customer.campusName}}</span></span>
+            <span class="caption-subject bold">充值类型: <span class="important">{{vm.apply.chargeType | chargeType}}</span></span>
+            <span class="caption-subject bold">申请人: <span class="important">{{vm.apply.applierName}}</span></span>
+            <span class="caption-subject bold">岗位: <span class="important">{{vm.apply.applierJobName}}</span></span>
+        </div>
+    </div>
+    <div class="portlet-body form">
+        <form class="form-horizontal" action="#" role="form" novalidate>
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <mcs-button category="save" click="vm.save()" ng-disabled="!vm.assert.ok"  ppts-job-functions="按钮-充值/删除/编辑缴费单"></mcs-button>
+                        <mcs-button category="delete" click="vm.delete()" ng-show="vm.apply.applyNo" ng-disabled="!vm.assert.ok"  ppts-job-functions="按钮-充值/删除/编辑缴费单"></mcs-button>
+                        <mcs-button category="cancel" click="vm.cancel()" ng-show="vm.showCancel"></mcs-button>
+                    </div>
                 </div>
             </div>
             <div class="alert alert-block alert-danger" ng-show="vm.errorMessage">
@@ -26,131 +28,134 @@
                 <i class="ace-icon fa fa-warning"></i>
                 {{vm.errorMessage}}
             </div>
-            <div class="profile-user-info profile-user-info-striped mcs-user-profile">
-                <div class="profile-info-row">
-                    <div class="profile-info-name">
-                        <i class="fa fa-caret-up" aria-hidden="true" />乙方(受辅导方)：
+            <div class="form-body">
+                <h4 class="form-section"><i class="ace-icon fa fa-th"></i> 学员及账户信息<span class="section-helper"> (<i class="ace-icon fa fa-caret-up red" /> 表示充值所需项)</span></h4>
+                <div class="row">
+                    <div class="form-group horizontal bordered">
+                        <mcs-label icons="caret-up" text="乙方(受辅导方)" css="col-sm-3" />
+                        <div class="col-sm-6">
+                            <p class="form-control-static">{{ vm.customer.customerName }}</p>
+                        </div>
                     </div>
-                    <div class="profile-info-value">
-                        {{ vm.customer.customerName }}
+                </div>
+                <div class="row">
+                    <div class="form-group horizontal bordered">
+                        <mcs-label icons="caret-up" text="性别" css="col-sm-3" />
+                        <div class="col-sm-6">
+                            <p class="form-control-static">{{ vm.customer.gender | gender }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group horizontal bordered">
+                        <mcs-label icons="caret-up" text="出生日期" css="col-sm-3" />
+                        <div class="col-sm-6">
+                            <p class="form-control-static">{{ vm.customer.birthday | date:"yyyy-MM-dd" | normalize }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group horizontal bordered">
+                        <mcs-label icons="caret-up" text="在读学校" css="col-sm-3" />
+                        <div class="col-sm-6">
+                            <p class="form-control-static">{{ vm.customer.schoolName }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group horizontal bordered">
+                        <mcs-label icons="caret-up" text="年级" css="col-sm-3" />
+                        <div class="col-sm-6">
+                            <p class="form-control-static">{{ vm.customer.grade | grade }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group horizontal bordered">
+                        <mcs-label icons="caret-up" text="法定监护人" css="col-sm-3" />
+                        <div class="col-sm-6">
+                            <p class="form-control-static">{{ vm.customer.parentName }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group horizontal bordered">
+                        <mcs-label icons="caret-up" text="是受辅导方的" css="col-sm-3" />
+                        <div class="col-sm-6">
+                            <p class="form-control-static">{{ vm.customer.parentRole | parent }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group horizontal bordered">
+                        <mcs-label icons="caret-up" text="手机号码" css="col-sm-3" />
+                        <div class="col-sm-6">
+                            <p class="form-control-static">{{ vm.customer.phoneNumber }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group horizontal">
+                        <div class="col-sm-12">
+                            <table class="table table-striped table-bordered table-hover" style="margin:15px;width:98%;">
+                                <thead>
+                                    <tr>
+                                        <th class="col-sm-3">学生编号</th>
+                                        <th class="col-sm-3">当前折扣基数(元)</th>
+                                        <th class="col-sm-3">当前账户价值</th>
+                                        <th class="col-sm-3">当前折扣率</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>{{ vm.customer.customerCode }}</td>
+                                        <td>{{ vm.apply.thatDiscountBase | currency:"￥" }}</td>
+                                        <td>{{ vm.apply.thatAccountValue | currency:"￥" }}</td>
+                                        <td>{{ vm.apply.thatDiscountRate | number:2 }}</td>
+                                    </tr>
+                                </tbody>
+                                <thead>
+                                    <tr>
+                                        <th>本次充值金额</th>
+                                        <th>本次折扣基数(元)</th>
+                                        <th>本次账户价值</th>
+                                        <th>本次折扣率</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><mcs-input model="vm.apply.chargeMoney" datatype="number" currency less="0" great="9999999" /><p class="help-block"></p></td>
+                                        <td>{{ vm.apply.thisDiscountBase | currency:"￥" }}</td>
+                                        <td>{{ vm.apply.thisAccountValue | currency:"￥" }}</td>
+                                        <td>{{ vm.apply.thisDiscountRate | number:2 }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <h4 class="form-section">
+                    <i class="ace-icon fa fa-th"></i> 业绩分配比例
+                    <mcs-button category="add" click="vm.addRow()" size="medium" ppts-job-functions="按钮-编辑业绩分配,按钮-编辑业绩分配-本校区,按钮-编辑业绩分配-本分公司"></mcs-button>
+                    <mcs-button category="delete" click="vm.removeRow()" size="medium" ppts-job-functions="按钮-编辑业绩分配,按钮-编辑业绩分配-本校区,按钮-编辑业绩分配-本分公司"></mcs-button>
+                </h4>
+                <div class="row">
+                    <div class="form-group horizontal">
+                        <div class="col-sm-12" style="margin:15px;width:98%;">
+                            <mcs-datatable data="vm.data" />
+                            <span class="pull-right">金额总计：{{ vm.apply.allot.totalMoney | currency:"￥" }}，课时总计：{{ vm.apply.allot.totalAmount }}</span>
+                        </div>
+                    </div>
+                </div>
+                <h4 class="form-section"><i class="ace-icon fa fa-th"></i> 所报科目信息</h4>
+                <div class="row">
+                    <div class="form-group horizontal">
+                        <div class="col-sm-12 mcs-padding-left-20">
+                            <ppts-checkbox-group category="subject" model="vm.apply.allot.subjects" show-all="false" />
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="profile-user-info profile-user-info-striped mcs-user-profile">
-                <div class="profile-info-row">
-                    <div class="profile-info-name">
-                        <i class="fa fa-caret-up" aria-hidden="true" />性别：
-                    </div>
-                    <div class="profile-info-value">
-                        {{ vm.customer.gender | gender }}
-                    </div>
-                </div>
-            </div>
-            <div class="profile-user-info profile-user-info-striped mcs-user-profile">
-                <div class="profile-info-row">
-                    <div class="profile-info-name">
-                        <i class="fa fa-caret-up" aria-hidden="true" />出生日期：
-                    </div>
-                    <div class="profile-info-value">
-                        {{ vm.customer.birthday | date:"yyyy-MM-dd" }}
-                    </div>
-                </div>
-            </div>
-            <div class="profile-user-info profile-user-info-striped mcs-user-profile">
-                <div class="profile-info-row">
-                    <div class="profile-info-name">
-                        <i class="fa fa-caret-up" aria-hidden="true" />在读学校：
-                    </div>
-                    <div class="profile-info-value">
-                        {{ vm.customer.schoolName }}
-                    </div>
-                </div>
-            </div>
-            <div class="profile-user-info profile-user-info-striped mcs-user-profile">
-                <div class="profile-info-row">
-                    <div class="profile-info-name">
-                        <i class="fa fa-caret-up" aria-hidden="true" />年级：
-                    </div>
-                    <div class="profile-info-value">
-                        {{ vm.customer.grade | grade }}
-                    </div>
-                </div>
-            </div>
-            <div class="profile-user-info profile-user-info-striped mcs-user-profile">
-                <div class="profile-info-row">
-                    <div class="profile-info-name">
-                        <i class="fa fa-caret-up" aria-hidden="true" />法定监护人：
-                    </div>
-                    <div class="profile-info-value">
-                        {{ vm.customer.parentName }}
-                    </div>
-                </div>
-            </div>
-            <div class="profile-user-info profile-user-info-striped mcs-user-profile">
-                <div class="profile-info-row">
-                    <div class="profile-info-name">
-                        <i class="fa fa-caret-up" aria-hidden="true" />是受辅导方的：
-                    </div>
-                    <div class="profile-info-value">
-                        {{ vm.customer.parentRole | parent}}
-                    </div>
-                </div>
-            </div>
-            <div class="profile-user-info profile-user-info-striped mcs-user-profile">
-                <div class="profile-info-row">
-                    <div class="profile-info-name">
-                        <i class="fa fa-caret-up" aria-hidden="true" />手机号码：
-                    </div>
-                    <div class="profile-info-value">
-                        {{ vm.customer.phoneNumber }}
-                    </div>
-                </div>
-            </div>
-            <!-- 收费信息表 -->
-            <table class="table table-bordered">
-                <tr>
-                    <td class="col-sm-3">学生编号</td>
-                    <td class="col-sm-3">当前折扣基数(元)</td>
-                    <td class="col-sm-3">当前账户价值</td>
-                    <td class="col-sm-3">当前折扣率</td>
-                </tr>
-                <tr>
-                    <td>{{ vm.customer.customerCode }}</td>
-                    <td>{{ vm.apply.thatDiscountBase | currency:"￥" }}</td>
-                    <td>{{ vm.apply.thatAccountValue | currency:"￥" }}</td>
-                    <td>{{ vm.apply.thatDiscountRate | number:2 }}</td>
-                </tr>
-                <tr>
-                    <td>本次充值金额</td>
-                    <td>本次折扣基数(元)</td>
-                    <td>本次账户价值</td>
-                    <td>本次折扣率</td>
-                </tr>
-                <tr>
-                    <td><mcs-input model="vm.apply.chargeMoney" type="Number" number-length="7" minnum="1" maxnum="9999999" class="col-sm-8" /></td>
-                    <td>{{ vm.apply.thisDiscountBase | currency:"￥" }}</td>
-                    <td>{{ vm.apply.thisAccountValue | currency:"￥" }}</td>
-                    <td>{{ vm.apply.thisDiscountRate | number:2 }}</td>
-                </tr>
-            </table>
-            <div class="col-sm-12 text-right">
-                <mcs-button category="add" click="vm.addRow()" size="medium"></mcs-button>
-                <mcs-button category="delete" click="vm.removeRow()" size="medium"></mcs-button>
-            </div>
-            <div class="page-header">
-                <span>业绩分配比例</span>
-            </div>
-            <mcs-datatable data="vm.data" />
-            <div class="col-sm-12 text-right">
-                <div class="col-sm-8">
-                </div>
-                <div class="col-sm-2">
-                    金额总计：{{ vm.apply.allot.totalMoney | currency:"￥" }}
-                </div>
-                <div class="col-sm-2">
-                    课时总计：{{ vm.apply.allot.totalAmount }}
-                </div>
-            </div>
-        </div>
+        </form>
     </div>
-</form>
+</div>

@@ -64,8 +64,8 @@
                                     }
                                 }
                                 else {
-                                    standard = '0';
-                                    value = '0';
+                                    standard = '-';
+                                    value = '-';
                                 }
                                 presentData.rows.push({
                                     stall: i + 1,

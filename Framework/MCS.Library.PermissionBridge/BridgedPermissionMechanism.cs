@@ -299,6 +299,11 @@ namespace MCS.Library.PermissionBridge
 
 			return per;
 		}
-		#endregion
-	}
+
+        public PermissionCollection GetRolesPermissions(IApplication application, string roleCodeNames)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+    }
 }

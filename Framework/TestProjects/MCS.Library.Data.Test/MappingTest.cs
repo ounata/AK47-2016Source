@@ -110,6 +110,20 @@ namespace MCS.Library.Data.Test
             Console.WriteLine(ORMapping.GetSelectSql(obj));
         }
 
+        //[TestMethod]
+        //public void ObjectToInsertSqlPerformanceTest()
+        //{
+        //    TestObject testObj = new TestObject() { ID = UuidHelper.NewUuidString(), Name = "GFW", Amount = 100 };
+
+        //    Action action = () =>
+        //    {
+        //        for (int i = 0; i < 100000; i++)
+        //            ORMapping.GetInsertSql(testObj, TSqlBuilder.Instance);
+        //    };
+
+        //    Console.WriteLine("Elapsed time: {0:#,##0}ms", action.Duration().TotalMilliseconds);
+        //}
+
         private DataTable PrepareTestTable()
         {
             DataTable table = new DataTable();

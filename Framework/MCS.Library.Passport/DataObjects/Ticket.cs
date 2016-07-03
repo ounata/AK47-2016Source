@@ -64,6 +64,36 @@ namespace MCS.Library.Passport
         }
 
         /// <summary>
+        /// 从Header中的参数读取Ticket信息
+        /// </summary>
+        /// <returns></returns>
+        public static ITicket LoadFromHeader()
+        {
+            ITicket ticket = null;
+
+            HttpRequest request = HttpContext.Current.Request;
+
+            string strTicket = request.Headers[Common.TicketHeaderKey];
+
+            try
+            {
+                if (strTicket != null)
+                    ticket = DecryptTicket(strTicket);	//从URL中加载Ticket
+
+                if (ticket != null)
+                    Trace.WriteLine(string.Format("从Header中找到用户{0}的ticket", ticket.SignInInfo.UserID), "PassportSDK");
+            }
+            catch (CryptographicException)
+            {
+            }
+            catch (FormatException)
+            {
+            }
+
+            return ticket;
+        }
+
+        /// <summary>
         /// 从Url中的参数读取Ticket信息
         /// </summary>
         /// <param name="reqParamName">url中对应ticket的参数名称</param>
@@ -252,6 +282,7 @@ namespace MCS.Library.Passport
                 return this.appSignInIP;
             }
         }
+
         /// <summary>
         /// Ticket信息保存入Cookie中
         /// </summary>
@@ -270,6 +301,21 @@ namespace MCS.Library.Passport
             cookie.HttpOnly = true;
 
             response.Cookies.Add(cookie);
+        }
+
+        /// <summary>
+        /// Ticket信息保存入Header中
+        /// </summary>
+        public void SaveToHeader()
+        {
+            Common.CheckHttpContext();
+
+            HttpResponse response = HttpContext.Current.Response;
+            HttpRequest request = HttpContext.Current.Request;
+
+            string strData = SaveToXml().InnerXml;
+
+            response.Headers[Common.TicketHeaderKey] = Common.EncryptString(strData);
         }
 
         /// <summary>

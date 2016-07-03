@@ -1,21 +1,16 @@
 ﻿<!-- #开始：综合服务费.快速查询条件 -->
-
 <ppts-dynamic-content template="quick-search.tpl.html">
     <div class="row">
-       <div class="col-md-4">
-           <ppts-select-branch model="vm.criteria.orgIds" class="pull-left mcs-width-full" />
-       </div>
-      <div class="col-md-4">
-          <div class="col-md-3">服务费类型：</div>
-          <div class="col-md-9">
-              <ppts-checkbox-group category="serviceFeeType" model="vm.criteria.serviceFeeTypes" clear="vm.criteria.serviceFeeTypes=[]" class="mcs-width-full pull-left" />
-          </div>
-      </div>
         <div class="col-md-4">
-            <mcs-input model="vm.criteria.creatorName" placeholder="创建人姓名" class="pull-left mcs-width-full"/>
-        </div>  
+            <ppts-select-branch model="vm.criteria.orgIds" class="pull-left mcs-width-full" />
+        </div>
+        <div class="col-md-4">
+            <mcs-select category="serviceFeeType" model="vm.criteria.serviceFeeTypes" caption="综合服务费类型" css="mcs-padding-0" />
+        </div>
+        <div class="col-md-4">
+            <mcs-input model="vm.criteria.creatorName" placeholder="创建人姓名" class="mcs-input-search mcs-width-full" />
+        </div>
     </div>
-
 </ppts-dynamic-content>
 <!-- /结束：综合服务费.快速查询条件 -->
 <!-- #开始：综合服务费.工具栏 -->
@@ -32,5 +27,5 @@
     {{vm.errorMessage}}
 </div>
 <!-- #开始：综合服务费.数据表格 -->
-<mcs-datatable data="vm.data" />
+<mcs-datatable data="vm.data"  condition="vm.criteria" />
 <!-- /结束：综合服务费.数据表格 -->

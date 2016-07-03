@@ -34,6 +34,17 @@ namespace PPTS.Data.Common.Entities
             get;
             set;
         }
+
+        public ConfigEntity()
+        {
+
+        }
+
+        public ConfigEntity(string configKey, string configValue)
+        {
+            this.ConfigKey = configKey;
+            this.ConfigValue = configValue;
+        }
     }
     
     /// <summary>

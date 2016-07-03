@@ -1,4 +1,5 @@
-﻿using PPTS.Data.Common.Adapters;
+﻿using PPTS.Data.Common;
+using PPTS.Data.Common.Adapters;
 using PPTS.Data.Products;
 using PPTS.Data.Products.Adapters;
 using PPTS.Data.Products.Entities;
@@ -7,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using MCS.Library.Core;
 
 namespace PPTS.WebAPI.Products.ViewModels.Products
 {
@@ -21,12 +23,12 @@ namespace PPTS.WebAPI.Products.ViewModels.Products
 
         public ProductExOfCourse ExOfCourse { set; get; }
 
-        public ProductPermissionCollection Permissions { set; get; }
+        public List<PermissionCampus> Permissions { set; get; }
 
         public IDictionary<string, IEnumerable<Data.Common.Entities.BaseConstantEntity>> Dictionaries { set; get; }
 
 
-        public static ProductViewModel GetProducViewtById(string id)
+        public static ProductViewModel GetProducViewtById(string id, string[] campusIds)
         {
             var result = new ProductViewModel()
             {
@@ -37,18 +39,50 @@ namespace PPTS.WebAPI.Products.ViewModels.Products
                 )
             };
 
-            var executor = new PPTSProductExecutor("GetProductView") { ProductId = id };
-            executor.FillProductView = (productView, exOfCourse, salaryRules,permissions) =>
+            var executor = new PPTSProductExecutor("GetProductView") { ProductId = id, CampusIDs = campusIds };
+            executor.FillProductView = (productView, exOfCourse, salaryRules, permissions) =>
             {
                 result.CategoryType = (CategoryType)Convert.ToInt32(productView.CategoryType);
                 result.Product = productView;
                 result.ExOfCourse = exOfCourse;
                 result.SalaryRules = salaryRules;
-                result.Permissions = permissions;
+                result.Permissions = permissions.Select(m => new PermissionCampus() { CampusID = m.CampusID }).ToList();
             };
+            
             executor.Execute();
+
+
+            result.Permissions.IsNotNull((mc) =>
+            {
+                (mc.Count() > 0).TrueAction(() =>
+                {
+                    var tempCampusIds = mc.Select(m => m.CampusID).ToArray();
+
+                    OGUExtensions.GetOrganizationByIDs(tempCampusIds).IsNotNull(collection =>
+                    {
+                        collection.ForEach(m => {
+                            var companyName = m.Parent.Name;
+                            var regionName = m.Parent.Parent.Name;
+
+                            var model = mc.Single(mm => m.ID == mm.CampusID);
+
+                            mc.Any(ms => ms.CompanyName == companyName).FalseAction(() => {
+                                model.CompanyName = companyName;
+                            });
+                            mc.Any(ms => ms.RegionName == regionName).FalseAction(() => {
+                                model.RegionName = regionName;
+                            });
+                            model.CampusName = m.Name;
+                        });
+                    });
+
+                });
+            });
+
             return result;
         }
+
+
 
         public ProductViewModel Empty()
         {
@@ -56,7 +90,8 @@ namespace PPTS.WebAPI.Products.ViewModels.Products
             return this;
         }
 
-        public ProductViewModel FillCatalogs() {
+        public ProductViewModel FillCatalogs()
+        {
             Catalogs = CategoryCatalogAdapter.Instance.LoadByCategoryType((CategoryType)Convert.ToInt32(Product.CategoryType));
             return this;
         }
@@ -65,7 +100,7 @@ namespace PPTS.WebAPI.Products.ViewModels.Products
 
     public class ProductViewCollectionModel
     {
-        
+
         public ProductViewCollection Products { set; get; }
 
         public IDictionary<string, IEnumerable<Data.Common.Entities.BaseConstantEntity>> Dictionaries
@@ -91,6 +126,13 @@ namespace PPTS.WebAPI.Products.ViewModels.Products
 
     }
 
+    public class PermissionCampus
+    {
+        public string CampusID { set; get; }
+        public string CampusName { set; get; }
+        public string CompanyName { set; get; }
+        public string RegionName { set; get; }
 
+    }
 
 }

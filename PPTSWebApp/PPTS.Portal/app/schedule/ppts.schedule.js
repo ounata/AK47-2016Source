@@ -21,12 +21,12 @@
             dependencies: ['app/schedule/studentassignment/stuasgmt-list/stuasgmt-list.controller']
         }).loadRoute($stateProvider, {
             name: 'ppts.stuasgmt-course',
-            url: '/course/:id',
+            url: '/course/:id?prev=:page',
             templateUrl: 'app/schedule/studentassignment/stuasgmt-course/stuasgmt-course.html',
             controller: 'stuAsgmtCourseController',
             breadcrumb: {
                 label: '周视图',
-                parent: 'ppts.schedule'
+                //parent: 'ppts.schedule'
             },
             dependencies: ['app/schedule/studentassignment/stuasgmt-course/stuasgmt-course.controller'
                 , 'app/schedule/studentassignment/stuasgmt-add/stuasgmt-add.controller'
@@ -35,12 +35,12 @@
             ]
         }).loadRoute($stateProvider, {
             name: 'ppts.stuasgmt-course-list',
-            url: '/courselist/:id',
+            url: '/courselist/:id?prev=:page',
             templateUrl: 'app/schedule/studentassignment/stuasgmt-course/stuasgmt-course-list.html',
             controller: 'stuAsgmtCourseListController',
             breadcrumb: {
                 label: '列表视图',
-                parent: 'ppts.schedule'
+                //parent: 'ppts.schedule'
             },
             dependencies: ['app/schedule/studentassignment/stuasgmt-course/stuasgmt-course-list.controller'
                 , 'app/schedule/studentassignment/stuasgmt-add/stuasgmt-add.controller'
@@ -120,8 +120,8 @@
             },
             dependencies: ['app/schedule/teachercourse/tchrecord-list.controller'
                 , 'app/schedule/teachercourse/tchrecord-list-markup.controller'
-                 , 'app/schedule/studentcourse/sturecord-list.controller'
-                   , 'app/schedule/teachercourse/tchrecord-list-companion.controller'
+                , 'app/schedule/studentcourse/stucourse-list/stucourse-confirm.controller'
+                , 'app/schedule/teachercourse/tchrecord-list-companion.controller'
             ]
         }).loadRoute($stateProvider, {
             name: 'ppts.accedit',
@@ -133,6 +133,28 @@
                 parent: 'ppts'
             },
             dependencies: ['app/schedule/studentassignment/stuasgmt-condition/stuasgmt-condition-edit.controller'
+            ]
+        }).loadRoute($stateProvider, {
+            name: 'ppts.tchcoursepsn',
+            url: '/tchpsncourse',
+            templateUrl: 'app/schedule/teachercourse/teacher-course-psn/teacher-course-psn.html',
+            controller: 'tchCoursePsnController',
+            breadcrumb: {
+                label: '教师个人课表',
+                parent: 'ppts'
+            },
+            dependencies: ['app/schedule/teachercourse/teacher-course-psn/teacher-course-psn.controller'
+            ]
+        }).loadRoute($stateProvider, {
+            name: 'ppts.tchcoursepsn-list',
+            url: '/tchpsncourse/lst',
+            templateUrl: 'app/schedule/teachercourse/teacher-course-psn/teacher-course-psn-list.html',
+            controller: 'tchCoursePsnListController',
+            breadcrumb: {
+                label: '列表视图',
+                parent: 'ppts.tchcoursepsn'
+            },
+            dependencies: ['app/schedule/teachercourse/teacher-course-psn/teacher-course-psn-list.controller'
             ]
         }).loadRoute($stateProvider, {
             name: 'ppts.classgroup',

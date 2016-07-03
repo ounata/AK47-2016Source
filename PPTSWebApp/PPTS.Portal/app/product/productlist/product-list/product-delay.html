@@ -6,10 +6,11 @@
 </div>
 <div class="modal-body">
     <ng-form name="nameDialog" novalidate role="form">
-        <div class="form-group input-group-lg" >
+        <!--<div class="form-group input-group-lg" >
             <label class="control-label" for="course">日期:</label>
-            <ppts-datepicker model="vm.entity.endDate" css="col-xs-10 col-sm-9" />
-        </div>
+            <mcs-datepicker model="vm.entity.endDate" css="col-xs-10 col-sm-9" />
+        </div>-->
+        <mcs-datatable data="vm.data" />
     </ng-form>
 </div>
 <div class="modal-footer">

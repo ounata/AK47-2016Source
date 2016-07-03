@@ -41,7 +41,7 @@ namespace MCS.Library.SOA.DataObjects.Workflow
             WhereSqlClauseBuilder wbuilder = PrepareProcessKeyWhereBuilder(processKey);
             UpdateSqlClauseBuilder uBuilder = new UpdateSqlClauseBuilder();
 
-            uBuilder.AppendItem("IMPORT_TIME", "GETDATE()", "=", true);
+            uBuilder.AppendItem("IMPORT_TIME", "GETUTCDATE()", "=", true);
 
             if (user != null)
             {

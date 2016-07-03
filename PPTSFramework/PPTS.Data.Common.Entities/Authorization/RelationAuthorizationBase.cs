@@ -19,7 +19,7 @@ namespace PPTS.Data.Common.Entities
         /// <summary>
         /// 授权对象ID
         /// </summary>
-        [ORFieldMapping("ObjectID")]
+        [ORFieldMapping("ObjectID", PrimaryKey = true)]
         [DataMember]
         public virtual string ObjectID { get; set; }
 

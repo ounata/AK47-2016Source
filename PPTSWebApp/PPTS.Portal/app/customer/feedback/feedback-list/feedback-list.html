@@ -1,33 +1,33 @@
 ﻿<ppts-dynamic-content template="quick-search.tpl.html">
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-6">
             <ppts-select-branch model="vm.criteria.orgIds" />
         </div>
-        <div class="col-md-4">
-            <ppts-daterangepicker start-date="vm.criteria.replyTimeStart" end-date="vm.criteria.replyTimeEnd" css="mcs-width-full mcs-padding-0" />
+        <div class="col-md-6">
+            <mcs-daterangepicker start-date="vm.criteria.replyTimeStart" end-date="vm.criteria.replyTimeEnd" css="mcs-width-full mcs-padding-0" />
         </div>
     </div>
     <div class="row">
         <div class="col-md-4">
-            <ppts-select category="grade" model="vm.criteria.grades" caption="学生年级" css="mcs-padding-0" />
+            <mcs-select category="grade" model="vm.criteria.grades" caption="学生年级" css="mcs-padding-0" />
         </div>
         <div class="col-md-4">
-            <ppts-select category="replyType" model="vm.criteria.replyType" css="mcs-padding-0" caption="反馈类型"/>
+            <mcs-select category="replyType" model="vm.criteria.replyType" css="mcs-padding-0" caption="反馈类型"/>
         </div>
         <div class="col-md-4">
-            <ppts-select category="replyObject" model="vm.criteria.replyObject" caption="互动岗位" css="mcs-padding-0" />
+            <mcs-select category="replyObject" model="vm.criteria.replyObject" caption="互动岗位" css="mcs-padding-0" />
         </div>
 
     </div>
     <div class="row">
         <div class="col-md-4">
-            <mcs-input placeholder="员工姓名" uib-tooltip="员工姓名"  model="vm.criteria.replierName" css="mcs-input-search mcs-width-full" />
+            <mcs-input placeholder="员工姓名" uib-popover="员工姓名"  model="vm.criteria.replierName" css="mcs-input-search mcs-width-full" />
         </div>
         <div class="col-md-4">
-            <mcs-input placeholder="学生姓名" uib-tooltip="学生姓名"  model="vm.criteria.customerName" css="mcs-input-search mcs-width-full" />
+            <mcs-input placeholder="学生姓名" uib-popover="学生姓名"  model="vm.criteria.customerName" css="mcs-input-search mcs-width-full" />
         </div>
         <div class="col-md-4">
-            <mcs-input placeholder="学员编号" uib-tooltip="学员编号" model="vm.criteria.customerCode" css="mcs-input-search mcs-width-full" />
+            <mcs-input placeholder="学员编号" uib-popover="学员编号" model="vm.criteria.customerCode" css="mcs-input-search mcs-width-full" />
         </div>
 
     </div>
@@ -38,5 +38,5 @@
     <mcs-button category="export" click="vm.export()"></mcs-button>
 </ppts-dynamic-content>
 <!-- #开始：学大反馈.数据表格 -->
-<mcs-datatable data="vm.data" />
+<mcs-datatable data="vm.data" condition="vm.criteria" />
 <!-- /结束：学大反馈.数据表格 -->

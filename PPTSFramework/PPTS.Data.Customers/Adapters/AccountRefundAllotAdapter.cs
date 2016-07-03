@@ -42,7 +42,7 @@ namespace PPTS.Data.Customers.Adapters
         private void InitData(AccountRefundAllot data)
         {
             if (data.AllotID.IsNullOrEmpty())
-                data.AllotID = System.Guid.NewGuid().ToString();
+                data.AllotID = UuidHelper.NewUuidString();
         }
     }
 }

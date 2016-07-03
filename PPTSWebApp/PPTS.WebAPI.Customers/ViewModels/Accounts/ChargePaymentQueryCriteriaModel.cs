@@ -20,7 +20,19 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
         /// </summary>
         [InConditionMapping("a.CampusID")]
         public string[] CampusIDs { get; set; }
-        
+
+        /// <summary>
+        /// 学员编号
+        /// </summary>
+        [ConditionMapping("a.CustomerCode", Operation = "=")]
+        public string CustomerCode { get; set; }
+
+        /// <summary>
+        /// 学员或家长姓名或联系电话
+        /// </summary>
+        [NoMapping]
+        public string SearchText { get; set; }
+
         /// <summary>
         /// 缴费单号
         /// </summary>
@@ -28,18 +40,28 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
         public string ApplyNo { get; set; }
 
         /// <summary>
-        /// 学员或家长姓名
+        /// 充值申请人
         /// </summary>
-        [ConditionMapping("d.CustomerSearchContent", Template = "CONTAINS(${DataField}$, ${Data}$)")]
-        public string CustomerOrParentName { get; set; }
-        
+        [ConditionMapping("a.ApplierName", Operation = "=")]
+        public string ApplierName { get; set; }
+
         /// <summary>
-        /// 充值日期
+        /// 付款日期
         /// </summary>
-        [ConditionMapping("a.ApplyTime", Operation = ">=")]
-        public DateTime ApplyTimeStart { get; set; }
-        [ConditionMapping("ApplyTime", Operation = "<", AdjustDays = 1)]
-        public DateTime ApplyTimeEnd { get; set; }
+        [ConditionMapping("a.PayTime", UtcTimeToLocal = true, Operation = ">=")]
+        public DateTime PayTimeStart { get; set; }
+        [ConditionMapping("a.PayTime", UtcTimeToLocal = true, Operation = "<", AdjustDays = 1)]
+        public DateTime PayTimeEnd { get; set; }
+
+        /// <summary>
+        /// 充值类型
+        /// </summary>
+        [InConditionMapping("a.ChargeType")]
+        public string[] ChargeTypes
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// 支付状态
@@ -58,13 +80,13 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
         /// </summary>
         [InConditionMapping("b.PayType")]
         public string[] PayTypes { get; set; }
-        
+
         /// <summary>
         /// 对账状态
         /// </summary>
         [InConditionMapping("b.CheckStatus")]
         public string[] CheckStatuses { get; set; }
-        
+
         [NoMapping]
         public PageRequestParams PageParams
         {

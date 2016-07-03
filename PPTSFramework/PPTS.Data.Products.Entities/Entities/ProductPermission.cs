@@ -1,6 +1,7 @@
 using MCS.Library.Core;
 using MCS.Library.Data.DataObjects;
 using MCS.Library.Data.Mapping;
+using PPTS.Data.Common.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace PPTS.Data.Products.Entities
     [Serializable]
     [ORTableMapping("PM.ProductPermissions")]
     [DataContract]
-    public class ProductPermission
+    public class ProductPermission: IEntityWithCreator
     {
         public ProductPermission()
         {

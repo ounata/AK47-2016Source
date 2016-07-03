@@ -1,21 +1,4 @@
-﻿<!--<form class="form-horizontal" role="form" novalidate>
-    <div class="widget-body">
-        <div class="widget-main no-padding">
-            <div class="clearfix form-actions mcs-form-actions" style="margin-bottom:15px">
-                <div class="col-md-offset-3 col-md-9">
-                    <mcs-button type="submit" category="save" click="vm.addCustomerMeeting()"></mcs-button>
-                    <mcs-button category="cancel" click="vm.cancelEditCustomerMeeting()"></mcs-button>
-                </div>
-            </div>
-           
-
-        </div>
-
-    </div>
-
-</form>-->
-
-
+﻿
 <div class="portlet light bordered">
     <div class="portlet-title">
         <div class="caption">
@@ -28,7 +11,7 @@
             <div class="form-actions">
                 <div class="row">
                     <div class="col-md-offset-3 col-md-9">
-                        <mcs-button type="submit" category="save" click="vm.addCustomerMeeting()"></mcs-button>
+                        <mcs-button category="save" click="vm.addCustomerMeeting()"></mcs-button>
                         <mcs-button category="cancel" click="vm.cancelEditCustomerMeeting()"></mcs-button>
                     </div>
                 </div>
@@ -37,153 +20,94 @@
                 <h4 class="form-section"><i class="ace-icon fa fa-th"></i> 教学服务会信息</h4>
                 <div class="row">
                     <div class="form-group horizontal">
-                        <mcs-label text="会议组织人" css="col-sm-4" />
-                        <div class="col-sm-8">
+                        <mcs-label text="学生姓名" css="col-sm-3" />
+                        <div class="col-sm-9">
+                            {{vm.customerMeeting.customerName}}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group horizontal">
+                        <mcs-label text="会议组织人" css="col-sm-3" />
+                        <div class="col-sm-9">
                             {{vm.customerMeeting.organizerName}}
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="form-group horizontal">
-                        <mcs-label required="true" text="会议日期" css="col-sm-4" />
-                        <div class="col-sm-3">
-                            <!--<ppts-daterangepicker start-date="vm.customerMeeting.meetingTime" end-date="vm.customerMeeting.meetingEndTime" css="mcs-padding-0" width="100%" uib-tooltip="会议时间只能选择当前时间及前三天的任意一天" required />-->
-                            <ppts-datetimepicker model="vm.customerMeeting.meetingTime" start-date="vm.startDate" end-date="vm.endDate"  css="mcs-padding-0" uib-tooltip="会议时间只能选择当前时间及前三天的任意一天" placeholder="会议起始时间" required />
-
-                        </div>
-                        <div class="col-sm-3">
-                            <ppts-datetimepicker model="vm.customerMeeting.meetingEndTime" start-date="vm.startDate" end-date="vm.endDate" css="mcs-padding-0" uib-tooltip="会议时间只能选择当前时间及前三天的任意一天" placeholder="会议结束时间" required />
-                        </div>
-
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group horizontal">
-                        <mcs-label required="true" text="会议时长" css="col-sm-4" />
-                        <div class="col-sm-8">
-                            <div class="col-sm-2"><input type="text" ng-model="vm.customerMeeting.hours" class="mcs-input-small" onkeyup="mcs.util.limit(this)" onafterpaste="mcs.util.limit(this)" required />小时</div>
-                            <div class="col-sm-10">
-                                <input type="text" ng-model="vm.customerMeeting.minutes" class="mcs-input-small" onkeyup="mcs.util.limit(this)" onafterpaste="mcs.util.limit(this)" required />分(如:1小时20分)
-                            </div>
+                        <mcs-label required="true" text="会议日期" css="col-sm-3" />
+                        <div class="col-sm-6">
+                            <mcs-daterangepicker start-date="vm.customerMeeting.meetingTime" end-date="vm.customerMeeting.meetingEndTime" offset="-3" range-restrict="0" minutes="vm.minutes" css="col-md-5 mcs-padding-0 " uib-popover="会议时间只能选择当前时间及前三天的任意一天" popover-trigger="mouseenter" mode="datetime" required />
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="form-group horizontal">
-                        <mcs-label required="true" text="下次开会时间" css="col-sm-4" />
-                        <div class="col-sm-8">
-                            <ppts-datetimepicker model="vm.customerMeeting.nextMeetingTime" css="col-md-3" required />
+                        <mcs-label required="true" text="会议时长" css="col-sm-3" />
+                        <div class="col-sm-6">
+                            {{vm.calDiff()}}
+                            <mcs-input placeholder="小时" model="vm.customerMeeting.hours" datatype="int" required />
+                            <mcs-input placeholder="分" model="vm.customerMeeting.minutes" datatype="int" required />
+                            (如:1小时20分)
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group horizontal">
+                        <mcs-label required="true" text="下次开会时间" css="col-sm-3" />
+                        <div class="col-sm-6">
+                            <mcs-datetimepicker model="vm.customerMeeting.nextMeetingTime" start-date="vm.now" css="col-md-5" required />
                         </div>
 
                     </div>
                 </div>
                 <div class="row">
                     <div class="form-group horizontal">
-                        <mcs-label required="true" text="会议主题" css="col-sm-4" />
-                        <div class="col-sm-8">
-                            <ppts-select category="meetingTitle" model="vm.customerMeeting.meetingTitle" caption="请选择" css="col-md-5" required />
+                        <mcs-label required="true" text="会议主题" css="col-sm-3" />
+                        <mcs-select category="meetingTitle" model="vm.customerMeeting.meetingTitle" caption="请选择" css="col-md-5" required />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group horizontal">
+                        <mcs-label required="true" text="会议类型" css="col-sm-3" />
+                        <mcs-select category="meetingType" model="vm.customerMeeting.meetingType" caption="请选择" css="col-md-5" required />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group horizontal">
+                        <mcs-label required="true" text="会议参与人" css="col-sm-3" />
+                        <div class="col-sm-6">
+                            <mcs-input model="vm.customerMeeting.participants" css="col-md-5" uib-popover="如:爸爸、妈妈、学管师张林要、教师蔡明、学科组长陈乃科等" required />
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="form-group horizontal">
-                        <mcs-label required="true" text="会议类型" css="col-sm-4" />
-                        <div class="col-sm-8">
-                            <ppts-select category="meetingType" model="vm.customerMeeting.meetingType" caption="请选择" css="col-md-5" required />
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group horizontal">
-                        <mcs-label required="true" text="会议参与人" css="col-sm-4" />
-                        <div class="col-sm-8">
-                            <mcs-input model="vm.customerMeeting.participants" css="col-md-4" uib-tooltip="如:爸爸、妈妈、学管师张林要、教师蔡明、学科组长陈乃科等" required />
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group horizontal">
-                        <div class="col-sm-2"></div>
-                        <div class="col-sm-8">
-                            <div class="widget-box" style="margin:0 50px;">
-                                <div class="widget-header" style="">
-                                    <h4 class="widget-title">增加对象及内容</h4>
-                                    <div class="widget-toolbar">
-                                        <mcs-button category="add" click="vm.addItem()" size="mini" />
-                                        <mcs-button category="delete" click="vm.removeItem()" text="移 除" size="mini" />
-                                    </div>
-                                </div>
-                                <mcs-uicopy class="widget-body" data="vm.items" item-template-url="./app/customer/customermeeting/customermeeting-add/customermeeting-add-item.tpl.html">
-                                </mcs-uicopy>
-                            </div>
-                        </div>
-                        <div class="col-sm-2"></div>
+                        <mcs-uicopy class="widget-body" model="vm" data="vm.items" item-template-url="./app/customer/customermeeting/customermeeting-add/customermeeting-add-item.tpl.html">
+                        </mcs-uicopy>
                     </div>
                 </div>
                 <div class="row">
                     <div class="form-group horizontal">
                         <mcs-label text="上传附件" css="col-sm-3" />
-                        <div class="col-sm-9">
-                            <table>
-                                <tr>
-                                    <td>
-                                        <input type="file" ngf-max-size="50MB" ngf-select ngf-allow-dir="allowDir" ngf-multiple="true" ng-model="vm.files" name="files" ngf-validate="{size: {max: '20MB'},pattern: 'image/*'}">
-                                    </td>
-                                    <td>
-                                        <i ng-show="form.files.$error.required">请选择文件</i>
-                                        <i ng-show="form.files.$error.pattern">不允许该格式文件上传</i>
-
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <input type="file" ngf-max-size="50MB" ngf-select ngf-allow-dir="allowDir" ngf-multiple="true" ng-model="vm.files" name="files" ngf-validate="{size: {max: '20MB'},pattern: 'image/*'}">
-                                    </td>
-                                    <td>
-                                        <i ng-show="form.files.$error.required">请选择文件</i>
-                                        <i ng-show="form.files.$error.pattern">不允许该格式文件上传</i>
-
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <input type="file" ngf-max-size="50MB" ngf-select ngf-allow-dir="allowDir" ngf-multiple="true" ng-model="vm.files" name="files" ngf-validate="{size: {max: '20MB'},pattern: 'image/*'}">
-                                    </td>
-                                    <td>
-                                        <i ng-show="form.files.$error.required">请选择文件</i>
-                                        <i ng-show="form.files.$error.pattern">不允许该格式文件上传</i>
-
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <span class="progress" ng-show="vm.files.progress >= 0">
-                                            <div style="width:{{vm.files.progress}}%" ng-bind="vm.files.progress + '%'"></div>
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <span ng-show="vm.files.result">上传成功</span>
-                                        <span>{{vm.msg}}</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <button ng-disabled="!form.$valid" ng-click="vm.uploadFiles(vm.files)">上传</button>
-                                    </td>
-                                </tr>
-                            </table>
+                        <div class="col-sm-6">
+                            <div files-upload model="vm.customerMeetingUpload.files" pattern="{size: {max: '20MB'},pattern: 'image/*,.doc,.docx,.xls,.xlsx,.ppt,.ppts,video/*'}"
+                                 readonly="false"
+                                 resource-Id="{{vm.resourceId}}" files-amount="3" module-name="新增会议上传" error-message="请参考本地网速,上传小于20M的图片、文档、MP4视频文件" 
+                                 uib-tooltip="请参考本地网速,上传小于20M的图片、文档、MP4视频文件" download-url="http://localhost/MCSWebApp/MCS.Web.API/api/sample/DownloadMaterial" url="{{vm.url}}api/customermeetings/UploadMaterial">
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div>
+                <div class="row">
                     <div class="form-group horizontal">
-                        <mcs-label required="true" text="家长满意度" css="col-sm-4" />
-                        <div class="col-sm-8">
-                            <ppts-select category="satisfaction" model="vm.customerMeeting.satisficing" caption="请选择" css="col-md-5" required />
-                        </div>
+                        <mcs-label required="true" text="家长满意度" css="col-sm-3" />
+                        <mcs-select category="satisfaction" model="vm.customerMeeting.satisficing" css="col-md-5" required />
                     </div>
                 </div>
             </div>
         </form>
     </div>
+
 </div>

@@ -49,7 +49,7 @@
                             description: 'customer code'
                         },
                         {
-                            field: "gradeName",
+                            field: "customerGradeName",
                             name: "当前年级",
                             headerCss: 'datatable-header-align-right',
                             sortable: false,

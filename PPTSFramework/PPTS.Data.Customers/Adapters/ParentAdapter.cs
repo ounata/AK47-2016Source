@@ -1,16 +1,5 @@
-﻿using MCS.Library.Caching;
-using MCS.Library.Core;
-using MCS.Library.Data;
-using MCS.Library.Data.Adapters;
-using MCS.Library.Data.Builder;
-using MCS.Library.Data.Mapping;
+﻿using System.Collections.Generic;
 using PPTS.Data.Customers.Entities;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PPTS.Data.Customers.Adapters
 {
@@ -20,6 +9,26 @@ namespace PPTS.Data.Customers.Adapters
 
         private ParentAdapter()
         {
+        }
+
+        public List<string> LoadAddress(string searchTerm, int maxCount)
+        {
+            List<string> list = new List<string>();
+            
+            ParentCollection parents = this.QueryData(this.GetMappingInfo(),
+                string.Format(@" SELECT DISTINCT TOP {0} AddressDetail FROM CM.Parents WHERE AddressDetail LIKE N'%{1}%' ORDER BY AddressDetail ASC", maxCount, searchTerm));
+
+            if (parents != null && parents.Count > 0)
+            {
+                parents.ForEach(p =>
+                {
+                    if (!list.Contains(p.AddressDetail))
+                    {
+                        list.Add(p.AddressDetail);
+                    }
+                });
+            }
+            return list;
         }
     }
 }

@@ -104,6 +104,30 @@ namespace MCS.Library.Caching
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="groupName"></param>
+        /// <param name="notifyType"></param>
+        /// <returns></returns>
+        public static CacheNotifyData[] FromSettings(string groupName, CacheNotifyType notifyType)
+        {
+            IEnumerable<string> queueNames = CacheNotifySettings.GetConfig().GetQueueNamesInGroup(groupName);
+
+            List<CacheNotifyData> data = new List<CacheNotifyData>();
+
+            foreach (string queueName in queueNames)
+            {
+                CacheNotifyData nd = new CacheNotifyData();
+                nd.CacheQueueTypeDesp = queueName;
+                nd.NotifyType = notifyType;
+
+                data.Add(nd);
+            }
+
+            return data.ToArray();
+        }
+
+        /// <summary>
         /// 通知的类型
         /// </summary>
         public CacheNotifyType NotifyType

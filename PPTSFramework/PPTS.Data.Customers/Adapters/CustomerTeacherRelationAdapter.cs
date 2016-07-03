@@ -1,15 +1,10 @@
-﻿using MCS.Library.Core;
+﻿using System;
+using System.Linq;
+using MCS.Library.Core;
 using MCS.Library.Data;
 using MCS.Library.Data.Adapters;
-using MCS.Library.SOA.DataObjects;
-using PPTS.Data.Common.Entities;
 using PPTS.Data.Common.Security;
 using PPTS.Data.Customers.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PPTS.Data.Customers.Adapters
 {
@@ -21,7 +16,8 @@ namespace PPTS.Data.Customers.Adapters
         {
         }
 
-        public void InsertCollection(CustomerTeacherRelationCollection ctrc) {
+        public void InsertCollection(CustomerTeacherRelationCollection ctrc)
+        {
             using (DbContext context = GetDbContext())
             {
 
@@ -34,6 +30,11 @@ namespace PPTS.Data.Customers.Adapters
 
                 context.ExecuteTimePointSqlInContext();
             }
+        }
+
+        public void LoadByCustomerIDInContext(string customerID, Action<CustomerTeacherRelationCollection> action)
+        {
+            this.LoadInContext(new WhereLoadingCondition(builder => builder.AppendItem("CustomerID", customerID)), action, DateTime.MinValue);
         }
     }
 }

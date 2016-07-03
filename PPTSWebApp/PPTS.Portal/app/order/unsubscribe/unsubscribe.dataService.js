@@ -23,6 +23,16 @@
             resource.post({ operation: 'Unsubscribe' }, data, function (entity) { if (callback) { callback(entity); } });
         }
 
+
+        resource.getDebookOrderDetial = function (id, callback) {
+            resource.query({ operation: 'getDebookOrderDetial', id: id }, function (debookOrder) { if (callback) { callback(debookOrder); } });
+        }
+
+        resource.getDebookOrderByWorkflow = function (data, callback) {
+            resource.post({ operation: 'GetDebookOrderByWorkflow' }, data, callback);
+        }
+
+
         return resource;
     }]);
 });

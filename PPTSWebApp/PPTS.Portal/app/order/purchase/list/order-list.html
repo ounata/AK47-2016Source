@@ -16,7 +16,7 @@
                         <div class="profile-info-row">
                             <div class="profile-info-name"> 订单类型</div>
                             <div class="profile-info-value">
-                                <ppts-checkbox-group category="categoryType" model="vm.criteria.selectedCategoryTypes" clear="vm.criteria.selectedCategoryTypes=[]" />
+                                <ppts-checkbox-group category="categoryType" model="vm.criteria.selectedCategories" />
                             </div>
                         </div>
                         <div class="profile-info-row">
@@ -24,45 +24,44 @@
                             <div class="profile-info-value">
                                 <ppts-radiobutton-group category="dateRange" model="vm.criteria.dateRange" show-all="true" />
                                 <div ng-show="vm.criteria.dateRange == 5">
-                                    <ppts-daterangepicker start-Date="vm.criteria.customStartDate" end-Date="vm.criteria.customEndDate" />
+                                    <mcs-daterangepicker start-Date="vm.criteria.customStartDate" end-Date="vm.criteria.customEndDate" />
                                 </div>
                             </div>
                         </div>
                         <div class="profile-info-row">
                             <div class="profile-info-name"> 订单状态</div>
                             <div class="profile-info-value">
-                                <ppts-checkbox-group category="orderStatus" model="vm.criteria.selectedOrderStatus" clear="vm.criteria.selectedOrderStatus=[]" />
+                                <ppts-checkbox-group category="orderStatus" model="vm.criteria.selectedOrderStatus" />
                             </div>
                         </div>
                         <div class="profile-info-row">
-                            <div class="profile-info-name"> 学生年级</div>
+                            <div class="profile-info-name"> 学员年级</div>
                             <div class="profile-info-value">
-                                <ppts-checkbox-group category="grade" model="vm.criteria.selectedStuGrades" clear="vm.criteria.selectedStuGrades=[]" />
+                                <ppts-checkbox-group category="grade" model="vm.criteria.selectedStuGrades" show-all="false" />
                             </div>
                         </div>
                         <div class="profile-info-row">
                             <div class="profile-info-name"> 产品年级</div>
                             <div class="profile-info-value">
-                                <ppts-checkbox-group category="grade" model="vm.criteria.selectedProductGrades" clear="vm.criteria.selectedProductGrades=[]" />
+                                <ppts-checkbox-group category="grade" model="vm.criteria.selectedProductGrades" />
                             </div>
                         </div>
                         <div class="profile-info-row">
                             <div class="profile-info-name"> 产品颗粒度</div>
                             <div class="profile-info-value">
-                                <ppts-checkbox-group category="unit" model="vm.criteria.selectedUnits" clear="vm.criteria.selectedUnits=[]" />
+                                <ppts-checkbox-group category="unit" model="vm.criteria.selectedUnits" />
                             </div>
                         </div>
                         <div class="profile-info-row">
                             <div class="profile-info-name"> 操作人岗位</div>
                             <div class="profile-info-value">
-                                <ppts-checkbox-group category="post" model="vm.criteria.selectedPosts" clear="vm.criteria.selectedPosts=[]" />
+                                <ppts-checkbox-group category="post" model="vm.criteria.selectedPosts" />
                             </div>
                         </div>
                         <div class="profile-info-row">
                             <div class="profile-info-name"> 剩余课时</div>
                             <div class="profile-info-value">
-                                <mcs-input model="vm.criteria.remainLessonStart" type="number" />到
-                                <mcs-input model="vm.criteria.remainLessonEnd" type="number" />
+                                <mcs-datarange min="vm.criteria.remainLessonStart" max="vm.criteria.remainLessonEnd" unit="" min-text="" max-text="" datatype="int"/>
                             </div>
                         </div>
                     </div>
@@ -76,32 +75,33 @@
 <ppts-dynamic-content template="quick-search.tpl.html">
     <div class="row">
         <div class="col-md-4">
-            <ppts-select-branch model="vm.criteria.campusIDs" />
+            <!--<ppts-select-branch model="vm.criteria.campusIDs" />-->
+            <ppts-organization branch="vm.criteria.branch" campus="vm.criteria.campusID" required-level="1" disabled-level="vm.disabledlevel" />
         </div>
         <div class="col-md-4">
-            <ppts-select category="subject" model="vm.criteria.subject" caption="科目" css="mcs-padding-0" />
+            <mcs-select category="subject" model="vm.criteria.subject" caption="科目" css="mcs-padding-0" />
         </div>
         <div class="col-md-4">
-            <ppts-select category="courseLevel" model="vm.criteria.courseLevel" caption="课程级别" css="mcs-padding-0" />
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-4">
-            <ppts-select category="duration" model="vm.criteria.duration" caption="课时时长" css="mcs-padding-0" />
-        </div>
-        <div class="col-md-4">
-            <mcs-input placeholder="学生姓名" uib-tooltip="学生姓名" model="vm.criteria.stuName" css="mcs-input-search mcs-width-full" />
-        </div>
-        <div class="col-md-4">
-            <mcs-input placeholder="家长姓名" uib-tooltip="家长姓名" model="vm.criteria.parentName" css="mcs-input-search mcs-width-full" />
+            <mcs-select category="courseLevel" model="vm.criteria.courseLevel" caption="课程级别" css="mcs-padding-0" />
         </div>
     </div>
     <div class="row">
         <div class="col-md-4">
-            <mcs-input placeholder="学生编号" uib-tooltip="学生编号" model="vm.criteria.stuCode" css="mcs-input-search mcs-width-full" />
+            <mcs-select category="duration" model="vm.criteria.duration" caption="课时时长" css="mcs-padding-0" />
         </div>
         <div class="col-md-4">
-            <mcs-input placeholder="订单编号" uib-tooltip="订单编号" model="vm.criteria.orderCode" css="mcs-input-search mcs-width-full" />
+            <mcs-input placeholder="学员姓名" uib-popover="学员姓名" model="vm.criteria.stuName" css="mcs-input-search mcs-width-full" />
+        </div>
+        <div class="col-md-4">
+            <mcs-input placeholder="家长姓名" uib-popover="家长姓名" model="vm.criteria.parentName" css="mcs-input-search mcs-width-full" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <mcs-input placeholder="学员编号" uib-popover="学员编号" model="vm.criteria.stuCode" css="mcs-input-search mcs-width-full" />
+        </div>
+        <div class="col-md-4">
+            <mcs-input placeholder="订单编号" uib-popover="订单编号" model="vm.criteria.orderCode" css="mcs-input-search mcs-width-full" />
         </div>
         <div class="col-md-4">
         </div>
@@ -111,12 +111,14 @@
 
 <!-- /结束：订购列表.查询条件 -->
 <!-- #开始：订购列表.工具条 -->
-<div class="mcs-panel-toolbar">
-    <mcs-button category="edit" text="退订" ng-disabled="vm.data.rowsSelected.length!=1" click="vm.unsubscribe()"></mcs-button>
-    <mcs-button category="edit" text="编辑关联缴费单" ng-disabled="vm.data.rowsSelected.length!=1" click="vm.editchargepay()"></mcs-button>
-    <mcs-button category="print" text="打印订单" ng-disabled="vm.data.rowsSelected.length!=1 && vm.data.rowsSelected[0].categoryType!=1 && vm.data.rowsSelected[0].categoryType!=2" click="vm.print()"></mcs-button>
-    <mcs-button category="export" click="vm.export()"></mcs-button>
-</div>
+
+<ppts-dynamic-content template="toolbar.tpl.html">
+    <mcs-button category="edit" text="退订" click="vm.unsubscribe()"  ppts-job-functions="退订"></mcs-button>
+    <mcs-button category="edit" text="编辑关联缴费单" click="vm.editchargepay()"  ppts-job-functions="编辑关联缴费单-本分公司"></mcs-button>
+    <mcs-button category="print" text="打印订单" click="vm.print()" ppts-job-functions="打印订单凭证,打印订单凭证-本校区,打印订单凭证-本分公司" ></mcs-button>
+    <mcs-button category="export" click="vm.export()" ppts-job-functions="订购列表导出"></mcs-button>
+</ppts-dynamic-content>
+
 <!-- /结束：订购列表.工具条 -->
 <!-- #开始：订购列表.数据表格 -->
 <mcs-datatable data="vm.data" />

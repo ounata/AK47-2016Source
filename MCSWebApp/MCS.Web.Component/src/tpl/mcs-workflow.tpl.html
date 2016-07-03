@@ -1,0 +1,35 @@
+﻿<div class="mcs-workflow-container">
+    <div class="form-body workflow">
+        <h4 class="form-section"><i class="ace-icon fa fa-th"></i> 审批进度</h4>
+        <div class="row">
+            <div class="form-group horizontal mcs-noborder">
+                <div class="col-sm-12">
+                    <mcs-workflow-step model="model" />
+                </div>
+            </div>
+        </div>
+        <h4 class="form-section"><i class="ace-icon fa fa-th"></i> 审批历史</h4>
+        <div class="row">
+            <div class="form-group horizontal mcs-noborder">
+                <div class="col-sm-12">
+                    <mcs-workflow-history model="model" />
+                </div>
+            </div>
+        </div>
+        <h4 class="form-section" ng-show="switch.canMoveTo"><i class="ace-icon fa fa-th"></i> 审批意见</h4>
+        <div class="row" ng-show="switch.canMoveTo">
+            <div class="form-group horizontal mcs-noborder">
+                <div class="col-sm-12">
+                    <mcs-workflow-comment model="model"/>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-actions worflow noborder center" ng-show="switch.canMoveTo || switch.canSave || switch.canCancel || switch.canWithdraw">
+        <div class="row">
+            <div class="mcs-padding-left-15 mcs-margin-top-5">
+                <mcs-workflow-toolbar model="model" callbacks="callbacks"/>
+            </div>
+        </div>
+    </div>
+</div>

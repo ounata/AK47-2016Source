@@ -16,24 +16,31 @@ namespace PPTS.Data.Customers.Entities
     [ORTableMapping("CM.PotentialCustomers", "CM.PotentialCustomers_Current")]
     [DataContract]
 
-    [EntityAuth(RecordType =RecordType.PotentialCustomer)]
+    #region 数据范围权限(存入识别)
+    [EntityAuth(RecordType = RecordType.Customer)]
+    #endregion 
 
-    [CustomerRelationScope(ActionType = ActionType.Read, Functions = "查看客户（不含联系方式）"
-        , RelationType = RelationType.Callcenter, RecordType = CustomerRecordType.PotentialCustomer, Description = "电销关系读取客户权限分配")]
+    #region 数据范围权限(数据读取权限)
+    [OwnerRelationScope(Name = "潜在客户列表-咨询关系", Functions = "潜客管理", RelationType = RelationType.Consultant, RecordType = RecordType.Customer)]
+    [OwnerRelationScope(Name = "潜在客户列表-建档关系", Functions = "潜客管理,市场资源", RelationType = RelationType.Owner, RecordType = RecordType.Customer)]
+    [OwnerRelationScope(Name = "潜在客户列表-电销关系", Functions = "潜客管理", RelationType = RelationType.Callcenter, RecordType = RecordType.Customer)]
+    [OwnerRelationScope(Name = "潜在客户列表-市场关系", Functions = "市场资源", RelationType = RelationType.Marketing, RecordType = RecordType.Customer)]
 
-    [CustomerRelationScope(ActionType = ActionType.Read, Functions = "学员列表查看"
-        , RelationType = RelationType.Consultant, RecordType = CustomerRecordType.PotentialCustomer, Description = "咨询关系读取客户权限分配")]
+    [RecordOrgScope(Name = "潜在客户列表-本部门", Functions = "潜客管理-本部门", OrgType = Common.Authorization.OrgType.Department, RecordType = RecordType.Customer)]
+    [RecordOrgScope(Name = "潜在客户列表-本校区", Functions = "潜客管理-本校区", OrgType = Common.Authorization.OrgType.Campus, RecordType = RecordType.Customer)]
+    [RecordOrgScope(Name = "潜在客户列表-本分公司", Functions = "潜客管理-本分公司", OrgType = Common.Authorization.OrgType.Branch, RecordType = RecordType.Customer)]
+    [RecordOrgScope(Name = "潜在客户列表-全国", Functions = "潜客管理-全国", OrgType = Common.Authorization.OrgType.HQ, RecordType = RecordType.Customer)]
+    #endregion
 
-    [CustomerRelationScope(ActionType = ActionType.Read, Functions = "成绩汇总列表查看"
-        , RelationType = RelationType.Educator, RecordType = CustomerRecordType.PotentialCustomer, Description = "学管关系读取客户权限分配")]
+    #region 数据范围权限(编辑操作权限)
+    [OwnerRelationScope(Name = "潜在客户编辑-咨询关系", Functions = "编辑潜客信息", RelationType = RelationType.Consultant ,ActionType =ActionType.Edit, RecordType = RecordType.Customer)]
+    [OwnerRelationScope(Name = "潜在客户编辑-建档关系", Functions = "编辑潜客信息", RelationType = RelationType.Owner, ActionType = ActionType.Edit, RecordType = RecordType.Customer)]
+    [OwnerRelationScope(Name = "潜在客户编辑-电销关系", Functions = "编辑潜客信息", RelationType = RelationType.Callcenter, ActionType = ActionType.Edit, RecordType = RecordType.Customer)]
+    [OwnerRelationScope(Name = "潜在客户编辑-市场关系", Functions = "编辑潜客信息", RelationType = RelationType.Marketing, ActionType = ActionType.Edit, RecordType = RecordType.Customer)]
 
-    [OrgCustomerRelationScope(OrgType = PPTS.Data.Common.Authorization.OrgType.HQ, ActionType = ActionType.Read
-        , Functions = "上课记录（学员视图）", RelationType = RelationType.Marketing
-        , RecordType = CustomerRecordType.PotentialCustomer)]
-
-    [OwnerRelationScope(ActionType = ActionType.Read, Functions = "技术支持", RecordType = RecordType.PotentialCustomer)]
-
-    [RecordOrgScope(OrgType = PPTS.Data.Common.Authorization.OrgType.Branch, ActionType = ActionType.Read, Functions = "b,c", RecordType = RecordType.PotentialCustomer)]
+    [RecordOrgScope(Name = "潜在客户编辑-本部门", Functions = "编辑潜客信息-本部门", OrgType = Common.Authorization.OrgType.Department, ActionType = ActionType.Edit, RecordType = RecordType.Customer)]
+    
+    #endregion
 
     public class PotentialCustomer : CustomerBase
     {

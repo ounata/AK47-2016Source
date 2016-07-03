@@ -2,78 +2,17 @@
         ppts.config.dataServiceConfig.accountChargeDataService],
         function (account) {
             account.registerController('accountChargePaymentQueryController', [
-                '$scope', '$state', 'mcsDialogService', 'dataSyncService', 'accountChargeDataService', 'paymentQueryAdvanceSearchItems',
-                function ($scope, $state, mcsDialogService, dataSyncService, accountDataService, searchItems) {
+                '$scope', '$state', 'mcsDialogService', 'dataSyncService', 'accountChargeDataService', 'chargePaymentQueryTable', 'paymentQueryAdvanceSearchItems',
+                function ($scope, $state, mcsDialogService, dataSyncService, accountDataService, chargePaymentQueryTable, searchItems) {
                     var vm = this;
 
-                    vm.data = {
-                        selection: 'checkbox',
-                        rowsSelected: [],
-                        keyFields: ['payID'],
-                        headers: [{
-                            field: "customerName",
-                            name: "学员姓名",
-                            template: '<span>{{row.customerName}}</span>'
-                        }, {
-                            field: "customerCode",
-                            name: "学员编号",
-                            template: '<span>{{row.customerCode}}</span>'
-                        }, {
-                            field: "applyNo",
-                            name: "缴费单号",
-                            template: '<span>{{row.applyNo}}</span>'
-                        }, {
-                            field: "chargeMoney",
-                            name: "充值金额",
-                            template: '<span>{{row.chargeMoney | currency:"￥"}}</span>'
-                        }, {
-                            field: "payeeName",
-                            name: "收款人",
-                            template: '<span>{{row.payeeName}}</span>'
-                        }, {
-                            field: "payMoney",
-                            name: "收款金额",
-                            template: '<span>{{row.payMoney | currency:"￥"}}</span>'
-                        }, {
-                            field: "payType",
-                            name: "收款类型",
-                            template: '<span>{{row.payType | payType}}</span>'
-                        }, {
-                            field: "payTime",
-                            name: "收款时间",
-                            template: '<span>{{row.payTime | date:"yyyy-MM-dd HH:mm"}}</span>'
-                        }, {
-                            field: "campusName",
-                            name: "校区",
-                            template: '<span>{{row.campusName}}</span>'
-                        }, {
-                            field: "checkStatus",
-                            name: "对账状态",
-                            template: '<span ng-class="{1: \'ppts-checked-color\', 0: \'ppts-unchecked-color\'}[{{row.checkStatus}}]">{{row.checkStatus | checkStatus}}</span>'
-                        }],
-                        pager: {
-                            pageIndex: 1,
-                            pageSize: ppts.config.pageSizeItem,
-                            totalCount: -1,
-                            pageChange: function () {
-                                dataSyncService.initCriteria(vm);
-                                customerDataService.queryPagedChargePaymentList(vm.criteria, function (result) {
-                                    vm.data.rows = result.pagedData;
-                                });
-                            }
-                        },
-                        orderBy: [{ dataField: 'a.payTime', sortDirection: 1 }]
-                    }
+                    // 配置数据表头 
+                    dataSyncService.configDataHeader(vm, chargePaymentQueryTable, accountDataService.queryPagedChargePaymentList);
 
                     // 页面初始化加载或重新搜索时查询
                     vm.search = function () {
-
-                        dataSyncService.initCriteria(vm);
-                        accountDataService.queryChargePaymentList(vm.criteria, function (result) {
-                            vm.data.rows = result.queryResult.pagedData;
+                        dataSyncService.initDataList(vm, accountDataService.queryChargePaymentList, function () {
                             vm.searchItems = searchItems;
-                            dataSyncService.injectDictData();
-                            dataSyncService.updateTotalCount(vm, result.queryResult);
                             $scope.$broadcast('dictionaryReady');
                         });
                     };
@@ -102,6 +41,25 @@
                                });
                            });
                     }
+
+                    vm.export = function () {
+                        if (vm.criteria.pageParams.totalCount < 50000) {
+                            var dlg = mcsDialogService.confirm({
+                                title: '提示',
+                                message: '您将导出共' + vm.criteria.pageParams.totalCount + '条记录，请确认是否要导出？'
+                            });
+                            dlg.result.then(function () {
+                                var url = ppts.config.customerApiBaseUrl + 'api/accounts/ExportAllChargePayments';
+                                mcs.util.postMockForm(url, vm.criteria);
+                            });
+                        } else {
+                            mcsDialogService.info({
+                                title: '提示',
+                                message: '内容超过5万条以上，无法正常导出，请缩小范围后再尝试!'
+                            }
+                            );
+                        }
+                    };
 
                 }]);
         });

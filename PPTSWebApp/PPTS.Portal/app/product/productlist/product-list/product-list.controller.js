@@ -3,38 +3,38 @@ define([ppts.config.modules.product,
         ppts.config.dataServiceConfig.classgroupDataService],
         function (helper) {
             helper.registerController('productListController', [
-                '$scope', '$state', 'dataSyncService', 'utilService', 'mcsDialogService', 'productDataService', 'classgroupDataService',
-                function ($scope, $state, dataSyncService, utilService, mcsDialogService, productDataService, classgroupDataService) {
+                '$scope', '$state', 'dataSyncService', 'utilService', 'mcsDialogService', 'productDataService', 'productDictionary', 'classgroupDataService',
+                function ($scope, $state, dataSyncService, utilService, mcsDialogService, productDataService, productDictionary, classgroupDataService) {
 
                     var vm = this;
-                    var iswatch_categories_extend = false;
 
 
                     vm.products = [
-                          { text: '一对一', route: 'ppts.productAdd.onetoone', loadtype: 'onetoone', typename: 'all' },
-                          { text: '班组', route: 'ppts.productAdd.classgroup', loadtype: 'classgroup', typename: 'all' },
-                          { text: '游学', route: 'ppts.productAdd.youxue', loadtype: 'youxue', typename: 'all' },
+                          { text: '一对一', loadtype: 'onetoone', },
+                          { text: '班组', loadtype: 'classgroup' },
+                          { text: '游学', loadtype: 'youxue' },
+                          { text: '代理招生', loadtype: 'dailizhaosheng' },
                           {
-                              text: '更多', route: 'ppts.productAdd.other', loadtype: 'other', typename: 'all',
+                              text: '其它', loadtype: 'other',
                               children: [
-                                  { text: '实物产品', route: 'ppts.productAdd.other', loadtype: 'other', typename: '实物产品' },
-                                  { text: '虚拟产品', route: 'ppts.productAdd.other', loadtype: 'other', typename: '虚拟产品' },
-                                  { text: '费用产品', route: 'ppts.productAdd.other', loadtype: 'other', typename: '费用产品' },
-                                  { text: '留学', route: 'ppts.productAdd.other', loadtype: 'other', typename: '留学' },
-                                  { text: '其它', route: 'ppts.productAdd.other', loadtype: 'other', typename: '其它产品' },
+                                  { text: '实物产品', loadtype: 'shiwu' },
+                                  { text: '虚拟产品', loadtype: 'xuni' },
+                                  { text: '费用产品', loadtype: 'feiyong' },
+                                  { text: '留学', loadtype: 'liuxue' },
+                                  { text: '其它', loadtype: 'other' },
                               ]
-                          },
-                          { text: '代理招生', route: 'ppts.productAdd.wukeshou', loadtype: 'wukeshou', typename: 'all' }
+                          }
                     ];
+
                     vm.data = {
                         selection: 'checkbox',
                         rowsSelected: [],
-                        keyFields: ['productID', 'categoryType', 'productStatus', 'endDate'],
+                        keyFields: ['productID', 'categoryType', 'productStatus', 'endDate', 'category', 'categoryName', 'productName', 'productCode'],
                         headers: [{
                             field: "productCode",
                             name: "产品编码",
                             template: '<a ui-sref="ppts.productView({id:row.productID})">{{row.productCode}}</a>',
-                            sortable: true
+                            //sortable: true
                         }, {
                             field: "productName",
                             name: "产品名称",
@@ -56,12 +56,15 @@ define([ppts.config.modules.product,
                             name: "时长（分钟）",
                             template: '<span>{{row.periodDuration | period }}</span>'
                         }, {
-                            field: "ProductPrice",
+                            field: "productPrice",
                             name: "产品单价（元）",
-                            template: '<span>{{row.productPrice}}</span>',
+                        }, {
+                            field: "targetPrice",
+                            name: "目标单价（元）",
                         }, {
                             name: "合作单价（元）",
-                            template: '<span>{{ row.productPrice * ( 1 - row.partnerRatio ) }}</span>'
+                            template: '<span ng-if="row.hasPartner==1">{{ row.productPrice * ( 1 - row.partnerRatio ) }}</span>'
+                                    + '<span ng-if="row.hasPartner==0">--</span>'
                         }, {
                             field: "coachType",
                             name: "辅导类型",
@@ -95,7 +98,8 @@ define([ppts.config.modules.product,
                     }
 
                     vm.create = function (item) {
-                        $state.go(item.route, { ltype: item.loadtype, lname: item.typename });
+                        var routeSuffix = productDictionary.categories[item.loadtype].routeSuffix;
+                        $state.go('ppts.productAdd.' + routeSuffix, { ltype: item.loadtype });
                     };
                     vm.search = function () {
 
@@ -130,7 +134,7 @@ define([ppts.config.modules.product,
                         }
 
 
-                        console.log(vm.criteria)
+                        ////console.log(vm.criteria)
                         //return;
 
 
@@ -141,69 +145,44 @@ define([ppts.config.modules.product,
                             vm.data.rows = result.queryResult.pagedData;
                             dataSyncService.updateTotalCount(vm, result.queryResult);
 
-
-
-
-                            var categories = [];
-                            var iscontinue = true;
-                            $(result.categories).each(function (i, v) {
-                                if (v.categoryType == "3") {
-                                    if (iscontinue) {
-                                        iscontinue = false;
-                                        categories.push({ category: '30', categoryName: '游学' });
-                                    }
-                                } else {
-                                    categories.push(v);
-                                }
-                            });
-
-                            if (!iswatch_categories_extend) {
-                                $scope.$watch('vm.criteria.categories_extend', function (n, o) {
-                                    var selectedCategories = [n];
-                                    if (n == 30) { selectedCategories = $(result.categories).map(function (i, v) { if (v.categoryType == "3") { return v.category; } }).toArray(); }
-                                    vm.criteria.categories = selectedCategories;
-                                });
-                                iswatch_categories_extend = true;
-                            }
-
-                            dataSyncService.injectDictData(mcs.util.mapping(categories, { key: 'category', value: 'categoryName' }, 'Categories'));
-                            ppts.config.dictMappingConfig["categories"] = "c_codE_ABBR_Categories";
-
-
-
-
                             $scope.$broadcast('dictionaryReady');
                         });
 
                     };
                     vm.copyProduct = function () {
                         if (utilService.selectOneRow(vm)) {
+
                             var selectedData = vm.data.rowsSelected[0]
                             var type = parseInt(selectedData.categoryType);
-                            var param = { id: selectedData.productID };
 
-                            var goName = '';
-                            switch (type) {
-                                case 1: goName = 'onetoone'; break;
-                                case 2: goName = 'classgroup'; break;
-                                case 3: goName = 'youxue'; break;
-                                case 4: goName = 'wukeshou'; break;
-                                case 5: goName = 'other'; break;
+                            var loadtype = '';
+                            var routeSuffix = '';
+
+                            for (var index in productDictionary.categories) {
+                                if (productDictionary.categories[index].index == type) {
+                                    routeSuffix = productDictionary.categories[index].routeSuffix;
+                                    loadtype = index; break;
+                                }
                             }
-                            if (goName == '') { return; }
-                            $state.go('ppts.productCopy.' + goName, param);
+
+                            if (loadtype == '') { return; }
+
+                            var param = { ltype: loadtype, id: selectedData.productID };
+
+                            $state.go('ppts.productCopy.' + routeSuffix, param);
                         }
                     };
                     vm.delete = function () {
                         if (utilService.selectMultiRows(vm)) {
                             var failProduct = $.grep(vm.data.rowsSelected, function (obj, index) {
-                                if (obj.productStatus != 2) return obj;
+                                if (obj.productStatus != 3) return obj;
                             });
 
                             if (utilService.showMessage(vm, failProduct.length > 0, '只允许删除驳回状态的产品！')) {
                                 return;
                             }
 
+                            var productIds = $(vm.data.rowsSelected).map(function (i, v) { return v.productID }).toArray();
                             mcsDialogService.confirm({ title: '危险确认', message: '删除产品无法恢复，是否确认删除？' })
                                 .result.then(function () {
                                     productDataService.delProduct(productIds, function (isSuccess) {
@@ -213,32 +192,62 @@ define([ppts.config.modules.product,
                         }
                     };
                     vm.stopProduct = function () {
-                        if (utilService.selectOneRow(vm)) {
-                            var rowProduct = vm.data.rowsSelected[0];
-                            if (rowProduct.productStatus == 1
-                                && rowProduct.endDate >= new Date()
-                                ) {
-                                productDataService.stopProduct(rowProduct.productID, function (entity) {
-                                    var index = mcs.util.indexOf(vm.data.rows, "productID", rowProduct.productID);
-                                    vm.data.rows[index].endDate = entity.endDate;
+                        if (utilService.selectMultiRows(vm)) {
+
+                            var productIds = new Array();
+                            var failProductIds = new Array();
+
+                            $(vm.data.rowsSelected).each(function (i, v) {
+                                if (v.productStatus != 4) {
+                                    failProductIds.push(v.productID);
+                                } else {
+                                    productIds.push(v.productID);
+                                }
+                            });
+
+                            if (utilService.showMessage(vm, failProductIds.length > 0, '只有 销售中 状态可止售！')) { return; }
+
+                            mcsDialogService.confirm({ title: '操作确认', message: '产品 仍在销售中，是否确认止售？' })
+                                .result.then(function () {
+                                    productDataService.stopProduct(productIds, function (entity) {
+                                        //var index = mcs.util.indexOf(vm.data.rows, "productID", rowProduct.productID);
+                                        //vm.data.rows[index].endDate = entity.endDate;
+                                        //vm.data.rows[index].productStatus = 5;
+                                        vm.search();
+                                    });
                                 });
-                            }
                         }
                     };
                     vm.delayProduct = function () {
-                        if (utilService.selectOneRow(vm)) {
-                            var rowProduct = vm.data.rowsSelected[0];
-                            if (rowProduct.productStatus == 1
-                                && rowProduct.endDate < new Date()
-                                ) {
-                                mcsDialogService.create('app/product/productlist/product-list/product-delay.html', { controller: 'delayController', params: rowProduct.endDate })
+                        if (utilService.selectMultiRows(vm)) {
+
+                            var productIds = new Array();
+                            var failProductIds = new Array();
+
+                            $(vm.data.rowsSelected).each(function (i, v) {
+                                if (v.productStatus == 4 || v.productStatus == 5) {
+                                    productIds.push(v.productID);
+                                } else {
+                                    failProductIds.push(v.productID);
+                                }
+                            });
+
+                            if (utilService.showMessage(vm, failProductIds.length > 0, '只有 销售中 或者 已停售 状态可延期！')) { return; }
+
+
+                            mcsDialogService.create('app/product/productlist/product-list/product-delay.html', { controller: 'delayController', params: vm.data.rowsSelected })
                                     .result.then(function (data) {
-                                        productDataService.delayProduct({ id: rowProduct.productID, endDate: data.endDate }, function () {
-                                            var index = mcs.util.indexOf(vm.data.rows, "productID", rowProduct.productID);
-                                            vm.data.rows[index].endDate = data.endDate;
+
+                                        //console.log(data)
+
+                                        var products = $(data).map(function (i, v) { return { productID: v.productID, endDate: v.modifyEndDate } }).toArray();
+                                        var param = { model: products };
+
+                                        productDataService.delayProduct(param, function () {
+                                            vm.search();
                                         });
+
                                     });
-                            }
                         }
                     };
                     vm.createClass = function () {
@@ -246,10 +255,10 @@ define([ppts.config.modules.product,
                             classgroupDataService.checkCreateClass_Product(vm.data.rowsSelected[0].productID, function (result) {
                                 if (result.sucess) {
                                     $state.go('ppts.classAdd', { id: vm.data.rowsSelected[0].productID });
-                                } else
-                                    mcsDialogService.error(
-                                   { title: 'Error', message: result.message }
-                               );
+                                } else {
+                                    utilService.showMessage(vm, true, result.message)
+
+                                }
                             }, function (result) {
 
                             });
@@ -272,6 +281,9 @@ define([ppts.config.modules.product,
                         dataSyncService.injectDictData(mcs.util.mapping(timeTypes, { key: 'key', value: 'value' }, 'TimeType'));
                         ppts.config.dictMappingConfig["timeType"] = "c_codE_ABBR_TimeType";
 
+                        var priceTypes = [{ key: '1', value: '产品单价' }, { key: '2', value: '目标单价' }, { key: '3', value: '合作单价' }];
+                        dataSyncService.injectDictData(mcs.util.mapping(priceTypes, { key: 'key', value: 'value' }, 'PriceType'));
+                        ppts.config.dictMappingConfig["priceType"] = "c_codE_ABBR_PriceType";
 
                         dataSyncService.initCriteria(vm);
 
@@ -287,23 +299,50 @@ define([ppts.config.modules.product,
             helper.registerController('delayController', [
                 '$scope', '$uibModalInstance', 'data',
                 function ($scope, $uibModalInstance, data) {
-
+                    //console.log(data)
                     var vm = this;
-                    vm.entity = { endDate: data };
+                    //vm.entity = { endDate: data };
                     $scope.vm = vm;
 
-                    vm.cancel = function () {
+                    vm.data = {
+                        headers: [{
+                            field: "productCode",
+                            name: "产品编码",
+                        }, {
+                            field: "productName",
+                            name: "产品名称",
+                        }, {
+                            name: "原止售时间",
+                            template: '<span>{{row.endDate | date:"yyyy-MM-dd" | normalize}}</span>',
+                        }, {
+                            name: "修改后止售时间",
+                            template: '<mcs-datepicker model="row.modifyEndDate" css="col-xs-10 col-sm-9" />',
+                        }],
+                        pager: {
+                            pageable: false
+                        },
+                        orderBy: [{ dataField: 'CreateTime', sortDirection: 1 }]
+                    }
+
+                    vm.close = vm.cancel = function () {
                         $uibModalInstance.dismiss('Canceled');
                     };
 
                     vm.save = function () {
-                        $uibModalInstance.close(vm.entity);
+                        $uibModalInstance.close(data);
                     };
 
                     vm.hitEnter = function (evt) {
-                        if (angular.equals(evt.keyCode, 13) && !(angular.equals(vm.entity.endDate, null) || angular.equals(vm.entity.endDate, '')))
+                        //if (angular.equals(evt.keyCode, 13) && !(angular.equals(vm.entity.endDate, null) || angular.equals(vm.entity.endDate, '')))
+                        if (angular.equals(evt.keyCode, 13)) {
                             vm.save();
+                        }
                     };
+
+                    var init = (function () {
+                        $(data).each(function (i, v) { v.modifyEndDate = v.endDate; });
+                        vm.data.rows = data;
+                    })();
 
                 }]);
 

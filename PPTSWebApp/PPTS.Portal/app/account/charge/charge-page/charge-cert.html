@@ -1,34 +1,122 @@
-﻿<form class="form-horizontal">
-    <div class="widget-box">
-        <div class="widget-header">
-            <h4 class="col-sm-8">缴费单凭证</h4>
+﻿<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            <span class="caption-subject bold"><i class="ace-icon fa"></i>学员<span class="important">【{{vm.customer.customerName}}({{vm.customer.customerCode}})】</span>，缴费单编号{{vm.apply.applyNo}}</span>
         </div>
-        <div class="widget-body">
-            <div class="clearfix form-actions mcs-form-actions">
-                <div>
-                    <mcs-button category="print" click="vm.showPrint()" text="打印缴费凭证"></mcs-button>
-                    <mcs-button category="export" click="vm.showPrint()" text="导出服务协议"></mcs-button>
-                </div>
-            </div>
-            <table class="table table-bordered">
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td colspan="3"></td>
-                    <td colspan="4"></td>
-                    <td colspan="3">{{vm.apply.applyNo}}</td>
-                </tr>
-            </table>
+        <div class="caption pull-right">
+            <span class="caption-subject bold">业绩归属: <span class="important">{{vm.customer.campusName}}</span></span>
+            <span class="caption-subject bold">充值类型: <span class="important">{{vm.apply.chargeType | chargeType}}</span></span>
+            <span class="caption-subject bold">状态: <span class="important">{{vm.apply.payStatus | payStatus}}</span></span>
+            <span class="caption-subject bold">申请人: <span class="important">{{vm.apply.applierName}}</span></span>
+            <span class="caption-subject bold">岗位: <span class="important">{{vm.apply.applierJobName}}</span></span>
         </div>
     </div>
-</form>
+    <div class="portlet-body form">
+        <form class="form-horizontal" action="#" role="form" novalidate>
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <mcs-button category="print" click="vm.print()" text="打印缴费凭证"  ppts-job-functions="按钮-打印缴费单凭证,按钮-打印缴费单凭证-本校区"></mcs-button>
+                        <mcs-button category="export" click="vm.exportServiceAgreement()" text="导出服务协议"  ppts-job-functions="按钮-打印服务协议,按钮-打印服务协议-本校区"></mcs-button>
+                    </div>
+                </div>
+            </div>
+            <div class="alert alert-block alert-danger" ng-show="vm.errorMessage">
+                <button type="button" class="close" data-dismiss="alert">
+                    <i class="ace-icon fa fa-times"></i>
+                </button>
+                <i class="ace-icon fa fa-warning"></i>
+                {{vm.errorMessage}}
+            </div>
+            <div class="form-body">
+                <div class="row">
+                    <div class="form-group horizontal">
+                        <div class="col-sm-12" style="margin:15px;width:98%;">
+                            <div id="printArea">
+                                <table class="table table-bordered">
+                                    <tr><td colspan="5">学大教育专用缴费单</td></tr>
+                                    <tr>
+                                        <td rowspan="14">缴费详单</td>
+                                        <td>缴费日期：</td>
+                                        <td> {{vm.apply.payment.payTime | date:"yyyy-MM-dd" | normalize  }} </td>
+                                        <td>收费单位：</td>
+                                        <td>{{vm.apply.campusName}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>受委托人：</td>
+                                        <td>{{vm.apply.payment.payeeName}}</td>
+                                        <td>受委托人岗位名称：</td>
+                                        <td>{{vm.apply.payment.payeeJobName}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>学生姓名：</td>
+                                        <td colspan="3">{{vm.apply.customerName}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>学生性别：</td>
+                                        <td colspan="3">{{vm.customer.gender | gender}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>出生日期：</td>
+                                        <td colspan="3">{{vm.customer.birthday | date:"yyyy-MM-dd" | normalize }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>在读学校名称：</td>
+                                        <td colspan="3">{{vm.customer.schoolName}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>年级：</td>
+                                        <td colspan="3">{{vm.customer.grade | grade}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>法定监护人：</td>
+                                        <td colspan="3">{{vm.customer.parentName}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>与受辅导方的关系：</td>
+                                        <td colspan="3">{{vm.customer.parentRole | parent}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>手机号码：</td>
+                                        <td colspan="3">{{vm.customer.phoneNumber}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>学生编号</td>
+                                        <td>当前折扣基数（元）</td>
+                                        <td>当前账户价值</td>
+                                        <td>当前折扣率</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{vm.customer.customerCode}}</td>
+                                        <td>{{vm.apply.thatDiscountBase}}</td>
+                                        <td>{{vm.apply.thatAccountValue}}</td>
+                                        <td>{{vm.apply.thatDiscountRate}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>本次充值金额（元）</td>
+                                        <td>本次折扣基数（元）</td>
+                                        <td>本次折扣率</td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>{{vm.apply.chargeMoney}}</td>
+                                        <td>{{vm.apply.thisDiscountBase}}  </td>
+                                        <td>{{vm.apply.thisDiscountRate}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>缴费类型：</td>
+                                        <td>{{vm.apply.chargeType | chargeType}}</td>
+                                        <td>续费人：</td>
+                                        <td>{{vm.customer.parentName}}</td>
+                                        <td></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

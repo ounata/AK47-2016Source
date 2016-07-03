@@ -147,3 +147,6 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level1name = N'Phones',
     @level2type = N'COLUMN',
     @level2name = N'VersionEndTime'
+GO
+
+CREATE INDEX [IX_Phones_PhoneNumber] ON [CM].[Phones] ([PhoneNumber], [AreaNumber])

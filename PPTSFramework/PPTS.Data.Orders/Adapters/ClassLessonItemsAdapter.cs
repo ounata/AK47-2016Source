@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MCS.Library.Core;
 
 namespace PPTS.Data.Orders.Adapters
 {
@@ -39,5 +40,12 @@ namespace PPTS.Data.Orders.Adapters
 
             return this.QueryData(sql);
         }
+
+        public void UpdateCollectionInContext(ClassLessonItemCollection collection) {
+            collection.IsNotNull(c => {
+                c.ForEach(item => { UpdateInContext(item); });
+            });
+        }
+
     }
 }

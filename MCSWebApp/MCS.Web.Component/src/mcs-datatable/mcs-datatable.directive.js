@@ -22,8 +22,11 @@
             scope: {
 
                 data: '=',
+                nodataTip: '@?',
                 retrieveData: '&?',
                 pageChanged: '&?',
+                condition: '=?',
+
 
 
             },
@@ -33,10 +36,12 @@
                     return;
                 }
 
+
+
                 if ($scope.retrieveData) {
                     $scope.retrieveData().then(function() {
                         $scope.reMatchRowsSelected();
-                    })
+                    });
                 }
 
 
@@ -104,9 +109,14 @@
                         }
 
                     }
-                }
+                };
 
                 $scope.pageChange = function(callback) {
+
+                    if (!angular.equals($scope.conditionCopy, $scope.condition)) {
+                        angular.copy($scope.conditionCopy, $scope.condition);
+                    }
+
                     if (callback()) {
                         callback().then(function() {
                             $scope.reMatchRowsSelected();
@@ -146,7 +156,7 @@
                         }
                     }
 
-                }
+                };
 
 
                 $scope.reorder = function(header, callback) {
@@ -155,11 +165,11 @@
                     if (header.sortable) {
                         if ($scope.onOrder && angular.isFunction($scope.onOrder())) {
                             $scope.onOrder({
-                                dataField: header.field,
+                                dataField: header.sort || header.field,
                                 sortDirection: header.orderDirection == 'asc' ? 0 : 1
                             });
                         } else {
-                            $scope.data.orderBy[0].dataField = header.field;
+                            $scope.data.orderBy[0].dataField = header.sort || header.field;
                             $scope.data.orderBy[0].sortDirection = header.orderDirection == 'asc' ? 0 : 1;
                             callback();
                             $scope.reMatchRowsSelected();
@@ -168,7 +178,15 @@
                     }
 
 
-                }
+                };
+
+                $scope.data.searching = function() {
+                    if ($scope.condition) {
+                        $scope.conditionCopy = {};
+                        angular.copy($scope.condition, $scope.conditionCopy);
+                    }
+                };
+
 
                 var reg = /click=['"]\w*/ig
 
@@ -184,7 +202,9 @@
                         }
 
                     }
-                })
+                });
+
+
 
             }
         };

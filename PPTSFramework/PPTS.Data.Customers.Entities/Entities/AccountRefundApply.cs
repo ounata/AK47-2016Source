@@ -1,6 +1,7 @@
 using MCS.Library.Core;
 using MCS.Library.Data.DataObjects;
 using MCS.Library.Data.Mapping;
+using PPTS.Data.Common.Authorization;
 using PPTS.Data.Common.Entities;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,9 @@ namespace PPTS.Data.Customers.Entities
     /// This object represents the properties and methods of a AccountRefundApply.
     /// 账户退费申请表
     /// </summary>
+    #region 数据范围权限(存入识别)
+    [EntityAuth(RecordType = RecordType.AccountRefundApply)]
+    #endregion
     [Serializable]
     [ORTableMapping("CM.AccountRefundApplies")]
     [DataContract]
@@ -147,7 +151,7 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 申请时间
         /// </summary>
-        [ORFieldMapping("ApplyTime")]
+        [ORFieldMapping("ApplyTime", UtcTimeToLocal = true)]
         [DataMember]
         public DateTime ApplyTime
         {
@@ -634,7 +638,7 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 提交时间
         /// </summary>
-        [ORFieldMapping("SubmitTime")]
+        [ORFieldMapping("SubmitTime", UtcTimeToLocal = true)]
         [DataMember]
         public DateTime SubmitTime
         {
@@ -689,7 +693,7 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 最后审批时间
         /// </summary>
-        [ORFieldMapping("ApproveTime")]
+        [ORFieldMapping("ApproveTime", UtcTimeToLocal = true)]
         [DataMember]
         public DateTime ApproveTime
         {
@@ -756,7 +760,7 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 财务最后确认时间
         /// </summary>
-        [ORFieldMapping("VerifyTime")]
+        [ORFieldMapping("VerifyTime", UtcTimeToLocal = true)]
         [DataMember]
         public DateTime VerifyTime
         {
@@ -823,7 +827,7 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 队长时间
         /// </summary>
-        [ORFieldMapping("CheckTime")]
+        [ORFieldMapping("CheckTime", UtcTimeToLocal = true)]
         [DataMember]
         public DateTime CheckTime
         {
@@ -835,6 +839,7 @@ namespace PPTS.Data.Customers.Entities
         /// 创建人ID
         /// </summary>
         [ORFieldMapping("CreatorID")]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update)]
         [DataMember]
         public string CreatorID
         {
@@ -846,6 +851,7 @@ namespace PPTS.Data.Customers.Entities
         /// 创建人姓名
         /// </summary>
         [ORFieldMapping("CreatorName")]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update)]
         [DataMember]
         public string CreatorName
         {
@@ -856,7 +862,8 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 创建时间
         /// </summary>
-        [ORFieldMapping("CreateTime")]
+        [ORFieldMapping("CreateTime", UtcTimeToLocal = true)]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.Select | ClauseBindingFlags.Where)]
         [DataMember]
         public DateTime CreateTime
         {
@@ -889,7 +896,8 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 最后修改时间
         /// </summary>
-        [ORFieldMapping("ModifyTime")]
+        [ORFieldMapping("ModifyTime", UtcTimeToLocal = true)]
+        [SqlBehavior(DefaultExpression = "GETUTCDATE()", ForceUseDefaultExpression = true)]
         [DataMember]
         public DateTime ModifyTime
         {

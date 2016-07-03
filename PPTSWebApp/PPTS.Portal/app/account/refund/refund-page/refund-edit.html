@@ -1,12 +1,16 @@
-﻿<form class="form-horizontal">
-    <div class="widget-box">
-        <div class="widget-header">
-            <h4 class="col-sm-8">退费</h4>
+﻿<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            <span class="caption-subject bold"><i class="ace-icon fa"></i>退费</span>
         </div>
-        <div class="widget-body">
-            <div class="clearfix form-actions mcs-form-actions">
-                <div>
-                    <mcs-button category="submit" click="vm.save()" ng-disabled="!vm.canSave"></mcs-button>
+    </div>
+    <div class="portlet-body form">
+        <form class="form-horizontal" action="#" role="form" novalidate>
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <mcs-button category="submit" click="vm.save()" ng-disabled="!vm.assert.ok" ppts-job-functions="退费"></mcs-button>
+                    </div>
                 </div>
             </div>
             <div class="alert alert-block alert-danger" ng-show="vm.errorMessage">
@@ -16,156 +20,185 @@
                 <i class="ace-icon fa fa-warning"></i>
                 {{vm.errorMessage}}
             </div>
-            <div class="page-header">
-                <span>账户列表</span>
-            </div>
-            <!-- 账户列表 -->
-            <mcs-datatable data="vm.account" />
-            <div class="page-header">
-                <span>退费信息</span>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-8">
-                    <mcs-label text="当前校区：" css="col-sm-3" />
-                    <div class="col-sm-9">
-                        {{ vm.apply.campusName }}
+            <div class="form-body">
+                <h4 class="form-section"><i class="ace-icon fa fa-th"></i> 账户列表</h4>
+                <div class="row">
+                    <div class="form-group horizontal">
+                        <div class="col-sm-12" style="margin:15px;width:98%;">
+                            <mcs-datatable data="vm.account" />
+                        </div>
+                    </div>
+                </div>
+                <h4 class="form-section"><i class="ace-icon fa fa-th"></i> 转让信息 <span class="section-helper">(<i class="ace-icon fa red" /> * 表示必填项)</span></h4>
+                <div class="row">
+                    <div class="form-group horizontal bordered">
+                        <mcs-label text="当前校区" css="col-sm-3" />
+                        <div class="col-sm-6">
+                            <p class="form-control-static">
+                                {{ vm.apply.campusName }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group horizontal bordered">
+                        <mcs-label text="当前学员" css="col-sm-3" />
+                        <div class="col-sm-6">
+                            <p class="form-control-static">
+                                {{ vm.apply.customerName }}（{{vm.apply.customerCode}}）
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group horizontal bordered">
+                        <mcs-label text="请输入申退金额" css="col-sm-3" />
+                        <div class="col-sm-6">
+                            <p class="form-control-static">
+                                <mcs-input model="vm.apply.inputRefundMoney" datatype="number" currency between="0,9999999" ng-keyup="vm.calcDataEvent($event)" />
+                                <mcs-button text="确定" size="medium" click="vm.calcDataEvent()"></mcs-button>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group horizontal bordered">
+                        <mcs-label text="已消耗课时价值" css="col-sm-3" title="已消耗课时价值=该客户最后因充值引起折扣变化后或者退费后消耗的课时数*实际单价的价值"/>
+                        <div class="col-sm-6">
+                            <p class="form-control-static">
+                                {{vm.apply.consumptionValue | currency:"￥"}}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group horizontal bordered">
+                        <mcs-label text="申退金额" css="col-sm-3" />
+                        <div class="col-sm-6">
+                            <p class="form-control-static">
+                                {{vm.apply.applyRefundMoney | currency:"￥"}}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group horizontal bordered">
+                        <mcs-label text="折扣返还" css="col-sm-3"  title="折扣返还=已消耗课时价值/退费前折扣率*（退费后折扣率）"/>
+                        <div class="col-sm-6">
+                            <p class="form-control-static">
+                                {{vm.apply.reallowanceMoney | currency:"￥"}}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group horizontal bordered">
+                        <mcs-label text="应退金额" css="col-sm-3 red" title="应退金额=申退金额-折扣返还" />
+                        <div class="col-sm-6">
+                            <p class="form-control-static">
+                                {{vm.apply.oughtRefundMoney | currency:"￥"}}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group horizontal bordered">
+                        <mcs-label text="差价补偿" css="col-sm-3" />
+                        <div class="col-sm-6">
+                            <p class="form-control-static">
+                                <mcs-input model="vm.apply.compensateMoney" datatype="number" currency between="0,9999999" />元   <span class="red">，备注：此处填写的金额用于差价找补扣除的金额数</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group horizontal bordered">
+                        <mcs-label text="制度外退款" css="col-sm-3" />
+                        <div class="col-sm-6">
+                            <p class="form-control-static">
+                                <mcs-input model="vm.apply.extraRefundMoney" datatype="number" currency between="0,9999999" />元  <span class="red">，备注：此处填写的金额用于补偿给客户的金额数</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group horizontal bordered">
+                        <mcs-label text="" css="col-sm-3" />
+                        <div class="col-sm-6">
+                            <p class="form-control-static">
+                                <mcs-select class="ppts-select-search" category="extraRefundType" model="vm.apply.extraRefundType" caption="请选择制度外退款类型" />
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group horizontal bordered">
+                        <mcs-label text="实退金额" css="col-sm-3" title="实退金额=申退金额-折扣返还-差价补偿+制度外退款" />
+                        <div class="col-sm-6">
+                            <p class="form-control-static">
+                                {{vm.apply.realRefundMoney | currency:"￥"}}元
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group horizontal bordered">
+                        <mcs-label text="退费后账户" css="col-sm-3" />
+                        <div class="col-sm-6">
+                            <p class="form-control-static">
+                                折扣基数{{vm.apply.thisDiscountBase | currency:"￥"}}，
+                                折扣率{{vm.apply.thisDiscountRate | number:"3"}}，
+                                账户价值{{vm.apply.thisAccountValue | currency:"￥"}}，
+                                可用金额{{vm.apply.thisAccountMoney | currency:"￥"}}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group horizontal bordered">
+                        <mcs-label text="领款人" required="true" css="col-sm-3" />
+                        <div class="col-sm-6">
+                            <p class="form-control-static">
+                                <mcs-input model="vm.apply.drawer" required />
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group horizontal bordered">
+                        <mcs-label text="选择上传文档" css="col-sm-3" />
+                        <div class="col-sm-6">
+                            <p class="form-control-static">
+                                <div files-upload model="vm.apply.files" readonly="false" resource-Id="{{vm.apply.applyID}}" download-url="http://localhost/MCSWebApp/MCS.Web.API/api/sample/DownloadMaterial" files-amount="5" module-name="liucy" url="{{vm.url}}api/accounts/UploadMaterial">
+                                </div>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group horizontal bordered">
+                        <mcs-label text="退费原因" required="true" css="col-sm-3" />
+                        <div class="col-sm-6">
+                            <p class="form-control-static">
+                                <textarea class="form-control" ng-model="vm.apply.applyMemo" rows="5" maxlength="1000" required style="resize: none;"></textarea>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <h4 class="form-section">
+                    <i class="ace-icon fa fa-th"></i> 业绩分配比例
+                    <mcs-button category="add" click="vm.addRow()" size="medium"></mcs-button>
+                    <mcs-button category="delete" click="vm.removeRow()" size="medium"></mcs-button>
+                </h4>
+                <div class="row">
+                    <div class="form-group horizontal">
+                        <div class="col-sm-12" style="margin:15px;width:98%;">
+                            <mcs-datatable data="vm.data" />
+                            <span class="pull-right">金额总计：{{ vm.apply.allot.totalMoney | currency:"￥" }}，课时总计：{{ vm.apply.allot.totalAmount }}</span>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="form-group">
-                <div class="col-sm-8">
-                    <mcs-label text="当前学员：" css="col-sm-3" />
-                    <div class="col-sm-9">
-                        {{ vm.apply.customerName }}（{{vm.apply.customerCode}}）
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-8">
-                    <mcs-label text="请输入申退金额：" css="col-sm-3" />
-                    <div class="col-sm-9">
-                        <mcs-input model="vm.apply.inputRefundMoney" type="Number" number-length="7" minnum="1" maxnum="9999999" ng-keyup="vm.calcDataEvent($event)"/>
-                        <mcs-button text="确定" size="medium" click="vm.calcDataEvent()"></mcs-button>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-8">
-                    <mcs-label text="已消耗课时价值：" css="col-sm-3" />
-                    <div class="col-sm-9">
-                        {{vm.apply.consumptionValue | currency:"￥"}}
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-8">
-                    <mcs-label text="申退金额：" css="col-sm-3" />
-                    <div class="col-sm-9">
-                        {{vm.apply.applyRefundMoney | currency:"￥"}}
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-8">
-                    <mcs-label text="折扣返还：" css="col-sm-3" />
-                    <div class="col-sm-9">
-                        {{vm.apply.reallowanceMoney | currency:"￥"}}
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-8">
-                    <mcs-label text="应退金额：" css="col-sm-3" />
-                    <div class="col-sm-9">
-                        {{vm.apply.oughtRefundMoney | currency:"￥"}}
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-8">
-                    <mcs-label text="差价补偿：" css="col-sm-3" />
-                    <div class="col-sm-9">
-                        <mcs-input model="vm.apply.compensateMoney" type="Number" number-length="7" minnum="1" maxnum="9999999" />元   <span class="red">备注：此处填写的金额用于差价找补，扣除的金额数</span>
-                    </div>
-                </div>     
-            </div>           
-            <div class="form-group">
-                <div class="col-sm-8">
-                    <mcs-label text="制度外退款：" css="col-sm-3" />
-                    <div class="col-sm-9">
-                        <mcs-input model="vm.apply.extraRefundMoney" type="Number" number-length="7" minnum="1" maxnum="9999999" />元  <span class="red">备注：此处填写的金额用于补偿给客户的金额数</span>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-8">
-                    <mcs-label text="" css="col-sm-3" />
-                    <div class="col-sm-9 ppts-select-search">
-                        <ppts-select category="extraRefundType" model="vm.apply.extraRefundType" caption="请选择制度外退款类型" />
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-8">
-                    <mcs-label text="实退金额：" css="col-sm-3" />
-                    <div class="col-sm-9">
-                        {{vm.apply.realRefundMoney | currency:"￥"}}元
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-8">
-                    <mcs-label text="退费后账户：" css="col-sm-3" />
-                    <div class="col-sm-9">
-                        折扣基数{{vm.apply.thisDiscountBase | currency:"￥"}}，
-                        折扣率{{vm.apply.thisDiscountRate | number:"3"}}，
-                        账户价值{{vm.apply.thisAccountValue | currency:"￥"}}，
-                        可用金额{{vm.apply.thisAccountMoney | currency:"￥"}}
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-8">
-                    <mcs-label text="领款人：" css="col-sm-3" />
-                    <div class="col-sm-9">
-                        <mcs-input model="vm.apply.drawer" required="true" />
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-8">
-                    <mcs-label css="col-sm-3" />
-                    <div class="col-sm-9">
-                        <mcs-button text="选择上传文档" size="medium"></mcs-button>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-8">
-                    <mcs-label text="退费原因：" css="col-sm-3" />
-                    <div class="col-sm-9">
-                        <textarea class="autosize-transition form-control" ng-model="vm.apply.applyMemo" style="overflow-x: hidden; overflow-y: auto;word-wrap: break-word; resize: none; height: 100px;"></textarea>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-12 text-right">
-                <mcs-button category="add" click="vm.addRow()" size="medium"></mcs-button>
-                <mcs-button category="delete" click="vm.removeRow()" size="medium"></mcs-button>
-            </div>
-            <div class="page-header">
-                <span>责任分配比例</span>
-            </div>
-            <mcs-datatable data="vm.data" />
-            <div class="col-sm-12 text-right">
-                <div class="col-sm-8">
-                </div>
-                <div class="col-sm-2">
-                    金额总计：{{ vm.apply.allot.totalMoney | currency:"￥" }}
-                </div>
-                <div class="col-sm-2">
-                    课时总计：{{ vm.apply.allot.totalAmount }}
-                </div>
-            </div>
-        </div>
+        </form>
     </div>
-</form>
+</div>

@@ -1,6 +1,7 @@
 using MCS.Library.Core;
 using MCS.Library.Data.DataObjects;
 using MCS.Library.Data.Mapping;
+using PPTS.Data.Common.Authorization;
 using PPTS.Data.Common.Entities;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,21 @@ namespace PPTS.Data.Customers.Entities
     [Serializable]
     [ORTableMapping("CM.CustomerReplies")]
     [DataContract]
+    #region 数据范围权限(存入识别)
+    [EntityAuth(RecordType = RecordType.CustomerReply)]
+    #endregion 
+
+    #region 数据范围权限(数据读取权限)
+    [CustomerRelationScope(Name = "学大反馈管理（学员视图-家校互动）", Functions = "学大反馈管理（学员视图-家校互动）", RecordType = CustomerRecordType.Customer)]
+    [OrgCustomerRelationScope(Name = "学大反馈管理（学员视图-家校互动）-本部门", Functions = "学大反馈管理（学员视图-家校互动）-本部门", RecordType = CustomerRecordType.Customer)]
+    [OrgCustomerRelationScope(Name = "学大反馈管理（学员视图-家校互动）-本校区", Functions = "学大反馈管理（学员视图-家校互动）-本校区", RecordType = CustomerRecordType.Customer)]
+    [OrgCustomerRelationScope(Name = "学大反馈管理（学员视图-家校互动）-本分公司", Functions = "学大反馈管理（学员视图-家校互动）-本分公司", RecordType = CustomerRecordType.Customer)]
+    [OrgCustomerRelationScope(Name = "学大反馈管理（学员视图-家校互动）-全国", Functions = "学大反馈管理（学员视图-家校互动）-全国", RecordType = CustomerRecordType.Customer)]
+    #endregion
+
+    #region 数据范围权限(编辑操作权限)
+    [CustomerRelationScope(Name = "联系家长", Functions = "联系家长", ActionType = ActionType.Edit, RecordType = CustomerRecordType.Customer)]
+    #endregion
     public class CustomerReply
     {
         public CustomerReply()
@@ -37,6 +53,7 @@ namespace PPTS.Data.Customers.Entities
         /// 学员ID
         /// </summary>
         [ORFieldMapping("CustomerID")]
+        [CustomerFieldMapping("CustomerID")]
         [DataMember]
         public string CustomerID
         {
@@ -69,6 +86,7 @@ namespace PPTS.Data.Customers.Entities
         /// 回复ID
         /// </summary>
         [ORFieldMapping("ReplyID", PrimaryKey = true)]
+        [KeyFieldMapping("ReplyID")]
         [DataMember]
         public string ReplyID
         {
@@ -79,7 +97,7 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 回复时间
         /// </summary>
-        [ORFieldMapping("ReplyTime")]
+        [ORFieldMapping("ReplyTime", UtcTimeToLocal = true)]
         [DataMember]
         public DateTime ReplyTime
         {
@@ -241,7 +259,7 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 创建时间
         /// </summary>
-        [ORFieldMapping("CreateTime")]
+        [ORFieldMapping("CreateTime", UtcTimeToLocal = true)]
         [DataMember]
         public DateTime CreateTime
         {

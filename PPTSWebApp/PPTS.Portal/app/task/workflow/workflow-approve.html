@@ -1,0 +1,15 @@
+﻿<div class="portlet light">
+    <div class="portlet-body form">
+        <form class="form-horizontal form-bordered form-row-stripped" action="#" role="form" novalidate>
+            <div class="form-body">
+                <div class="form-group">
+                    <mcs-label required="true" text="标题" css="col-md-3" />
+                    <div class="col-md-9">
+                        <p class="form-control-static">{{ vm.form.title }}</p>
+                    </div>
+                </div>
+                <mcs-workflow model="vm.clientProcess" />
+            </div>
+        </form>
+    </div>
+</div>

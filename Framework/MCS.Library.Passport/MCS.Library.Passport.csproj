@@ -54,7 +54,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <CodeAnalysisRules>
     </CodeAnalysisRules>
-    <CodeAnalysisRuleSet>Migrated rules for MCS.Library.Passport.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>BasicCorrectnessRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -154,6 +154,7 @@
     <Compile Include="DataObjects\OpenIDBinding.cs" />
     <Compile Include="DataObjects\SignInInfo.cs" />
     <Compile Include="DataObjects\Ticket.cs" />
+    <Compile Include="DataObjects\TicketSource.cs" />
     <Compile Include="HttpModules\AuthenticationModuleBase.cs" />
     <Compile Include="HttpModules\OpenIDAuthenticationModule.cs" />
     <Compile Include="HttpModules\PassportAuthenticationModule.cs" />

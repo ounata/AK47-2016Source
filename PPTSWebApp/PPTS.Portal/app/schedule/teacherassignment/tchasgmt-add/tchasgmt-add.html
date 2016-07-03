@@ -1,140 +1,117 @@
-﻿<div class="page-content">
-    <!-- #开始：添加排课Form -->
-    <div class="page-content-area">
+﻿<form class="form-horizontal" role="form">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="alert" ng-click="vm.cancel()">
+            <i class="ace-icon fa fa-times"></i>
+        </button>
+        <h4 class="modal-title">新增排课</h4>
+    </div>
+    <div class="modal-body">
         <div class="row">
-            <div class="col-sm-12">
-                <form class="form-horizontal" role="form">
-                    <div class="widget-box">
-                        <div class="widget-header">
-                            <h4>
-                                排课操作
-                                <small>
-                                    <i class="icon-double-angle-right"></i>
-
-                                </small>
-                            </h4>
-                        </div>
-                        <div class="widget-body">
-                            <div class="widget-main no-padding">
-                                <form class="form-horizontal" role="form">
-                                    <div class="clearfix form-actions mcs-form-actions">
-                                        <div class="col-md-offset-3 col-md-9">
-                                            <mcs-button category="save" click="vm.save()"></mcs-button>
-                                            <mcs-button category="close" click="vm.cancel()"></mcs-button>
-                                        </div>
-                                    </div>
-
-                                    <div class="page-header">
-                                        <span>排课信息  (<span class="required"> * </span>表示必填字段)</span>
-                                    </div>
-                                    <div class="profile-user-info profile-user-info-striped mcs-user-profile">
-                                        <div class="profile-info-row">
-                                            <div class="profile-info-name"> 校区 </div>
-                                            <div class="profile-info-value">
-                                                {{ vm.result.assign.campusName }}
-                                            </div>
-                                        </div>
-                                        <div class="profile-info-row">
-                                            <div class="profile-info-name"> 排课条件 </div>
-                                            <div class="profile-info-value">
-                                                <span class="editable editable-click">
-                                                    <ppts-select category="assignCondition" model="vm.result.assign.conditionID"  callback="vm.selectAssignConditionClick(item)" css="col-xs-7 col-sm-7" />
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div class="profile-info-row">
-                                            <div class="profile-info-name"> 学员姓名 </div>
-                                            <div class="profile-info-value">
-                                                <ppts-select category="student" ng-show="vm.showStudentSelect" model="vm.result.assign.customerID" callback="vm.selectStudentClick(item)" css="col-xs-7 col-sm-7" />
-                                                <span ng-show="!vm.showStudentSelect">{{ vm.result.assign.customerName }}</span>
-                                            </div>
-                                        </div>
-                                        <div class="profile-info-row">
-                                            <div class="profile-info-name"> 订单编号 </div>
-                                            <div class="profile-info-value">
-                                                <ppts-select category="asset" ng-show="vm.showOrderSelect" caption="请选择" model="vm.result.assign.assetID" callback="vm.selectAssetClick(item)" css="col-xs-7 col-sm-7" />
-                                                <span ng-show="!vm.showOrderSelect">{{ vm.result.assign.assetName }}</span>
-                                            </div>
-                                        </div>
-                                        <div class="profile-info-row">
-                                            <div class="profile-info-name"> 上课年级 </div>
-                                            <div class="profile-info-value">
-                                                <ppts-select ng-show="vm.showGradeSelect" caption="上课年级" category="subGrade" callback="vm.selectGradeClick(item)" model="vm.result.assign.grade" css="col-xs-7 col-sm-7" />
-                                                <span ng-show="!vm.showGradeSelect">
-                                                    {{vm.result.assign.gradeName}}
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div class="profile-info-row">
-                                            <div class="profile-info-name"> 上课科目 </div>
-                                            <div class="profile-info-value">
-                                                <ppts-select category="subSubject" model="vm.result.assign.subject" ng-show="vm.showSubjectSelect" callback="vm.selectSubjectClick(item)" css="col-xs-7 col-sm-7" />
-                                                <span ng-show="!vm.showSubjectSelect">{{ vm.result.assign.subjectName }}</span>
-                                            </div>
-                                        </div>
-
-                                        <div class="profile-info-row">
-                                            <div class="profile-info-name"> 课时时长 </div>
-                                            <div class="profile-info-value">
-                                                <span>{{ vm.result.assign.lessonDurationValue }}</span>
-                                            </div>
-                                        </div>
-                                        <div class="profile-info-row">
-                                            <div class="profile-info-name"> 课程级别 </div>
-                                            <div class="profile-info-value">
-                                                <span>{{ vm.result.assign.courseLevelName }}</span>
-                                            </div>
-                                        </div>
-                                        <div class="profile-info-row">
-                                            <div class="profile-info-name"> 上课日期 </div>
-                                            <div class="profile-info-value">
-                                                <ppts-datepicker model="vm.beginDate" />
-                                            </div>
-                                        </div>
-                                        <div class="profile-info-row">
-                                            <div class="profile-info-name"> 上课时间 </div>
-                                            <div class="profile-info-value">
-                                                <ppts-select caption="" category="hour" model="vm.beginHour" callback="vm.calcDurationValueBHClick(item)" css="col-xs-2 col-sm-2" />
-                                                <ppts-select caption="" category="minute" model="vm.beginMinute" callback="vm.calcDurationValueBMClick(item)" css="col-xs-2 col-sm-2" />
-                                                <div style="float:left; margin:0 5px 0 5px;">到</div>
-                                                <ppts-select caption="" category="hour" model="vm.endHour" callback="vm.calcDurationValueEHClick(item)" css="col-xs-2 col-sm-2" />
-                                                <ppts-select caption="" category="minute" model="vm.endMinute" callback="vm.calcDurationValueEMClick(item)" css="col-xs-2 col-sm-2" />
-                                            </div>
-                                        </div>
-                                        <div class="profile-info-row">
-                                            <div class="profile-info-name"> 实际上课时长 </div>
-                                            <div class="profile-info-value">
-                                                <span>
-                                                    {{ vm.assignDuration }} 分钟
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div class="profile-info-row">
-                                            <div class="profile-info-name"> 排定课时数 </div>
-                                            <div class="profile-info-value">
-                                                <span>
-                                                    {{vm.result.assign.amount}}
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div class="profile-info-row">
-                                            <div class="profile-info-name"> 该课表是否可被复制 </div>
-                                            <div class="profile-info-value">
-                                                <span>
-                                                    <ppts-radiobutton-group category="ifElse" model="vm.result.assign.copyAllowed" />
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </form>
+            <div class="form-group horizontal">
+                <mcs-label text="校区" css="col-sm-3" />
+                <div class="col-sm-6">
+                    <p class="form-control-static">{{ vm.result.assign.campusName }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group horizontal">
+                <mcs-label text="排课条件" css="col-sm-3" />
+                <div class="col-sm-6">
+                    <mcs-select category="assignCondition" model="vm.result.assign.conditionID" callback="vm.selectAssignConditionClick(item)" css="mcs-padding-0" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group horizontal">
+                <mcs-label  required="true" text="学员姓名" css="col-sm-3" />
+                <div class="col-sm-6">
+                    <mcs-select category="student" ng-show="vm.showStudentSelect" model="vm.result.assign.customerID" callback="vm.selectStudentClick(item)" css="mcs-padding-0" />
+                    <p class="form-control-static" ng-show="!vm.showStudentSelect">{{ vm.result.assign.customerName }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group horizontal">
+                <mcs-label  required="true" text="订单编号" css="col-sm-3" />
+                <div class="col-sm-6">
+                    <mcs-select category="asset" ng-show="vm.showOrderSelect" model="vm.result.assign.assetID" callback="vm.selectAssetClick(item)" css="mcs-padding-0" />
+                    <p class="form-control-static" ng-show="!vm.showOrderSelect">{{ vm.result.assign.assetName }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group horizontal">
+                <mcs-label  required="true" text="上课年级" css="col-sm-3" />
+                <div class="col-sm-6">
+                    <mcs-select category="subGrade" ng-show="vm.showGradeSelect" callback="vm.selectGradeClick(item)" model="vm.result.assign.grade" css="mcs-padding-0" />
+                    <p class="form-control-static" ng-show="!vm.showGradeSelect">{{ vm.result.assign.gradeName}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group horizontal">
+                <mcs-label  required="true" text="上课科目" css="col-sm-3" />
+                <div class="col-sm-6">
+                    <mcs-select category="subSubject" ng-show="vm.showSubjectSelect" model="vm.result.assign.subject" callback="vm.selectSubjectClick(item)" css="mcs-padding-0" />
+                    <p class="form-control-static" ng-show="!vm.showSubjectSelect">{{ vm.result.assign.subjectName }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group horizontal">
+                <mcs-label text="课时时长" css="col-sm-3" />
+                <div class="col-sm-6">
+                    <p class="form-control-static">{{ vm.result.assign.lessonDurationValue }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group horizontal">
+                <mcs-label text="课程级别" css="col-sm-3" />
+                <div class="col-sm-6">
+                    <p class="form-control-static">{{ vm.result.assign.courseLevelName }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group horizontal">
+                <mcs-label required="true" text="上课时间" css="col-sm-3" />
+                <div class="col-sm-6">
+                    <mcs-daterangepicker start-date="vm.dateClass.beginDate" end-date="vm.dateClass.endDate" mode="datetime" offset="30" range-restrict="0" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group horizontal">
+                <mcs-label text="实际上课时长" css="col-sm-3" />
+                <div class="col-sm-6">
+                    <p class="form-control-static">{{  vm.assignDuration   }} 分钟</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group horizontal">
+                <mcs-label text="排定课时数" css="col-sm-3" />
+                <div class="col-sm-6">
+                    <p class="form-control-static">{{ vm.result.assign.amount }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group horizontal">
+                <mcs-label text="该课表是否可被复制" css="col-sm-3" />
+                <div class="col-sm-6">
+                    <ppts-radiobutton-group category="ifElse" model="vm.result.assign.copyAllowed" />
+                </div>
             </div>
         </div>
     </div>
-</div>
+    <div class="modal-footer">
+        <mcs-button category="save" click="vm.save()"></mcs-button>
+        <mcs-button category="close" click="vm.cancel()"></mcs-button>
+    </div>
+</form>
 
 
 

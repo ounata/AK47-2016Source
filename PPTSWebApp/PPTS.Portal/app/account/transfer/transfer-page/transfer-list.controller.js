@@ -14,7 +14,7 @@
                             field: "applyTime",
                             name: "转让日期",
                             headerCss: "col-sm-1",
-                            template: '<span>{{row.applyTime | date:"yyyy-MM-dd"}}</span>'
+                            template: '<span>{{row.applyTime | date:"yyyy-MM-dd" | normalize}}</span>'
                         }, {
                             field: "transferType",
                             name: "转让类型",

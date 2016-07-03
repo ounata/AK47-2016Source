@@ -58,9 +58,39 @@
             templateUrl: 'app/account/charge/payment-page/payment-edit.html',
             controller: 'accountChargePaymentEditController',
             breadcrumb: {
-                label: '登记收款'
+                label: '登记付款'
             },
             dependencies: ['app/account/charge/payment-page/payment-edit.controller']
+        }).loadRoute($stateProvider, {
+            name: 'ppts.accountCharge-view.invoice-list',
+            url: '/invoice/list?prev=:page',
+            templateUrl: 'app/account/charge/invoice-page/invoice-list.html',
+            controller: 'accountChargeInvoiceListController',
+            breadcrumb: {
+                label: '登记发票'
+            },
+            dependencies: ['app/account/charge/invoice-page/invoice-list.controller'
+            , 'app/account/charge/invoice-page/invoice-add.controller'
+            , 'app/account/charge/invoice-page/invoice-edit.controller'
+            , 'app/account/charge/invoice-page/invoice-info.controller']
+        }).loadRoute($stateProvider, {
+            name: 'ppts.accountCharge-view.invoice-edit',
+            url: '/invoice/edit?prev=:page',
+            templateUrl: 'app/account/charge/invoice-page/invoice-edit.html',
+            controller: 'accountChargeInvoiceEditController',
+            breadcrumb: {
+                label: '登记发票'
+            },
+            dependencies: ['app/account/charge/invoice-page/invoice-edit.controller']
+        }).loadRoute($stateProvider, {
+            name: 'ppts.accountCharge-view.invoice-info',
+            url: '/invoice/info?prev=:page',
+            templateUrl: 'app/account/charge/invoice-page/invoice-edit.info',
+            controller: 'accountChargeInvoiceInfoController',
+            breadcrumb: {
+                label: '发票信息'
+            },
+            dependencies: ['app/account/charge/invoice-page/invoice-edit.controller']
         }).loadRoute($stateProvider, {
             name: 'ppts.accountCharge-query',
             url: '/account/charge/query/',
@@ -71,7 +101,9 @@
                 parent: 'ppts'
             },
             dependencies: ['app/account/charge/charge-page/charge-query.controller',
-                           'app/account/charge/charge-page/charge-audit.controller']
+                           'app/account/charge/charge-page/charge-audit.controller',
+                            'app/order/unsubscribe/view/debookOrderItem-view.controller',
+                            'app/order/purchase/view/assetConsumeView.controller']
         }).loadRoute($stateProvider, {
             name: 'ppts.accountCharge-allot',
             url: '/allot/:applyID?prev=:page',
@@ -97,7 +129,7 @@
             templateUrl: 'app/account/refund/refund-page/refund-query.html',
             controller: 'accountRefundQueryController',
             breadcrumb: {
-                label: '退费列表',
+                label: '退款列表',
                 parent: 'ppts'
             },
             dependencies: ['app/account/refund/refund-page/refund-query.controller',
@@ -109,36 +141,27 @@
             templateUrl: 'app/account/refund/refund-page/refund-info.html',
             controller: 'accountRefundInfoController',
             breadcrumb: {
-                label: '退费申请详情',
+                label: '退费申请详情'
             },
             dependencies: ['app/account/refund/refund-page/refund-info.controller']
         }).loadRoute($stateProvider, {
             name: 'ppts.accountRefund-approve',
-            url: '/account/refund/approve/:id',
+            url: '/account/refund/approve?processID&activityID&resourceID',
             templateUrl: 'app/account/refund/refund-page/refund-approve.html',
             controller: 'accountRefundApproveController',
             breadcrumb: {
-                label: '退费审批',
+                label: '退费审批'
             },
             dependencies: ['app/account/refund/refund-page/refund-approve.controller']
         }).loadRoute($stateProvider, {
             name: 'ppts.accountTransfer-approve',
-            url: '/account/transfer/approve/:id',
+            url: '/account/transfer/approve?processID&activityID&resourceID',
             templateUrl: 'app/account/transfer/transfer-page/transfer-approve.html',
             controller: 'accountTransferApproveController',
             breadcrumb: {
-                label: '转让审批',
+                label: '转让审批'
             },
             dependencies: ['app/account/transfer/transfer-page/transfer-approve.controller']
-        }).loadRoute($stateProvider, {
-            name: 'ppts.accountReturn-edit',
-            url: '/account/return/edit/:id',
-            templateUrl: 'app/account/return/return-page/return-edit.html',
-            controller: 'accountReturnEditController',
-            //breadcrumb: {
-            //    label: '返还综合服务费',
-            //},
-            dependencies: ['app/account/return/return-page/return-edit.controller']
         });
     });
 

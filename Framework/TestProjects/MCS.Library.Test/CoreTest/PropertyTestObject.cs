@@ -32,6 +32,36 @@ namespace MCS.Library.Test
             set;
         }
 
+        public Decimal DecimalValue
+        {
+            get;
+            set;
+        }
+
+        public bool BooleanValue
+        {
+            get;
+            set;
+        }
+
+        public DateTime DateValue
+        {
+            get;
+            set;
+        }
+
+        public TimeSpan TimeSpanValue
+        {
+            get;
+            set;
+        }
+
+        public BooleanState BooleanStateValue
+        {
+            get;
+            set;
+        }
+
         public int Add(int a, int b)
         {
             return a + b;
@@ -54,6 +84,11 @@ namespace MCS.Library.Test
             data.ID = UuidHelper.NewUuidString();
             data.User = TestUser.PrepareTestData();
             data.PrivateInt = 1024;
+            data.BooleanValue = true;
+            data.DecimalValue = 18.25M;
+            data.DateValue = DateTime.Now;
+            data.TimeSpanValue = TimeSpan.FromSeconds(1800);
+            data.BooleanStateValue = BooleanState.Unknown;
 
             return data;
         }

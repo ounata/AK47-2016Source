@@ -22,6 +22,19 @@ namespace PPTS.WebAPI.Orders.DataSources
         }
 
 
+
+        protected override void OnBuildQueryCondition(QueryCondition qc)
+        {
+
+            #region 数据权限加工
+            qc.WhereClause = PPTS.Data.Common.Authorization.ScopeAuthorization<Class>
+                .GetInstance(ConnectionDefine.PPTSOrderConnectionName)
+                .ReadAuthExistsBuilder("Classes", qc.WhereClause).ToSqlString(TSqlBuilder.Instance);
+            #endregion
+
+            base.OnBuildQueryCondition(qc);
+        }
+
         public PagedQueryResult<ClassSearchModel, ClassSearchModelCollection> LoadClasses(IPageRequestParams prp, ClassesQueryCriteriaModel condition, IEnumerable<IOrderByRequestItem> orderByBuilder)
         {
             var classBuilder = ConditionMapping.GetConnectiveClauseBuilder(condition, new AdjustConditionValueDelegate(ClassesQueryCriteriaModel.ClassesAdjustConditionValueDelegate));
@@ -36,7 +49,7 @@ namespace PPTS.WebAPI.Orders.DataSources
 
             sqlWhere = sqlWhere + string.Format(" and  ClassStatus != {0} ", ((int)ClassStatusDefine.Deleted).ToString());
 
-            var result = Query(prp, sqlWhere, " ClassID desc ");
+            var result = Query(prp, sqlWhere, " createTime desc ");
 
             return result;
         }

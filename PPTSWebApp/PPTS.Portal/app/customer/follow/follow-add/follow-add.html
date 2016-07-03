@@ -21,7 +21,7 @@
                     <div class="form-group horizontal">
                         <mcs-label required="true" text="跟进方式" css="col-sm-3" />
                         <div class="col-sm-6">
-                            <ppts-select category="followType" model="vm.follow.followType" css="col-sm-6 mcs-padding-0" required />
+                            <mcs-select category="followType" model="vm.follow.followType" css="col-sm-6 mcs-padding-0" required />
                         </div>
                     </div>
                 </div>
@@ -29,7 +29,7 @@
                     <div class="form-group horizontal">
                         <mcs-label required="true" text="跟进对象" css="col-sm-3" />
                         <div class="col-sm-6">
-                            <ppts-select category="followObject" model="vm.follow.followObject" css="col-sm-6 mcs-padding-0" required />
+                            <mcs-select category="followObject" model="vm.follow.followObject" css="col-sm-6 mcs-padding-0" required />
                         </div>
                     </div>
                 </div>
@@ -53,23 +53,25 @@
                     <div class="form-group horizontal">
                         <mcs-label required="true" text="客户级别" css="col-sm-3" />
                         <div class="col-sm-6">
-                            <ppts-radiobutton-group category="customerLevel" model="vm.follow.customerLevel" required />
+                            <ppts-radiobutton-group category="customerLevel" model="vm.follow.customerLevel" value="vm.customerLevelValue" required />
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row" ng-show="vm.follow.customerLevel">
+                    <div class="form-group horizontal">
+                        <mcs-label text="沟通结果" css="col-sm-3" />
+                        <div class="col-sm-6">
+                            <p class="form-control-static">
+                                {{vm.talkResult}}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" ng-show="vm.follow.customerLevel == 11">
                     <div class="form-group horizontal">
                         <mcs-label required="true" text="无效理由" css="col-sm-3" />
                         <div class="col-sm-6">
                             <ppts-radiobutton-group category="invalidReason" model="vm.follow.invalidReason" required />
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group horizontal">
-                        <mcs-label required="true" text="沟通结果" css="col-sm-3" />
-                        <div class="col-sm-6">
-                            <mcs-cascading-select caption="一级沟通结果,二级沟通结果" data="vm.talkData" model="vm.selection" async="false" required-level="1" required />
                         </div>
                     </div>
                 </div>
@@ -85,7 +87,7 @@
                     <div class="form-group horizontal">
                         <mcs-label required="true" text="本次跟进阶段" css="col-sm-3" />
                         <div class="col-sm-6">
-                            <ppts-select category="followStage" model="vm.follow.followStage" css="col-sm-6 mcs-padding-0" required />
+                            <mcs-select category="followStage" model="vm.follow.followStage" css="col-sm-6 mcs-padding-0" required />
                         </div>
                     </div>
                 </div>
@@ -93,7 +95,7 @@
                     <div class="form-group horizontal">
                         <mcs-label required="true" text="预计上门时间" css="col-sm-3" />
                         <div class="col-sm-6">
-                            <ppts-datepicker placeholder="预计上门时间" model="vm.follow.planVerifyTime" css="col-sm-6" required />
+                            <mcs-datepicker placeholder="预计上门时间" model="vm.follow.planVerifyTime" css="col-sm-6" required />
                         </div>
                     </div>
                 </div>
@@ -101,7 +103,7 @@
                     <div class="form-group horizontal">
                         <mcs-label required="true" text="预计下次沟通时间" css="col-sm-3" />
                         <div class="col-sm-6">
-                            <ppts-datepicker placeholder="预计下次沟通时间" model="vm.follow.nextFollowTime" css="col-sm-6" required />
+                            <mcs-datepicker placeholder="预计下次沟通时间" model="vm.follow.nextFollowTime" css="col-sm-6" required />
                         </div>
                     </div>
                 </div>
@@ -109,7 +111,7 @@
                     <div class="form-group horizontal">
                         <mcs-label required="true" text="预计签约时间" css="col-sm-3" />
                         <div class="col-sm-6">
-                            <ppts-datepicker placeholder="预计签约时间" model="vm.follow.planSignDate" css="col-sm-6" required />
+                            <mcs-datepicker placeholder="预计签约时间" model="vm.follow.planSignDate" css="col-sm-6" required />
                         </div>
                     </div>
                 </div>
@@ -128,8 +130,8 @@
                             <ppts-radiobutton-group category="ifElse" model="vm.follow.isStudyThere" />
                         </div>
                         <div class="col-sm-4 pull-right">
-                            <a class="btn btn-link mcs-margin-left-40" ng-click="vm.addRow()" ng-show="vm.follow.isStudyThere==1" uib-tooltip="新增其他辅导机构"><i class="ace-icon fa fa-plus bigger-110"></i></a>
-                            <a class="btn btn-link" ng-click="vm.removeRow()" ng-show="vm.follow.isStudyThere==1" uib-tooltip="移除其他辅导机构"><i class="ace-icon fa fa-minus bigger-110"></i></a>
+                            <a class="btn btn-link mcs-margin-left-40" ng-click="vm.addRow()" ng-show="vm.follow.isStudyThere==1" uib-popover="新增其他辅导机构" popover-trigger="mouseenter"><i class="ace-icon fa fa-plus bigger-110"></i></a>
+                            <a class="btn btn-link" ng-click="vm.removeRow()" ng-show="vm.follow.isStudyThere==1" uib-popover="移除其他辅导机构" popover-trigger="mouseenter"><i class="ace-icon fa fa-minus bigger-110"></i></a>
                         </div>
                     </div>
                 </div>
@@ -145,7 +147,7 @@
                     <div class="form-group horizontal">
                         <mcs-label text="跟进情况备注" css="col-sm-3" />
                         <div class="col-sm-6">
-                            <textarea rows="7" class="form-control" placeholder="请输入备注信息" ng-model="vm.follow.followMemo">{{ vm.criteria.followMemo }}</textarea>
+                            <textarea rows="7" class="form-control" placeholder="预案相关内容(家长对配套服务的关注、抗拒点、危机塑造思路、课时方案、预计合同总金额 孩子的性格，爱好，家庭教育情况等信息 目标学校、目前空余时间段 丢单的详细情况描述)" ng-model="vm.follow.followMemo">{{ vm.criteria.followMemo }}</textarea>
                         </div>
                     </div>
                 </div>

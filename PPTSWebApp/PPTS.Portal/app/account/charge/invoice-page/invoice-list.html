@@ -1,0 +1,43 @@
+﻿<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            <span class="caption-subject bold"><i class="ace-icon fa"></i>学员<span class="important">【{{vm.customer.customerName}}({{vm.customer.customerCode}})】</span>，缴费单编号{{vm.apply.applyNo}}</span>
+        </div>
+        <div class="caption pull-right">
+            <span class="caption-subject bold">业绩归属: <span class="important">{{vm.customer.campusName}}</span></span>
+            <span class="caption-subject bold">充值类型: <span class="important">{{vm.apply.chargeType | chargeType}}</span></span>
+            <span class="caption-subject bold">状态: <span class="important">{{vm.apply.payStatus | payStatus}}</span></span>
+            <span class="caption-subject bold">申请人: <span class="important">{{vm.apply.applierName}}</span></span>
+            <span class="caption-subject bold">岗位: <span class="important">{{vm.apply.applierJobName}}</span></span>
+        </div>
+    </div>
+    <div class="portlet-body form">
+        <form class="form-horizontal" action="#" role="form" novalidate>
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <mcs-button category="edit" click="vm.edit()" text="编辑" ppts-job-functions="按钮-登记发票,按钮-登记发票-本校区"></mcs-button>
+                        <mcs-button category="add" click="vm.add()" text="新增" ppts-job-functions="按钮-登记发票,按钮-登记发票-本校区"></mcs-button>
+                        <mcs-button category="view" click="vm.look()" text="查看" ppts-job-functions="按钮-登记发票,按钮-登记发票-本校区"></mcs-button>
+                    </div>
+                </div>
+            </div>
+            <div class="alert alert-block alert-danger" ng-show="vm.errorMessage">
+                <button type="button" class="close" data-dismiss="alert">
+                    <i class="ace-icon fa fa-times"></i>
+                </button>
+                <i class="ace-icon fa fa-warning"></i>
+                {{vm.errorMessage}}
+            </div>
+            <div class="form-body">
+                <div class="row">
+                    <div class="form-group horizontal">
+                        <div class="col-sm-12" style="margin:15px;width:98%;">
+                            <mcs-datatable data="vm.data" condition="vm.criteria" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

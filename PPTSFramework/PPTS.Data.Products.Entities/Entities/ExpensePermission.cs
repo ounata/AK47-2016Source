@@ -68,7 +68,7 @@ namespace PPTS.Data.Products.Entities
         /// <summary>
         /// 创建时间
         /// </summary>
-        [ORFieldMapping("CreateTime")]
+        [ORFieldMapping("CreateTime", UtcTimeToLocal = true)]
         [DataMember]
         public DateTime CreateTime
         {

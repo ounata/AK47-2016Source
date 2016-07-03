@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -389,6 +390,31 @@ namespace MCS.Library.Core
             enumItem.NullCheck("enumItem");
 
             return EnumItemDescriptionAttribute.GetDescription(enumItem);
+        }
+
+        /// <summary>
+        /// 得到某个操作的action的执行时间
+        /// </summary>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        public static TimeSpan Duration(this Action action)
+        {
+            Stopwatch sw = new Stopwatch();
+
+            sw.Start();
+            
+            try
+            {
+                if (action != null)
+                    action();
+
+                return sw.Elapsed;
+            }
+            finally
+            {
+                sw.Stop();
+            }
+
         }
     }
 }

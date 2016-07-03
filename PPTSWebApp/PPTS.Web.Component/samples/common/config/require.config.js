@@ -12,6 +12,7 @@
             ztree: ppts.config.mcsComponentBaseUrl + 'libs/zTree-3.5.22/js/jquery.ztree.all.min',
             select2: ppts.config.mcsComponentBaseUrl + 'libs/angular-ui-select-0.13.2/dist/select2',
             select2Locale: ppts.config.mcsComponentBaseUrl + 'libs/angular-ui-select-0.13.2/dist/select2_locale_zh-CN',
+            gritter: ppts.config.mcsComponentBaseUrl + 'libs/gritter-1.7.4/jquery.gritter.min',
             autocomplete: ppts.config.mcsComponentBaseUrl + 'libs/ng-tags-input-3.0.0/ng-tags-input',
             moment: ppts.config.mcsComponentBaseUrl + 'libs/date-time-3.0.0/moment.min',
             momentLocale: ppts.config.mcsComponentBaseUrl + 'libs/fullcalendar-2.6.1/moment-with-locales',
@@ -75,6 +76,10 @@
             select2Locale: {
                 exports: 'select2Locale',
                 deps: ['select2']
+            },
+            gritter: {
+                exports: 'gritter',
+                deps: ['jquery']
             },
             autocomplete: {
                 exports: 'autocomplete',
@@ -169,6 +174,7 @@
                 'ztree',
                 'select2',
                 'select2Locale',
+                'gritter',
                 'autocomplete',
                 'ace',
                 'aceExtra',

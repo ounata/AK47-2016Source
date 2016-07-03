@@ -61,6 +61,7 @@
     <Compile Include="Entities\Account.cs" />
     <Compile Include="Entities\AccountChargeAllot.cs" />
     <Compile Include="Entities\AccountChargeApply.cs" />
+    <Compile Include="Entities\AccountChargeInvoice.cs" />
     <Compile Include="Entities\AccountChargePayment.cs" />
     <Compile Include="Entities\AccountDeductApply.cs" />
     <Compile Include="Entities\AccountRecord.cs" />
@@ -79,6 +80,8 @@
     <Compile Include="Entities\CustomerFulltext.cs" />
     <Compile Include="Entities\CustomerMeeting.cs" />
     <Compile Include="Entities\CustomerMeetingItem.cs" />
+    <Compile Include="Entities\FinancialIncome.cs" />
+    <Compile Include="Entities\FinancialRefund.cs" />
     <Compile Include="Entities\PotentialCustomerParentPhone.cs" />
     <Compile Include="Entities\CustomerParentPhone.cs" />
     <Compile Include="Entities\CustomerParentRelation.cs" />
@@ -113,6 +116,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="MCS.Library.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Framework\MCS.Web.MVC.Library\MCS.Web.MVC.Library.csproj">
+      <Project>{A9962EDB-8271-4D6B-8513-BEF4000DC7B1}</Project>
+      <Name>MCS.Web.MVC.Library</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

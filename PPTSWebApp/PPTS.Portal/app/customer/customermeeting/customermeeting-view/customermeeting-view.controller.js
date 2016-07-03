@@ -32,5 +32,8 @@ define([ppts.config.modules.customer, ppts.config.dataServiceConfig.customerMeet
                         $state.go('ppts.customermeeting');
                         //$window.history.back();
                     }
+                    vm.downloadFile = function (file) {
+                        mcs.util.postMockForm(ppts.config.customerApiBaseUrl + "api/customermeetings/downloadmaterial", file);
+                    };
                 }]);
         });

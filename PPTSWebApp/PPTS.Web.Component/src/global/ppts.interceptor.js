@@ -1,13 +1,14 @@
 ﻿//loading
-ppts.ng.factory('viewLoading', ["$rootScope", '$q', 'storage', 'userService', function ($rootScope, $q, storage, userService) {
+ppts.ng.factory('viewLoading', ["$rootScope", '$q', 'storage', 'userService', function($rootScope, $q, storage, userService) {
     var viewLoading = {
-        request: function (config) {
-           
-            config.headers['pptsCurrentJobID'] = storage.get('ppts.user.currentJobId');
+        request: function(config) {
+            config.headers['pptsCurrentJobID'] = storage.get('ppts.user.currentJobId_' + ppts.user.id);
             config.headers['x-session-token'] = userService.sessionToken;
             return config;
         },
-        response: function (response) {          
+        response: function(response) {
+            userService.sessionToken = response.headers('x-session-token');
+
             if (response.data && response.data.dictionaries) {
                 // 过滤掉失效的字典值
                 var result = {};
@@ -24,11 +25,10 @@ ppts.ng.factory('viewLoading', ["$rootScope", '$q', 'storage', 'userService', fu
                 }
                 mcs.util.merge(result);
             }
-           
+
             return response || $q.when(response);
         },
-        responseError: function (error) {
-            
+        responseError: function(error) {
             return $q.reject(error);
         }
     };

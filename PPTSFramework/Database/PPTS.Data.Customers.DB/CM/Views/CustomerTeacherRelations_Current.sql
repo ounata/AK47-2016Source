@@ -12,6 +12,7 @@ SELECT [ID]
       ,[CreatorID]
       ,[CreatorName]
       ,[CreateTime]
+      ,[TenantCode]
       ,[VersionStartTime]
       ,[VersionEndTime]
 FROM      CM.CustomerTeacherRelations

@@ -85,8 +85,8 @@ namespace PPTS.WebAPI.Customers.ViewModels.Students
         /// <summary>
         /// 客户等级
         /// </summary>
-        [InConditionMapping("CustomerLevel")]
-        public int[] CustomerLevels { get; set; }
+        [InConditionMapping("VipLevel")]
+        public int[] VipLevels { get; set; }
         /// <summary>
         /// 有过转介绍的学员
         /// </summary>
@@ -108,36 +108,10 @@ namespace PPTS.WebAPI.Customers.ViewModels.Students
         [NoMapping]
         public string Graduated { get { return GraduatedParam == "-1" ? "" : GraduatedParam; } set { } }
         /// <summary>
-        /// 建档人姓名
-        /// </summary>
-        [ConditionMapping("CreaterName")]
-        public string CreatorName { get; set; }
-        /// <summary>
         /// 学员或者家长姓名
         /// </summary>
-        [ConditionMapping("CustomerName", Operation = "LIKE")]
-        public string CustomerOrParentName { get; set; }
-        /// <summary>
-        /// 学员编号
-        /// </summary>
-        [ConditionMapping("CustomerCode")]
-        public string CustomerCode { get; set; }
-        /// <summary>
-        /// 咨询师
-        /// </summary>
-        [ConditionMapping("ConsultantName")]
-        public string ConsultantName { get; set; }
-        /// <summary>
-        /// 学管师
-        /// </summary>
-        [ConditionMapping("EducatorName")]
-        public string EducatorName { get; set; }
-        /// <summary>
-        /// 家长联系方式
-        /// </summary>
-        [ConditionMapping("(ParentPrimaryPhoneNumber)")]
-        public string ParentContact { get; set; }
-
+        [NoMapping]
+        public string KeyWord { get; set; }
 
         #region 学员类型
 
@@ -209,6 +183,42 @@ namespace PPTS.WebAPI.Customers.ViewModels.Students
         [NoMapping]
         public int LastCourseType { get; set; }
 
+        /// <summary>
+        /// 在读学校
+        /// </summary>
+        [ConditionMapping("CustomerSchoolName", EscapeLikeString = true, Prefix = "%", Postfix = "%", Operation = "LIKE")]
+        public string SchoolName { get; set; }
+
+        /// <summary>
+        /// 归属关系
+        /// </summary>
+        [NoMapping]
+        public int[] Belongs { get; set; }
+
+        /// <summary>
+        /// 归属人姓名
+        /// </summary>
+        [NoMapping]
+        public string BelongName { get; set; }
+
+        /// <summary>
+        /// 建档关系
+        /// </summary>
+        [InConditionMapping("CreatorJobType")]
+        public int[] Creation { get; set; }
+
+        /// <summary>
+        /// 建档人姓名
+        /// </summary>
+        [ConditionMapping("CreatorName")]
+        public string CreatorName { get; set; }
+
+        /// <summary>
+        /// 建档部门
+        /// </summary>
+        [NoMapping]
+        public string Dept { get; set; }
+
         [NoMapping]
         public PageRequestParams PageParams
         {
@@ -240,6 +250,8 @@ namespace PPTS.WebAPI.Customers.ViewModels.Students
         public string FirstSignTime { get; set; }
         [DataMember]
         public string SchoolName { get; set; }
+        [DataMember]
+        public string CustomerSchoolName { get; set; }
         [DataMember]
         public string Grade { get; set; }
         [DataMember]

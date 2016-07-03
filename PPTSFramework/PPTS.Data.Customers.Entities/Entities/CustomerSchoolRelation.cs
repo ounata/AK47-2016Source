@@ -1,6 +1,7 @@
 using MCS.Library.Core;
 using MCS.Library.Data.DataObjects;
 using MCS.Library.Data.Mapping;
+using PPTS.Data.Common.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,118 +9,109 @@ using System.Runtime.Serialization;
 
 namespace PPTS.Data.Customers.Entities
 {
-	/// <summary>
-	/// This object represents the properties and methods of a CustomerSchoolRelation.
-	/// 客户在读学校关系表
-	/// </summary>
-	[Serializable]
+    /// <summary>
+    /// This object represents the properties and methods of a CustomerSchoolRelation.
+    /// 客户在读学校关系表
+    /// </summary>
+    [Serializable]
     [ORTableMapping("CM.CustomerSchoolRelations")]
     [DataContract]
-	public class CustomerSchoolRelation
-	{		
-		public CustomerSchoolRelation()
-		{
-		}		
+    public class CustomerSchoolRelation : IEntityWithCreator, IEntityWithModifier
+    {
+        public CustomerSchoolRelation()
+        {
+        }
 
-		/// <summary>
-		/// 
-		/// </summary>
-		[ORFieldMapping("ID", PrimaryKey=true)]
+        /// <summary>
+        /// 客户ID
+        /// </summary>
+        [ORFieldMapping("CustomerID", PrimaryKey = true)]
         [DataMember]
-		public string ID
-		{
-			get;
+        public string CustomerID
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 客户ID
-		/// </summary>
-		[ORFieldMapping("CustomerID")]
+        /// <summary>
+        /// 在读学校ID
+        /// </summary>
+        [ORFieldMapping("SchoolID", PrimaryKey = true)]
         [DataMember]
-		public string CustomerID
-		{
-			get;
+        public string SchoolID
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 在读学校ID
-		/// </summary>
-		[ORFieldMapping("SchoolID")]
+        /// <summary>
+        /// 创建人ID
+        /// </summary>
+        [ORFieldMapping("CreatorID")]
         [DataMember]
-		public string SchoolID
-		{
-			get;
+        public string CreatorID
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 创建人ID
-		/// </summary>
-		[ORFieldMapping("CreatorID")]
+        /// <summary>
+        /// 创建人姓名
+        /// </summary>
+        [ORFieldMapping("CreatorName")]
         [DataMember]
-		public string CreatorID
-		{
-			get;
+        public string CreatorName
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 创建人姓名
-		/// </summary>
-		[ORFieldMapping("CreatorName")]
+        /// <summary>
+        /// 创建日期
+        /// </summary>
+        [ORFieldMapping("CreateTime", UtcTimeToLocal = true)]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.Select | ClauseBindingFlags.Where)]
         [DataMember]
-		public string CreatorName
-		{
-			get;
+        public DateTime CreateTime
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 创建日期
-		/// </summary>
-		[ORFieldMapping("CreateTime")]
+        /// <summary>
+        /// 最后修改人ID
+        /// </summary>
+        [ORFieldMapping("ModifierID")]
         [DataMember]
-		public DateTime CreateTime
-		{
-			get;
+        public string ModifierID
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 最后修改人ID
-		/// </summary>
-		[ORFieldMapping("ModifierID")]
+        /// <summary>
+        /// 最后修改人姓名
+        /// </summary>
+        [ORFieldMapping("ModifierName")]
         [DataMember]
-		public string ModifierID
-		{
-			get;
+        public string ModifierName
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 最后修改人姓名
-		/// </summary>
-		[ORFieldMapping("ModifierName")]
+        /// <summary>
+        /// 最后修改时间
+        /// </summary>
+        [ORFieldMapping("ModifyTime", UtcTimeToLocal = true)]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update, DefaultExpression = "GETUTCDATE()", ForceUseDefaultExpression = true)]
         [DataMember]
-		public string ModifierName
-		{
-			get;
+        public DateTime ModifyTime
+        {
+            get;
             set;
-		}
-
-		/// <summary>
-		/// 最后修改时间
-		/// </summary>
-		[ORFieldMapping("ModifyTime")]
-        [DataMember]
-		public DateTime ModifyTime
-		{
-			get;
-            set;
-		}
-	}
+        }
+    }
 
     [Serializable]
     [DataContract]

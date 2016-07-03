@@ -9,6 +9,8 @@ using MCS.Library.Data.Builder;
 using PPTS.Data.Customers.Entities;
 using MCS.Library.Data.Mapping;
 using System.Text;
+using PPTS.Data.Customers;
+using System;
 
 namespace PPTS.ExtServices.UnionPay.Executors
 {
@@ -18,22 +20,30 @@ namespace PPTS.ExtServices.UnionPay.Executors
         public AddPosRecordsExecutor(POSRecordsModel model) : base(model, null)
         {
             model.NullCheck("交易信息为空");
-            model.PosRecord.NullCheck("银联刷卡记录不能为空");
+            model.POSRecordCollection.NullCheck("银联刷卡记录不能为空");
+            (model.POSRecordCollection.Count <= 0).TrueThrow("银联刷卡记录数量必须大于零");
         }
         
 
         protected override void PrepareData(DataExecutionContext<UserOperationLogCollection> context)
         {
             base.PrepareData(context);
-            StringBuilder sql = new StringBuilder();
-            sql.AppendFormat("if not exists({0})", ExistSql(this.Model.PosRecord));
-            sql.AppendLine(" ");
-            sql.AppendLine("begin");
-            sql.AppendLine(InsertSql(this.Model.PosRecord));
-            sql.AppendLine("end");
-            POSRecordAdapter.Instance.GetSqlContext().AppendSqlWithSperatorInContext(TSqlBuilder.Instance, sql.ToString());
-
-            //POSRecordAdapter.Instance.UpdateInContext(this.Model.PosRecord);
+            StringBuilder sqlBuilder = new StringBuilder();
+            this.Model.POSRecordCollection.ForEach((POSRecord record) => {
+                sqlBuilder.AppendFormat("if not exists({0})", ExistSql(record));
+                sqlBuilder.AppendLine(" ");
+                sqlBuilder.AppendLine("begin");
+                sqlBuilder.AppendLine(InsertSql(record));
+                sqlBuilder.AppendLine("end");
+                if(record.FromType == Convert.ToInt32(PaySourceType.Async).ToString())
+                { 
+                    sqlBuilder.AppendLine("else");
+                    sqlBuilder.AppendLine("begin");
+                    sqlBuilder.AppendLine(UpdateSql(record));
+                    sqlBuilder.AppendLine("end");
+                }
+            });
+            POSRecordAdapter.Instance.GetSqlContext().AppendSqlWithSperatorInContext(TSqlBuilder.Instance, sqlBuilder.ToString());
         }
 
         protected override void ExecuteNonQuerySqlInContext(DbContext dbContext)
@@ -44,13 +54,28 @@ namespace PPTS.ExtServices.UnionPay.Executors
         protected override void PersistOperationLog(DataExecutionContext<UserOperationLogCollection> context)
         {
             base.PersistOperationLog(context);
-            context.Logs.ForEach(log => log.ResourceID = Model.PosRecord.MerchantID + Model.PosRecord.POSID + Model.PosRecord.TransactionID);
+            context.Logs.ForEach(log => log.OperationDescription = this.Model.LogContent );
         }
 
         private string InsertSql(POSRecord record)
         {
             ORMappingItemCollection mappingCollection = POSRecordAdapter.Instance.GetMappingInfo();
             string sql = ORMapping.GetInsertSql<POSRecord>(record, mappingCollection, TSqlBuilder.Instance);
+            return sql;
+        }
+
+        private string UpdateSql(POSRecord record)
+        {
+            UpdateSqlClauseBuilder updateBuilder = new UpdateSqlClauseBuilder();
+            updateBuilder.AppendItem("SettlementDate", TimeZoneContext.Current.ConvertTimeToUtc(record.SettlementDate));
+
+            WhereSqlClauseBuilder whereBuilder = new WhereSqlClauseBuilder();
+            whereBuilder.AppendItem("TransactionID", record.TransactionID).AppendItem("MerchantID", record.MerchantID).AppendItem("POSID", record.POSID);
+
+            string sql = string.Format(@"update {0} set {1} where {2}"
+                    ,POSRecordAdapter.Instance.GetQueryMappingInfo().GetQueryTableName()
+                    ,updateBuilder.ToSqlString(TSqlBuilder.Instance)
+                    ,whereBuilder.ToSqlString(TSqlBuilder.Instance));
             return sql;
         }
 

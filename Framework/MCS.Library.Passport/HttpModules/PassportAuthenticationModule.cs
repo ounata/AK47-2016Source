@@ -70,9 +70,9 @@ namespace MCS.Library.Passport
 
             PassportManager.CheckAuthenticated(autoRedirect);
 
-            bool fromCookie = false;
+            TicketSource ticketSource = TicketSource.Unknown;
 
-            return PassportManager.GetTicket(out fromCookie);
+            return PassportManager.GetTicket(out ticketSource);
         }
 
         private void context_BeginRequest(object sender, EventArgs e)

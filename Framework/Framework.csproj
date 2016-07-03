@@ -65,6 +65,8 @@
     <ProjectItem Include="MCS.Library.Accredit\MCS.Library.Accredit.csproj" />
     <ProjectItem Include="MCS.SqlServer.Compression\MCS.SqlServer.Compression.csproj" />
 
+    <ProjectItem Include="MCS.Library.Cloud.Caching\MCS.Library.Cloud.Caching.csproj" />
+
     <!--单元测试-->
      
     <!--<ProjectItem Include="MCS.Library.STS.SessionAuthenticationModule\MCS.Library.STS.SessionAuthenticationModule.csproj" />-->

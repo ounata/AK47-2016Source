@@ -16,6 +16,8 @@ using PPTS.Data.Common.Security;
 using PPTS.Contracts.Proxies;
 using PPTS.Data.Customers.Entities;
 using PPTS.Contracts.Customers.Models;
+using PPTS.Data.Products;
+using PPTS.Data.Common;
 
 namespace PPTS.WebAPI.Orders.Executors
 {
@@ -35,6 +37,8 @@ namespace PPTS.WebAPI.Orders.Executors
             ///2. 检查资产表，未排课课时数量要不小于当前排课的数量
             ///3. 学员排课及教师排课冲突检查
             ///4. 资产表已排课数据增加排定的课时数
+            ///5. 排课日期从当日起 不能超过30天
+            
             base.PrepareData(context);
 
             Assign assign = GetAssign(this.Model);
@@ -44,6 +48,7 @@ namespace PPTS.WebAPI.Orders.Executors
             this.Model.AssignID = assign.AssignID;
             assign.AssignStatus = AssignStatusDefine.Assigned;
             assign.AssignSource = AssignSourceDefine.Manual;
+            assign.CategoryType =  ((int)CategoryType.OneToOne).ToString();
             assign.ConfirmStatus = ConfirmStatusDefine.Unconfirmed;
 
             ///1.学员是否被冻结
@@ -59,7 +64,7 @@ namespace PPTS.WebAPI.Orders.Executors
             GenericAssetAdapter<Asset, AssetCollection>.Instance.CheckUnAssignedAmountInContext(this.Model.AssetID, this.Model.Amount);
 
             //新增排课条件           
-            if (string.IsNullOrEmpty(this.Model.ConditionID) || this.Model.ConditionID.Trim() == "100")
+            if (string.IsNullOrEmpty(this.Model.ConditionID))//|| this.Model.ConditionID.Trim() == "100"
             {
                 AssignCondition ac = this.GetAssignCondition(this.Model);
                 ac.ConditionID = UuidHelper.NewUuidString();

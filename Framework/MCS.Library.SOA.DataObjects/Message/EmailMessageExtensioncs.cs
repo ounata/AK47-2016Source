@@ -7,52 +7,56 @@ using MCS.Library.Core;
 
 namespace MCS.Library.SOA.DataObjects
 {
-	public static class EmailMessageExtensioncs
-	{
-		/// <summary>
-		/// 转换为.Net的MailAddress
-		/// </summary>
-		/// <param name="ea"></param>
-		/// <returns></returns>
-		public static MailAddress ToMailAddress(this EmailAddress ea)
-		{
-			MailAddress result = null;
+    public static class EmailMessageExtensioncs
+    {
+        public static MailAddress ToMailAddress(this EmailAddress ea, bool enableFake = false)
+        {
+            MailAddress result = null;
 
-			if (ea != null)
-				result = new MailAddress(ea.Address, ea.DisplayName);
+            if (ea != null)
+            {
+                EmailMessageSettings settings = EmailMessageSettings.GetConfig();
 
-			return result;
-		}
+                string address = ea.Address;
 
-		/// <summary>
-		/// 将Encoding转换成名称，如果为空，则返回空串
-		/// </summary>
-		/// <param name="encoding"></param>
-		/// <returns></returns>
-		public static string ToDescription(this Encoding encoding)
-		{
-			string result = string.Empty;
+                if (enableFake && settings.EnableFakeTarget && settings.FakeTarget.IsNotEmpty())
+                    address = settings.FakeTarget;
 
-			if (encoding != null)
-				result = encoding.BodyName;
+                result = new MailAddress(address, ea.DisplayName);
+            }
 
-			return result;
-		}
+            return result;
+        }
 
-		/// <summary>
-		/// 将名称转换成Encoding
-		/// </summary>
-		/// <param name="encoding"></param>
-		/// <param name="encodingDesp"></param>
-		/// <returns></returns>
-		public static Encoding FromDescription(this Encoding encoding, string encodingDesp)
-		{
-			Encoding result = Encoding.UTF8;
+        /// <summary>
+        /// 将Encoding转换成名称，如果为空，则返回空串
+        /// </summary>
+        /// <param name="encoding"></param>
+        /// <returns></returns>
+        public static string ToDescription(this Encoding encoding)
+        {
+            string result = string.Empty;
 
-			if (encodingDesp.IsNotEmpty())
-				result = Encoding.GetEncoding(encodingDesp);
+            if (encoding != null)
+                result = encoding.BodyName;
 
-			return result;
-		}
-	}
+            return result;
+        }
+
+        /// <summary>
+        /// 将名称转换成Encoding
+        /// </summary>
+        /// <param name="encoding"></param>
+        /// <param name="encodingDesp"></param>
+        /// <returns></returns>
+        public static Encoding FromDescription(this Encoding encoding, string encodingDesp)
+        {
+            Encoding result = Encoding.UTF8;
+
+            if (encodingDesp.IsNotEmpty())
+                result = Encoding.GetEncoding(encodingDesp);
+
+            return result;
+        }
+    }
 }

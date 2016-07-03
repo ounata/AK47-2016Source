@@ -50,17 +50,20 @@ namespace WfOperationServices.Test.Descriptors
         [TestMethod()]
         public void LoadUserDelegationsTest()
         {
+            TenantContext.Current.TenantCode = "Test1";
+            TenantContext.Current.Enabled = true;
+
             string userID = UuidHelper.NewUuidString();
             WfClientDelegationCollection delegations = DelegationHelper.PrepareDelegations(userID);
             WfClientDelegationCollection sd = WfClientProcessDescriptorServiceProxy.Instance.LoadUserDelegations(userID);
 
-            //传递过程，客户端扩展的属性会丢失
-            delegations.ForEach(action =>
-            {
-                action.ApplicationName = string.Empty;
-                action.ProgramName = string.Empty;
-                action.TenantCode = string.Empty;
-            });
+            ////传递过程，客户端扩展的属性会丢失
+            //delegations.ForEach(action =>
+            //{
+            //    action.ApplicationName = string.Empty;
+            //    action.ProgramName = string.Empty;
+            //    action.TenantCode = string.Empty;
+            //});
 
             //默认排序
             sd.Sort((m, n) => m.SourceUserName.CompareTo(n.SourceUserName));
@@ -94,9 +97,9 @@ namespace WfOperationServices.Test.Descriptors
             WfClientDelegation delegation2 = list.Find(w => w.DestinationUserID == duserID);
 
             //传递过程，客户端扩展的属性会丢失
-            delegation.ApplicationName = string.Empty;
-            delegation.TenantCode = string.Empty;
-            delegation.ProgramName = string.Empty;
+            //delegation.ApplicationName = string.Empty;
+            //delegation.TenantCode = string.Empty;
+            //delegation.ProgramName = string.Empty;
 
             delegation.AreSame(delegation2);
         }

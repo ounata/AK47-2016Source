@@ -4,7 +4,7 @@ CREATE VIEW [SC].[SchemaOrganizationSnapshot_Current]
 WITH SCHEMABINDING 
 AS
 SELECT [ID], [VersionStartTime], [VersionEndTime], [Status], [CreateDate], [Name], [DisplayName], [CodeName], [AllowAclInheritance], [SearchContent], [RowUniqueID],
-	[SchemaType], [ShortName], [WP], [Address], [DepartmentType], [CreatorID], [CreatorName], [SimplePinyin], [FullPinyin], [Comment]
+	[SchemaType], [ShortName], [WP], [Address], [DepartmentType], [CreatorID], [CreatorName], [SimplePinyin], [FullPinyin], [LegalEntity], [Comment]
 FROM [SC].[SchemaOrganizationSnapshot]
 WHERE [VersionEndTime] = CONVERT(DATETIME, '99990909 00:00:00', 112) AND [Status] = 1
 

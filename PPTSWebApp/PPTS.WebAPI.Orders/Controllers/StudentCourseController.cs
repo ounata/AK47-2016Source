@@ -6,6 +6,7 @@ using MCS.Library.Principal;
 using MCS.Web.MVC.Library.ApiCore;
 using MCS.Web.MVC.Library.Filters;
 using MCS.Web.MVC.Library.ModelBinder;
+using PPTS.Data.Common;
 using PPTS.Data.Common.Adapters;
 using PPTS.Data.Common.Entities;
 using PPTS.Data.Common.Security;
@@ -13,7 +14,10 @@ using PPTS.Data.Orders;
 using PPTS.Data.Orders.Adapters;
 using PPTS.Data.Orders.DataSources;
 using PPTS.Data.Orders.Entities;
+using PPTS.Data.Products;
+using PPTS.Web.MVC.Library.Filters;
 using PPTS.WebAPI.Orders.Executors;
+using PPTS.WebAPI.Orders.Service;
 using PPTS.WebAPI.Orders.ViewModels.Assignment;
 using System;
 using System.Collections.Generic;
@@ -30,35 +34,65 @@ namespace PPTS.WebAPI.Orders.Controllers
     public partial class StudentCourseController : ApiController
     {
         #region api/studentcourse/getStuCourse
-        /// <summary>
+
         /// 获取学员课表列表数据
-        /// </summary>
-        /// <param name="criteriaQCM"></param>
-        /// <returns></returns>
         [HttpPost]
-        public AssignQCR GetStuCourse(AssignQCM criteriaQCM)
+        [PPTSJobFunctionAuthorize("PPTS:客户课表管理列表（打印课表）,客户课表管理列表（打印课表）-本部门,客户课表管理列表（打印课表）-本校区,客户课表管理列表（打印课表）-本分公司,客户课表管理列表（打印课表）-全国")]
+        public AssignQCR GetStuCourse(AssignQCM qcm)
+        {
+            if (DeluxeIdentity.CurrentUser.GetCurrentJob().JobType == Data.Common.JobTypeDefine.Teacher)
+                qcm.TeacherJobID = DeluxeIdentity.CurrentUser.GetCurrentJob().ID;
+
+            this.GetStuCourseCondition(qcm);
+            Dictionary<string, IEnumerable<BaseConstantEntity>> dic = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(Assign));
+            ///处理查询条件
+            new OrderCommonHelper().GetProductCategoryType(dic);
+
+            return new AssignQCR()
+            {
+                QueryResult = GenericOrderDataSource<Data.Orders.Entities.Assign, AssignCollection>.Instance.Query(qcm.PageParams, qcm, qcm.OrderBy),
+                Dictionaries = dic
+            };
+        }
+
+        [HttpPost]
+        [PPTSJobFunctionAuthorize("PPTS:客户课表管理列表（打印课表）,客户课表管理列表（打印课表）-本部门,客户课表管理列表（打印课表）-本校区,客户课表管理列表（打印课表）-本分公司,客户课表管理列表（打印课表）-全国")]
+        public PagedQueryResult<Assign, AssignCollection> GetStuCoursePaged(AssignQCM qcm)
+        {
+            if (DeluxeIdentity.CurrentUser.GetCurrentJob().JobType == Data.Common.JobTypeDefine.Teacher)
+                qcm.TeacherJobID = DeluxeIdentity.CurrentUser.GetCurrentJob().ID;
+            this.GetStuCourseCondition(qcm);
+            return GenericOrderDataSource<Data.Orders.Entities.Assign, AssignCollection>.Instance.Query(qcm.PageParams, qcm, qcm.OrderBy);
+        }
+
+        private void GetStuCourseCondition(AssignQCM criteriaQCM)
         {
             if (criteriaQCM.EndTime != DateTime.MinValue)
             {
                 criteriaQCM.EndTime = criteriaQCM.EndTime.AddDays(1);
             }
-            return new AssignQCR()
+            ///排除无效状态的
+            if (criteriaQCM.AssignStatus != null && criteriaQCM.AssignStatus.Length == 0)
             {
-                QueryResult = GenericOrderDataSource<Data.Orders.Entities.Assign, AssignCollection>.Instance.Query(criteriaQCM.PageParams, criteriaQCM, criteriaQCM.OrderBy),
-                Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(Data.Orders.Entities.Assign))
-            };
+                criteriaQCM.AssignStatus = new int[] { (int)AssignStatusDefine.Assigned, (int)AssignStatusDefine.Exception, (int)AssignStatusDefine.Finished };
+            }
+            ///
+            if (criteriaQCM.CategoryType != null && criteriaQCM.CategoryType.Length == 0)
+            {
+                criteriaQCM.CategoryType = new string[] { ((int)CategoryType.OneToOne).ToString(), ((int)CategoryType.CalssGroup).ToString() };
+            }
         }
 
         [HttpPost]
-        public PagedQueryResult<Data.Orders.Entities.Assign, AssignCollection> GetStuCoursePaged(AssignQCM criteriaQCM)
+        [PPTSJobFunctionAuthorize("PPTS:按钮-客户课表导出")]
+        public HttpResponseMessage ExportPageStuCourse([ModelBinder(typeof(FormBinder))] AssignQCM qcm)
         {
-            return GenericOrderDataSource<Data.Orders.Entities.Assign, AssignCollection>.Instance.Query(criteriaQCM.PageParams, criteriaQCM, criteriaQCM.OrderBy);
-        }
 
-        [HttpPost]
-        public HttpResponseMessage ExportPageStuCourse([ModelBinder(typeof(FormBinder))] AssignQCM criteriaQCM)
-        {
-            PagedQueryResult<Data.Orders.Entities.Assign, AssignCollection> dc = GenericOrderDataSource<Data.Orders.Entities.Assign, AssignCollection>.Instance.Query(criteriaQCM.PageParams, criteriaQCM, criteriaQCM.OrderBy);
+            if (DeluxeIdentity.CurrentUser.GetCurrentJob().JobType == Data.Common.JobTypeDefine.Teacher)
+                qcm.TeacherJobID = DeluxeIdentity.CurrentUser.GetCurrentJob().ID;
+
+            this.GetStuCourseCondition(qcm);
+            PagedQueryResult<Data.Orders.Entities.Assign, AssignCollection> dc = GenericOrderDataSource<Assign, AssignCollection>.Instance.Query(qcm.PageParams, qcm, qcm.OrderBy);
 
             WorkBook wb = WorkBook.CreateNew();
             WorkSheet sheet = wb.Sheets["sheet1"];
@@ -90,10 +124,10 @@ namespace PPTS.WebAPI.Orders.Controllers
                     {
                         case "StartTime":
                             var sDate = Convert.ToDateTime(param.PropertyValue);
-                            cell.Value = string.Format("{0}({1})",sDate.ToString("yyyy-MM-dd"), wname[(int)sDate.DayOfWeek]);
+                            cell.Value = string.Format("{0}({1})", sDate.ToString("yyyy-MM-dd"), wname[(int)sDate.DayOfWeek]);
                             break;
                         case "AssignStatus":
-                            ConstantEntity status = ConstantAdapter.Instance.Get("C_CODE_ABBR_Course_AssignStatus",  ((int)((AssignStatusDefine)param.PropertyValue)).ToString());
+                            ConstantEntity status = ConstantAdapter.Instance.Get("C_CODE_ABBR_Course_AssignStatus", ((int)((AssignStatusDefine)param.PropertyValue)).ToString());
                             cell.Value = status == null ? param.PropertyValue.ToString() : status.Value;
                             break;
                         case "AssignSource":
@@ -116,10 +150,12 @@ namespace PPTS.WebAPI.Orders.Controllers
 
         /// 学员课表，删除课表
         [HttpPost]
+        [PPTSJobFunctionAuthorize("PPTS:按钮-录入/删除/确认课时-本校区")]
         public void DeleteAssign(AssignCollection model)
         {
             AssignDeleteExecutor executor = new AssignDeleteExecutor(model);
             executor.Execute();
+            AssignTaskService.UpdateCustomerSearchInfo(executor.CustomerIDTask);
         }
         #endregion
 
@@ -127,30 +163,34 @@ namespace PPTS.WebAPI.Orders.Controllers
 
         /// 学员课表，确认课表
         [HttpPost]
+        [PPTSJobFunctionAuthorize("PPTS:按钮-录入/删除/确认课时-本校区")]
         public void ConfirmAssign(AssignCollection model)
         {
             AssignConfirmExecutor executor = new AssignConfirmExecutor(model);
             executor.Execute();
+            AssignTaskService.UpdateCustomerSearchInfo(executor.CustomerIDTask);
         }
 
         #endregion
 
         #region api/studentcourse/markupAssign
 
-        ///保存补录的课时
+        ///学员课表 补录课时
         [HttpPost]
+        [PPTSJobFunctionAuthorize("PPTS:按钮-录入/删除/确认课时-本校区")]
         public dynamic MarkupAssign(AssignSuperModel asm)
         {
             AssignMarkupExecutor ac = new AssignMarkupExecutor(asm);
             var result = ac.Execute();
             if (string.IsNullOrEmpty(ac.Msg))
                 ac.Msg = "ok";
+            AssignTaskService.UpdateCustomerSearchInfo(asm.CustomerID);
             return new { Msg = ac.Msg };
         }
 
-        #endregion 
+        #endregion
 
-      
+
 
     }
 }

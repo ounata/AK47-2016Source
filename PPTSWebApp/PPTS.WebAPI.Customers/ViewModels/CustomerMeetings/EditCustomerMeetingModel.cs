@@ -14,6 +14,7 @@ namespace PPTS.WebAPI.Customers.ViewModels.CustomerMeetings
   
     public class EditCustomerMeetingModel 
     {
+        
         [ObjectValidator]
         public CustomerMeeting CustomerMeeting { set; get; }
 

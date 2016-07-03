@@ -8,28 +8,31 @@
             <ppts-select-branch model="vm.criteria.orgIds" />
         </div>
         <div class="col-md-4">
-            <mcs-input placeholder="学员家长姓名" uib-tooltip="学员家长姓名" model="vm.criteria.parentName" css="mcs-input-search mcs-width-full" />
+            <mcs-input placeholder="学员家长姓名" uib-popover="学员家长姓名" model="vm.criteria.parentName" css="mcs-input-search mcs-width-full" />
         </div>
         <div class="col-md-4">
-            <mcs-input placeholder="学员编号" uib-tooltip="学员编号" model="vm.criteria.customerCode" css="mcs-input-search mcs-width-full" />
+            <mcs-input placeholder="学员编号" uib-popover="学员编号" model="vm.criteria.customerCode" css="mcs-input-search mcs-width-full" />
         </div>
     </div>
     <div class="row">
         <div class="col-md-4">
-            <mcs-input placeholder="客服受理人" uib-tooltip="客服受理人" model="vm.criteria.accepterName" css="mcs-input-search mcs-width-full" />
+            <mcs-input placeholder="客服受理人" uib-popover="客服受理人" model="vm.criteria.accepterName" css="mcs-input-search mcs-width-full" />
         </div>
         <div class="col-md-4">
-            <mcs-input placeholder="当前受理人" uib-tooltip="当前受理人" model="vm.criteria.handlerName" css="mcs-input-search mcs-width-full" />
+            <mcs-input placeholder="当前受理人" uib-popover="当前受理人" model="vm.criteria.handlerName" css="mcs-input-search mcs-width-full" />
         </div>
-    </div>
+        <div class="col-md-4">
+
+        </div>
+        </div>
 </ppts-dynamic-content>
 <!-- /结束：客户服务列表.快速查询条件 -->
 <!-- #开始：客户服务列表.工具栏 -->
 <ppts-dynamic-content template="toolbar.tpl.html">
-    <mcs-button category="add" text="新增客服记录" ppts-job-functions="新增客服记录" click="$state.go('ppts.custservice-add')"></mcs-button>
+    <mcs-button category="add" text="新增客服记录" ppts-job-functions="新增客服记录" click="vm.add()"></mcs-button>
     <mcs-button category="export" click="vm.export()"></mcs-button>
 </ppts-dynamic-content>
 <!-- /结束：客户服务列表.工具栏 -->
 <!-- #开始：客户服务列表.数据表格 -->
-<mcs-datatable data="vm.data" />
+<mcs-datatable data="vm.data" condition="vm.criteria" />
 <!-- /结束：客户服务列表.数据表格 -->

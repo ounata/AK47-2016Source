@@ -30,7 +30,7 @@ namespace PPTS.WebAPI.Products.DataSources
             }  
             string sqlWhere = string.Format("{0}{1}", string.IsNullOrEmpty(PresentsWhere) ? " 1 = 1 " : PresentsWhere, PresentPermissionsWhere);
             sqlWhere = sqlWhere + string.Format(" and  PresentStatus != {0} ", ((int)PresentStatusDefine.Deleted).ToString());
-            var result = Query(prp, sqlWhere, " PresentID desc ");
+            var result = Query(prp, sqlWhere, " CreateTime desc ");
 
             return result;
         }

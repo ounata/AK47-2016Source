@@ -32,14 +32,32 @@ namespace PPTS.WebAPI.Customers.ViewModels.CustomerFollows
         /// <summary>
         /// 记录人
         /// </summary>
-        [InConditionMapping("a.FollowerName")]
+        [ConditionMapping("a.FollowerName")]
         public string FollowerName { get; set; }
 
         /// <summary>
         /// 建档人
         /// </summary>
-        [InConditionMapping("a.CreatorName")]
+        [ConditionMapping("a.CreatorName")]
         public string CreatorName { get; set; }
+
+        /// <summary>
+        /// 建档人岗位类型
+        /// </summary>
+        [NoMapping]
+        public string[] CreatorJobTypes { get; set; }
+
+        /// <summary>
+        /// 查询部门
+        /// </summary>
+        [NoMapping]
+        public string[] QueryDepts { get; set; }
+
+        /// <summary>
+        /// 查询部门ID
+        /// </summary>
+        [NoMapping]
+        public string QueryDeptID { get; set; }
 
         /// <summary>
         /// 多个跟进阶段
@@ -89,6 +107,22 @@ namespace PPTS.WebAPI.Customers.ViewModels.CustomerFollows
         [InConditionMapping("a.OrgID")]
         public string[] OrgIds { get; set; }
 
+        #region 建档日期
+
+        /// <summary>
+        /// 建档日期起
+        /// </summary>
+        [ConditionMapping("a.CreateTime", UtcTimeToLocal = true, Operation = ">=")]
+        public DateTime CreateTimeStart { get; set; }
+
+        /// <summary>
+        /// 建档日期止
+        /// </summary>
+        [ConditionMapping("a.CreateTime", UtcTimeToLocal = true, Operation = "<", AdjustDays = 1)]
+        public DateTime CreateTimeEnd { get; set; }
+
+        #endregion
+
         #region 跟进时间
 
         /// <summary>
@@ -121,14 +155,29 @@ namespace PPTS.WebAPI.Customers.ViewModels.CustomerFollows
 
         #endregion
 
+        /// <summary>
+        /// 是否在其他机构辅导
+        /// </summary>
         [NoMapping]
-        public int IsStudyThere { get; set; }
+        public string IsStudyThere { get; set; }
 
         /// <summary>
-        /// 是否在本机构进行辅导
+        /// 是否在其他机构辅导
         /// </summary>
         [ConditionMapping("a.IsStudyThere")]
-        public string NoIsStudyThere { get { return IsStudyThere == -1 ? "" : IsStudyThere.ToString(); } }
+        public string _IsStudyThere { get { return IsStudyThere == "-1" ? "" : IsStudyThere; } set { } }
+
+        /// <summary>
+        /// 记录人岗位
+        /// </summary>
+        [InConditionMapping("a.FollowerJobID")]
+        public string[] FollowerJobIDs { get; set; }
+
+        /// <summary>
+        /// 记录人姓名
+        /// </summary>
+        [ConditionMapping("a.FollowerJobName")]
+        public string FollowerJobName { get; set; }
 
         #region 预计上门时间
 
@@ -163,20 +212,20 @@ namespace PPTS.WebAPI.Customers.ViewModels.CustomerFollows
         #endregion
 
         /// <summary>
-        /// 校区名称
-        /// </summary>
-        [ConditionMapping("b.campusName", EscapeLikeString = true, Prefix = "%", Postfix = "%", Operation = "LIKE")]
-        public string CampusName { get; set; }
-
-        [ConditionMapping("", Template = "CONTAINS(c.*, ${Data}$)")]
-        public string Keyword { get; set; }
-
-        /// <summary>
-        /// 咨询师姓名
+        /// 校区ID
         /// </summary>
         [NoMapping]
-        public string StaffName { get; set; }
+        public string CampusIDs { get; set; }
 
+        /// <summary>
+        /// 分公司ID
+        /// </summary>
+        [NoMapping]
+        public string BranchIDs { get; set; }
+
+        //[ConditionMapping("", Template = "CONTAINS(c.*, ${Data}$)")]
+        [NoMapping]
+        public string Keyword { get; set; }
 
         [NoMapping]
         public PageRequestParams PageParams
@@ -190,19 +239,6 @@ namespace PPTS.WebAPI.Customers.ViewModels.CustomerFollows
         {
             get;
             set;
-        }
-
-        public static object AdjustConditionValueDelegate_Follow(string propertyName, object propertyValue, ref bool ignored)
-        {
-            object result = propertyValue;
-            switch (propertyName)
-            {
-                case "IsStudyThere":
-                    if (result.ToString() == "-1")
-                        ignored = true;
-                    break;
-            }
-            return result;
         }
     }
 }

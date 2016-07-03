@@ -43,13 +43,13 @@ namespace PPTS.Data.Customers.Adapters
         private void InitData(AccountTransferApply data)
         {
             if (data.ApplyID.IsNullOrEmpty())
-                data.ApplyID = System.Guid.NewGuid().ToString();
+                data.ApplyID = UuidHelper.NewUuidString();
             if (data.ApplyNo.IsNullOrEmpty())
                 data.ApplyNo = Helper.GetApplyNo("ZR");
             if (data.BizAccountID.IsNullOrEmpty())
                 data.BizAccountID = data.ApplyID;
             if (data.BizAccountCode.IsNullOrEmpty())
-                data.BizAccountCode = data.ApplyNo;
+                data.BizAccountCode = Helper.GetAccountCode();
         }
     }
 

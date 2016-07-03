@@ -1,21 +1,21 @@
 ﻿define([ppts.config.modules.schedule,
         ppts.config.dataServiceConfig.studentAssignmentDataService], function (schedule) {
             schedule.registerController("stuAsgmtCourseController", [
-                 '$scope', '$state', '$stateParams', '$filter', 'dataSyncService', '$compile'
-                 , '$uibModal', '$http', 'studentassignmentDataService', 'mcsDialogService', 'uiCalendarConfig', 'printService',
-            function ($scope, $state, $stateParams, $filter, dataSyncService, $compile
-                , $uibModal, $http, studentassignmentDataService, mcsDialogService, uiCalendarConfig, printService) {
+                 '$scope', '$state', '$stateParams', '$filter', 'dataSyncService', 'utilService', '$compile',
+                 '$uibModal', '$http', 'studentassignmentDataService', 'mcsDialogService', 'uiCalendarConfig', 'printService','$location',
+            function ($scope, $state, $stateParams, $filter, dataSyncService, utilService, $compile,
+                $uibModal, $http, studentassignmentDataService, mcsDialogService, uiCalendarConfig, printService, $location) {
 
                 var vm = this;
-
+                vm.page = $location.$$search.prev;
                 vm.CID = $stateParams.id;
                 //vm.stuName = $stateParams.tn;
                 vm.selectedEvents = [];
                 vm.events = [];
 
                 vm.weekText = new Array("星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六");
-                vm.acQM = { customerID: vm.CID, startTime: '2016-04-18', endTime: '2016-05-09', isUTCTime: false, grade: '', assignStatus: '', teacherName: '' };
-                
+                vm.acQM = { customerID: vm.CID, startTime: '2016-04-18', endTime: '2016-05-09', isUTCTime: false, grade: '', assignStatus: '', teacherName: '', categoryType: '' };
+
                 /*配置日程组件*/
                 vm.uiConfig = {
                     calendar: {
@@ -38,8 +38,9 @@
                         },
                         eventRender: function (event, element, view) {
                             element.attr({
-                                'uib-tooltip': event.startText + '-' + event.endText + '\r\n' + event.tooltiptxt,
-                                'tooltip-append-to-body': true
+                                'uib-popover': event.startText + '-' + event.endText + '\r\n' + event.tooltiptxt,
+                                'tooltip-append-to-body': true,
+                                'popover-trigger': 'mouseenter'
                             });
                             element.context.innerText = event.title;
                             $compile(element)($scope);
@@ -87,12 +88,12 @@
                         };
                     },
                     function (error) {
-                    });   
+                    });
                 };
                 vm.eventSources = [vm.events, vm.schedules];
 
                 /*刷新周视图数据*/
-                vm.reLoadCourse = function () {
+                vm.search = function () {
                     vm.events.splice(0, vm.events.length);
                     studentassignmentDataService.getStudentWeekCourse(vm.acQM, function (data) {
                         var assignCollection = data.result;
@@ -118,9 +119,9 @@
                         endText: vm.getDoubleStr(event.endTime.getHours()) + ':' + vm.getDoubleStr(event.endTime.getMinutes()),
                         color: '#000000',
                         status: event.assignStatus,
-                        coursessource: event.assignSource,
+                        coursessource: event.categoryType,
                         customerName: event.customerName,
-                        customerID:event.customerID,
+                        customerID: event.customerID,
                         subjectName: event.subjectName,
                         curDate: event.startTime.getFullYear() + '-' + vm.getDoubleStr((event.startTime.getMonth() + 1)) + '-' + vm.getDoubleStr(event.startTime.getDate()),
                         curWeek: vm.weekText[event.startTime.getDay()],
@@ -130,8 +131,7 @@
                         eTime: event.endTime
                     };
                     evt.className = "mcs-calendar-event";
-                    switch (event.assignStatus)
-                    {
+                    switch (event.assignStatus) {
                         case 1:
                             evt.color = '#0000FF'; evt.title += '排定'; evt.tooltiptxt += '排定'; /*排定*/
                             break;
@@ -142,35 +142,38 @@
                             evt.color = '#C0C0C0'; evt.title += '已上'; evt.tooltiptxt += '已上'; /*已上*/
                             break;
                     };
-                    switch (event.assignSource)
-                    {
+                    switch (event.categoryType) {
                         case 1: evt.tooltiptxt += "一对一"; break;
                         case 2: evt.tooltiptxt += "班组"; break;
                     }
                     return evt;
                 };
 
-                /*查询*/
-                vm.simpleSearch = function () {
-                    vm.reLoadCourse();
-                };
+              
 
                 /*取消课表*/
                 vm.cancelCourseClick = function () {
+                    if (utilService.showMessage(vm, !vm.selectedEvents.length, '请选择需要取消的课表！')) {
+                        return;
+                    }
                     var msg = '';
                     var model = [];
                     for (var i in vm.selectedEvents) {
-                        ///只能取消异常，排定的课表
-                        if (vm.selectedEvents[i].status == 1 || vm.selectedEvents[i].status == 8) {
-                            msg += "确定将学员" + vm.selectedEvents[i].customerName + " " + vm.selectedEvents[i].curDate + "（" + vm.selectedEvents[i].curWeek + "）" + vm.selectedEvents[i].startText + "-" + vm.selectedEvents[i].endText + "的" + vm.selectedEvents[i].subjectName + "课取消？<br>";
+                        ///只能取消异常，排定的课表 并且是一对一
+                        if ((vm.selectedEvents[i].status == 1 || vm.selectedEvents[i].status == 8) && vm.selectedEvents[i].coursessource == 1) {
+                            msg += "确定将学员" + vm.selectedEvents[i].customerName + " " + vm.selectedEvents[i].curDate + "（" + vm.selectedEvents[i].curWeek + "）"
+                                + vm.selectedEvents[i].startText + "-" + vm.selectedEvents[i].endText + "的" + vm.selectedEvents[i].subjectName + "课取消？<br>";
                             model.push({
                                 assetID: vm.selectedEvents[i].assetID,
                                 assignID: vm.selectedEvents[i].id
                             });
                         };
                     };
-                    if (msg == "")
+
+                    if (utilService.showMessage(vm, model.length == 0, '选择的记录不允许取消，请重新选择！')) {
                         return;
+                    }
+
                     mcsDialogService.confirm({
                         title: '取消课表',
                         message: msg
@@ -200,13 +203,14 @@
                     mcsDialogService.create('app/schedule/studentassignment/stuasgmt-add/stuasgmt-add.html', {
                         controller: 'stuAsgmtAddController',
                         settings: {
-                            size: 'lg'
+                            size: 'lg',
+                            backdrop: 'static'
                         }
                     }).result.then(function (retValue) {
                         if (retValue != 'canceled') {
                             retValue.assignStatus = 1;
                             var evt = vm.getViewModel(retValue);
-                            vm.events.push(evt);                         
+                            vm.events.push(evt);
                             uiCalendarConfig.calendars.courseCalendar.fullCalendar('rerenderEvents');
                             vm.getCustomerStatCurMonth();
                         };
@@ -216,10 +220,13 @@
                 /*复制课表*/
                 vm.copyCourseClick = function () {
                     mcsDialogService.create('app/schedule/studentassignment/stuasgmt-course/stuasgmt-course-copy.html', {
-                        controller: 'stuAsgmtCourseCopyController'
+                        controller: 'stuAsgmtCourseCopyController',
+                        settings: {
+                            backdrop: 'static'
+                        }
                     }).result.then(function (retValue) {
                         if (retValue == 'ok') {
-                            vm.reLoadCourse();
+                            vm.search();
                             vm.getCustomerStatCurMonth();
                         };
                     });
@@ -227,24 +234,27 @@
 
                 /*调整课表*/
                 vm.resetCourseClick = function () {
+                    if (utilService.showMessage(vm, !vm.selectedEvents.length, '请选择需要调整的课表！')) {
+                        return;
+                    }
                     /*将聂鑫航（ST00001）2016-05-05（星期二）13:00 - 15:00 的数学课调整为*/
                     var model = [], msg = '', tempdate2 = new Date();
                     var tempdate = new Date(tempdate2.getFullYear(), tempdate2.getMonth(), tempdate2.getDate(), 0, 0, 0, 0);
                     for (var i in vm.selectedEvents) {
-                        if (vm.selectedEvents[i].status == 1 || vm.selectedEvents[i].status == 8) {
+                        if ((vm.selectedEvents[i].status == 1 || vm.selectedEvents[i].status == 8) && vm.selectedEvents[i].coursessource == 1) {
                             msg = "将" + vm.selectedEvents[i].customerName + "（" + vm.selectedEvents[i].customerCode + "）"
                                 + vm.selectedEvents[i].curDate + "（" + vm.selectedEvents[i].curWeek + "）" + vm.selectedEvents[i].startText
                                 + " - " + vm.selectedEvents[i].endText + "的" + vm.selectedEvents[i].subjectName + "课调整为";
                             var tempM = {
                                 assignID: vm.selectedEvents[i].id,
                                 info: msg,
-                                reDate: new Date(),
+                                reDate: '',
                                 reHour: '',
                                 reMinute: '',
                                 startTime: vm.selectedEvents[i].sTime,
                                 endTime: vm.selectedEvents[i].eTime,
                                 allowResetDateTime: new Date(),
-                                customerID:vm.selectedEvents[i].customerID
+                                customerID: vm.selectedEvents[i].customerID
                             };
                             var sdate = vm.selectedEvents[i].startText.split(':');
                             if (sdate.length == 2) {
@@ -254,17 +264,21 @@
                             model.push(tempM);
                         };
                     };
-                    if (model.length == 0)
+
+                    if (utilService.showMessage(vm, model.length == 0, '选择的记录不允许调课，请重新选择！')) {
                         return;
+                    }
+
                     mcsDialogService.create('app/schedule/studentassignment/stuasgmt-course/stuasgmt-course-reset.html', {
                         controller: 'stuAsgmtCourseResetController',
                         params: { para: model },
                         settings: {
-                            size: 'lg'
+                            size: 'lg',
+                            backdrop: 'static'
                         }
                     }).result.then(function (retValue) {
                         if (retValue == 'ok') {
-                            vm.reLoadCourse();
+                            vm.search();
                             vm.getCustomerStatCurMonth();
                         };
                     });
@@ -288,7 +302,7 @@
 
                 /*跳转列表视图*/
                 vm.gotoCourseList = function () {
-                    $state.go('ppts.stuasgmt-course-list', { id: vm.CID });
+                    $state.go('ppts.stuasgmt-course-list', { id: vm.CID, prev: vm.page });
                 };
 
                 /*跳转学生排课列表*/
@@ -301,7 +315,7 @@
                 };
 
                 vm.print = function () {
-                    printService.print();
+                    printService.print(true);
                 }
 
 

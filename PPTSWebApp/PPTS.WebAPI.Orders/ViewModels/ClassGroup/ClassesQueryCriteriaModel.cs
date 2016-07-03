@@ -84,11 +84,11 @@ namespace PPTS.WebAPI.Orders.ViewModels.ClassGroup
                 case "ProductCode":
                 case "ProductName":
                 case "ClassName":
-                case "Subject":
-                case "Grade":
+                case "Subjects":
+                case "Grades":
                 case "StartTime":
                 case "EndTime":
-                case "ClassStatus":
+                case "ClassStatuses":
                     break;
                 default:
                     ignored = true;

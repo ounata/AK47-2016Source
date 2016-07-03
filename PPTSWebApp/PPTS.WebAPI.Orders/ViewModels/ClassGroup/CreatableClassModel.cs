@@ -2,6 +2,7 @@
 using MCS.Library.Principal;
 using PPTS.Contracts.Customers.Models;
 using PPTS.Contracts.Proxies;
+using PPTS.Data.Common;
 using PPTS.Data.Common.Security;
 using PPTS.Data.Customers.Entities;
 using PPTS.Data.Products.Entities;
@@ -95,7 +96,7 @@ namespace PPTS.WebAPI.Orders.ViewModels.ClassGroup
                 return result;
             }
 
-            if (Product.CategoryType != Data.Products.CategoryType.CalssGroup) {
+            if (Product.CategoryType != CategoryType.CalssGroup) {
                 result.SetErrorMsg("只有班组产品才可以创建班级！");
                 return result;
             }

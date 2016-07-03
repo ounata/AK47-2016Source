@@ -26,26 +26,52 @@ namespace PPTS.WebAPI.Customers.ViewModels.CustomerMeetings
         /// <summary>
         /// 会议开始时间
         /// </summary>
-        [ConditionMapping("MeetingTime", Operation = ">=")]
+        [ConditionMapping("MeetingTime", Operation = ">=", UtcTimeToLocal = true)]
         public string MeetingTimeStart { set; get; }
 
+        private string meetingTimeEnd = null;
         /// <summary>
         /// 会议结束时间
         /// </summary>
-        [ConditionMapping("MeetingTime", Operation = "<")]
-        public string MeetingTimeEnd { set; get; }
+        [ConditionMapping("MeetingTime", Operation = "<", UtcTimeToLocal = true)]
+        public string MeetingTimeEnd
+        {
+            set
+            {
+                if (!string.IsNullOrEmpty(value))
+                {
+                    meetingTimeEnd = Convert.ToDateTime(value).ToShortDateString() + " 23:59";
+                }
+            }
+            get
+            {
+                return meetingTimeEnd;
+            }
+        }
 
         /// <summary>
         /// 下次会议开始时间
         /// </summary>
-        [ConditionMapping("NextMeetingTime", Operation = ">=")]
+        [ConditionMapping("NextMeetingTime", Operation = ">=", UtcTimeToLocal = true)]
         public string NextMeetingTimeStart { set; get; }
 
+        private string nextMeetingTimeEnd = null;
         /// <summary>
         /// 下次会议结束时间
         /// </summary>
-        [ConditionMapping("NextMeetingTime", Operation = "<")]
-        public string NextMeetingTimeEnd { set; get; }
+        [ConditionMapping("NextMeetingTime", Operation = "<", UtcTimeToLocal = true)]
+        public string NextMeetingTimeEnd
+        {
+            set
+            {
+                if (!string.IsNullOrEmpty(value))
+                {
+                    nextMeetingTimeEnd = Convert.ToDateTime(value).ToShortDateString() + " 23:59";
+                }
+
+            }
+            get { return nextMeetingTimeEnd; }
+        }
 
         /// <summary>
         /// 会议类型
@@ -59,12 +85,13 @@ namespace PPTS.WebAPI.Customers.ViewModels.CustomerMeetings
         [InConditionMapping("MeetingType")]
         public int? MeetingType { set; get; }
 
-        [ConditionMapping("customer.CustomerId", Operation = " = ")]
+        [ConditionMapping("CustomerId", Operation = " = ")]
         public string CustomerId { set; get; }
 
         /// <summary>
         /// 学员姓名
         /// </summary>
+        [ConditionMapping("CustomerName", EscapeLikeString = true, Prefix = "%", Postfix = "%", Operation = "LIKE")]
         public string CustomerName { set; get; }
         /// <summary>
         /// 学员编号

@@ -9,9 +9,9 @@
                             <span class="lbl"></span>
                         </label>
                     </th>
-                    <th ng-repeat="header in data.headers" style="cursor: pointer" ng-click="reorder(header,data.pager.pageChange)">
-                        {{header.name}}
-                        <i ng-if="header.sortable" ng-class="{undefined:'fa fa-sort','desc':'fa fa-sort-alpha-desc','asc':'fa fa-sort-alpha-asc'}[header.orderDirection]"></i>
+                    <th ng-repeat="header in data.headers" title="{{header.description}}" style="cursor: pointer" ng-click="reorder(header,data.pager.pageChange)">
+                        <label>{{header.name}}</label>
+                        <i ng-if="header.sortable" ng-class="{undefined:'fa fa-sort','desc':'fa fa-sort-desc','asc':'fa fa-sort-asc'}[header.orderDirection]"></i>
                     </th>
                 </tr>
             </thead>
@@ -28,9 +28,9 @@
             </tbody>
         </table>
     </div>
-    <div ng-show="data.pager.totalCount==0">
+    <div ng-show="data.pager.totalCount<1">
         <div class="center well well-sm red bigger-110">
-            没有查询到任何记录，请重新设置条件查询。
+            {{nodataTip||"没有查询到任何记录，请重新设置条件查询"}}
         </div>
     </div>
     <div class="noprint" ng-if="data.pagable || data.pager.totalCount>0">

@@ -12,7 +12,7 @@ namespace PPTS.ExtServices.UnionPay.Validation
         /// <summary>
         /// 是否是最小日期
         /// </summary>
-        IsMiniDate = 1,
+        IsDateFormat = 1,
         /// <summary>
         /// 是否是decimal
         /// </summary>

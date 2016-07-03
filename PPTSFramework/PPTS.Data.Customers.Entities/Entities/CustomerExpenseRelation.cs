@@ -48,6 +48,7 @@ namespace PPTS.Data.Customers.Entities
         /// 费用类型
         /// </summary>
         [ORFieldMapping("ExpenseType")]
+        [ConstantCategory("c_codE_ABBR_Product_ExpenseType")]
         [DataMember]
         public string ExpenseType
         {
@@ -113,7 +114,7 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 创建时间
         /// </summary>
-        [ORFieldMapping("CreateTime")]
+        [ORFieldMapping("CreateTime", UtcTimeToLocal = true)]
         [DataMember]
         public DateTime CreateTime
         {

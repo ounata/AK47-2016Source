@@ -5,48 +5,84 @@
         </h4>
     </div>
     <div class="widget-body">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <form name="classForm" class="col-sm-offset-2 col-sm-8" ng-submit="vm.save(classForm)">
-                    <div class="from-group">
-                        <label>产品编号：{{vm.product.productCode}}</label>
+        <div class="portlet-body form">
+            <form name="classForm" class="form-horizontal" ng-submit="vm.save(classForm)">
+                <div class="form-actions">
+                    <div class="row">
+                        <div class="col-md-offset-3 col-md-9">
+                            <mcs-button type="submit" category="save" click="vm.save(classForm)" />
+                            <mcs-button category="cancel" click="vm.close()" />
+                        </div>
                     </div>
-                    <div class="from-group">
-                        <label>产品名称：{{vm.product.productName}}</label>
+                </div>
+                <div class="form-body">
+                    <div class="row">
+                        <div class="form-group horizontal">
+                            <mcs-label text="产品编号" css="col-sm-4" />
+                            <div class="col-sm-3">
+                                <p class="form-control-static">{{vm.product.productCode}}</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>科目:</label>
-                        <ppts-select category="subject" ng-required name="subject" model="vm.class.subject" callback="vm.selectSubject(item, model)" />
+                    <div class="row">
+                        <div class="form-group horizontal">
+                            <mcs-label text="产品名称" css="col-sm-4" />
+                            <div class="col-sm-3">
+                                <p class="form-control-static">{{vm.product.productName}}</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="from-group">
-                        <label>年级：{{ vm.product.grade | grade }}</label>
+                    <div class="row">
+                        <div class="form-group horizontal">
+                            <mcs-label text="年级" css="col-sm-4" />
+                            <div class="col-sm-3">
+                                <p class="form-control-static">{{vm.product.grade | grade}}</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group has-feedback" ng-class="{'has-error':classForm.dayOfWeeks.$invalid && classForm.dayOfWeeks.$dirty}">
-                        <label>
-                            第1节课至第{{vm.product.lessonCount}}节课，每课课时时长{{vm.product.durationValue}}分钟，每周
-                        </label>
-                        <input name="dayOfWeeks" class="form-control" type="text" required ng-readonly="true" ng-model="vm.dayOfWeeks_Str" ng-click="vm.selectDayOfWeeks(classForm)" />
+                    <div class="row">
+                        <div class="form-group horizontal">
+                            <mcs-label text="科目" css="col-sm-4" />
+                            <div class="col-sm-3">
+                                <mcs-select category="subject" css="mcs-padding-0" ng-required name="subject" model="vm.class.subject" callback="vm.selectSubject(item, model)" />
+                            </div>
+                        </div>
                     </div>
-                    <div class="from-group">
-                        <label>
-                            上课开始日期时间:
-                        </label>
-                        <ppts-datetimepicker class="from-control"  model="vm.class.startTime" z-index="9" />
+                    <div class="row">
+                        <div class="form-group  horizontal" ng-class="{'has-error':classForm.dayOfWeeks.$invalid && classForm.dayOfWeeks.$dirty}">
+                            <mcs-label text="第1节课至第{{vm.product.lessonCount}}节课，每课课时时长{{vm.product.durationValue}}分钟，每周" css="col-sm-4" />
+                            <div class="col-sm-3">
+                                <mcs-input name="dayOfWeeks" required ng-readonly="true" model="vm.dayOfWeeks_Str" ng-click="vm.selectDayOfWeeks(classForm)" css="col-sm-12" />
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group has-feedback" ng-class="{'has-error':classForm.customers.$invalid && classForm.customers.$dirty}">
-                        <label>选择上课学生:</label>
-                        <input type="text" class="form-control" name="customers" required ng-readonly="true" ng-model="vm.customerNames" ng-click="vm.selectCustomers(classForm)" />
+                    <div class="row">
+                        <div class="form-group  horizontal">
+                            <mcs-label text="上课开始日期时间" css="col-sm-4" />
+                            <div class="col-sm-3">
+                                <mcs-datetimepicker class="from-control" model="vm.class.startTime" z-index="9" css="col-sm-12" />
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group has-feedback" ng-class="{'has-error':classForm.teacher.$invalid && classForm.teacher.$dirty}">
-                        <label>选择上课教师:</label>
-                        <input type="text" class="form-control" name="teacher" required ng-readonly="true" ng-model="vm.class.teacherName" ng-click="vm.selectTeacher(classForm)" />
+                    <div class="row">
+                        <div class="form-group  horizontal" ng-class="{'has-error':classForm.customers.$invalid && classForm.customers.$dirty}">
+                            <mcs-label text="选择上课学生" css="col-sm-4" />
+                            <div class="col-sm-3">
+                                <mcs-input name="customers" required ng-readonly="true" model="vm.customerNames" ng-click="vm.selectCustomers(classForm)" css="col-sm-12" />
+                                <div></div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="from-group">
-                        <mcs-button type="submit" category="save" />
-                        <mcs-button category="cancel" click="vm.close()" />
+                    <div class="row">
+                        <div class="form-group  horizontal" ng-class="{'has-error':classForm.teacher.$invalid && classForm.teacher.$dirty}">
+                            <mcs-label text="选择上课教师" css="col-sm-4" />
+                            <div class="col-sm-3">
+                                <mcs-input name="teacher" required ng-readonly="true" model="vm.class.teacherName" ng-click="vm.selectTeacher(classForm)" css="col-sm-12" />
+                            </div>
+                        </div>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>

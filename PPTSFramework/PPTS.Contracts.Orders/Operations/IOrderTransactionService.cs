@@ -1,4 +1,6 @@
-﻿using PPTS.Data.Orders.Entities;
+﻿using PPTS.Data.Common;
+using PPTS.Data.Orders;
+using PPTS.Data.Orders.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,19 +13,34 @@ namespace PPTS.Contracts.Orders.Operations
     [ServiceContract]
     public interface IOrderTransactionService
     {
-        /// <summary>
-        /// 修改订单状态
-        /// </summary>
-        /// <param name="orderId"></param>
-        /// <param name="status"></param>
-        [OperationContract]
-        void ResetOrderStatus(string processID, string orderId, int status);
+
 
         /// <summary>
-        /// 提交订单后同步资产
+        /// 帐户扣钱后，订单进行处理
         /// </summary>
+        /// <param name="processID"></param>
+        /// <param name="orderId"></param>
+        /// <param name="processStatus"></param>
+        /// <param name="order"></param>
+        /// <param name="items"></param>
         /// <param name="assets"></param>
+        /// <param name="assigns"></param>
+        /// <param name="classLessonItems"></param>
         [OperationContract]
-        void SyncAsset(string processID, AssetCollection assets);
+        void OrderProcess(string processID, string orderId, ProcessStatusDefine processStatus, Order order, List<OrderItem> items, List<Asset> assets, List<Assign> assigns, List<ClassLessonItem> classLessonItems);
+
+        /// <summary>
+        /// 帐户退钱后，订单进行处理
+        /// </summary>
+        /// <param name="processID"></param>
+        /// <param name="debookId"></param>
+        /// <param name="orderStatus"></param>
+        /// <param name="processStatus"></param>
+        /// <param name="currentUserId"></param>
+        /// <param name="currentUserName"></param>
+        [OperationContract]
+        void ModifyDebookOrderStatus(string processID, string debookId, OrderStatus orderStatus, ProcessStatusDefine processStatus,string currentUserId,string currentUserName);
+
+
     }
 }

@@ -21,6 +21,10 @@ using System.Web.Http.ModelBinding;
 using MCS.Library.Office.OpenXml.Excel;
 using System.Data;
 using MCS.Web.MVC.Library.ApiCore;
+using PPTS.Data.Products.Entities;
+using PPTS.Data.Orders.Adapters;
+using PPTS.Web.MVC.Library.Filters;
+using MCS.Web.MVC.Library.Models.Workflow;
 
 namespace PPTS.WebAPI.Orders.Controllers
 {
@@ -30,11 +34,8 @@ namespace PPTS.WebAPI.Orders.Controllers
 
         #region 退订列表
 
-        /// <summary>
-        /// 查询，第一次。第一页，下载字典
-        /// </summary>
-        /// <param name="criteria">查询条件</param>
-        /// <returns>返回带字典的潜客数据列表</returns>
+
+        [PPTSJobFunctionAuthorize("PPTS:退订管理列表,退订管理列表-本部门,退订管理列表-本校区,退订管理列表-本分公司,退订管理列表-全国")]
         [HttpPost]
         public DebookOrderQueryResult GetAllDebookOrders(DebookOrderCriteriaModel criteria)
         {
@@ -42,15 +43,12 @@ namespace PPTS.WebAPI.Orders.Controllers
             return new DebookOrderQueryResult
             {
                 QueryResult = GenericPurchaseSource<DebookOrderItemView, DebookOrderItemViewCollection>.Instance.Query(criteria.PageParams, criteria, criteria.OrderBy),
-                Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(DebookOrder), typeof(OrderItemView), typeof(DebookOrderItemView)),
+                Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(Product), typeof(DebookOrder), typeof(OrderItemView), typeof(DebookOrderItemView)),
             };
         }
 
-        /// <summary>
-        /// 查询，翻页或排序。不下载字典
-        /// </summary>
-        /// <param name="criteria">查询条件</param>
-        /// <returns>返回不带字典的潜客数据列表</returns>
+
+        [PPTSJobFunctionAuthorize("PPTS:退订管理列表,退订管理列表-本部门,退订管理列表-本校区,退订管理列表-本分公司,退订管理列表-全国")]
         [HttpPost]
         public PagedQueryResult<DebookOrderItemView, DebookOrderItemViewCollection> GetPagedDebookOrders(DebookOrderCriteriaModel criteria)
         {
@@ -59,6 +57,7 @@ namespace PPTS.WebAPI.Orders.Controllers
 
         #endregion
 
+        [PPTSJobFunctionAuthorize("PPTS:退订")]
         [HttpPost]
         public void Unsubscribe(DebookOrderModel model)
         {
@@ -73,6 +72,7 @@ namespace PPTS.WebAPI.Orders.Controllers
 
         #region 导出
 
+        [PPTSJobFunctionAuthorize("PPTS:退订列表导出")]
         [HttpPost]
         public HttpResponseMessage ExportDebookItemList([ModelBinder(typeof(FormBinder))]DebookOrderCriteriaModel criteria)
         {
@@ -87,33 +87,26 @@ namespace PPTS.WebAPI.Orders.Controllers
             var columns = new Dictionary<string, string>() {
 { "校区", "CampusName"},
 {"学生姓名", "CustomerName"},
-{"学生编号", "CustomerCode"},
+//{"学生编号", "CustomerCode"},
 {"家长姓名", "ParentName"},
 {"订购单编号", "OrderNo"},
-//{"订购日期", "OrderTime"},
-//{"产品类型", "CatalogName"},
-//{"年级", "Grade"},
-//{"科目", "Subject"},
-//{"课程级别", "CourseLevel"},
-//{"实际单价(元)", "RealPrice"},
-//{"客户折扣率", "DiscountRate"},
-//{"订购数量", "OrderAmount"},
-//{"订购金额(元)", "BookMoney"},
-//{"赠送数量", "PresentAmount"},
-//{"已退数量", "DebookedAmount"},
-//{"已排数量", "AssignedAmount"},
-//{"已上数量", "ConfirmedAmount"},
-//{"剩余数量", "RemainCount"},
-//{"订单状态", "OrderStatus"},
-//{"订购操作人", "SubmitterName"},
-//{"操作人岗位", "SubmitterJobName"},
+{"产品类型", "CategoryType"},
+{"实际单价", "RealPrice"},
+{"订购数量", "OrderAmount"},
+{"订购金额", "BookMoney"},
+{"已上数量", "ConfirmedAmount"},
+{"已使用金额", "ConfirmedMoney"},
+{"退订数量(赠送)", "DebookAmountAndPreset"},
+{"退订金额", "DebookMoney"},
+{"退订日期", "DebookTime"},
+{"退订申请人", "SubmitterName"},
  };
             columns.ToList().ForEach(kv =>
             {
                 tableDesp.AllColumns.Add(new TableColumnDescription(new DataColumn(kv.Key, typeof(string))) { PropertyName = kv.Value });
             });
 
-            var dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(DebookOrderItemView));
+            var dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(DebookOrderItemView), typeof(Product));
             sheet.LoadFromCollection(pageData.PagedData, tableDesp, (cell, param) =>
             {
 
@@ -135,6 +128,10 @@ namespace PPTS.WebAPI.Orders.Controllers
                         var ro = dictionaries["c_codE_ABBR_Order_OrderStatus"].Where(c => c.Key == Convert.ToString(param.PropertyValue));
                         cell.Value = null != ro ? (null == ro.FirstOrDefault() ? null : ro.FirstOrDefault().Value) : null;
                         break;
+                    case "CategoryType":
+                        var ct = dictionaries["c_codE_ABBR_Product_CategoryType"].Where(c => c.Key == Convert.ToString(param.PropertyValue));
+                        cell.Value = null != ct ? (null == ct.FirstOrDefault() ? null : ct.FirstOrDefault().Value) : null;
+                        break;
                     default:
                         cell.Value = param.PropertyValue;
                         break;
@@ -146,6 +143,27 @@ namespace PPTS.WebAPI.Orders.Controllers
 
 
         #endregion
+
+        #region api/unsubscribe/getDebookOrderDetial
+        [HttpGet]
+        public DebookOrderItemView GetDebookOrderDetial(string id) {
+            DebookOrderItemView result = DebookOrderItemViewAdapter.Instance.Load(builder => builder.AppendItem("DebookID", id)).SingleOrDefault();
+            return result;
+        }
+        #endregion
+
+        [HttpPost]
+        public dynamic GetDebookOrderByWorkflow(dynamic wfParams)
+        {
+            WfClientSearchParameters p = new WfClientSearchParameters();
+
+            p.ResourceID = wfParams.resourceID;
+            p.ActivityID = wfParams.activityID;
+            p.ProcessID = wfParams.processID;
+
+            var model = DebookOrderItemViewAdapter.Instance.Load(builder => builder.AppendItem("DebookID", p.ResourceID)).SingleOrDefault();
+            return new { ClientProcess = WfClientProxy.GetClientProcess(p), Model = model };
+        }
 
     }
 }

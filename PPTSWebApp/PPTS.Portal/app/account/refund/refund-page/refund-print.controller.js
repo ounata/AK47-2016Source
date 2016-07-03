@@ -2,8 +2,8 @@
         ppts.config.dataServiceConfig.accountRefundDataService],
         function (account) {
             account.registerController('accountRefundPrintController', [
-                '$scope', '$state', '$stateParams', '$uibModalInstance', 'accountRefundDataService', 'data',
-                function ($scope, $state, $stateParams, $uibModalInstance, accountDataService, data) {
+                '$scope', '$state', '$stateParams', '$uibModalInstance', 'accountRefundDataService', 'data', 'printService',
+                function ($scope, $state, $stateParams, $uibModalInstance, accountDataService, data,printService) {
                     var vm = this;
                     vm.applyID = data.applyID;
 
@@ -19,7 +19,8 @@
                     vm.init();
 
                     //保存打印状态
-                    vm.save = function () {
+                    vm.print = function () {
+                        printService.print(true);
                         $uibModalInstance.close();
                     }
 

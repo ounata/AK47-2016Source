@@ -9,8 +9,8 @@ namespace PPTS.WebAPI.Products.ViewModels.ServiceFees
 {
     public class ExpensesCriteriaModel
     {
-        [InConditionMapping("ExpenseType")]
-        public string[] serviceFeeTypes { set; get; }
+        [ConditionMapping("ExpenseType")]
+        public string serviceFeeTypes { set; get; }
 
         [InConditionMapping("CampusIDs")]
         public string[] OrgIds { get; set; }

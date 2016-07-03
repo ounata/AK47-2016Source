@@ -1,40 +1,41 @@
-﻿<div class="page-content">
-    <!-- #开始：排课计划 -->
-    <div class="page-content-area">
-        <div class="row">
-            <div class="col-xs-12">
-                <!-- #开始：排课计划.查询条件 -->
-                <div class="mcs-panel-search well well-sm">
-                    <form class="form-inline">
-                        <ppts-daterangepicker start-date="vm.criteria.startTime" end-date="vm.criteria.endTime" />
-                        <ppts-select caption="上课年级" category="grade" model="vm.criteria.grade" class="col-sm-3" />
-                        <ppts-select caption="上课科目" category="subject" model="vm.criteria.subject" class="col-sm-3" />
-                        <ppts-select caption="课时状态" category="assignStatus" model="" class="col-sm-3" />
-                        <mcs-input placeholder="教师姓名" model="vm.criteria.teacherName" />
-                        <button class="btn btn-sm btn-success" ng-click="vm.queryList()">
-                            <i class="ace-icon fa fa-search"></i>
-                            查询
-                        </button>
-                    </form>
-                </div>
-                <!-- /结束：排课计划.查询条件 -->
-                <!-- #开始：排课计划.工具条 -->
-                <div class="mcs-panel-toolbar">
-                    <button class="btn btn-sm mcs-width-100 btn-white btn-bold btn-round" ng-click="vm.createSchedule()">新增课表</button>
-                    <button class="btn btn-sm mcs-width-100 btn-white btn-bold btn-round" ng-click="vm.cancelCourseClick()" ng-disabled="!vm.data.rowsSelected.length">取消课表</button>
-                    <button class="btn btn-sm mcs-width-100 btn-white btn-bold btn-round" ng-click="vm.copyCourseClick()">复制课表</button>
-                    <button class="btn btn-sm mcs-width-100 btn-white btn-bold btn-round" ng-disabled="!vm.data.rowsSelected.length" ng-click="vm.resetCourseClick()">调整课表</button>
-                    <button class="btn btn-sm mcs-width-100 btn-white btn-bold btn-round" ng-click="vm.gotoCourseWeek()">周视图</button>
-                    <!--<button class="btn btn-sm mcs-width-100 btn-white btn-bold btn-round" ng-click="vm.gotoAssignList()">返回</button>-->
-                </div>
-                <!-- /结束：排课计划.工具条 -->
-                <!-- #开始：排课计划.日程表 -->
-                <div>
-                    <mcs-datatable data="vm.data" />
-                </div>
-                <!-- /结束：排课计划.日程表 -->
-            </div><!-- /.col -->
-        </div><!-- /.row -->
+﻿<!-- #开始：按学员排课列表视图.快速查询条件 -->
+<ppts-dynamic-content template="quick-search.tpl.html">
+    <div class="row">
+        <div class="col-md-6">
+            <mcs-daterangepicker start-date="vm.criteria.startTime" end-date="vm.criteria.endTime" css="mcs-width-full"/>
+        </div>
+        <div class="col-md-3">
+            <mcs-input placeholder="教师姓名" uib-popover="教师姓名" css="mcs-input-search mcs-margin-top-2 mcs-width-full" model="vm.criteria.teacherName" />
+        </div>
+        <div class="col-md-3">
+            <mcs-input placeholder="订单编号" uib-popover="订单编号" css="mcs-input-search mcs-margin-top-2 mcs-width-full" model="vm.criteria.assetCode" />
+        </div>
     </div>
-    <!-- /结束：排课计划 -->
-</div>
+    <div class="row">
+        <div class="col-md-3">
+            <mcs-select caption="上课年级" category="grade" model="vm.criteria.grade" css="mcs-padding-0" />
+        </div>
+        <div class="col-md-3">
+            <mcs-select caption="上课科目" category="subject" model="vm.criteria.subject" css="mcs-padding-0" />
+        </div>       
+        <div class="col-md-3">
+            <mcs-select caption="课时状态" category="assignStatus" model="vm.assignStatus" css="mcs-padding-0" />
+        </div>
+        <div class="col-md-3">
+            <mcs-select caption="课时类型" category="categoryType" model="vm.categoryType" css="mcs-padding-0" />
+        </div>
+    </div>
+</ppts-dynamic-content>
+<!-- /结束：按学员排课列表视图.快速查询条件 -->
+<!-- #开始：按学员排课列表视图.工具栏 -->
+<ppts-dynamic-content template="toolbar.tpl.html">
+    <mcs-button category="add" click="vm.createSchedule()" text="新增课表" />
+    <mcs-button category="cancel" click="vm.cancelCourseClick()" text="取消课表" />
+    <mcs-button icon="copy" click="vm.copyCourseClick()" text="复制课表" />
+    <mcs-button icon="exchange" click="vm.resetCourseClick()" text="调整课表" />
+    <mcs-button icon="reorder" click="vm.gotoCourseWeek()" text="周视图" />
+</ppts-dynamic-content>
+<!-- /结束：按学员排课列表视图.工具栏 -->
+<!-- #开始：按学员排课列表视图.数据表格 -->
+<mcs-datatable data="vm.data" />
+<!-- /结束：按学员排课列表视图.数据表格 -->

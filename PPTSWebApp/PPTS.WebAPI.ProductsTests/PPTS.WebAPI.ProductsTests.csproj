@@ -78,6 +78,7 @@
       <HintPath>..\..\PPTSBin\PPTS.Data.Products.Entities.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
   </ItemGroup>
   <Choose>
@@ -88,7 +89,9 @@
     </When>
     <Otherwise>
       <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
+          <Private>False</Private>
+        </Reference>
       </ItemGroup>
     </Otherwise>
   </Choose>
@@ -97,6 +100,7 @@
     <Compile Include="Controllers\PresentControllerTests.cs" />
     <Compile Include="DataSources\DiscountDataSourceTests.cs" />
     <Compile Include="DataSources\PresentDataSourceTests.cs" />
+    <Compile Include="Executors\AddProductExecutorTests.cs" />
     <Compile Include="Executors\ApprovedDiscountExecutorTests.cs" />
     <Compile Include="Executors\ApprovedPresentExecutorTests.cs" />
     <Compile Include="Executors\CreateDiscountExecutorTests.cs" />

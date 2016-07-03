@@ -41,7 +41,7 @@ namespace PPTS.WebAPI.Customers.Executors
                 AccountChargePayment payment = AccountChargePaymentAdapter.Instance.LoadByPayID(payID);
                 if (payment != null && payment.PayStatus == PayStatusDefine.Paid)
                 {
-                    ChargePaymentItemModel model = AutoMapper.Mapper.DynamicMap<ChargePaymentItemModel>(payment);
+                    ChargePaymentItemModel model = payment.ProjectedAs<ChargePaymentItemModel>();
                     model.FillModifier();
                     model.PrintStatus = PrintStatusDefine.Printed;
                     AccountChargePaymentAdapter.Instance.Update(model);

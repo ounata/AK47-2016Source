@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace MCS.Web.MVC.Library.Providers
@@ -18,6 +19,23 @@ namespace MCS.Web.MVC.Library.Providers
 
         // Set of indexes of which HttpContents we designate as form data
         private Collection<bool> _isFormData = new Collection<bool>();
+
+        public static InMemoryMultipartFormDataStreamProvider GetProvider(HttpRequestMessage request)
+        {
+            InMemoryMultipartFormDataStreamProvider provider = null;
+
+            Task.Factory.StartNew(() => provider = request.Content.ReadAsMultipartAsync<InMemoryMultipartFormDataStreamProvider>(
+                new InMemoryMultipartFormDataStreamProvider()).Result,
+                CancellationToken.None,
+                TaskCreationOptions.LongRunning,
+                TaskScheduler.Default).Wait();
+
+            return provider;
+        }
+
+        private InMemoryMultipartFormDataStreamProvider()
+        {
+        }
 
         /// <summary>
         /// Gets a <see cref="NameValueCollection"/> of form data passed as part of the multipart form data.

@@ -1,16 +1,16 @@
 ﻿<div class="mcs-cascading-select-container">
     <ul>
         <li>
-            <select class="mcs-padding-0" ng-style="customStyle" submit-validate="true"></select>
+            <select class="mcs-padding-0" ng-style="customStyle" submit-validate="true" ng-disabled="disabledLevel>0"></select>
         </li>
         <li ng-show="level>1" ng-class="{'last':level==2}">
-            <select class="mcs-padding-0" ng-style="customStyle" submit-validate="true"></select>
+            <select class="mcs-padding-0" ng-style="customStyle" submit-validate="true" ng-disabled="disabledLevel>1"></select>
         </li>
         <li ng-show="level>2" ng-class="{'last':level==3}">
-            <select class="mcs-padding-0" ng-style="customStyle" submit-validate="true"></select>
+            <select class="mcs-padding-0" ng-style="customStyle" submit-validate="true" ng-disabled="disabledLevel>2"></select>
         </li>
         <li ng-show="level>3" ng-class="{'last':level==4}">
-            <select class="mcs-padding-0" ng-style="customStyle" submit-validate="true"></select>
+            <select class="mcs-padding-0" ng-style="customStyle" submit-validate="true" ng-disabled="disabledLevel>3"></select>
         </li>
     </ul>
 </div>

@@ -1,40 +1,42 @@
 ﻿<!-- #开始：客户回访列表.快速查询条件 -->
-<div class="mcs-panel-search well well-sm">
-    <div class="portlet">
-        <div class="portlet-title line">
-            <div class="caption">
-                <label class="quick-search"><i class="ace-icon fa fa-search bigger-125"></i> 快速查询</label>
-            </div>
+<ppts-dynamic-content template="quick-search.tpl.html">
+    <div class="row">
+        <div class="col-md-4">
+            <mcs-select category="satisficing" model="vm.criteria.satisficing" caption="家长满意度" css="mcs-padding-0" />
         </div>
-        <div class="portlet-body">
-            <div class="ppts-oneline-block">
-                <ppts-select category="satisficing" model="vm.criteria.satisficing" caption="家长满意度" class="ppts-select-search ppts-select-search-nopadding" />
-                <ppts-select category="visitWay" model="vm.criteria.visitWay" caption="回访方式" class="ppts-select-search ppts-select-search-nopadding"/>
-                <ppts-select category="visitType" model="vm.criteria.visitType" caption="回访类型" class="ppts-select-search ppts-select-search-nopadding" />
-
-            </div>
-            <div class="ppts-oneline-block">
-                <ppts-daterangepicker class="search" start-date="vm.criteria.visitTimeStart" end-date="vm.criteria.visitTimeEnd" />
-                <mcs-input placeholder="回访人" model="vm.criteria.visitorName" css="mcs-input-search" />
-                <mcs-button category="search" click="vm.search()" size="medium" />
-            </div>
-           
+        <div class="col-md-4">
+            <mcs-select category="visitWay" model="vm.criteria.visitWay" caption="回访方式" css="mcs-padding-0" />
+        </div>
+        <div class="col-md-4">
+            <mcs-select category="visitType" model="vm.criteria.visitType" caption="回访类型" css="mcs-padding-0" />
         </div>
     </div>
-</div>
-<!-- /结束：客户回访列表.快速查询条件 -->
-<!-- #开始：客户服务列表.工具栏 -->
-<div class="mcs-panel-toolbar">
-    <mcs-button category="add" text="录入回访" click="vm.add()"></mcs-button>
-</div>
-<div class="alert alert-block alert-danger" ng-show="vm.errorMessage">
-    <button type="button" class="close" data-dismiss="alert">
-        <i class="ace-icon fa fa-times"></i>
-    </button>
-    <i class="ace-icon fa fa-warning"></i>
-    {{vm.errorMessage}}
-</div>
-<!-- /结束：客户服务列表.工具栏 -->
-<!-- #开始：客户服务列表.数据表格 -->
-<mcs-datatable data="vm.data" />
-<!-- /结束：客户服务列表.数据表格 -->
+    <div class="row">
+        <div class="col-md-4">
+            <mcs-daterangepicker class="search" start-date="vm.criteria.visitTimeStart" end-date="vm.criteria.visitTimeEnd" start-text="回访时间起" end-text="回访时间止" css="mcs-width-full mcs-padding-0"/>
+        </div>
+        <div class="col-md-4">
+            <mcs-input placeholder="回访人" model="vm.criteria.visitorName" css="mcs-input-search mcs-width-full"/>
+        </div>
+        <div class="col-md-4">
+
+        </div>
+    </div>
+
+</ppts-dynamic-content>
+    <!-- /结束：客户回访列表.快速查询条件 -->
+    <!-- #开始：客户服务列表.工具栏 -->
+    <div class="mcs-panel-toolbar">
+        <mcs-button category="add" text="录入回访" click="vm.add()" ppts-job-functions="录入/编辑回访"></mcs-button>
+    </div>
+    <div class="alert alert-block alert-danger" ng-show="vm.errorMessage" >
+        <button type="button" class="close" data-dismiss="alert">
+            <i class="ace-icon fa fa-times"></i>
+        </button>
+        <i class="ace-icon fa fa-warning"></i>
+        {{vm.errorMessage}}
+    </div>
+    <!-- /结束：客户服务列表.工具栏 -->
+    <!-- #开始：客户服务列表.数据表格 -->
+    <mcs-datatable data="vm.data" condition="vm.criteria" />
+    <!-- /结束：客户服务列表.数据表格 -->

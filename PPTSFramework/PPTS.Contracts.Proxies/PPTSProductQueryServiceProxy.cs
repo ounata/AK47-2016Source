@@ -20,6 +20,21 @@ namespace PPTS.Contracts.Proxies
         }
 
         /// <summary>
+        /// 是否允许 手工确认
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <returns></returns>
+        public bool IsAssetConfirm(string productId)
+        {
+            return this.SingleCall(action => action.IsAssetConfirm(productId));
+        }
+
+        public bool IsExistsCampusInProduct(string[] campusIds, string[] productIds)
+        {
+            return this.SingleCall(action => action.IsExistsCampusInProduct(campusIds, productIds));
+        }
+
+        /// <summary>
         /// 通过产品ID集合获得产品信息
         /// </summary>
         /// <param name="productIDs">产品ID集合</param>

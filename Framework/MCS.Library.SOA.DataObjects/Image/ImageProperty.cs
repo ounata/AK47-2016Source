@@ -159,7 +159,7 @@ namespace MCS.Library.SOA.DataObjects
 		/// 最后更新时间
 		/// </summary>
 		[ORFieldMapping("UPDATE_TIME")]
-		[SqlBehavior(BindingFlags = ClauseBindingFlags.Where | ClauseBindingFlags.Select | ClauseBindingFlags.Update, DefaultExpression = "GETDATE()")]
+		[SqlBehavior(BindingFlags = ClauseBindingFlags.Where | ClauseBindingFlags.Select | ClauseBindingFlags.Update, DefaultExpression = "GETUTCDATE()")]
 		public DateTime UpdateTime
 		{
 			get;

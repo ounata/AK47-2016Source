@@ -11,7 +11,7 @@ define([ppts.config.modules.product,
                     var id = $stateParams.id;
                     var loadtype = $location.$$search.ltype;
 
-                    productEditHelper.init($scope, vm, loadtype, productDataService, function () {
+                    productEditHelper.init($scope, vm, loadtype, productDataService, $state, function () {
 
                         //加载信息
                         productDataService.copyProductView(id, function (entity) {

@@ -453,7 +453,7 @@ namespace MCS.Library.Data.Mapping
                 }
                 else
                     if (dataType == typeof(TimeSpan))
-                        data = ((TimeSpan)data).TotalSeconds;
+                    data = ((TimeSpan)data).TotalSeconds;
             }
 
             return data;
@@ -478,11 +478,21 @@ namespace MCS.Library.Data.Mapping
                         case MemberTypes.Property:
                             PropertyInfo pi = (PropertyInfo)mi;
                             if (pi.CanRead)
+                            {
+                                //沈峥修改，改成通过delegate。
                                 data = pi.GetValue(graph, null);
+                                //data = pi.GetPropertyValue(graph);
+                            }
                             break;
                         case MemberTypes.Field:
-                            FieldInfo fi = (FieldInfo)mi;
-                            data = fi.GetValue(graph);
+                            {
+                                FieldInfo fi = (FieldInfo)mi;
+
+                                //沈峥修改，改成通过delegate。
+                                data = fi.GetValue(graph);
+                                //Func<object, object> reader = (Func<object, object>)DynamicHelper.GetFiledGetterDelegate(fi);
+                                //data = reader(graph);
+                            }
                             break;
                         default:
                             ThrowInvalidMemberInfoTypeException(mi);

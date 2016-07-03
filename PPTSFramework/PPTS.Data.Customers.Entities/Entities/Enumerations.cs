@@ -1,4 +1,5 @@
 ﻿using MCS.Library.Core;
+using PPTS.Data.Common;
 
 namespace PPTS.Data.Customers
 {
@@ -7,18 +8,18 @@ namespace PPTS.Data.Customers
     /// </summary>
     public enum CustomerRelationType
     {
-        [EnumItemDescription("建党关系")]
-        Creator = 0,
         [EnumItemDescription("咨询关系")]
-        Consultant = 1,
+        Consultant = JobTypeDefine.Consultant,
         [EnumItemDescription("学管关系")]
-        Educator = 2,
+        Educator = JobTypeDefine.Educator,
         [EnumItemDescription("教学关系")]
-        Teacher = 3,
+        Teacher = JobTypeDefine.Teacher,
         [EnumItemDescription("电销关系")]
-        Callcenter = 4,
+        Callcenter = JobTypeDefine.Callcenter,
         [EnumItemDescription("市场关系")]
-        Market = 5
+        Market = JobTypeDefine.Marketing,
+        [EnumItemDescription("建档关系")]
+        Creator = 10,
     }
 
     /// <summary>
@@ -84,28 +85,35 @@ namespace PPTS.Data.Customers
         Normal = 11,
 
         /// <summary>
-        /// 停课
-        /// </summary>
-        [EnumItemDescription("停课")]
-        Stopped,
-
-        /// <summary>
-        /// 休学
-        /// </summary>
-        [EnumItemDescription("休学")]
-        Pending,
-
-        /// <summary>
         /// 冻结（高三毕业9月后）
         /// </summary>
         [EnumItemDescription("冻结")]
-        Blocked,
+        Blocked = 14,
 
         /// <summary>
-        /// 结业
+        /// 解冻中
         /// </summary>
-        [EnumItemDescription("结业")]
-        Graduated
+        [EnumItemDescription("解冻中")]
+        Releasing = 141
+    }
+
+    public enum ThawReasonType
+    {
+        /// <summary>
+        /// 高三复读
+        /// </summary>
+        [EnumItemDescription("高三复读")]
+        Repeat = 1,
+        /// <summary>
+        /// 应届毕业生
+        /// </summary>
+        [EnumItemDescription("应届毕业生")]
+        Grad = 2,
+        /// <summary>
+        /// 其他
+        /// </summary>
+        [EnumItemDescription("其他")]
+        Other = 3
     }
 
     /// <summary>
@@ -154,6 +162,24 @@ namespace PPTS.Data.Customers
 
         [EnumItemDescription("办公电话")]
         WorkPhone = 3
+    }
+
+    public static class PayTypeConsts
+    {
+        /// <summary>
+        /// 现金
+        /// </summary>
+        public const string Cash = "1";
+
+        /// <summary>
+        /// 电汇
+        /// </summary>
+        public const string Telex = "2";
+
+        /// <summary>
+        /// 支票
+        /// </summary>
+        public const string Cheque = "4";
     }
 
     /// <summary>
@@ -331,48 +357,6 @@ namespace PPTS.Data.Customers
     }
 
     /// <summary>
-    /// 退费类型
-    /// </summary>
-    public enum PayTypeDefine
-    {
-        [EnumItemDescription("现金")]
-        Cash = 1,
-
-        [EnumItemDescription("电汇")]
-        Telex = 2,
-
-        [EnumItemDescription("POS刷卡")]
-        POS = 3,
-
-        [EnumItemDescription("支票")]
-        Cheque = 4,
-
-        [EnumItemDescription("其他Pos刷卡")]
-        OtherPOS = 5,
-
-        [EnumItemDescription("工行pos刷卡")]
-        ICBC = 6,
-
-        [EnumItemDescription("天猫短信码")]
-        Tmall = 9,
-
-        [EnumItemDescription("银联封顶pos刷卡")]
-        UnionpayPos = 12,
-
-        [EnumItemDescription("银联普通封顶")]
-        UnionPayNotButtCapPos = 13,
-
-        [EnumItemDescription("银联不封顶")]
-        UnionPayNotButtCapIsNotPos = 14,
-
-        [EnumItemDescription("快钱普通封顶")]
-        FastMoneyNotButtCapPos = 15,
-
-        [EnumItemDescription("快钱不封顶")]
-        FastMoneyNotButtCapIsNot = 16
-    }
-
-    /// <summary>
     /// 支付状态
     /// </summary>
     public enum PayStatusDefine
@@ -442,6 +426,52 @@ namespace PPTS.Data.Customers
         /// </summary>
         [EnumItemDescription("转入")]
         TransferIn = 2
+    }
+
+    /// <summary>
+    /// 账户记录类型
+    /// </summary>
+    public enum AccountRecordType
+    {
+        /// <summary>
+        /// 充值
+        /// </summary>
+        Charge = 1,
+
+        /// <summary>
+        /// 退费
+        /// </summary>
+        Refund = 2,
+
+        /// <summary>
+        /// 转入
+        /// </summary>
+        TransferIn = 3,
+
+        /// <summary>
+        /// 转出
+        /// </summary>
+        TransferOut = 4,
+
+        /// <summary>
+        /// 订购
+        /// </summary>
+        Order = 5,
+
+        /// <summary>
+        /// 退订
+        /// </summary>
+        Debook = 6,
+
+        /// <summary>
+        /// 服务费扣除
+        /// </summary>
+        Deduct = 7,
+
+        /// <summary>
+        /// 服务费返还
+        /// </summary>
+        Return = 8
     }
 
     /// <summary>
@@ -776,12 +806,7 @@ namespace PPTS.Data.Customers
         /// 班组上课
         /// </summary>
         [EnumItemDescription("班组上课")]
-        ClassAttend,
-        /// <summary>
-        /// 非课收上课
-        /// </summary>
-        [EnumItemDescription("非课收上课")]
-        OtherAttend
+        ClassAttend
     }
 
     /// <summary>
@@ -824,10 +849,15 @@ namespace PPTS.Data.Customers
     public enum CompletedDefine
     {
         /// <summary>
+        /// 未结课
+        /// </summary>
+        [EnumItemDescription("未结课")]
+        NotCompleted = 1,
+        /// <summary>
         /// 消耗结课
         /// </summary>
         [EnumItemDescription("上课结课")]
-        ConsumeCompleted = 1,
+        ConsumeCompleted,
         /// <summary>
         /// 退费结课
         /// </summary>
@@ -857,5 +887,99 @@ namespace PPTS.Data.Customers
         LastPay
     }
 
-    #endregion 
+    /// <summary>
+    /// 发票状态
+    /// </summary>
+    public enum InvoiceStatusDefine
+    {
+        /// <summary>
+        /// 正常
+        /// </summary>
+        Normal = 1,
+        /// <summary>
+        /// 已退
+        /// </summary>
+        Return = 2
+    }
+    ///发票记录状态
+    public enum InvoiceRecordStatusDefine
+    {
+        /// <summary>
+        /// 正常
+        /// </summary>
+        Normal = 1,
+        /// <summary>
+        /// 已退
+        /// </summary>
+        Invalid = 2
+    }
+
+
+    #endregion
+
+    #region 银联接口，支付数据来源，POS刷卡交易类型
+
+    /// <summary>
+    /// 支付数据来源
+    /// </summary>
+    public enum PaySourceType
+    {
+        /// <summary>
+        /// 1--接口(实时接口)来源
+        /// </summary>
+        [EnumItemDescription("实时接口")]
+        Sync = 1,
+
+        /// <summary>
+        /// 2--对账(异步接口)来源
+        /// </summary>
+        [EnumItemDescription("对账单")]
+        Async = 2
+    }
+
+    /// <summary>
+    /// POS交易类型，银联（1）通联（4）
+    /// </summary>
+    public enum POSTransactionType
+    {
+        /// <summary>
+        /// 银联
+        /// </summary>
+        [EnumItemDescription("银联")]
+        UnionPay = 1,
+
+        /// <summary>
+        /// 通联
+        /// </summary>
+        [EnumItemDescription("通联")]
+        AllInPay = 4
+    }
+
+    #endregion
+
+    #region 同步状态
+
+    /// <summary>
+    /// 同步状态
+    /// </summary>
+    public enum SynchroStatusDefine
+    {
+        /// <summary>
+        /// 未同步
+        /// </summary>
+        [EnumItemDescription("未同步")]
+        NotSynchronized = 0,
+        /// <summary>
+        /// 已同步
+        /// </summary>
+        [EnumItemDescription("已同步")]
+        Synchronized = 1,
+        /// <summary>
+        /// 无需同步
+        /// </summary>
+        [EnumItemDescription("无需同步")]
+        NoNeedSynchrozation = 2
+    }
+
+    #endregion
 }

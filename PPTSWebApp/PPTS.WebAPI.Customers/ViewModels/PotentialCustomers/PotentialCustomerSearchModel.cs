@@ -33,10 +33,17 @@ namespace PPTS.WebAPI.Customers.ViewModels.PotentialCustomers
         public CustomerStaffRelation Consultant { get; set; }
 
         /// <summary>
-        /// 学管师
+        /// 市场专员
         /// </summary>
         [DataMember]
         public CustomerStaffRelation Market { get; set; }
+
+        /// <summary>
+        /// 建档人岗位
+        /// </summary>
+        [DataMember]
+        public string CreateJobName { get; set; }
+
     }
 
     [Serializable]

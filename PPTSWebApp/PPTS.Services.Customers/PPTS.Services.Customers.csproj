@@ -78,6 +78,13 @@
     <Reference Include="PPTS.Data.Customers.Entities">
       <HintPath>..\..\PPTSBin\PPTS.Data.Customers.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="PPTS.Data.Orders">
+      <HintPath>..\..\PPTSBin\PPTS.Data.Orders.dll</HintPath>
+    </Reference>
+    <Reference Include="PPTS.Data.Orders.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=62ea08f894871798, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\PPTSBin\PPTS.Data.Orders.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
@@ -108,9 +115,11 @@
   <ItemGroup>
     <Content Include="Global.asax" />
     <Content Include="Services\AccountQueryService.svc" />
+    <Content Include="Services\WorkflowService.svc" />
     <Content Include="Services\CustomerUpdateService.svc" />
     <Content Include="Services\CustomerQueryService.svc" />
     <Content Include="Services\AccountTransactionService.svc" />
+    <Content Include="Services\CustomerScopeAuthorizationService.svc" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -123,6 +132,9 @@
     <Compile Include="Services\AccountQueryService.svc.cs">
       <DependentUpon>AccountQueryService.svc</DependentUpon>
     </Compile>
+    <Compile Include="Services\WorkflowService.svc.cs">
+      <DependentUpon>WorkflowService.svc</DependentUpon>
+    </Compile>
     <Compile Include="Services\CustomerUpdateService.svc.cs">
       <DependentUpon>CustomerUpdateService.svc</DependentUpon>
     </Compile>
@@ -132,10 +144,11 @@
     <Compile Include="Services\AccountTransactionService.svc.cs">
       <DependentUpon>AccountTransactionService.svc</DependentUpon>
     </Compile>
+    <Compile Include="Services\CustomerScopeAuthorizationService.svc.cs">
+      <DependentUpon>CustomerScopeAuthorizationService.svc</DependentUpon>
+    </Compile>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

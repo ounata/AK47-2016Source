@@ -1,0 +1,29 @@
+﻿<ppts-dynamic-content template="quick-search.tpl.html">
+    <div class="row">
+        <div class="col-md-12">
+            <h5> 教师：{{vm.tchName}}, 本月 已上课时：{{vm.cSCM.finishedCourse}}, 已排课时：{{vm.cSCM.assignedCourse}}</h5>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <mcs-select caption="上课年级" category="grade" model="vm.acQM.grade" css="mcs-padding-0" />
+        </div>
+        <div class="col-md-3">
+            <mcs-select caption="课时状态" category="assignStatus" model="vm.acQM.assignStatus" css="mcs-padding-0" />
+        </div>
+        <div class="col-md-3">
+            <mcs-select caption="课时类型" category="categoryType" model="vm.acQM.categoryType" css="mcs-padding-0" />
+        </div>
+        <div class="col-md-3">
+            <mcs-input placeholder="学生姓名" model="vm.acQM.customerName" css="mcs-width-full" />
+        </div>
+    </div>
+</ppts-dynamic-content>
+<ppts-dynamic-content template="toolbar.tpl.html">
+    <mcs-button icon="list" click="vm.gotoCourseList()" text="列表视图" />
+    <mcs-button category="print" click="vm.print()" text="打印课表" />
+</ppts-dynamic-content>
+<div id="printArea">
+    <div ui-calendar="vm.uiConfig.calendar" calendar="courseCalendar" ng-model="vm.eventSources"></div>
+</div>
+

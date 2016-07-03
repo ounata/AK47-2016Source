@@ -7,7 +7,7 @@
     [OwnerType] NVARCHAR(32) NOT NULL, 
     [CreateTime] DATETIME NULL DEFAULT getutcdate(), 
     [ModifyTime] DATETIME NULL DEFAULT getutcdate(), 
-    PRIMARY KEY ([ObjectType], [RelationType], [OwnerID], [OwnerType])
+    PRIMARY KEY ([ObjectID], [ObjectType], [RelationType], [OwnerID], [OwnerType])
 )
 
 GO
@@ -73,3 +73,10 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level1name = N'CourseOrgAuthorizations',
     @level2type = N'COLUMN',
     @level2name = N'RelationType'
+GO
+
+CREATE INDEX [IX_CourseOrgAuthorizations_01] ON [MT].[CourseOrgAuthorizations] ([OwnerID], [OwnerType], [RelationType])
+
+GO
+
+CREATE INDEX [IX_CourseOrgAuthorizations_02] ON [MT].[CourseOrgAuthorizations] ([OwnerID], [OwnerType], [ObjectType], [ObjectID])

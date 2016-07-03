@@ -2,11 +2,7 @@
 using MCS.Library.Data.Mapping;
 using PPTS.Data.Common.Entities;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PPTS.Data.Customers.Entities
 {
@@ -1644,6 +1640,69 @@ namespace PPTS.Data.Customers.Entities
             get;
             set;
         }
+
+        /// <summary>
+        /// 一对一最后一次上课日期
+        /// </summary>
+        [ORFieldMapping("OneToOneLastClassTime")]
+        [DataMember]
+        public DateTime OneToOneLastClassTime
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 班组最后一次上课日期
+        /// </summary>
+        [ORFieldMapping("GroupLastClassTime")]
+        [DataMember]
+        public DateTime GroupLastClassTime
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 结课类型
+        /// </summary>
+        [ORFieldMapping("CompleteType")]
+        [DataMember]
+        public string CompleteType
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 结课时间
+        /// </summary>
+        [ORFieldMapping("CompleteTime")]
+        [DataMember]
+        public DateTime CompleteTime
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 转介绍学员个数 
+        /// </summary>
+        [ORFieldMapping("ReferralCount")]
+        [DataMember]
+        public int ReferralCount
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 服务更新时间
+        /// </summary>
+        [ORFieldMapping("ServiceModifyTime",UtcTimeToLocal =true)]
+        [DataMember]
+        public DateTime ServiceModifyTime
+        { get; set; }
     }
 
     [Serializable]

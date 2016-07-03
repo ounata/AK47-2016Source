@@ -5,9 +5,9 @@
 	[RelationType] NVARCHAR(32) NOT NULL DEFAULT (10),
     [OwnerID] NVARCHAR(36) NOT NULL, 
     [OwnerType] NVARCHAR(32) NOT NULL, 
-    [CreateTime] DATETIME NULL, 
-    [ModifyTime] DATETIME NULL, 
-    CONSTRAINT [PK_RecordOrgAuthorizations] PRIMARY KEY ([RelationType], [ObjectType], [OwnerID], [OwnerType]) 
+    [CreateTime] DATETIME NULL DEFAULT getutcdate(), 
+    [ModifyTime] DATETIME NULL DEFAULT getutcdate(), 
+    CONSTRAINT [PK_RecordOrgAuthorizations] PRIMARY KEY ([OwnerType], [ObjectID], [ObjectType], [RelationType], [OwnerID]) 
 )
 
 GO
@@ -83,3 +83,10 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level1name = N'RecordOrgAuthorizations',
     @level2type = N'COLUMN',
     @level2name = N'RelationType'
+GO
+
+CREATE INDEX [IX_RecordOrgAuthorizations_01] ON [MT].[RecordOrgAuthorizations] ([OwnerID], [OwnerType], [RelationType])
+
+GO
+
+CREATE INDEX [IX_RecordOrgAuthorizations_02] ON [MT].[RecordOrgAuthorizations] ([OwnerID], [OwnerType], [ObjectType], [ObjectID])

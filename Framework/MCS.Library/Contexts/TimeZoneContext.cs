@@ -18,7 +18,7 @@ namespace MCS.Library.Core
         /// </summary>
         public TimeZoneContext()
         {
-            this.CurrentTimeZone = TimeZoneInfo.Local;
+            this.CurrentTimeZone = GetDefaultTimeZone();
         }
 
         /// <summary>
@@ -71,9 +71,21 @@ namespace MCS.Library.Core
             if (tz == null)
                 tz = TimeZoneInfo.Local;
 
-            DateTime convertedTime = DateTime.SpecifyKind(localTime, DateTimeKind.Unspecified);
+            DateTime unspecifiedTime = DateTime.SpecifyKind(localTime, DateTimeKind.Unspecified);
 
-            return TimeZoneInfo.ConvertTimeToUtc(convertedTime, tz);
+            DateTime result;
+
+            if (unspecifiedTime == DateTime.MinValue)
+            {
+                result = DateTime.MinValue;
+            }
+            else
+            {
+                result = TimeZoneInfo.ConvertTimeToUtc(unspecifiedTime, tz);
+                result = DateTime.SpecifyKind(result, DateTimeKind.Local);
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -93,7 +105,7 @@ namespace MCS.Library.Core
             return TimeZoneInfo.ConvertTime(localTime, TimeZoneInfo.Local, tz);
         }
 
-        private TimeZoneInfo GetDefaultTimeZone()
+        private static TimeZoneInfo GetDefaultTimeZone()
         {
             TimeZoneInfo result = TimeZoneInfo.Local;
 

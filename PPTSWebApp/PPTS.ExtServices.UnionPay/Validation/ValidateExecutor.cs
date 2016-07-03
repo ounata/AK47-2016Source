@@ -28,9 +28,9 @@ namespace PPTS.ExtServices.UnionPay.Validation
                     foreach (ValidateAttribute validateAttribute in validateContent)
                     {
                         IList<ValidateModel> condition = new List<ValidateModel>();
-
+                        
                         condition.Add(new ValidateModel() { Type = ValidateType.IsDecimal, CheckFunc = () => { Regex regex = new Regex(validateAttribute.RegexContent); Match match = regex.Match(value.ToString()); return !match.Success; }, ErrorMessage = validateAttribute.ErrorMessage });
-                        condition.Add(new ValidateModel() { Type = ValidateType.IsMiniDate, CheckFunc = () => { return value == null || (DateTime)value == DateTime.MinValue; }, ErrorMessage = validateAttribute.ErrorMessage });
+                        condition.Add(new ValidateModel() { Type = ValidateType.IsDateFormat, CheckFunc = () => { if (value == null) return true; else { try { DateTime.ParseExact(value.ToString(), validateAttribute.DateFormat, System.Globalization.CultureInfo.InvariantCulture); return false; } catch { return true; } } }, ErrorMessage = validateAttribute.ErrorMessage });
                         condition.Add(new ValidateModel() { Type = ValidateType.IsLessEqualZero, CheckFunc = () => { return value == null || (decimal)value <= 0; }, ErrorMessage = validateAttribute.ErrorMessage });
                         condition.Add(new ValidateModel() { Type = ValidateType.NullOrEmpty, CheckFunc = () => { return value == null || value.ToString() == string.Empty; }, ErrorMessage = validateAttribute.ErrorMessage });
 

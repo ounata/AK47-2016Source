@@ -14,7 +14,7 @@
     <RootNamespace>PPTS.WebAPI.Common</RootNamespace>
     <AssemblyName>PPTS.WebAPI.Common</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -48,11 +48,19 @@
     <Reference Include="MCS.Library">
       <HintPath>..\..\Bin\MCS.Library.dll</HintPath>
     </Reference>
-    <Reference Include="MCS.Library.Data, Version=1.3.0.0, Culture=neutral, PublicKeyToken=62ea08f894871798" />
+    <Reference Include="MCS.Library.Data, Version=1.3.0.0, Culture=neutral, PublicKeyToken=62ea08f894871798, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Bin\MCS.Library.Data.dll</HintPath>
+    </Reference>
     <Reference Include="MCS.Library.OGUPermission">
       <HintPath>..\..\Bin\MCS.Library.OGUPermission.dll</HintPath>
     </Reference>
-    <Reference Include="MCS.Web.MVC.Library">
+    <Reference Include="MCS.Library.SOA.DataObjects, Version=1.0.0.0, Culture=neutral, PublicKeyToken=62ea08f894871798, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Bin\MCS.Library.SOA.DataObjects.dll</HintPath>
+    </Reference>
+    <Reference Include="MCS.Web.MVC.Library, Version=1.0.0.0, Culture=neutral, PublicKeyToken=62ea08f894871798, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Bin\MCS.Web.MVC.Library.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
@@ -65,6 +73,13 @@
     </Reference>
     <Reference Include="PPTS.Data.Common.Entities">
       <HintPath>..\..\PPTSBin\PPTS.Data.Common.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="PPTS.Data.Customers">
+      <HintPath>..\..\PPTSBin\PPTS.Data.Customers.dll</HintPath>
+    </Reference>
+    <Reference Include="PPTS.Data.Customers.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=62ea08f894871798, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\PPTSBin\PPTS.Data.Customers.Entities.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -102,9 +117,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\SendEmailController.cs" />
+    <Compile Include="Controllers\SMSController.cs" />
     <Compile Include="Controllers\UserGraphController.cs" />
     <Compile Include="Controllers\MetadataController.cs" />
     <Compile Include="Controllers\OrganizationController.cs" />
+    <Compile Include="Controllers\WorkflowController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -137,16 +155,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
-          <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>10956</DevelopmentServerPort>
-          <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:10956/</IISUrl>
-          <NTLMAuthentication>False</NTLMAuthentication>
-          <UseCustomServer>False</UseCustomServer>
-          <CustomServerUrl>
-          </CustomServerUrl>
-          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+          <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
     </VisualStudio>

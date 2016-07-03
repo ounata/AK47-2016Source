@@ -2,13 +2,13 @@
         ppts.config.dataServiceConfig.teacherAssignmentDataService], function (schedule) {
             schedule.registerController("tchAsgmtCourseController", [
                 '$scope', '$state', '$stateParams', '$filter', 'dataSyncService', '$compile'
-                 , '$uibModal', '$http', 'teacherAssignmentDataService', 'mcsDialogService', 'uiCalendarConfig', 'printService',
+                 , '$uibModal', '$http', 'teacherAssignmentDataService', 'mcsDialogService', 'uiCalendarConfig', 'printService', 'utilService',
                 function ($scope, $state, $stateParams, $filter, dataSyncService, $compile
-                , $uibModal, $http, teacherAssignmentDataService, mcsDialogService, uiCalendarConfig, printService) {
+                , $uibModal, $http, teacherAssignmentDataService, mcsDialogService, uiCalendarConfig, printService, utilService) {
                     var vm = this;
 
                     vm.print = function () {
-                        printService.print();
+                        printService.print(true);
                     }
 
                     vm.CID = $stateParams.cID;
@@ -45,8 +45,9 @@
                             },
                             eventRender: function (event, element, view) {
                                 element.attr({
-                                    'uib-tooltip': event.startText + '-' + event.endText + '\r\n' + event.tooltiptxt,
-                                    'tooltip-append-to-body': true
+                                    'uib-popover': event.startText + '-' + event.endText + '\r\n' + event.tooltiptxt,
+                                    'tooltip-append-to-body': true,
+                                    'popover-trigger': 'mouseenter'
                                 });
                                 element.context.innerText = event.title;
                                 $compile(element)($scope);
@@ -97,7 +98,7 @@
                     };
                     vm.eventSources = [vm.events, vm.schedules];
 
-                    vm.reLoadCourse = function () {
+                    vm.search = function () {
                         vm.events.splice(0, vm.events.length);
                         teacherAssignmentDataService.getTeacherWeekCourse(vm.acQM, function (data) {
                             var assignCollection = data.result;
@@ -122,13 +123,14 @@
                             endText: vm.getDoubleStr(event.endTime.getHours()) + ':' + vm.getDoubleStr(event.endTime.getMinutes()),
                             color: '#000000',
                             status: event.assignStatus,
-                            coursessource: event.assignSource,
+                            coursessource: event.categoryType,
                             customerName: event.customerName,
                             subjectName: event.subjectName,
                             curDate: event.startTime.getFullYear() + '-' + vm.getDoubleStr((event.startTime.getMonth() + 1)) + '-' + vm.getDoubleStr(event.startTime.getDate()),
                             curWeek: vm.weekText[event.startTime.getDay()],
                             assetID: event.assetID,
                             customerCode: event.customerCode,
+                            customerID:event.customerID,
                             sTime: event.startTime,
                             eTime: event.endTime
                         };
@@ -144,16 +146,11 @@
                                 evt.color = '#C0C0C0'; evt.title += '已上'; evt.tooltiptxt += '已上'; /*已上*/
                                 break;
                         };
-                        switch (event.assignSource) {
+                        switch (event.categoryType) {
                             case 1: evt.tooltiptxt += "一对一"; break;
                             case 2: evt.tooltiptxt += "班组"; break;
                         }
                         return evt;
-                    };
-
-                    /*查询*/
-                    vm.simpleSearch = function () {
-                        vm.reLoadCourse();
                     };
 
                     /*新增课表*/
@@ -179,10 +176,14 @@
 
                     /*取消课表*/
                     vm.cancelCourseClick = function () {
+                        if (utilService.showMessage(vm, !vm.selectedEvents.length, '请选择需要取消的课表！')) {
+                            return;
+                        }
                         var msg = '';
                         var model = [];
                         for (var i in vm.selectedEvents) {
-                            if (vm.selectedEvents[i].status == 1 || vm.selectedEvents[i].status == 8) {
+                            if ((vm.selectedEvents[i].status == 1 || vm.selectedEvents[i].status == 8)
+                                && vm.selectedEvents[i].coursessource == 1) {
                                 msg += "确定将学员" + vm.selectedEvents[i].customerName + " " + vm.selectedEvents[i].curDate + "（" + vm.selectedEvents[i].curWeek + "）" + vm.selectedEvents[i].startText + "-" + vm.selectedEvents[i].endText + "的" + vm.selectedEvents[i].subjectName + "课取消？<br>";
                                 model.push({
                                     assetID: vm.selectedEvents[i].assetID,
@@ -190,8 +191,11 @@
                                 });
                             };
                         };
-                        if (msg == "")
+
+                        if (utilService.showMessage(vm, model.length == 0, '选择的记录不允许取消，请重新选择！')) {
                             return;
+                        }
+
                         mcsDialogService.confirm({
                             title: '取消课表',
                             message: msg
@@ -222,7 +226,7 @@
                             controller: 'tchAsgmtCourseCopyController'
                         }).result.then(function (retValue) {
                             if (retValue == 'ok') {
-                                vm.reLoadCourse();
+                                vm.search();
                                 vm.getCurMonthStat();
                             };
                         });
@@ -230,11 +234,14 @@
 
                     /*调整课表*/
                     vm.resetCourseClick = function () {
+                        if (utilService.showMessage(vm, !vm.selectedEvents.length, '请选择需要调整的课表！')) {
+                            return;
+                        }
                         /*将聂鑫航（ST00001）2016-05-05（星期二）13:00 - 15:00 的数学课调整为*/
                         var model = [], msg = '', tempdate2 = new Date();
                         var tempdate = new Date(tempdate2.getFullYear(), tempdate2.getMonth(), tempdate2.getDate(), 0, 0, 0, 0);
                         for (var i in vm.selectedEvents) {
-                            if (vm.selectedEvents[i].status == 1 || vm.selectedEvents[i].status == 8) {
+                            if ((vm.selectedEvents[i].status == 1 || vm.selectedEvents[i].status == 8) && vm.selectedEvents[i].coursessource == 1) {
                                 msg = "将" + vm.selectedEvents[i].customerName + "（" + vm.selectedEvents[i].customerCode + "）"
                                     + vm.selectedEvents[i].curDate + "（" + vm.selectedEvents[i].curWeek + "）" + vm.selectedEvents[i].startText
                                     + " - " + vm.selectedEvents[i].endText + "的" + vm.selectedEvents[i].subjectName + "课调整为";
@@ -257,8 +264,11 @@
                                 model.push(tempM);
                             };
                         };
-                        if (model.length == 0)
+                  
+                        if (utilService.showMessage(vm, model.length == 0, '选择的记录不允许调课，请重新选择！')) {
                             return;
+                        }
+
                         mcsDialogService.create('app/schedule/teacherassignment/tchasgmt-course/tchasgmt-course-reset.html', {
                             controller: 'tchAsgmtCourseResetController',
                             params: { para: model },
@@ -267,7 +277,7 @@
                             }
                         }).result.then(function (retValue) {
                             if (retValue == 'ok') {
-                                vm.reLoadCourse();
+                                vm.search();
                                 vm.getCurMonthStat();
                             };
                         });

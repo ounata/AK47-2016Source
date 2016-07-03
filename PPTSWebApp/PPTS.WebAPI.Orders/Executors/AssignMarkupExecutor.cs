@@ -22,6 +22,8 @@ namespace PPTS.WebAPI.Orders.Executors
     public class AssignMarkupExecutor : PPTSEditAssignExecutorBase<AssignSuperModel>
     {
         public string Msg { get; set; }
+
+        
         public AssignMarkupExecutor(AssignSuperModel model)
             : base(model, null)
         {
@@ -36,8 +38,8 @@ namespace PPTS.WebAPI.Orders.Executors
             ///4.上课日期是否早于该学员新签缴费单的付款日期，若早于提示“上课日期不能早于新签缴费单的付款日期
             ///5.设置排课状态为 已上， 确认状态为已确认
             base.PrepareData(context);
-
-            Assign assign = GetAssign(this.Model);
+            this.Msg = "ok";
+            Assign assign = this.GetAssign(this.Model);
             assign.FillCreator();
             assign.FillModifier();
             assign.AssignID = UuidHelper.NewUuidString();
@@ -50,19 +52,21 @@ namespace PPTS.WebAPI.Orders.Executors
             Customer cust = PPTS.WebAPI.Orders.Service.CustomerService.GetCustomerByCustomerId(this.Model.CustomerID);
             if (cust.Locked)
             {
-                throw new Exception("学员被冻结，不能补录课时");
+                this.Msg = "学员被冻结，不能补录课时";
+                return;
             }
             List<Account> accounts = PPTS.WebAPI.Orders.Service.CustomerService.GetAccountbyCustomerId(this.Model.CustomerID);
             if (accounts == null || accounts.Count == 0)
             {
-                throw new Exception("未能获取到账号信息！");
+                this.Msg = "没有查询到账号信息，无法获取新签缴费单的付款日期！";
+                return;
             }
             var aca = accounts.OrderBy(p => p.ChargePayTime).FirstOrDefault();
             if (this.Model.StartTime < aca.ChargePayTime)
             {
-                throw new Exception("上课日期不能早于新签缴费单的付款日期！");
+                this.Msg = "上课日期不能早于新签缴费单的付款日期！";
+                return;
             }
-            //throw new Exception("未能获取到缴费单记录！");
             ///学员排课及教师排课冲突检查,如果有冲突，引发异常，事务回滚
             AssignsAdapter.Instance.CheckConflictAssignInContext(assign);
 
@@ -106,10 +110,10 @@ namespace PPTS.WebAPI.Orders.Executors
             AssignsAdapter.Instance.UpdateInContext(assign);
             ///更新资产表排课数量       
             Asset at = GenericAssetAdapter<Asset, AssetCollection>.Instance.Load(this.Model.AssetID);
-            ///确认课时数量要加上 补录的课时数量
-            at.ConfirmedAmount += this.Model.Amount;
-            ///剩余课时数量要减去 补录的课时数量
-            at.Amount -= this.Model.Amount;
+            at.ConfirmedAmount += this.Model.Amount; ////确认课时数量增加
+            at.Amount -= this.Model.Amount;  ///剩余课时数量要减去 补录的课时数量
+            at.ConfirmedMoney += this.Model.Amount * at.Price; //确认金额增加
+
             GenericAssetAdapter<Asset, AssetCollection>.Instance.UpdateInContext(at);
         }
 

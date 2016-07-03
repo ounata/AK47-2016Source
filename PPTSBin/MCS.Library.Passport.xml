@@ -753,6 +753,11 @@
             每一个具体配置项
             </summary>
         </member>
+        <member name="P:MCS.Library.Passport.RolesDefineConfig.Enabled">
+            <summary>
+            是否启用角色检查
+            </summary>
+        </member>
         <member name="T:MCS.Library.Passport.RolesDefineCollection">
             <summary>
             逻辑角色定义的集合
@@ -1177,13 +1182,6 @@
             渲染控件
             </summary>
             <param name="writer"></param>
-        </member>
-        <member name="M:MCS.Library.Web.Controls.SignInLogoControl.ChangeToAbsoluteUrl(System.String)">
-            <summary>
-            将需要返回的url变成绝对路径的url（如果本来是绝对地址，则忽略）
-            </summary>
-            <param name="ru"></param>
-            <returns></returns>
         </member>
         <member name="P:MCS.Library.Web.Controls.SignInLogoControl.SignInImage">
             <summary>
@@ -2097,6 +2095,12 @@
             </summary>
             <returns>对象。</returns>
         </member>
+        <member name="M:MCS.Library.Passport.Ticket.LoadFromHeader">
+            <summary>
+            从Header中的参数读取Ticket信息
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:MCS.Library.Passport.Ticket.LoadFromUrl(System.String)">
             <summary>
             从Url中的参数读取Ticket信息
@@ -2149,6 +2153,11 @@
         <member name="M:MCS.Library.Passport.Ticket.SaveToCookie">
             <summary>
             Ticket信息保存入Cookie中
+            </summary>
+        </member>
+        <member name="M:MCS.Library.Passport.Ticket.SaveToHeader">
+            <summary>
+            Ticket信息保存入Header中
             </summary>
         </member>
         <member name="M:MCS.Library.Passport.Ticket.SaveToXml">
@@ -2237,6 +2246,36 @@
         <member name="P:MCS.Library.Passport.Ticket.AppSignInIP">
             <summary>
             应用登录IP
+            </summary>
+        </member>
+        <member name="T:MCS.Library.Passport.TicketSource">
+            <summary>
+            票据来源
+            </summary>
+        </member>
+        <member name="F:MCS.Library.Passport.TicketSource.Unknown">
+            <summary>
+            未知
+            </summary>
+        </member>
+        <member name="F:MCS.Library.Passport.TicketSource.FromCookie">
+            <summary>
+            来源于Cookie
+            </summary>
+        </member>
+        <member name="F:MCS.Library.Passport.TicketSource.FromUrl">
+            <summary>
+            来源于Url
+            </summary>
+        </member>
+        <member name="F:MCS.Library.Passport.TicketSource.FromHeader">
+            <summary>
+            来源于Header
+            </summary>
+        </member>
+        <member name="F:MCS.Library.Passport.TicketSource.FromForm">
+            <summary>
+            来源于表单
             </summary>
         </member>
         <member name="T:MCS.Library.Passport.AuthenticationModuleBase">
@@ -2710,7 +2749,7 @@
             </summary>
             <returns>注销后重定向url</returns>
         </member>
-        <member name="M:MCS.Library.Passport.PassportManager.GetTicket(System.Boolean@)">
+        <member name="M:MCS.Library.Passport.PassportManager.GetTicket(MCS.Library.Passport.TicketSource@)">
             <summary>
             从Cookie中得到Ticket
             </summary>
@@ -2795,6 +2834,13 @@
             拼接认证url中的额外参数
             </summary>
             <param name="strReturlUrl"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MCS.Library.Passport.PassportManager.ChangeToAbsoluteUrl(System.String)">
+            <summary>
+            将需要返回的url变成绝对路径的url（如果本来是绝对地址，则忽略）
+            </summary>
+            <param name="ru"></param>
             <returns></returns>
         </member>
         <member name="T:MCS.Library.Passport.WindowsAuthenticator">

@@ -9,7 +9,6 @@ using System.Security.Authentication;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http.Filters;
-using System.Web.Mvc;
 
 namespace MCS.Web.MVC.Library.Filters
 {

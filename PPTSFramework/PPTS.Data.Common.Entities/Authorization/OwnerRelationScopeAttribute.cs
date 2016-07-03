@@ -9,14 +9,16 @@ namespace PPTS.Data.Common.Authorization
     /// <summary>
     /// 所有者关系权限范围标识
     /// </summary>
-    public class OwnerRelationScopeAttribute:ScopeBaseAttribute
+    public class OwnerRelationScopeAttribute : ScopeBaseAttribute
     {
+        //private RelationType relationType = RelationType.Owner;
         /// <summary>
         /// 授权关系类型，默认所有者
         /// </summary>
         public RelationType RelationType
         {
-            get { return RelationType.Owner; }
+            get;//{ return relationType; }
+            set;//{ relationType = value; }
         }
 
         /// <summary>

@@ -151,7 +151,7 @@ namespace MCS.Library.SOA.DataObjects
 		}
 
 		[ORFieldMapping("CREATE_TIME")]
-		[SqlBehavior(BindingFlags = ClauseBindingFlags.Select, DefaultExpression = "getdate()")]
+		[SqlBehavior(BindingFlags = ClauseBindingFlags.Select, DefaultExpression = "GETUTCDATE()")]
 		public DateTime CreateTime
 		{
 			get

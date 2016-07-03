@@ -1,0 +1,74 @@
+﻿<div class="portlet light">
+    <div class="portlet-body form">
+        <form class="form-horizontal form-bordered form-row-stripped" action="#" role="form" novalidate>
+            <div class="form-body">
+                <h4 class="form-section"><i class="ace-icon fa fa-th"></i> 审批内容<span class="section-helper">【转学】</span></h4>
+                <div class="form-group">
+                    <mcs-label text="学员编号：" css="col-sm-3" />
+                    <div class="col-sm-6">
+                        <p class="form-control-static">
+                            {{vm.apply.customerCode}}
+                        </p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="学员姓名：" css="col-sm-3" />
+                    <div class="col-sm-6">
+                        <p class="form-control-static">
+                            {{ vm.apply.customerName }}
+                        </p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="当前所在校区：" css="col-sm-3" />
+                    <div class="col-sm-6">
+                        <p class="form-control-static">
+                            {{ vm.apply.campusName }}
+                        </p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="所属学管师：" css="col-sm-3" />
+                    <div class="col-sm-6">
+                        <p class="form-control-static">
+                            {{ vm.apply.applierName }}
+                        </p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="申请转至：" css="col-sm-3" />
+                    <div class="col-sm-6">
+                        <p class="form-control-static">
+                            {{ vm.apply.toCampusName }}
+                        </p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="转学原因：" css="col-sm-3" />
+                    <div class="col-sm-6">
+                        <p class="form-control-static">
+                            {{ vm.apply.applyMemo }}
+                        </p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="申请人：" css="col-sm-3" />
+                    <div class="col-sm-6">
+                        <p class="form-control-static">
+                            {{vm.apply.applierName }}
+                        </p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mcs-label text="申请时间：" css="col-sm-3" />
+                    <div class="col-sm-6">
+                        <p class="form-control-static">
+                            {{ vm.apply.applyTime | date:"yyyy-MM-dd HH:mm" }}
+                        </p>
+                    </div>
+                </div>
+                <mcs-workflow model="vm.clientProcess" />
+            </div>
+        </form>
+    </div>
+</div>

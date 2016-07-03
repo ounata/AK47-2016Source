@@ -26,12 +26,18 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
         /// </summary>
         [ConditionMapping("a.CustomerCode", Operation = "=")]
         public string CustomerCode { get; set; }
+        
+        /// <summary>
+        /// 学员或家长姓名或联系电话
+        /// </summary>
+        [NoMapping]
+        public string SearchText { get; set; }
 
         /// <summary>
-        /// 学员或家长姓名
+        /// 申请人岗位类型
         /// </summary>
-        [ConditionMapping("d.CustomerSearchContent", Template = "CONTAINS(${DataField}$, ${Data}$)")]
-        public string CustomerOrParentName { get; set; }
+        [InConditionMapping("a.ApplierJobType")]
+        public string[] ApplierJobTypes { get; set; }
 
         /// <summary>
         /// 退款操作人姓名
@@ -42,17 +48,17 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
         /// <summary>
         /// 业务终审日期
         /// </summary>
-        [ConditionMapping("a.ApproveTime", Operation = ">=")]
+        [ConditionMapping("a.ApproveTime", UtcTimeToLocal = true, Operation = ">=")]
         public DateTime ApproveTimeStart { get; set; }
-        [ConditionMapping("ApplyTime", Operation = "<", AdjustDays = 1)]
+        [ConditionMapping("ApplyTime", UtcTimeToLocal = true, Operation = "<", AdjustDays = 1)]
         public DateTime ApproveTimeEnd { get; set; }
 
         /// <summary>
         /// 财务终审日期
         /// </summary>
-        [ConditionMapping("a.VerifyTime", Operation = ">=")]
+        [ConditionMapping("a.VerifyTime", UtcTimeToLocal = true, Operation = ">=")]
         public DateTime VerifyTimeStart { get; set; }
-        [ConditionMapping("ApplyTime", Operation = "<", AdjustDays = 1)]
+        [ConditionMapping("ApplyTime", UtcTimeToLocal = true, Operation = "<", AdjustDays = 1)]
         public DateTime VerifyTimeEnd { get; set; }
 
         /// <summary>

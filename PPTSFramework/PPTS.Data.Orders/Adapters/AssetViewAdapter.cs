@@ -11,38 +11,38 @@ using System.Text;
 using System.Threading.Tasks;
 using PPTS.Data.Orders.Entities;
 using MCS.Library.Data;
+using PPTS.Data.Common;
 
 namespace PPTS.Data.Orders.Adapters
 {
-	public class AssetViewAdapter : OrderAdapterBase<AssetView, AssetViewCollection>
-	{
-		public static readonly AssetViewAdapter Instance = new AssetViewAdapter();
+    public class AssetViewAdapter : OrderAdapterBase<AssetView, AssetViewCollection>
+    {
+        public static readonly AssetViewAdapter Instance = new AssetViewAdapter();
 
-		private AssetViewAdapter()
-		{
-		}
+        private AssetViewAdapter()
+        {
+        }
 
-        ///
         public AssetViewCollection LoadCollection(string customerID)
         {
             WhereLoadingCondition wLC = new WhereLoadingCondition(builder => builder
             .AppendItem("Amount", 0, ">")
-            .AppendItem("CategoryType",1)
+            .AppendItem("CategoryType", (int)CategoryType.OneToOne)
             .AppendItem("CustomerID", customerID));
 
             return this.Load(wLC);
         }
 
-        public AssetViewCollection LoadCollection(string operaterCampusID, string customerID,string subject,string grade)
+        public AssetViewCollection LoadCollection(string operaterCampusID, string customerID, string subject, string grade)
         {
             WhereSqlClauseBuilder wSCB = new WhereSqlClauseBuilder();
             wSCB.AppendItem("Amount", 0, ">")
-            .AppendItem("CategoryType", 1)
+            .AppendItem("CategoryType", (int)CategoryType.OneToOne)
             .AppendItem("CustomerID", customerID)
             .AppendItem("CustomerCampusID", operaterCampusID);
-            string cc = string.Format("((subject='{0}' and grade='{1}') or (subject='0' and grade='{1}') or (subject='{0}' and grade='0') or (subject='0' and grade='0'))", subject,grade);
-            wSCB.AppendItem(cc, "","",true);
-            WhereLoadingCondition wLC = new WhereLoadingCondition( s=> { foreach (var v in wSCB) s.Add(v); });
+            string cc = string.Format("((subject='{0}' and grade='{1}') or (subject='0' and grade='{1}') or (subject='{0}' and grade='0') or (subject='0' and grade='0'))", subject, grade);
+            wSCB.AppendItem(cc, "", "", true);
+            WhereLoadingCondition wLC = new WhereLoadingCondition(s => { foreach (var v in wSCB) s.Add(v); });
             return this.Load(wLC);
         }
 
@@ -50,9 +50,9 @@ namespace PPTS.Data.Orders.Adapters
         {
             WhereLoadingCondition wLC = new WhereLoadingCondition(builder => builder
            .AppendItem("Amount", 0, ">").AppendItem("AssetID", assetID)
-           .AppendItem("CategoryType", 1)
+           .AppendItem("CategoryType", (int)CategoryType.OneToOne)
            .AppendItem("CustomerID", customerID));
-           //.AppendItem("CustomerCampusID", operaterCampusID)
+            //.AppendItem("CustomerCampusID", operaterCampusID)
 
             return this.Load(wLC).FirstOrDefault();
         }

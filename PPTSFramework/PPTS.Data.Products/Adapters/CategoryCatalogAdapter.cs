@@ -1,4 +1,5 @@
 ﻿using MCS.Library.Data.Adapters;
+using PPTS.Data.Common;
 using PPTS.Data.Products.Entities;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,11 @@ namespace PPTS.Data.Products.Adapters
         public void LoadByCategoryTypeInContext(CategoryType type, Action<CategoryCatalogCollection> action)
         {
             this.LoadInContext(new WhereLoadingCondition(builder => builder.AppendItem("CategoryType", type)), action);
+        }
+
+        public CategoryCatalog LoadByCatalog(string catalog)
+        {
+            return Load(b => b.AppendItem("Catalog", catalog)).FirstOrNull();
         }
 
     }

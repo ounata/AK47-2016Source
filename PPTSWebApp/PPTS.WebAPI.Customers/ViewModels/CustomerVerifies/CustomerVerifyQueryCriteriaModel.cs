@@ -13,47 +13,58 @@ namespace PPTS.WebAPI.Customers.ViewModels.CustomerVerifies
     /// </summary>
     public class CustomerVerifyQueryCriteriaModel
     {
-        [ConditionMapping("", Template = "CONTAINS(c.*, ${Data}$)")]
-        public string Keyword { get; set; }
         /// <summary>
-        /// 校区名称
+        /// 校区ID
         /// </summary>
-        [ConditionMapping("b.campusName", EscapeLikeString = true, Prefix = "%", Postfix = "%", Operation = "LIKE")]
-        public string CampusName { get; set; }
-
-        /// <summary>
-        /// 咨询师姓名
-        /// </summary>
-        [ConditionMapping("StaffName")]
-        public string StaffName { get; set; }
+        [InConditionMapping("a.CampusID")]
+        public string[] CampusIDs { get; set; }
 
         /// <summary>
         /// 建档人
         /// </summary>
-        [InConditionMapping("b.CreatorName")]
-        public int CreatorName { get; set; }
+        [ConditionMapping("a.CreatorName")]
+        public string CreatorName { get; set; }
 
         /// <summary>
-        /// 归属组织机构ID
+        /// 是否邀约
         /// </summary>
-        [InConditionMapping("a.CampusID")]
-        public string[] OrgIds { get; set; }
+        [NoMapping]
+        public string IsInvited
+        {
+            get;
+            set;
+        }
 
+        [ConditionMapping("a.IsInvited")]
+        public string _IsInvited
+        {
+            get
+            {
+                return IsInvited == "-1" ? "" : IsInvited;
+            }
+        }
         #region 预计上门时间
 
         /// <summary>
         /// 预计上门开始时间
         /// </summary>
-        [ConditionMapping("planTime", Operation = ">=")]
+        [ConditionMapping("a.PlanVerifyTime", Operation = ">=")]
         public DateTime PlanVerifyStartTime { get; set; }
 
         /// <summary>
         /// 预计上门结束时间
         /// </summary>
-        [ConditionMapping("planTime", Operation = "<", AdjustDays = 1)]
+        [ConditionMapping("a.PlanVerifyTime", Operation = "<", AdjustDays = 1)]
         public DateTime PlanVerifyEndTime { get; set; }
 
+
         #endregion
+
+        /// <summary>
+        /// 咨询师姓名
+        /// </summary>
+        [ConditionMapping("a.CreatorName")]
+        public string StaffName { get; set; }
 
         #region 实际上门时间
 
@@ -71,33 +82,29 @@ namespace PPTS.WebAPI.Customers.ViewModels.CustomerVerifies
 
         #endregion
 
-
-
         #region 建档时间
 
         /// <summary>
-        /// 建档开始时间
+        /// 建档日期
         /// </summary>
-        [ConditionMapping("b.CreateTime", Operation = ">=")]
-        public DateTime CustomerCreateStartTime { get; set; }
-
-        /// <summary>
-        /// 建档结束时间
-        /// </summary>
-        [ConditionMapping("b.CreateTime", Operation = "<", AdjustDays = 1)]
-        public DateTime CustomerCreateEndTime { get; set; }
+        [NoMapping]
+        public DateTime CreateTimeStart { get; set; }
+        [NoMapping]
+        public DateTime CreateTimeEnd { get; set; }
 
         #endregion
 
         /// <summary>
-        /// 是否邀约
+        /// 建档人岗位类型
         /// </summary>
-        [ConditionMapping("a.IsInvited")]
-        public int IsInvited
-        {
-            get;
-            set;
-        }
+        [NoMapping]
+        public string[] CreatorJobTypes { get; set; }
+
+        /// <summary>
+        /// 学员名称/家长名称/电话/学员编号
+        /// </summary>
+        [NoMapping]
+        public string Keyword { get; set; }
 
         [NoMapping]
         public PageRequestParams PageParams

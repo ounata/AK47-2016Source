@@ -52,9 +52,9 @@ namespace PPTS.Data.Customers.Adapters
         private void InitData(AccountChargePayment data)
         {
             if (data.PayID.IsNullOrEmpty())
-                data.PayID = System.Guid.NewGuid().ToString();
+                data.PayID = UuidHelper.NewUuidString();
             if (data.PayNo.IsNullOrEmpty())
-                data.PayNo = Helper.GetApplyNo("SK");
+                data.PayNo = Helper.GetApplyNo("FK");
         }
     }
 }

@@ -8,50 +8,50 @@
             <ppts-select-branch model="vm.criteria.campusID" />
         </div>
         <div class="col-md-3">
-            <mcs-input placeholder="学员姓名" uib-tooltip="学员姓名" css="mcs-input-search mcs-width-full" model="vm.criteria.customerName" />
+            <mcs-input placeholder="学员姓名" uib-popover="学员姓名" css="mcs-input-search mcs-width-full" model="vm.criteria.customerName" />
         </div>
         <div class="col-md-3">
-            <mcs-input placeholder="学员编号" uib-tooltip="学员编号" css="mcs-input-search mcs-width-full" model="vm.criteria.customerCode" />
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-3">
-            <mcs-input placeholder="教师姓名" uib-tooltip="教师姓名" css="mcs-input-search mcs-width-full" model="vm.criteria.teacherName" />
-        </div>
-        <div class="col-md-3">
-            <mcs-input placeholder="学管师姓名" uib-tooltip="学管师姓名" css="mcs-input-search mcs-width-full" model="vm.criteria.educatorName" />
-        </div>
-        <div class="col-md-3">
-            <mcs-input placeholder="咨询师姓名" uib-tooltip="咨询师姓名" css="mcs-input-search mcs-width-full" model="vm.criteria.consultantName" />
-        </div>
-        <div class="col-md-3">
-            <mcs-input placeholder="订单编号" uib-tooltip="订单编号" css="mcs-input-search mcs-width-full" model="vm.criteria.assetCode" />
+            <mcs-input placeholder="学员编号" uib-popover="学员编号" css="mcs-input-search mcs-width-full" model="vm.criteria.customerCode" />
         </div>
     </div>
     <div class="row">
         <div class="col-md-3">
-            <ppts-select caption="上课科目" category="subject" model="vm.criteria.subject" css="mcs-padding-0"/>
+            <mcs-input placeholder="教师姓名" uib-popover="教师姓名" css="mcs-input-search mcs-width-full" model="vm.criteria.teacherName" />
         </div>
         <div class="col-md-3">
-            <ppts-select caption="上课年级" category="grade" model="vm.criteria.grade" css="mcs-padding-0"/>
+            <mcs-input placeholder="学管师姓名" uib-popover="学管师姓名" css="mcs-input-search mcs-width-full" model="vm.criteria.educatorName" />
         </div>
         <div class="col-md-3">
-            <ppts-select caption="课时状态" category="assignStatus" model="vm.assignStatus" css="mcs-padding-0"/>
+            <mcs-input placeholder="咨询师姓名" uib-popover="咨询师姓名" css="mcs-input-search mcs-width-full" model="vm.criteria.consultantName" />
         </div>
         <div class="col-md-3">
-            <ppts-select caption="课时类型" category="assignSource" model="vm.assignSource" css="mcs-padding-0"/>
+            <mcs-input placeholder="订单编号" uib-popover="订单编号" css="mcs-input-search mcs-width-full" model="vm.criteria.assetCode" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <mcs-select caption="上课科目" category="subject" model="vm.criteria.subject" css="mcs-padding-0"/>
+        </div>
+        <div class="col-md-3">
+            <mcs-select caption="上课年级" category="grade" model="vm.criteria.grade" css="mcs-padding-0"/>
+        </div>
+        <div class="col-md-3">
+            <mcs-select caption="课时状态" category="assignStatus" model="vm.criteria.assignStatus001" css="mcs-padding-0"/>
+        </div>
+        <div class="col-md-3">
+            <mcs-select caption="课时类型" category="categoryType" model="vm.criteria.categoryType001" css="mcs-padding-0"/>
         </div>
     </div>
 </ppts-dynamic-content>
 <!-- /结束：学员课表.快速查询条件 -->
 <!-- #开始：学员课表.工具栏 -->
 <ppts-dynamic-content template="toolbar.tpl.html">
-    <mcs-button category="edit" text="调课" click="vm.resetCourseClick()"></mcs-button>
-    <mcs-button category="reject" text="取消课表" click="vm.cancelCourseClick()"></mcs-button>
-    <mcs-button category="delete" text="删除课表" click="vm.deleteCourseClick()"></mcs-button>
-    <mcs-button category="ok" text="课时确认" click="vm.confirmCourseClick()"></mcs-button>
+    <mcs-button category="edit" text="调课" ppts-functions="按钮-新增/取消/复制/调动课表-本校区" click="vm.resetCourseClick()"></mcs-button>
+    <mcs-button category="reject" text="取消课表" ppts-functions="按钮-新增/取消/复制/调动课表-本校区" click="vm.cancelCourseClick()"></mcs-button>
+    <mcs-button category="delete" text="删除课表"ppts-functions="按钮-录入/删除/确认课时-本校区"  click="vm.deleteCourseClick()"></mcs-button>
+    <mcs-button category="ok" text="课时确认" ppts-functions="按钮-录入/删除/确认课时-本校区" click="vm.confirmCourseClick()"></mcs-button>
     <mcs-button category="print" text="打印本页课表" click="vm.print()"></mcs-button>
-    <mcs-button category="export" text="导出" click="vm.export()"></mcs-button>
+    <mcs-button category="export" text="导出" ppts-functions="按钮-客户课表导出" click="vm.export()"></mcs-button>
 </ppts-dynamic-content>
 <div id="printArea">
     <div class="justPrint">

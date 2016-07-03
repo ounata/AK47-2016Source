@@ -1,12 +1,8 @@
-using MCS.Library.Core;
+using System;
+using System.Runtime.Serialization;
 using MCS.Library.Data.DataObjects;
 using MCS.Library.Data.Mapping;
 using PPTS.Data.Common.Authorization;
-using PPTS.Data.Common.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
 
 namespace PPTS.Data.Customers.Entities
 {
@@ -17,50 +13,24 @@ namespace PPTS.Data.Customers.Entities
     [Serializable]
     [ORTableMapping("CM.Customers", "CM.Customers_Current")]
     [DataContract]
-    [EntityAuth(RecordType =RecordType.Customer)]
-    [CustomerRelationScope(ActionType = ActionType.Read, Functions = "查看客户（不含联系方式）"
-        , RelationType = RelationType.Callcenter, RecordType = CustomerRecordType.Customer, Description = "电销关系读取客户权限分配")]
 
-    [CustomerRelationScope(ActionType = ActionType.Read, Functions = "学员列表查看"
-        , RelationType = RelationType.Consultant, RecordType = CustomerRecordType.Customer,Description ="咨询关系读取客户权限分配")]
+    #region 数据范围权限(存入识别)
+    [EntityAuth(RecordType = RecordType.Customer)]
+    #endregion 
 
-    [CustomerRelationScope(ActionType = ActionType.Read, Functions = "成绩汇总列表查看"
-        , RelationType = RelationType.Educator, RecordType = CustomerRecordType.Customer,Description ="学管关系读取客户权限分配")]
+    #region 数据范围权限(数据读取权限)
+    [OwnerRelationScope(Name = "学员管理", Functions = "学员管理", RecordType = RecordType.Customer)]
+    #endregion
 
-    [OrgCustomerRelationScope(OrgType = OrgType.Branch, ActionType = ActionType.Read
-        , Functions = "上课记录（学员视图）", RelationType = RelationType.Marketing
-        , RecordType = CustomerRecordType.Customer)]
+    #region 数据范围权限(编辑操作权限)
+    [OwnerRelationScope(Name = "修改家长、学员非关键信息", Functions = "修改家长、学员非关键信息", ActionType = ActionType.Edit, RecordType = RecordType.Customer)]
+    [RecordOrgScope(Name = "修改家长、学员关键信息-本分公司", Functions = "修改家长、学员关键信息-本分公司", OrgType = OrgType.Department, ActionType = ActionType.Edit, RecordType = RecordType.Customer)]
+    #endregion
 
-    [OwnerRelationScope(ActionType = ActionType.Read, Functions = "技术支持", RecordType = RecordType.Customer)]
-
-    [RecordOrgScope(OrgType = OrgType.Branch, ActionType = ActionType.Read, Functions = "b,c", RecordType = RecordType.Customer)]
-    [RecordOrgScope(OrgType = OrgType.Campus, ActionType = ActionType.Read, Functions = "b,c", RecordType = RecordType.Customer)]
     public class Customer : CustomerBase
     {
         public Customer()
         {
-        }
-
-        /// <summary>
-        /// 校区ID（学员属性）
-        /// </summary>
-        [ORFieldMapping("CampusID")]
-        [DataMember]
-        public string CampusID
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 校区名称（学员属性）
-        /// </summary>
-        [ORFieldMapping("CampusName")]
-        [DataMember]
-        public string CampusName
-        {
-            get;
-            set;
         }
 
         /// <summary>
@@ -75,7 +45,7 @@ namespace PPTS.Data.Customers.Entities
         }
 
         /// <summary>
-        /// 锁定描述（转学，毕业）(学员属性)
+        /// 锁定描述（目前毕业就冻结锁定）
         /// </summary>
         [ORFieldMapping("LockMemo")]
         [DataMember]
@@ -88,6 +58,8 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 学员状态
         /// </summary>
+        [ORFieldMapping("StudentStatus")]
+        [DataMember]
         public StudentStatusDefine StudentStatus
         {
             set;

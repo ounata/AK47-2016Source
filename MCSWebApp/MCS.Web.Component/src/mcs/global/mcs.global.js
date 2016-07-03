@@ -1,8 +1,11 @@
-﻿(function () {
+﻿(function() {
     'use strict';
 
-    var fileTypes = { css: 'css', javascript: 'js' };
-    var getFileName = function (fileType, filePath, isLocal) {
+    var fileTypes = {
+        css: 'css',
+        javascript: 'js'
+    };
+    var getFileName = function(fileType, filePath, isLocal) {
         var fileName = !isLocal ? mcs.app.config.mcsComponentBaseUrl.replace('http://', 'http:\\') : '';
         var extension = '';
         switch (fileType) {
@@ -24,10 +27,14 @@
         return fileName;
     };
 
-    var handleParam = function (fileType, params) {
+    var handleParam = function(fileType, params) {
         if (!params.length) return;
 
-        var assets = { files: [], localFiles: [], container: '' };
+        var assets = {
+            files: [],
+            localFiles: [],
+            container: ''
+        };
 
         if (params.length == 1) {
             if (params[0] instanceof Object && params[0].constructor == Object) {
@@ -72,13 +79,16 @@
      * cssFiles: 来自远程服务器的CSS文件列表(如：/libs/demo.css,lib/demo,lib/demo.css)
      * localCssFiles: 来自本地服务器的CSS文件列表(如：/local/demo.css, local/demo)
      * container: 可不指定将附加到head中，否则将附加到指定的标签位置
-    */
-    mcs.g.loadCss = function (/*{cssFiles:[],localCssFiles:[],container:'#containerId'}*/) {
+     */
+    mcs.g.loadCss = function( /*{cssFiles:[],localCssFiles:[],container:'#containerId'}*/ ) {
         var assets = handleParam(fileTypes.css, arguments);
-        var mergeFiles = [
-            { isLocal: false, data: assets.cssFiles || []},
-            { isLocal: true, data: assets.localCssFiles || []}
-        ];
+        var mergeFiles = [{
+            isLocal: false,
+            data: assets.cssFiles || []
+        }, {
+            isLocal: true,
+            data: assets.localCssFiles || []
+        }];
 
         for (var i = 0, iLen = mergeFiles.length; i < iLen; i++) {
             var file = mergeFiles[i];
@@ -97,18 +107,22 @@
         }
     };
 
+
     /*
-    * 动态加载Js文件列表，可指定页面上的任意位置
-    * jsFiles: 来自远程服务器的JS文件列表(如：/libs/demo.js,lib/demo,lib/demo.js)
-    * localJsFiles: 来自本地服务器的JS文件列表(如：/local/demo.css, local/demo)
-    * container: 可不指定将附加到head中，否则将附加到指定的标签位置
-   */
-    mcs.g.loadJs = function (/*{jsFiles:[],localJsFiles:[],container:'#containerId'}*/) {
+     * 动态加载Js文件列表，可指定页面上的任意位置
+     * jsFiles: 来自远程服务器的JS文件列表(如：/libs/demo.js,lib/demo,lib/demo.js)
+     * localJsFiles: 来自本地服务器的JS文件列表(如：/local/demo.css, local/demo)
+     * container: 可不指定将附加到head中，否则将附加到指定的标签位置
+     */
+    mcs.g.loadJs = function( /*{jsFiles:[],localJsFiles:[],container:'#containerId'}*/ ) {
         var assets = handleParam(fileTypes.javascript, arguments);
-        var mergeFiles = [
-            { isLocal: false, data: assets.jsFiles || []},
-            { isLocal: true, data: assets.localJsFiles || []}
-        ];
+        var mergeFiles = [{
+            isLocal: false,
+            data: assets.jsFiles || []
+        }, {
+            isLocal: true,
+            data: assets.localJsFiles || []
+        }];
 
         for (var i = 0, iLen = mergeFiles.length; i < iLen; i++) {
             var file = mergeFiles[i];
@@ -127,12 +141,12 @@
     };
 
     /*
-    * 对requirejs单独做处理
-    * requireFile: 来自远程或本地服务器的RequireJS文件地址(如：libs/require)
-    * requireConfig: 来自本地服务器的RequireJS配置文件地址(如：./app/config/require.config),
-    * isLocal: 是否来自本地服务器(默认为false)
-   */
-    mcs.g.loadRequireJs = function (requireFile, requireConfig, isLocal) {
+     * 对requirejs单独做处理
+     * requireFile: 来自远程或本地服务器的RequireJS文件地址(如：libs/require)
+     * requireConfig: 来自本地服务器的RequireJS配置文件地址(如：./app/config/require.config),
+     * isLocal: 是否来自本地服务器(默认为false)
+     */
+    mcs.g.loadRequireJs = function(requireFile, requireConfig, isLocal) {
         if (!requireFile || !requireConfig) return;
         var fileType = fileTypes.javascript;
         var fileName = getFileName(fileType, requireFile, isLocal);

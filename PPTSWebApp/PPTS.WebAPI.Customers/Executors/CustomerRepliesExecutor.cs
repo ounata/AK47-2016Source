@@ -12,6 +12,7 @@ using System.Web;
 using PPTS.Data.Common.Security;
 using MCS.Library.Principal;
 using PPTS.Data.Common;
+using MCS.Library.Net.SNTP;
 
 namespace PPTS.WebAPI.Customers.Executors
 {
@@ -27,7 +28,7 @@ namespace PPTS.WebAPI.Customers.Executors
         protected override void PrepareData(DataExecutionContext<UserOperationLogCollection> context)
         {
             base.PrepareData(context);
-            var cDateTime = DateTime.Now;
+            var cDateTime =SNTPClient.AdjustedLocalTime;
             var customer = CustomerAdapter.Instance.Load(Model.CustomerId);
             var parentRelation = CustomerParentRelationAdapter.Instance.Load(Model.CustomerId).Find(a => a.IsPrimary == true);
             var parent = ParentAdapter.Instance.Load(parentRelation.ParentID);
@@ -55,7 +56,7 @@ namespace PPTS.WebAPI.Customers.Executors
                     continue;
                 }
                 item.CampusID = customer.CampusID;
-                item.CampusName = customer.CampusName;
+                item.CampusName = OGUExtensions.GetOrganizationByID(customer.CampusID).GetShortName();
                 item.CustomerName = customer.CustomerName;
 
                 item.ReplyFrom = Convert.ToString((int)ReplyFrom.PPTSWEB);
@@ -82,6 +83,10 @@ namespace PPTS.WebAPI.Customers.Executors
                 }
                 CustomerReplyAdapter.Instance.UpdateInContext(item);
             }
+        }
+        protected override object DoOperation(DataExecutionContext<UserOperationLogCollection> context)
+        {
+            return base.DoOperation(context);
         }
     }
 }

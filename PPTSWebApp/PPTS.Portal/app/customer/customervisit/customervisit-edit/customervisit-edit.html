@@ -17,13 +17,13 @@
             <div class="space-10">
             </div>
             <div class="form-group">
-                <label required class="control-label col-sm-3">回访人:</label>
+                <label required class="control-label col-sm-3">被访学员</label>
                 <div class="input-group col-sm-9">
                     <span>{{vm.customer.customerName}}</span>
                 </div>
             </div>
             <div class="form-group">
-                <label required class="control-label col-sm-3">回访人:</label>
+                <label required class="control-label col-sm-3">回访人</label>
                 <div class="input-group col-sm-9">
                     <span>{{vm.customerVisit.visitorName}}</span>
                 </div>
@@ -43,7 +43,7 @@
             <div class="form-group">
                 <mcs-label required="true" text="回访时间" css="col-sm-3" />
                 <div class="input-group col-sm-3">
-                    <ppts-datetimepicker model="vm.customerVisit.visitTime" css="mcs-padding-0" width="100%" required/>
+                    <mcs-datetimepicker model="vm.customerVisit.visitTime" css="mcs-padding-0" width="100%"  required/>
                     <span class="label-260">
                         回访时间只能选择当前时间及前三天的任意一天。
                     </span>
@@ -53,7 +53,7 @@
                 <mcs-label required="true" text="回访内容" css="col-sm-3" />
                 <div class="input-group col-sm-9">
                     <textarea class="col-sm-8" rows="5" id="textArea" ng-model="vm.customerVisit.visitContent" maxlength="1000" required></textarea>
-                    <span class="help-block col-sm-6">不允许输入1000个字符，已经输入{{ vm.customerVisit.visitContent.length || 0 }}个</span>
+                    <span class="help-block col-sm-6">最多支持输入1000个字，还可以输入{{ 1000 - vm.customerVisit.visitContent.length || 0 }}个</span>
                 </div>
             </div>
             <div class="form-group">
@@ -63,15 +63,22 @@
                 </div>
             </div>
             <div class="form-group">
-                <mcs-label required="true" text="预计下次回访时间" css="col-sm-3" />
+                <mcs-label text="预计下次回访时间" css="col-sm-3" />
                 <div class="input-group col-sm-3">
-                    <ppts-datetimepicker model="vm.customerVisit.nextVisitTime" css="mcs-padding-0" width="100%" required/>
+                    <mcs-datetimepicker model="vm.customerVisit.nextVisitTime" css="mcs-padding-0" width="100%" />
+                </div>
+            </div>
+           
+            <div class="form-group">
+                <label class="control-label col-sm-3">设置提醒时间</label>
+                <div class="input-group col-sm-3">
+                    <mcs-datetimepicker model="vm.customerVisit.remindTime" css="mcs-padding-0" />
                 </div>
             </div>
             <div class="form-group">
-                <label class="control-label col-sm-3">通知处理人:</label>
-                <div class="input-group col-sm-9">
-                    <ppts-checkbox-group category="messageType" model="vm.selectTypes" />
+                <label class="control-label col-sm-3"></label>
+                <div class="input-group col-sm-6">
+                    <ppts-radiobutton-group category="messageType" model="vm.customerVisit.selectType" />
                 </div>
             </div>
         </form>

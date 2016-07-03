@@ -375,9 +375,9 @@ namespace MCS.Library.Principal
 
             PassportManager.CheckAuthenticated(needRedirect);
 
-            bool fromCookie = false;
+            TicketSource ticketSource = TicketSource.Unknown;
 
-            return PassportManager.GetTicket(out fromCookie);
+            return PassportManager.GetTicket(out ticketSource);
         }
 
         private static IPrincipal SetPrincipal(string userID, ITicket ticket)

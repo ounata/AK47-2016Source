@@ -1,35 +1,40 @@
-﻿第一步：选择要兑换的产品
+﻿
+<b>第一步：选择要兑换的产品</b>
 <br />
 您正在为学员 {{vm.customer.customerName}} ({{vm.customer.customerCode}}) 选择产品
 <br />
 
-<div class="mcs-panel-search well well-sm">
-    <div class="portlet">
-        <div class="portlet-title line">
-            <div class="caption">
-                <label class="quick-search"><i class="ace-icon fa fa-search bigger-125"></i> 快速查询条件</label>
-            </div>
+<ppts-dynamic-content template="quick-search.tpl.html">
+
+    <div class="row">
+        <div class="col-sm-4">
+            <ppts-organization branch="vm.criteria.branch" campus="vm.criteria.campusID" required-level="1" disabled-level="vm.disabledlevel" />
         </div>
-        <div class="portlet-body">
-            <form name="orderListForm">
-                <div class="search-inline">
-                    <ppts-select category="grade" class="ppts-select-search" model="vm.criteria.grade" caption="年级" />
-                    <ppts-select category="subject" class="ppts-select-search" model="vm.criteria.subject" caption="科目" />
-                    <ppts-select category="courseLevel" class="ppts-select-search" model="vm.criteria.courseLevel" caption="课程级别" />
-                    <ppts-select category="duration" class="ppts-select-search" model="vm.criteria.periodDuration" caption="课时时长" />
-                </div>
-                <div>
-                    <mcs-button category="search" click="vm.search()" size="medium" />
-                </div>
-            </form>
+        <div class="col-md-4">
+            <mcs-select category="grade" model="vm.criteria.grade" caption="年级" css="mcs-padding-0" />
+        </div>
+        <div class="col-md-4">
+            <mcs-select category="subject" model="vm.criteria.subject" caption="科目" css="mcs-padding-0" />
         </div>
     </div>
-</div>
 
-<div class="mcs-panel-toolbar">
-    <mcs-button category="edit" text="下一步" click="vm.next()" ng-disabled="vm.data.rowsSelected.length!=1"></mcs-button>
+    <div class="row">
+        <div class="col-md-4">
+            <mcs-select category="courseLevel" model="vm.criteria.courseLevel" caption="课程级别" css="mcs-padding-0" />
+        </div>
+        <div class="col-md-4">
+            <mcs-select category="duration" model="vm.criteria.periodDuration" caption="课时时长" css="mcs-padding-0" />
+        </div>
+        <div class="col-md-4">
+        </div>
+    </div>
+</ppts-dynamic-content>
+
+
+<ppts-dynamic-content template="toolbar.tpl.html">
+    <mcs-button category="edit" text="下一步" click="vm.next()" ></mcs-button>
     <mcs-button category="cancel" click="vm.cancel()"></mcs-button>
-</div>
+</ppts-dynamic-content>
 
 <mcs-datatable data="vm.data" />
 

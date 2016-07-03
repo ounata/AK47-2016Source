@@ -16,13 +16,13 @@ namespace PPTS.WebAPI.Customers.DataSources
 
         public PagedQueryResult<CustomerServiceModel, CustomerServiceModelCollection> LoadCustomerService(IPageRequestParams prp, object condition, IEnumerable<IOrderByRequestItem> orderByBuilder)
         {
-            string select = " cs.CustomerID,cs.ServiceID,pc.CustomerName CustomerName ,p.ParentName ParentName,pc.grade,cs.AcceptTime,";
-            select += "cs.serviceType,cs.accepterName,cs.serviceStatus,cs.handlerName,";
-            select += " cs.complaintTimes,'校区反馈' SchoolMemo,cs.isUpgradeHandle,cs.VoiceID,'录音状态' VoiceStatus ";
-            string from = @" CM.CustomerServices cs left join CM.PotentialCustomers pc 
+            string select = " pc.OrgName,pc.CampusName,cs.CustomerID,cs.ServiceID,pc.CustomerName CustomerName ,p.ParentName ParentName,pc.grade,cs.AcceptTime,";
+            select += "cs.ServiceType,cs.AccepterName,cs.ServiceStatus,cs.HandlerName,";
+            select += " cs.ComplaintTimes,cs.ComplaintLevel,'校区反馈' SchoolMemo,cs.IsUpgradeHandle,cs.VoiceID,'录音状态' VoiceStatus ";
+            string from = @" CM.CustomerServices cs left join CM.PotentialCustomers_Current pc 
                               on cs.CustomerID = pc.CustomerID
-                              left join CM.CustomerParentRelations csr on cs.CustomerID = csr.CustomerID
-                              left join CM.Parents p on csr.ParentID = p.ParentID";
+                              left join CM.CustomerParentRelations_Current csr on cs.CustomerID = csr.CustomerID
+                              left join CM.Parents_Current p on csr.ParentID = p.ParentID";
 
             PagedQueryResult<CustomerServiceModel, CustomerServiceModelCollection> result = Query(prp, select, from, condition, orderByBuilder);
             return result;

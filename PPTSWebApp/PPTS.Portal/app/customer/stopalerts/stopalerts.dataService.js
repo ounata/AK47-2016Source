@@ -77,7 +77,7 @@
             dataSyncService.initCriteria(vm);
             stopAlertdataService.getAllStopAlerts(vm.criteria, function (result) {
                 vm.data.rows = result.queryResult.pagedData;
-                dataSyncService.injectPageDict(['dateRange', 'people', 'ifElse']);
+                dataSyncService.injectDynamicDict('dateRange,dept,ifElse');
                 dataSyncService.updateTotalCount(vm, result.queryResult);
                 if (ng.isFunction(callback)) {
                     callback();
@@ -89,7 +89,7 @@
         service.initCreateStopAlertInfo = function (vm, state, callback) {
             stopAlertdataService.getStopAlertForCreate(state.id, function (result) {
                 vm.criteria = result.stopAlert;
-                dataSyncService.injectPageDict(['ifElse']);
+                dataSyncService.injectDynamicDict('ifElse');
                 if (ng.isFunction(callback)) {
                     callback();
                 }

@@ -1,4 +1,5 @@
-﻿using PPTS.Data.Common.Adapters;
+﻿using PPTS.Data.Common;
+using PPTS.Data.Common.Adapters;
 using PPTS.Data.Common.Entities;
 using PPTS.Data.Customers.Entities;
 using PPTS.Data.Orders.Adapters;
@@ -124,8 +125,9 @@ namespace PPTS.WebAPI.Orders.ViewModels.Purchase
             Cart.ForEach(m =>
             {
                 m.Item.ProductID = m.ProductID;
-                m.Item.SpecialRate = m.Item.OrderAmount = 1;
-                if (m.Product.CategoryType == Data.Products.CategoryType.CalssGroup)
+                //m.Item.SpecialRate = 0;
+                m.Item.OrderAmount = 1;
+                if (m.Product.CategoryType == CategoryType.CalssGroup)
                 {
                     m.Item.OrderAmount = m.Product.LessonCount;
                 }
@@ -189,7 +191,7 @@ namespace PPTS.WebAPI.Orders.ViewModels.Purchase
         /// <summary>
         /// 特殊折扣
         /// </summary>
-        public decimal SpecialRate { set; get; }
+        public decimal? SpecialRate { set; get; }
 
         /// <summary>
         /// 买赠-赠送数量

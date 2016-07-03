@@ -1,14 +1,18 @@
-﻿using System.Collections.Generic;
-using MCS.Library.Data;
+﻿using System.Text;
+using System.Collections.Generic;
 using PPTS.Data.Customers.DataSources;
 using PPTS.Data.Customers.Entities;
 using PPTS.WebAPI.Customers.ViewModels.PotentialCustomers;
 using PPTS.Data.Customers.Adapters;
 using PPTS.Data.Customers;
+using MCS.Library.Data;
 using MCS.Library.Data.DataObjects;
-using System.Text;
 using MCS.Library.Data.Builder;
 using MCS.Library.Data.Mapping;
+using MCS.Library.Principal;
+using PPTS.Data.Common.Security;
+using PPTS.Data.Common;
+using System;
 
 namespace PPTS.WebAPI.Customers.DataSources
 {
@@ -40,7 +44,12 @@ namespace PPTS.WebAPI.Customers.DataSources
             qc.SelectFields = @" PotentialCustomers.* ";
             qc.FromClause = @" CM.PotentialCustomers_Current PotentialCustomers ";
 
-            // qc.WhereClause=PPTS.Data.Customers.Authorization.ScopeAuthorization<PotentialCustomer>.Instance.ReadAuthExistsBuider("pcc", qc.WhereClause).ToSqlString(MCS.Library.Data.Builder.TSqlBuilder.Instance);
+            #region 数据权限加工
+            qc.WhereClause = PPTS.Data.Common.Authorization.ScopeAuthorization<PotentialCustomer>
+                .GetInstance(ConnectionDefine.PPTSCustomerConnectionName)
+                .ReadAuthExistsBuilder("PotentialCustomers", qc.WhereClause).ToSqlString(TSqlBuilder.Instance);
+            #endregion
+
             base.OnBuildQueryCondition(qc);
         }
 
@@ -53,6 +62,8 @@ namespace PPTS.WebAPI.Customers.DataSources
                 customer.Consultant = relations.GetStaff(CustomerRelationType.Consultant);
                 customer.Market = relations.GetStaff(CustomerRelationType.Market);
                 customer.MarketStaff = relations.GetStaffName(CustomerRelationType.Market);
+                var creator = relations.GetStaff(CustomerRelationType.Creator);
+                customer.CreateJobName = creator == null ? "" : creator.StaffJobName;
 
                 ParentModel parent = GenericParentAdapter<ParentModel, List<ParentModel>>.Instance.LoadPrimaryParentInContext(customer.CustomerID);
                 customer.ParentName = parent == null ? "" : parent.ParentName;
@@ -64,43 +75,40 @@ namespace PPTS.WebAPI.Customers.DataSources
             string sqlBuilder = string.Empty;
 
             #region 在读学校
-            string schoolNameBuilder = string.Empty;
             if (!string.IsNullOrEmpty(condition.SchoolName))
             {
-                schoolNameBuilder = string.Format(
-                    @" and exists (select SchoolID from CM.Schools AS Schools where PotentialCustomers.SchoolID=Schools.SchoolID and SchoolName like N'%{0}%') ", condition.SchoolName);
+                sqlBuilder = string.Format(
+                    @" and exists (select SchoolID from CM.Schools AS Schools where PotentialCustomers.SchoolID=Schools.SchoolID and SchoolName like N'%{0}%') ", condition.SchoolName.EncodeString());
             }
             #endregion
 
             #region 家庭住址
-            string addressBuilder = string.Empty;
             if (!string.IsNullOrEmpty(condition.AddressDetail))
             {
-                addressBuilder = string.Format(
+                sqlBuilder += string.Format(
                     @" and exists(select CustomerParentRelations.CustomerID 
 					from CM.CustomerParentRelations_Current AS CustomerParentRelations inner join CM.Parents_Current AS Parents on CustomerParentRelations.ParentID = Parents.ParentID
-					where PotentialCustomers.CustomerID = CustomerParentRelations.CustomerID and Parents.AddressDetail like N'%{0}%')", condition.AddressDetail);
+					where PotentialCustomers.CustomerID = CustomerParentRelations.CustomerID and Parents.AddressDetail like N'%{0}%')", condition.AddressDetail.EncodeString());
             }
             #endregion
 
-            #region 归属关系
-            string staffRelationBuilder = string.Empty;
+            #region 归属关系-是否分配
             StringBuilder staffBuilder = new StringBuilder();
             StringBuilder isAssignBuilder = new StringBuilder();
 
-            string sqlString = @" and exists(select CustomerStaffRelations.CustomerID 
+            string staffRelationString = @" and exists(select CustomerStaffRelations.CustomerID 
                        from CM.CustomerStaffRelations_Current AS CustomerStaffRelations 
 				       where PotentialCustomers.CustomerID = CustomerStaffRelations.CustomerID {0})";
             // 归属坐席
             if (!string.IsNullOrEmpty(condition.CallcenterName))
             {
-                staffBuilder.AppendFormat(sqlString, string.Format(@" and (CustomerStaffRelations.StaffName=N'{0}' and CustomerStaffRelations.RelationType={1})", condition.CallcenterName, (byte)CustomerRelationType.Callcenter));
+                staffBuilder.AppendFormat(staffRelationString, string.Format(@" and (CustomerStaffRelations.StaffName=N'{0}' and CustomerStaffRelations.RelationType={1})", condition.CallcenterName.EncodeString(), (byte)CustomerRelationType.Callcenter));
             }
             else if (!string.IsNullOrEmpty(condition.IsAssignCallcenterStatus))
             {
                 if (condition.IsAssignCallcenterStatus == ((byte)StaffRelationIsAssigned.Yes).ToString())
                 {
-                    staffBuilder.AppendFormat(sqlString, string.Format(@" and (CustomerStaffRelations.RelationType={0}) ", (byte)CustomerRelationType.Callcenter));
+                    staffBuilder.AppendFormat(staffRelationString, string.Format(@" and (CustomerStaffRelations.RelationType={0}) ", (byte)CustomerRelationType.Callcenter));
                 }
                 else
                 {
@@ -114,13 +122,13 @@ namespace PPTS.WebAPI.Customers.DataSources
             // 咨询师姓名
             if (!string.IsNullOrEmpty(condition.ConsultantName))
             {
-                staffBuilder.AppendFormat(sqlString, string.Format(@" and (CustomerStaffRelations.StaffName=N'{0}' and CustomerStaffRelations.RelationType={1})", condition.ConsultantName, (byte)CustomerRelationType.Consultant));
+                staffBuilder.AppendFormat(staffRelationString, string.Format(@" and (CustomerStaffRelations.StaffName=N'{0}' and CustomerStaffRelations.RelationType={1})", condition.ConsultantName.EncodeString(), (byte)CustomerRelationType.Consultant));
             }
             else if (!string.IsNullOrEmpty(condition.IsAssignConsultantStatus))
             {
                 if (condition.IsAssignConsultantStatus == ((byte)StaffRelationIsAssigned.Yes).ToString())
                 {
-                    staffBuilder.AppendFormat(sqlString, string.Format(@" and (CustomerStaffRelations.RelationType={0}) ", (byte)CustomerRelationType.Consultant));
+                    staffBuilder.AppendFormat(staffRelationString, string.Format(@" and (CustomerStaffRelations.RelationType={0}) ", (byte)CustomerRelationType.Consultant));
                 }
                 else
                 {
@@ -134,13 +142,13 @@ namespace PPTS.WebAPI.Customers.DataSources
             // 市场专员姓名
             if (!string.IsNullOrEmpty(condition.MarketName))
             {
-                staffBuilder.AppendFormat(sqlString, string.Format(@" and (CustomerStaffRelations.StaffName=N'{0}' and CustomerStaffRelations.RelationType={1})", condition.MarketName, (byte)CustomerRelationType.Market));
+                staffBuilder.AppendFormat(staffRelationString, string.Format(@" and (CustomerStaffRelations.StaffName=N'{0}' and CustomerStaffRelations.RelationType={1})", condition.MarketName.EncodeString(), (byte)CustomerRelationType.Market));
             }
             else if (!string.IsNullOrEmpty(condition.IsAssignMarketStatus))
             {
                 if (condition.IsAssignMarketStatus == ((byte)StaffRelationIsAssigned.Yes).ToString())
                 {
-                    staffBuilder.AppendFormat(sqlString, string.Format(@" and (CustomerStaffRelations.RelationType={0}) ", (byte)CustomerRelationType.Market));
+                    staffBuilder.AppendFormat(staffRelationString, string.Format(@" and (CustomerStaffRelations.RelationType={0}) ", (byte)CustomerRelationType.Market));
                 }
                 else
                 {
@@ -151,39 +159,123 @@ namespace PPTS.WebAPI.Customers.DataSources
                 }
             }
 
-            staffRelationBuilder = staffBuilder.ToString() + isAssignBuilder.ToString();
+            sqlBuilder += staffBuilder.ToString() + isAssignBuilder.ToString();
             #endregion
 
+            #region 归属关系
+            StringBuilder belongsBuilder = new StringBuilder();
+            if (!string.IsNullOrEmpty(condition.BelongName))
+            {
+                belongsBuilder.AppendFormat(string.Format(@" and CustomerStaffRelations.StaffName = N'{0}' ", condition.BelongName.EncodeString()));
+            }
+            if (condition.Belongs != null && condition.Belongs.Length > 0)
+            {
+                string ins = string.Empty;
+                foreach (string item in condition.Belongs)
+                {
+                    ins += "\'" + item + "\',";
+                }
+                ins = ins.TrimEnd(',');
+                belongsBuilder.AppendFormat(string.Format(@" and CustomerStaffRelations.RelationType in ({0}) ", ins));
+            }
+            sqlBuilder = string.IsNullOrEmpty(belongsBuilder.ToString()) ? sqlBuilder : sqlBuilder + string.Format(staffRelationString, belongsBuilder.ToString());
+            #endregion
+
+            #region 查询部门
+            if (!string.IsNullOrEmpty(condition.DeptParam))
+            {
+                string deptID = DeluxeIdentity.CurrentUser.GetCurrentJob().Organization().ID;
+                sqlBuilder += string.Format(@"
+                        and exists(select CustomerStaffRelations.CustomerID 
+				        from CM.CustomerStaffRelations_Current AS CustomerStaffRelations
+				        where PotentialCustomers.CustomerID = CustomerStaffRelations.CustomerID and CustomerStaffRelations.StaffJobOrgID = '{0}')", deptID);
+            }
+            #endregion 
+
             #region 有效无效状态
-            string customerStatusBuilder = string.Format(" and CustomerStatus <> {0}", (byte)CustomerStatus.Formal); // 潜客中过滤掉学员
             if (!string.IsNullOrEmpty(condition.CustomerStatus))
             {
                 if (condition.CustomerStatus == ((byte)CustomerStatus.Invalid).ToString())
                 {
-                    customerStatusBuilder = string.Format(" and CustomerStatus = {0}", (byte)CustomerStatus.Invalid);
+                    sqlBuilder += string.Format(" and CustomerStatus = {0}", (byte)CustomerStatus.Invalid);
                 }
                 else
                 {
-                    customerStatusBuilder = string.Format(" and CustomerStatus <> {0}", (byte)CustomerStatus.Invalid);
+                    sqlBuilder += string.Format(" and CustomerStatus <> {0}", (byte)CustomerStatus.Invalid);
                 }
             }
 
             #endregion 
 
             #region 学员家长姓名、学员编号、联系方式 全文检索
-            string customersFulltextbuilder = string.Empty;
             if (!string.IsNullOrEmpty(condition.Keyword))
             {
-                customersFulltextbuilder = string.Format(
+                sqlBuilder += string.Format(
                     @" and exists(select OwnerID
                        from CM.PotentialCustomersFulltext AS PotentialCustomersFulltext
-                       where PotentialCustomers.CustomerID = PotentialCustomersFulltext.OwnerID and CONTAINS(PotentialCustomersFulltext.*, N'{0}'))", condition.Keyword);
+                       where PotentialCustomers.CustomerID = PotentialCustomersFulltext.OwnerID and CONTAINS(PotentialCustomersFulltext.*, N'""{0}""'))", condition.Keyword.EncodeString());
             }
             #endregion
 
-            sqlBuilder = schoolNameBuilder + addressBuilder + staffRelationBuilder + customersFulltextbuilder + customerStatusBuilder;
+            #region 市场相关-潜客列表过滤掉学员，市场导入的资源不过滤
+            // 来源
+            if (condition.From == "market")
+            {
+                sqlBuilder += string.Format(@" and PotentialCustomers.CreatorJobType = " + (byte)JobTypeDefine.Marketing);
+            }
+            else
+            {
+                sqlBuilder += string.Format(" and CustomerStatus <> {0}", (byte)CustomerStatus.Formal); // 潜客中过滤掉学员
+            }
+            #endregion
+
+            #region 市场相关-充值日期
+            string chargeBuilder = @" and exists (select AccountChargeApplies.CustomerID 
+                                     from CM.AccountChargeApplies AccountChargeApplies 
+	                                 where PotentialCustomers.CustomerID=AccountChargeApplies.CustomerID {0})";
+            string payTimeBuilder = string.Empty;
+            if (condition.PayTimeStartUTC != null && condition.PayTimeStartUTC != DateTime.MinValue)
+            {
+                payTimeBuilder = string.Format(@" and AccountChargeApplies.PayTime >= '{0}'", condition.PayTimeStartUTC);
+            }
+            if (condition.PayTimeEndUTC != null && condition.PayTimeEndUTC != DateTime.MinValue)
+            {
+                payTimeBuilder += string.Format(@" and AccountChargeApplies.PayTime <= '{0}'", condition.PayTimeEndUTC);
+            }
+            sqlBuilder += string.IsNullOrEmpty(payTimeBuilder) ? "" : string.Format(chargeBuilder, payTimeBuilder);
+
+            #endregion
+
+            #region 市场相关-充值金额
+            string payAmountBuilder = string.Empty;
+            if (condition.PayAmountMin > 0)
+            {
+                payAmountBuilder = string.Format(@" and AccountChargeApplies.ChargeMoney >= {0}", condition.PayAmountMin);
+            }
+            if (condition.PayAmountMax > 0)
+            {
+                payAmountBuilder += string.Format(@" and AccountChargeApplies.ChargeMoney <= {0}", condition.PayAmountMax);
+            }
+            sqlBuilder += string.IsNullOrEmpty(payAmountBuilder) ? "" : string.Format(chargeBuilder, payAmountBuilder);
+
+            #endregion
+
+            #region 市场相关-客户分类-有效无效
+            if (!string.IsNullOrEmpty(condition.CustomerType))
+            {
+                if (condition.CustomerType == "0")
+                {
+                    sqlBuilder += string.Format(@" and PotentialCustomers.CustomerStatus <> {0}",(byte)CustomerStatus.Formal);
+                }
+                else if (condition.CustomerType == "1")
+                {
+                    sqlBuilder += string.Format(@" and PotentialCustomers.CustomerStatus = {0}", (byte)CustomerStatus.Formal);
+                }
+            }
+            #endregion 
 
             return sqlBuilder;
         }
+
     }
 }

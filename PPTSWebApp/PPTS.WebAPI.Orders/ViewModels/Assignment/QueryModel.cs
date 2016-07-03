@@ -75,13 +75,13 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
         [DataMember]
         public DateTime ReDate { get; set; }
 
-        /// 调课后小时
-        [DataMember]
-        public string ReHour { get; set; }
+        ///// 调课后小时
+        //[DataMember]
+        //public string ReHour { get; set; }
 
-        /// 调整后分钟
-        [DataMember]
-        public string ReMinute { get; set; }
+        ///// 调整后分钟
+        //[DataMember]
+        //public string ReMinute { get; set; }
 
         /// 原排课开始时间
         [DataMember]

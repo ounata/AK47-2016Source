@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using PPTS.Data.Common.Authorization;
 
 namespace PPTS.Data.Customers.Entities
 {
@@ -14,6 +15,9 @@ namespace PPTS.Data.Customers.Entities
     /// This object represents the properties and methods of a AccountChargeApply.
     /// 账户缴费申请表
     /// </summary>
+    #region 数据范围权限(存入识别)
+    [EntityAuth(RecordType = RecordType.AccountChargeApply)]
+    #endregion 
     [Serializable]
     [ORTableMapping("CM.AccountChargeApplies")]
     [DataContract]
@@ -46,8 +50,32 @@ namespace PPTS.Data.Customers.Entities
         }
 
         /// <summary>
+        /// 家长ID
+        /// </summary>
+        [ORFieldMapping("ParentID")]
+        [DataMember]
+        public string ParentID
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 家长姓名
+        /// </summary>
+        [ORFieldMapping("ParentName")]
+        [DataMember]
+        public string ParentName
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// 学员ID
         /// </summary>
+        [KeyFieldMapping("CustomerID")]
+        [CustomerFieldMapping("CustomerID")]
         [ORFieldMapping("CustomerID")]
         [DataMember]
         public string CustomerID
@@ -304,7 +332,7 @@ namespace PPTS.Data.Customers.Entities
         }
 
         /// <summary>
-        /// 异步处理时间
+        /// 最早支付时间
         /// </summary>
         [ORFieldMapping("PayTime", UtcTimeToLocal = true)]
         [DataMember]
@@ -314,6 +342,17 @@ namespace PPTS.Data.Customers.Entities
             set;
         }
 
+        /// <summary>
+        /// 最早刷卡时间
+        /// </summary>
+        [ORFieldMapping("SwipeTime", UtcTimeToLocal = true)]
+        [DataMember]
+        public DateTime SwipeTime
+        {
+            get;
+            set;
+        }
+        
         /// <summary>
         /// 充值前折扣ID
         /// </summary>
@@ -765,6 +804,18 @@ namespace PPTS.Data.Customers.Entities
         [SqlBehavior(DefaultExpression = "GETUTCDATE()", ForceUseDefaultExpression = true)]
         [DataMember]
         public DateTime ModifyTime
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 所报科目
+        /// </summary>
+        [ConstantCategory("c_codE_ABBR_BO_Product_TeacherSubject")]
+        [ORFieldMapping("AllotSubjects")]
+        [DataMember]
+        public string AllotSubjects
         {
             get;
             set;

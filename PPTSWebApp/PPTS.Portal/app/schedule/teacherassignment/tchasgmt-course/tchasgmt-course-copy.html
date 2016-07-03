@@ -16,13 +16,13 @@
             <label class="control-label" ng-show="vm.copyType">复制来源：</label>
             <label class="control-label" ng-show="!vm.copyType">复制【来源日期】和【目标日期】：</label>
             <div class="input-group">
-                <ppts-daterangepicker start-date="vm.aCM.srcDateStart" end-date="vm.aCM.srcDateEnd" />
+                <mcs-daterangepicker start-date="vm.aCM.srcDateStart" end-date="vm.aCM.srcDateEnd" />
             </div>
         </div>
         <div class="form-group" ng-show="vm.copyType">
             <label class="control-label">复制目标：</label>
             <div class="input-group">
-                <ppts-daterangepicker start-date="vm.aCM.destDateStart" end-date="vm.aCM.destDateEnd" />
+                <mcs-daterangepicker start-date="vm.aCM.destDateStart" end-date="vm.aCM.destDateEnd" disabled="after" />
             </div>
         </div>
     </div>

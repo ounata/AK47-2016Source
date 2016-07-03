@@ -18,8 +18,8 @@ namespace MCS.Web.Passport.TestPages
         {
             PassportManager.CheckAuthenticated();
 
-			bool fromCookie = false;
-            ITicket ticket = PassportManager.GetTicket(out fromCookie);
+			TicketSource ticketSource = TicketSource.Unknown;
+            ITicket ticket = PassportManager.GetTicket(out ticketSource);
 
             ShowTicketInfo(ticket);
         }

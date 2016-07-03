@@ -49,6 +49,24 @@ namespace PPTS.WebAPI.Customers.ViewModels.CustomerServices
             set;
         }
 
+        public string ResourceID
+        {
+            get;
+            set;
+        }
+
+        public string ActivityID
+        {
+            get;
+            set;
+        }
+
+        public string ProcessID
+        {
+            get;
+            set;
+        }
+
         public IDictionary<string, IEnumerable<BaseConstantEntity>> Dictionaries
         {
             get;
@@ -84,6 +102,17 @@ namespace PPTS.WebAPI.Customers.ViewModels.CustomerServices
             result.CurrJobID = DeluxeIdentity.CurrentUser.GetCurrentJob().ID;
 
             return result;
+        }
+
+        public static List<CustomerServiceItem> LoadByServiceID(string serviceID)
+        {
+            List<CustomerServiceItem> models = new List<CustomerServiceItem>();
+            CustomerServiceItemCollection customerServices = CustomerServiceItemsAdapter.Instance.LoadCollectionByServiceID(serviceID);
+            foreach (CustomerServiceItem customerService in customerServices)
+            {
+                models.Add(customerService);
+            }
+            return models;
         }
     }
 }

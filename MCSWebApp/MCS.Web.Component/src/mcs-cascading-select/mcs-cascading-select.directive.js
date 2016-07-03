@@ -15,6 +15,7 @@
                 otherParams: '=?',
                 parentKey: '@',
                 customStyle: '@',
+                disabledLevel: '=?',
                 callback: '&'
             },
             templateUrl: mcs.app.config.mcsComponentBaseUrl + '/src/tpl/mcs-cascading-select.tpl.html',
@@ -41,6 +42,7 @@
                 var loadData = function (elem, id) {
                     if (!id) return;
                     // 支持异步
+                    var $$model = mcs.util.clone($scope.model);
                     if (mcs.util.bool($scope.async)) {
                         if (!$scope.url) return;
                         $http({
@@ -51,6 +53,7 @@
                         }).then(function (result) {
                             if (!result.data) return;
                             $scope.data = $scope.data || {};
+                            $scope.model = $$model;
                             for (var i in result.data) {
                                 var item = result.data[i];
                                 $scope.data[id] = $scope.data[id] || {};
@@ -63,7 +66,6 @@
                             return false;
                         loadDataCallback(elem, $scope.data[id]);
                     }
-                    elem.select2('val', '');
                 };
 
                 var captions = mcs.util.toArray($scope.caption);
@@ -78,14 +80,65 @@
                     loadWatchDataCallback();
                 });
 
-                var loadDataCallback = function (elem, json, selected_id) {
+                var loadDataCallback = function (elem, json) {
                     var width = ($elem.width() - ($scope.level * 10)) / $scope.level;
+                    // 获取当前下拉框在级联容器中的索引
+                    var index = elem.closest('ul').children().index(elem.parent());
+                    var selectedValue = '';
                     $elem.find('.select2-container').width(width);
                     if (json) {
                         $.each(json, function (k, v) {
                             var option = '<option value="' + k + '">' + v + '</option>';
+                            if (($scope.model && k == $scope.model[index]) ||
+                                ($scope.$parent && k == $scope.$parent.model[index])) {
+                                selectedValue = k;
+                            }
                             elem.append(option);
                         });
+                    }
+                    // 默认选中
+                    elem.select2('val', selectedValue);
+                    // 如果选中则加载下一下拉框
+                    if (selectedValue) {
+                        var next = $elem.find('select').eq(index + 1);
+                        var parent = $scope.model[index];
+                        if ($scope.path) {
+                            switch (index) {
+                                case 0:
+                                    parent = $scope.root + ',' + parent;
+                                    break;
+                                case 1:
+                                    parent = $scope.root + ',' + $elem.find('select').eq(index - 1).val() + ',' + parent;
+                                    break;
+                                case 2:
+                                    parent = $scope.root + ',' + $elem.find('select').eq(index - 2).val() + ',' + $elem.find('select').eq(index - 1).val() + ',' + parent;
+                                    break;
+                            }
+                        }
+                        // 回传当前选中的数据
+                        $scope.model['selected'] = $scope.model['selected'] || {};
+                        $scope.model['selected'][index] = $scope.model['selected'][index] || {};
+                        $scope.model['selected'][index]['key'] = parent;
+                        $scope.model['selected'][index]['value'] = $elem.find('select').eq(index).select2('data').text;
+                        // 注册回调事件
+                        var isLast = (index == captions.length - 1);
+                        if (isLast) {
+                            $scope.$watch('$scope.model', $scope.callback);
+                        }
+                        // 扩展其他参数配置
+                        if (mcs.util.bool($scope.async)) {
+                            $scope.params[$scope.parentKey] = parent;
+                            if ($scope.otherParams) {
+                                for (var prop in $scope.params) {
+                                    if ($scope.otherParams[prop]) {
+                                        $scope.params[prop] = $scope.otherParams[prop];
+                                    }
+                                }
+                            }
+                        }
+
+                        loadData(next, parent);
+                        //next.change();
                     }
                 };
 
@@ -117,7 +170,7 @@
                         var isLast = (k == captions.length - 1);
 
                         // 返回已选择的数据
-                        $scope.model[k] = select.val();
+                        $scope.model[k] = select.val() || $scope.model[k];
 
                         if ($scope.customStyle) {
                             select.attr('style', $scope.customStyle);
@@ -191,10 +244,8 @@
                                             }
                                         }
                                     }
-                                    loadData(next, parent);
-                                } else {
-                                    loadData(next, parent);
                                 }
+                                loadData(next, parent);
                                 next.change();
                             } else {
                                 var validateElem = select;
@@ -209,9 +260,7 @@
                     });
 
                     // 默认加载第一级
-                    $scope.$watch('data', function () {
-                        loadData($elem.find('select').eq(0), $scope.root);
-                    });
+                    loadData($elem.find('select').eq(0), $scope.root);
                 };
             }
         }

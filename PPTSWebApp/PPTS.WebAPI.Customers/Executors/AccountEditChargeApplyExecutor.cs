@@ -29,10 +29,24 @@ namespace PPTS.WebAPI.Customers.Executors
             model.NullCheck("model");
         }
 
+        protected override object DoOperation(DataExecutionContext<UserOperationLogCollection> context)
+        {
+            #region 生成数据权限范围数据
+            PPTS.Data.Common.Authorization.ScopeAuthorization<AccountChargeApply>
+               .GetInstance(PPTS.Data.Customers.ConnectionDefine.PPTSCustomerConnectionName)
+               .UpdateAuthInContext(DeluxeIdentity.CurrentUser.GetCurrentJob()
+               , DeluxeIdentity.CurrentUser.GetCurrentJob().Organization()
+               , this.Model.ApplyID
+               , PPTS.Data.Common.Authorization.RelationType.Owner);
+            #endregion 生成数据权限范围数据
+
+            return base.DoOperation(context);
+        }
+
         private void Init(ChargeApplyModel apply)
         {
             if (apply.ApplyID.IsNullOrEmpty())
-                apply.ApplyID = Guid.NewGuid().ToString().ToUpper();
+                apply.ApplyID = UuidHelper.NewUuidString();
 
             apply.FillCreator();
             apply.FillModifier();

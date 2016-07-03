@@ -28,6 +28,8 @@ namespace MCS.Library.WF.Contracts.Converters.DataObjects
 
             server.SourceUserID = client.SourceUserID;
             server.DestinationUserID = client.DestinationUserID;
+            server.ApplicationName = client.ApplicationName;
+            server.ProgramName = client.ProgramName;
             server.DestinationUserName = client.DestinationUserName;
             server.SourceUserName = client.SourceUserName;
             server.StartTime = client.StartTime;
@@ -62,6 +64,8 @@ namespace MCS.Library.WF.Contracts.Converters.DataObjects
 
             client.SourceUserID = server.SourceUserID;
             client.DestinationUserID = server.DestinationUserID;
+            client.ApplicationName = server.ApplicationName;
+            client.ProgramName = server.ProgramName;
             client.DestinationUserName = server.DestinationUserName;
             client.SourceUserName = server.SourceUserName;
             client.StartTime = server.StartTime;

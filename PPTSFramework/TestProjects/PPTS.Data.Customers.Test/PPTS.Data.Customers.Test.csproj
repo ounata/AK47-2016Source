@@ -86,7 +86,9 @@
   <ItemGroup>
     <Compile Include="AccountDeductAppliesExecutorTest.cs" />
     <Compile Include="AssertHelper.cs" />
+    <Compile Include="CustomerScopeAuthorizationTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UpdateCustomerSearchByCustomerTaskTest.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

@@ -47,28 +47,32 @@
                                         工作流表单没有数据<br /><br />
                                     </div>
                                 </div>
+                                <h4 class="form-section"><i class="ace-icon fa fa-th"></i> 单独使用(mcs-workflow-step，mcs-workflow-history，mcs-workflow-comment，mcs-workflow-approve，mcs-workflow-reject)</h4>
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <span class="activity-step" ng-repeat="item in vm.clientProcess.activities">
-                                            <span ng-class="{true: 'active', false: 'inactive'}[item.isActive]">{{item.activityName}}({{item.approvers}}<span ng-if="$last">{{vm.clientProcess.processStatusString}}</span>)</span><span ng-if="!$last"> => </span>
-                                        </span>
+                                        <mcs-workflow-step model="vm.clientProcess" />
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <mcs-datatable data="vm.approvalHistoryData" />
+                                        <mcs-workflow-history model="vm.clientProcess" />
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12">
                                         <span>审批意见：</span>
-                                        <textarea ng-model="vm.comment" cols="100" rows="3"></textarea>
+                                        <mcs-workflow-comment model="vm.clientProcess" />
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <mcs-button category="submit" text="同意" click="vm.moveto()"></mcs-button>
-                                        <mcs-button category="cancel" text="驳回" click="vm.cancel()"></mcs-button>
+                                        <mcs-workflow-toolbar model="vm.clientProcess" />
+                                    </div>
+                                </div>
+                                <h4 class="form-section"><i class="ace-icon fa fa-th"></i> 独立使用(4合1，mcs-workflow)</h4>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <mcs-workflow model="vm.clientProcess" callbacks="vm.callbacks"></mcs-workflow>
                                     </div>
                                 </div>
                             </form>

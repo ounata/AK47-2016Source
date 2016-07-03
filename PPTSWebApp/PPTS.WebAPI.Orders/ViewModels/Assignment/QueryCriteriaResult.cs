@@ -8,12 +8,7 @@ using System.Web;
 
 namespace PPTS.WebAPI.Orders.ViewModels.Assignment
 {
-    /// 按教师排课，获取教师列表，查询结果数据模型
-    public class TeacherQCR
-    {
-        public PagedQueryResult<TeacherJobView, TeacherJobViewCollection> QueryResult { get; set; }
-        public IDictionary<string, IEnumerable<BaseConstantEntity>> Dictionaries { get; set; }
-    }
+    
 
     ///学员视图，排课条件列表，查询结果数据模型
     public class AssignConditionQCR

@@ -31,7 +31,7 @@
                           'app/customer/potentialcustomer/customer-search/customer-search.controller']
         }).loadRoute($stateProvider, {
             name: 'ppts.custservice-view',
-            url: '/custservice/view/:id',
+            url: '/custservice/view/:id?processID&activityID&resourceID',
             templateUrl: 'app/custcenter/custservice/custservice-view/custservice-view.html',
             controller: 'custserviceViewController',
             breadcrumb: {
@@ -41,7 +41,7 @@
             dependencies: ['app/custcenter/custservice/custservice-view/custservice-view.controller']
         }).loadRoute($stateProvider, {
             name: 'ppts.custservice-nextProcess',
-            url: '/custservice/nextProcess/:id',
+            url: '/custservice/nextProcess/:id?processID&activityID&resourceID',
             templateUrl: 'app/custcenter/custservice/custservice-nextProcess/custservice-nextProcess.html',
             controller: 'custserviceNextProcessController',
             breadcrumb: {

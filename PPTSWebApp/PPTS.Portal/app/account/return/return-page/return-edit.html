@@ -1,12 +1,16 @@
-﻿<form class="form-horizontal">
-    <div class="widget-box">
-        <div class="widget-header">
-            <h4 class="col-sm-8">服务费返还</h4>
+﻿<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            <span class="caption-subject bold"><i class="ace-icon fa"></i>服务费返还</span>
         </div>
-        <div class="widget-body">
-            <div class="clearfix form-actions mcs-form-actions">
-                <div>
-                    <mcs-button category="ok" click="vm.save()" ></mcs-button>
+    </div>
+    <div class="portlet-body form">
+        <form class="form-horizontal" action="#" role="form" novalidate>
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <mcs-button category="ok" click="vm.save()" ppts-job-functions="返还综合服务费"></mcs-button>
+                    </div>
                 </div>
             </div>
             <div class="alert alert-block alert-danger" ng-show="vm.errorMessage">
@@ -16,38 +20,47 @@
                 <i class="ace-icon fa fa-warning"></i>
                 {{vm.errorMessage}}
             </div>
-            <div class="page-header">
-                <span>学员信息</span>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-6">
-                    <mcs-label text="当前校区：" css="col-sm-3" />
-                    <div class="col-sm-9">
-                        {{ vm.customer.campusName }}
+            <div class="form-body">
+                <h4 class="form-section"><i class="ace-icon fa fa-th"></i> 学员信息</h4>
+                <div class="row">
+                    <div class="form-group horizontal bordered">
+                        <mcs-label text="当前校区" css="col-sm-3" />
+                        <div class="col-sm-6">
+                            <p class="form-control-static">
+                                {{ vm.customer.campusName }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group horizontal bordered">
+                        <mcs-label text="学员姓名" css="col-sm-3" />
+                        <div class="col-sm-6">
+                            <p class="form-control-static">
+                                {{ vm.apply.customerName }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group horizontal bordered">
+                        <mcs-label text="学员编号" css="col-sm-3" />
+                        <div class="col-sm-6">
+                            <p class="form-control-static">
+                                {{vm.customer.customerCode}}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <h4 class="form-section"><i class="ace-icon fa fa-th"></i> 服务费列表</h4>
+                <div class="row">
+                    <div class="form-group horizontal">
+                        <div class="col-sm-12" style="margin:15px;width:98%;">
+                            <mcs-datatable data="vm.data" />
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="form-group">
-                <div class="col-sm-6">
-                    <mcs-label text="学员姓名：" css="col-sm-3" />
-                    <div class="col-sm-9">
-                        {{ vm.customer.customerName }}
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-6">
-                    <mcs-label text="学员编号：" css="col-sm-3" />
-                    <div class="col-sm-9">
-                        {{vm.customer.customerCode}}
-                    </div>
-                </div>
-            </div>
-            <div class="page-header">
-                <span>服务费列表</span>
-            </div>
-            <!-- 服务费列表 -->
-            <mcs-datatable data="vm.data" />
-        </div>
+        </form>
     </div>
-</form>
+</div>

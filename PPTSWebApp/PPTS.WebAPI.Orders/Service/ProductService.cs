@@ -48,13 +48,36 @@ namespace PPTS.WebAPI.Orders.Service
         }
 
         /// <summary>
-        /// 获取2级产品分类
+        /// 是否存在插班信息
         /// </summary>
+        /// <param name="campusId"></param>
+        /// <param name="productId"></param>
         /// <returns></returns>
-        public static CategoryEntityCollection GetCategories() {
-            return PPTS.Contracts.Proxies.PPTSCategoryQueryServiceProxy.Instance.QueryCategories();
+        public static bool IsExistsTransfer(string []campusId , string []productId)
+        {
+            return true;
         }
 
+        /// <summary>
+        /// 是否允许 手工 确认非上课类收入
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <returns></returns>
+        public static bool IsAssetConfirm(string productId)
+        {
+            return PPTS.Contracts.Proxies.PPTSProductQueryServiceProxy.Instance.IsAssetConfirm(productId);
+        }
+
+        /// <summary>
+        /// 是否 存在校区 在 产品列表中
+        /// </summary>
+        /// <param name="campusIds"></param>
+        /// <param name="productIds"></param>
+        /// <returns></returns>
+        public static bool IsExistsCampusInProduct(string[] campusIds, string[] productIds)
+        {
+            return PPTS.Contracts.Proxies.PPTSProductQueryServiceProxy.Instance.IsExistsCampusInProduct(campusIds, productIds);
+        }
 
     }
     

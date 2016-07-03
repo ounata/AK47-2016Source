@@ -24,7 +24,8 @@
                     <div>
                         异步数据源：<ppts-checkbox-group category="grade_async" model="vm.selectGrades" /><br/>
                         同步数据源：<ppts-checkbox-group category="grade" model="vm.selectGrades" async="false"/><br />
-                        指定清空选项：<ppts-checkbox-group category="grade" model="vm.selectGrades" async="false" clear="vm.selectGrades=[]" /><br />
+                        指定清空选项：<ppts-checkbox-group category="grade" model="vm.selectGrades" async="false"/><br />
+                        禁用：<ppts-checkbox-group category="grade" model="vm.selectGrades" async="false" disabled="true"/><br />
                         已选中: {{vm.selectGrades}}
                     </div>
                 </div>
@@ -37,6 +38,7 @@
                         异步数据源：&lt;ppts-checkbox-group category="grade_async" model="vm.selectGrades" /&gt;&lt;br/&gt;
                         同步数据源：&lt;ppts-checkbox-group category="grade" model="vm.selectGrades" async="false"/&gt;&lt;br /&gt;
                         指定清空选项：&lt;ppts-checkbox-group category="grade" model="vm.selectGrades" async="false" clear="vm.selectGrades=[]" /&gt;&lt;br /&gt;
+                        禁用：&lt;ppts-checkbox-group category="grade" model="vm.selectGrades" async="false" disabled="true"/&gt;&lt;br/&gt;                       
                         已选中: {{vm.selectGrades}}
                         <code><b>Javascript</b></code><br />
                         angular.module('app.widget')
@@ -98,11 +100,11 @@
                                 <td>&lt;ppts-checkbox-group category="grade" model="vm.selectGrades" async="false"/&gt;</td>
                             </tr>
                             <tr>
-                                <td><code>clear</code></td>
-                                <td>是否添加清空选项按钮(可选)</td>
+                                <td><code>disabled</code></td>
+                                <td>是否禁用(可选)</td>
                                 <td>否</td>
-                                <td>无</td>
-                                <td>&lt;ppts-checkbox-group category="grade" model="vm.selectGrades" async="false" clear="vm.selectGrades=[]" /&gt;</td>
+                                <td>false</td>
+                                <td>&lt;ppts-checkbox-group category="grade" model="vm.selectGrades" async="false" disabled="true"/&gt;</td>
                             </tr>
                         </tbody>
                     </table>

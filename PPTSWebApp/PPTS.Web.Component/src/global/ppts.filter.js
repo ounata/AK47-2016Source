@@ -1,7 +1,13 @@
 ﻿//注册过滤器
-for (var mappingCongfig in ppts.config.dictMappingConfig) {
+for (var prop in ppts.enum) {
+    if (!ppts.config.dictMappingConfig[prop]) {
+        ppts.config.dictMappingConfig[prop] = 'c_codE_ABBR_' + prop;
+    }
+}
+
+for (var mappingConfig in ppts.config.dictMappingConfig) {
     (function() {
-        var filterName = mappingCongfig;
+        var filterName = mappingConfig;
         ppts.ng.filter(filterName, function() {
             var config = ppts.config.dictMappingConfig[filterName];
             return function(current, separator) {
@@ -32,6 +38,7 @@ for (var mappingCongfig in ppts.config.dictMappingConfig) {
                 var result = [];
                 for (var item in array) {
                     if (!mcs.util.bool(array[item], true)) continue;
+                    if (array[item] == -1) continue;
                     result.push(mcs.util.getDictionaryItemValue(ppts.dict[config], array[item]));
                 }
                 return result.join('，');

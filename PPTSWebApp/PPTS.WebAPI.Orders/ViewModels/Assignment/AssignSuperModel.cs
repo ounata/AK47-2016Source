@@ -383,6 +383,9 @@ namespace PPTS.WebAPI.Orders.ViewModels.Assignment
             get;
             set;
         }
+
+        [DataMember]
+        public string ConfirmID { get; set; }
         #endregion
 
         #region  IAssignConditionAttr

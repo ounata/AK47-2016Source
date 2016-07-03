@@ -42,7 +42,7 @@ namespace PPTS.WebAPI.Customers.Executors
                 AccountRefundApply apply = AccountRefundApplyAdapter.Instance.LoadByApplyID(applyID);
                 if (apply != null && apply.VerifyStatus == RefundVerifyStatus.Refunded && apply.CheckStatus == CheckStatusDefine.UnCheck)
                 {
-                    RefundApplyModel model = AutoMapper.Mapper.DynamicMap<RefundApplyModel>(apply);
+                    RefundApplyModel model = apply.ProjectedAs<RefundApplyModel>();
                     model.FillModifier();
                     model.InitChecker(DeluxeIdentity.CurrentUser);
                     AccountRefundApplyAdapter.Instance.Update(model);

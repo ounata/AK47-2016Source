@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MCS.Library.OGUPermission;
 using PPTS.Data.Common.Security;
 using System.Diagnostics;
+using MCS.Library.Core;
 
 namespace PPTS.Data.Common.Test
 {
@@ -53,9 +54,10 @@ namespace PPTS.Data.Common.Test
             Console.WriteLine(result.ID);
             DepartmentType type = result.PPTSDepartmentType();//组织机构类型
             IList<IOrganization> orgList = result.GetAllDataScopeParents();
-            foreach(var org in orgList)
+            foreach (var org in orgList)
             {
                 Console.WriteLine(org.PPTSDepartmentType().ToString());
+                Console.WriteLine(org.GetOfficeAddress());
             }
             Console.WriteLine(type.ToString());
         }
@@ -75,9 +77,38 @@ namespace PPTS.Data.Common.Test
                 Console.WriteLine(job.JobType.ToString());
                 IOrganization org = job.GetParentOrganizationByType(DepartmentType.HQ);//分公司信息
                 if (org != null)
+                {
                     Console.WriteLine(org.Name);
+                    Console.WriteLine(org.GetFirstInitial());
+                }
             }
         }
+
+        [TestMethod]
+        public void GetUserByIDTest()
+        {
+            IUser user = PPTS.Data.Common.OGUExtensions.GetUserByID("10285");//人员信息
+            user.IsNotNull(action =>
+            {
+                Console.WriteLine(user.Email);
+                Console.WriteLine(user.GetUserMobile());
+            });
+        }
+
+        [TestMethod]
+        public void GetUserByIDsTest()
+        {
+            OguObjectCollection<IUser> users = PPTS.Data.Common.OGUExtensions.GetUserByIDs("10285");//人员信息
+            foreach (IUser user in users)
+            {
+                user.IsNotNull(action =>
+                {
+                    Console.WriteLine(user.Email);
+                    Console.WriteLine(user.GetUserMobile());
+                });
+            }
+        }
+
 
         [TestMethod]
         public void GetNullWhereBuilderTest()
@@ -91,7 +122,7 @@ namespace PPTS.Data.Common.Test
         public void GetFirstEnglishCodeTest()
         {
             IOrganization result = PPTS.Data.Common.OGUExtensions.GetOrganizationByID("1004-Org");//机构ID
-           
+
             Console.Write(result.GetFirstInitial());
             Console.WriteLine(result.GetShowShortName());
         }
@@ -99,7 +130,7 @@ namespace PPTS.Data.Common.Test
         [TestMethod]
         public void TestEnum()
         {
-            
+
         }
     }
 }

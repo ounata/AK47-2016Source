@@ -1,4 +1,7 @@
 ﻿using MCS.Library.Data;
+using MCS.Library.Data.Builder;
+using MCS.Library.Data.DataObjects;
+using MCS.Library.SOA.DataObjects;
 using PPTS.Data.Products.DataSources;
 using PPTS.Data.Products.Entities;
 using PPTS.WebAPI.Products.ViewModels.ServiceFees;
@@ -24,6 +27,19 @@ namespace PPTS.WebAPI.Products.DataSources
 
             PagedQueryResult<ExpensesQueryModel, ExpensesQueryCollection> result = Query(prp, select, from, condition, orderByBuilder);
             return result;
+        }
+        protected override void OnBuildQueryCondition(QueryCondition qc)
+        {
+            qc.SelectFields = @" Expenses.* ";
+            qc.FromClause = @" PM.Expenses Expenses";
+
+            #region 数据权限加工
+            qc.WhereClause = PPTS.Data.Common.Authorization.ScopeAuthorization<Expense>
+                .GetInstance(ConnectionDefine.DBConnectionName)
+                .ReadAuthExistsBuilder("Expenses", qc.WhereClause).ToSqlString(TSqlBuilder.Instance);
+            #endregion
+
+            base.OnBuildQueryCondition(qc);
         }
     }
 }

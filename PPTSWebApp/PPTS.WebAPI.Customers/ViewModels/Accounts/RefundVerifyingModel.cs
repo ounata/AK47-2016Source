@@ -8,6 +8,7 @@ using MCS.Library.OGUPermission;
 using MCS.Library.Net.SNTP;
 using PPTS.Data.Common.Security;
 using PPTS.Data.Customers.Adapters;
+using MCS.Library.Core;
 
 namespace PPTS.WebAPI.Customers.ViewModels.Accounts
 {
@@ -34,7 +35,7 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
         {
             this.ApplyID = applyID;
             this.FillCreator();
-            this.VerifyID = Guid.NewGuid().ToString().ToUpper();
+            this.VerifyID = UuidHelper.NewUuidString();
             this.VerifyTime = SNTPClient.AdjustedTime;
             this.VerifierID = user.ID;
             this.VerifierName = user.Name;
@@ -48,7 +49,7 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
             AccountRefundApply apply = AccountRefundApplyAdapter.Instance.LoadByApplyID(this.ApplyID);
             if (apply != null && apply.ApplyStatus == ApplyStatusDefine.Approved && apply.VerifyStatus != RefundVerifyStatus.Refunded)
             {
-                this.Apply = AutoMapper.Mapper.DynamicMap<RefundApplyModel>(apply);
+                this.Apply = apply.ProjectedAs<RefundApplyModel>();
                 if (this.VerifyAction == RefundVerifyAction.RegionVerify)
                 {
                     Account account = AccountAdapter.Instance.LoadByAccountID(apply.AccountID);
@@ -59,7 +60,7 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
                         account.DiscountCode = apply.ThisDiscountCode;
                         account.DiscountBase = apply.ThisDiscountBase;
                         account.DiscountRate = apply.ThisDiscountRate;
-                        account.AccountMoney = apply.ThisAccountMoney;
+                        account.AccountMoney += apply.ThisAccountMoney - apply.ThatAccountMoney;
                         this.Account = account;
                     }
                 }

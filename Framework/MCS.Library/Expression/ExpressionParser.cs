@@ -37,6 +37,7 @@ namespace MCS.Library.Expression
         #region ParsingContext
         private class ParsingContext
         {
+            private bool throwParseException = true;
             private int position = 0;
             private bool outputIdentifiers = false;
             private ParseIdentifier identifiers = null;
@@ -92,6 +93,15 @@ namespace MCS.Library.Expression
             {
                 get { return this.identifiers; }
                 set { this.identifiers = value; }
+            }
+
+            /// <summary>
+            /// 是否抛出分析时的异常
+            /// </summary>
+            public bool ThrowParseException
+            {
+                get { return this.throwParseException; }
+                set { this.throwParseException = value; }
             }
         }
         #endregion ParsingContext
@@ -184,8 +194,13 @@ namespace MCS.Library.Expression
                             oID = Operation_IDs.OI_EQUAL;
                             strID = "==";
                             break;
-                        default: throw ParsingException.NewParsingException(ParseError.peInvalidOperator,
-                                        context.Position, op.ToString());
+                        default:
+                            {
+                                if (context.ThrowParseException)
+                                    throw ParsingException.NewParsingException(ParseError.peInvalidOperator,
+                                       context.Position, op.ToString());
+                                break;
+                            }
                     }
 
                     context.Position++;
@@ -201,8 +216,11 @@ namespace MCS.Library.Expression
                             context.Position++;
                         }
                         else
-                            throw ParsingException.NewParsingException(ParseError.peInvalidOperator,
+                        {
+                            if (context.ThrowParseException)
+                                throw ParsingException.NewParsingException(ParseError.peInvalidOperator,
                                     context.Position, op.ToString());
+                        }
                     }
                     else
                     {
@@ -217,8 +235,13 @@ namespace MCS.Library.Expression
                                 strID = "<";
                                 break;
                             default:
-                                throw ParsingException.NewParsingException(ParseError.peInvalidOperator,
-                                     context.Position, op.ToString());
+                                {
+                                    if (context.ThrowParseException)
+                                        throw ParsingException.NewParsingException(ParseError.peInvalidOperator,
+                                         context.Position, op.ToString());
+
+                                    break;
+                                }
                         }
                     }
                 }
@@ -369,7 +392,10 @@ namespace MCS.Library.Expression
                     SkipSpaces(context);
 
                     if (context.CurrentChar != ')')
-                        throw ParsingException.NewParsingException(ParseError.peCharExpected, context.Position, ")");
+                    {
+                        if (context.ThrowParseException)
+                            throw ParsingException.NewParsingException(ParseError.peCharExpected, context.Position, ")");
+                    }
                     else
                         OutputID(context, Operation_IDs.OI_RBRACKET, ")", context.Position);
 
@@ -412,9 +438,12 @@ namespace MCS.Library.Expression
                             result = DoNumber(context);
                         else
                             if (Char.IsLetter(ch) || ch == '_')
-                                result = DoFunctionID(context);
-                            else
+                            result = DoFunctionID(context);
+                        else
+                        {
+                            if (context.ThrowParseException)
                                 throw ParsingException.NewParsingException(ParseError.peInvalidOperator, context.Position, ch.ToString());
+                        }
                         break;
                 }
 
@@ -447,7 +476,10 @@ namespace MCS.Library.Expression
             }
 
             if (ch == '\0')
-                throw ParsingException.NewParsingException(ParseError.peCharExpected, context.Position, "#");
+            {
+                if (context.ThrowParseException)
+                    throw ParsingException.NewParsingException(ParseError.peCharExpected, context.Position, "#");
+            }
 
             ExpTreeNode node = NewTreeNode(context);
 
@@ -465,7 +497,10 @@ namespace MCS.Library.Expression
             }
             catch (System.FormatException)
             {
-                throw ParsingException.NewParsingException(ParseError.peFormatError, nPos);
+                if (context.ThrowParseException)
+                    throw ParsingException.NewParsingException(ParseError.peFormatError, nPos);
+
+                return null;
             }
         }
 
@@ -489,23 +524,26 @@ namespace MCS.Library.Expression
                 }
                 else
                     if (context.ExpressionChars[context.Position + 1] == '"')
-                    {
-                        strB.Append('"');
-                        strIDB.Append("\"\"");
-                        context.Position += 2;
-                    }
-                    else
-                    {
-                        strIDB.Append('"');
-                        context.Position++;
-                        break;
-                    }
+                {
+                    strB.Append('"');
+                    strIDB.Append("\"\"");
+                    context.Position += 2;
+                }
+                else
+                {
+                    strIDB.Append('"');
+                    context.Position++;
+                    break;
+                }
 
                 ch = context.CurrentChar;
             }
 
             if (ch == '\0')
-                throw ParsingException.NewParsingException(ParseError.peCharExpected, context.Position, "\"");
+            {
+                if (context.ThrowParseException)
+                    throw ParsingException.NewParsingException(ParseError.peCharExpected, context.Position, "\"");
+            }
 
             string strID = strIDB.ToString();
 
@@ -623,7 +661,10 @@ namespace MCS.Library.Expression
                         node.FunctionName = strID;
                 }
                 else
-                    throw ParsingException.NewParsingException(ParseError.peCharExpected, context.Position, ")");
+                {
+                    if (context.ThrowParseException)
+                        throw ParsingException.NewParsingException(ParseError.peCharExpected, context.Position, ")");
+                }
 
                 SkipSpaces(context);
             }

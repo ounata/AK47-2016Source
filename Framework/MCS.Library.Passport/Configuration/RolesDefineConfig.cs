@@ -11,165 +11,177 @@ using MCS.Library.OGUPermission;
 
 namespace MCS.Library.Passport
 {
-	/// <summary>
-	/// 逻辑角色配置的配置节。这个配置节配置了每一个逻辑角色，应该包含哪些授权系统中的角色
-	/// </summary>
-	public class RolesDefineConfig : ConfigurationSection
-	{
-		private RolesDefineConfig() { }
+    /// <summary>
+    /// 逻辑角色配置的配置节。这个配置节配置了每一个逻辑角色，应该包含哪些授权系统中的角色
+    /// </summary>
+    public class RolesDefineConfig : ConfigurationSection
+    {
+        private RolesDefineConfig() { }
 
-		private const string configNodeName = "rolesDefineConfig";
+        private const string configNodeName = "rolesDefineConfig";
 
-		/// <summary>
-		/// 得到配置节
-		/// </summary>
-		/// <returns></returns>
-		public static RolesDefineConfig GetConfig()
-		{
-			RolesDefineConfig config = (RolesDefineConfig)ConfigurationBroker.GetSection(configNodeName);
+        /// <summary>
+        /// 得到配置节
+        /// </summary>
+        /// <returns></returns>
+        public static RolesDefineConfig GetConfig()
+        {
+            RolesDefineConfig config = (RolesDefineConfig)ConfigurationBroker.GetSection(configNodeName);
 
-			ConfigurationExceptionHelper.CheckSectionNotNull(config, configNodeName);
+            ConfigurationExceptionHelper.CheckSectionNotNull(config, configNodeName);
 
-			return config;
-		}
+            return config;
+        }
 
-		/// <summary>
-		/// 每一个具体配置项
-		/// </summary>
-		[ConfigurationProperty("rolesDefine")]
-		public RolesDefineCollection RolesDefineCollection
-		{
-			get
-			{
-				return (RolesDefineCollection)base["rolesDefine"];
-			}
-		}
+        /// <summary>
+        /// 每一个具体配置项
+        /// </summary>
+        [ConfigurationProperty("rolesDefine")]
+        public RolesDefineCollection RolesDefineCollection
+        {
+            get
+            {
+                return (RolesDefineCollection)base["rolesDefine"];
+            }
+        }
 
-		/// <summary>
-		/// 获取配置节中，指定Key所对应的角色
-		/// </summary>
-		/// <param name="roleConfigKeys"></param>
-		/// <returns></returns>
-		public IRole[] GetRolesInstances(params string[] roleConfigKeys)
-		{
-			roleConfigKeys.NullCheck("roleConfigKeys");
+        /// <summary>
+        /// 是否启用角色检查
+        /// </summary>
+        [ConfigurationProperty("enabled", DefaultValue = true, IsRequired = false)]
+        public bool Enabled
+        {
+            get
+            {
+                return (bool)base["enabled"];
+            }
+        }
 
-			Dictionary<string, IRole> roleDict = new Dictionary<string, IRole>(StringComparer.OrdinalIgnoreCase);
+        /// <summary>
+        /// 获取配置节中，指定Key所对应的角色
+        /// </summary>
+        /// <param name="roleConfigKeys"></param>
+        /// <returns></returns>
+        public IRole[] GetRolesInstances(params string[] roleConfigKeys)
+        {
+            roleConfigKeys.NullCheck("roleConfigKeys");
 
-			foreach (string roleKey in roleConfigKeys)
-			{
-				RolesDefine rf = RolesDefineCollection[roleKey];
+            Dictionary<string, IRole> roleDict = new Dictionary<string, IRole>(StringComparer.OrdinalIgnoreCase);
 
-				if (rf != null)
-				{
-					IRole[] roles = rf.GetRolesInstances();
+            foreach (string roleKey in roleConfigKeys)
+            {
+                RolesDefine rf = RolesDefineCollection[roleKey];
 
-					roles.ForEach(r => roleDict[r.FullCodeName] = r);
-				}
-			}
+                if (rf != null)
+                {
+                    IRole[] roles = rf.GetRolesInstances();
 
-			List<IRole> result = new List<IRole>();
+                    roles.ForEach(r => roleDict[r.FullCodeName] = r);
+                }
+            }
 
-			foreach (KeyValuePair<string, IRole> kp in roleDict)
-				result.Add(kp.Value);
+            List<IRole> result = new List<IRole>();
 
-			return result.ToArray();
-		}
+            foreach (KeyValuePair<string, IRole> kp in roleDict)
+                result.Add(kp.Value);
 
-		/// <summary>
-		/// 当前用户是否在已经配置的角色中
-		/// </summary>
-		/// <param name="roleConfigKeys"></param>
-		/// <returns></returns>
-		public bool IsCurrentUserInRoles(params string[] roleConfigKeys)
-		{
-			return IsCurrentUserInRoles(DeluxeIdentity.CurrentUser, roleConfigKeys);
-		}
+            return result.ToArray();
+        }
 
-		/// <summary>
-		/// 某个用户是否在已经配置的角色中
-		/// </summary>
-		/// <param name="user"></param>
-		/// <param name="roleConfigKeys"></param>
-		/// <returns></returns>
-		public bool IsCurrentUserInRoles(IUser user, params string[] roleConfigKeys)
-		{
-			user.NullCheck("user");
-			ExceptionHelper.FalseThrow<ArgumentNullException>(roleConfigKeys != null, "roleConfigKeys");
+        /// <summary>
+        /// 当前用户是否在已经配置的角色中
+        /// </summary>
+        /// <param name="roleConfigKeys"></param>
+        /// <returns></returns>
+        public bool IsCurrentUserInRoles(params string[] roleConfigKeys)
+        {
+            return IsCurrentUserInRoles(DeluxeIdentity.CurrentUser, roleConfigKeys);
+        }
 
-			bool result = false;
+        /// <summary>
+        /// 某个用户是否在已经配置的角色中
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="roleConfigKeys"></param>
+        /// <returns></returns>
+        public bool IsCurrentUserInRoles(IUser user, params string[] roleConfigKeys)
+        {
+            user.NullCheck("user");
+            ExceptionHelper.FalseThrow<ArgumentNullException>(roleConfigKeys != null, "roleConfigKeys");
 
-			foreach (string roleKey in roleConfigKeys)
-			{
-				RolesDefine rf = RolesDefineCollection[roleKey];
+            bool result = false;
 
-				if (rf != null)
-				{
-					if (DeluxePrincipal.IsInRole(user, rf.Roles))
-					{
-						result = true;
-						break;
-					}
-				}
-			}
+            foreach (string roleKey in roleConfigKeys)
+            {
+                RolesDefine rf = RolesDefineCollection[roleKey];
 
-			return result;
-		}
+                if (rf != null)
+                {
+                    if (DeluxePrincipal.IsInRole(user, rf.Roles))
+                    {
+                        result = true;
+                        break;
+                    }
+                }
+            }
 
-		/// <summary>
-		/// 检查当前用户是否属于某角色
-		/// </summary>
-		/// <param name="roleConfigKey"></param>
-		public void CheckCurrentUserInRole(string roleConfigKey)
-		{
-			CheckCurrentUserInRole(DeluxeIdentity.CurrentUser, roleConfigKey);
-		}
+            return result;
+        }
 
-		/// <summary>
-		/// 检查某个用户是否属于某角色
-		/// </summary>
-		/// <param name="user"></param>
-		/// <param name="roleConfigKey"></param>
-		public void CheckCurrentUserInRole(IUser user, string roleConfigKey)
-		{
-			ExceptionHelper.CheckStringIsNullOrEmpty("roleConfigKey", "roleConfigKey");
+        /// <summary>
+        /// 检查当前用户是否属于某角色
+        /// </summary>
+        /// <param name="roleConfigKey"></param>
+        public void CheckCurrentUserInRole(string roleConfigKey)
+        {
+            CheckCurrentUserInRole(DeluxeIdentity.CurrentUser, roleConfigKey);
+        }
 
-			RolesDefine rf = RolesDefineCollection[roleConfigKey];
+        /// <summary>
+        /// 检查某个用户是否属于某角色
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="roleConfigKey"></param>
+        public void CheckCurrentUserInRole(IUser user, string roleConfigKey)
+        {
+            ExceptionHelper.CheckStringIsNullOrEmpty("roleConfigKey", "roleConfigKey");
 
-			ExceptionHelper.FalseThrow(rf != null, "您没有权限执行此操作，不能查到角色配置信息\"{0}\"，请检查rolesDefineConfig配置节", roleConfigKey);
-			ExceptionHelper.FalseThrow(DeluxePrincipal.IsInRole(user, rf.Roles), "您不属于\"{0}\"，没有权限执行此操作", rf.Description);
-		}
-	}
+            RolesDefine rf = RolesDefineCollection[roleConfigKey];
 
-	/// <summary>
-	/// 逻辑角色定义的集合
-	/// </summary>
-	public class RolesDefineCollection : NamedConfigurationElementCollection<RolesDefine> { }
+            ExceptionHelper.FalseThrow(rf != null, "您没有权限执行此操作，不能查到角色配置信息\"{0}\"，请检查rolesDefineConfig配置节", roleConfigKey);
+            ExceptionHelper.FalseThrow(DeluxePrincipal.IsInRole(user, rf.Roles), "您不属于\"{0}\"，没有权限执行此操作", rf.Description);
+        }
+    }
 
-	/// <summary>
-	/// 逻辑角色
-	/// </summary>
-	public class RolesDefine : NamedConfigurationElement
-	{
-		/// <summary>
-		/// 授权系统中的角色
-		/// </summary>
-		[ConfigurationProperty("roles", IsRequired = true)]
-		public string Roles
-		{
-			get
-			{
-				return this["roles"].ToString();
-			}
-		}
+    /// <summary>
+    /// 逻辑角色定义的集合
+    /// </summary>
+    public class RolesDefineCollection : NamedConfigurationElementCollection<RolesDefine> { }
 
-		/// <summary>
-		/// 得到定义的角色的实例
-		/// </summary>
-		/// <returns></returns>
-		public IRole[] GetRolesInstances()
-		{
-			return DeluxePrincipal.GetRoles(Roles);
-		}
-	}
+    /// <summary>
+    /// 逻辑角色
+    /// </summary>
+    public class RolesDefine : NamedConfigurationElement
+    {
+        /// <summary>
+        /// 授权系统中的角色
+        /// </summary>
+        [ConfigurationProperty("roles", IsRequired = true)]
+        public string Roles
+        {
+            get
+            {
+                return this["roles"].ToString();
+            }
+        }
+
+        /// <summary>
+        /// 得到定义的角色的实例
+        /// </summary>
+        /// <returns></returns>
+        public IRole[] GetRolesInstances()
+        {
+            return DeluxePrincipal.GetRoles(Roles);
+        }
+    }
 }

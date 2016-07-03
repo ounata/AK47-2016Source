@@ -9,15 +9,16 @@
 // -------------------------------------------------
 #endregion
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Xml;
-using MCS.Library.Data.Mapping;
 using MCS.Library;
 using MCS.Library.Core;
-using System.Web.Script.Serialization;
+using MCS.Library.Data.Mapping;
 using MCS.Library.SOA.DataObjects.Workflow;
+using System;
+using System.Collections.Generic;
+using System.Runtime.Serialization;
+using System.Text;
+using System.Web.Script.Serialization;
+using System.Xml;
 
 namespace MCS.Library.SOA.DataObjects
 {
@@ -27,6 +28,7 @@ namespace MCS.Library.SOA.DataObjects
     [Serializable]
     [XmlRootMapping("UserTask", false)]
     [ORTableMapping("WF.USER_TASK")]
+    [DataContract]
     public class UserTask : IUserTask
     {
         private string taskID = string.Empty;
@@ -61,11 +63,13 @@ namespace MCS.Library.SOA.DataObjects
         private string draftUserName = string.Empty;
 
         private Dictionary<string, object> context = null;
+
         #region
         /// <summary>
         /// 消息ID
         /// </summary>
         [ORFieldMapping("TASK_GUID")]
+        [DataMember]
         public string TaskID
         {
             get
@@ -82,6 +86,7 @@ namespace MCS.Library.SOA.DataObjects
         /// 应用名称
         /// </summary>
         [ORFieldMapping("APPLICATION_NAME")]
+        [DataMember]
         public string ApplicationName
         {
             get
@@ -98,6 +103,7 @@ namespace MCS.Library.SOA.DataObjects
         /// 模块名称
         /// </summary>
         [ORFieldMapping("PROGRAM_NAME")]
+        [DataMember]
         public string ProgramName
         {
             get
@@ -114,6 +120,7 @@ namespace MCS.Library.SOA.DataObjects
         /// 标题
         /// </summary>
         [ORFieldMapping("TASK_TITLE")]
+        [DataMember]
         public string TaskTitle
         {
             get
@@ -130,6 +137,7 @@ namespace MCS.Library.SOA.DataObjects
         /// 资源ID
         /// </summary>
         [ORFieldMapping("RESOURCE_ID")]
+        [DataMember]
         public string ResourceID
         {
             get
@@ -146,6 +154,7 @@ namespace MCS.Library.SOA.DataObjects
         /// 发件人ID
         /// </summary>
         [ORFieldMapping("SOURCE_ID")]
+        [DataMember]
         public string SourceID
         {
             get
@@ -162,6 +171,7 @@ namespace MCS.Library.SOA.DataObjects
         /// 发件人名称
         /// </summary>
         [ORFieldMapping("SOURCE_NAME")]
+        [DataMember]
         public string SourceName
         {
             get
@@ -175,6 +185,7 @@ namespace MCS.Library.SOA.DataObjects
         }
 
         [ORFieldMapping("SEND_TO_USER")]
+        [DataMember]
         public string SendToUserID
         {
             get
@@ -188,6 +199,7 @@ namespace MCS.Library.SOA.DataObjects
         }
 
         [ORFieldMapping("SEND_TO_USER_NAME")]
+        [DataMember]
         public string SendToUserName
         {
             get;
@@ -195,6 +207,7 @@ namespace MCS.Library.SOA.DataObjects
         }
 
         [ORFieldMapping("DATA")]
+        [DataMember]
         public string Body
         {
             get
@@ -211,6 +224,7 @@ namespace MCS.Library.SOA.DataObjects
         /// 消息类型
         /// </summary>
         [ORFieldMapping("TASK_LEVEL")]
+        [DataMember]
         public TaskLevel Level
         {
             get
@@ -227,6 +241,7 @@ namespace MCS.Library.SOA.DataObjects
         /// 流程ID
         /// </summary>
         [ORFieldMapping("PROCESS_ID")]
+        [DataMember]
         public string ProcessID
         {
             get
@@ -243,6 +258,7 @@ namespace MCS.Library.SOA.DataObjects
         /// 工作流节点ID
         /// </summary>
         [ORFieldMapping("ACTIVITY_ID")]
+        [DataMember]
         public string ActivityID
         {
             get
@@ -259,6 +275,7 @@ namespace MCS.Library.SOA.DataObjects
         /// 待办事项的链接
         /// </summary>
         [ORFieldMapping("URL")]
+        [DataMember]
         public string Url
         {
             get
@@ -276,6 +293,7 @@ namespace MCS.Library.SOA.DataObjects
         /// </summary>
         [NoMapping]
         [NoXmlObjectMappingAttribute]
+        [DataMember]
         public string NormalizedUrl
         {
             get
@@ -336,6 +354,7 @@ namespace MCS.Library.SOA.DataObjects
         /// 紧急程度
         /// </summary>
         [ORFieldMapping("EMERGENCY")]
+        [DataMember]
         public FileEmergency Emergency
         {
             get
@@ -352,6 +371,7 @@ namespace MCS.Library.SOA.DataObjects
         /// 节点名称，例如拟办等
         /// </summary>
         [ORFieldMapping("PURPOSE")]
+        [DataMember]
         public string Purpose
         {
             get
@@ -368,6 +388,7 @@ namespace MCS.Library.SOA.DataObjects
         /// 待办事项状态
         /// </summary>
         [ORFieldMapping("STATUS")]
+        [DataMember]
         public TaskStatus Status
         {
             get
@@ -384,8 +405,9 @@ namespace MCS.Library.SOA.DataObjects
         /// 任务开始时间
         /// </summary>
         /// <remarks>一般为文件的拟稿时间，以当前时间为默认值有悖真实情况，是否妥当</remarks>
-        [SqlBehavior(BindingFlags = ClauseBindingFlags.All, DefaultExpression = "getdate()")]
-        [ORFieldMapping("TASK_START_TIME")]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.All, DefaultExpression = "GETUTCDATE()")]
+        [ORFieldMapping("TASK_START_TIME", UtcTimeToLocal = true)]
+        [DataMember]
         public DateTime TaskStartTime
         {
             get
@@ -402,7 +424,8 @@ namespace MCS.Library.SOA.DataObjects
         /// 过期时间
         /// </summary>
         [SqlBehavior(BindingFlags = ClauseBindingFlags.All)]
-        [ORFieldMapping("EXPIRE_TIME")]
+        [ORFieldMapping("EXPIRE_TIME", UtcTimeToLocal = true)]
+        [DataMember]
         public DateTime ExpireTime
         {
             get
@@ -418,8 +441,9 @@ namespace MCS.Library.SOA.DataObjects
         /// <summary>
         /// 消息发送时间
         /// </summary>
-        [ORFieldMapping("DELIVER_TIME")]
-        [SqlBehavior(BindingFlags = ClauseBindingFlags.All, DefaultExpression = "getdate()")]
+        [ORFieldMapping("DELIVER_TIME", UtcTimeToLocal = true)]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.All, DefaultExpression = "GETUTCDATE()")]
+        [DataMember]
         public DateTime DeliverTime
         {
             get
@@ -432,8 +456,9 @@ namespace MCS.Library.SOA.DataObjects
             }
         }
 
-        [ORFieldMapping("READ_TIME")]
+        [ORFieldMapping("READ_TIME", UtcTimeToLocal = true)]
         [SqlBehavior(BindingFlags = ClauseBindingFlags.All)]
+        [DataMember]
         public DateTime ReadTime
         {
             get
@@ -467,6 +492,7 @@ namespace MCS.Library.SOA.DataObjects
         /// 消息置顶标志
         /// </summary>
         [ORFieldMapping("TOP_FLAG")]
+        [DataMember]
         public int TopFlag
         {
             get
@@ -483,6 +509,7 @@ namespace MCS.Library.SOA.DataObjects
         /// 起草部门的时间
         /// </summary>
         [ORFieldMapping("DRAFT_DEPARTMENT_NAME")]
+        [DataMember]
         public string DraftDepartmentName
         {
             get
@@ -498,8 +525,9 @@ namespace MCS.Library.SOA.DataObjects
         /// <summary>
         /// 已办任务的办理时间
         /// </summary>
-        [ORFieldMapping("COMPLETED_TIME")]
+        [ORFieldMapping("COMPLETED_TIME", UtcTimeToLocal = true)]
         [SqlBehavior(ClauseBindingFlags.Select)]
+        [DataMember]
         public DateTime CompletedTime
         {
             get
@@ -513,6 +541,7 @@ namespace MCS.Library.SOA.DataObjects
         }
 
         [ORFieldMapping("DRAFT_USER_ID")]
+        [DataMember]
         public string DraftUserID
         {
             get
@@ -526,6 +555,7 @@ namespace MCS.Library.SOA.DataObjects
         }
 
         [ORFieldMapping("DRAFT_USER_NAME")]
+        [DataMember]
         public string DraftUserName
         {
             get

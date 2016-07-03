@@ -15,7 +15,6 @@ namespace MCS.Library.SOA.DataObjects.Test.DataObjectsTest
 	[TestClass]
 	public class WfDelegationTest
 	{
-	
 		[TestMethod]
 		[TestCategory(ProcessTestHelper.Delegation)]
 		[Description("流转时，查看委托的待办是否发送成功")]
@@ -44,13 +43,48 @@ namespace MCS.Library.SOA.DataObjects.Test.DataObjectsTest
 			}
 		}
 
-		[TestMethod]
+        [TestMethod]
+        [TestCategory(ProcessTestHelper.Delegation)]
+        [Description("流转时，流程类型不匹配的委托")]
+        public void MovetoDelegationNotMatchTest()
+        {
+            WfDelegationAdapter.Instance.ClearAll();
+
+            WfDelegation delegation = PrepareDelegation();
+
+            delegation.ApplicationName = "TEST_APP_NAME1";
+            delegation.ProgramName = "TEST_PROGRAM_NAME1";
+
+            WfDelegationAdapter.Instance.Update(delegation); //添加委托
+
+            try
+            {
+                //创建流程
+                IWfProcess process = WfProcessTestCommon.StartupProcessWithAssignee();
+
+                IWfActivityDescriptor nextActivityDesp = process.CurrentActivity.Descriptor.ToTransitions[0].ToActivity;
+                WfTransferParams tp = ProcessTestHelper.GetInstanceOfWfTransferParams(nextActivityDesp, OguObject.approver1);
+                process.MoveTo(tp);//流转
+
+                WfRuntime.PersistWorkflows();
+                process = WfRuntime.GetProcessByProcessID(process.ID);
+
+                Assert.IsTrue((ProcessTestHelper.GetActivityUserTasks(process.CurrentActivity.ID, TaskStatus.Ban).Count) == 1, "只有一个待办事项。委托无效");
+            }
+            finally
+            {
+                WfDelegationAdapter.Instance.Delete(delegation); //清理委托
+            }
+        }
+
+
+        [TestMethod]
 		[TestCategory(ProcessTestHelper.Delegation)]
 		[Description("取消时，查看存在委托的节点的状况")]
 		public void CancelDelegationTest()
 		{
 			WfDelegation delegation = PrepareDelegation();
-			WfDelegationAdapter.Instance.Update(delegation);
+            WfDelegationAdapter.Instance.Update(delegation);
 
 			try
 			{
@@ -115,6 +149,42 @@ namespace MCS.Library.SOA.DataObjects.Test.DataObjectsTest
 				WfDelegationAdapter.Instance.Delete(delegation);
 			}
 		}
+
+        [TestMethod]
+        public void DelegationAppNameMatchTest()
+        {
+            WfDelegation delegation = new WfDelegation();
+
+            Assert.IsTrue(delegation.Matched("App1", "Prog1"));
+
+            delegation = new WfDelegation()
+            {
+                ProgramName = "Prog1"
+            };
+
+            Assert.IsTrue(delegation.Matched("App2", "Prog1"));
+            Assert.IsFalse(delegation.Matched("App2", "Prog2"));
+
+            delegation = new WfDelegation()
+            {
+                ApplicationName = "App1"
+            };
+
+            Assert.IsTrue(delegation.Matched("App1", "Prog2"));
+            Assert.IsFalse(delegation.Matched("App2", "Prog2"));
+
+            delegation = new WfDelegation()
+            {
+                ApplicationName = "App1",
+                ProgramName = "Prog1"
+            };
+
+            Assert.IsTrue(delegation.Matched("App1", "Prog1"));
+            Assert.IsFalse(delegation.Matched("App2", "Prog2"));
+
+            Assert.IsFalse(delegation.Matched(null, "Prog1"));
+            Assert.IsFalse(delegation.Matched("App1", null));
+        }
 
 		public static WfDelegation PrepareDelegation()
 		{

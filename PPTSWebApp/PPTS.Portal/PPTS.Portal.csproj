@@ -14,7 +14,7 @@
     <RootNamespace>PPTS.Portal</RootNamespace>
     <AssemblyName>PPTS.Portal</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -58,6 +58,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Bin\MCS.Library.Passport.dll</HintPath>
     </Reference>
+    <Reference Include="MCS.Web.MVC.Library">
+      <HintPath>..\..\Bin\MCS.Web.MVC.Library.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -99,6 +102,13 @@
     <Content Include="app\account\charge\charge-page\charge-view.html" />
     <Content Include="app\account\charge\charge-page\charge-audit.controller.js" />
     <Content Include="app\account\charge\charge-page\charge-audit.html" />
+    <Content Include="app\account\charge\invoice-page\invoice-add.html" />
+    <Content Include="app\account\charge\invoice-page\invoice-info.html" />
+    <Content Include="app\account\charge\invoice-page\invoice-info.controller.js" />
+    <Content Include="app\account\charge\invoice-page\invoice-edit.controller.js" />
+    <Content Include="app\account\charge\invoice-page\invoice-edit.html" />
+    <Content Include="app\account\charge\invoice-page\invoice-list.controller.js" />
+    <Content Include="app\account\charge\invoice-page\invoice-list.html" />
     <Content Include="app\account\charge\payment-page\payment-edit.controller.js" />
     <Content Include="app\account\charge\payment-page\payment-edit.html" />
     <Content Include="app\account\charge\payment-page\payment-list.controller.js" />
@@ -107,6 +117,8 @@
     <Content Include="app\account\charge\payment-page\payment-print.html" />
     <Content Include="app\account\charge\payment-page\payment-query.controller.js" />
     <Content Include="app\account\charge\payment-page\payment-query.html" />
+    <Content Include="app\account\display\account-page\account-record.html" />
+    <Content Include="app\account\display\account-page\account-record.controller.js" />
     <Content Include="app\account\ppts.account.service.js" />
     <Content Include="app\account\display\account-page\account-view.controller.js" />
     <Content Include="app\account\display\account-page\account-view.html" />
@@ -132,8 +144,6 @@
     <Content Include="app\account\transfer\transfer-page\transfer-edit.html" />
     <Content Include="app\account\transfer\transfer-page\transfer-list.controller.js" />
     <Content Include="app\account\transfer\transfer-page\transfer-list.html" />
-    <Content Include="app\auditing\auditinglist\auditing.dataService.js" />
-    <Content Include="app\auditing\ppts.auditing.js" />
     <Content Include="app\common\config\ppts.startup.js" />
     <Content Include="app\common\config\ppts.startup.min.js" />
     <Content Include="app\common\layout.html" />
@@ -141,9 +151,13 @@
     <Content Include="app\common\tpl\breadcrumb.tpl.html" />
     <Content Include="app\common\tpl\footer.tpl.html" />
     <Content Include="app\common\tpl\header.tpl.html" />
+    <Content Include="app\common\tpl\job-functions.tpl.html" />
+    <Content Include="app\common\tpl\page-spinner-loading.tpl.html" />
     <Content Include="app\common\tpl\quick-search.tpl.html" />
     <Content Include="app\common\tpl\sidebar.tpl.html" />
     <Content Include="app\common\tpl\toolbar.tpl.html" />
+    <Content Include="app\customer\customermeeting\customermeeting-view\customermeeting-view-item.tpl.html" />
+    <Content Include="app\customer\customerverify\customerverify-add\customerverify-add.controller.js" />
     <Content Include="app\customer\customervisit\customervisit-addBatch\customervisit-addBatch.controller.js" />
     <Content Include="app\customer\customervisit\customervisit-addBatch\customervisit-addBatch.html" />
     <Content Include="app\custcenter\custservice\custservice-add\custservice-add.controller.js" />
@@ -152,7 +166,6 @@
     <Content Include="app\custcenter\custservice\custservice-edit\custservice-edit.html" />
     <Content Include="app\custcenter\custservice\custservice-list\custservice-list.controller.js" />
     <Content Include="app\custcenter\custservice\custservice-list\custservice-list.html" />
-    <Content Include="app\customer\customerverify\customerverify-add\customerverify-add.controller.js" />
     <Content Include="app\customer\customerverify\customerverify-add\customerverify-add.html" />
     <Content Include="app\customer\customerverify\customerverify-list\customerverify-list.controller.js" />
     <Content Include="app\customer\customerverify\customerverify-list\customerverify-list.html" />
@@ -200,6 +213,8 @@
     <Content Include="app\customer\market\market-list\market-list.controller.js" />
     <Content Include="app\customer\market\market-list\market-list.html" />
     <Content Include="app\customer\potentialcustomer\customer-add\ppts.customer.relation.js" />
+    <Content Include="app\customer\potentialcustomer\customer-import\customer-import-history.controller.js" />
+    <Content Include="app\customer\potentialcustomer\customer-import\customer-import-history.tpl.html" />
     <Content Include="app\customer\potentialcustomer\customer-parents\parent-new.controller.js" />
     <Content Include="app\customer\potentialcustomer\customer-parents\parent-new.tpl.html" />
     <Content Include="app\customer\potentialcustomer\customer-search\customer-search.controller.js" />
@@ -210,6 +225,8 @@
     <Content Include="app\customer\potentialcustomer\customer-parents\parents-view.controller.js" />
     <Content Include="app\customer\potentialcustomer\customer-parents\parent-edit.tpl.html" />
     <Content Include="app\customer\potentialcustomer\customer-parents\parents-view.tpl.html" />
+    <Content Include="app\customer\potentialcustomer\customer-import\customer-import.tpl.html" />
+    <Content Include="app\customer\potentialcustomer\customer-import\customer-import.controller.js" />
     <Content Include="app\customer\potentialcustomer\customer-teacher-relations\customer-teacher-relations.controller.js" />
     <Content Include="app\customer\potentialcustomer\customer-teacher-relations\customer-teacher-relations.tpl.html" />
     <Content Include="app\customer\potentialcustomer\customer-staff-relations\assign-staff-relation.tpl.html" />
@@ -221,6 +238,10 @@
     <Content Include="app\customer\potentialcustomer\customer-transfer\customer-transfer.tpl.html" />
     <Content Include="app\customer\ppts.customer.js" />
     <Content Include="app\customer\ppts.customer.service.js" />
+    <Content Include="app\customer\student\student-thaw-view\student-thaw-view.controller.js" />
+    <Content Include="app\customer\student\student-thaw-view\student-thaw-view.html" />
+    <Content Include="app\customer\student\student-transfer\student-transfer-approve.controller.js" />
+    <Content Include="app\customer\student\student-transfer\student-transfer-approve.html" />
     <Content Include="app\infra\discount\discount-add\discount-add.controller.js" />
     <Content Include="app\infra\discount\discount-add\discount-add.html" />
     <Content Include="app\infra\discount\discount-approve\discount-approve.controller.js" />
@@ -231,6 +252,7 @@
     <Content Include="app\infra\discount\discount-list\discount-list.html" />
     <Content Include="app\infra\discount\discount-view\discount-view.controller.js" />
     <Content Include="app\infra\discount\discount-view\discount-view.html" />
+    <Content Include="app\infra\discount\discount-workflow\discount-workflow.html" />
     <Content Include="app\infra\discount\discount.dataService.js" />
     <Content Include="app\customer\refundalerts\refund-add\refund-add.controller.js" />
     <Content Include="app\customer\refundalerts\refund-add\refund-add.html" />
@@ -277,6 +299,8 @@
     <Content Include="app\infra\present\present-edit\present-edit.html" />
     <Content Include="app\infra\present\present-list\present-list.controller.js" />
     <Content Include="app\infra\present\present-list\present-list.html" />
+    <Content Include="app\infra\present\present-workflow\present-workflow.controller.js" />
+    <Content Include="app\infra\present\present-workflow\present-workflow.html" />
     <Content Include="app\infra\present\present.dataService.js" />
     <Content Include="app\infra\servicefee\servicefee-add\servicefee-add.controller.js" />
     <Content Include="app\infra\servicefee\servicefee-add\servicefee-add.html" />
@@ -284,6 +308,8 @@
     <Content Include="app\infra\servicefee\servicefee-edit\servicefee-edit.html" />
     <Content Include="app\infra\servicefee\servicefee-list\servicefee-list.controller.js" />
     <Content Include="app\infra\servicefee\servicefee-list\servicefee-list.html" />
+    <Content Include="app\order\purchase\approve\order-approve.controller.js" />
+    <Content Include="app\order\purchase\approve\order-approve.html" />
     <Content Include="app\order\purchase\history\exchange-amount.controller.js" />
     <Content Include="app\order\purchase\history\exchange-amount.html" />
     <Content Include="app\order\purchase\history\exchange.controller.js" />
@@ -308,12 +334,48 @@
     <Content Include="app\order\purchase\product\product-orderclassgroup.controller.js" />
     <Content Include="app\order\purchase\product\product-orderclassgroup.html" />
     <Content Include="app\order\purchase\product\product-orderclassgrouplist.html" />
+    <Content Include="app\order\purchase\view\assetConsumeView.html" />
     <Content Include="app\order\purchase\view\order-view.controller.js" />
     <Content Include="app\order\purchase\view\order-view.html" />
+    <Content Include="app\order\unsubscribe\approve\debook-approve.controller.js" />
+    <Content Include="app\order\unsubscribe\approve\debook-approve.html" />
     <Content Include="app\order\unsubscribe\list\list.html" />
+    <Content Include="app\order\unsubscribe\view\debookOrderItem-view.html" />
+    <Content Include="app\product\productlist\product-approve\product-approve.controller.js" />
+    <Content Include="app\product\productlist\product-approve\product-approve.html" />
     <Content Include="app\product\productlist\product-list\product-list.controller.js" />
     <Content Include="app\product\productlist\product-list\product-list.html" />
     <Content Include="app\product\productlist\product-list\product-delay.html" />
+    <Content Include="app\query\account\account-query.service.js" />
+    <Content Include="app\query\account\charge\charge.controller.js" />
+    <Content Include="app\query\account\charge\charge.html" />
+    <Content Include="app\query\account\payment\payment.controller.js" />
+    <Content Include="app\query\account\payment\payment.html" />
+    <Content Include="app\query\account\posrecord\posrecord.controller.js" />
+    <Content Include="app\query\account\posrecord\posrecord.html" />
+    <Content Include="app\query\account\refund\refund.controller.js" />
+    <Content Include="app\query\account\refund\refund.html" />
+    <Content Include="app\query\assign\assign-query.service.js" />
+    <Content Include="app\query\assign\class-group\class-group.controller.js" />
+    <Content Include="app\query\assign\class-group\class-group.html" />
+    <Content Include="app\query\assign\student-course\student-course.controller.js" />
+    <Content Include="app\query\assign\student-course\student-course.html" />
+    <Content Include="app\query\assign\teacher-course\teacher-course.controller.js" />
+    <Content Include="app\query\assign\teacher-course\teacher-course.html" />
+    <Content Include="app\query\order\order-exchange\order-exchange.controller.js" />
+    <Content Include="app\query\order\order-exchange\order-exchange.html" />
+    <Content Include="app\query\order\order-list\order-list.controller.js" />
+    <Content Include="app\query\order\order-list\order-list.html" />
+    <Content Include="app\query\order\order-query.service.js" />
+    <Content Include="app\query\order\order-stock\order-stock.controller.js" />
+    <Content Include="app\query\order\order-stock\order-stock.html" />
+    <Content Include="app\query\ppts.query.js" />
+    <Content Include="app\query\student\student-list\student-list.controller.js" />
+    <Content Include="app\query\student\student-list\student-list.html" />
+    <Content Include="app\query\student\student-query.service.js" />
+    <Content Include="app\query\task\task-list\task-list.controller.js" />
+    <Content Include="app\query\task\task-list\task-list.html" />
+    <Content Include="app\query\task\task-query.service.js" />
     <Content Include="app\schedule\classgroup\class-add\class-add.controller.js" />
     <Content Include="app\schedule\classgroup\class-add\class-add.html" />
     <Content Include="app\schedule\classgroup\class-add\dayofweek.controller.js" />
@@ -332,6 +394,8 @@
     <Content Include="app\schedule\classgroup\lesson-edit\lesson-edit.html" />
     <Content Include="app\schedule\classgroup\teacher-add\teacher-add.controller.js" />
     <Content Include="app\schedule\classgroup\teacher-add\teacher-add.html" />
+    <Content Include="app\schedule\classgroup\teacher-edit\teacher-edit.controller.js" />
+    <Content Include="app\schedule\classgroup\teacher-edit\teacher-edit.html" />
     <Content Include="app\schedule\studentassignment\stuasgmt-add\stuasgmt-add.controller.js" />
     <Content Include="app\schedule\studentassignment\stuasgmt-add\stuasgmt-add.html" />
     <Content Include="app\schedule\studentassignment\stuasgmt-condition\stuasgmt-condition-edit.controller.js" />
@@ -374,8 +438,25 @@
     <Content Include="app\schedule\teachercourse\tchrecord-list.html" />
     <Content Include="app\schedule\teachercourse\tchrecord-list.controller.js" />
     <Content Include="app\schedule\teachercourse\tchrecord-list-markup.html" />
+    <Content Include="app\schedule\teachercourse\teacher-course-psn\teacher-course-psn-list.html" />
+    <Content Include="app\schedule\teachercourse\teacher-course-psn\teacher-course-psn-list.controller.js" />
+    <Content Include="app\schedule\teachercourse\teacher-course-psn\teacher-course-psn.controller.js" />
+    <Content Include="app\schedule\teachercourse\teacher-course-psn\teacher-course-psn.html" />
     <Content Include="app\schedule\teachercourse\teacher-course\teacher-course.controller.js" />
     <Content Include="app\schedule\teachercourse\teacher-course\teacher-course.html" />
+    <Content Include="app\task\completed-task\completed-task-list.controller.js" />
+    <Content Include="app\task\completed-task\completed-task-list.html" />
+    <Content Include="app\task\notify\notify-item.tpl.html" />
+    <Content Include="app\task\notify\notify-list.controller.js" />
+    <Content Include="app\task\notify\notify-list.html" />
+    <Content Include="app\task\task.dataService.js" />
+    <Content Include="app\task\ppts.task.js" />
+    <Content Include="app\task\user-task\task-list.controller.js" />
+    <Content Include="app\task\user-task\task-list.html" />
+    <Content Include="app\task\workflow\workflow-approve.controller.js" />
+    <Content Include="app\task\workflow\workflow-approve.html" />
+    <Content Include="app\task\workflow\workflow.controller.js" />
+    <Content Include="app\task\workflow\workflow.html" />
     <Content Include="assets\images\department.png" />
     <Content Include="assets\images\metro.gif" />
     <Content Include="assets\images\person.png" />
@@ -388,6 +469,11 @@
     <Content Include="app\customer\customermeeting\customermeeting-view\customermeeting-view.html" />
     <Content Include="app\custcenter\custservice\custservice-view\custservice-view.controller.js" />
     <Content Include="app\customer\weeklyfeedback\customer-feedbacks-list\customer-feedbacks-list.controller.js" />
+    <Content Include="app\common\tpl\导入客户模板.xlsx" />
+    <Content Include="app\account\charge\invoice-page\invoice-add.controller.js" />
+    <Content Include="app\order\unsubscribe\view\debookOrderItem-view.controller.js" />
+    <Content Include="app\order\purchase\view\assetConsumeView.controller.js" />
+    <Content Include="app\infra\discount\discount-workflow\discount-workflow.controller.js" />
     <None Include="Properties\PublishProfiles\PPTS.Portal.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -397,10 +483,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="app\contract\contractlist\contractlist.dataService.js" />
-    <Content Include="app\contract\paylist\paylist.dataService.js" />
-    <Content Include="app\contract\ppts.contract.js" />
-    <Content Include="app\contract\refundlist\refundlist.dataService.js" />
     <Content Include="app\custcenter\custservice\custservice.dataService.js" />
     <Content Include="app\custcenter\ppts.custcenter.js" />
     <Content Include="app\customer\customerverify\customerverify.dataService.js" />
@@ -465,6 +547,7 @@
     <Content Include="assets\images\user.png" />
     <Content Include="assets\styles\site.css" />
     <Content Include="favicon.ico" />
+    <Content Include="redirector.aspx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -478,6 +561,13 @@
       <DependentUpon>index.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="redirector.aspx.cs">
+      <DependentUpon>redirector.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="redirector.aspx.designer.cs">
+      <DependentUpon>redirector.aspx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\..\Bin\MCS.Library.dll" />

@@ -210,6 +210,7 @@ namespace PPTS.Data.Common.Adapters
 
             builder.AppendItem("Category", category);
             builder.AppendItem("ParentKey", parentKey);
+            builder.AppendItem("IsValidate", 1);
 
             string sql = string.Format("SELECT * FROM {0} WHERE {1} ORDER BY SortNo",
                 this.GetTableName(),

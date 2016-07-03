@@ -195,3 +195,12 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level1name = N'SchemaOrganizationSnapshot',
     @level2type = N'COLUMN',
     @level2name = N'FullPinyin'
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description',
+    @value = N'法人实体',
+    @level0type = N'SCHEMA',
+    @level0name = N'SC',
+    @level1type = N'TABLE',
+    @level1name = N'SchemaOrganizationSnapshot',
+    @level2type = N'COLUMN',
+    @level2name = N'LegalEntity'

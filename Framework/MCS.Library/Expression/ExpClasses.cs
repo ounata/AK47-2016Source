@@ -383,6 +383,50 @@ namespace MCS.Library.Expression
         }
 
         /// <summary>
+        /// 遍历所有的标识符
+        /// </summary>
+        /// <param name="action"></param>
+        public void ScanIdentifiers(Action<ParseIdentifier> action)
+        {
+            if (action != null)
+            {
+                this.ScanIdentifiers(identifier =>
+                {
+                    action(identifier);
+                    return true;
+                });
+            }
+        }
+
+        /// <summary>
+        /// 遍历所有的标识符
+        /// </summary>
+        /// <param name="func"></param>
+        public bool ScanIdentifiers(Func<ParseIdentifier, bool> func)
+        {
+            bool execContinue = true;
+
+            if (func != null)
+            {
+                execContinue = func(this);
+
+                if (execContinue)
+                {
+                    if (this.SubIdentifier != null)
+                        execContinue = this.SubIdentifier.ScanIdentifiers(func);
+
+                    if (execContinue)
+                    {
+                        if (this.NextIdentifier != null)
+                            execContinue = this.NextIdentifier.ScanIdentifiers(func);
+                    }
+                }
+            }
+
+            return execContinue;
+        }
+
+        /// <summary>
         /// 输出内容
         /// </summary>
         /// <returns></returns>
@@ -393,15 +437,6 @@ namespace MCS.Library.Expression
             using (StringWriter writer = new StringWriter(strB))
             {
                 WriteIdentifierInfoRecursively(writer);
-                /*
-                ParseIdentifier identifier = this;
-
-                while (identifier != null)
-                {
-                    identifier.WriteIdentifierInfoRecursively(writer, 0);
-
-                    identifier = identifier.NextIdentifier;
-                }*/
             }
 
             return strB.ToString();
@@ -453,7 +488,7 @@ namespace MCS.Library.Expression
     /// 封装的解析错误，在表达式解析过程中会报出异常，提示信息包括错误原因、出错位置
     /// <code source="..\Framework\TestProjects\DeluxeWorks.Library.Test\Expression\ExpressionParserTest.cs" region="parse_error" lang="cs" />
     /// </remarks>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2237:MarkISerializableTypesWithSerializable"), 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2237:MarkISerializableTypesWithSerializable"),
     System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2240:ImplementISerializableCorrectly")]
     public sealed class ParsingException : System.Exception
     {

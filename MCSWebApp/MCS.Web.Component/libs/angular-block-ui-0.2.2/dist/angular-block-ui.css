@@ -51,7 +51,7 @@ body.block-ui > .block-ui-container,
   height: 100%;
   opacity: 0.5;
   filter: alpha(opacity=50);
-  background-color: white;
+  background-color: #f5f5f5;
 }
 
 .block-ui-message-container {

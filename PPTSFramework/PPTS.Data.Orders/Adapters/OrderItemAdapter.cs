@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using PPTS.Data.Orders.Entities;
 using MCS.Library.Data;
-
+using MCS.Library.Core;
 
 namespace PPTS.Data.Orders.Adapters
 {
@@ -44,6 +44,18 @@ namespace PPTS.Data.Orders.Adapters
             return this.Load(builder => builder.AppendItem("ItemID", itemID)).SingleOrDefault();
         }
 
+        public void LoadInContext(string orderId, string[] campusIds, Action<OrderItemCollection> action)
+        {
+
+            var where = new WhereSqlClauseBuilder(LogicOperatorDefine.And);
+            where.AppendItem("OrderID", orderId);
+            if (campusIds != null)
+            {
+                where.AppendItem("exists", OrdersAdapter.Instance.IsExistsCampusIDSQL(orderId, campusIds), "", true);
+            }
+            LoadByBuilderInContext(new ConnectiveLoadingCondition(where), action);
+        }
+
         public OrderItemCollection LoadCollection(IList<string> itemID)
         {
             return this.LoadByInBuilder(new InLoadingCondition(builder => builder.AppendItem(itemID.ToArray<string>()), dataField: "ItemID"));
@@ -60,7 +72,8 @@ namespace PPTS.Data.Orders.Adapters
             {
                 var item = collection[i];
                 item.OrderID = order.OrderID;
-                item.ItemNo = order.OrderNo + (i + 1);
+                //item.ItemNo = order.OrderNo + (i + 1);
+                item.ItemNo.IsNullOrWhiteSpace().TrueAction(() => { item.ItemNo = order.OrderNo + (i + 1); });
                 sqlContext.AppendSqlInContext(TSqlBuilder.Instance, TSqlBuilder.Instance.DBStatementSeperator);
 
                 this.InnerInsertInContext(item, sqlContext, context, StringExtension.EmptyStringArray);
@@ -73,21 +86,21 @@ namespace PPTS.Data.Orders.Adapters
         /// </summary>
         /// <param name="customerId"></param>
         /// <returns></returns>
-        public decimal GetFrozenMoneyByCustomerId(string customerId,string accountId)
+        public decimal GetFrozenMoneyByCustomerId(string customerId, string accountId)
         {
             var whereBuilder = new WhereSqlClauseBuilder();
 
-            whereBuilder.AppendItem("a.orderid", "orderid","=",true);
+            whereBuilder.AppendItem("a.orderid", "orderid", "=", true);
             whereBuilder.AppendItem("CustomerID", customerId);
             whereBuilder.AppendItem("AccountID", accountId);
 
-            var sql = string.Format("select SUM( RealAmount*RealPrice ) from {0} as a where  exists( select * from {1} where OrderStatus in (0,2) and ProcessStatus=2 and {2})", 
+            var sql = string.Format("select SUM( RealAmount*RealPrice ) from {0} as a where  exists( select * from {1} where OrderStatus in (1) and ProcessStatus in (0,1,3) and {2})",
                 GetTableName(),
                 OrdersAdapter.Instance.TableName,
                 whereBuilder.ToSqlString(TSqlBuilder.Instance));
             var returnValue = DbHelper.RunSqlReturnScalar(sql, GetConnectionName());
-            
-           return returnValue is DBNull ?0:Convert.ToDecimal(returnValue);
+
+            return returnValue is DBNull ? 0 : Convert.ToDecimal(returnValue);
         }
     }
 }

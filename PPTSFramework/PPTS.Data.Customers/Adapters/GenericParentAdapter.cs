@@ -41,7 +41,7 @@ namespace PPTS.Data.Customers.Adapters
             this.RegisterQueryData(this.GetQueryMappingInfo().GetQueryTableName(),
                 this.GetQueryMappingInfo(),
                 this.PrepareLoadPrimaryParentSql(customerID),
-                (parents) => action(parents.SingleOrDefault()));
+                (parents) => action(parents.FirstOrDefault()));
         }
 
         /// <summary>

@@ -13,7 +13,7 @@ namespace PPTS.Data.Orders.Entities
 	/// 教室表
 	/// </summary>
 	[Serializable]
-    [ORTableMapping("Rooms")]
+    [ORTableMapping("OM.Rooms")]
     [DataContract]
 	public class Room
 	{		

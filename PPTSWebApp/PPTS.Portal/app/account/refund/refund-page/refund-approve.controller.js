@@ -6,33 +6,24 @@
                 function ($scope, $state, $stateParams, $location, mcsDialogService, accountDataService) {
                     var vm = this;
                     vm.page = $location.$$search.prev;
-                    vm.applyID = $stateParams.id;
 
+                    vm.wfParams = {
+                        processID: $stateParams.processID,
+                        activityID: $stateParams.activityID,
+                        resourceID: $stateParams.resourceID
+                    };
+                    
                     // 页面初始化加载或重新搜索时查询
                     vm.init = function () {
-                        accountDataService.getRefundApplyByApplyID(vm.applyID, function (result) {
+                        accountDataService.getRefundApplyByWorkflow(vm.wfParams, function (result) {
                             vm.apply = result.apply
                             vm.customer = result.customer;
+                            vm.clientProcess = result.clientProcess;
 
                             $scope.$broadcast('dictionaryReady');
                         });
                     };
                     vm.init();
 
-                    //模拟保存审批结果
-                    vm.approve = function () {
-                        
-                        accountDataService.approveRefundApply(vm.apply.applyID, 'approve', function () {
-                            vm.init();
-                        });
-                    }
-
-                    //模拟保存审批结果
-                    vm.refuse = function () {
-
-                        accountDataService.approveRefundApply(vm.apply.applyID, 'refuse', function () {
-                            vm.init();
-                        });
-                    }
                 }]);
         });

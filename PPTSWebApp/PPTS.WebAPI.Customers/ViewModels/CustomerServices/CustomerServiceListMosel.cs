@@ -11,6 +11,10 @@ namespace PPTS.WebAPI.Customers.ViewModels.CustomerServices
     [Serializable]
     public class CustomerServiceModel : CustomerService
     {
+        [DataMember]
+        public string OrgName { get; set; }
+        
+
         /// <summary>
         /// 学员姓名
         /// </summary>

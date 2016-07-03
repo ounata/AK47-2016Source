@@ -98,13 +98,13 @@ namespace PPTS.Data.Customers.Adapters
         private void InitData(AccountChargeApply data)
         {
             if (data.ApplyID.IsNullOrEmpty())
-                data.ApplyID = System.Guid.NewGuid().ToString();
+                data.ApplyID = UuidHelper.NewUuidString();
             if (data.ApplyNo.IsNullOrEmpty())
                 data.ApplyNo = Helper.GetApplyNo("NC");
             if (data.AccountID.IsNullOrEmpty())
                 data.AccountID = data.ApplyID;
             if (data.AccountCode.IsNullOrEmpty())
-                data.AccountCode = data.ApplyNo;
+                data.AccountCode = Helper.GetAccountCode();
         }
 
         /// <summary>

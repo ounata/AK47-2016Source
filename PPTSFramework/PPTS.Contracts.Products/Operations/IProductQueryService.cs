@@ -19,5 +19,23 @@ namespace PPTS.Contracts.Products.Operations
         /// <returns></returns>
         [OperationContract]
         ProductViewQueryResult QueryProductViewsByIDs(string[] productIDs);
+
+        /// <summary>
+        /// 是否允许手工确认
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <returns></returns>
+        [OperationContract]
+        bool IsAssetConfirm(string productId);
+
+        /// <summary>
+        /// 是否 存在校区 在 产品列表中
+        /// </summary>
+        /// <param name="campusIds"></param>
+        /// <param name="productIds"></param>
+        /// <returns></returns>
+        [OperationContract]
+        bool IsExistsCampusInProduct(string[] campusIds, string[] productIds);
+
     }
 }

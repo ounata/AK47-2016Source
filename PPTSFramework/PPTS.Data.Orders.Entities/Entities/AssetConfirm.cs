@@ -1,131 +1,182 @@
-using MCS.Library.Core;
+using System;
+using System.Runtime.Serialization;
 using MCS.Library.Data.DataObjects;
 using MCS.Library.Data.Mapping;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
+using PPTS.Data.Common.Entities;
+using PPTS.Data.Common;
 
 namespace PPTS.Data.Orders.Entities
 {
 	/// <summary>
 	/// This object represents the properties and methods of a AssetConfirm.
-	/// 账户缴费申请表
+	/// 资产收入确认记录表
 	/// </summary>
 	[Serializable]
-    [ORTableMapping("AssetConfirms")]
+    [ORTableMapping("OM.AssetConfirms")]
     [DataContract]
-	public class AssetConfirm
-	{		
-		public AssetConfirm()
-		{
-		}		
-
-		/// <summary>
-		/// 校区ID
-		/// </summary>
-		[ORFieldMapping("CampusID")]
+	public class AssetConfirm : IEntityWithCreator
+    {
+        /// <summary>
+        /// 校区ID
+        /// </summary>
+        [ORFieldMapping("CampusID")]
         [DataMember]
-		public string CampusID
-		{
-			get;
+        public string CampusID
+        {
+            get;
             set;
-		}
-
-		/// <summary>
-		/// 校区名称
-		/// </summary>
-		[ORFieldMapping("CampusName")]
+        }
+        /// <summary>
+        /// 校区名称
+        /// </summary>
+        [ORFieldMapping("CampusName")]
         [DataMember]
-		public string CampusName
-		{
-			get;
+        public string CampusName
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 学员ID
-		/// </summary>
-		[ORFieldMapping("CustomerID")]
-        [DataMember]
-		public string CustomerID
-		{
-			get;
-            set;
-		}
-
-		/// <summary>
-		/// 学员编码
-		/// </summary>
-		[ORFieldMapping("CustomerCode")]
-        [DataMember]
-		public string CustomerCode
-		{
-			get;
-            set;
-		}
-
-		/// <summary>
-		/// 学员姓名
-		/// </summary>
-		[ORFieldMapping("CustomerName")]
-        [DataMember]
-		public string CustomerName
-		{
-			get;
-            set;
-		}
-
-		/// <summary>
-		/// 资产ID
-		/// </summary>
-		[ORFieldMapping("AssetID")]
-        [DataMember]
-		public string AssetID
-		{
-			get;
-            set;
-		}
-
-		/// <summary>
-		/// 资产编码
-		/// </summary>
-		[ORFieldMapping("AssetCode")]
-        [DataMember]
-		public string AssetCode
-		{
-			get;
-            set;
-		}
-
-		/// <summary>
-		/// 确认单ID
-		/// </summary>
-		[ORFieldMapping("ConfirmID", PrimaryKey=true)]
-        [DataMember]
-		public string ConfirmID
-		{
-			get;
-            set;
-		}
-
-		/// <summary>
-		/// 确认类型（0-非课程，1-课程类）
-		/// </summary>
-		[ORFieldMapping("ConfirmType")]
-        [DataMember]
-		public string ConfirmType
-		{
-			get;
-            set;
-		}
+   
 
         /// <summary>
-        /// 确认类型（1-收入确认，-1-收入取消）
+        /// 学员ID
+        /// </summary>
+        [ORFieldMapping("CustomerID")]
+        [DataMember]
+        public string CustomerID
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 学员编码
+        /// </summary>
+        [ORFieldMapping("CustomerCode")]
+        [DataMember]
+        public string CustomerCode
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 学员姓名
+        /// </summary>
+        [ORFieldMapping("CustomerName")]
+        [DataMember]
+        public string CustomerName
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 账户ID
+        /// </summary>
+        [ORFieldMapping("AccountID")]
+        [DataMember]
+        public string AccountID
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 资产ID
+        /// </summary>
+        [ORFieldMapping("AssetID")]
+        [DataMember]
+        public string AssetID
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 资产编码
+        /// </summary>
+        [ORFieldMapping("AssetCode")]
+        [DataMember]
+        public string AssetCode
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 资产类型
+        /// </summary>
+        [ORFieldMapping("AssetType")]
+        [DataMember]
+        public AssetTypeDefine AssetType
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 资产来源类型
+        /// </summary>
+        [ORFieldMapping("AssetRefType")]
+        [DataMember]
+        public AssetRefTypeDefine AssetRefType
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 资产来源PID（存放订购单ID）
+        /// </summary>
+        [ORFieldMapping("AssetRefPID")]
+        [DataMember]
+        public string AssetRefPID
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 资产来源ID（存放订购明细ID）
+        /// </summary>
+        [ORFieldMapping("AssetRefID")]
+        [DataMember]
+        public string AssetRefID
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 上次资产剩余价值
+        /// </summary>
+        [ORFieldMapping("AssetMoney")]
+        [DataMember]
+        public decimal AssetMoney
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 确认单ID
+        /// </summary>
+        [ORFieldMapping("ConfirmID", PrimaryKey = true)]
+        [DataMember]
+        public string ConfirmID
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 确认标志（1-收入确认，-1收入取消）
         /// </summary>
         [ORFieldMapping("ConfirmFlag")]
         [DataMember]
-        public int ConfirmFlag
+        public ConfirmFlagDefine ConfirmFlag
         {
             get;
             set;
@@ -136,287 +187,321 @@ namespace PPTS.Data.Orders.Entities
         /// </summary>
         [ORFieldMapping("ConfirmMoney")]
         [DataMember]
-		public decimal ConfirmMoney
-		{
-			get;
+        public decimal ConfirmMoney
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 确认说明
-		/// </summary>
-		[ORFieldMapping("ConfirmMemo")]
+        /// <summary>
+        /// 确认说明
+        /// </summary>
+        [ORFieldMapping("ConfirmMemo")]
         [DataMember]
-		public string ConfirmMemo
-		{
-			get;
+        public string ConfirmMemo
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 确认状态（1-已确认，3-已删除 ）参考排课
-		/// </summary>
-		[ORFieldMapping("ConfirmStatus")]
+        /// <summary>
+        /// 确认状态（1-已确认，3-已删除 ）参考排课
+        /// </summary>
+        [ORFieldMapping("ConfirmStatus")]
         [DataMember]
-		public string ConfirmStatus
-		{
-			get;
+        public ConfirmStatusDefine ConfirmStatus
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 确认时间
-		/// </summary>
-		[ORFieldMapping("ConfirmTime")]
+        /// <summary>
+        /// 确认时间
+        /// </summary>
+        [ORFieldMapping("ConfirmTime", UtcTimeToLocal = true)]
         [DataMember]
-		public DateTime ConfirmTime
-		{
-			get;
+        public DateTime ConfirmTime
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 确认人ID
-		/// </summary>
-		[ORFieldMapping("ConfirmerID")]
+        /// <summary>
+        /// 确认人ID
+        /// </summary>
+        [ORFieldMapping("ConfirmerID")]
         [DataMember]
-		public string ConfirmerID
-		{
-			get;
+        public string ConfirmerID
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 确认人姓名
-		/// </summary>
-		[ORFieldMapping("ConfirmerName")]
+        /// <summary>
+        /// 确认人姓名
+        /// </summary>
+        [ORFieldMapping("ConfirmerName")]
         [DataMember]
-		public string ConfirmerName
-		{
-			get;
+        public string ConfirmerName
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 确认人岗位ID
-		/// </summary>
-		[ORFieldMapping("ConfirmerJobID")]
+        /// <summary>
+        /// 确认人岗位ID
+        /// </summary>
+        [ORFieldMapping("ConfirmerJobID")]
         [DataMember]
-		public string ConfirmerJobID
-		{
-			get;
+        public string ConfirmerJobID
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 确认人岗位名称
-		/// </summary>
-		[ORFieldMapping("ConfirmerJobName")]
+        /// <summary>
+        /// 确认人岗位名称
+        /// </summary>
+        [ORFieldMapping("ConfirmerJobName")]
         [DataMember]
-		public string ConfirmerJobName
-		{
-			get;
+        public string ConfirmerJobName
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 异步处理状态（参考订购）
-		/// </summary>
-		[ORFieldMapping("ProcessStatus")]
+        /// <summary>
+        /// 确认人岗位类型代码
+        /// </summary>
+        [ORFieldMapping("ConfirmerJobType")]
         [DataMember]
-		public string ProcessStatus
-		{
-			get;
+        public string ConfirmerJobType
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 异步处理时间
-		/// </summary>
-		[ORFieldMapping("ProcessTime")]
+        /// <summary>
+        /// 异步处理状态（参考订购）
+        /// </summary>
+        [ORFieldMapping("ProcessStatus")]
         [DataMember]
-		public DateTime ProcessTime
-		{
-			get;
+        public ProcessStatusDefine ProcessStatus
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 异步处理说明
-		/// </summary>
-		[ORFieldMapping("ProcessMemo")]
+        /// <summary>
+        /// 异步处理时间
+        /// </summary>
+        [ORFieldMapping("ProcessTime", UtcTimeToLocal = true)]
         [DataMember]
-		public string ProcessMemo
-		{
-			get;
+        public DateTime ProcessTime
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 咨询师ID
-		/// </summary>
-		[ORFieldMapping("ConsultantID")]
+        /// <summary>
+        /// 异步处理说明
+        /// </summary>
+        [ORFieldMapping("ProcessMemo")]
         [DataMember]
-		public string ConsultantID
-		{
-			get;
+        public string ProcessMemo
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 咨询师姓名
-		/// </summary>
-		[ORFieldMapping("ConsultantName")]
+        /// <summary>
+        /// 咨询师ID
+        /// </summary>
+        [ORFieldMapping("ConsultantID")]
         [DataMember]
-		public string ConsultantName
-		{
-			get;
+        public string ConsultantID
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 咨询师岗位ID
-		/// </summary>
-		[ORFieldMapping("ConsultantJobID")]
+        /// <summary>
+        /// 咨询师姓名
+        /// </summary>
+        [ORFieldMapping("ConsultantName")]
         [DataMember]
-		public string ConsultantJobID
-		{
-			get;
+        public string ConsultantName
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 咨询师岗位名称
-		/// </summary>
-		[ORFieldMapping("ConsultantJobName")]
+        /// <summary>
+        /// 咨询师岗位ID
+        /// </summary>
+        [ORFieldMapping("ConsultantJobID")]
         [DataMember]
-		public string ConsultantJobName
-		{
-			get;
+        public string ConsultantJobID
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 学管师ID
-		/// </summary>
-		[ORFieldMapping("EducatorID")]
+        /// <summary>
+        /// 学管师ID
+        /// </summary>
+        [ORFieldMapping("EducatorID")]
         [DataMember]
-		public string EducatorID
-		{
-			get;
+        public string EducatorID
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 学管师姓名
-		/// </summary>
-		[ORFieldMapping("EducatorName")]
+        /// <summary>
+        /// 学管师姓名
+        /// </summary>
+        [ORFieldMapping("EducatorName")]
         [DataMember]
-		public string EducatorName
-		{
-			get;
+        public string EducatorName
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 学管师岗位ID
-		/// </summary>
-		[ORFieldMapping("EducatorJobID")]
+        /// <summary>
+        /// 学管师岗位ID
+        /// </summary>
+        [ORFieldMapping("EducatorJobID")]
         [DataMember]
-		public string EducatorJobID
-		{
-			get;
+        public string EducatorJobID
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 学管师姓名
-		/// </summary>
-		[ORFieldMapping("EducatorJobName")]
+        /// <summary>
+        /// 教师ID
+        /// </summary>
+        [ORFieldMapping("TeacherID")]
         [DataMember]
-		public string EducatorJobName
-		{
-			get;
+        public string TeacherID
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 创建人ID
-		/// </summary>
-		[ORFieldMapping("CreatorID")]
+        /// <summary>
+        /// 教师姓名
+        /// </summary>
+        [ORFieldMapping("TeacherName")]
         [DataMember]
-		public string CreatorID
-		{
-			get;
+        public string TeacherName
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 创建人姓名
-		/// </summary>
-		[ORFieldMapping("CreatorName")]
+        /// <summary>
+        /// 教师岗位ID
+        /// </summary>
+        [ORFieldMapping("TeacherJobID")]
         [DataMember]
-		public string CreatorName
-		{
-			get;
+        public string TeacherJobID
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 创建时间
-		/// </summary>
-		[ORFieldMapping("CreateTime")]
+        /// <summary>
+        /// 上课开始时间
+        /// </summary>
+        [ORFieldMapping("StartTime", UtcTimeToLocal = true)]
         [DataMember]
-		public DateTime CreateTime
-		{
-			get;
+        public DateTime StartTime
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 最后修改人ID
-		/// </summary>
-		[ORFieldMapping("ModifierID")]
+        /// <summary>
+        /// 上课结束时间
+        /// </summary>
+        [ORFieldMapping("EndTime", UtcTimeToLocal = true)]
         [DataMember]
-		public string ModifierID
-		{
-			get;
+        public DateTime EndTime
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 最后修改人姓名
-		/// </summary>
-		[ORFieldMapping("ModifierName")]
+        /// <summary>
+        /// 课次时长
+        /// </summary>
+        [ORFieldMapping("DurationValue")]
         [DataMember]
-		public string ModifierName
-		{
-			get;
+        public decimal DurationValue
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 最后修改时间
-		/// </summary>
-		[ORFieldMapping("ModifyTime")]
+        /// <summary>
+        /// 课次数
+        /// </summary>
+        [ORFieldMapping("Amount")]
         [DataMember]
-		public DateTime ModifyTime
-		{
-			get;
+        public decimal Amount
+        {
+            get;
             set;
-		}
+        }
 
-		/// <summary>
-		/// 
-		/// </summary>
-		[ORFieldMapping("TenantCode")]
+        /// <summary>
+        /// 课时单价
+        /// </summary>
+        [ORFieldMapping("Price")]
         [DataMember]
-		public string TenantCode
-		{
-			get;
+        public decimal Price
+        {
+            get;
             set;
-		}
-	}
+        }
+
+        /// <summary>
+        /// 创建人ID
+        /// </summary>
+        [ORFieldMapping("CreatorID")]
+        [DataMember]
+        public string CreatorID
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 创建人姓名
+        /// </summary>
+        [ORFieldMapping("CreatorName")]
+        [DataMember]
+        public string CreatorName
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 创建时间
+        /// </summary>
+        [ORFieldMapping("CreateTime", UtcTimeToLocal = true)]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.Select | ClauseBindingFlags.Where, DefaultExpression = "GETUTCDATE()")]
+        [DataMember]
+        public DateTime CreateTime
+        {
+            get;
+            set;
+        }
+    }
 
     [Serializable]
     [DataContract]

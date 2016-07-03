@@ -1,12 +1,19 @@
-﻿using MCS.Library.Data;
+﻿using MCS.Library.Core;
+using MCS.Library.Data;
 using MCS.Library.OGUPermission;
 using MCS.Library.Principal;
+using MCS.Web.MVC.Library.Filters;
 using PPTS.Data.Common.Adapters;
 using PPTS.Data.Common.Entities;
 using PPTS.Data.Common.Security;
 using PPTS.Data.Orders;
+using PPTS.Data.Orders.Adapters;
 using PPTS.Data.Orders.DataSources;
 using PPTS.Data.Orders.Entities;
+using PPTS.Data.Products;
+using PPTS.Web.MVC.Library.Filters;
+using PPTS.WebAPI.Orders.Executors;
+using PPTS.WebAPI.Orders.Service;
 using PPTS.WebAPI.Orders.ViewModels.Assignment;
 using System;
 using System.Collections.Generic;
@@ -22,80 +29,162 @@ namespace PPTS.WebAPI.Orders.Controllers
         #region api/teachercourse/getTchClassRecord
         ///教师  上课记录查询列表
         [HttpPost]
-        public AssignQCR GetTchClassRecord(AssignQCM criteriaQCM)
+        [ApiPassportAuthentication]
+        [PPTSJobFunctionAuthorize("PPTS:教师上课记录（打印上课记录）,教师上课记录（打印上课记录）-本部门,教师上课记录（打印上课记录）-本校区,教师上课记录（打印上课记录）-本分公司,教师上课记录（打印）-全国")]
+        public ClassRecordTeacherModel GetTchClassRecord(AssignQCM qcm)
         {
-            //当前操作人所属校区ID
-            IOrganization org = DeluxeIdentity.CurrentUser.GetCurrentJob().GetParentOrganizationByType(DepartmentType.Campus);
-            if (org == null)
-            {
-                return new AssignQCR
-                {
-                    QueryResult = new PagedQueryResult<Assign, AssignCollection>(),
-                    Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(Data.Orders.Entities.Assign))
-                };
-            }
-            if (criteriaQCM.EndTime != DateTime.MinValue)
-                criteriaQCM.EndTime = criteriaQCM.EndTime.AddDays(1);
-
-
-            criteriaQCM.CampusID = new string[] { org.ID };
-            if (criteriaQCM.AssignStatus == null || criteriaQCM.AssignStatus.Length == 0)
-                criteriaQCM.AssignStatus = new int[] { (int)AssignStatusDefine.Exception, (int)AssignStatusDefine.Finished };
-            else if (criteriaQCM.AssignStatus[0] == (int)AssignStatusDefine.Assigned
-                || criteriaQCM.AssignStatus[0] == (int)AssignStatusDefine.Invalid
-                )
-            {
-                criteriaQCM.AssignStatus = new int[] { (int)AssignStatusDefine.Exception, (int)AssignStatusDefine.Finished };
-            }
-
-            Dictionary<string, IEnumerable<BaseConstantEntity>> dic = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(Data.Orders.Entities.Assign));
-
-            string key = "C_CODE_ABBR_Course_AssignStatus";
-            foreach (var v in dic)
-            {
-                if (v.Key.ToLower() == key.ToLower())
-                {
-                    key = v.Key;
-                    System.Collections.Generic.List<BaseConstantEntity> ie = (System.Collections.Generic.List<BaseConstantEntity>)v.Value;
-                    var cc = from c in ie
-                             where (new[] { "异常", "已上"}).Contains(c.Value)
-                             select c;
-                    dic.Remove(key);
-                    dic.Add(key, cc);
-                    break;
-                }
-            }
-            return new AssignQCR()
-            {
-                QueryResult = GenericOrderDataSource<Data.Orders.Entities.Assign, AssignCollection>.Instance.Query(criteriaQCM.PageParams, criteriaQCM, criteriaQCM.OrderBy),
-                Dictionaries = dic
-            };
+            ClassRecordTeacherModel result = new ClassRecordTeacherModel();
+            result.LoadData(qcm);
+            return result;
         }
+
         ///教师  上课记录查询列表翻页事件
         [HttpPost]
-        public PagedQueryResult<Data.Orders.Entities.Assign, AssignCollection> GetTchClassRecordPaged(AssignQCM criteriaQCM)
+        [ApiPassportAuthentication]
+        [PPTSJobFunctionAuthorize("PPTS:教师上课记录（打印上课记录）,教师上课记录（打印上课记录）-本部门,教师上课记录（打印上课记录）-本校区,教师上课记录（打印上课记录）-本分公司,教师上课记录（打印）-全国")]
+        public PagedQueryResult<AssignView, AssignViewCollection> GetTchClassRecordPaged(AssignQCM qcm)
         {
-            //当前操作人所属校区ID
-            IOrganization org = DeluxeIdentity.CurrentUser.GetCurrentJob().GetParentOrganizationByType(DepartmentType.Campus);
-            if (org == null)
+            //如果当前操作人
+            if (DeluxeIdentity.CurrentUser.GetCurrentJob().JobType == Data.Common.JobTypeDefine.Teacher)
             {
-                return new PagedQueryResult<Data.Orders.Entities.Assign, AssignCollection>();
+                qcm.TeacherJobID = DeluxeIdentity.CurrentUser.GetCurrentJob().ID;
+                IOrganization org = DeluxeIdentity.CurrentUser.GetCurrentJob().GetParentOrganizationByType(DepartmentType.Campus);
+                qcm.CampusID = new string[] { org.ID };
             }
-            if (criteriaQCM.EndTime != DateTime.MinValue)
-                criteriaQCM.EndTime = criteriaQCM.EndTime.AddDays(1);
-            criteriaQCM.CampusID = new string[] { org.ID };
-            if (criteriaQCM.AssignStatus == null || criteriaQCM.AssignStatus.Length == 0)
-                criteriaQCM.AssignStatus = new int[] { (int)AssignStatusDefine.Exception, (int)AssignStatusDefine.Finished };
-            else if (criteriaQCM.AssignStatus[0] == (int)AssignStatusDefine.Assigned
-                || criteriaQCM.AssignStatus[0] == (int)AssignStatusDefine.Invalid
-                )
-            {
-                criteriaQCM.AssignStatus = new int[] { (int)AssignStatusDefine.Exception, (int)AssignStatusDefine.Finished };
-            }
-            return GenericOrderDataSource<Data.Orders.Entities.Assign, AssignCollection>.Instance.Query(criteriaQCM.PageParams, criteriaQCM, criteriaQCM.OrderBy);
+            var och = new OrderCommonHelper();
+            och.GetCourseCondition(qcm);
+            return GenericOrderDataSource<Data.Orders.Entities.AssignView, AssignViewCollection>.Instance.Query(qcm.PageParams, qcm, qcm.OrderBy);
         }
 
         #endregion
+
+        #region api/teachercourse/addAccompanion
+
+        /*初始化录入陪读课时记录界面数据*/
+        [HttpPost]
+        [ApiPassportAuthentication]
+        [PPTSJobFunctionAuthorize("PPTS:按钮-录入/删除/确认课时-本校区")]
+        public dynamic InitAccompanion()
+        {
+            IOrganization organ = DeluxeIdentity.CurrentUser.GetCurrentJob().GetParentOrganizationByType(DepartmentType.Campus);
+            if (organ == null)
+            {
+                return null;
+            }
+            return new
+            {
+                CampusID = organ.ID,
+                CampusName = organ.Name,
+                Accompanion = new AccompanyAssign() { CampusID = organ.ID, CampusName = organ.Name }
+            };
+        }
+
+        //添加陪读记录
+        [HttpPost]
+        [ApiPassportAuthentication]
+        [PPTSJobFunctionAuthorize("PPTS:按钮-录入/删除/确认课时-本校区")]
+        public dynamic AddAccompanion(AccompanyAssign aa)
+        {
+            aa.NullCheck("AccompanyAssign");
+
+            aa.AssignID = UuidHelper.NewUuidString();
+            aa.AssignStatus = Data.Orders.AssignStatusDefine.Finished;
+
+            aa.FillCreator();
+            aa.FillModifier();
+
+            string msg = "ok";
+
+            try
+            {
+                AccompanyAssignsAdapter.Instance.Update(aa);
+            }
+            catch (Exception error)
+            {
+                msg = error.StackTrace.ToString();
+            }
+
+            return new { Msg = msg };
+        }
+
+        #endregion
+
+        #region api/teachercourse/markupAssign
+
+        ///教师上课记录 录入学科课时
+        [HttpPost]
+        [ApiPassportAuthentication]
+        [PPTSJobFunctionAuthorize("PPTS:按钮-录入/删除/确认课时-本校区")]
+        public dynamic MarkupAssign(AssignSuperModel asm)
+        {
+            AssignMarkupExecutor ac = new AssignMarkupExecutor(asm);
+            ac.Execute();
+            AssignTaskService.UpdateCustomerSearchInfo(asm.CustomerID);
+            return new { Msg = ac.Msg };
+        }
+
+        #endregion
+
+        #region api/teachercourse/deleteAssign
+
+        /// 教师上课记录，删除课表
+        [HttpPost]
+        [ApiPassportAuthentication]
+        [PPTSJobFunctionAuthorize("PPTS:按钮-录入/删除/确认课时-本校区")]
+        public void DeleteAssign(AssignCollection model)
+        {
+            AssignDeleteExecutor executor = new AssignDeleteExecutor(model);
+            executor.Execute();
+            AssignTaskService.UpdateCustomerSearchInfo(executor.CustomerIDTask);
+        }
+        #endregion
+
+        #region api/teachercourse/cancelAssign
+
+        /// 教师上课记录，取消排课
+        [HttpPost]
+        [ApiPassportAuthentication]
+        [PPTSJobFunctionAuthorize("PPTS:按钮-新增/取消/复制/调动课表-本校区")]
+        public void CancelAssign(AssignCollection model)
+        {
+            AssignCancelExecutor executor = new AssignCancelExecutor(model);
+            executor.Execute();
+            AssignTaskService.UpdateCustomerSearchInfo(executor.CustomerIDTask);
+        }
+        #endregion
+
+        #region api/teachercourse/getCurrUserCampus
+        ///获取当前用户所属校区
+        [HttpPost]
+        [ApiPassportAuthentication]
+        public dynamic GetCurrUserCampus()
+        {
+            IOrganization organ = DeluxeIdentity.CurrentUser.GetCurrentJob().GetParentOrganizationByType(DepartmentType.Campus);
+            if (organ == null)
+                return null;
+            return new { CampusID = organ.ID, CampusName = organ.Name };
+        }
+        #endregion
+
+        #region api/teachercourse/getTeacher
+        /*录入学科课时、陪读课时，获取智能提示搜索框下拉数据*/
+        [HttpPost]
+        [ApiPassportAuthentication]
+        public SimpleTeacherJobViewCollection GetTeacher(dynamic para)
+        {
+            IOrganization organ = DeluxeIdentity.CurrentUser.GetCurrentJob().GetParentOrganizationByType(DepartmentType.Campus);
+            TeacherQCM qcm = new TeacherQCM() { TeacherName = para.searchTerm };
+            
+            if (organ == null)
+                return new SimpleTeacherJobViewCollection()
+                {
+                    Result = new TeacherJobViewCollection()
+                };
+            qcm.CampusID = organ.ID;
+            var r = TeacherJobViewAdapter.Instance.LoadCollection(qcm.CampusID, qcm.TeacherName);
+            return new SimpleTeacherJobViewCollection() { Result = r };
+        }
+        #endregion 
 
     }
 }

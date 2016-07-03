@@ -41,6 +41,10 @@
     <AssemblyOriginatorKeyFile>MCS.Library.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper, Version=4.2.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartComponent\Bin\AutoMapper.4.2.1\lib\net45\AutoMapper.dll</HintPath>
+    </Reference>
     <Reference Include="MCS.Library">
       <HintPath>..\..\Bin\MCS.Library.dll</HintPath>
     </Reference>
@@ -56,6 +60,19 @@
     </Reference>
     <Reference Include="MCS.Library.SOA.DataObjects">
       <HintPath>..\..\Bin\MCS.Library.SOA.DataObjects.dll</HintPath>
+    </Reference>
+    <Reference Include="MCS.Library.WcfExtensions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=62ea08f894871798, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Bin\MCS.Library.WcfExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="MCS.Web.MVC.Library">
+      <HintPath>..\..\Bin\MCS.Web.MVC.Library.dll</HintPath>
+    </Reference>
+    <Reference Include="PPTS.Contracts.Customers">
+      <HintPath>..\..\PPTSBin\PPTS.Contracts.Customers.dll</HintPath>
+    </Reference>
+    <Reference Include="PPTS.Contracts.Orders">
+      <HintPath>..\..\PPTSBin\PPTS.Contracts.Orders.dll</HintPath>
     </Reference>
     <Reference Include="PPTS.Data.Common.Entities">
       <HintPath>..\..\PPTSBin\PPTS.Data.Common.Entities.dll</HintPath>
@@ -74,36 +91,55 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Adapters\MutexRecordAdapter.cs" />
+    <Compile Include="Adapters\MutexSettingsCache.cs" />
     <Compile Include="Adapters\ConfigsCache.cs" />
     <Compile Include="Adapters\ConstantsCache.cs" />
     <Compile Include="Adapters\ConstantAdapter.cs" />
     <Compile Include="Adapters\ConfigAdapter.cs" />
+    <Compile Include="Adapters\PPTSOrgAndJobCacheQueue.cs" />
     <Compile Include="Adapters\PPTSOrganizationAdapter.cs" />
+    <Compile Include="Adapters\MutexSettingAdapter.cs" />
     <Compile Include="Adapters\TeacherAdapter.cs" />
     <Compile Include="Adapters\TeacherJobViewAdapter.cs" />
     <Compile Include="Adapters\TeacherJobAdapter.cs" />
     <Compile Include="Adapters\TeacherTeachingAdapter.cs" />
-    <Compile Include="Authorization\CourseOrgAuthorizationAdapterBase.cs" />
-    <Compile Include="Authorization\CourseRelationAuthorizationAdpterBase.cs" />
-    <Compile Include="Authorization\CustomerOrgAuthorizationAdapterBase.cs" />
-    <Compile Include="Authorization\CustomerRelationAuthorizationAdaperBase.cs" />
-    <Compile Include="Authorization\OwnerRelationAuthorizationAdapterBase.cs" />
-    <Compile Include="Authorization\RecordOrgAuthorizationAdapterBase.cs" />
-    <Compile Include="Authorization\ScopeAuthorizationBase.cs" />
+    <Compile Include="Adapters\WFJobConfigAdapter.cs" />
+    <Compile Include="Adapters\WFRelationConfigAdapter.cs" />
+    <Compile Include="Authorization\CourseOrgAuthorizationAdapter.cs" />
+    <Compile Include="Authorization\CourseRelationAuthorizationAdpter.cs" />
+    <Compile Include="Authorization\CustomerOrgAuthorizationAdapter.cs" />
+    <Compile Include="Authorization\CustomerRelationAuthorizationAdaper.cs" />
+    <Compile Include="Authorization\OwnerRelationAuthorizationAdapter.cs" />
+    <Compile Include="Authorization\RecordOrgAuthorizationAdapter.cs" />
+    <Compile Include="Authorization\ScopeAuthorization.cs" />
     <Compile Include="Common\ConnectionDefine.cs" />
-    <Compile Include="Common\Helper.cs" />
+    <Compile Include="Common\CommonHelper.cs" />
+    <Compile Include="Common\EntityExtensions.cs" />
+    <Compile Include="Common\DictionaryExtensions.cs" />
+    <Compile Include="Common\MutexHelper.cs" />
     <Compile Include="Common\OGUExtensions.cs" />
+    <Compile Include="Configuration\ScopeAuthSettingsSection.cs" />
     <Compile Include="DataSources\GenericCommonDataSource.cs" />
     <Compile Include="DataSources\UserAndJobDataSource.cs" />
+    <Compile Include="Executors\MutexRecordSaveExecutor.cs" />
     <Compile Include="Executors\PPTSEditEntityExecutorBase.cs" />
     <Compile Include="Executors\PPTSExecutorBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\Extensions.cs" />
+    <Compile Include="Service\CustomerScopeAuthorizationTask.cs" />
+    <Compile Include="Service\OrderScopeAuthorzationTask.cs" />
+    <Compile Include="Service\SendEmailService.cs" />
+    <Compile Include="Service\SMSTask.cs" />
+    <Compile Include="Workflow\WfJobRoleFunctions.cs" />
+    <Compile Include="Common\WorkflowHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MCS.Library.snk" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Adapters\Templates\QueryUsersInJobByOrganization.sql" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>IF NOT EXIST "$(ProjectDir)..\..\PPTSBin" MD "$(ProjectDir)..\..\PPTSBin"

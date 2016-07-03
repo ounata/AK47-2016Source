@@ -1,5 +1,6 @@
 using MCS.Library.Data.DataObjects;
 using MCS.Library.Data.Mapping;
+using PPTS.Data.Common.Authorization;
 using PPTS.Data.Common.Entities;
 using System;
 using System.Runtime.Serialization;
@@ -13,6 +14,23 @@ namespace PPTS.Data.Customers.Entities
     [Serializable]
     [ORTableMapping("CM.CustomerScores")]
     [DataContract]
+
+    #region 数据范围权限(存入识别)
+    [EntityAuth(RecordType = RecordType.CustomerScores)]
+    #endregion
+
+    #region 数据范围权限(数据读取权限)
+    [CustomerRelationScope(Name = "成绩管理（学员视图-成绩）", Functions = "成绩管理（学员视图-成绩）", RecordType = CustomerRecordType.Customer)]
+    [OrgCustomerRelationScope(Name = "成绩管理（学员视图-成绩、成绩详情）-本部门", Functions = "成绩管理（学员视图-成绩、成绩详情）-本部门", OrgType = OrgType.Department, RecordType = CustomerRecordType.Customer)]
+    [OrgCustomerRelationScope(Name = "成绩管理（学员视图-成绩、成绩详情）-本校区", Functions = "成绩管理（学员视图-成绩、成绩详情）-本校区", OrgType = OrgType.Campus, RecordType = CustomerRecordType.Customer)]
+    [OrgCustomerRelationScope(Name = "成绩管理（学员视图-成绩、成绩详情）-本分公司", Functions = "成绩管理（学员视图-成绩、成绩详情）-本分公司", OrgType = OrgType.Branch, RecordType = CustomerRecordType.Customer)]
+    [OrgCustomerRelationScope(Name = "成绩管理（学员视图-成绩、成绩详情）-全国", Functions = "成绩管理（学员视图-成绩、成绩详情）-全国", OrgType = OrgType.HQ, RecordType = CustomerRecordType.Customer)]
+    #endregion
+
+    #region 数据范围权限(编辑操作权限)
+    [CustomerRelationScope(Name = "录入/批量录入/编辑成绩", Functions = "录入/批量录入/编辑成绩", ActionType = ActionType.Edit, RecordType = CustomerRecordType.Customer)]
+    #endregion
+
     public class CustomerScore : IEntityWithCreator, IEntityWithModifier
     {
         public CustomerScore()
@@ -44,6 +62,7 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 学员ID
         /// </summary>
+        [CustomerFieldMapping("CustomerID")]
         [ORFieldMapping("CustomerID")]
         [DataMember]
         public string CustomerID

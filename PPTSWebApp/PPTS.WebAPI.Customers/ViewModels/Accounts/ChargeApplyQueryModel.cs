@@ -15,26 +15,6 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
     public class ChargeApplyQueryModel : AccountChargeApply
     {
         /// <summary>
-        /// 家长姓名
-        /// </summary>
-        [DataMember]
-        public string ParentName
-        {
-            set;
-            get;
-        }
-
-        /// <summary>
-        /// 家长电话
-        /// </summary>
-        [DataMember]
-        public string PhoneNumber
-        {
-            set;
-            get;
-        }
-
-        /// <summary>
         /// 是否能够审核
         /// </summary>
         [DataMember]
@@ -47,6 +27,19 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
             }
         }
 
+        /// <summary>
+        /// 是否潜客
+        /// </summary>
+        [DataMember]
+        public bool IsPotential
+        {
+            get
+            {
+                if (this.PayStatus == PayStatusDefine.Unpay && this.ChargeType == ChargeTypeDefine.New)
+                    return true;
+                return false;
+            }
+        }
     }
 
     [Serializable]

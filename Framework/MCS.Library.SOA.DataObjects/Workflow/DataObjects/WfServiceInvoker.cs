@@ -175,6 +175,12 @@ namespace MCS.Library.SOA.DataObjects.Workflow
                                 }
                             }
 
+                            if (result is IDictionary<string, object>)
+                            {
+                                foreach (KeyValuePair<string, object> kp in (IDictionary<string, object>)result)
+                                    context[kp.Key] = kp.Value;
+                            }
+
                             if (this._SvcOperationDef.RtnXmlStoreParamName.IsNotEmpty())
                                 context[this._SvcOperationDef.RtnXmlStoreParamName] = result;
 
@@ -265,29 +271,75 @@ namespace MCS.Library.SOA.DataObjects.Workflow
             if (string.IsNullOrEmpty(firstElement.Value))
                 return null;
 
-            object result;
-            switch (firstElement.Name.LocalName.ToLower())
+            object result = ParseValueFromXElement(firstElement, firstElement.Name.LocalName);
+
+            if (result == null)
+            {
+                if (firstElement.Name.LocalName.ToLower() == "arrayofdictionaryentry")
+                    result = ToDictionary(firstElement);
+            }
+
+            return result;
+        }
+
+        private static Dictionary<string, object> ToDictionary(XElement element)
+        {
+            Dictionary<string, object> result = new Dictionary<string, object>();
+
+            XNamespace ns = "http://tempuri.org/";
+            XNamespace xsi = "http://www.w3.org/2001/XMLSchema-instance";
+
+            foreach (XElement entryElem in element.Elements())
+            {
+                XElement keyElem = entryElem.Element(ns + "Key");
+
+                if (keyElem != null)
+                {
+                    string keyTypeName = keyElem.Attribute(xsi + "type", "string");
+                    object key = ParseValueFromXElement(keyElem, keyTypeName);
+
+                    if (key != null)
+                    {
+                        XElement valueElem = entryElem.Element(ns + "Value");
+
+                        string valueTypeName = valueElem.Attribute(xsi + "type", "string");
+                        object value = ParseValueFromXElement(valueElem, valueTypeName);
+
+                        result[key.ToString()] = value;
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        private static object ParseValueFromXElement(XElement element, string typeName)
+        {
+            object result = null;
+            typeName = typeName.Replace("xsd:", "");
+
+            switch (typeName.ToLower())
             {
                 case "int":
-                    result = int.Parse(firstElement.Value);
+                    result = int.Parse(element.Value);
                     break;
                 case "decimal":
-                    result = decimal.Parse(firstElement.Value);
+                    result = decimal.Parse(element.Value);
                     break;
                 case "double":
-                    result = double.Parse(firstElement.Value);
+                    result = double.Parse(element.Value);
                     break;
                 case "datetime":
-                    result = DateTime.Parse(firstElement.Value);
+                    result = DateTime.Parse(element.Value);
                     break;
                 case "timespan":
-                    result = TimeSpan.Parse(firstElement.Value);
+                    result = TimeSpan.Parse(element.Value);
                     break;
                 case "boolean":
-                    result = bool.Parse(firstElement.Value);
+                    result = bool.Parse(element.Value);
                     break;
                 case "string":
-                    result = firstElement.Value;
+                    result = element.Value;
                     break;
                 default:
                     result = null;

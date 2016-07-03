@@ -13,6 +13,7 @@ using MCS.Library.WcfExtensions;
 using System.ServiceModel.Web;
 using PPTS.Data.Orders.Entities;
 using MCS.Library.SOA.DataObjects.AsyncTransactional;
+using PPTS.Data.Orders;
 
 namespace PPTS.Services.Orders.Services
 {
@@ -21,37 +22,72 @@ namespace PPTS.Services.Orders.Services
 
         [WfJsonFormatter]
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
-        public void ResetOrderStatus(string processID, string orderId,int status)
+        public void ModifyDebookOrderStatus(string processID, string debookId, OrderStatus orderStatus, ProcessStatusDefine processStatus, string currentUserId, string currentUserName)
         {
-            OrdersAdapter.Instance.Load(orderId).IsNotNull(order => {
+            DebookOrderAdapter.Instance.Load(debookId).IsNotNull((model) =>
+            {
                 TxProcessExecutor.GetExecutor(processID).PrepareData(tp =>
                 {
-                    tp.CurrentActivity.Context["orderId"] = orderId;
-                    tp.CurrentActivity.Context["status"] = status;
+                    tp.CurrentActivity.Context["debookId"] = debookId;
                 }).ExecuteMoveTo(tp =>
                 {
-                    OrdersAdapter.Instance.Update(orderId, new Dictionary<string, object>() { { "ProcessStatus", status } });
+                    model.DebookStatus = ((int)orderStatus).ToString();
+                    model.ProcessStatus = ((int)processStatus).ToString();
+                    model.ModifierID = currentUserId;
+                    model.ModifierName = currentUserName;
+
+                    DebookOrderAdapter.Instance.Update(model);
                 });
-                
+
             });
-
         }
-
 
         [WfJsonFormatter]
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
-        public void SyncAsset(string processID, AssetCollection assets)
+        public void OrderProcess(string processID, string orderId, ProcessStatusDefine processStatus, Order order, List<OrderItem> items, List<Asset> assets, List<Assign> assigns, List<ClassLessonItem> classLessonItems)
         {
-            TxProcessExecutor.GetExecutor(processID).PrepareData(tp =>
+            OrdersAdapter.Instance.Load(order.OrderID).IsNotNull(model =>
             {
-                tp.CurrentActivity.Context["assets"] = assets;
-            }).ExecuteMoveTo(tp =>
-            {
-                var whereSqlBuilder = new MCS.Library.Data.Builder.InSqlClauseBuilder("AssetID");
-                whereSqlBuilder.AppendItem(assets.Select(i => i.AssetID).ToArray());
-                GenericAssetAdapter<Asset, AssetCollection>.Instance.UpdateCollection(whereSqlBuilder, assets);
+                TxProcessExecutor.GetExecutor(processID).PrepareData(tp =>
+                {
+                    tp.CurrentActivity.Context["order"] = model;
+                    tp.CurrentActivity.Context["items"] = items;
+                    tp.CurrentActivity.Context["assets"] = assets;
+                }).ExecuteMoveTo(tp =>
+                {
+                    var OrderItems = new OrderItemCollection();
+                    items.ForEach(m => { OrderItems.Add(m); });
+                    var Assets = new AssetCollection();
+                    assets.ForEach(m => { Assets.Add(m); });
+
+                    AssignCollection Assigns = null;
+                    assigns.IsNotNull((l) =>
+                    {
+                        Assigns = new AssignCollection();
+                        assigns.ForEach(m => { Assigns.Add(m); });
+                    });
+                    ClassLessonItemCollection ClassLessonItems = null;
+                    classLessonItems.IsNotNull((l) =>
+                    {
+                        ClassLessonItems = new ClassLessonItemCollection();
+                        classLessonItems.ForEach(m => { ClassLessonItems.Add(m); });
+                    });
+
+
+                    new PPTS.Data.Orders.Executors.PPTSyncOrderExecutor("OrderProcess")
+                    {
+                        Order = order,
+                        Items = OrderItems,
+                        Assets = Assets,
+                        Assigns = Assigns,
+                        ClassLessonItems = ClassLessonItems,
+                        ProcessStatus = processStatus,
+                        OrderID = orderId
+                    }.Execute();
+                });
+
             });
-            
         }
+
     }
 }

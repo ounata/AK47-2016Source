@@ -7,7 +7,7 @@
     </div>
     <div class="modal-body">
         <div class="form-group">
-            <span class="col-sm-4 control-label no-padding-right" style="padding-top:8px">我申请将<span class="required" uib-tooltip="{{vm.customerNames}}"> {{vm.displayNames}} </span>分配给：</span>
+            <span class="col-sm-4 control-label no-padding-right" style="padding-top:8px">我申请将<span class="required" uib-popover="{{vm.customerNames}}" popover-trigger="mouseenter"> {{vm.displayNames}} </span>分配给：</span>
             <div class="col-sm-8">
                 <ppts-select-staff staff="vm.staff" job-type="vm.jobType"/>
             </div>

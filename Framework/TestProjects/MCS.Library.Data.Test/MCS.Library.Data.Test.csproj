@@ -75,9 +75,11 @@
     <Compile Include="Adapters\TestObjectAdapter.cs" />
     <Compile Include="Adapters\UserAdapter.cs" />
     <Compile Include="Common.cs" />
+    <Compile Include="DataObjects\BaseObject.cs" />
     <Compile Include="DataObjects\ConditionObject.cs" />
     <Compile Include="DataObjects\ConditionWithInObject.cs" />
     <Compile Include="DataObjects\ContainerObject.cs" />
+    <Compile Include="DataObjects\DescendentObject.cs" />
     <Compile Include="DataObjects\ObjectForSelect.cs" />
     <Compile Include="DataObjects\TestObject.cs" />
     <Compile Include="DataObjects\User.cs" />

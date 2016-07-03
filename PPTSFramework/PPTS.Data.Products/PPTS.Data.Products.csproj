@@ -92,6 +92,7 @@
     <Compile Include="Adapters\PresentPermissionAdapter.cs" />
     <Compile Include="Adapters\PresentPermissionsApplyAdapter.cs" />
     <Compile Include="Adapters\PresentPermissionViewAdapter.cs" />
+    <Compile Include="Adapters\ProductClassStatsAdapter.cs" />
     <Compile Include="Adapters\ProductPermissionAdapter.cs" />
     <Compile Include="Adapters\ProductViewAdapter.cs" />
     <Compile Include="Adapters\ProductAdapter.cs" />

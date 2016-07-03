@@ -1,0 +1,6 @@
+﻿<div class="mcs-panel-toolbar">
+    <mcs-button category="approve" click="$parent.moveTo()" uib-popover="流程将流转到下一审批人" popover-trigger="mouseenter" ng-show="$parent.switch.canMoveTo"></mcs-button>
+    <mcs-button category="save" click="$parent.save()" uib-popover="保存流程表单信息，不流转到下一审批人" popover-trigger="mouseenter" ng-show="$parent.switch.canSave"></mcs-button>
+    <mcs-button category="delete" click="$parent.cancel()" text="驳 回" uib-popover="流程被驳回将结束审批过程" popover-trigger="mouseenter" ng-show="$parent.switch.canCancel"></mcs-button>
+    <mcs-button category="reject" click="$parent.withdraw()" text="撤 回" uib-popover="流程被撤回将返回到上一审批人" popover-trigger="mouseenter" ng-show="$parent.switch.canWithdraw"></mcs-button>
+</div>

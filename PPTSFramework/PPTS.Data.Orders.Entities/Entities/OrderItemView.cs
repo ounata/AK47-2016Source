@@ -3,9 +3,32 @@ using System.Runtime.Serialization;
 using MCS.Library.Data.DataObjects;
 using MCS.Library.Data.Mapping;
 using PPTS.Data.Common.Entities;
+using PPTS.Data.Common.Authorization;
 
 namespace PPTS.Data.Orders.Entities
 {
+
+
+    #region 数据范围权限(存入识别)
+    [EntityAuth(RecordType = RecordType.Order)]
+    #endregion 
+
+    #region 数据范围权限(数据读取权限)
+
+    [CustomerRelationScope(Name = "订购记录查看(客户关系)", Functions = "学员视图-充值记录/订购历史/转让记录,订购管理列表（订购单详情）,打印订单凭证",  RecordType = CustomerRecordType.Customer)]
+    [OwnerRelationScope(Name = "订购记录查看", Functions = "学员视图-充值记录/订购历史/转让记录,订购管理列表（订购单详情）,打印订单凭证", RecordType = RecordType.Order)]
+
+    [RecordOrgScope(Name = "订购记录查看-本部门", Functions = "学员视图-充值记录/订购历史/转让记录-本部门,订购管理列表（订购单详情）-本部门", OrgType = OrgType.Department, RecordType = RecordType.Order)]
+    [RecordOrgScope(Name = "订购记录查看-本校区", Functions = "学员视图-充值记录/订购历史/转让记录-本校区,订购管理列表（订购单详情）-本校区,打印订单凭证-本校区,打印订单凭证-本分公司", OrgType = OrgType.Campus, RecordType = RecordType.Order)]
+    [RecordOrgScope(Name = "订购记录查看-本分公司", Functions = "学员视图-充值记录/订购历史/转让记录-本分公司,订购管理列表（订购单详情）-本分公司", OrgType = OrgType.Branch, RecordType = RecordType.Order)]
+    [RecordOrgScope(Name = "订购记录查看-全国", Functions = "学员视图-充值记录/订购历史/转让记录-全国,订购管理列表（订购单详情）-全国", OrgType = OrgType.HQ, RecordType = RecordType.Order)]
+
+    [CustomerRelationScope(Name = "订购记录编辑(客户关系)", Functions = "订购,资产兑换", RecordType = CustomerRecordType.Customer)]
+    [OwnerRelationScope(Name = "订购记录编辑", Functions = "订购,资产兑换", RecordType = RecordType.Order)]
+    [RecordOrgScope(Name = "订购记录编辑-本分公司", Functions = "编辑关联缴费单-本分公司", OrgType = OrgType.Branch, RecordType = RecordType.Order)]
+    
+    #endregion
+
     [Serializable]
     [ORTableMapping("OM.v_OrderItems")]
     [DataContract]
@@ -58,6 +81,7 @@ namespace PPTS.Data.Orders.Entities
         /// </summary>		
         [ORFieldMapping("CustomerID")]
         [DataMember]
+        [CustomerFieldMapping("CustomerID")]
         public string CustomerID
         {
             get;
@@ -159,6 +183,7 @@ namespace PPTS.Data.Orders.Entities
         /// </summary>		
         [ORFieldMapping("OrderType")]
         [DataMember]
+        [ConstantCategory("c_codE_ABBR_Order_OrderType")]
         public string OrderType
         {
             get;
@@ -294,6 +319,61 @@ namespace PPTS.Data.Orders.Entities
         }
 
         /// <summary>
+        /// 资产名称（资产编号+产品名称）
+        /// </summary>
+        [ORFieldMapping("AssetName")]
+        [DataMember]
+        public string AssetName
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 资产类型（0-课程，1-非课程）
+        /// </summary>
+        [ORFieldMapping("AssetType")]
+        [DataMember]
+        public AssetTypeDefine AssetType
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 资产来源（0-订单）
+        /// </summary>
+        [ORFieldMapping("AssetRefType")]
+        [DataMember]
+        public AssetRefTypeDefine AssetRefType
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 资产来源PID（订单ID）
+        /// </summary>
+        [ORFieldMapping("AssetRefPID")]
+        [DataMember]
+        public string AssetRefPID
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 资产来源ID（订单明细ID）
+        /// </summary>
+        [ORFieldMapping("AssetRefID")]
+        [DataMember]
+        public string AssetRefID
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// 已排数量（课程资产用）
         /// </summary>
         [ORFieldMapping("AssignedAmount")]
@@ -381,11 +461,28 @@ namespace PPTS.Data.Orders.Entities
             set;
         }
 
+        /// <summary>
+        /// 插班班级名称
+        /// </summary>
+        [ORFieldMapping("JoinedClassName")]
+        [DataMember]
+        public string JoinedClassName
+        {
+            get;
+            set;
+        }
+
         #endregion
 
+        /// <summary>
+        /// 订购金额
+        /// </summary>
         [NoMapping]
         public decimal BookMoney { get { return RealPrice * RealAmount; } }
 
+        /// <summary>
+        /// 剩余数量
+        /// </summary>
         [NoMapping]
         public decimal RemainCount { get { return RealAmount - ConfirmedAmount; } }
     }

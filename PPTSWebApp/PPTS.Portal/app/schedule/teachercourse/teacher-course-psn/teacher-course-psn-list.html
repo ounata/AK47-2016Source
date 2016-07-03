@@ -1,0 +1,37 @@
+﻿<!-- #开始：按学员排课列表视图.快速查询条件 -->
+<ppts-dynamic-content template="quick-search.tpl.html">
+    <div class="row">
+        <div class="col-md-6">
+            <mcs-daterangepicker start-date="vm.criteria.startTime" end-date="vm.criteria.endTime" css="mcs-width-full" />
+        </div>
+        <div class="col-md-3">
+            <mcs-input placeholder="学员姓名" uib-popover="学员姓名" css="mcs-input-search mcs-margin-top-2 mcs-width-full" model="vm.criteria.customerName" />
+        </div>
+        <div class="col-md-3">
+            <mcs-input placeholder="订单编号" uib-popover="订单编号" css="mcs-input-search mcs-margin-top-2 mcs-width-full" model="vm.criteria.assetCode" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <mcs-select caption="上课年级" category="grade" model="vm.criteria.grade" css="mcs-padding-0" />
+        </div>
+        <div class="col-md-3">
+            <mcs-select caption="上课科目" category="subject" model="vm.criteria.subject" css="mcs-padding-0" />
+        </div>
+        <div class="col-md-3">
+            <mcs-select caption="课时状态" category="assignStatus" model="vm.assignStatus" css="mcs-padding-0" />
+        </div>
+        <div class="col-md-3">
+            <mcs-select caption="课时类型" category="categoryType" model="vm.categoryType" css="mcs-padding-0" />
+        </div>
+    </div>
+</ppts-dynamic-content>
+<!-- /结束：按学员排课列表视图.快速查询条件 -->
+<!-- #开始：按学员排课列表视图.工具栏 -->
+<ppts-dynamic-content template="toolbar.tpl.html">
+    <mcs-button icon="reorder" click="vm.gotoCourseWeek()" text="周视图" />
+</ppts-dynamic-content>
+<!-- /结束：按学员排课列表视图.工具栏 -->
+<!-- #开始：按学员排课列表视图.数据表格 -->
+<mcs-datatable data="vm.data" />
+<!-- /结束：按学员排课列表视图.数据表格 -->

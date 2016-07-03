@@ -11,6 +11,9 @@ using PPTS.WebAPI.Customers.ViewModels.PotentialCustomers;
 using PPTS.Data.Common.Entities;
 using PPTS.Data.Common.Adapters;
 using MCS.Library.Data.DataObjects;
+using PPTS.Data.Customers;
+using PPTS.Data.Common;
+using MCS.Library.OGUPermission;
 
 namespace PPTS.WebAPI.Customers.DataSources
 {
@@ -24,27 +27,63 @@ namespace PPTS.WebAPI.Customers.DataSources
 
         public PagedQueryResult<CustomerScoresSearchModel, CustomerScoresSearchModelCollection> LoadCustomerScores(IPageRequestParams prp, CustomerScoresQueryCriteriaModel condition, IEnumerable<IOrderByRequestItem> orderByBuilder)
         {
-            WhereSqlClauseBuilder customerScoreBuilder = ConditionMapping.GetWhereSqlClauseBuilder(condition, new AdjustConditionValueDelegate(CustomerScoresQueryCriteriaModel.AdjustConditionValueDelegate_CustomerScore));
-            WhereSqlClauseBuilder customerScoreItemsBuilder = ConditionMapping.GetWhereSqlClauseBuilder(condition, new AdjustConditionValueDelegate(CustomerScoresQueryCriteriaModel.AdjustConditionValueDelegate_CustomerScoreItems));
-            WhereSqlClauseBuilder staffRelationBuilder = ConditionMapping.GetWhereSqlClauseBuilder(condition, new AdjustConditionValueDelegate(CustomerScoresQueryCriteriaModel.AdjustConditionValueDelegate_StaffRelations));
-            WhereSqlClauseBuilder customerBuilder = ConditionMapping.GetWhereSqlClauseBuilder(condition, new AdjustConditionValueDelegate(CustomerScoresQueryCriteriaModel.AdjustConditionValueDelegate_Customers));
+            ConnectiveSqlClauseCollection sqlCollection = new ConnectiveSqlClauseCollection();
+            sqlCollection.Add(ConditionMapping.GetConnectiveClauseBuilder(condition));
 
-            string customerScoreWhere = customerScoreBuilder.ToSqlString(TSqlBuilder.Instance);
-            string customerScoreItemsWhere = customerScoreItemsBuilder.ToSqlString(TSqlBuilder.Instance);
-            string staffRelationsWhere = condition.CheckCondition_StaffRelations() ? "" : string.Format(" and exists(select CustomerID from CM.CustomerStaffRelations_Current Staff where Staff.CustomerID = CustomerScores.CustomerID and {0}) ", staffRelationBuilder.ToSqlString(TSqlBuilder.Instance));
-            string customersWhere = condition.CheckCondition_Customers() ? "" : string.Format(" and exists(select CustomerID from CM.Customers Customers where Customers.CustomerID = CustomerScores.CustomerID and {0}) ", customerBuilder.ToSqlString(TSqlBuilder.Instance));
+            string customerSqlBuilder = sqlCollection.ToSqlString(TSqlBuilder.Instance);
+            string sqlBuilder = BuildQueryCondition(condition);
 
-            string select = @"";
-            string from = @"";
+            sqlBuilder = string.IsNullOrEmpty(customerSqlBuilder) ? string.Format(" 1=1 {0}", sqlBuilder) : string.Format("{0}{1}", customerSqlBuilder, sqlBuilder);
 
-            string where = string.Format("{0}{1}{2}{3}",
-                                        string.IsNullOrEmpty(customerScoreWhere) ? " 1 = 1 " : customerScoreWhere,
-                                        string.IsNullOrEmpty(customerScoreItemsWhere) ? "" : " and " + customerScoreItemsWhere,
-                                        staffRelationsWhere,
-                                        customersWhere);
-            var result = Query(prp, select, from, where, orderByBuilder);
+            var result = Query(prp, sqlBuilder, orderByBuilder);
 
             return result;
+        }
+
+        private string BuildQueryCondition(CustomerScoresQueryCriteriaModel condition)
+        {
+            // string sqlBuilder = string.Format(@" and CustomerScores.CreateTime >= '{0}' ", TimeZoneContext.Current.ConvertTimeToUtc(Convert.ToDateTime(DateTime.Now.ToString("yyyy-MM-01"))));
+            string sqlBuilder = string.Empty;
+
+            #region 学员姓名
+            string customerNameBuilder = string.Empty;
+            if (!string.IsNullOrEmpty(condition.CustomerName))
+            {
+                customerNameBuilder = string.Format(
+                    @" and exists(select CustomerID from CM.Customers Customers where Customers.CustomerID = CustomerScores.CustomerID and CustomerName like '%{0}%') ", condition.CustomerName.EncodeString());
+            }
+            #endregion
+
+            #region 咨询师、学管师姓名
+            string staffNameBuilder = string.Empty;
+            if (!string.IsNullOrEmpty(condition.ConsultantName))
+            {
+                staffNameBuilder = string.Format(
+                   @" and exists(select CustomerID from CM.CustomerStaffRelations_Current Staff where Staff.CustomerID = CustomerScores.CustomerID and staff.RelationType = {0} and staff.StaffName like '%{1}%') ", (byte)CustomerRelationType.Consultant, condition.ConsultantName.EncodeString());
+            }
+            if (!string.IsNullOrEmpty(condition.EducatorName))
+            {
+                staffNameBuilder += string.Format(
+                    @" and exists(select CustomerID from CM.CustomerStaffRelations_Current Staff where Staff.CustomerID = CustomerScores.CustomerID and staff.RelationType = {0} and staff.StaffName like '%{1}%') ", (byte)CustomerRelationType.Educator, condition.EducatorName.EncodeString());
+            }
+            if (!string.IsNullOrEmpty(condition.StaffOA))
+            {
+                IUser user = OGUExtensions.GetUserByOAName(condition.StaffOA);
+                string uid = user == null ? "0" : user.ID;
+                staffNameBuilder += string.Format(
+                    @" and exists(select CustomerID from CM.CustomerStaffRelations_Current Staff where Staff.CustomerID = CustomerScores.CustomerID and staff.RelationType in ({0},{1}) and staff.StaffID = '{2}') ", (byte)CustomerRelationType.Consultant, (byte)CustomerRelationType.Educator, uid);
+            }
+            if (!string.IsNullOrEmpty(condition.TeacherOA))
+            {
+                IUser user = OGUExtensions.GetUserByOAName(condition.TeacherOA);
+                string uid = user == null ? "0" : user.ID;
+                staffNameBuilder += string.Format(@" and TeacherID='{0}'", uid);
+            }
+            #endregion
+
+            sqlBuilder += customerNameBuilder + staffNameBuilder;
+
+            return sqlBuilder;
         }
 
         protected override void OnAfterQuery(CustomerScoresSearchModelCollection result)
@@ -75,7 +114,7 @@ namespace PPTS.WebAPI.Customers.DataSources
                 }
                 if (teachers != null && teachers.Count > 0)
                 {
-                    teacher = teachers.Find(t=>t.TeacherID==item.TeacherID);
+                    teacher = teachers.Find(t => t.TeacherID == item.TeacherID);
                     item.TeacherOACode = teacher == null ? "" : teacher.TeacherOACode;
                 }
             });
@@ -91,7 +130,14 @@ namespace PPTS.WebAPI.Customers.DataSources
                                CustomerScoreItems.TeacherName, CustomerScoreItems.PaperScore, CustomerScoreItems.RealScore, CustomerScoreItems.GradeRank, 
                                CustomerScoreItems.ClassRank, CustomerScoreItems.Satisficing, CustomerScoreItems.IsStudyHere ";
             qc.FromClause = @" CM.CustomerScores CustomerScores inner join CM.CustomerScoreItems CustomerScoreItems on CustomerScores.ScoreID = CustomerScoreItems.ScoreID ";
-            
+
+            #region 数据权限加工
+            qc.WhereClause = Data.Common.Authorization.ScopeAuthorization<CustomerScore>
+                .GetInstance(ConnectionDefine.PPTSCustomerConnectionName)
+                .ReadAuthExistsBuilder("CustomerScores", qc.WhereClause).ToSqlString(TSqlBuilder.Instance);
+            #endregion
+
+            base.OnBuildQueryCondition(qc);
         }
 
     }

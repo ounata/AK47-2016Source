@@ -3,12 +3,12 @@ define([ppts.config.modules.schedule,
         ppts.config.dataServiceConfig.studentCourseDataService],
         function (schedule) {
             schedule.registerController('stucrsListController', [
-                '$scope', '$state', 'dataSyncService', 'studentCourseDataService', '$stateParams', 'mcsDialogService', 'printService',
-                function ($scope, $state, dataSyncService, studentCourseDataService, $stateParams, mcsDialogService, printService) {
+                '$scope', '$state', 'dataSyncService', 'studentCourseDataService', '$stateParams', 'mcsDialogService', 'printService', 'utilService',
+                function ($scope, $state, dataSyncService, studentCourseDataService, $stateParams, mcsDialogService, printService, utilService) {
                     var vm = this;
                     vm.weekText = new Array("星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六");
 
-                    vm.assignSource = '';
+                    vm.categoryType = '';
                     vm.assignStatus = '';
 
                     vm.criteria = vm.criteria || {};
@@ -18,7 +18,7 @@ define([ppts.config.modules.schedule,
                     vm.criteria.subject = '';
                     vm.criteria.grade = '';
                     vm.criteria.assignStatus = '';
-                    vm.criteria.assignSource = '';              
+                    vm.criteria.categoryType = '';
                     vm.criteria.teacherName = '';
                     vm.criteria.educatorName = '';
                     vm.criteria.consultantName = '';
@@ -73,9 +73,9 @@ define([ppts.config.modules.schedule,
                             name: "课时状态",
                             template: '<span>{{row.assignStatus | assignStatus }}</span>'
                         }, {
-                            field: "assignSource",
+                            field: "categoryTypeName",
                             name: "课时类型",
-                            template: '<span>{{row.assignSource | assignSource }}</span>'
+                            template: '<span>{{row.categoryTypeName}}</span>'
                         }, {
                             field: "assetCode",
                             name: "订单编号",
@@ -95,9 +95,6 @@ define([ppts.config.modules.schedule,
                         orderBy: [{ dataField: 'startTime', sortDirection: 1 }]
                     }
 
-
-                  
-
                     vm.getCourseDate = function (sDate) {
                         var startDate = new Date(sDate);
                         return startDate.getFullYear() + '-' + vm.getDoubleStr((startDate.getMonth() + 1)) + '-' + vm.getDoubleStr(startDate.getDate())
@@ -111,24 +108,23 @@ define([ppts.config.modules.schedule,
                     };
 
                     // 页面初始化加载或重新搜索时查询
-                    vm.init = function () {
+                    vm.search = function () {
                         dataSyncService.initCriteria(vm);
 
-                        vm.criteria.assignSource = new Array();
+                        vm.criteria.categoryType = new Array();
                         vm.criteria.assignStatus = new Array();
-                        if (vm.assignSource != '' && vm.assignSource != null)
-                            vm.criteria.assignSource[0] = vm.assignSource;
+                        if (vm.categoryType != '' && vm.categoryType != null)
+                            vm.criteria.categoryType[0] = vm.categoryType;
                         if (vm.assignStatus != '' && vm.assignStatus != null)
                             vm.criteria.assignStatus[0] = vm.assignStatus;
 
                         studentCourseDataService.getStuClassRecord(vm.criteria, function (result) {
                             vm.data.rows = result.queryResult.pagedData;
-                            dataSyncService.injectDictData();
                             dataSyncService.updateTotalCount(vm, result.queryResult);
                             $scope.$broadcast('dictionaryReady');
                         });
                     };
-                    vm.init();
+                    vm.search();
 
 
                     /*补录课时*/
@@ -140,24 +136,21 @@ define([ppts.config.modules.schedule,
                             }
                         }).result.then(function (retValue) {
                             if (retValue != 'canceled') {
-                                vm.queryList();
+                                vm.search();
                             };
                         });
                     };
 
                     /*删除课表*/
                     vm.deleteCourseClick = function () {
+                        if (!utilService.selectMultiRows(vm)) return;
                         var msg = '';
                         var model = [];
                         var selectedObj = vm.data.rowsSelected;
-                        if (selectedObj.length == 0) {
-                            vm.showMsg("请选择要删除的课表");
-                            return;
-                        }
                         var objCollecton = vm.data.rows;
                         for (var i in selectedObj) {
                             for (var j in objCollecton) {
-                                if (selectedObj[i].assignID == objCollecton[j].assignID) {
+                                if (selectedObj[i].assignID == objCollecton[j].assignID && objCollecton[i].categoryType == 1) {
                                     ///已上状态的课表可以删除
                                     if (objCollecton[j].assignStatus == 3) {
                                         model.push({
@@ -172,15 +165,14 @@ define([ppts.config.modules.schedule,
                                         var curWeek = vm.weekText[objCollecton[j].startTime.getDay()];
                                         var startText = vm.getDoubleStr(objCollecton[j].startTime.getHours()) + ':' + vm.getDoubleStr(objCollecton[j].startTime.getMinutes());
                                         var endText = vm.getDoubleStr(objCollecton[j].endTime.getHours()) + ':' + vm.getDoubleStr(objCollecton[j].endTime.getMinutes());
-                                        msg += objCollecton[j].customerName + "学员" + curDate + "（" + curWeek + "）" + startText + "-" + endText + "的" + objCollecton[j].subjectName + "课表不是已上状态，不能删除<br>";
+                                        msg += objCollecton[j].customerName + "学员" + curDate + "（" + curWeek + "）" + startText + "-" + endText + "的" + objCollecton[j].subjectName + "课表不是已上状态，不能删除；";
                                     };
                                     break;
                                 }
 
                             };
                         };
-                        if (msg != '') {
-                            vm.showMsg(msg);
+                        if (utilService.showMessage(vm, msg != '', msg)) {
                             return;
                         }
                         msg = "确定删除？";
@@ -189,7 +181,7 @@ define([ppts.config.modules.schedule,
                             message: msg
                         }).result.then(function () {
                             studentCourseDataService.deleteAssign(model, function (result) {
-                                vm.queryList();
+                                vm.search();
                                 vm.showMsg("删除成功");
                             },
                             function (error) {
@@ -202,19 +194,16 @@ define([ppts.config.modules.schedule,
 
                     /*确认课表*/
                     vm.confirmCourseClick = function () {
+                        if (!utilService.selectMultiRows(vm)) return;
                         var msg = '';
                         var model = [];
                         var selectedObj = vm.data.rowsSelected;
-                        if (selectedObj.length == 0) {
-                            vm.showMsg("请选择要确认的课表");
-                            return;
-                        }
                         var objCollecton = vm.data.rows;
                         for (var i in selectedObj) {
                             for (var j in objCollecton) {
                                 if (selectedObj[i].assignID == objCollecton[j].assignID) {
                                     ///异常状态的课表可以确认
-                                    if (objCollecton[j].assignStatus == 8) {
+                                    if (objCollecton[j].assignStatus == 8 && objCollecton[i].categoryType == 1) {
                                         model.push({
                                             assetID: objCollecton[j].assetID,
                                             assignID: objCollecton[j].assignID,
@@ -232,15 +221,14 @@ define([ppts.config.modules.schedule,
                                         var curWeek = vm.weekText[objCollecton[j].startTime.getDay()];
                                         var startText = vm.getDoubleStr(objCollecton[j].startTime.getHours()) + ':' + vm.getDoubleStr(objCollecton[j].startTime.getMinutes());
                                         var endText = vm.getDoubleStr(objCollecton[j].endTime.getHours()) + ':' + vm.getDoubleStr(objCollecton[j].endTime.getMinutes());
-                                        msg += objCollecton[j].customerName + "学员" + curDate + "（" + curWeek + "）" + startText + "-" + endText + "的" + objCollecton[j].subjectName + "课表不是异常状态，不能确认<br>";
+                                        msg += objCollecton[j].customerName + "学员" + curDate + "（" + curWeek + "）" + startText + "-" + endText + "的" + objCollecton[j].subjectName + "课表不是异常状态，不能确认；";
                                     };
                                     break;
                                 }
 
                             };
                         };
-                        if (msg != '') {
-                            vm.showMsg(msg);
+                        if (utilService.showMessage(vm, msg != '', msg)) {
                             return;
                         }
                         mcsDialogService.create('app/schedule/studentcourse/stucourse-list/stucourse-confirm.html', {
@@ -251,30 +239,30 @@ define([ppts.config.modules.schedule,
                             }
                         }).result.then(function (retValue) {
                             if (retValue == 'ok') {
-                                vm.queryList();
+                                vm.search();
                             };
                         });
                     };
 
                     /*取消课表*/
                     vm.cancelCourseClick = function () {
+                        if (!utilService.selectMultiRows(vm)) return;
                         var msg = '';
                         var model = [];
                         var selectedObj = vm.data.rowsSelected;
-                        if (selectedObj.length == 0) {
-                            vm.showMsg("请选择要取消的课表");
-                            return;
-                        }
                         var objCollecton = vm.data.rows;
                         for (var i in selectedObj) {
                             for (var j in objCollecton) {
                                 ///异常，排定的课表可以取消
-                                if (selectedObj[i].assignID == objCollecton[j].assignID && (objCollecton[j].assignStatus == 1 || objCollecton[j].assignStatus == 8)) {
+                                if (selectedObj[i].assignID == objCollecton[j].assignID
+                                    && (objCollecton[j].assignStatus == 1 || objCollecton[j].assignStatus == 8)
+                                    && objCollecton[i].categoryType == 1
+                                    ) {
                                     var curDate = objCollecton[j].startTime.getFullYear() + '-' + vm.getDoubleStr((objCollecton[j].startTime.getMonth() + 1)) + '-' + vm.getDoubleStr(objCollecton[j].startTime.getDate());
                                     var curWeek = vm.weekText[objCollecton[j].startTime.getDay()];
                                     var startText = vm.getDoubleStr(objCollecton[j].startTime.getHours()) + ':' + vm.getDoubleStr(objCollecton[j].startTime.getMinutes());
                                     var endText = vm.getDoubleStr(objCollecton[j].endTime.getHours()) + ':' + vm.getDoubleStr(objCollecton[j].endTime.getMinutes());
-                                    msg += "确定将" + objCollecton[j].customerName + "学员" + curDate + "（" + curWeek + "）" + startText + "-" + endText + "的" + objCollecton[j].subjectName + "课取消？<br>";
+                                    msg += "确定将" + objCollecton[j].customerName + "学员" + curDate + "（" + curWeek + "）" + startText + "-" + endText + "的" + objCollecton[j].subjectName + "课取消？";
                                     model.push({
                                         assetID: objCollecton[j].assetID,
                                         assignID: objCollecton[j].assignID
@@ -283,14 +271,16 @@ define([ppts.config.modules.schedule,
                                 };
                             };
                         };
-                        if (msg == "")
+                        if (utilService.showMessage(vm, model.length == 0, '选择的记录不允许取消，请重新选择！')) {
                             return;
+                        }
+
                         mcsDialogService.confirm({
                             title: '取消课表',
                             message: msg
                         }).result.then(function () {
                             studentassignmentDataService.cancelAssign(model, function (result) {
-                                vm.queryList();
+                                vm.search();
                                 vm.showMsg("取消成功");
                             },
                             function (error) {
@@ -299,16 +289,12 @@ define([ppts.config.modules.schedule,
                         });
                     };
 
-                    vm.queryList = function () {
-                        vm.init();
-                    };
-
                     vm.showMsg = function (msg) {
                         mcsDialogService.error({ title: '提示信息', message: msg });
                     };
 
                     vm.print = function () {
-                        printService.print();
+                        printService.print(true);
                     }
 
                 }]);

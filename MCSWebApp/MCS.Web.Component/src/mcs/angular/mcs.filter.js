@@ -1,12 +1,12 @@
-﻿(function() {
+﻿(function () {
     'use strict';
 
-    mcs.ng.filter('props', function() {
-        return function(items, props) {
+    mcs.ng.filter('props', function () {
+        return function (items, props) {
             var out = [];
             if (angular.isArray(items)) {
                 var keys = Object.keys(props);
-                items.forEach(function(item) {
+                items.forEach(function (item) {
                     var itemMatches = false;
                     for (var i = 0; i < keys.length; i++) {
                         var prop = keys[i];
@@ -28,30 +28,43 @@
         };
     });
 
-    mcs.ng.filter('trusted', ['$sce', function($sce) {
-        return function(text) {
+    mcs.ng.filter('trusted', ['$sce', function ($sce) {
+        return function (text) {
             return $sce.trustAsHtml(text);
         };
     }]);
 
-    mcs.ng.filter('normalize', function() {
-        return function(text) {
-            return !mcs.util.bool(text) || text == '0001-01-01' ? '' : text;
+    mcs.ng.filter('normalize', function () {
+        return function (text) {
+            text += '';
+            return !mcs.util.bool(text) || text.indexOf('0001-01-01') > -1 || text.indexOf('9999-09-09') > -1 || (text.indexOf('￥') > -1 && parseFloat(text.replace('￥', '')) == 0) ? '' : text;
         };
     });
 
-
-    mcs.ng.filter('truncate', function() {
-        return function(text, length) {
-            var array = mcs.util.toArray(text);
-            if (array.length > 1) {
-                return array[0] + '...';
+    mcs.ng.filter('truncate', function () {
+        return function (text, length) {
+            if (!text) return '';
+            if (!length) {
+                // 按照数组进行拦截
+                text = text.replace('，', ',');
+                var array = mcs.util.toArray(text);
+                if (array.length > 1) {
+                    return array[0] + '...';
+                }
             }
             if (length > 0 && length < text.length) {
                 return text.substr(0, length) + '...';
             }
             return text;
         }
+    });
+
+    mcs.ng.filter('tooltip', function () {
+        return function (text, length) {
+            if (!text) return '';
+            length = length || 10;
+            return text && mcs.util.isString(text) && text.length > length ? text : '';
+        };
     });
 
     mcs.ng.filter('rmb', function () {

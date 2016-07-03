@@ -1,0 +1,18 @@
+﻿
+<mcs-label text="学生姓名" /><span class="blue"><a ui-sref="ppts.student-view.profiles({id:vm.order.customerID,prev:'ppts.student'})">{{vm.order.customerName}}</a></span>
+<mcs-label text="学生编号" /><span>{{vm.order.customerCode}}</span>
+<mcs-label text="订单编号" /><span> {{vm.order.orderNo}} </span>
+<!--<span class="blue"><a ui-sref="ppts.purchaseOrderView({orderId:vm.order.orderID})">{{vm.order.orderNo}}</a></span>-->
+
+<mcs-datatable data="vm.data" />
+
+<span class="pull-left">客户折扣率 {{vm.account.discountRate}}</span>
+<span class="pull-right"><mcs-label text="总产品原价" /><span>{{ vm.totalPrice()|currency}}</span> <mcs-label text="总订购金额" /><span>{{ vm.totalRealPrice()|currency}}</span></span>
+
+<div class="row">
+    <div class="form-group horizontal bordered">
+        <div class="col-md-12">
+            <mcs-workflow model="vm.clientProcess" approve-callback="vm.approve(vm.clientProcess)" reject-callback="vm.reject(vm.clientProcess)" />
+        </div>
+    </div>
+</div>

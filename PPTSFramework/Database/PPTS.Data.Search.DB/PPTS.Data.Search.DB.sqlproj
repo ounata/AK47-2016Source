@@ -69,6 +69,8 @@
     <Folder Include="SM\Tables" />
     <Folder Include="MT" />
     <Folder Include="MT\Tables" />
+    <Folder Include="SM\Views" />
+    <Folder Include="Storage" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Security\SM.sql" />
@@ -100,6 +102,32 @@
     <Build Include="SM\Tables\OrgRegions.sql" />
     <Build Include="SM\Tables\OrgCampuses.sql" />
     <Build Include="SM\Tables\OrgStaffJobs.sql" />
+    <Build Include="MT\Tables\CourseRelationAuthorizations.sql" />
+    <Build Include="SM\Tables\EducateStaffPerDaySum.sql" />
+    <Build Include="SM\Tables\EducateStaffPerMonthSum.sql" />
+    <Build Include="SM\Tables\EducateBranchCrmMonthSum.sql" />
+    <Build Include="SM\Tables\EducateBranchPerDaySum.sql" />
+    <Build Include="SM\Tables\EducateBranchPerMonthSum.sql" />
+    <Build Include="SM\Tables\EducateCampusCrmMonthSum.sql" />
+    <Build Include="SM\Tables\EducateCampusPerDaySum.sql" />
+    <Build Include="SM\Tables\EducateCampusPerMonthSum.sql" />
+    <Build Include="SM\Tables\EducateCountryCrmMonthSum.sql" />
+    <Build Include="SM\Tables\EducateCountryPerDaySum.sql" />
+    <Build Include="SM\Tables\EducateCountryPerMonthSum.sql" />
+    <Build Include="SM\Tables\EducateStaffCrmMonthSum.sql" />
+    <Build Include="SM\Tables\TaskDetails.sql" />
+    <Build Include="SM\Views\CustomerSearchFulltext.sql" />
+    <Build Include="Storage\PPTSCustomerCatalog.sql" />
+    <Build Include="SM\Tables\TeachStaffPerMonthSum.sql" />
+    <Build Include="SM\Tables\TeachGroupCrmMonthSum.sql" />
+    <Build Include="SM\Tables\TeachGroupPerMonthSum.sql" />
+    <Build Include="SM\Tables\TeachStaffCrmMonthSum.sql" />
+    <Build Include="SM\Tables\TeachBranchCrmMonthSum.sql" />
+    <Build Include="SM\Tables\TeachBranchPerMonthSum.sql" />
+    <Build Include="SM\Tables\TeachCampusCrmMonthSum.sql" />
+    <Build Include="SM\Tables\TeachCampusPerMonthSum.sql" />
+    <Build Include="SM\Tables\TeachCountryCrmMonthSum.sql" />
+    <Build Include="SM\Tables\TeachCountryPerMonthSum.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PPTS.Data.Search.DB.refactorlog" />

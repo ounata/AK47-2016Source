@@ -41,6 +41,7 @@ namespace MCS.Library.Data.Builder
         private static DataDescriptionGeneratorBase[] _DataDescriptors = new DataDescriptionGeneratorBase[]{
             NullDescriptionGenerator.Instance,
             ExpressionDescriptionGenerator.Instance,
+            SqlFullTextDescriptionGenerator.Instance,
             DateTimeDescriptionGenerator.Instance,
             DBNullDescriptionGenerator.Instance,
             BooleanDescriptionGenerator.Instance,
@@ -90,52 +91,6 @@ namespace MCS.Library.Data.Builder
 
             return result;
         }
-        //public override string GetDataDesp(ISqlBuilder builder)
-        //{
-        //    string result = string.Empty;
-
-        //    if (this.data == null || this.data is DBNull)
-        //        result = "NULL";
-        //    else
-        //    {
-        //        if (this.data is DateTime)
-        //        {
-        //            DateTime minDate = new DateTime(1753, 1, 1);
-
-        //            if ((DateTime)this.data < minDate)
-        //                result = "NULL";
-        //            else
-        //                result = builder.FormatDateTime((DateTime)this.data);
-        //        }
-        //        else if (this.data is System.Guid)
-        //        {
-        //            if ((Guid)this.data == Guid.Empty)
-        //                result = "NULL";
-        //            else
-        //                result = builder.CheckUnicodeQuotationMark(this.data.ToString());
-        //        }
-        //        else
-        //        {
-        //            if (this.isExpression == false && (this.data is string || this.data.GetType().IsEnum))
-        //                result = builder.CheckUnicodeQuotationMark(this.data.ToString());
-        //            else
-        //                if (this.data is bool)
-        //                    result = ((int)Convert.ChangeType(this.data, typeof(int))).ToString();
-        //                else
-        //                {
-        //                    if (this.data is byte[])
-        //                        result = BytesToHexString((byte[])data);
-        //                    else
-        //                        if (this.data is Stream)
-        //                            result = StreamToHexString((Stream)data);
-        //                        else
-        //                            result = this.data.ToString();
-        //                }
-        //        }
-        //    }
-
-        //    return result;
-        //}
 
         private static DataDescriptionGeneratorBase GetDataDescriptor(SqlCaluseBuilderItemWithData buiderItem)
         {
@@ -152,56 +107,6 @@ namespace MCS.Library.Data.Builder
 
             return result;
         }
-
-        //private static string StreamToHexString(Stream stream)
-        //{
-        //    byte[] buffer = new byte[4096];
-
-        //    StringBuilder strB = new StringBuilder(4096);
-
-        //    using (BinaryReader br = new BinaryReader(stream))
-        //    {
-        //        int byteRead = br.Read(buffer, 0, buffer.Length);
-
-        //        while (byteRead > 0)
-        //        {
-        //            for (int i = 0; i < byteRead; i++)
-        //            {
-        //                if (strB.Length == 0)
-        //                    strB.Append("0X");
-
-        //                strB.AppendFormat("{0:X2}", buffer[i]);
-        //            }
-
-        //            byteRead = br.Read(buffer, 0, buffer.Length);
-        //        }
-        //    }
-
-        //    if (strB.Length == 0)
-        //        strB.Append("NULL");
-
-        //    return strB.ToString();
-        //}
-
-        //private static string BytesToHexString(byte[] data)
-        //{
-        //    StringBuilder strB = new StringBuilder(4096);
-
-        //    if (data.Length > 0)
-        //    {
-        //        for (int i = 0; i < data.Length; i++)
-        //        {
-        //            if (strB.Length == 0)
-        //                strB.Append("0X");
-
-        //            strB.AppendFormat("{0:X2}", data[i]);
-        //        }
-        //    }
-        //    else
-        //        strB.Append("NULL");
-
-        //    return strB.ToString();
-        //}
     }
 
     /// <summary>

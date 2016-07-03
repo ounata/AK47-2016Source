@@ -1,6 +1,8 @@
 ﻿using MCS.Library.Data.Adapters;
+using MCS.Library.Data.Builder;
 using MCS.Library.Data.DataObjects;
-
+using MCS.Library.Passport;
+using PPTS.Data.Orders.Entities;
 
 namespace PPTS.Data.Orders.DataSources
 {
@@ -18,5 +20,26 @@ namespace PPTS.Data.Orders.DataSources
         {
             return ConnectionDefine.PPTSOrderConnectionName;
         }
+
+        protected override void OnBuildQueryCondition(QueryCondition qc)
+        {
+
+            #region 数据权限加工
+
+            if (RolesDefineConfig.GetConfig().Enabled)
+            {
+                var queryTable = MCS.Library.Data.Mapping.ORMapping.GetMappingInfo<T>().GetQueryTableName();
+
+                qc.WhereClause = PPTS.Data.Common.Authorization.ScopeAuthorization<T>
+                    .GetInstance(ConnectionDefine.PPTSOrderConnectionName)
+                    .ReadAuthExistsBuilder(queryTable, qc.WhereClause).ToSqlString(TSqlBuilder.Instance);
+            }
+
+            #endregion
+
+
+            base.OnBuildQueryCondition(qc);
+        }
+
     }
 }

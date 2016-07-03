@@ -34,7 +34,7 @@
                         <input type="text" ng-model="vm.userInfo.userName" name="userName">
                         <label>年龄：</label>
                         <input type="text" ng-model="vm.userInfo.userAge" name="userAge">
-                        <div files-upload model="vm.userInfo.files" pattern="{size: {max: '5MB'},pattern: 'image/*'}" readonly="false" resource-Id="123-124-222-123" files-amount="5" module-name="liucy" download-url="http://localhost/MCSWebApp/MCS.Web.API/api/sample/DownloadMaterial" url="http://localhost/MCSWebApp/MCS.Web.API/api/sample/UploadMaterial">
+                        <div files-upload error-message="只能选择图片或word文档" model="vm.userInfo.files" pattern="{size: {max: '5MB'},pattern: 'image/*,.docx,.pdf'}" readonly="false" resource-Id="{{vm.userInfo.resourceId}}" files-amount="2" module-name="{{vm.userInfo.moduleName}}" download-url="http://localhost/MCSWebApp/MCS.Web.API/api/sample/DownloadMaterial" url="http://localhost/MCSWebApp/MCS.Web.API/api/sample/UploadMaterialWriteDB">
                         </div>
                         <hr>
                         <input type="submit" ng-click="vm.submit()">
@@ -43,11 +43,67 @@
                 <div class="laycode col-sm-12">
                     <h3 class="header smaller lighter green">示例代码</h3>
                     <div class="code_box code_skin0">
+                        <article id="content" class="markdown-body">
+                            <div class="codehilite"><pre> <span class="nt">&lt;div</span> <span class="na">files-upload</span> <span class="na">error-message=</span><span class="s">&quot;只能选择图片或word文档&quot;</span> <span class="na">model=</span><span class="s">&quot;vm.userInfo.files&quot;</span> <span class="na">pattern=</span><span class="s">&quot;{size: {max: &#39;5MB&#39;},pattern: &#39;image/*,.docx&#39;}&quot;</span> <span class="na">readonly=</span><span class="s">&quot;false&quot;</span> <span class="na">resource-Id=</span><span class="s">&quot;{{vm.userInfo.resourceId}}&quot;</span> <span class="na">files-amount=</span><span class="s">&quot;5&quot;</span> <span class="na">module-name=</span><span class="s">&quot;{{vm.userInfo.moduleName}}&quot;</span> <span class="na">download-url=</span><span class="s">&quot;http://localhost/MCSWebApp/MCS.Web.API/api/sample/DownloadMaterial&quot;</span> <span class="na">url=</span><span class="s">&quot;http://localhost/MCSWebApp/MCS.Web.API/api/sample/UploadMaterialWriteDB&quot;</span><span class="nt">&gt;</span>
+ <span class="nt">&lt;/div&gt;</span>
+                        </article>
                     </div>
                 </div>
                 <div class="col-sm-12">
                     <h3 class="header smaller lighter green">参数说明</h3>
                     <table class="table table-striped table-bordered table-hover">
+                        <thead>
+                            <thead>
+                                <th>参数</th>
+                                <th>用途</th>
+                                <th>取值范围</th>
+                                <th>示例</th>
+                            </thead>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>error-message</td>
+                                <td>设定文件类型选择错误的提示消息</td>
+                                <td>string</td>
+                                <td>error-message="只能选择图片"</td>
+                            </tr>
+                            <tr>
+                                <td>files-amount</td>
+                                <td>设定上传的附件数量</td>
+                                <td>number</td>
+                                <td>files-amount="5"</td>
+                            </tr>
+                            <tr>
+                                <td>module-name</td>
+                                <td>当前操作所属模块名称</td>
+                                <td>string</td>
+                                <td>module-name="customer"</td>
+                            </tr>
+                            <tr>
+                                <td>download-url</td>
+                                <td>附件下载接口</td>
+                                <td>string</td>
+                                <td>download-url="http://localhost/api/downloadFile"</td>
+                            </tr>
+                            <tr>
+                                <td>url</td>
+                                <td>附件上传地址</td>
+                                <td>string</td>
+                                <td>url="http://localhost/api/fileupload"</td>
+                            </tr>
+                            <tr>
+                                <td>resource-Id</td>
+                                <td>能唯一标识当前业务的ID</td>
+                                <td>string</td>
+                                <td>resource-Id="1122-2233-3322"</td>
+                            </tr>
+                            <tr>
+                                <td>pattern</td>
+                                <td>文件类型验证模式</td>
+                                <td>string</td>
+                                <td>pattern="image/*,.docx"</td>
+                            </tr>
+                        </tbody>
                     </table>
                 </div>
             </div>

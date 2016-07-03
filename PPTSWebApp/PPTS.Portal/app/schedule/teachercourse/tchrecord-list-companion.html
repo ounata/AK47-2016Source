@@ -1,51 +1,46 @@
-﻿<form role="form">
+﻿<form class="form-horizontal" role="form">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="alert" ng-click="vm.cancel()">
             <i class="ace-icon fa fa-times"></i>
         </button>
-        <h4 class="modal-title">录入课时</h4>
+        <h4 class="modal-title">陪读课时</h4>
     </div>
     <div class="modal-body">
-        <div class="profile-user-info profile-user-info-striped mcs-user-profile">         
-            <div class="profile-info-row">
-                <div class="profile-info-name"> 校区 </div>
-                <div class="profile-info-value">
-                    {{ vm.currCampusName }}
+        <div class="row">
+            <div class="form-group horizontal">
+                <mcs-label text="校区" css="col-sm-3" />
+                <div class="col-sm-6">
+                    <p class="form-control-static">{{ vm.currCampusName }}</p>
                 </div>
             </div>
-            <div class="profile-info-row">
-                <div class="profile-info-name"> 上课教师 </div>
-                <div class="profile-info-value">            
-                    <tags-input class="mcs-tags-input-lg noplaceholder noshow" ng-disable="true" ng-model="vm.teachers" add-on-space="true" add-from-autocomplete-only="true" add-on-enter="true" key-property="teacherId" display-property="name" placeholder="">
-                        <auto-complete min-length="1" source="vm.queryTeacherList($query)"></auto-complete>
-                    </tags-input>
+        </div>
+        <div class="row">
+            <div class="form-group horizontal">
+                <mcs-label required="true" text="上课教师" css="col-sm-3" />
+                <div class="col-sm-6">
+                    <ppts-auto-complete  class="mcs-tags-input-lg noshow noplaceholder" async="true" param="{maxCount: 10,listMark: 15}" placeholder=""  ng-model="vm.teachers" max-tags="2"  full-path="name" display-property="tchName" result-filter="vm.filter" key="jobID" remote-data="{{vm.apiBaseUrl + 'api/teachercourse/getTeacher'}}" />
                 </div>
             </div>
-            <div class="profile-info-row">
-                <div class="profile-info-name"> 上课科目 </div>
-                <div class="profile-info-value">
-                     陪读
+        </div>
+        <div class="form-group horizontal">
+            <mcs-label text="上课科目" css="col-sm-3" />
+            <div class="col-sm-6">
+                <p class="form-control-static">陪读</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group horizontal">
+                <mcs-label required="true" text="上课时间" css="col-sm-3" />
+                <div class="col-sm-6">
+                    <mcs-datetimepicker model="vm.beginDate" placeholder="" />
                 </div>
             </div>
-            <div class="profile-info-row">
-                <div class="profile-info-name"> 上课日期</div>
-                <div class="profile-info-value">
-                    <ppts-datepicker model="vm.beginDate" />
-                </div>
-            </div>
-            <div class="profile-info-row">
-                <div class="profile-info-name"> 上课时间 </div>
-                <div class="profile-info-value">
-                    <ppts-select caption="" category="hour" model="vm.beginHour" callback="vm.calcDurationValueBHClick(item)" css="col-xs-2 col-sm-2" />
-                    <ppts-select caption="" category="minute" model="vm.beginMinute" callback="vm.calcDurationValueBMClick(item)" css="col-xs-2 col-sm-2" />
-                </div>
-            </div>
-            <div class="profile-info-row">
-                <div class="profile-info-name"> 课时数 </div>
-                <div class="profile-info-value">
-                    <span>
-                        <ppts-select caption="" category="courseAmount" model="vm.amount" callback="vm.calcDurationValueCAClick(item)" css="col-xs-7 col-sm-7" />
-                    </span>
+        </div>
+        <div class="row">
+            <div class="form-group horizontal">
+                <mcs-label required="true" text="课时数" css="col-sm-3" />
+                <div class="col-sm-6">
+                    <mcs-select category="courseAmount" model="vm.amount" callback="vm.calcDurationValueCAClick(item)" css="mcs-padding-0" />
                 </div>
             </div>
         </div>
@@ -55,5 +50,7 @@
         <mcs-button category="close" click="vm.cancel()" />
     </div>
 </form>
+
+
 
 

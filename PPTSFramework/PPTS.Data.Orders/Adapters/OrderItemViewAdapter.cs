@@ -1,4 +1,5 @@
 ﻿using MCS.Library.Data.Adapters;
+using MCS.Library.Data.Builder;
 using PPTS.Data.Orders.Entities;
 using System;
 using System.Collections.Generic;
@@ -29,6 +30,18 @@ namespace PPTS.Data.Orders.Adapters
             .AppendItem("CustomerID", CustomerID));
             //.AppendItem("CustomerCampusID", OperaterCampusID));
             return this.Load(wLC);
+        }
+
+        public void LoadInContext(string orderId, string[] campusIds, Action<OrderItemViewCollection> action)
+        {
+
+            var where = new WhereSqlClauseBuilder(LogicOperatorDefine.And);
+            where.AppendItem("OrderID", orderId);
+            if (campusIds != null)
+            {
+                where.AppendItem("exists", OrdersAdapter.Instance.IsExistsCampusIDSQL(orderId, campusIds), "", true);
+            }
+            LoadByBuilderInContext(new ConnectiveLoadingCondition(where), action);
         }
     }
 }

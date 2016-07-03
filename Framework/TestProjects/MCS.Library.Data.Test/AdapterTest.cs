@@ -30,6 +30,12 @@ namespace MCS.Library.Data.Test
         {
             User user = new User() { UserID = UuidHelper.NewUuidString(), UserName = "沈峥", Gender = GenderType.Male };
 
+            Tuple<string, DateTime> tag = Tuple.Create(UuidHelper.NewUuidString(), DateTime.Now);
+
+            Console.WriteLine("Original Tag: {0}, {1:yyyy-MM-dd HH:mm:ss.fff}", tag.Item1, tag.Item2);
+
+            UserAdapter.Instance.GetSqlContext().BeforeActions.Add(() => Console.WriteLine("Before Tag: {0}, {1:yyyy-MM-dd HH:mm:ss.fff}", tag.Item1, tag.Item2));
+            UserAdapter.Instance.GetSqlContext().AfterActions.Add(() => Console.WriteLine("After Tag: {0}, {1:yyyy-MM-dd HH:mm:ss.fff}", tag.Item1, tag.Item2));
             UserAdapter.Instance.UpdateInContext(user);
 
             Console.WriteLine(UserAdapter.Instance.GetSqlContext().GetSqlInContext());

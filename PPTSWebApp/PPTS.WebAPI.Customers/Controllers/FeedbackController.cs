@@ -8,6 +8,7 @@ using PPTS.Data.Common.Adapters;
 using PPTS.Data.Common.Entities;
 using PPTS.Data.Customers.Adapters;
 using PPTS.Data.Customers.Entities;
+using PPTS.Web.MVC.Library.Filters;
 using PPTS.WebAPI.Customers.DataSources;
 using PPTS.WebAPI.Customers.Executors;
 using PPTS.WebAPI.Customers.ViewModels.Feedback;
@@ -48,6 +49,11 @@ namespace PPTS.WebAPI.Customers.Controllers
         /// <param name="criteria"></param>
         /// <returns></returns>
         [HttpPost]
+//        [PPTSJobFunctionAuthorize(@"PPTS:学大反馈管理（学员视图-家校互动）,
+//学大反馈管理（学员视图-家校互动）-本部门,
+//学大反馈管理（学员视图-家校互动）-本校区,
+//学大反馈管理（学员视图-家校互动）-本分公司,
+//学大反馈管理（学员视图-家校互动）-全国")]
         public CustomerRepliesQueryResult GetCustomerRepliesList(CustomerRepliesCriteriaModel criteria)
         {
             return new CustomerRepliesQueryResult
@@ -65,6 +71,11 @@ namespace PPTS.WebAPI.Customers.Controllers
         /// <param name="criteria"></param>
         /// <returns></returns>
         [HttpPost]
+//        [PPTSJobFunctionAuthorize(@"PPTS:学大反馈管理（学员视图-家校互动）,
+//学大反馈管理（学员视图-家校互动）-本部门,
+//学大反馈管理（学员视图-家校互动）-本校区,
+//学大反馈管理（学员视图-家校互动）-本分公司,
+//学大反馈管理（学员视图-家校互动）-全国")]
         public PagedQueryResult<CustomerRepliesQueryModel, CustomerRepliesQueryCollection> GetPagedCustomerRepliesList(CustomerRepliesCriteriaModel criteria)
         {
             return CustomerRepliesDataSource.Instance.GetCustomerRepliesList(criteria.PageParams, criteria, criteria.OrderBy);
@@ -74,6 +85,7 @@ namespace PPTS.WebAPI.Customers.Controllers
 
         #region api/feedback/createcustomerreplies
         [HttpPost]
+        //[PPTSJobFunctionAuthorize(@"PPTS:联系家长")]
         public void CreateCustomerReplies(EditCustomerRepliesModel model)
         {
             CustomerRepliesExecutor crExecutor = new CustomerRepliesExecutor(model);
@@ -83,6 +95,7 @@ namespace PPTS.WebAPI.Customers.Controllers
 
         #region api/Present/exportcustomerreplies
         [HttpPost]
+        //[PPTSJobFunctionAuthorize(@"PPTS:导出反馈")]
         public HttpResponseMessage ExportCustomerReplies([ModelBinder(typeof(FormBinder))]CustomerRepliesCriteriaModel criteria)
         {
             

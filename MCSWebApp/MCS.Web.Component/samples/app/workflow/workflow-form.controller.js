@@ -104,5 +104,20 @@
                 $state.reload();
             });
         };
+
+        vm.callbacks = {
+            moveTo: function () {
+                alert('下一步');
+            },
+            save: function () {
+                alert('保存');
+            },
+            cancel: function () {
+                alert('驳回');
+            },
+            withdraw: function () {
+                alert('撤回');
+            }
+        };
     }])
 })();

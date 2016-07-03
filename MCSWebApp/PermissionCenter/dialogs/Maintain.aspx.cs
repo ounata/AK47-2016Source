@@ -11,6 +11,7 @@ using MCS.Library.SOA.DataObjects.Security.Adapters;
 using MCS.Library.SOA.DataObjects.Workflow;
 using MCS.Web.WebControls;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Transactions;
 using PC = MCS.Library.SOA.DataObjects.Security;
@@ -187,6 +188,10 @@ namespace PermissionCenter.Dialogs
             ExceptionHelper.FalseThrow(Path.GetExtension(file.FileName).ToLower() == ".xlsx",
                 "'{0}' 必须是Excel的xlsx类型的文件", file.FileName);
 
+            Stopwatch sw = new Stopwatch();
+
+            sw.Start();
+
             WorkBook workbook = WorkBook.Load(file.InputStream);
             WorkSheet sheet = workbook.Sheets.Any;
 
@@ -208,7 +213,9 @@ namespace PermissionCenter.Dialogs
             });
 
             result.DataChanged = processed > 0 && completed > 0;
-            result.ProcessLog = string.Format("总共处理了{0}条数据，{1}条成功", processed, completed);
+            result.ProcessLog = string.Format("经过了{0:#,##0}秒，总共处理了{1}条数据，{2}条成功",
+                sw.Elapsed.TotalSeconds,
+                processed, completed);
             result.CloseWindow = processed == completed;
 
             if (result.DataChanged)

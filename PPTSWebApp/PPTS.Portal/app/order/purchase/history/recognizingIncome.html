@@ -11,15 +11,17 @@
             <br/>
             收入确认时间：{{ vm.data.confirmStartDate | date:'yyyy-MM-dd'}} 至 {{vm.data.confirmEndDate | date:'yyyy-MM-dd'}} 
             <br />
-            本次可确认的最大金额数：{{ 1|currency }}
+            本次可确认的最大金额数：{{ vm.data.realPrice * vm.data.realAmount -vm.data.confirmedMoney |currency }}
             <br />
-            本次需要确认的金额数：<mcs-input placeholder="金额" model="vm.input.money" />
+            <div>
+                本次需要确认的金额数：<mcs-input placeholder="金额" model="vm.input.money" datatype="number" required />
+            </div>
             <br />
             备注：非上课类课收可以分多次确认，也可一次性确认。
         </div>
     </ng-form>
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-default" ng-click="vm.cancel()">Cancel</button>
-    <button type="button" class="btn btn-primary" ng-click="vm.save()">Save</button>
+    <button type="button" class="btn btn-default" ng-click="vm.save()">确认</button>
+    <button type="button" class="btn btn-primary" ng-click="vm.cancel()">取消</button>
 </div>

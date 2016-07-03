@@ -59,7 +59,7 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
             result.Customer = CustomerModel.Load(customerID, false);
             foreach(AccountTransferApplyView  apply in AccountTransferApplyViewAdapter.Instance.LoadCollectionByCustomerID(customerID))
             {
-                TransferApplyModel model = AutoMapper.Mapper.DynamicMap<TransferApplyModel>(apply);
+                TransferApplyModel model = apply.ProjectedAs<TransferApplyModel>();
                 result.Items.Add(model);
             }
             result.Dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(CustomerModel)

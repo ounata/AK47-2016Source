@@ -1576,6 +1576,31 @@
             <param name="strB"></param>
             <param name="builder"></param>
         </member>
+        <member name="T:MCS.Library.Data.Builder.SqlFullTextDescriptionGenerator">
+            <summary>
+            Sql Server全文检索值的描述生成器
+            </summary>
+        </member>
+        <member name="F:MCS.Library.Data.Builder.SqlFullTextDescriptionGenerator.Instance">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:MCS.Library.Data.Builder.SqlFullTextDescriptionGenerator.DecideIsMatched(MCS.Library.Data.Builder.SqlCaluseBuilderItemWithData)">
+            <summary>
+            
+            </summary>
+            <param name="builderItem"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MCS.Library.Data.Builder.SqlFullTextDescriptionGenerator.GetDescription(MCS.Library.Data.Builder.SqlCaluseBuilderItemWithData,MCS.Library.Data.Builder.ISqlBuilder)">
+            <summary>
+            
+            </summary>
+            <param name="builderItem"></param>
+            <param name="builder"></param>
+            <returns></returns>
+        </member>
         <member name="T:MCS.Library.Data.Builder.DataDescriptionGeneratorBase">
             <summary>
             数据转换成Sql描述的生成器的基类
@@ -2896,6 +2921,45 @@
             <param name="addQuotation"></param>
             <returns></returns>
         </member>
+        <member name="T:MCS.Library.Data.Configuration.ConnectionNameMappingSettings">
+            <summary>
+            连接名称映射关系的配置节
+            </summary>
+        </member>
+        <member name="M:MCS.Library.Data.Configuration.ConnectionNameMappingSettings.GetConfig">
+            <summary>
+            得到配置ConnectionNameMapping的配置信息
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:MCS.Library.Data.Configuration.ConnectionNameMappingSettings.Mappings">
+            <summary>
+            映射关系
+            </summary>
+        </member>
+        <member name="M:MCS.Library.Data.Configuration.ConnectionNameMappingSettings.GetConnectionName(System.String,System.String)">
+            <summary>
+            根据映射关系查询连接名称
+            </summary>
+            <param name="key"></param>
+            <param name="defaultValue">如果没有找到，则返回缺省值</param>
+            <returns>连接串的名称</returns>
+        </member>
+        <member name="T:MCS.Library.Data.Configuration.ConnectionNameMappingElementCollection">
+            <summary>
+            映射关系项的集合
+            </summary>
+        </member>
+        <member name="T:MCS.Library.Data.Configuration.ConnectionNameMappingElement">
+            <summary>
+            映射关系项
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Data.Configuration.ConnectionNameMappingElement.ConnectionName">
+            <summary>
+            目标连接名称
+            </summary>
+        </member>
         <member name="T:MCS.Library.Data.Configuration.DbEventArgsConfigurationElement">
             <summary>
             自定义数据库执行过程事件参数的配置项
@@ -4128,6 +4192,16 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="T:MCS.Library.Data.SqlActions">
+            <summary>
+            在ExecuteSqlInContext执行SQL前后的附加操作
+            </summary>
+        </member>
+        <member name="M:MCS.Library.Data.SqlActions.DoActions">
+            <summary>
+            执行操作
+            </summary>
+        </member>
         <member name="T:MCS.Library.Data.SqlContextItem">
             <summary>
             SQL语句的上下文缓存
@@ -4141,6 +4215,16 @@
         <member name="P:MCS.Library.Data.SqlContextItem.TableActions">
             <summary>
             DataTable的回调操作
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Data.SqlContextItem.BeforeActions">
+            <summary>
+            执行Context之前的操作
+            </summary>
+        </member>
+        <member name="P:MCS.Library.Data.SqlContextItem.AfterActions">
+            <summary>
+            执行Context之后的操作
             </summary>
         </member>
         <member name="M:MCS.Library.Data.SqlContextItem.AppendSqlInContext(MCS.Library.Data.Builder.SqlBuilderBase,System.Boolean,System.String,System.Object[])">
@@ -4451,6 +4535,12 @@
             </summary>
             <param name="connName">连接名称</param>
             <param name="conn">数据库连接对象</param>
+        </member>
+        <member name="M:MCS.Library.Data.TableAction.DoAction(System.Data.DataTable)">
+            <summary>
+            执行与table相关的操作
+            </summary>
+            <param name="table"></param>
         </member>
         <member name="T:MCS.Library.Data.DbEventType">
             <summary>

@@ -38,13 +38,12 @@ namespace PPTS.WebAPI.Customers.Executors
 
             this.Model.CustomerServiceItem = new Data.Customers.Entities.CustomerServiceItem();
 
-            if (this.Model.CustomerService.HandlerJobType != "")
+            if (this.Model.CustomerService.HandlerJobName != "")
             {
                 this.Model.CustomerServiceItem.ItemID = UuidHelper.NewUuidString();
                 this.Model.CustomerServiceItem.ServiceID = this.Model.CustomerService.ServiceID;
                 this.Model.CustomerServiceItem.HandleTime = MCS.Library.Net.SNTP.SNTPClient.AdjustedTime;
                 this.Model.CustomerServiceItem.HandleStatus = "5";
-                this.Model.CustomerServiceItem.HandleMemo = "暂时保存";
                 this.Model.CustomerServiceItem.HandlerID = DeluxeIdentity.CurrentUser.ID;
                 this.Model.CustomerServiceItem.HandlerName = DeluxeIdentity.CurrentUser.Name;
                 this.Model.CustomerServiceItem.HandlerJobID = DeluxeIdentity.CurrentUser.GetCurrentJob().ID;
@@ -56,7 +55,7 @@ namespace PPTS.WebAPI.Customers.Executors
             }
 
             CustomerServiceAdapter.Instance.UpdateInContext(this.Model.CustomerService);
-            if (this.Model.CustomerService.HandlerJobType != "")
+            if (this.Model.CustomerService.HandlerJobName != "")
             {
                 CustomerServiceItemsAdapter.Instance.UpdateInContext(this.Model.CustomerServiceItem);
             }

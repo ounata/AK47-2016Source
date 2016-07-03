@@ -31,75 +31,131 @@
                 })();
 
                 vm.updateDiscountStandardRank = function (row, index) {
-                    if (!row.discountStandard) return;
-                    var result = true;
-                    if (index == 0) {
-                        var next = discountData.rows[index + 1];
-                        if (!next.discountStandard) return;
-                        result = row.discountStandard < next.discountStandard;
-                    } else if (index == discountData.rows.length - 1) {
+                    var result = vm.checkZero(row.discountStandard, 0);
+                    if (result.result) {
                         var last = discountData.rows[index - 1];
-                        if (!last.discountStandard) {
-                            last.validStandard = false;
-                            return;
+                        var next = discountData.rows[index + 1];
+
+
+                        var checkResult = vm.check(row.discountStandard, last ? last.discountStandard : null, next ? next.discountStandard : null, 0, index);
+                        if (!checkResult.result) {
+                            row.errorStandardMessage = checkResult.message;
                         }
-                        result = row.discountStandard > last.discountStandard;
-                    } else {
-                        var last = discountData.rows[index - 1];
-                        var next = discountData.rows[index + 1];
-                        if (!last.discountStandard) {
-                            last.validStandard = false;
-                            return;
-                        } else {
-                            result = row.discountStandard > last.discountStandard;
-                            if (result) {
-                                if (next.discountStandard) {
-                                    result = row.discountStandard < next.discountStandard;
-                                }
-                            }
+                        row.validStandard = !(!checkResult.result && checkResult.message != '');
+                        if (row.validStandard && last) {
+                            last.validStandard = true;
+                        }
+                        if (row.validStandard && next) {
+                            next.validStandard = true;
                         }
                     }
-                    row.validStandard = result;
-                    $scope.$apply('discountData');
-                    return result;
-                };
+                    else {
+                        row.errorStandardMessage = result.message;
+                        row.validStandard = !(!result.result && result.message != '');
+                        if (row.validStandard && last) {
+                            last.validStandard = true;
+                        }
+                        if (row.validStandard && next) {
+                            next.validStandard = true;
+                        }
+                    }
+                }
 
                 vm.updateDiscountValueRank = function (row, index) {
-                    vm.errorRowMessage = '折扣率不能大于1!';
-                    if (!row.discountValue) return;
-                    var result = (row.discountValue < 1);
-                    row.validValue = result;
-                    if (result)
-                        vm.errorRowMessage = '需小于上档大于下档!';
-                    if (index == 0) {
-                        var next = discountData.rows[index + 1];
-                        if (next.discountValue != "")
-                            result = row.discountValue > next.discountValue;
-                    } else if (index == discountData.rows.length - 1) {
+                    var result = vm.checkZero(row.discountValue, 1);
+                    if (result.result) {
                         var last = discountData.rows[index - 1];
-                        if (!last.discountValue) {
-                            last.validValue = false;
-                            return;
+                        var next = discountData.rows[index + 1];
+
+
+                        var checkResult = vm.check(row.discountValue, last ? last.discountValue : null, next ? next.discountValue : null, 1, index);
+                        if (!checkResult.result) {
+                            row.errorValueMessage = checkResult.message;
                         }
-                        result = row.discountValue < last.discountValue;
-                    } else {
-                        var last = discountData.rows[index - 1];
-                        var next = discountData.rows[index + 1];
-                        if (!last.discountValue) {
-                            last.validValue = false;
-                            return;
-                        } else {
-                            result = row.discountValue < last.discountValue;
-                            if (result) {
-                                if (next.discountValue) {
-                                    result = row.discountValue > next.discountValue;
+                        row.validValue = !(!checkResult.result && checkResult.message != '');
+                        if (row.validValue && last) {
+                            last.validValue = true;
+                        }
+                        if (row.validValue && next) {
+                            next.validValue = true;
+                        }
+                    }
+                    else {
+                        row.errorValueMessage = result.message;
+                        row.validValue = !(!result.result && result.message != '');
+                        if (row.validValue && last) {
+                            last.validValue = true;
+                        }
+                        if (row.validValue && next) {
+                            next.validValue = true;
+                        }
+                    }
+                }
+
+                vm.check = function (currentValue, preValue, afterValue, rule, index) {
+
+                    var currentValueGreater = currentValue && currentValue > 0;
+                    var currentValueNothing = !currentValue || currentValue == '';
+
+                    var preValueGreater = preValue != undefined && preValue != '' && preValue > 0;
+                    var preValueNothing = preValue == undefined || preValue == '';
+
+                    var afterValueGreater = afterValue != undefined && afterValue != '' && afterValue > 0;
+                    var afterValueNothing = afterValue || afterValue == '';
+
+                    //检查非第一行
+                    var condition1 = (index > 0 && currentValueNothing && afterValueNothing);
+                    var condition2 = (index == 0 && currentValueGreater);
+                    var condition3 = (currentValueGreater && afterValueGreater) && ((rule == 0 && afterValue > currentValue) || (rule == 1 && afterValue < currentValue));
+                    var condition4 = (currentValueGreater && preValueGreater) && ((rule == 0 && preValue < currentValue) || (rule == 1 && preValue > currentValue));
+
+                    if (condition1 || condition2 || condition3 || condition4) {
+                        if (preValueGreater && afterValueGreater) {
+
+                            if (condition3 && condition4) {
+                                return {
+                                    result: true
                                 }
+                            } else {
+                                return {
+                                    result: false,
+                                    message: (rule == 0 ? '需大于上档小于下档' : '需小于上档大于下档')
+                                }
+                            }
+                        } else {
+                            return {
+                                result: true
                             }
                         }
                     }
-                    row.validValue = result;
-                    $scope.$apply('discountData');
-                    return result;
+                    else {
+                        return {
+                            result: false,
+                            message: preValueNothing ? '上面不能为空' : (rule == 0 ? '需大于上档小于下档' : '需小于上档大于下档')
+                        }
+                    }
+                }
+
+                vm.checkZero = function (currentValue, rule) {
+                    var condition = !(rule == 0 ? currentValue > 0 : currentValue > 0 && currentValue < 1);
+                    if (currentValue != undefined && condition) {
+                        return {
+                            result: false,
+                            message: (rule == 0 ? '必须大于0' : '必须大于0小于1')
+                        };
+
+                    } else {
+                        if (currentValue == NaN || currentValue === '') {
+                            return {
+                                result: false,
+                                message: ''
+                            }
+                        } else {
+                            return {
+                                result: true
+                            };
+                        }
+                    }
                 };
 
                 vm.addRow = function () {
@@ -128,25 +184,25 @@
                 }
 
                 vm.save = function () {
-                    if (mcsValidationService.run($scope)) {
-                        if (discountData.rows[0].discountStandard == "" || discountData.rows[0].discountValue == "") {
-                            vm.errorMessage = '充值额与折扣率至少輸入一条记录！';
+                    if (discountData.rows[0].discountStandard == "" || discountData.rows[0].discountValue == "") {
+                        vm.errorMessage = '折扣表主要内容不得为空，请填写后再保存！';
+                        return;
+                    }
+                    for (var value in discountData.rows) {
+                        if (!discountData.rows[value].validStandard || !discountData.rows[value].validValue) {
+                            vm.errorMessage = '充值折扣关系表填写的值验证不通过,请重新填写！';
                             return;
                         }
-                        for (var value in discountData.rows) {
-                            if (!discountData.rows[value].validStandard || !discountData.rows[value].validValue) {
-                                vm.errorMessage = '充值折扣关系表填写的值验证不通过,请重新填写！';
-                                return;
-                            }
-                            if (discountData.rows[value].discountStandard && !discountData.rows[value].discountValue) {
-                                vm.errorMessage = '充值额与折扣率对应关系有误，请重新填写！';
-                                return;
-                            }
-                            if (!discountData.rows[value].discountStandard && discountData.rows[value].discountValue) {
-                                vm.errorMessage = '充值额与折扣率对应关系有误，请重新填写！';
-                                return;
-                            }
+                        if (discountData.rows[value].discountStandard && !discountData.rows[value].discountValue) {
+                            vm.errorMessage = '充值额和折扣率应该配对，请填写后再提交审批！';
+                            return;
                         }
+                        if (!discountData.rows[value].discountStandard && discountData.rows[value].discountValue) {
+                            vm.errorMessage = '充值额和折扣率应该配对，请填写后再提交审批！';
+                            return;
+                        }
+                    }
+                    if (mcsValidationService.run($scope)) {
                         var createDiscountModel = { discount: { startDate: vm.criteria.startDate }, discountPermissionsApplieCollection: [], discountItemCollection: discountData.rows };
                         for (var i in vm.criteria.orgIds) {
                             createDiscountModel.discountPermissionsApplieCollection.push({ campusID: vm.criteria.orgIds[i] });

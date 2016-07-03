@@ -1,0 +1,27 @@
+﻿<ppts-dynamic-content template="quick-search.tpl.html">
+    <div class="form-group horizontal bordered">
+        <mcs-label text="收入支出" css="col-md-2" />
+        <div class="col-md-10">
+            <ppts-checkbox-group category="incomeExpend" model="vm.criteria.incomeExpend" class="mcs-margin-left-5" />
+        </div>
+    </div>
+    <div class="form-group horizontal bordered">
+        <mcs-label text="冻结解冻" css="col-md-2" />
+        <div class="col-md-10">
+            <ppts-checkbox-group category="frozeRelease" model="vm.criteria.frozenRelease" class="mcs-margin-left-5" />
+        </div>
+    </div>
+    <div class="form-group horizontal bordered">
+        <mcs-label text="金额区间" css="col-md-2" />
+        <div class="col-md-10">
+            <mcs-datarange min="vm.criteria.chargeMoneyStart" max="vm.criteria.chargeMoneyEnd" width="510px"/>
+        </div>
+    </div>
+    <div class="form-group horizontal bordered">
+        <mcs-label text="起止日期" css="col-md-2" />
+        <div class="col-md-10">
+            <mcs-daterangepicker start-date="vm.criteria.payTimeStart" end-date="vm.criteria.payTimeEnd" css="mcs-margin-left-15" />
+        </div>
+    </div>
+</ppts-dynamic-content>
+<mcs-datatable data="vm.data" />

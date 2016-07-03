@@ -13,6 +13,7 @@
                 src: ['src/global/ppts.head.js',
                       'src/global/ppts.controller.js',
                       'src/global/ppts.route.js',
+                      'src/global/ppts.enum.js',
                       'src/global/ppts.filter.js',
                       'src/global/ppts.service.js',
                       'src/global/ppts.directive.js',

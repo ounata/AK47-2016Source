@@ -8,7 +8,7 @@
     [OwnerType] NVARCHAR(32) NOT NULL, 
     [CreateTime] DATETIME NULL DEFAULT getutcdate(), 
     [ModifyTime] DATETIME NULL DEFAULT getutcdate(), 
-    CONSTRAINT [PK_CustomerRelationAuthorizations] PRIMARY KEY ([OwnerID], [OwnerType], [ObjectType]) 
+    CONSTRAINT [PK_CustomerRelationAuthorizations] PRIMARY KEY ([ObjectType], [ObjectID], [OwnerID], [OwnerType]) 
 )
 
 GO
@@ -31,7 +31,7 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level2name = N'ObjectID'
 GO
 EXEC sp_addextendedproperty @name = N'MS_Description',
-    @value = N'授权对象类别:“咨询关系”、“学管关系”、“教学关系”、“市场关系”、“电销关系”',
+    @value = N'授权对象类别:“咨询关系”、“学管关系”、“市场关系”、“电销关系”、“建档关系”(10)',
     @level0type = N'SCHEMA',
     @level0name = N'MT',
     @level1type = N'TABLE',
@@ -94,4 +94,4 @@ EXEC sp_addextendedproperty @name = N'MS_Description',
     @level2name = N'ModifyTime'
 GO
 
-CREATE INDEX [IX_CustomerRelationAuthorizations_01] ON [MT].[CustomerRelationAuthorizations] ([ObjectID], [OrgType], [OwnerID], [OwnerType])
+CREATE INDEX [IX_CustomerRelationAuthorizations_01] ON [MT].[CustomerRelationAuthorizations] ([ObjectType],[OwnerID], [OwnerType])

@@ -189,10 +189,15 @@ namespace MCS.Library.Passport
 		/// </summary>
 		void SaveToCookie();
 
-		/// <summary>
-		/// 将应用登录信息保存到Xml文档对象中
-		/// </summary>
-		XmlDocument SaveToXml();
+        /// <summary>
+        /// Ticket信息保存入Header中
+        /// </summary>
+        void SaveToHeader();
+
+        /// <summary>
+        /// 将应用登录信息保存到Xml文档对象中
+        /// </summary>
+        XmlDocument SaveToXml();
 
 		/// <summary>
 		/// Ticket是否合法

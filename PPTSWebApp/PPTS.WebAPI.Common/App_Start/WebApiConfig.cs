@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Formatting;
 using System.Web.Http;
+using System.Web.Http.Validation;
+using MCS.Web.MVC.Library.Providers;
 
 namespace PPTS.WebAPI.Common
 {
@@ -25,6 +27,8 @@ namespace PPTS.WebAPI.Common
                 routeTemplate: "api/{controller}/{action}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
+            config.Services.Replace(typeof(IBodyModelValidator), new MCSBodyModelValidator());
 
             config.Formatters.Clear();
             config.Formatters.Add(new JsonMediaTypeFormatter());

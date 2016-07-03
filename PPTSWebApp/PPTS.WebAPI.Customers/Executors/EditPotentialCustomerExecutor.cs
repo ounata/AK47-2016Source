@@ -2,16 +2,11 @@
 using MCS.Library.Data;
 using MCS.Library.Data.Executors;
 using MCS.Library.SOA.DataObjects;
-using PPTS.Data.Common.Executors;
 using PPTS.Data.Common.Security;
 using PPTS.Data.Customers.Adapters;
 using PPTS.Data.Customers.Entities;
 using PPTS.Data.Customers.Executors;
 using PPTS.WebAPI.Customers.ViewModels.PotentialCustomers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace PPTS.WebAPI.Customers.Executors
 {
@@ -39,8 +34,19 @@ namespace PPTS.WebAPI.Customers.Executors
 
             PotentialCustomerAdapter.Instance.UpdateInContext(this.Model.Customer);
 
-            PhoneAdapter.Instance.UpdateByOwnerIDInContext(this.Model.Customer.CustomerID,
-                this.Model.Customer.ToPhones(this.Model.Customer.CustomerID));
+            // 学员学校信息
+            if (!string.IsNullOrEmpty(this.Model.Customer.SchoolID))
+            {
+                CustomerSchoolRelation schoolRelation = new CustomerSchoolRelation()
+                {
+                    SchoolID = this.Model.Customer.SchoolID,
+                    CustomerID = this.Model.Customer.CustomerID
+                };
+                schoolRelation.FillCreator().FillModifier();
+                CustomerSchoolRelationAdapter.Instance.UpdateInContext(schoolRelation);
+            }
+
+            PhoneAdapter.Instance.UpdateByOwnerIDInContext(this.Model.Customer.CustomerID, this.Model.Customer.ToPhones(this.Model.Customer.CustomerID));
 
             CustomerFulltextInfo fullText = CustomerFulltextInfo.Create(this.Model.Customer.CustomerID, CustomerFulltextInfo.PotentialCustomersType, this.Model.Customer.Status);
 

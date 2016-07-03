@@ -10,8 +10,8 @@
             <div class="form-actions">
                 <div class="row">
                     <div class="col-md-offset-3 col-md-9">
-                        <mcs-button category="save" click="vm.save()"></mcs-button>
-                        <mcs-button category="add" text="添加已有家长" click="vm.parentAdd('查看现有家长，勾选查询结果，确认亲属关系')"></mcs-button>
+                        <mcs-button category="save" click="vm.save()" ppts-job-functions="新增潜在客户"></mcs-button>
+                        <mcs-button category="add" text="添加已有家长" ppts-functions="新增潜在客户" click="vm.parentAdd('查看现有家长，勾选查询结果，确认亲属关系')"></mcs-button>
                         <mcs-button icon="recycle" text="清空家长信息" click="vm.reset()"></mcs-button>
                         <mcs-button category="cancel" text="返回潜客列表" click="$state.go('ppts.customer')"></mcs-button>
                     </div>
@@ -24,15 +24,15 @@
                         <div class="form-group">
                             <mcs-label required="true" text="家长姓名" css="col-md-3" />
                             <div class="col-md-9">
-                                <mcs-input model="vm.parent.parentName" css="col-md-12" required />
+                                <mcs-input id="parentName" model="vm.parent.parentName" maxlength="15" validate="vm.checkName('#customerName')" data-validation-custom-message="家长姓名不能与学员姓名重复！" css="col-md-12" submit-validate="true" required />
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <ppts-select category="idtype" model="vm.parent.idType" css="col-md-3" />
+                            <mcs-select category="idtype" model="vm.parent.idType" css="col-md-3" />
                             <div class="col-md-9">
-                                <mcs-input model="vm.parent.idNumber" css="col-md-12" />
+                                <mcs-input id="parentIdNumber" model="vm.parent.idNumber" validate="vm.isIdCard(vm.parent.idType, vm.parent.idNumber, '#parentIdNumber')" data-validation-custom-message="输入数据项不是合法身份证号！" css="col-md-12"/>
                             </div>
                         </div>
                     </div>
@@ -50,7 +50,7 @@
                         <div class="form-group">
                             <mcs-label text="家庭年总收入" css="col-md-3" />
                             <div class="col-md-9 mcs-padding-0">
-                                <ppts-select category="income" model="vm.parent.income" />
+                                <mcs-select category="income" model="vm.parent.income" />
                             </div>
                         </div>
                     </div>
@@ -62,14 +62,14 @@
                             <div class="col-md-9">
                                 <div class="customer-relation-container">
                                     <div class="col-md-12 mcs-padding-0 mcs-margin-bottom-2">
-                                        <div class="col-md-4 mcs-padding-0"><input class="mcs-readonly-input" ng-model="vm.customer.customerName" onkeydown="return false;" style="width:88%;background:none;" />是</div>
-                                        <div class="col-md-4 mcs-padding-0"><input class="mcs-readonly-input" ng-model="vm.parent.parentName" onkeydown="return false;" style="width:88%;background:none;" />的</div>
-                                        <div class="col-md-4 mcs-padding-0"><ppts-select data="vm.customerRoles" model="vm.customerRole" callback="selectCustomerRole(item, model)" css="mcs-padding-0" caption="子女关系" /></div>
+                                        <div class="col-md-4 mcs-padding-0"><input class="mcs-readonly-input" ng-model="vm.customer.customerName" ng-readonly="true" onkeydown="return false;" onpaste="return false;" oncontextmenu="return false;" style="width:88%;background:none !important;" />是</div>
+                                        <div class="col-md-4 mcs-padding-0"><input class="mcs-readonly-input" ng-model="vm.parent.parentName" ng-readonly="true" onkeydown="return false;" onpaste="return false;" oncontextmenu="return false;" style="width:88%;background:none !important;" />的</div>
+                                        <div class="col-md-4 mcs-padding-0"><mcs-select data="vm.customerRoles" model="vm.customerRole" callback="selectCustomerRole(item, model)" css="mcs-padding-0" caption="子女关系" /></div>
                                     </div>
                                     <div class="col-sm-12 mcs-padding-0">
-                                        <div class="col-md-4 mcs-padding-0"><input class="mcs-readonly-input" ng-model="vm.parent.parentName" onkeydown="return false;" style="width:88%;background:none;" />是</div>
-                                        <div class="col-md-4 mcs-padding-0"><input class="mcs-readonly-input" ng-model="vm.customer.customerName" onkeydown="return false;" style="width:88%;background:none;" />的</div>
-                                        <div class="col-md-4 mcs-padding-0"><ppts-select data="vm.parentRoles" model="vm.parentRole" disabled="!(vm.parent.gender && vm.customer.gender && vm.customerRole && vm.parentRoles.length > 1)" css="mcs-padding-0" caption="家属关系" /></div>
+                                        <div class="col-md-4 mcs-padding-0"><input class="mcs-readonly-input" ng-model="vm.parent.parentName" ng-readonly="true" onkeydown="return false;" onpaste="return false;" oncontextmenu="return false;" style="width:88%;background:none !important;" />是</div>
+                                        <div class="col-md-4 mcs-padding-0"><input class="mcs-readonly-input" ng-model="vm.customer.customerName" ng-readonly="true" onkeydown="return false;" onpaste="return false;" oncontextmenu="return false;" style="width:88%;background:none !important;" />的</div>
+                                        <div class="col-md-4 mcs-padding-0"><mcs-select data="vm.parentRoles" model="vm.parentRole" disabled="!(vm.parent.gender && vm.customer.gender && vm.customerRole && vm.parentRoles.length > 1)" css="mcs-padding-0" caption="家属关系" /></div>
                                     </div>
                                     <p class="help-block"></p>
                                 </div>
@@ -80,7 +80,7 @@
                         <div class="form-group">
                             <mcs-label text="现住址" css="col-md-3" />
                             <div class="col-md-9">
-                                <ppts-region province="vm.parent.province" city="vm.parent.city" district="vm.parent.county" street="vm.parent.streetName" required />
+                                <ppts-region province="vm.parent.province" city="vm.parent.city" district="vm.parent.county" street="vm.parent.streetName" selected="vm.selected" maxlength="128"/>
                             </div>
                         </div>
                     </div>
@@ -88,18 +88,28 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <mcs-label text="家长Email" css="col-md-3" />
+                            <mcs-label text="主要联系方式" required="true" css="col-md-3" />
                             <div class="col-md-9">
-                                <mcs-input model="vm.parent.email" css="col-md-12" />
+                                <mcs-input id="parentPrimaryPhone" model="vm.parent.primaryPhone.phoneNumber" css="col-md-12" required phone/>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <mcs-label text="联系电话" css="col-md-3" />
+                            <mcs-label text="家长Email" css="col-md-3" />
                             <div class="col-md-9">
-                                <mcs-input model="vm.parent.primaryPhone.phoneNumber" css="col-sm-6 mcs-input-width-50 mcs-margin-right-10" placeholder="主要联系电话" />
-                                <mcs-input model="vm.parent.secondaryPhone.phoneNumber" css="col-sm-6 mcs-input-width-50 mcs-margin-right-0 pull-right" placeholder="辅助联系电话" />
+                                <mcs-input model="vm.parent.email" css="col-md-12" email />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <mcs-label text="辅助联系方式" css="col-md-3" />
+                            <div class="col-md-9">
+                                <mcs-input model="vm.parent.secondaryPhone.phoneNumber" css="col-md-12" phone />
+                                <p class="help-block"></p>
                             </div>
                         </div>
                     </div>
@@ -110,7 +120,7 @@
                         <div class="form-group">
                             <mcs-label required="true" text="学员姓名" css="col-md-3" />
                             <div class="col-md-9">
-                                <mcs-input model="vm.customer.customerName" css="col-md-12" required />
+                                <mcs-input id="customerName" model="vm.customer.customerName" maxlength="15" validate="vm.checkName('#parentName')" data-validation-custom-message="学员姓名不能与家长姓名重复！" css="col-md-12" required/>
                             </div>
                         </div>
                     </div>
@@ -118,7 +128,7 @@
                         <div class="form-group">
                             <mcs-label text="入学大年级" css="col-md-3" />
                             <div class="col-md-9 mcs-padding-0">
-                                <ppts-select category="grade" model="vm.customer.entranceGrade" />
+                                <mcs-select category="grade" model="vm.customer.entranceGrade" />
                             </div>
                         </div>
                     </div>
@@ -143,18 +153,36 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <div class="form-group">
-                            <mcs-label required="true" text="接触方式" css="col-md-3" />
-                            <div class="col-md-9 mcs-padding-0">
-                                <ppts-select category="contactType" model="vm.customer.contactType" />
+                        <div class="form-group"> 
+                            <mcs-label required="true" text="客户资源归属地" css="col-md-3" />
+                            <div class="col-md-9">
+                                <ppts-organization branch="vm.branchID" campus="vm.campusID" selected="vm.orgInfoSelected" disabled-level="vm.disabledlevel" required-level="1"/>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
+                            <mcs-label text="学年制" css="col-md-3" />
+                            <div class="col-md-9 mcs-padding-0">
+                                <mcs-select category="academicYear" model="vm.customer.schoolYear" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <mcs-label required="true" text="接触方式" css="col-md-3" />
+                            <div class="col-md-9 mcs-padding-0">
+                                <mcs-select category="contactType" model="vm.customer.contactType" required/>
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="col-md-6">
+                        <div class="form-group">
                             <mcs-label text="当前所在学校" css="col-md-3" />
                             <div class="col-md-9">
-                                <mcs-input model="vm.customer.schoolName" css="col-md-12" required />
+                                <ppts-school model="vm.customer.schoolID" name="vm.customer.schoolName"/>
                             </div>
                         </div>
                     </div>
@@ -163,8 +191,8 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <mcs-label required="true" text="信息来源" css="col-md-3" />
-                            <div class="col-md-9" uib-tooltip="注意：信息来源保存后无法修改，请正确填写">
-                                <ppts-source main="vm.customer.sourceMainType" sub="vm.customer.sourceSubType" required-level="1" />
+                            <div class="col-md-9" uib-popover="注意：信息来源保存后无法修改，请正确填写" popover-trigger="mouseenter">
+                                <ppts-source main="vm.customer.sourceMainType" sub="vm.customer.sourceSubType" required />
                             </div>
                         </div>
                     </div>
@@ -172,7 +200,7 @@
                         <div class="form-group" style="height:40px">
                             <mcs-label text="学员出生日期" css="col-md-3" />
                             <div class="col-md-9">
-                                <ppts-datepicker model="vm.customer.birthday" css="col-md-12" />
+                                <mcs-datepicker model="vm.customer.birthday" css="col-md-12" />
                             </div>
                         </div>
                     </div>
@@ -180,17 +208,17 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <mcs-label text="转介绍" css="col-md-3" />
+                            <mcs-label text="转介绍员工OA" css="col-md-3" />
                             <div class="col-md-9">
-                                <mcs-input model="vm.customer.referralStaffName" placeholder="员工OA" css="col-md-12" />
+                                <mcs-input id="referralStaffOACode" model="vm.customer.referralStaffOACode" placeholder="员工OA" ng-blur="vm.getStaffByOA(vm.customer.referralStaffOACode)" data-validation-custom-message="输入的转介绍员工OA不正确！" css="col-md-12" uib-popover="注意：转介绍填写后无法修改，请正确填写" ng-disabled="vm.customer.sourceMainType!=617" />
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <ppts-select category="idtype" model="vm.customer.idType" css="col-md-3" />
+                            <mcs-select category="idtype" model="vm.customer.idType" css="col-md-3" />
                             <div class="col-md-9">
-                                <mcs-input model="vm.customer.idNumber" css="col-md-12" />
+                                <mcs-input id="customerIdNumber" model="vm.customer.idNumber" validate="vm.isIdCard(vm.customer.idType, vm.customer.idNumber, '#customerIdNumber')" data-validation-custom-message="输入数据项不是合法身份证号！" css="col-md-12" />
                             </div>
                         </div>
                     </div>
@@ -198,9 +226,9 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <mcs-label text="岗位名称" css="col-md-3" />
-                            <div class="col-md-9">
-                                <mcs-input model="vm.customer.jobName" css="col-md-12" />
+                            <mcs-label text="转介绍员工岗位" css="col-md-3" />
+                            <div class="col-md-9 mcs-padding-0">
+                                <mcs-select category="referralStaffJobName" model="vm.customer.referralStaffJobID" disabled="vm.customer.sourceMainType!=617"/>
                             </div>
                         </div>
                     </div>
@@ -218,7 +246,7 @@
                         <div class="form-group">
                             <mcs-label text="转介绍学员编号" css="col-md-3" />
                             <div class="col-md-7">
-                                <mcs-input model="vm.customer.referralCustomerCode" ng-blur="vm.getCustomerByCode(vm.customer.referralCustomerCode)" css="col-md-12" uib-tooltip="注意：转介绍填写后无法修改，请正确填写" />
+                                <mcs-input id="referralCustomerCode" model="vm.customer.referralCustomerCode" ng-blur="vm.getCustomerByCode(vm.customer.referralCustomerCode)" data-validation-custom-message="输入的转介绍学员编号不正确" css="col-md-12" ng-disabled="vm.customer.sourceMainType!=617" uib-popover="注意：只能输入学员编号，转介绍填写后无法修改，请正确填写" popover-trigger="mouseenter"/>
                             </div>
                             <div class="col-md-2 mcs-padding-0">
                                 <mcs-label text="{{vm.customer.referralCustomerName}}" />
@@ -229,7 +257,7 @@
                         <div class="form-group">
                             <mcs-label text="vip等级" css="col-md-3" />
                             <div class="col-md-9 mcs-padding-0">
-                                <ppts-select category="vipLevel" model="vm.customer.vipLevel" />
+                                <mcs-select category="vipLevel" model="vm.customer.vipLevel" disabled="vm.customer.vipType==3"/>
                             </div>
                         </div>
                     </div>
@@ -237,18 +265,17 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <mcs-label text="是否复读" css="col-md-3" />
+                            <mcs-label text="联系方式" css="col-md-3" />
                             <div class="col-md-9">
-                                <ppts-radiobutton-group category="ifElse" model="vm.customer.isStudyAgain" />
+                                <mcs-input model="vm.customer.primaryPhone.phoneNumber" css="col-md-12" phone />
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <mcs-label text="联系电话" css="col-md-3" />
+                            <mcs-label text="是否复读" css="col-md-3" />
                             <div class="col-md-9">
-                                <mcs-input model="vm.customer.primaryPhone.phoneNumber" css="col-sm-6 mcs-input-width-50 mcs-margin-right-10" placeholder="主要联系电话" />
-                                <mcs-input model="vm.customer.secondaryPhone.phoneNumber" css="col-sm-6 mcs-input-width-50 mcs-margin-right-0 pull-right" placeholder="辅助联系电话" />
+                                <ppts-radiobutton-group category="ifElse" model="vm.customer.isStudyAgain" />
                             </div>
                         </div>
                     </div>

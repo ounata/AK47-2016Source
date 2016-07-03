@@ -11,80 +11,80 @@
                     </div>
                 </div>
                 <div class="page-header">
-                    <span>学员姓名：{{ vm.customer.customerName }}</span>
+                    <span>学员姓名{{ vm.customer.customerName }}</span>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-3">
-                        <mcs-label text="学年度：" css="col-sm-6" />
+                        <mcs-label text="学年度" css="col-sm-6" />
                         <div class="col-sm-6 mcs-padding-0">
-                            <mcs-label text="{{vm.score.studyYear | studyYear}}" model="vm.score.studyYear" />
+                            <p class="form-control-static">{{vm.score.studyYear | studyYear}}</p>
                         </div>
                     </div>
                     <div class="col-sm-3">
-                        <mcs-label text="学期：" css="col-sm-6" />
+                        <mcs-label text="学期" css="col-sm-6" />
                         <div class="col-sm-6 mcs-padding-0">
-                            <mcs-label text="{{vm.score.studyTerm | studyTerm}}" model="vm.score.studyTerm" />
+                            <p class="form-control-static">{{vm.score.studyTerm | studyTerm}}</p>
                         </div>
                     </div>
                     <div class="col-sm-3">
-                        <mcs-label text="考试年级：" css="col-sm-6" />
+                        <mcs-label text="考试年级" css="col-sm-6" />
                         <div class="col-sm-6 mcs-padding-0">
-                            <mcs-label text="{{vm.score.scoreGrade | grade}}" model="vm.score.scoreGrade" />
+                            <p class="form-control-static">{{vm.score.scoreGrade | grade}}</p>
                         </div>
                     </div>
                     <div class="col-sm-3" ng-show="vm.score.studyStage">
-                        <mcs-label text="考试学段：" css="col-sm-6" />
+                        <mcs-label text="考试学段" css="col-sm-6" />
                         <div class="col-sm-6 mcs-padding-0">
-                            <mcs-label text="{{vm.score.studyStage | studyStage}}" model="vm.score.studyStage" />
+                            <p class="form-control-static">{{vm.score.studyStage | studyStage}}</p>
                         </div>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-3">
-                        <mcs-label text="考试类型：" css="col-sm-6" />
+                        <mcs-label text="考试类型" css="col-sm-6" />
                         <div class="col-sm-6 mcs-padding-0">
-                            <mcs-label text="{{vm.score.scoreType | scoreType}}" model="vm.score.scoreType" />
+                            <p class="form-control-static">{{vm.score.scoreType | scoreType}}</p>
                             <span ng-if="vm.score.otherScoreTypeName">-</span> {{vm.score.otherScoreTypeName}}
                         </div>
                     </div>
                     <div class="col-sm-3" ng-if="vm.score.admissionType">
-                        <mcs-label text="录入院校类别：" css="col-sm-6" />
+                        <mcs-label text="录入院校类别" css="col-sm-6" />
                         <div class="col-sm-6 mcs-padding-0">
-                            <mcs-label text="{{vm.score.admissionType | admissionType}}" model="vm.score.admissionType" />
+                            <p class="form-control-static">{{vm.score.admissionType | admissionType}}</p>
                         </div>
                     </div>
                     <div class="col-sm-3" ng-if="vm.score.admissionSchool">
-                        <mcs-label text="录入院校：" css="col-sm-6" />
+                        <mcs-label text="录入院校" css="col-sm-6" />
                         <div class="col-sm-6 mcs-padding-0">
-                            <mcs-label text="{{vm.score.admissionSchool}}" model="vm.score.admissionSchool" />
+                            <p class="form-control-static">{{vm.score.admissionSchool}}</p>
                         </div>
                     </div>
                     <div class="col-sm-3" ng-if="vm.score.scoreType == '14'">
-                        <mcs-label text="属985/211院校：" css="col-sm-6" />
+                        <mcs-label text="属985/211院校" css="col-sm-6" />
                         <div class="col-sm-6 mcs-padding-0">
-                            <mcs-label text="{{vm.score.isKeyCollege | ifElse}}" model="vm.score.isKeyCollege" />
+                            <p class="form-control-static">{{vm.score.isKeyCollege | ifElse}}</p>
                         </div>
                     </div>
                     <div class="col-sm-3" ng-show="vm.score.scoreType=='15'">
-                        <mcs-label text="考试月份：" css="col-sm-6" />
+                        <mcs-label text="考试月份" css="col-sm-6" />
                         <div class="col-sm-6 mcs-padding-0">
-                            <mcs-label text="{{vm.score.examineMonth | examMonth}}" model="vm.score.examineMonth" />
+                            <p class="form-control-static">{{vm.score.examineMonth | examMonth}}</p>
                         </div>
                     </div>
                 </div>
 
                 <div class="form-group" ng-show="vm.score.scoreType == '14'">
                     <div class="col-sm-3" ng-show="vm.score.studentType">
-                        <mcs-label text="学员类型：" css="col-sm-6" />
+                        <mcs-label text="学员类型" css="col-sm-6" />
                         <div class="col-sm-6 mcs-padding-0">
-                            <mcs-label text="{{vm.score.studentType | examCustomerType}}" model="vm.score.studentType" />
+                            <p class="form-control-static">{{vm.score.studentType | examCustomerType}}</p>
                         </div>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="col-sm-3">
-                        <mcs-label text="成绩：" css="col-sm-6" />
+                        <mcs-label text="成绩" css="col-sm-6" />
                     </div>
                 </div>
             </div>

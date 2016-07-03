@@ -15,7 +15,7 @@ namespace PPTS.Data.Customers.Entities
     [Serializable]
     [ORTableMapping("CM.CustomerParentRelations", "CM.CustomerParentRelations_Current")]
     [DataContract]
-    public class CustomerParentRelation : IVersionDataObjectWithoutID, IEntityWithCreator
+    public class CustomerParentRelation : IVersionDataObjectWithoutID, IEntityWithCreator, IEntityWithModifier
     {
         public CustomerParentRelation()
         {
@@ -107,6 +107,40 @@ namespace PPTS.Data.Customers.Entities
         [SqlBehavior(BindingFlags = ClauseBindingFlags.Select | ClauseBindingFlags.Where)]
         [DataMember]
         public DateTime CreateTime
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 最后修改人ID
+        /// </summary>
+        [ORFieldMapping("ModifierID")]
+        [DataMember]
+        public string ModifierID
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 最后修改人姓名
+        /// </summary>
+        [ORFieldMapping("ModifierName")]
+        [DataMember]
+        public string ModifierName
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 最后修改时间
+        /// </summary>
+        [ORFieldMapping("ModifyTime", UtcTimeToLocal = true)]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.All & ~ClauseBindingFlags.Update, DefaultExpression = "GETUTCDATE()", ForceUseDefaultExpression = true)]
+        [DataMember]
+        public DateTime ModifyTime
         {
             get;
             set;

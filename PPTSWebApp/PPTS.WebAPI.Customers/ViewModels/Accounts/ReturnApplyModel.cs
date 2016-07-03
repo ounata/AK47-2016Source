@@ -1,4 +1,5 @@
-﻿using MCS.Library.Net.SNTP;
+﻿using MCS.Library.Core;
+using MCS.Library.Net.SNTP;
 using MCS.Library.OGUPermission;
 using PPTS.Data.Common.Security;
 using PPTS.Data.Customers;
@@ -75,6 +76,8 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
             AccountModel account = AccountModel.LoadByAccountID(expense.AccountID);
             if (account == null)
                 throw new Exception("当前返还的服务费对应的账户不存在");
+
+            this.ApplyNo = Helper.GetApplyNo("FH");
             this.AccountID = account.AccountID;
             this.AccountCode = account.AccountCode;
 
@@ -100,7 +103,7 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
         public static ReturnApplyModel Load(CustomerModel customer)
         {
             ReturnApplyModel model = new ReturnApplyModel();
-            model.ApplyID = Guid.NewGuid().ToString().ToUpper();
+            model.ApplyID = UuidHelper.NewUuidString();
             model.CampusID = customer.CampusID;
             model.CampusName = customer.CampusName;
             model.CustomerID = customer.CustomerID;

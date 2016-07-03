@@ -59,6 +59,9 @@ namespace MCS.Library.SOA.DataObjects.Security.Adapters
 
     public static class RolesFunctionsImporter
     {
+        private const int StartColumn = 2;
+        private const int StartRow = 1;
+
         private const string ImportedTag = "Imported";
 
         public static void ImportRolesAndPermissions(this SCApplication app, WorkSheet sheet, Action<RolesFunctionsImportContext> callerAction = null)
@@ -70,14 +73,14 @@ namespace MCS.Library.SOA.DataObjects.Security.Adapters
 
         public static void ImportRolesAndPermissions(this SCApplication app, DataTable table, Action<RolesFunctionsImportContext> callerAction = null)
         {
-            if (table.Columns.Count > 3)
+            if (table.Columns.Count > StartColumn)
             {
                 ProcessProgress.Current.MinStep = 0;
                 ProcessProgress.Current.MaxStep = 1;
                 ProcessProgress.Current.CurrentStep = 0;
                 ProcessProgress.Current.Response();
 
-                SCRolesAndPermissions rolesAndPermissions = table.GetRolesAndPermissions();
+                SCRolesAndPermissions rolesAndPermissions = table.GetRolesAndPermissions(app.CurrentPermissions);
 
                 SCRoleCollection roles = rolesAndPermissions.Roles;
                 SCPermissionCollection permissions = rolesAndPermissions.Permissions;
@@ -347,16 +350,16 @@ namespace MCS.Library.SOA.DataObjects.Security.Adapters
             return result;
         }
 
-        public static SCRolesAndPermissions GetRolesAndPermissions(this DataTable table)
+        public static SCRolesAndPermissions GetRolesAndPermissions(this DataTable table, SCPermissionCollection existedPermissions)
         {
             table.NullCheck("table");
 
             SCRoleCollection roles = new SCRoleCollection();
-            SCPermissionCollection permissions = table.GetPermissions();
+            SCPermissionCollection permissions = table.GetPermissions(existedPermissions);
 
-            if (table.Columns.Contains("权限点/数据权限") && table.Columns.Count > 3)
+            if (table.Columns.Contains("权限点/数据权限") && table.Columns.Count > StartColumn)
             {
-                for (int i = 3; i < table.Columns.Count; i++)
+                for (int i = StartColumn; i < table.Columns.Count; i++)
                 {
                     string roleName = table.Columns[i].ColumnName;
 
@@ -374,7 +377,7 @@ namespace MCS.Library.SOA.DataObjects.Security.Adapters
                             {
                                 string cellValue = row[roleName].ToString();
 
-                                if (cellValue.IsNullOrEmpty() || cellValue.Trim().ToUpper() == "N")
+                                if (cellValue.IsNullOrEmpty() || cellValue.Trim().IsNullOrEmpty() || cellValue.Trim().ToUpper() == "N")
                                     continue;
 
                                 role.CurrentPermissions.Append(permission);
@@ -391,9 +394,9 @@ namespace MCS.Library.SOA.DataObjects.Security.Adapters
         {
             SCRoleCollection roles = new SCRoleCollection();
 
-            if (table != null && table.Columns.Count > 3)
+            if (table != null && table.Columns.Count > StartColumn)
             {
-                for (int i = 3; i < table.Columns.Count; i++)
+                for (int i = StartColumn; i < table.Columns.Count; i++)
                 {
                     string roleName = table.Columns[i].ColumnName;
 
@@ -406,8 +409,10 @@ namespace MCS.Library.SOA.DataObjects.Security.Adapters
             return roles;
         }
 
-        public static SCPermissionCollection GetPermissions(this DataTable table)
+        public static SCPermissionCollection GetPermissions(this DataTable table, SCPermissionCollection existedPermissions)
         {
+            Dictionary<string, SCPermission> existedDict = existedPermissions.ToDictionaryByCodeName();
+
             SCPermissionCollection permissions = new SCPermissionCollection();
 
             if (table != null && table.Columns.Contains("权限点/数据权限"))
@@ -418,9 +423,16 @@ namespace MCS.Library.SOA.DataObjects.Security.Adapters
 
                     if (permissionName.IsNotEmpty())
                     {
-                        SCPermission permission = new SCPermission();
+                        SCPermission permission = null;
 
-                        permissions.Add(InitProperties(permission, permissionName));
+                        if (existedDict.TryGetValue(permissionName, out permission) == false)
+                        {
+                            permission = new SCPermission();
+
+                            InitProperties(permission, permissionName);
+                        }
+
+                        permissions.Add(permission);
                     }
                 }
             }
@@ -488,7 +500,7 @@ namespace MCS.Library.SOA.DataObjects.Security.Adapters
         {
             for (int i = 1; i < sheet.Columns.Count; i++)
             {
-                object cellValue = sheet.Cells[1, i].Value;
+                object cellValue = sheet.Cells[StartRow, i].Value;
 
                 if (cellValue != null)
                     table.Columns.Add(cellValue.ToString());
@@ -497,19 +509,9 @@ namespace MCS.Library.SOA.DataObjects.Security.Adapters
             }
         }
 
-        private static T InitProperties<T>(T obj, string objName) where T : SCBase
-        {
-            obj.ID = UuidHelper.NewUuidString();
-            obj.DisplayName = obj.Name = objName;
-            obj.CodeName = objName;
-            obj.Properties.TrySetValue("Comment", "Imported");
-
-            return obj;
-        }
-
         private static void BuildRows(WorkSheet sheet, DataTable table)
         {
-            for (int rowIndex = 2; rowIndex < sheet.Rows.Count; rowIndex++)
+            for (int rowIndex = StartRow + 1; rowIndex < sheet.Rows.Count; rowIndex++)
             {
                 DataRow row = null;
 
@@ -534,6 +536,16 @@ namespace MCS.Library.SOA.DataObjects.Security.Adapters
                     }
                 }
             }
+        }
+
+        private static T InitProperties<T>(T obj, string objName) where T : SCBase
+        {
+            obj.ID = UuidHelper.NewUuidString();
+            obj.DisplayName = obj.Name = objName;
+            obj.CodeName = objName;
+            obj.Properties.TrySetValue("Comment", "Imported");
+
+            return obj;
         }
 
         private static void DoOperation(SchemaObjectBase relativeObject, string description, Action<RolesFunctionsImportContext> callerAction, Action innerAction)

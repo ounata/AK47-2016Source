@@ -3,8 +3,8 @@
         ppts.config.dataServiceConfig.productDataService], function (helper) {
 
             helper.registerController('orderExchangeController', [
-                '$scope', '$state', '$stateParams','$window', 'dataSyncService', 'purchaseCourseDataService','productDataService',
-                function ($scope, $state, $stateParams,$window, dataSyncService, purchaseCourseDataService, productDataService) {
+                '$scope', '$state', '$stateParams', '$window', 'dataSyncService', 'utilService', 'purchaseCourseDataService', 'productDataService',
+                function ($scope, $state, $stateParams, $window, dataSyncService, utilService, purchaseCourseDataService, productDataService) {
 
                     var vm = this;
                     var itemId = $stateParams.itemid;
@@ -69,11 +69,9 @@
 
 
                     vm.search = function () {
-                        console.log(vm.criteria)
 
                         productDataService.getAllProducts(vm.criteria, function (result) {
-                            console.log(result)
-
+                            //console.log(result)
                             vm.data.rows = result.queryResult.pagedData;
                             dataSyncService.updateTotalCount(vm, result.queryResult);
                             $scope.$broadcast('dictionaryReady');
@@ -81,23 +79,38 @@
                     };
 
                     vm.next = function () {
+
+                        if (utilService.showMessage(vm, !vm.criteria.campusID, '没有选择校区不允许进行购买！')) { return; }
+                        if (!utilService.selectOneRow(vm)) { return; }
+
                         var productId = vm.data.rowsSelected[0].productID;
-                        $state.go('ppts.purchaseExchangeAmount', { itemid: itemId,type:type, productid: productId });
+
+                        var param = $.extend($stateParams, { itemid: itemId,type:type, productid: productId });
+
+                        $state.go('ppts.purchaseExchangeAmount-'+type, param);
+
                     };
 
-                    vm.cancel = function () { $window.history.back();};
+                    vm.cancel = function () { $window.history.back(); };
 
-
-
-
+                    var permisstionFilter = function () {
+                        //权限指定
+                        vm.criteria.branch = ppts.user.branchId;
+                        vm.criteria.campusID = ppts.user.campusId;
+                        if (ppts.user.branchId) { vm.disabledlevel = 1; }
+                        if (ppts.user.campusId) { vm.disabledlevel = 2; }
+                    };
 
                     var init = (function () {
 
                         dataSyncService.initCriteria(vm);
+
+                        permisstionFilter();
+
                         
                         purchaseCourseDataService.getOrderItem(itemId, function (presult) {
 
-                            console.log(presult);
+                            //console.log(presult);
 
                             vm.customer = { customerName: presult.entity.customerName, customerCode: presult.entity.customerCode };
 

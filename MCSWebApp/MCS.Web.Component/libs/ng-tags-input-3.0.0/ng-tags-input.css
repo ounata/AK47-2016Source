@@ -23,10 +23,11 @@ tags-input .tags {
   overflow: hidden;
   word-wrap: break-word;
   cursor: text;
-  background-color: #fff;
+  /*background-color: #fff;
   border: 1px solid darkgray;
-  box-shadow: 1px 1px 1px 0 lightgray inset;
+  box-shadow: 1px 1px 1px 0 lightgray inset;*/
   height: 100%;
+  width: 100%;
 }
 /*tags-input .tags.focused {
   outline: none;
@@ -63,7 +64,7 @@ tags-input .tags .tag-item .remove-button {
   background: none;
   cursor: pointer;
   vertical-align: middle;
-  font: bold 16px Arial, sans-serif;
+  /*font: bold 16px Arial, sans-serif;*/
   color: #585858;
 }
 tags-input .tags .tag-item .remove-button:active {
@@ -77,8 +78,8 @@ tags-input .tags .input, tags-input .tags .input:focus {
   padding: 0;
   padding-left: 5px;
   float: left;
-  height: 26px;
-  font: 14px "Helvetica Neue", Helvetica, Arial, sans-serif;
+  height: 30px;
+  /*font: 14px "Helvetica Neue", Helvetica, Arial, sans-serif;*/
 }
 tags-input .tags .input.invalid-tag {
   color: #ff0000;
@@ -154,7 +155,7 @@ tags-input .autocomplete .suggestion-item.selected em {
 }
 tags-input .autocomplete .suggestion-item em {
   font: normal bold 16px "Helvetica Neue", Helvetica, Arial, sans-serif;
-  color: #000;
+  color: #d15b47;
   background-color: #fff;
 }
 

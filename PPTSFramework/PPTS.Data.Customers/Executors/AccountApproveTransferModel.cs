@@ -37,8 +37,16 @@ namespace PPTS.Data.Customers.Executors
         public void PrepareApprove()
         {
             AccountTransferApply apply = AccountTransferApplyAdapter.Instance.LoadByApplyID(this.BillID);
+            this.PrepareApprove(apply);
+        }
+
+        public void PrepareApprove(AccountTransferApply apply)
+        {
             if (apply == null)
                 throw new Exception(string.Format("转让申请单ID为[{0}]的记录不存在", this.BillID));
+
+            this.BillID = apply.ApplyID;
+            this.BillCode = apply.ApplyNo;
 
             this.Apply = apply;
             Account account = AccountAdapter.Instance.LoadByAccountID(this.Apply.AccountID);

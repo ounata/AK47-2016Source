@@ -86,7 +86,7 @@
 
                 dataSyncService.initCriteria(vm);
 
-                dataSyncService.injectPageDict(['ifElse']);
+                dataSyncService.injectDynamicDict('ifElse');
 
                 //关闭窗口
                 vm.close = function () {
@@ -131,8 +131,8 @@
                         });
                     }
                     else {
-                        mcsDialogService.error(
-                              { title: 'Error', message: "请选择一个学生！" }
+                        mcsDialogService.info(
+                              { title: '提示', message: "请选择一个学生！" }
                           )
                     }
                 }

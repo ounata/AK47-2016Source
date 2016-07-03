@@ -10,35 +10,35 @@
                 </div>
             </div>
             <div class="form-body">
-                <div class="form-group">
-                    <mcs-label text="校区" />
+                <div class="form-group horizontal bordered">
+                    <mcs-label text="校区" css="col-md-3" />
                     <div class="col-md-4">
                         {{ vm.result.campusName }}
                     </div>
                 </div>
-                <div class="form-group">
-                    <mcs-label text="订单编号" />
-                    <div class="col-md-8">
-                        <ppts-select category="asset" caption="请选择" model="vm.result.acc.assetID" callback="vm.selectAssetClick(item)" css="col-xs-7 col-sm-7" />
-                     </div>
-                </div>
-                <div class="form-group">
-                    <mcs-label text="上课年级" />
+                <div class="form-group horizontal bordered">
+                    <mcs-label text="订单编号" css="col-md-3" />
                     <div class="col-md-4">
-                         {{vm.result.acc.gradeName}}
+                        <mcs-select category="asset" caption="请选择" model="vm.result.acc.assetID" callback="vm.selectAssetClick(item)" css="mcs-padding-0" />
                     </div>
                 </div>
-                <div class="form-group">
-                    <mcs-label text="上课科目" />
+                <div class="form-group horizontal bordered">
+                    <mcs-label text="上课年级" css="col-md-3" />
                     <div class="col-md-4">
-                        <ppts-select category="subSubject" model="vm.result.acc.subject" ng-show="vm.showSubjectSelect" callback="vm.selectSubjectClick(item)" css="col-xs-7 col-sm-7" />
+                        {{vm.result.acc.gradeName}}
+                    </div>
+                </div>
+                <div class="form-group horizontal bordered">
+                    <mcs-label text="上课科目" css="col-md-3" />
+                    <div class="col-md-4">
+                        <mcs-select category="subSubject" model="vm.result.acc.subject" ng-show="vm.showSubjectSelect" callback="vm.selectSubjectClick(item)" css="mcs-padding-0" />
                         <span ng-show="!vm.showSubjectSelect">{{ vm.result.acc.subjectName }}</span>
                     </div>
                 </div>
-                <div class="form-group">
-                    <mcs-label text="上课教师" />
+                <div class="form-group horizontal bordered">
+                    <mcs-label text="上课教师" css="col-md-3" />
                     <div class="col-md-4">
-                        <ppts-select category="teacher" ng-show="vm.showTchSelect" model="vm.result.acc.teacherID" callback="vm.selectTeacherClick(item)" css="col-xs-7 col-sm-7" />
+                        <mcs-select category="teacher" ng-show="vm.showTchSelect" model="vm.result.acc.teacherID" callback="vm.selectTeacherClick(item)" css="mcs-padding-0" />
                         <span ng-show="!vm.showTchSelect">{{ vm.result.acc.teacherName }}</span>
                     </div>
                 </div>

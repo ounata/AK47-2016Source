@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.ServiceModel;
-using System.Text;
 using PPTS.Contracts.UnionPay.Operations;
 using System.ServiceModel.Web;
 using PPTS.Services.UnionPay.ProcessCSVFile;
@@ -11,10 +6,9 @@ using PPTS.Data.Customers.Entities;
 using System.Reflection;
 using PPTS.Services.UnionPay.Model;
 using PPTS.Services.UnionPay.Description;
-using MCS.Library.Data.DataObjects;
-using PPTS.Data.Customers.Adapters;
 using PPTS.Services.UnionPay.Extensions;
 using MCS.Library.WcfExtensions;
+using PPTS.Data.Customers;
 
 namespace PPTS.Services.UnionPay.Services
 {
@@ -46,7 +40,7 @@ namespace PPTS.Services.UnionPay.Services
                     MerchantID = model.MerchantNumber,
                     POSID = model.TerminalNo,
                     Money = model.Amount,
-                    FromType = UnionPaySourceType.Async.GetHashCode().ToString()
+                    FromType = Convert.ToInt32(PaySourceType.Async).ToString()
                 };
                 recordCollection.Add(record);
             }

@@ -7,7 +7,9 @@
                     var vm = this;
 
                     vm.id = $stateParams.id;
-
+                    //vm.processID = $stateParams.processID;
+                    //vm.activityID = $stateParams.activityID;
+                    //vm.resourceID = $stateParams.resourceID;
 
                     custserviceDataViewService.configCustomerServiceItemListHeaders(vm);
                     //custserviceDataViewService.configCustomerServiceItemAllListHeaders(vm);
@@ -21,17 +23,22 @@
                         }
                         vm.customer = result.customer;
                         vm.pCustomer = result.pCustomer;
-                        dataSyncService.injectPageDict(['ifElse']);
+                        dataSyncService.injectDynamicDict('ifElse');
 
                         custserviceDataViewService.initCustomerServiceItemAllList(vm, function () {
                         });
 
-                        //custserviceDataViewService.initCustomerServiceItemAllList(vm, function () {
-                        //});
+                        
                         
                     });
 
-                    
+                    vm.edit = function () {
+                        $state.go('ppts.custservice-edit', { id: vm.customerService.serviceID });
+                    };
+
+                    vm.nextPerson = function () {
+                        $state.go('ppts.custservice-nextProcess', { id: vm.customerService.serviceID });
+                    };
 
                     vm.overProcess = function () {
 

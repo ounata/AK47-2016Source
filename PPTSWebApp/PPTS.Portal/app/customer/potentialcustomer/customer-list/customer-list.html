@@ -8,7 +8,7 @@
             <ppts-select-branch model="vm.criteria.orgIds" />
         </div>
         <div class="col-md-6">
-            <mcs-input placeholder="输入学员、家长姓名，学员编号，联系方式进行查询" uib-tooltip="学员、家长姓名，学员编号，联系方式" model="vm.criteria.keyword" css="mcs-input-search mcs-width-full" />
+            <mcs-input placeholder="请输入学员、家长姓名，学员编号，家长联系电话进行查询" uib-popover="请输入学员、家长姓名，学员编号，家长联系电话进行查询" model="vm.criteria.keyword" css="mcs-input-search mcs-width-full" />
         </div>
     </div>
 </ppts-dynamic-content>
@@ -17,10 +17,11 @@
 <ppts-dynamic-content template="toolbar.tpl.html">
     <mcs-button category="add" text="新增潜在客户" ppts-job-functions="新增潜在客户" click="$state.go('ppts.customer-add')"></mcs-button>
     <mcs-button category="add" text="新增跟进记录" ppts-job-functions="新增跟进记录" click="vm.addFollow()"></mcs-button>
-    <mcs-button icon="user-plus" css="btn-success" text="分配咨询师" ppts-job-functions="分配咨询师" click="vm.assign(vm.relationType.consultant)"></mcs-button>
-    <mcs-button icon="female" css="btn-success" text="分配坐席" ppts-job-functions="分配坐席" click="vm.assign(vm.relationType.callcenter)"></mcs-button>
-    <mcs-button icon="mail-forward" css="btn-yellow" text="划转资源" ppts-job-functions="划转资源" click="vm.transfer()"></mcs-button>
+    <mcs-dropdown-button title="分 配" items="vm.relations" icon="user-plus" ppts-job-functions="分配咨询师,分配咨询师-本校区,分配咨询师-本部门,分配坐席-本部门" category="success"></mcs-dropdown-button>
+    <mcs-button icon="mail-forward" css="btn-yellow" text="划转资源" ppts-job-functions="划转资源,划转资源-本部门,划转资源-本校区,划转资源-本分公司,划转资源-全国" click="vm.transfer()"></mcs-button>
     <mcs-button icon="cny" css="btn-purple" text="充 值" ppts-job-functions="充值" click="vm.pay()"></mcs-button>
+    <mcs-button category="add" text="批量导入资源" ppts-job-functions="批量导入潜在客户" click="vm.import()"></mcs-button>
+    <!--<mcs-button category="export" support-disabled click="vm.export()"></mcs-button>-->
 </ppts-dynamic-content>
 <!-- /结束：潜客列表.工具栏 -->
 <!-- #开始：潜客列表.数据表格 -->

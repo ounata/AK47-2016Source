@@ -1,10 +1,12 @@
-﻿using MCS.Library.Core;
+﻿using MCS.Library.Caching;
+using MCS.Library.Core;
 using MCS.Library.OGUPermission;
 using MCS.Library.Principal;
 using PPTS.Data.Common.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
@@ -136,6 +138,40 @@ namespace PPTS.Data.Common.Security
 
         #region 功能和岗位
         /// <summary>
+        /// 得到经过Filter过滤通过的岗位功能点
+        /// </summary>
+        /// <param name="principal"></param>
+        /// <returns></returns>
+        public static HashSet<string> MatchedJobFunctions(this IPrincipal principal)
+        {
+            return (HashSet<string>)ObjectContextCache.Instance.GetOrAddNewValue("PPTSMatchedJobFunctions", (cache, key) =>
+            {
+                HashSet<string> result = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+                cache.Add("PPTSMatchedJobFunctions", result);
+
+                return result;
+            });
+        }
+
+        /// <summary>
+        /// 得到经过Filter过滤通过的全部功能点
+        /// </summary>
+        /// <param name="principal"></param>
+        /// <returns></returns>
+        public static HashSet<string> MatchedAllFunctions(this IPrincipal principal)
+        {
+            return (HashSet<string>)ObjectContextCache.Instance.GetOrAddNewValue("PPTSMatchedAllFunctions", (cache, key) =>
+            {
+                HashSet<string> result = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+                cache.Add("PPTSMatchedAllFunctions", result);
+
+                return result;
+            });
+        }
+
+        /// <summary>
         /// 得到用户所有的功能
         /// </summary>
         /// <param name="user"></param>
@@ -210,6 +246,12 @@ namespace PPTS.Data.Common.Security
             {
                 string jobID = HttpContext.Current.Request.Headers.GetValue(PPTSJob.JobHeaderTag, string.Empty);
 
+                if (jobID.IsNullOrEmpty())
+                    jobID = HttpContext.Current.Request.QueryString.GetValue(PPTSJob.JobHeaderTag, string.Empty);
+
+                if (jobID.IsNullOrEmpty())
+                    jobID = HttpContext.Current.Request.Form.GetValue(PPTSJob.JobHeaderTag, string.Empty);
+
                 if (jobID.IsNotEmpty())
                     result = user.Jobs()[jobID];
             }
@@ -233,7 +275,7 @@ namespace PPTS.Data.Common.Security
             IGroup result = null;
 
             if (job != null)
-                result = OguMechanismFactory.GetMechanism().GetObjects<IGroup>(SearchOUIDType.Guid, job.ID).SingleOrDefault();
+                result = OguMechanismFactory.GetMechanism().GetObjects<IGroup>(SearchOUIDType.Guid, job.ID).FirstOrDefault();
 
             return result;
         }
@@ -301,7 +343,7 @@ namespace PPTS.Data.Common.Security
             if (abbr.IsNotEmpty())
                 job.Name = string.Format("{0} - {1}", job.Name, abbr);
 
-            IApplication app = OguPermissionSettings.GetConfig().PermissionFactory.GetApplications(ConnectionDefine.PPTSApplicationName).SingleOrDefault();
+            IApplication app = OguPermissionSettings.GetConfig().PermissionFactory.GetApplications(ConnectionDefine.PPTSApplicationName).FirstOrDefault();
 
             if (app != null)
             {
@@ -505,7 +547,7 @@ namespace PPTS.Data.Common.Security
             IOrganization org = null;
 
             if (job != null && job.ParentOrganizationID.IsNotEmpty())
-                org = OguMechanismFactory.GetMechanism().GetObjects<IOrganization>(SearchOUIDType.Guid, job.ParentOrganizationID).SingleOrDefault();
+                org = OguMechanismFactory.GetMechanism().GetObjects<IOrganization>(SearchOUIDType.Guid, job.ParentOrganizationID).FirstOrDefault();
 
             return org;
         }
@@ -555,6 +597,47 @@ namespace PPTS.Data.Common.Security
             });
 
             return result;
+        }
+
+        /// <summary>
+        /// 根据岗位的组织向上爬，将所有的校区、分公司、大区以及总部填充到流程上下文中
+        /// </summary>
+        /// <param name="job"></param>
+        /// <param name="runtimeParameters"></param>
+        /// <returns></returns>
+        public static T FillRuntimeParameters<T>(this PPTSJob job, T runtimeParameters) where T : IDictionary<string, object>
+        {
+            if (job != null && runtimeParameters != null)
+                job.Organization().FillRuntimeParameters(runtimeParameters);
+
+            return runtimeParameters;
+        }
+
+        /// <summary>
+        /// 根据岗位的组织向上爬，将所有的校区、分公司、大区以及总部填充到流程上下文中
+        /// </summary>
+        /// <param name="job"></param>
+        /// <param name="runtimeParameters"></param>
+        /// <returns></returns>
+        public static T FillRuntimeParameters<T>(this IOrganization root, T runtimeParameters) where T : IDictionary<string, object>
+        {
+            if (root != null && runtimeParameters != null)
+            {
+                EnumItemDescriptionList desps = EnumItemDescriptionAttribute.GetDescriptionList(typeof(DepartmentType));
+
+                root.ProbeParents(org =>
+                {
+                    if (org.IsDataScope(desps))
+                    {
+                        DepartmentType deptType = org.PPTSDepartmentType();
+                        runtimeParameters[deptType.ToString() + "ID"] = org.ID;
+                    }
+
+                    return true;
+                });
+            }
+
+            return runtimeParameters;
         }
 
         /// <summary>
@@ -651,7 +734,27 @@ namespace PPTS.Data.Common.Security
         /// <returns></returns>
         public static string GetFirstInitial(this IOrganization org)
         {
-            return org.Properties.GetValue("SimplePinyin", "B");
+            return org.Properties.GetValue("SimplePinyin", "HB");
+        }
+
+        /// <summary>
+        /// 获得法人实体名称
+        /// </summary>
+        /// <param name="org"></param>
+        /// <returns></returns>
+        public static string GetLegalOwner(this IOrganization org)
+        {
+            return org.Properties.GetValue("LegalEntity", string.Empty);
+        }
+
+        /// <summary>
+        /// 获得办公地址信息
+        /// </summary>
+        /// <param name="org"></param>
+        /// <returns></returns>
+        public static string GetOfficeAddress(this IOrganization org)
+        {
+            return org.Properties.GetValue("Address", string.Empty);
         }
 
         public static string GetShortName(this IOrganization org)
@@ -670,12 +773,20 @@ namespace PPTS.Data.Common.Security
         {
             IOrganization result = null;
             if (org != null)
-                result = OguMechanismFactory.GetMechanism().GetObjects<IOrganization>(SearchOUIDType.Guid, org.ID).SingleOrDefault();
+                result = OguMechanismFactory.GetMechanism().GetObjects<IOrganization>(SearchOUIDType.Guid, org.ID).FirstOrDefault();
             return result;
         }
         #endregion 组织机构扩展
 
         #region 人员扩展
+        public static string GetUserMobile(this IUser user)
+        {
+            string result = null;
+            if (user != null)
+                result = user.Properties.GetValue("MP", string.Empty);
+            return result;
+        }
+
         //public static IUser ToBaseUser(this PPTSUser user)
         //{
         //    IUser result = null;

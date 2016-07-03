@@ -8,25 +8,30 @@
             <ppts-select-branch model="vm.criteria.orgIds" />
         </div>
         <div class="col-md-4">
-            <mcs-input placeholder="学员姓名" uib-tooltip="学员姓名" model="vm.criteria.customerName" css="mcs-input-search mcs-width-full" />
+            <mcs-input placeholder="学员姓名" uib-popover="学员姓名" model="vm.criteria.customerName" css="mcs-input-search mcs-width-full" />
         </div>
         <div class="col-md-4">
-            <mcs-input placeholder="学员编号" uib-tooltip="学员编号" model="vm.criteria.customerCode" css="mcs-input-search mcs-width-full" />
+            <mcs-input placeholder="学员编号" uib-popover="学员编号" model="vm.criteria.customerCode" css="mcs-input-search mcs-width-full" />
         </div>
     </div>
     <div class="row">
         <div class="col-md-4">
-            <mcs-input placeholder="会议组织人" uib-tooltip="会议组织人" model="vm.criteria.organizerName" css="mcs-input-search mcs-width-full" />
+            <mcs-input placeholder="会议组织人" uib-popover="会议组织人" model="vm.criteria.organizerName" css="mcs-input-search mcs-width-full" />
         </div>
         <div class="col-md-4">
-            <mcs-input placeholder="咨询师姓名" uib-tooltip="咨询师姓名" model="vm.criteria.consultantName" css="mcs-input-search mcs-width-full" />
+            <mcs-input placeholder="咨询师姓名" uib-popover="咨询师姓名" model="vm.criteria.consultantName" css="mcs-input-search mcs-width-full" />
         </div>
         <div class="col-md-4">
-            <mcs-input placeholder="学管师姓名" uib-tooltip="学管师姓名" model="vm.criteria.leaveManageName" css="mcs-input-search mcs-width-full" />
+            <mcs-input placeholder="学管师姓名" uib-popover="学管师姓名" model="vm.criteria.leaveManageName" css="mcs-input-search mcs-width-full" />
         </div>
     </div>
 </ppts-dynamic-content>
 <!-- /结束：教学服务会.快速查询条件 -->
+<!-- #开始：教学服务会.工具栏 -->
+<ppts-dynamic-content template="toolbar.tpl.html">
+    <mcs-button category="export" click="vm.export()"></mcs-button>
+</ppts-dynamic-content>
+<!-- /结束：教学服务会.工具栏 -->
 <!-- #开始：教学服务会.数据表格 -->
-<mcs-datatable data="vm.data" />
+<mcs-datatable data="vm.data"  condition="vm.criteria" />
 <!-- /结束：教学服务会.数据表格 -->

@@ -1,43 +1,45 @@
-﻿<ppts-dynamic-content template="quick-search.tpl.html">
+﻿此订单为 {{vm.customer.customerName}}({{vm.customer.customerCode}}) 的订购单
+<ppts-dynamic-content template="quick-search.tpl.html">
     <div class="row">
-        <div class="col-md-4">
-            <ppts-select-branch model="vm.criteria.campusIDs" />
+        <div class="col-sm-4">
+            <!--<ppts-select-branch model="vm.criteria.campusIDs" />-->
+            <ppts-organization branch="vm.criteria.branch" campus="vm.criteria.campusID" required-level="1"  disabled-level="vm.disabledlevel" />
         </div>
-        <div class="col-md-4">
+        <div class="col-sm-4">
             <span ng-if="type==1">
-                <ppts-select category="categoryType" model="vm.criteria.categoryType" caption="产品类型" css="mcs-padding-0" />
+                <mcs-select category="categoryType" model="vm.criteria.categoryType" caption="产品类型" css="mcs-padding-0" />
             </span>
             <span ng-if="type==2">
-                <ppts-select category="categoryType" model="vm.criteria.categoryType" caption="产品类型" disabled="true" css="mcs-padding-0" />
+                <mcs-select category="categoryType" model="vm.criteria.categoryType" caption="产品类型" disabled="true" css="mcs-padding-0" />
             </span>
         </div>
-        <div class="col-md-4">
-            <ppts-select category="grade" model="vm.criteria.selectedGrades" caption="年级" css="mcs-padding-0" />
+        <div class="col-sm-4">
+            <mcs-select category="grade" model="vm.criteria.selectedGrades" caption="年级" css="mcs-padding-0" />
         </div>
     </div>
     <div class="row">
-        <div class="col-md-4">
-            <ppts-select category="subject" model="vm.criteria.selectedSubjects" caption="科目" css="mcs-padding-0" />
+        <div class="col-sm-4">
+            <mcs-select category="subject" model="vm.criteria.selectedSubjects" caption="科目" css="mcs-padding-0" />
         </div>
-        <div class="col-md-4">
-            <ppts-select category="courseLevel" model="vm.criteria.courseLevel" caption="课程级别" css="mcs-padding-0" />
+        <div class="col-sm-4">
+            <mcs-select category="courseLevel" model="vm.criteria.courseLevel" caption="课程级别" css="mcs-padding-0" />
         </div>
-        <div class="col-md-4">
-            <ppts-select category="duration" model="vm.criteria.duration" caption="课时时长" css="mcs-padding-0" />
+        <div class="col-sm-4">
+            <mcs-select category="duration" model="vm.criteria.duration" caption="课时时长" css="mcs-padding-0" />
         </div>
     </div>
 </ppts-dynamic-content>
 
 
-<!-- /结束：订购列表.查询条件 -->
-<!-- #开始：订购列表.工具条 -->
-<div class="mcs-panel-toolbar">
-
+<ppts-dynamic-content template="toolbar.tpl.html">
     <mcs-button category="edit" text="放入订单清单" click="vm.buy()"></mcs-button>
     <mcs-button category="edit" text="查看订购清单" click="vm.showShoppingCart()"></mcs-button>
+</ppts-dynamic-content>
 
+<div class="col-sm-12" ng-show="type!=2">
+    <div class="form-group row warning pull-right">
+        列表中红色字体的产品不遵循客户折扣率
+    </div>
 </div>
-<!-- /结束：订购列表.工具条 -->
-<!-- #开始：订购列表.数据表格 -->
+
 <mcs-datatable data="vm.data" />
-<!-- /结束：订购列表.数据表格 -->

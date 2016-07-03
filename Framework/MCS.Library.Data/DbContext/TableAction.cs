@@ -31,6 +31,18 @@ namespace MCS.Library.Data
             get;
             set;
         }
+
+        /// <summary>
+        /// 执行与table相关的操作
+        /// </summary>
+        /// <param name="table"></param>
+        public TableAction DoAction(DataTable table)
+        {
+            if (this.Action != null)
+                this.Action(table);
+
+            return this;
+        }
     }
 
     internal class TableActionCollection : EditableDataObjectCollectionBase<TableAction>

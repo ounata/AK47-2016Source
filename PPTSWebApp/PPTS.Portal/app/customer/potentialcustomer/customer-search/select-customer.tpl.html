@@ -8,30 +8,30 @@
     <div class="portlet">
         <div class="portlet-body">
             <div class="row">
-                <div class="col-sm-4">
-                    <ppts-select-branch model="vm.criteria.orgIds" css="mcs-width-full mcs-margin-left-5"/>
-                </div>
-                <div class="col-sm-2">
-                    <ppts-select category="grade" model="vm.criteria.grade" caption="选择年级" css="mcs-padding-0"/>
-                </div>
                 <div class="col-sm-6">
-                    <ppts-search placeholder="输入学员、家长姓名，学员编号，联系方式进行查询" uib-tooltip="学员、家长姓名，学员编号，联系方式" css="mcs-width-full" click="vm.search()" model="vm.criteria.keyword" />
+                    <ppts-select-branch model="vm.criteria.orgIds" css="mcs-width-full mcs-margin-left-5" />
+                </div>
+                <div class="col-md-6">
+                    <mcs-input placeholder="咨询师姓名" uib-popover="咨询师姓名" model="vm.criteria.consultantName" css="mcs-input-search mcs-width-full" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <ppts-search placeholder="输入学员、家长姓名，学员编号，联系方式进行查询" uib-popover="学员、家长姓名，学员编号，联系方式" popover-trigger="mouseenter" css="mcs-width-full mcs-margin-left-5" click="vm.search()" model="vm.criteria.keyword" />
                 </div>
             </div>
         </div>
     </div>
 </div>
-<div class="modal-body">
+<div class="modal-body" style="height: 500px;">
     <!-- #开始：潜客列表.数据表格 -->
     <mcs-datatable data="vm.data" />
     <!-- /结束：潜客列表.数据表格 -->
-
     <div class="alert alert-block alert-danger" ng-show="vm.errorMessage && !vm.data.rowsSelected.length">
         <button type="button" class="close" data-dismiss="alert">
             <i class="ace-icon fa fa-times"></i>
         </button>
-        <i class="ace-icon fa fa-warning"></i>
-        {{vm.errorMessage}}
+        <i class="ace-icon fa fa-warning"></i> {{vm.errorMessage}}
     </div>
 </div>
 <div class="modal-footer">

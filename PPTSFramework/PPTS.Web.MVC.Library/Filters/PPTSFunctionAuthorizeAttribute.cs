@@ -27,7 +27,18 @@ namespace PPTS.Web.MVC.Library.Filters
         {
             HashSet<string> allFunctions = DeluxeIdentity.CurrentUser.AllFunctions();
 
-            return DeluxePrincipal.ParseRoleDescription(functions, (appName, function) => allFunctions.Contains(function));
+            HashSet<string> matchedFunctions = principal.MatchedAllFunctions();
+
+            //将匹配到的功能记录下来
+            DeluxePrincipal.ParseRoleDescription(functions, (appName, function) =>
+            {
+                if (allFunctions.Contains(function))
+                    matchedFunctions.Add(function);
+
+                return false;
+            });
+
+            return matchedFunctions.Count > 0;
         }
     }
 }

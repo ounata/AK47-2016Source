@@ -65,33 +65,27 @@
                         <div class="profile-info-row">
                             <div class="profile-info-name"> 满班人数</div>
                             <div class="profile-info-value">
-                                <mcs-input placeholder="最小满班人数" model="vm.criteria.minPeoples" name="minPeopleCount" type="number" min="0" ng-pattern="/^\d+$/" />-
-                                <mcs-input placeholder="最大满班人数" model="vm.criteria.maxPeoples" name="maxPeopleCount" type="number" min="0" ng-pattern="/^\d+$/" />
-                                <span style="color:red" ng-show="vm.minPeopleCount > vm.maxPeopleCount ">最小 不能大于 最大</span>
-                                <span style="color:red" ng-show="advQuery.minPeopleCount.$invalid || advQuery.maxPeopleCount.$invalid">满班人数 非法输入</span>
+                                <mcs-datarange min="vm.criteria.minPeoples" max="vm.criteria.maxPeoples" unit="" min-text="最小满班人数" max-text="最大满班人数" datatype="int" />
+
                             </div>
                         </div>
                         <div class="profile-info-row">
                             <div class="profile-info-name"> 订购优惠金额</div>
                             <div class="profile-info-value">
-                                <mcs-input placeholder="最小优惠金额" model="vm.criteria.minDiscountAmount" name="minDiscountAmount" type="number" step="0.01" min="0" ng-pattern="/^\d{0,7}(\.\d{1,2})?$/" />-
-                                <mcs-input placeholder="最大优惠金额" model="vm.criteria.maxDiscountAmount" name="maxDiscountAmount" type="number" step="0.01" min="0" ng-pattern="/^\d{0,7}(\.\d{1,2})?$/" />
-                                <span style="color:red" ng-show="advQuery.minDiscountAmount.$invalid || advQuery.maxDiscountAmount.$invalid">订购优惠金额 非法输入</span>
+                                <mcs-datarange min="vm.criteria.minDiscountAmount" max="vm.criteria.maxDiscountAmount" unit="" min-text="最小优惠金额" max-text="最大优惠金额" datatype="int" />
+
                             </div>
                         </div>
                         <div class="profile-info-row">
                             <div class="profile-info-name"> 单价类型</div>
                             <div class="profile-info-value">
-                                <ppts-checkbox-group category="priceType" model="vm.criteria.priceTypes" clear="vm.criteria.priceTypes=[]" />
+                                <ppts-checkbox-group category="priceType" model="vm.criteria.priceTypes" />
                             </div>
                         </div>
-                        <div class="profile-info-row">
+                        <div class="profile-info-row" ng-show="vm.criteria.priceTypes.length>0">
                             <div class="profile-info-name"> 单价区间</div>
                             <div class="profile-info-value">
-                                <mcs-input placeholder="最小金额" model="vm.criteria.minPrice" name="minPrice" type="number" step="0.01" min="0" ng-pattern="/^\d{0,7}(\.\d{1,2})?$/" />-
-                                <mcs-input placeholder="最大金额" model="vm.criteria.maxPrice" name="maxPrice" type="number" step="0.01" min="0" ng-pattern="/^\d{0,7}(\.\d{1,2})?$/" />
-                                <span style="color:red" ng-show="vm.minAmount> vm.maxAmount">最小金额 不能高于 最大金额</span>
-                                <span style="color:red" ng-show="advQuery.minAmount.$invalid || advQuery.maxAmount.$invalid">单价区间 非法输入</span>
+                                <mcs-datarange min="vm.criteria.minPrice" max="vm.criteria.maxPrice" unit="" min-text="最小金额" max-text="最大金额" datatype="int" />
                             </div>
                         </div>
                     </div>
@@ -101,38 +95,39 @@
     </div>
     <!--高级查询-结束-->
 </form>
+
 <ppts-dynamic-content template="quick-search.tpl.html">
     <div class="row">
         <div class="col-md-4">
             <ppts-select-branch model="vm.criteria.campusIDs" />
         </div>
         <div class="col-md-4">
-            <ppts-select category="categories" model="vm.criteria.categories_extend" caption="产品类型" css="mcs-padding-0" />
+            <mcs-select category="categoryType" model="vm.criteria.categoryType" caption="产品类型" css="mcs-padding-0" />
         </div>
         <div class="col-md-4">
-            <ppts-select category="hasPartner" model="vm.criteria.hasPartner" caption="合作关系" css="mcs-padding-0"/>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-4">
-            <mcs-input placeholder="产品名称" uib-tooltip="产品名称" css="mcs-input-search mcs-width-full" model="vm.criteria.productName" />
-        </div>
-        <div class="col-md-4">
-            <mcs-input placeholder="产品编码" uib-tooltip="产品编码" css="mcs-input-search mcs-width-full" model="vm.criteria.productCode" />
-        </div>
-        <div class="col-md-4">
-            <mcs-input placeholder="创建人" uib-tooltip="创建人" css="mcs-input-search mcs-width-full" model="vm.criteria.creatorName" />
+            <mcs-select category="hasPartner" model="vm.criteria.hasPartner" caption="合作关系" css="mcs-padding-0"/>
         </div>
     </div>
     <div class="row">
         <div class="col-md-4">
-            <ppts-select category="productStatus" model="vm.criteria.productStatus" caption="销售状态" css="mcs-padding-0"/>
+            <mcs-input placeholder="产品名称" uib-popover="产品名称" css="mcs-input-search mcs-width-full" model="vm.criteria.productName" />
         </div>
         <div class="col-md-4">
-            <ppts-select category="timeType" model="vm.criteria.timeType" caption="时间类型" css="mcs-padding-0"/>
+            <mcs-input placeholder="产品编码" uib-popover="产品编码" css="mcs-input-search mcs-width-full" model="vm.criteria.productCode" />
+        </div>
+        <div class="col-md-4">
+            <mcs-input placeholder="创建人" uib-popover="创建人" css="mcs-input-search mcs-width-full" model="vm.criteria.creatorName" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <mcs-select category="productStatus" model="vm.criteria.productStatus" caption="销售状态" css="mcs-padding-0"/>
+        </div>
+        <div class="col-md-4">
+            <mcs-select category="timeType" model="vm.criteria.timeType" caption="时间类型" css="mcs-padding-0"/>
         </div>
         <div class="col-md-4"  ng-show="vm.criteria.timeType >0 ">
-            <ppts-daterangepicker start-date="vm.criteria.beginTime" end-date="vm.criteria.endTime" css="mcs-width-full mcs-padding-0" />
+            <mcs-daterangepicker start-date="vm.criteria.beginTime" end-date="vm.criteria.endTime" css="mcs-width-full mcs-padding-0" />
         </div>
     </div>
     
@@ -140,12 +135,12 @@
 <!-- /结束：产品列表.查询条件 -->
 <!-- #开始：产品列表.工具条 -->
 <ppts-dynamic-content template="toolbar.tpl.html">
-    <mcs-dropdown-button items="vm.products"></mcs-dropdown-button>
-    <mcs-button category="delete" click="vm.delete()"></mcs-button>
-    <mcs-button category="delete" text="止售产品" click="vm.stopProduct()"></mcs-button>
-    <mcs-button category="edit" text="延期产品" click="vm.delayProduct()"></mcs-button>
-    <mcs-button category="edit" text="复制产品" click="vm.copyProduct()"></mcs-button>
-    <mcs-button category="add" text="创建班级" ppts-job-functions="新建班级" click="vm.createClass()"></mcs-button>
+    <mcs-dropdown-button items="vm.products" ppts-job-functions="新建/删除/止售/延期产品-本分公司,新建/删除/止售/延期-全国,新建/删除/止售/延期-国际游学-全国"></mcs-dropdown-button>
+    <mcs-button category="delete" click="vm.delete()" ppts-job-functions="新建/删除/止售/延期产品-本分公司,新建/删除/止售/延期-全国,新建/删除/止售/延期-国际游学-全国"></mcs-button>
+    <mcs-button category="delete" text="止售产品" click="vm.stopProduct()" ppts-job-functions="新建/删除/止售/延期产品-本分公司,新建/删除/止售/延期-全国,新建/删除/止售/延期-国际游学-全国"></mcs-button>
+    <mcs-button category="edit" text="延期产品" click="vm.delayProduct()" ppts-job-functions="新建/删除/止售/延期产品-本分公司,新建/删除/止售/延期-全国,新建/删除/止售/延期-国际游学-全国"></mcs-button>
+    <mcs-button icon="copy" text="复制产品" click="vm.copyProduct()" ppts-job-functions="新建/删除/止售/延期产品-本分公司,新建/删除/止售/延期-全国,新建/删除/止售/延期-国际游学-全国"></mcs-button>
+    <mcs-button category="add" text="创建班级" ppts-job-functions="按钮新增班级（编辑课表/更换教师/增加学生/删除班级/移出班级）-本校区" click="vm.createClass()"></mcs-button>
 </ppts-dynamic-content>
 <!-- /结束：产品列表.工具条 -->
 <!-- #开始：产品列表.数据表格 -->

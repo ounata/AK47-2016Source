@@ -21,13 +21,40 @@ namespace MCS.Library.Data
         /// 在上下文中的注册的返回结果处理操作
         /// </summary>
         private TableActionCollection tableActions = new TableActionCollection();
+        private SqlActions beforeActions = new SqlActions();
+        private SqlActions afterActions = new SqlActions();
 
         /// <summary>
         /// DataTable的回调操作
         /// </summary>
         internal TableActionCollection TableActions
         {
-            get { return this.tableActions; }
+            get
+            {
+                return this.tableActions;
+            }
+        }
+
+        /// <summary>
+        /// 执行Context之前的操作
+        /// </summary>
+        public SqlActions BeforeActions
+        {
+            get
+            {
+                return this.beforeActions;
+            }
+        }
+
+        /// <summary>
+        /// 执行Context之后的操作
+        /// </summary>
+        public SqlActions AfterActions
+        {
+            get
+            {
+                return this.afterActions;
+            }
         }
 
         /// <summary>
@@ -76,6 +103,8 @@ namespace MCS.Library.Data
         {
             this.sqlInContext.Clear();
             this.tableActions.Clear();
+            this.beforeActions.Clear();
+            this.AfterActions.Clear();
         }
 
         /// <summary>

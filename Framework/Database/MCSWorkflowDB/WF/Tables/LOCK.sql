@@ -30,7 +30,7 @@ EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'加锁人ID
 
 
 GO
-EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'锁创建时间', @level0type = N'SCHEMA', @level0name = N'WF', @level1type = N'TABLE', @level1name = N'LOCK', @level2type = N'COLUMN', @level2name = N'LOCK_TIME';
+EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'锁创建时间(UTC)', @level0type = N'SCHEMA', @level0name = N'WF', @level1type = N'TABLE', @level1name = N'LOCK', @level2type = N'COLUMN', @level2name = N'LOCK_TIME';
 
 
 GO

@@ -1,7 +1,5 @@
-﻿using System;
-using MCS.Library.Data.Builder;
+﻿using MCS.Library.Data;
 using MCS.Library.Data.Mapping;
-using MCS.Library.Data;
 
 namespace PPTS.WebAPI.Customers.ViewModels.PotentialCustomers
 {

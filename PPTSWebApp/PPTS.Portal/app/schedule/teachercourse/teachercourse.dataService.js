@@ -54,6 +54,21 @@
             resource.post({ operation: 'initTchWeekCourse' }, criteria, success, error);
         }
 
+        resource.getPsnTeacherWeekCourse = function (criteria, success, error) {
+            resource.post({ operation: 'getPsnTeacherWeekCourse' }, criteria, success, error);
+        }
+
+        resource.getPsnCurMonthStat = function (criteria, success, error) {
+            resource.post({ operation: 'getPsnCurMonthStat' }, criteria, success, error);
+        }
+
+        resource.getSCLV = function (criteria, success, error) {
+            resource.post({ operation: 'getSCLV' }, criteria, success, error);
+        }
+
+        resource.getPagedSCLV = function (criteria, success, error) {
+            resource.post({ operation: 'getPagedSCLV' }, criteria, success, error);
+        }
 
         return resource;
     }]);

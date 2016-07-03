@@ -38,7 +38,7 @@ namespace PPTS.Data.Customers.Adapters
         private void InitData(CustomerTransferApply data)
         {
             if (data.ApplyID.IsNullOrEmpty())
-                data.ApplyID = System.Guid.NewGuid().ToString();
+                data.ApplyID = UuidHelper.NewUuidString();
         }
     }
 }

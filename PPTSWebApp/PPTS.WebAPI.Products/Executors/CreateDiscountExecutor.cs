@@ -61,51 +61,46 @@ namespace PPTS.WebAPI.Products.Executors
         {
             base.PrepareData(context);
             CheckResultModel chk = Model.CheckCreateDiscount();
-            if (chk.Sucess) {
-                //折扣表
-                Model.Discount.DiscountID = UuidHelper.NewUuidString();
-                Model.Discount.DiscountCode = PPTS.Data.Products.Helper.GetDiscountCode(CreateJob.GetParentOrganizationByType(DepartmentType.HQ).GetFirstInitial());
-                Model.Discount.DiscountName = PPTS.Data.Products.Helper.GetDiscountName(CreateJob.GetParentOrganizationByType(DepartmentType.Branch).Name);
-                Model.Discount.DiscountStatus = Data.Products.DiscountStatusDefine.Approving;
-                Model.Discount.FillCreator();
-                Model.Discount.FillModifier();
-                //Model.Discount.ApproverID = CreateUser.ID;
-                //Model.Discount.ApproverName = CreateUser.Name;
-                //Model.Discount.ApproverJobID = CreateJob.ID;
-                //Model.Discount.ApproverJobName = CreateJob.Name;
-                //Model.Discount.ApproveTime = SNTPClient.AdjustedTime;
-                Model.Discount.SubmitterID = CreateUser.ID;
-                Model.Discount.SubmitterName = CreateUser.Name;
-                Model.Discount.SubmitterJobId = CreateJob.ID;
-                Model.Discount.SubmitterJobName = CreateJob.Name;
-                Model.Discount.SubmitTime = SNTPClient.AdjustedTime;
-                Model.Discount.BranchID = CreateJob.GetParentOrganizationByType(DepartmentType.Branch).ID;
-                Model.Discount.BranchName = CreateJob.GetParentOrganizationByType(DepartmentType.Branch).Name;
-                DiscountAdapter.Instance.UpdateInContext(Model.Discount);
+            chk.Sucess.FalseThrow(chk.Message);
+            //折扣表
+            Model.Discount.DiscountID = UuidHelper.NewUuidString();
+            Model.Discount.DiscountCode = PPTS.Data.Products.Helper.GetDiscountCode(CreateJob.GetParentOrganizationByType(DepartmentType.HQ).GetFirstInitial());
+            Model.Discount.DiscountName = PPTS.Data.Products.Helper.GetDiscountName(CreateJob.GetParentOrganizationByType(DepartmentType.Branch).Name);
+            Model.Discount.DiscountStatus = Data.Products.DiscountStatusDefine.Approving;
+            Model.Discount.FillCreator();
+            Model.Discount.FillModifier();
+            //Model.Discount.ApproverID = CreateUser.ID;
+            //Model.Discount.ApproverName = CreateUser.Name;
+            //Model.Discount.ApproverJobID = CreateJob.ID;
+            //Model.Discount.ApproverJobName = CreateJob.Name;
+            //Model.Discount.ApproveTime = SNTPClient.AdjustedTime;
+            Model.Discount.SubmitterID = CreateUser.ID;
+            Model.Discount.SubmitterName = CreateUser.Name;
+            Model.Discount.SubmitterJobId = CreateJob.ID;
+            Model.Discount.SubmitterJobName = CreateJob.Name;
+            Model.Discount.SubmitTime = SNTPClient.AdjustedTime;
+            Model.Discount.BranchID = CreateJob.GetParentOrganizationByType(DepartmentType.Branch).ID;
+            Model.Discount.BranchName = CreateJob.GetParentOrganizationByType(DepartmentType.Branch).Name;
+            DiscountAdapter.Instance.UpdateInContext(Model.Discount);
 
-                //折扣表数据档
-                foreach (var item in Model.DiscountItemCollection)
-                {
-                    if (item.DiscountStandard == 0 && item.DiscountValue == 0)
-                        continue;
-                    item.DiscountID = Model.Discount.DiscountID;                    
-                    DiscountItemAdapter.Instance.UpdateInContext(item);
-                }
-                //折扣表  校区 关系提交
-                foreach (var item in Model.DiscountPermissionsApplieCollection)
-                {
-                    item.FillCreator();
-                    item.DiscountID = Model.Discount.DiscountID;
-                    DiscountPermissionsApplyAdapter.Instance.UpdateInContext(item);
-                }
-                
-                
+            //折扣表数据档
+            foreach (var item in Model.DiscountItemCollection)
+            {
+                if (item.DiscountStandard == 0 && item.DiscountValue == 0)
+                    continue;
+                item.DiscountID = Model.Discount.DiscountID;
+                DiscountItemAdapter.Instance.UpdateInContext(item);
             }
-            else { 
-                throw new Exception(chk.Message);
+            //折扣表  校区 关系提交
+            foreach (var item in Model.DiscountPermissionsApplieCollection)
+            {
+                item.FillCreator();
+                item.DiscountID = Model.Discount.DiscountID;
+                DiscountPermissionsApplyAdapter.Instance.UpdateInContext(item);
             }
-
         }
+
+
 
         /// <summary>
         /// 准备日志信息
@@ -116,5 +111,4 @@ namespace PPTS.WebAPI.Products.Executors
             base.PrepareOperationLog(context);
         }
     }
-
 }

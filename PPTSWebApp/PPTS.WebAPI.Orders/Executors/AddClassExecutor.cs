@@ -1,4 +1,5 @@
 ﻿using MCS.Library.Core;
+using MCS.Library.Data;
 using MCS.Library.Data.Executors;
 using MCS.Library.Principal;
 using MCS.Library.SOA.DataObjects;
@@ -36,6 +37,8 @@ namespace PPTS.WebAPI.Orders.Executors
             model.NullCheck("model");
         }
 
+        private Class c;
+
         protected override void PrepareData(DataExecutionContext<UserOperationLogCollection> context)
         {
             base.PrepareData(context);
@@ -44,7 +47,7 @@ namespace PPTS.WebAPI.Orders.Executors
                 throw new Exception(check.Message);
             }
 
-            Class c = new Class();
+            c  = new Class();
             #region 1.添加班级信息
             c.CampusID = Model.CampusID;
             c.CampusName = Model.CampusName;
@@ -53,6 +56,8 @@ namespace PPTS.WebAPI.Orders.Executors
             c.ProductCode = Model.Product.ProductCode;
             c.LessonDurationValue = Model.Product.LessonDurationValue;
             c.LessonCount = Model.Product.LessonCount;
+            c.PeriodDurationValue = Model.Product.PeriodDurationValue;
+            c.PeriodsOfLesson = Model.Product.PeriodsOfLesson;
             c.ClassName = Data.Orders.Helper.GetClassName(Model.Product.ProductCode, Model.ShortCampusName);
             c.ClassID = UuidHelper.NewUuidString();
             c.ClassStatus = ClassStatusDefine.Createed;
@@ -167,15 +172,20 @@ namespace PPTS.WebAPI.Orders.Executors
                     #endregion
                     ClassLessonItemsAdapter.Instance.UpdateInContext(cli);
                     AssignsAdapter.Instance.UpdateInContext(a);
-
-                    //扣除资产                    
-                    Data.Orders.Entities.Asset at = GenericAssetAdapter<Data.Orders.Entities.Asset, AssetCollection>.Instance.Load(asset.AssetID);
-                    at.AssignedAmount += 1;
-                    GenericAssetAdapter<Data.Orders.Entities.Asset, AssetCollection>.Instance.UpdateInContext(at);
                 }
             }
             #endregion
+
+            #region 扣除资产   
+            foreach (var asset in Model.Assets)
+            {
+                Data.Orders.Entities.Asset at = GenericAssetAdapter<Data.Orders.Entities.Asset, AssetCollection>.Instance.Load(asset.AssetID);
+                at.AssignedAmount += Model.StartTimeList.Count;
+                GenericAssetAdapter<Data.Orders.Entities.Asset, AssetCollection>.Instance.UpdateInContext(at);
+            }
+            #endregion
         }
+
 
         /// <summary>
         /// 准备日志信息
@@ -186,6 +196,28 @@ namespace PPTS.WebAPI.Orders.Executors
             base.PrepareOperationLog(context);
 
 
+        }
+
+        protected override object DoOperation(DataExecutionContext<UserOperationLogCollection> context)
+        {
+            #region 生成数据权限范围数据
+            PPTS.Data.Common.Authorization.ScopeAuthorization<Class>
+               .GetInstance(PPTS.Data.Orders.ConnectionDefine.PPTSOrderConnectionName)
+               .UpdateAuthInContext(DeluxeIdentity.CurrentUser.GetCurrentJob()
+               , DeluxeIdentity.CurrentUser.GetCurrentJob().Organization()
+               , c.ClassID
+               , PPTS.Data.Common.Authorization.RelationType.Owner);
+            #endregion 生成数据权限范围数据
+
+            using (DbContext dbContext = PPTS.Data.Orders.ConnectionDefine.GetDbContext())
+            {
+                dbContext.ExecuteTimePointSqlInContext();
+
+                if (this.DataAction != null)
+                    this.DataAction(this.Model);
+            }
+            return this.Model;
+            //return base.DoOperation(context);
         }
 
         protected override void Validate()

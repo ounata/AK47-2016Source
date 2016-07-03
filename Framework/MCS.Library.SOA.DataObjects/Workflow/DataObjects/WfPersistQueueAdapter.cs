@@ -136,7 +136,7 @@ namespace MCS.Library.SOA.DataObjects.Workflow
             InsertSqlClauseBuilder builder = ORMapping.GetInsertSqlClauseBuilder(pq, mappingInfo);
 
             builder.AppendItem("SORT_ID", pq.SortID);
-            builder.AppendItem("PROCESS_TIME", "GETDATE()", "=", true);
+            builder.AppendItem("PROCESS_TIME", "GETUTCDATE()", "=", true);
 
             StringBuilder sql = new StringBuilder();
 

@@ -1,6 +1,5 @@
 ﻿using MCS.Library.Core;
 using MCS.Library.Data;
-using MCS.Library.Data.Adapters;
 using MCS.Library.Office.OpenXml.Excel;
 using MCS.Library.Principal;
 using MCS.Web.MVC.Library.ApiCore;
@@ -12,13 +11,14 @@ using PPTS.Data.Common.Entities;
 using PPTS.Data.Common.Security;
 using PPTS.Data.Customers.Adapters;
 using PPTS.Data.Customers.Entities;
+using PPTS.Web.MVC.Library.Filters;
 using PPTS.WebAPI.Customers.DataSources;
 using PPTS.WebAPI.Customers.Executors;
 using PPTS.WebAPI.Customers.ViewModels.CustomerScores;
 using PPTS.WebAPI.Customers.ViewModels.PotentialCustomers;
 using System;
-using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.ModelBinding;
@@ -36,6 +36,7 @@ namespace PPTS.WebAPI.Customers.Controllers
         /// <param name="criteria">查询条件</param>
         /// <returns>返回带字典的成绩数据列表</returns>
         [HttpPost]
+        [PPTSJobFunctionAuthorize("PPTS:成绩管理（学员视图-成绩）,成绩管理（学员视图-成绩、成绩详情）-本部门,成绩管理（学员视图-成绩、成绩详情）-本校区,成绩管理（学员视图-成绩、成绩详情）-本分公司,成绩管理（学员视图-成绩、成绩详情）-全国")]
         public CustomerScoresQueryResult GetAllScores(CustomerScoresQueryCriteriaModel criteria)
         {
             return new CustomerScoresQueryResult
@@ -52,6 +53,7 @@ namespace PPTS.WebAPI.Customers.Controllers
         /// <param name="criteria">查询条件</param>
         /// <returns>返回不带字典的成绩数据列表</returns>
         [HttpPost]
+        [PPTSJobFunctionAuthorize("PPTS:成绩管理（学员视图-成绩）,成绩管理（学员视图-成绩、成绩详情）-本部门,成绩管理（学员视图-成绩、成绩详情）-本校区,成绩管理（学员视图-成绩、成绩详情）-本分公司,成绩管理（学员视图-成绩、成绩详情）-全国")]
         public PagedQueryResult<CustomerScoresSearchModel, CustomerScoresSearchModelCollection> GetPagedScores(CustomerScoresQueryCriteriaModel criteria)
         {
             return CustomerScoresDataSource.Instance.LoadCustomerScores(criteria.PageParams, criteria, criteria.OrderBy);
@@ -62,6 +64,7 @@ namespace PPTS.WebAPI.Customers.Controllers
         #region api/customerscores/addscores
 
         [HttpGet]
+        [PPTSJobFunctionAuthorize("PPTS:录入/批量录入/编辑成绩")]
         public CustomerScoresModel AddScores(string id)
         {
             Customer customer = CustomerAdapter.Instance.Load(id);
@@ -86,6 +89,7 @@ namespace PPTS.WebAPI.Customers.Controllers
         }
 
         [HttpPost]
+        [PPTSJobFunctionAuthorize("PPTS:录入/批量录入/编辑成绩")]
         public void AddScores(CustomerScoresModel model)
         {
             AddCustomerScoresExecutor executor = new AddCustomerScoresExecutor(model);
@@ -97,6 +101,7 @@ namespace PPTS.WebAPI.Customers.Controllers
         #region api/customerscores/getScoresInfo
 
         [HttpGet]
+        [PPTSJobFunctionAuthorize("PPTS:成绩管理（学员视图-成绩）,成绩管理（学员视图-成绩、成绩详情）-本部门,成绩管理（学员视图-成绩、成绩详情）-本校区,成绩管理（学员视图-成绩、成绩详情）-本分公司,成绩管理（学员视图-成绩、成绩详情）-全国")]
         public CustomerScoresModel GetScoresInfo(string id)
         {
             CustomerScore score = CustomerScoreAdapter.Instance.Load(id);
@@ -117,13 +122,15 @@ namespace PPTS.WebAPI.Customers.Controllers
         #region api/customerscores/editscores
 
         [HttpGet]
+        [PPTSJobFunctionAuthorize("PPTS:录入/批量录入/编辑成绩")]
         public CustomerScoresModel EditScores(string id)
         {
             CustomerScore score = CustomerScoreAdapter.Instance.Load(id);
             Customer customer = CustomerAdapter.Instance.Load(score.CustomerID);
             TeacherSearchCollection teachers = null;
             string uid = DeluxeIdentity.CurrentUser.ID;
-            bool isTeacher = DeluxeIdentity.CurrentUser.GetCurrentJob().JobType == Data.Common.JobTypeDefine.Teacher;
+            // bool isTeacher = DeluxeIdentity.CurrentUser.GetCurrentJob().JobType == Data.Common.JobTypeDefine.Teacher;
+            bool isTeacher = DeluxeIdentity.CurrentUser.GetCurrentJob() ==null ? false : DeluxeIdentity.CurrentUser.GetCurrentJob().JobType == JobTypeDefine.Teacher;
             if (isTeacher)
             {
                 teachers = TeacherSearchAdapter.Instance.Load(customer.CustomerID, DeluxeIdentity.CurrentUser.ID);
@@ -149,6 +156,7 @@ namespace PPTS.WebAPI.Customers.Controllers
         }
 
         [HttpPost]
+        [PPTSJobFunctionAuthorize("PPTS:录入/批量录入/编辑成绩")]
         public void EditScores(CustomerScoresModel model)
         {
             EditCustomerScoresExecutor executor = new EditCustomerScoresExecutor(model);
@@ -160,6 +168,7 @@ namespace PPTS.WebAPI.Customers.Controllers
         #region api/customerscores/getscoreforbatchadd
 
         [HttpGet]
+        [PPTSJobFunctionAuthorize("PPTS:录入/批量录入/编辑成绩")]
         public CustomerScoresModel GetScoreForBatchAdd()
         {
             return new CustomerScoresModel()
@@ -169,6 +178,7 @@ namespace PPTS.WebAPI.Customers.Controllers
         }
 
         [HttpPost]
+        [PPTSJobFunctionAuthorize("PPTS:录入/批量录入/编辑成绩")]
         public CustomerScoresBatchQueryResult GetScoreForBatchAdd(CustomerScoresQueryCriteriaModel criteria)
         {
             return new CustomerScoresBatchQueryResult()
@@ -180,6 +190,7 @@ namespace PPTS.WebAPI.Customers.Controllers
         }
 
         [HttpPost]
+        [PPTSJobFunctionAuthorize("PPTS:录入/批量录入/编辑成绩")]
         public void AddBatchScores(CustomerScoresBatchSearchModelCollection model)
         {
             AddBatchScoresExecutor executor = new AddBatchScoresExecutor(model);
@@ -191,6 +202,7 @@ namespace PPTS.WebAPI.Customers.Controllers
         #region api/customerscores/getscoresforstudent
 
         [HttpPost]
+        [PPTSJobFunctionAuthorize("PPTS:成绩管理（学员视图-成绩）,成绩管理（学员视图-成绩、成绩详情）-本部门,成绩管理（学员视图-成绩、成绩详情）-本校区,成绩管理（学员视图-成绩、成绩详情）-本分公司,成绩管理（学员视图-成绩、成绩详情）-全国")]
         public CustomerScoresQueryResult GetScoresForStudent(CustomerScoresQueryCriteriaModel criteria)
         {
             return new CustomerScoresQueryResult
@@ -201,6 +213,7 @@ namespace PPTS.WebAPI.Customers.Controllers
         }
 
         [HttpPost]
+        [PPTSJobFunctionAuthorize("PPTS:成绩管理（学员视图-成绩）,成绩管理（学员视图-成绩、成绩详情）-本部门,成绩管理（学员视图-成绩、成绩详情）-本校区,成绩管理（学员视图-成绩、成绩详情）-本分公司,成绩管理（学员视图-成绩、成绩详情）-全国")]
         public PagedQueryResult<CustomerScoresSearchModel, CustomerScoresSearchModelCollection> GetPagedScoresForStudent(CustomerScoresQueryCriteriaModel criteria)
         {
             return CustomerScoresDataSource.Instance.LoadCustomerScores(criteria.PageParams, criteria, criteria.OrderBy);
@@ -211,19 +224,16 @@ namespace PPTS.WebAPI.Customers.Controllers
         #region api/customerscores/exportallScores
 
         [HttpPost]
+        [PPTSJobFunctionAuthorize("PPTS:导出成绩")]
         public HttpResponseMessage ExportAllScores([ModelBinder(typeof(FormBinder))] CustomerScoresQueryCriteriaModel criteria)
         {
-            criteria.PageParams.PageIndex = 1;
+            criteria.PageParams.PageIndex = 0;
             criteria.PageParams.PageSize = 5000;
             PagedQueryResult<CustomerScoresSearchModel, CustomerScoresSearchModelCollection> queryResult = CustomerScoresDataSource.Instance.LoadCustomerScores(criteria.PageParams, criteria, criteria.OrderBy);
 
             WorkBook wb = WorkBook.CreateNew();
             WorkSheet sheet = wb.Sheets["sheet1"];
-
             TableDescription tableDesp = new TableDescription("成绩管理");
-
-            tableDesp.AllColumns.Add(new TableColumnDescription(new DataColumn("大区", typeof(string))) { PropertyName = "CustomerCode" });
-            tableDesp.AllColumns.Add(new TableColumnDescription(new DataColumn("分公司", typeof(string))) { PropertyName = "CustomerCode" });
             tableDesp.AllColumns.Add(new TableColumnDescription(new DataColumn("校区", typeof(string))) { PropertyName = "CampusName" });
             tableDesp.AllColumns.Add(new TableColumnDescription(new DataColumn("学年度", typeof(string))) { PropertyName = "StudyYear" });
             tableDesp.AllColumns.Add(new TableColumnDescription(new DataColumn("学员编号", typeof(string))) { PropertyName = "CustomerCode" });
@@ -249,67 +259,58 @@ namespace PPTS.WebAPI.Customers.Controllers
             tableDesp.AllColumns.Add(new TableColumnDescription(new DataColumn("录取院校类别", typeof(string))) { PropertyName = "AdmissionType" });
             tableDesp.AllColumns.Add(new TableColumnDescription(new DataColumn("属985或211院校", typeof(string))) { PropertyName = "IsKeyCollege" });
 
-            // IDictionary<string, IEnumerable<BaseConstantEntity>> dictionary = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(CustomerScore), typeof(CustomerScoreItem));
+            var dictionaries = ConstantAdapter.Instance.GetSimpleEntitiesByCategories(typeof(CustomerScore), typeof(CustomerScoreItem));
 
             sheet.LoadFromCollection(queryResult.PagedData, tableDesp, (cell, param) =>
             {
                 if (param.PropertyValue != null && !string.IsNullOrEmpty(param.PropertyValue.ToString()))
                 {
-                    if (param.ColumnDescription.PropertyName == "StudyYear")
+                    switch (param.ColumnDescription.PropertyName)
                     {
-                        ConstantEntity studyYear = ConstantAdapter.Instance.Get("C_CODE_ABBR_Customer_StudyYear", param.PropertyValue.ToString());
-                        cell.Value = studyYear == null ? param.PropertyValue.ToString() : studyYear.Value;
-                    }
-                    else if (param.ColumnDescription.PropertyName == "ScoreGrade")
-                    {
-                        ConstantEntity scoreGrade = ConstantAdapter.Instance.Get("C_CODE_ABBR_CUSTOMER_GRADE", param.PropertyValue.ToString());
-                        cell.Value = scoreGrade == null ? param.PropertyValue.ToString() : scoreGrade.Value;
-                    }
-                    else if (param.ColumnDescription.PropertyName == "StudyTerm")
-                    {
-                        ConstantEntity studyTerm = ConstantAdapter.Instance.Get("C_CODE_ABBR_Customer_StudyTerm", param.PropertyValue.ToString());
-                        cell.Value = studyTerm == null ? param.PropertyValue.ToString() : studyTerm.Value;
-                    }
-                    else if (param.ColumnDescription.PropertyName == "ScoreType")
-                    {
-                        ConstantEntity scoreType = ConstantAdapter.Instance.Get("C_Code_Abbr_BO_Customer_GradeTypeExt", param.PropertyValue.ToString());
-                        cell.Value = scoreType == null ? param.PropertyValue.ToString() : scoreType.Value;
-                    }
-                    else if (param.ColumnDescription.PropertyName == "ExamineMonth")
-                    {
-                        ConstantEntity examineMonth = ConstantAdapter.Instance.Get("C_CODE_ABBR_Exam_Month", param.PropertyValue.ToString());
-                        cell.Value = examineMonth == null ? param.PropertyValue.ToString() : examineMonth.Value;
-                    }
-                    else if (param.ColumnDescription.PropertyName == "Subject")
-                    {
-                        ConstantEntity subject = ConstantAdapter.Instance.Get("C_CODE_ABBR_Customer_Exam_Subject", param.PropertyValue.ToString());
-                        cell.Value = subject == null ? param.PropertyValue.ToString() : subject.Value;
-                    }
-                    else if (param.ColumnDescription.PropertyName == "IsStudyHere")
-                    {
-                        cell.Value = Convert.ToBoolean(param.PropertyValue) ? "是" : "否";
-                    }
-                    else if (param.ColumnDescription.PropertyName == "Satisficing")
-                    {
-                        cell.Value = param.PropertyValue.ToString() == "1" ? "是" : "否";
-                    }
-                    else if (param.ColumnDescription.PropertyName == "StudentType")
-                    {
-                        ConstantEntity studentType = ConstantAdapter.Instance.Get("C_CODE_ABBR_Exam_Customer_Type", param.PropertyValue.ToString());
-                        cell.Value = studentType == null ? param.PropertyValue.ToString() : studentType.Value;
-                    }
-                    else if (param.ColumnDescription.PropertyName == "AdmissionType")
-                    {
-                        ConstantEntity admissionType = ConstantAdapter.Instance.Get("C_CODE_ABBR_Customer_AdmissionType", param.PropertyValue.ToString());
-                        cell.Value = admissionType == null ? param.PropertyValue.ToString() : admissionType.Value;
-                    }
-                    else if (param.ColumnDescription.PropertyName == "IsKeyCollege")
-                    {
-                        cell.Value = param.PropertyValue.ToString() == "1" ? "是" : "否";
-                    }
-                    else
-                    {
-                        cell.Value = param.ColumnDescription.FormatValue(param.PropertyValue);
+                        case "StudyYear":
+                            var studyYear = dictionaries["C_CODE_ABBR_Customer_StudyYear"].Where(c => c.Key == Convert.ToString(param.PropertyValue));
+                            cell.Value = null != studyYear ? (null == studyYear.FirstOrDefault() ? null : studyYear.FirstOrDefault().Value) : null;
+                            break;
+                        case "ScoreGrade":
+                            var scoreGrade = dictionaries["C_CODE_ABBR_CUSTOMER_GRADE"].Where(c => c.Key == Convert.ToString(param.PropertyValue));
+                            cell.Value = null != scoreGrade ? (null == scoreGrade.FirstOrDefault() ? null : scoreGrade.FirstOrDefault().Value) : null;
+                            break;
+                        case "StudyTerm":
+                            var studyTerm = dictionaries["C_CODE_ABBR_Customer_StudyTerm"].Where(c => c.Key == Convert.ToString(param.PropertyValue));
+                            cell.Value = null != studyTerm ? (null == studyTerm.FirstOrDefault() ? null : studyTerm.FirstOrDefault().Value) : null;
+                            break;
+                        case "ScoreType":
+                            var scoreType = dictionaries["C_Code_Abbr_BO_Customer_GradeTypeExt"].Where(c => c.Key == Convert.ToString(param.PropertyValue));
+                            cell.Value = null != scoreType ? (null == scoreType.FirstOrDefault() ? null : scoreType.FirstOrDefault().Value) : null;
+                            break;
+                        case "ExamineMonth":
+                            var examineMonth = dictionaries["C_CODE_ABBR_Exam_Month"].Where(c => c.Key == Convert.ToString(param.PropertyValue));
+                            cell.Value = null != examineMonth ? (null == examineMonth.FirstOrDefault() ? null : examineMonth.FirstOrDefault().Value) : null;
+                            break;
+                        case "Subject":
+                            var subject = dictionaries["C_CODE_ABBR_Customer_Exam_Subject"].Where(c => c.Key == Convert.ToString(param.PropertyValue));
+                            cell.Value = null != subject ? (null == subject.FirstOrDefault() ? null : subject.FirstOrDefault().Value) : null;
+                            break;
+                        case "IsStudyHere":
+                            cell.Value = Convert.ToBoolean(param.PropertyValue) ? "是" : "否";
+                            break;
+                        case "Satisficing":
+                            cell.Value = param.PropertyValue.ToString() == "1" ? "是" : "否";
+                            break;
+                        case "StudentType":
+                            var studentType = dictionaries["C_CODE_ABBR_Exam_Customer_Type"].Where(c => c.Key == Convert.ToString(param.PropertyValue));
+                            cell.Value = null != studentType ? (null == studentType.FirstOrDefault() ? null : studentType.FirstOrDefault().Value) : null;
+                            break;
+                        case "AdmissionType":
+                            var admissionType = dictionaries["C_CODE_ABBR_Exam_Customer_Type"].Where(c => c.Key == Convert.ToString(param.PropertyValue));
+                            cell.Value = null != admissionType ? (null == admissionType.FirstOrDefault() ? null : admissionType.FirstOrDefault().Value) : null;
+                            break;
+                        case "IsKeyCollege":
+                            cell.Value = param.PropertyValue.ToString() == "1" ? "是" : "否";
+                            break;
+                        default:
+                            cell.Value = param.PropertyValue;
+                            break;
                     }
                 }
             });

@@ -1,0 +1,3 @@
+﻿<tags-input template="{{category}}tag-template" add-from-autocomplete-only="{{onlyFromList}}" min-length="{{ minValidLength }}" ng-blur="tagBlur()" text="text" on-tag-added="tagChanged($tag)" max-tags="{{ maxTags }}" ng-model="model" key-property="{{ keyProperty }}" display-property="{{ displayProperty }}" placeholder="{{placeholder}}">
+    <auto-complete template="{{category}}autocomplete-template" load-on-focus="true" min-length="{{ minInputLength }}" display-property="{{ fullPath || displayProperty }}" source="query($query)"></auto-complete>
+</tags-input>

@@ -47,12 +47,12 @@ namespace MCS.Library.SOA.DataObjects.Test.MaterialTest
 					{
 						MaterialAdapter.Instance.InsertWithContent(list);
 
-						MaterialList loadedList = MaterialAdapter.Instance.LoadMaterialByMaterialID(dest.ID);
+						Material loaded = MaterialAdapter.Instance.LoadMaterialByMaterialID(dest.ID);
 
-						Assert.IsTrue(loadedList.Count > 0);
+                        Assert.IsNotNull(loaded);
 
-						loadedList[0].EnsureMaterialContent();
-						ValidateMaterial(source, loadedList[0]);
+                        loaded.EnsureMaterialContent();
+						ValidateMaterial(source, loaded);
 					});
 				});
 		}

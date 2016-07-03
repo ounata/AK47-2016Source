@@ -1,17 +1,18 @@
 ﻿(function () {
     require.config({
         baseUrl: '.',
+        urlArgs: "bust=" + mcs.app.config.timeStamp,
+        waitSeconds: 80000,
         paths: {
             jquery: ppts.config.mcsComponentBaseUrl + 'libs/jquery-2.2.1/dist/jquery.min',
             bootstrap: ppts.config.mcsComponentBaseUrl + 'libs/bootstrap-3.3.5/js/bootstrap.min',
-            datePicker: ppts.config.mcsComponentBaseUrl + 'libs/date-time-3.0.0/bootstrap-datepicker.min',
-            timePicker: ppts.config.mcsComponentBaseUrl + 'libs/date-time-3.0.0/bootstrap-timepicker.min',
-            dateRangePicker: ppts.config.mcsComponentBaseUrl + 'libs/date-time-3.0.0/daterangepicker.min',
             dateTimePicker: ppts.config.mcsComponentBaseUrl + 'libs/date-time-3.0.0/bootstrap-datetimepicker.min',
             dateLocale: ppts.config.mcsComponentBaseUrl + 'libs/date-time-3.0.0/locales/bootstrap-datepicker.zh-CN',
             ztree: ppts.config.mcsComponentBaseUrl + 'libs/zTree-3.5.22/js/jquery.ztree.all.min',
             select2: ppts.config.mcsComponentBaseUrl + 'libs/angular-ui-select-0.13.2/dist/select2',
             select2Locale: ppts.config.mcsComponentBaseUrl + 'libs/angular-ui-select-0.13.2/dist/select2_locale_zh-CN',
+            slimscroll: ppts.config.mcsComponentBaseUrl + 'libs/slimscroll-1.3.6/jquery.slimscroll',
+            gritter: ppts.config.mcsComponentBaseUrl + 'libs/gritter-1.7.4/jquery.gritter.min',
             autocomplete: ppts.config.mcsComponentBaseUrl + 'libs/ng-tags-input-3.0.0/ng-tags-input',
             moment: ppts.config.mcsComponentBaseUrl + 'libs/date-time-3.0.0/moment.min',
             momentLocale: ppts.config.mcsComponentBaseUrl + 'libs/fullcalendar-2.6.1/moment-with-locales',
@@ -44,25 +45,13 @@
                 exports: 'bootstrap',
                 deps: ['jquery']
             },
-            datePicker: {
-                exports: 'datePicker',
-                deps: ['jquery', 'bootstrap']
-            },
-            timePicker: {
-                exports: 'timePicker',
-                deps: ['jquery', 'bootstrap', 'moment']
-            },
-            dateRangePicker: {
-                exports: 'dateRangePicker',
-                deps: ['jquery', 'bootstrap']
-            },
             dateTimePicker: {
                 exports: 'dateTimePicker',
                 deps: ['jquery', 'bootstrap', 'moment']
             },
             dateLocale: {
                 exports: 'dateLocale',
-                deps: ['datePicker', 'dateTimePicker']
+                deps: ['dateTimePicker']
             },
             ztree: {
                 exports: 'ztree',
@@ -74,6 +63,14 @@
             },
             select2Locale: {
                 exports: 'select2Locale',
+                deps: ['select2']
+            },
+            slimscroll: {
+                exports: 'slimscroll',
+                deps: ['jquery']
+            },
+            gritter: {
+                exports: 'gritter',
                 deps: ['select2']
             },
             autocomplete: {
@@ -161,14 +158,13 @@
                 'jquery',
                 'bootstrap',
                 'moment',
-                'datePicker',
-                'timePicker',
-                'dateRangePicker',
                 'dateTimePicker',
                 'dateLocale',
                 'ztree',
                 'select2',
                 'select2Locale',
+                'slimscroll',
+                'gritter',
                 'autocomplete',
                 'ace',
                 'aceExtra',
@@ -187,22 +183,8 @@
                 'dialogs',
                 'ppts'
             ], function () {
-                window.onload = function () {
-                    // the script will be run once for ie
-                    if (!mcs.browser.s.edge && mcs.browser.s.msie) {
-                        if (!sessionStorage.getItem('ppts_expand_sidebar')) {
-                            ace.handle_side_menu($);
-                            sessionStorage.setItem('ppts_expand_sidebar', true);
-                        }
-                    };
-                };
-
                 angular.element(document).ready(function () {
                     angular.bootstrap(document, ['ppts']);
-                    // the script will not run for ie && edge
-                    if (!mcs.browser.s.msie) {
-                        ace.handle_side_menu($);
-                    }
                 });
             });
         }

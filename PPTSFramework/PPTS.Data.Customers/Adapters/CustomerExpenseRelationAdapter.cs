@@ -59,7 +59,7 @@ namespace PPTS.Data.Customers.Adapters
                 var whereSqlBuilder = new WhereSqlClauseBuilder();
                 whereSqlBuilder.AppendItem("CustomerID", item.CustomerID)
                     .AppendItem("ExpenseType", item.ExpenseType)
-                    .AppendItem("AccountID",item.AccountID)
+                    //.AppendItem("AccountID",item.AccountID)
                     .AppendItem("OrderID","null","is",true);
 
                 var updateSqlBuilder = new UpdateSqlClauseBuilder();

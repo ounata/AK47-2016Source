@@ -12,6 +12,8 @@ namespace MCS.Library.SOA.DataObjects.Workflow.Actions
     /// </summary>
     public abstract class InvokeServiceActionBase : IWfAction
     {
+        private static readonly char[] Splitter = new char[] { ',', ';' };
+
         public virtual void PrepareAction(WfActionParams actionParams)
         {
             if (WfRuntime.ProcessContext.EnableServiceCall)
@@ -78,7 +80,7 @@ namespace MCS.Library.SOA.DataObjects.Workflow.Actions
             string opKeys = this.GetInvokeServiceKeys();
 
             if (opKeys.IsNotEmpty())
-                result.CopyFrom(WfServiceDefinitionSettings.GetSection().GetOperations(false, opKeys));
+                result.CopyFrom(WfServiceDefinitionSettings.GetSection().GetOperations(false, opKeys.Split(Splitter, StringSplitOptions.RemoveEmptyEntries)));
 
             return result;
         }
@@ -94,7 +96,7 @@ namespace MCS.Library.SOA.DataObjects.Workflow.Actions
             string opKeys = this.GetInvokeServiceKeys();
 
             if (opKeys.IsNotEmpty())
-                result.CopyFrom(WfServiceDefinitionSettings.GetSection().GetOperations(true, opKeys));
+                result.CopyFrom(WfServiceDefinitionSettings.GetSection().GetOperations(true, opKeys.Split(Splitter, StringSplitOptions.RemoveEmptyEntries)));
 
             return result;
         }

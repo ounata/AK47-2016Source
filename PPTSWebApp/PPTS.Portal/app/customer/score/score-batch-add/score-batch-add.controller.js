@@ -9,7 +9,8 @@
             'scoresEditDataHeader',
             'scoreDataService',
             'scoresDataViewService',
-            function ($scope, $state, $stateParams, dataSyncService, scoresEditDataHeader, scoreDataService, scoresDataViewService) {
+            'mcsValidationService',
+            function ($scope, $state, $stateParams, dataSyncService, scoresEditDataHeader, scoreDataService, scoresDataViewService, mcsValidationService) {
                 var vm = this;
 
                 (function () {
@@ -33,22 +34,22 @@
                         }, {
                             field: "teacherName",
                             name: "任课教师",
-                            template: '<span ng-if="row.canEdit"><ppts-select category="scoreTeacher_{{row.customerID}}" filter="{{row.subject}}" prop="subject" model="row.teacherID" value="row.teacherName" ng-show="row.subject != \'60\'" callback=" row.teacherOrgID=\'\';row.teacherOrgName=\'\'; " async="false" style="width:150px;"/></span>'
+                            template: '<span ng-if="row.canEdit"><mcs-select category="scoreTeacher_{{row.customerID}}" filter="{{row.subject}}" prop="subject" model="row.teacherID" value="row.teacherName" ng-show="row.subject != \'60\'" callback=" row.teacherOrgID=\'\';row.teacherOrgName=\'\'; " async="false" style="width:150px;"/></span>'
                                     + '<span ng-if="!row.canEdit">{{row.teacherName}}</span>'
                                     + '<small><span ng-show="row.subject == \'60\'">总得分={{vm.totalRealScore(row.customerID)}}</span><br /><span ng-show="row.subject == \'60\'">总卷面分={{vm.totalPaperScore(row.customerID)}}</span></small>'
                         }, {
                             field: "jobOrgShortName",
                             name: "学科组",
-                            template: '<span ng-if="row.canEdit"><ppts-select category="scoreTeacherOrgName_{{row.customerID}}" filter="{{row.teacherID}}" prop="teacherID" show-all="false" model="row.teacherOrgID" value="row.teacherOrgName" ng-show="row.subject != \'60\'" async="false" style="width:150px;"/></span>'
+                            template: '<span ng-if="row.canEdit"><mcs-select category="scoreTeacherOrgName_{{row.customerID}}" filter="{{row.teacherID}}" prop="teacherID" show-all="false" model="row.teacherOrgID" value="row.teacherOrgName" ng-show="row.subject != \'60\'" async="false" style="width:150px;"/></span>'
                                     + '<span ng-if="!row.canEdit">{{row.teacherOrgName}}</span>'
                         }, {
                             field: 'realScore',
                             name: '得分',
                             // template: '<input type="text" ng-model="row.realScore" onafterpaste="mcs.util.limit(this)" onkeyup="mcs.util.limit(this)" class="mcs-input-search" style="width:150px"/>'
-                            template: '<span ng-if="row.canEdit"><input type="text" ng-model="row.realScore" onafterpaste="mcs.util.limit(this)" onkeyup="mcs.util.limit(this)" class="mcs-input-small"/></span>'
+                            template: '<span ng-if="row.canEdit"><mcs-input model="row.realScore" datatype="number" class="mcs-input-small"/></span>'
                                     + '<span ng-if="!row.canEdit">'
                                         + '<span ng-if="row.subject ==\'60\'">'
-                                            + '<span ng-if="row.canEidt_totalScore"><input type="text" ng-model="row.realScore" onafterpaste="mcs.util.limit(this)" onkeyup="mcs.util.limit(this)" class="mcs-input-small"/></span>'
+                                            + '<span ng-if="row.canEidt_totalScore"><mcs-input model="row.realScore" datatype="number" class="mcs-input-small"/></span>'
                                             + '<span ng-if="!row.canEidt_totalScore">{{row.realScore}}</span>'
                                         + '</span>'
                                         + '<span ng-if="row.subject !=\'60\'">{{row.realScore}}</span>'
@@ -57,10 +58,10 @@
                             field: 'paperScore',
                             name: '卷面分',
                             // template: '<input type="text" ng-model="row.paperScore" onafterpaste="mcs.util.limit(this)" onkeyup="mcs.util.limit(this)" class="mcs-input-search" style="width:150px"/>'
-                            template: '<span ng-if="row.canEdit"><input type="text" ng-model="row.paperScore" onafterpaste="mcs.util.limit(this)" onkeyup="mcs.util.limit(this)" class="mcs-input-small"/></span>'
+                            template: '<span ng-if="row.canEdit"><mcs-input model="row.paperScore" datatype="number" class="mcs-input-small"/></span>'
                                     + '<span ng-if="!row.canEdit">'
                                         + '<span ng-if="row.subject ==\'60\'">'
-                                            + '<span ng-if="row.canEidt_totalScore"><input type="text" ng-model="row.paperScore" onafterpaste="mcs.util.limit(this)" onkeyup="mcs.util.limit(this)" class="mcs-input-small"/></span>'
+                                            + '<span ng-if="row.canEidt_totalScore"><mcs-input model="row.paperScore" datatype="number" class="mcs-input-small"/></span>'
                                             + '<span ng-if="!row.canEidt_totalScore">{{row.paperScore}}</span>'
                                         + '</span>'
                                         + '<span ng-if="row.subject !=\'60\'">{{row.paperScore}}</span>'
@@ -69,31 +70,31 @@
                             field: 'classRank',
                             name: '班级名次',
                             // template: '<input type="text" ng-model="row.classRank" onafterpaste="mcs.util.limit(this)" onkeyup="mcs.util.limit(this)" class="mcs-input-search" style="width:150px"/>'
-                            template: '<span ng-if="row.canEdit"><input type="text" ng-model="row.classRank" onafterpaste="mcs.util.limit(this)" onkeyup="mcs.util.limit(this)" class="mcs-input-small"/></span>'
+                            template: '<span ng-if="row.canEdit"><mcs-input model="row.classRank" datatype="int" class="mcs-input-small"/></span>'
                                     + '<span ng-if="!row.canEdit">{{row.classRank}}</span>'
                         }, {
                             field: 'gradeRank',
                             name: '年级名次',
                             // template: '<input type="text" ng-model="row.gradeRank" onafterpaste="mcs.util.limit(this)" onkeyup="mcs.util.limit(this)" class="mcs-input-search" style="width:150px"/>'
-                            template: '<span ng-if="row.canEdit"><input type="text" ng-model="row.gradeRank" onafterpaste="mcs.util.limit(this)" onkeyup="mcs.util.limit(this)" class="mcs-input-small"/></span>'
+                            template: '<span ng-if="row.canEdit"><mcs-input model="row.gradeRank" datatype="int" class="mcs-input-small"/></span>'
                                     + '<span ng-if="!row.canEdit">{{row.gradeRank}}</span>'
                         }, {
                             field: 'scoreChangeType',
                             name: '成绩升降',
-                            // template: '<ppts-select category="scoreChangeType" model="row.scoreChangeType" async="false" style="width:150px;"/>'
-                            template: '<span ng-if="row.canEdit"><ppts-select category="scoreChangeType" model="row.scoreChangeType" async="false" custom-style="width:150px;"/></span>'
+                            // template: '<mcs-select category="scoreChangeType" model="row.scoreChangeType" async="false" style="width:150px;"/>'
+                            template: '<span ng-if="row.canEdit"><mcs-select category="scoreChangeType" model="row.scoreChangeType" async="false" custom-style="width:150px;"/></span>'
                                     + '<span ng-if="!row.canEdit">{{row.scoreChangeType | scoreChangeType}}</span>'
                         }, {
                             field: 'satisficing',
                             name: '家长满意度',
-                            // template: '<ppts-select category="scoreSatisficing" model="row.satisficing" async="false" style="width:150px;"/>'
-                            template: '<span ng-if="row.canEdit"><ppts-select category="scoreSatisficing" model="row.satisficing" async="false" custom-style="width:200px;"/></span>'
+                            // template: '<mcs-select category="scoreSatisficing" model="row.satisficing" async="false" style="width:150px;"/>'
+                            template: '<span ng-if="row.canEdit"><mcs-select category="scoreSatisficing" model="row.satisficing" async="false" custom-style="width:200px;"/></span>'
                                     + '<span ng-if="!row.canEdit">{{row.satisficing | scoreSatisficing}}</span>'
                         }, {
                             field: 'isStudyHere',
                             name: '是否在学大辅导',
-                            // template: '<ppts-select category="ifElse" model="row.isStudyHere" async="false" style="width:150px;"/>'
-                            template: '<span ng-if="row.canEdit"><ppts-select category="ifElse" model="row.isStudyHere" async="false" style="width:150px;"/></span>'
+                            // template: '<mcs-select category="ifElse" model="row.isStudyHere" async="false" style="width:150px;"/>'
+                            template: '<span ng-if="row.canEdit"><mcs-select category="ifElse" model="row.isStudyHere" async="false" style="width:150px;"/></span>'
                                     + '<span ng-if="!row.canEdit">{{row.isStudyHere | ifElse}}</span>'
                         }],
                         rows: [],
@@ -111,7 +112,7 @@
                         vm.data.headers.push({
                             field: 'admissionType',
                             name: '录取院校类别',
-                            template: '<ppts-select ng-if="row.subject==1" category="admissionType" model="row.scores.admissionType" filter="{{vm.criteria.scoreType}}" prop="parentKey" async="false" style="width:150px;"/>'
+                            template: '<mcs-select ng-if="row.subject==1" category="admissionType" model="row.scores.admissionType" filter="{{vm.criteria.scoreType}}" prop="parentKey" async="false" style="width:150px;"/>'
                         });
                         // 录取院校
                         vm.data.headers.push({
@@ -125,12 +126,12 @@
                         vm.data.headers.push({
                             field: 'admissionSchool',
                             name: '985/211院校',
-                            template: '<ppts-select ng-if="row.subject==1" category="ifElse" model="row.scores.isKeyCollege" async="false" style="width:150px;"/>'
+                            template: '<mcs-select ng-if="row.subject==1" category="ifElse" model="row.scores.isKeyCollege" async="false" style="width:150px;"/>'
                         });
                         vm.data.headers.push({
                             field: 'studentType',
                             name: '学员类别',
-                            template: '<ppts-select ng-if="row.subject==1" category="examCustomerType" model="row.scores.studentType" filter="{{vm.score.scoreType}}" prop="parentKey" async="false" caption="学员类别" css="mcs-padding-0" />'
+                            template: '<mcs-select ng-if="row.subject==1" category="examCustomerType" model="row.scores.studentType" filter="{{vm.score.scoreType}}" prop="parentKey" async="false" caption="学员类别" css="mcs-padding-0" />'
                         });
                     }
                     // 月考
@@ -138,44 +139,46 @@
                         vm.data.headers.push({
                             field: 'admissionSchool',
                             name: '考试月份',
-                            template: '<ppts-select ng-if="row.subject==1" category="examMonth" model="row.scores.examineMonth" caption="考试月份" />'
+                            template: '<mcs-select ng-if="row.subject==1" category="examMonth" model="row.scores.examineMonth" caption="考试月份" />'
                         });
                     }
                 };
 
                 vm.save = function () {
-                    var data = [];
-                    var dataList = vm.dataList;
-                    for (var i in dataList) {
-                        var obj = {};
-                        obj.scores = {};
-                        obj.scoreItems = [];
-                        var rows = dataList[i].rows;
-                        for (var j in rows) {
-                            var row = rows[j];
-                            if (row.realScore) {
-                                row.isStudyHere = mcs.util.bool(row.isStudyHere);
-                                obj.scoreItems.push(row);
+                    if (mcsValidationService.run($scope)) {
+                        var data = [];
+                        var dataList = vm.dataList;
+                        for (var i in dataList) {
+                            var obj = {};
+                            obj.scores = {};
+                            obj.scoreItems = [];
+                            var rows = dataList[i].rows;
+                            for (var j in rows) {
+                                var row = rows[j];
+                                if (row.realScore) {
+                                    row.isStudyHere = mcs.util.bool(row.isStudyHere);
+                                    obj.scoreItems.push(row);
+                                }
+                            }
+                            if (obj.scoreItems.length) {
+                                obj.scores = rows[0].scores || {};
+                                obj.scores.scoreID = obj.scores.scoreID;
+                                obj.scores.customerID = row.customerID;
+                                obj.scores.studyYear = vm.criteria.studyYear;
+                                obj.scores.studyTerm = vm.criteria.studyTerm;
+                                obj.scores.studyStage = vm.criteria.studyStage;
+                                obj.scores.scoreGrade = vm.criteria.scoreGrade;
+                                obj.scores.scoreType = vm.criteria.scoreType;
+                                if (obj.scoreItems.length == rows.length) {
+                                    obj.scores.isAllAdded = 1;
+                                }
+                                data.push(obj);
                             }
                         }
-                        if (obj.scoreItems.length) {
-                            obj.scores = rows[0].scores || {};
-                            obj.scores.scoreID = obj.scores.scoreID;
-                            obj.scores.customerID = row.customerID;
-                            obj.scores.studyYear = vm.criteria.studyYear;
-                            obj.scores.studyTerm = vm.criteria.studyTerm;
-                            obj.scores.studyStage = vm.criteria.studyStage;
-                            obj.scores.scoreGrade = vm.criteria.scoreGrade;
-                            obj.scores.scoreType = vm.criteria.scoreType;
-                            if (obj.scoreItems.length == rows.length) {
-                                obj.scores.isAllAdded = 1;
-                            }
-                            data.push(obj);
-                        }
+                        scoreDataService.addBatchScores(data, function (result) {
+                            $state.go('ppts.score');
+                        });
                     }
-                    scoreDataService.addBatchScores(data, function (result) {
-                        $state.go('ppts.score');
-                    });
                 };
 
                 vm.search = function () {
@@ -190,12 +193,7 @@
                         vm.data.pager.pageSize = result.queryResult.pageSize;
                         vm.data.pager.pageIndex = result.queryResult.pageIndex;
 
-                        //dataSyncService.injectDictData(mcs.util.mapping(vm.teachers, { key: 'teacherID', value: 'teacherName', props: 'subject' }, 'scoreTeacher'));
-                        //dataSyncService.injectDictData(mcs.util.mapping(vm.teachers, { key: 'teacherJobOrgID', value: 'teacherJobOrgName', props: 'teacherID' }, 'scoreTeacherOrgName'));
-                        dataSyncService.injectDictData({
-                            c_codE_ABBR_Score_Satisficing: [{ key: '1', value: '对成绩满意' }, { key: '0', value: '对成绩不满意' }]
-                        });
-                        dataSyncService.injectPageDict(['ifElse']);
+                        dataSyncService.injectDynamicDict('ifElse,scoreSatisficing');
                         $scope.$broadcast('dictionaryReady');
 
                         scoresDataViewService.fillGradeParentKey();
@@ -220,21 +218,15 @@
                             }
                             if (!flag)
                                 result_teacher.push(teachers[j]);
-                            var categoryName = 'c_codE_ABBR_scoreTeacher_' + data[i].customerID;
-                            var categoryValue = mcs.util.mapping(result_teacher, { key: 'teacherID', value: 'teacherName', props: 'subject' }, 'scoreTeacher_' + data[i].customerID);
-                            ppts.config.dictMappingConfig['scoreTeacher_' + data[i].customerID] = categoryName;
-                            dataSyncService.injectDictData(categoryValue);
+
+                            dataSyncService.injectDynamicDict(result_teacher, { key: 'teacherID', value: 'teacherName', props: 'subject', keyName: data[i].customerID, category: 'scoreTeacher' });
                         }
                     }
                 };
 
                 vm.handleTeacherOrgNameCategory = function (data) {
                     for (var i in data) {
-                        var teachers = data[i].teachers;
-                        var categoryName = 'c_codE_ABBR_scoreTeacherOrgName_' + data[i].customerID;
-                        var categoryValue = mcs.util.mapping(teachers, { key: 'teacherJobOrgID', value: 'teacherJobOrgName', props: 'teacherID' }, 'scoreTeacherOrgName_' + data[i].customerID);
-                        ppts.config.dictMappingConfig['scoreTeacherOrgName_' + data[i].customerID] = categoryName;
-                        dataSyncService.injectDictData(categoryValue);
+                        dataSyncService.injectDynamicDict(data[i].teachers, { key: 'teacherJobOrgID', value: 'teacherJobOrgName', props: 'teacherID', keyName: data[i].customerID, category: 'scoreTeacherOrgName' });
                     }
                 };
 
@@ -348,8 +340,8 @@
                     vm.dataList.forEach(function (data) {
                         if (data.customerID == customerID) {
                             data.rows.forEach(function (row) {
-                                if (row.realScore && parseInt(row.realScore) && row.subject != '60')
-                                    total += parseInt(row.realScore || 0);
+                                if (row.realScore && parseFloat(row.realScore) && row.subject != '60')
+                                    total += parseFloat(row.realScore || 0);
                             })
                         }
                     });
@@ -362,8 +354,8 @@
                     vm.dataList.forEach(function (data) {
                         if (data.customerID == customerID) {
                             data.rows.forEach(function (row) {
-                                if (row.paperScore && parseInt(row.paperScore) && row.subject != '60')
-                                    total += parseInt(row.paperScore || 0);
+                                if (row.paperScore && parseFloat(row.paperScore) && row.subject != '60')
+                                    total += parseFloat(row.paperScore || 0);
                             })
                         }
                     });

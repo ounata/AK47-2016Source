@@ -5,6 +5,10 @@ using MCS.Library.Principal;
 using PPTS.Data.Common.Security;
 using MCS.Library.Configuration;
 using MCS.Library.Core;
+using MCS.Library.Passport;
+using MCS.Web.MVC.Library.Models.UserTasks;
+using System.Reflection;
+using System.IO;
 
 namespace PPTS.Portal
 {
@@ -30,11 +34,17 @@ namespace PPTS.Portal
                 PPTSJobCollection jobs = DeluxeIdentity.CurrentUser.Jobs();
                 parameters["userId"] = DeluxeIdentity.CurrentUser.ID;
                 parameters["displayName"] = DeluxeIdentity.CurrentUser.DisplayName;
+                parameters["logOnName"] = DeluxeIdentity.CurrentUser.LogOnName;
                 parameters["jobs"] = jobs;
                 parameters["roles"] = DeluxeIdentity.CurrentUser.PPTSRoles();
                 if (jobs.Count > 0)
                 {
-                    parameters["orgId"] = jobs[0].GetParentOrganizationByType(DepartmentType.HQ).ID;
+                    var hq = jobs[0].GetParentOrganizationByType(DepartmentType.HQ);
+                    var branch = jobs[0].GetParentOrganizationByType(DepartmentType.Branch);
+                    var campus = jobs[0].GetParentOrganizationByType(DepartmentType.Campus);
+                    parameters["orgId"] = hq != null ? hq.ID : "";
+                    parameters["branchId"] = branch != null ? branch.ID : "";
+                    parameters["campusId"] = campus != null ? campus.ID : "";
                 }
             }
 
@@ -43,6 +53,11 @@ namespace PPTS.Portal
             UriSettings.GetConfig().GetUrlsInGroup("pptsWebAPIs").ForEach(u => webAPIs[u.Key] = u.Value.Uri);
 
             parameters["pptsWebAPIs"] = webAPIs;
+            parameters["logoffUrl"] = PassportManager.GetLogOnOrLogOffUrl();
+            parameters["userTasksAndCount"] = UserTaskModelHelper.Instance.QueryTaskCountAndSimpleList(DeluxeIdentity.CurrentUser.ID, new UserTaskSearchParams() { Top = 5 });
+
+            parameters["roleCheckEnabled"] = RolesDefineConfig.GetConfig().Enabled;
+            parameters["timestamp"] = File.GetCreationTime(Assembly.GetExecutingAssembly().Location).Ticks;
 
             return parameters;
         }

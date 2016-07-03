@@ -13,6 +13,12 @@ using System.Web;
 using PPTS.Data.Common;
 using PPTS.Data.Orders;
 using PPTS.Data.Common.Entities;
+using MCS.Library.SOA.DataObjects.AsyncTransactional;
+using PPTS.Data.Customers.Entities;
+using PPTS.Data.Customers;
+using PPTS.Contracts.Customers.Operations;
+using MCS.Library.Configuration;
+using PPTS.Contracts.Orders.Operations;
 
 namespace PPTS.WebAPI.Orders.ViewModels.Unsubscribe
 {
@@ -37,6 +43,8 @@ namespace PPTS.WebAPI.Orders.ViewModels.Unsubscribe
         public DebookOrderModel FillOrder()
         {
 
+            Order.DebookID =  UuidHelper.NewUuidString();
+            Order.DebookNo = Data.Orders.Helper.GetDebookOrderCode("DEB");
             Order.CustomerID = OrderItemView.CustomerID;
             Order.CustomerCode = OrderItemView.CustomerCode;
             Order.CustomerName = OrderItemView.CustomerName;
@@ -45,7 +53,7 @@ namespace PPTS.WebAPI.Orders.ViewModels.Unsubscribe
             Order.ParentID = OrderItemView.ParentID;
             Order.ParentName = OrderItemView.ParentName;
 
-            Order.DebookStatus = ((int)OrderStatus.PendingApproval).ToString();
+            Order.DebookStatus = ((int)OrderStatus.ApprovalPass).ToString();
             Order.ProcessStatus = ((int)ProcessStatusDefine.Processing).ToString();
 
             FillUser(Order);
@@ -55,10 +63,10 @@ namespace PPTS.WebAPI.Orders.ViewModels.Unsubscribe
 
         public DebookOrderModel FillOrderItem()
         {
-
             var currentAmount = OrderItemView.RealAmount - OrderItemView.DebookedAmount - OrderItemView.ConfirmedAmount;
             Item.DebookAmount = Item.DebookAmount < currentAmount ? Item.DebookAmount : currentAmount;
 
+            Item.DebookID = Order.DebookID;
             Item.AccountCode = OrderItemView.AccountCode;
             Item.AccountID = OrderItemView.AccountID;
             Item.AssetID = OrderItemView.AssetID;
@@ -74,7 +82,7 @@ namespace PPTS.WebAPI.Orders.ViewModels.Unsubscribe
             }
 
             Item.DebookMoney = Item.DebookAmount * OrderItemView.RealPrice;
-            
+
             Item.AssetID = OrderItemView.AssetID;
 
             FillUser(Item);
@@ -107,16 +115,19 @@ namespace PPTS.WebAPI.Orders.ViewModels.Unsubscribe
 
 
 
-        public Asset ToAsset()
+        public DebookOrderModel FillAsset()
         {
-            if (null != Asset) { return Asset; }
+            //if (null != Asset) { return Asset; }
             Asset = GenericAssetAdapter<Asset, AssetCollection>.Instance.LoadByItemId(OrderItemView.ItemID);
             Asset.NullCheck("Asset");
 
             Asset.ReturnedMoney = Item.ReturnMoney;
             Asset.DebookedAmount += Item.DebookAmount;
-            return Asset;
+            Asset.Amount -= Item.DebookAmount;
+
+            return this;
         }
+        
 
         private OrderItemView _orderItemView = null;
         private OrderItemView OrderItemView
@@ -140,14 +151,113 @@ namespace PPTS.WebAPI.Orders.ViewModels.Unsubscribe
 
             (
                 Item.DebookAmount == 0 ||
-                Asset.RealAmount - Item.DebookAmount- Asset.AssignedAmount - Asset.ConfirmedAmount- Asset.DebookedAmount < 0
+                Asset.Amount < 0
             ).TrueThrow("退订数据有误！");
 
-            (
-                Asset.ConfirmedAmount == Asset.RealAmount || 
-                Asset.DebookedAmount + Asset.AssignedAmount == Asset.RealAmount
-             ).TrueThrow("无剩余数量可退");
+            //是否存在 未完成订购操作
+            OrdersAdapter.Instance.ExistsPendingApprovalInContext(Order.CustomerID);
+            Data.Orders.ConnectionDefine.GetDbContext().DoAction(db => db.ExecuteNonQuerySqlInContext());
+        }
+
+        #region 异步使用
+        private Data.Customers.Entities.AccountRecord Record { set; get; }
+
+        private void FillAccountRecord()
+        {
+            Record.IsNull(() =>
+            {
+
+                Order = DebookOrderAdapter.Instance.Load(Order.DebookID);
+                var tempOrderItem = OrderItemAdapter.Instance.Load(OrderItemID);
+                var tempOrder = OrdersAdapter.Instance.Load(tempOrderItem.OrderID);
+
+                Record = new AccountRecord()
+                {
+                    CampusID = Order.CampusID,
+                    CustomerID = Order.CustomerID,
+                    AccountID = tempOrder.AccountID,
+                    RecordID = UuidHelper.NewUuidString(),
+                    RecordType = AccountRecordType.Debook,
+                    RecordFlag = 1,
+
+                    BillID = Order.DebookID,
+                    BillNo = Order.DebookNo,
+
+                    BillRelateID = tempOrder.OrderID,
+                    BillRelateNo = tempOrder.OrderNo,
+
+                    BillType = ((int)tempOrder.OrderType).ToString(),
+                    BillTypeName = EnumItemDescriptionAttribute.GetDescription(tempOrder.OrderType),
+                    BillTime = tempOrder.OrderTime
+                };
+                FillUser(Record);
+            });
+
+        }
+        public TxProcess TxProcess { private set; get; }
+        public TxProcess PrepareProcess()
+        {
+            if (TxProcess != null)
+            {
+                return TxProcess;
+            }
+
+            FillAccountRecord();
+
+            TxProcess = new TxProcess();
+
+            TxProcess.ProcessName = "提交退订";
+            TxProcess.Category = "提交退订";
             
+
+            TxActivity activity1 = TxProcess.Activities.AddActivity("帐户退钱");
+            activity1.AddActionService<IAccountTransactionService>(
+                UriSettings.GetConfig().CheckAndGet("pptsServices", "accountTransactionService").ToString(),
+                proxy => proxy.DebookAccount(TxProcess.ProcessID, Record.AccountID, Item.DebookMoney, Record));
+
+            activity1.AddCompensationService<IAccountTransactionService>(
+                UriSettings.GetConfig().CheckAndGet("pptsServices", "accountTransactionService").ToString(),
+                proxy => proxy.RollbackDebookAccount(TxProcess.ProcessID, Record.AccountID, Item.DebookMoney, Record));
+
+
+            TxActivity activity2 = TxProcess.Activities.AddActivity("重置退订订单状态");
+            activity2.AddActionService<IOrderTransactionService>(
+                UriSettings.GetConfig().CheckAndGet("pptsServices", "orderTransactionService").ToString(),
+                proxy => proxy.ModifyDebookOrderStatus(TxProcess.ProcessID,Order.DebookID, OrderStatus.ApprovalPass, ProcessStatusDefine.Processed,Order.CreatorID,Order.CreatorName));
+            activity2.AddCompensationService<IOrderTransactionService>(
+                UriSettings.GetConfig().CheckAndGet("pptsServices", "orderTransactionService").ToString(),
+                proxy => proxy.ModifyDebookOrderStatus(TxProcess.ProcessID, Order.DebookID, OrderStatus.ApprovalPass, ProcessStatusDefine.Error, Order.CreatorID, Order.CreatorName));
+
+            return TxProcess;
+
+        }
+
+        #endregion
+
+
+        /// <summary>
+        /// 是否需要审批
+        /// </summary>
+        public bool IsApprove { private set; get; }
+
+        public DebookOrderModel PrepareIsApprove() {
+            
+
+
+            if(OrderItemView != null)
+            {
+                IsApprove.FalseAction(() => {
+                    IsApprove = (OrderItemView.CategoryType == ((int)CategoryType.YouXue).ToString() );
+                }); 
+            }
+
+            //IsApprove = true;
+
+            IsApprove.TrueAction(() => {
+                Order.DebookStatus = ((int)OrderStatus.PendingApproval).ToString();
+            });
+
+            return this;
         }
 
     }

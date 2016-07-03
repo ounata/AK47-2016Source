@@ -58,6 +58,7 @@
       <HintPath>..\..\Bin\MCS.Library.WcfExtensions.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="PPTS.Contracts.Search">
       <HintPath>..\..\PPTSBin\PPTS.Contracts.Search.dll</HintPath>
     </Reference>
@@ -103,6 +104,15 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Executors\CustomerSearchExecutor_ByAssign.cs" />
+    <Compile Include="Executors\CustomerSearchExecutor_ByAccountTransfer.cs" />
+    <Compile Include="Executors\CustomerSearchExecutor_ByAccountRefund.cs" />
+    <Compile Include="Executors\CustomerSearchExecutor_ByAccountCharge.cs" />
+    <Compile Include="Executors\CustomerSearchTest.cs" />
+    <Compile Include="Executors\CustomerSearchProcessor.cs" />
+    <Compile Include="Executors\CustomerSearchExecutor_ByCustomer.cs" />
+    <Compile Include="Executors\CustomerSearchExecutorBase.cs" />
+    <Compile Include="Executors\CustomerSearchExecutor_ByCustomerFollow.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -111,9 +121,7 @@
       <DependentUpon>CustomerSearchUpdateService.svc</DependentUpon>
     </Compile>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -121,6 +129,9 @@
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

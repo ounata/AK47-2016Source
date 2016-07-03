@@ -18,32 +18,29 @@
             </div>
             <div class="form-body">
                 <h4 class="form-section"><i class="ace-icon fa fa-th"></i> {{vm.criteria.discountName}}</h4>
-                <div class="row">
-                    <div class="form-group horizontal">
-                        <mcs-label required="true" text="启用日期" css="col-sm-3" />
-                        <span class="col-sm-4">{{vm.criteria.startDate | date:"yyyy-MM-dd"}}</span>
+                <div class="form-group">
+                    <mcs-label text="启用日期：" css="col-md-4" />
+                    <div class="col-md-4">
+                        <p class="form-control-static">{{vm.criteria.startDate | date:"yyyy-MM-dd"}}</p>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="form-group horizontal">
-                        <mcs-label required="true" text="选择校区" css="col-sm-3" />
-                        <span class="col-sm-4">
-                            {{vm.criteria.campusNames}}
-                        </span>
+
+                <div class="form-group">
+                    <mcs-label text="选择校区：" css="col-md-4" />
+                    <div class="col-md-4">
+                        <p class="form-control-static">{{vm.criteria.campusNames}}</p>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="form-group horizontal">
-                        <div class="col-sm-6 col-md-6">
-                            <div style="text-align:center; background-color:#ccc; padding:10px 0 10px 0; font-size:14px;">
-                                充值折扣关系
-                            </div>
-                            <mcs-datatable data="vm.relationData" />
+                <div class="form-group">
+                    <div class="col-sm-6 col-md-6">
+                        <div style="text-align:center; background-color:#ccc; padding:10px 0 10px 0; font-size:14px;">
+                            充值折扣关系
                         </div>
-                        <div class="col-sm-6 col-md-6">
-                            <div style="text-align:center; background-color:#ccc; padding:14px 0 14px 0; font-size:14px;">校区及使用状态</div>
-                            <mcs-datatable data="vm.campusData" />
-                        </div>
+                        <mcs-datatable data="vm.relationData" />
+                    </div>
+                    <div class="col-sm-6 col-md-6">
+                        <div style="text-align:center; background-color:#ccc; padding:10px 0 10px 0; font-size:14px;">校区及使用状态</div>
+                        <mcs-datatable data="vm.campusData" />
                     </div>
                 </div>
             </div>

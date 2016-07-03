@@ -70,6 +70,7 @@
     <Compile Include="Models\CustomerRelationByTeacherQueryResult.cs" />
     <Compile Include="Models\CustomerExpenseCollectionQueryResult.cs" />
     <Compile Include="Models\PrimaryParentQueryResult.cs" />
+    <Compile Include="Models\CustomerScopeAuthorizationModel.cs" />
     <Compile Include="Models\TeacherRelationByCustomerQueryResult.cs" />
     <Compile Include="Models\TeacherJobModel.cs" />
     <Compile Include="Operations\IAccountQueryService.cs" />
@@ -79,6 +80,9 @@
     <Compile Include="Operations\ICustomerQueryService.cs" />
     <Compile Include="Operations\IAccountTransactionService.cs" />
     <Compile Include="Operations\ICustomerUpdateService.cs" />
+    <Compile Include="Operations\ICustomerScopeAuthorizationService.cs" />
+    <Compile Include="Operations\IFinancialChargeService.cs" />
+    <Compile Include="Operations\IWorkflowService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

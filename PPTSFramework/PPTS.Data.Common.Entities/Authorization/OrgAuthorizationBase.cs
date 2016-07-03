@@ -17,7 +17,7 @@ namespace PPTS.Data.Common.Authorization
     {/// <summary>
      /// 授权对象ID
      /// </summary>
-        [ORFieldMapping("ObjectID")]
+        [ORFieldMapping("ObjectID", PrimaryKey = true)]
         [DataMember]
         public virtual string ObjectID { get; set; }
 

@@ -139,7 +139,6 @@
     <Build Include="CM\Tables\CustomerRefundAlerts.sql" />
     <Build Include="CM\Tables\CustomerStopAlerts.sql" />
     <Build Include="CM\Tables\CustomerUserMapping.sql" />
-    <Build Include="CM\Tables\POSRecords.sql" />
     <Build Include="CM\Tables\CustomerTeacherAssignApplies.sql" />
     <Build Include="MT\Tables\CustomerOrgAuthorizations.sql" />
     <Build Include="MT\Tables\CustomerRelationAuthorizations.sql" />
@@ -153,6 +152,9 @@
     <Build Include="CM\Stored Procedures\CustomerAutoUpgrade.sql" />
     <Build Include="CM\Stored Procedures\CustomerGraduated.sql" />
     <Build Include="CM\Stored Procedures\CustomerFrozen.sql" />
+    <Build Include="CM\Tables\POSRecords.sql" />
+    <Build Include="CM\Tables\AccountChargeInvoices.sql" />
+    <Build Include="CM\Views\v_AccountRecords.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PPTS.Data.Customers.DB.refactorlog" />

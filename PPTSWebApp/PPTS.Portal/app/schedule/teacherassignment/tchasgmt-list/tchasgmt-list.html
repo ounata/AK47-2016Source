@@ -2,24 +2,24 @@
 <ppts-dynamic-content template="quick-search.tpl.html">
     <div class="row">
         <div class="col-md-4">
-            <mcs-input uib-tooltip="教师姓名" css="mcs-input-search mcs-width-full" placeholder="教师姓名" model="vm.criteria.teacherName" />
+            <mcs-input uib-popover="教师姓名" css="mcs-input-search mcs-width-full" placeholder="教师姓名" model="vm.criteria.teacherName" />
         </div>
         <div class="col-md-4">
-            <ppts-select caption="授课年级" category="grade" model="vm.criteria.gradeMemo" css="mcs-padding-0" />
+            <mcs-select caption="授课年级" category="grade" model="vm.criteria.gradeMemo" css="mcs-padding-0" />
         </div>
         <div class="col-md-4">
-            <ppts-select caption="授课科目" category="subject" model="vm.criteria.subjectMemo"  css="mcs-padding-0" />
+            <mcs-select caption="授课科目" category="subject" model="vm.criteria.subjectMemo"  css="mcs-padding-0" />
         </div>
     </div>
     <div class="row">
         <div class="col-md-4">
-            <ppts-select caption="岗位性质" category="teacherType" model="vm.criteria.isFullTime" css="mcs-padding-0"  />
+            <mcs-select caption="岗位性质" category="teacherType" model="vm.criteria.isFullTime" css="mcs-padding-0"  />
         </div>
         <div class="col-md-4">
-            <ppts-select caption="性别" category="gender" model="vm.criteria.gender" css="mcs-padding-0"  />
+            <mcs-select caption="性别" category="gender" model="vm.criteria.gender" css="mcs-padding-0"  />
         </div>
         <div class="col-md-4">
-            <ppts-select caption="年龄" category="ageCollection" model="vm.age" callback="vm.calcAge(item)" css="mcs-padding-0"  />
+            <mcs-select caption="年龄" category="ageCollection" model="vm.criteria.age" callback="vm.calcAge(item)" css="mcs-padding-0"  />
         </div>
     </div>
 </ppts-dynamic-content>

@@ -19,6 +19,12 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
     [DataContract]
     public class RefundAllotItemModel : AccountRefundAllot
     {
+        [DataMember]
+        public List<TeacherJobModel> TeacherJobs
+        {
+            set;
+            get;
+        }
 
     }
 }

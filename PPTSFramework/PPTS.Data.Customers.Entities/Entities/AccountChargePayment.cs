@@ -2,6 +2,7 @@
 using MCS.Library.Data.DataObjects;
 using MCS.Library.Data.Mapping;
 using PPTS.Data.Common;
+using PPTS.Data.Common.Authorization;
 using PPTS.Data.Common.Entities;
 using System;
 using System.Collections.Generic;
@@ -10,11 +11,14 @@ using System.Runtime.Serialization;
 
 namespace PPTS.Data.Customers.Entities
 {
-	/// <summary>
-	/// This object represents the properties and methods of a AccountChargePayment.
-	/// 账户缴费支付单表
-	/// </summary>
-	[Serializable]
+    /// <summary>
+    /// This object represents the properties and methods of a AccountChargePayment.
+    /// 账户缴费支付单表
+    /// </summary>
+    #region 数据范围权限(存入识别)
+    [EntityAuth(RecordType = RecordType.AccountChargePayment)]
+    #endregion
+    [Serializable]
     [ORTableMapping("CM.AccountChargePayments")]
     [DataContract]
 	public class AccountChargePayment : IEntityWithCreator, IEntityWithModifier
@@ -67,10 +71,32 @@ namespace PPTS.Data.Customers.Entities
             set;
 		}
 
-		/// <summary>
-		/// 支付时间
-		/// </summary>
-		[ORFieldMapping("PayTime", UtcTimeToLocal = true)]
+        /// <summary>
+        /// 输入时间
+        /// </summary>
+        [ORFieldMapping("InputTime", UtcTimeToLocal = true)]
+        [DataMember]
+        public DateTime InputTime
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 刷卡时间
+        /// </summary>
+        [ORFieldMapping("SwipeTime", UtcTimeToLocal = true)]
+        [DataMember]
+        public DateTime SwipeTime
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 收款时间（很多规则在里面）
+        /// </summary>
+        [ORFieldMapping("PayTime", UtcTimeToLocal = true)]
         [DataMember]
 		public DateTime PayTime
 		{
@@ -84,7 +110,7 @@ namespace PPTS.Data.Customers.Entities
 		[ORFieldMapping("PayType")]
         [ConstantCategory(Category = "Account_PayType")]
         [DataMember]
-		public PayTypeDefine PayType
+		public string PayType
 		{
 			get;
             set;

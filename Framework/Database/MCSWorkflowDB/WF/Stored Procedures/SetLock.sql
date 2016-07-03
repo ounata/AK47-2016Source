@@ -24,7 +24,7 @@ BEGIN
 
 	DECLARE @CurrentTime DATETIME
 
-	SET @CurrentTime = getdate()
+	SET @CurrentTime = GETUTCDATE()
 
 	DECLARE @resultTable TABLE(
 				LOCK_ID NVARCHAR(36),

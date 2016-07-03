@@ -4,6 +4,9 @@ using PPTS.Data.Customers.Adapters;
 using PPTS.Data.Customers.DataSources;
 using PPTS.Data.Customers.Entities;
 using PPTS.WebAPI.Customers.ViewModels.PotentialCustomers;
+using MCS.Library.Data.DataObjects;
+using PPTS.WebAPI.Customers.ViewModels.Parents;
+using PPTS.Data.Customers;
 
 namespace PPTS.WebAPI.Customers.DataSources
 {
@@ -15,6 +18,25 @@ namespace PPTS.WebAPI.Customers.DataSources
         {
         }
 
+        public PagedQueryResult<ParentModel, ParentModelCollection> LoadParents(IPageRequestParams prp, ParentsSearchQueryCriteriaModel condition, IEnumerable<IOrderByRequestItem> orderByBuilder)
+        {
+            string sqlBuilder = BuildQueryCondition(condition);
+
+            sqlBuilder = string.Format(" 1=1 {0}", sqlBuilder);
+
+            var result = Query(prp, sqlBuilder, orderByBuilder);
+
+            return result;
+        }
+
+        protected override void OnBuildQueryCondition(QueryCondition qc)
+        {
+            qc.SelectFields = @" Parents.ParentID, Parents.ParentName, Parents.CreateTime, Parents.Gender ";
+            qc.FromClause = @" CM.Parents_Current Parents ";
+
+            base.OnBuildQueryCondition(qc);
+        }
+
         protected override void OnAfterQuery(ParentModelCollection result)
         {
             result.ForEach(parent =>
@@ -24,12 +46,24 @@ namespace PPTS.WebAPI.Customers.DataSources
             });
         }
 
-        public PagedQueryResult<ParentModel, ParentModelCollection> LoadParents(IPageRequestParams prp, object condition, IEnumerable<IOrderByRequestItem> orderByBuilder)
+        private string BuildQueryCondition(ParentsSearchQueryCriteriaModel condition)
         {
-            string select = " a.ParentID, a.ParentName, a.CreateTime, a.Gender ";
-            string from = " CM.Parents_Current a left join CM.ParentsFulltext b on a.ParentID = b.OwnerID ";
-            PagedQueryResult<ParentModel, ParentModelCollection> result = Query(prp, select, from, condition, orderByBuilder);
-            return result;
+            string sqlBuilder = string.Empty;
+            if (!string.IsNullOrEmpty(condition.CustomerID))
+            {
+                sqlBuilder = string.Format(
+                    @" and ParentID not in (select ParentID from CM.CustomerParentRelations_Current where CustomerID = '{0}') ", condition.CustomerID);
+            }
+            if (!string.IsNullOrEmpty(condition.Keyword))
+            {
+                sqlBuilder += string.Format(
+                    @" and exists(select OwnerID
+                       from CM.ParentsFulltext AS ParentsFulltext
+                       where Parents.ParentID = ParentsFulltext.OwnerID and CONTAINS(ParentsFulltext.ParentSearchContent, N'""{0}""'))", condition.Keyword.EncodeString());
+            }
+
+            return sqlBuilder;
         }
+
     }
 }

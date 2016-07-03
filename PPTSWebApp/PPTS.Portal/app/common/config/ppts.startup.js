@@ -13,11 +13,14 @@ var mcs = mcs || {};
 
     return mcs;
 })();
-(function () {
+(function() {
     'use strict';
 
-    var fileTypes = { css: 'css', javascript: 'js' };
-    var getFileName = function (fileType, filePath, isLocal) {
+    var fileTypes = {
+        css: 'css',
+        javascript: 'js'
+    };
+    var getFileName = function(fileType, filePath, isLocal) {
         var fileName = !isLocal ? mcs.app.config.mcsComponentBaseUrl.replace('http://', 'http:\\') : '';
         var extension = '';
         switch (fileType) {
@@ -39,10 +42,14 @@ var mcs = mcs || {};
         return fileName;
     };
 
-    var handleParam = function (fileType, params) {
+    var handleParam = function(fileType, params) {
         if (!params.length) return;
 
-        var assets = { files: [], localFiles: [], container: '' };
+        var assets = {
+            files: [],
+            localFiles: [],
+            container: ''
+        };
 
         if (params.length == 1) {
             if (params[0] instanceof Object && params[0].constructor == Object) {
@@ -87,13 +94,16 @@ var mcs = mcs || {};
      * cssFiles: 来自远程服务器的CSS文件列表(如：/libs/demo.css,lib/demo,lib/demo.css)
      * localCssFiles: 来自本地服务器的CSS文件列表(如：/local/demo.css, local/demo)
      * container: 可不指定将附加到head中，否则将附加到指定的标签位置
-    */
-    mcs.g.loadCss = function (/*{cssFiles:[],localCssFiles:[],container:'#containerId'}*/) {
+     */
+    mcs.g.loadCss = function( /*{cssFiles:[],localCssFiles:[],container:'#containerId'}*/ ) {
         var assets = handleParam(fileTypes.css, arguments);
-        var mergeFiles = [
-            { isLocal: false, data: assets.cssFiles || []},
-            { isLocal: true, data: assets.localCssFiles || []}
-        ];
+        var mergeFiles = [{
+            isLocal: false,
+            data: assets.cssFiles || []
+        }, {
+            isLocal: true,
+            data: assets.localCssFiles || []
+        }];
 
         for (var i = 0, iLen = mergeFiles.length; i < iLen; i++) {
             var file = mergeFiles[i];
@@ -112,18 +122,22 @@ var mcs = mcs || {};
         }
     };
 
+
     /*
-    * 动态加载Js文件列表，可指定页面上的任意位置
-    * jsFiles: 来自远程服务器的JS文件列表(如：/libs/demo.js,lib/demo,lib/demo.js)
-    * localJsFiles: 来自本地服务器的JS文件列表(如：/local/demo.css, local/demo)
-    * container: 可不指定将附加到head中，否则将附加到指定的标签位置
-   */
-    mcs.g.loadJs = function (/*{jsFiles:[],localJsFiles:[],container:'#containerId'}*/) {
+     * 动态加载Js文件列表，可指定页面上的任意位置
+     * jsFiles: 来自远程服务器的JS文件列表(如：/libs/demo.js,lib/demo,lib/demo.js)
+     * localJsFiles: 来自本地服务器的JS文件列表(如：/local/demo.css, local/demo)
+     * container: 可不指定将附加到head中，否则将附加到指定的标签位置
+     */
+    mcs.g.loadJs = function( /*{jsFiles:[],localJsFiles:[],container:'#containerId'}*/ ) {
         var assets = handleParam(fileTypes.javascript, arguments);
-        var mergeFiles = [
-            { isLocal: false, data: assets.jsFiles || []},
-            { isLocal: true, data: assets.localJsFiles || []}
-        ];
+        var mergeFiles = [{
+            isLocal: false,
+            data: assets.jsFiles || []
+        }, {
+            isLocal: true,
+            data: assets.localJsFiles || []
+        }];
 
         for (var i = 0, iLen = mergeFiles.length; i < iLen; i++) {
             var file = mergeFiles[i];
@@ -142,12 +156,12 @@ var mcs = mcs || {};
     };
 
     /*
-    * 对requirejs单独做处理
-    * requireFile: 来自远程或本地服务器的RequireJS文件地址(如：libs/require)
-    * requireConfig: 来自本地服务器的RequireJS配置文件地址(如：./app/config/require.config),
-    * isLocal: 是否来自本地服务器(默认为false)
-   */
-    mcs.g.loadRequireJs = function (requireFile, requireConfig, isLocal) {
+     * 对requirejs单独做处理
+     * requireFile: 来自远程或本地服务器的RequireJS文件地址(如：libs/require)
+     * requireConfig: 来自本地服务器的RequireJS配置文件地址(如：./app/config/require.config),
+     * isLocal: 是否来自本地服务器(默认为false)
+     */
+    mcs.g.loadRequireJs = function(requireFile, requireConfig, isLocal) {
         if (!requireFile || !requireConfig) return;
         var fileType = fileTypes.javascript;
         var fileName = getFileName(fileType, requireFile, isLocal);
@@ -165,13 +179,14 @@ var mcs = mcs || {};
     return mcs.g;
 
 })();
-(function () {
+
+(function() {
     'use strict';
 
     /*
      * 两个对象判等
      */
-    mcs.util.isObjectsEqual = function (a, b) {
+    mcs.util.isObjectsEqual = function(a, b) {
         var aProps = Object.getOwnPropertyNames(a);
         var bProps = Object.getOwnPropertyNames(b);
         if (aProps.length != bProps.length) {
@@ -186,9 +201,9 @@ var mcs = mcs || {};
         return true;
     };
 
-
-
-    mcs.util.postMockForm = function (URL, PARAMS) {
+    mcs.util.postMockForm = function(URL, PARAMS) {
+        var currentJobId = PARAMS.pptsCurrentJobID;
+        delete PARAMS.pptsCurrentJobID;
         var temp_form = document.createElement("form");
         temp_form.action = URL;
         temp_form.target = "_blank";
@@ -197,7 +212,11 @@ var mcs = mcs || {};
         var opt = document.createElement("textarea");
         opt.name = 'form';
         opt.value = JSON.stringify(PARAMS);
+        var currentJobEle = document.createElement('textarea');
+        currentJobEle.name = 'pptsCurrentJobID';
+        currentJobEle.value = currentJobId;
         temp_form.appendChild(opt);
+        temp_form.appendChild(currentJobEle);
 
 
         document.body.appendChild(temp_form);
@@ -209,7 +228,7 @@ var mcs = mcs || {};
     /*
      * 删除数组中指定元素
      */
-    mcs.util.removeByValue = function (_array, val) {
+    mcs.util.removeByValue = function(_array, val) {
         for (var i = 0; i < _array.length; i++) {
             if (this[i] == val) {
                 _array.splice(i, 1);
@@ -222,7 +241,7 @@ var mcs = mcs || {};
      * 删除对象集合中具有指定特征的对象    
      */
 
-    mcs.util.removeByObjectWithKeys = function (_array, obj) {
+    mcs.util.removeByObjectWithKeys = function(_array, obj) {
         var props = Object.getOwnPropertyNames(obj);
         var propsAmount = props.length;
 
@@ -248,7 +267,7 @@ var mcs = mcs || {};
     /*
      * 删除对象集合中具有指定特征的对象集
      */
-    mcs.util.removeByObjectsWithKeys = function (_array, targetArray) {
+    mcs.util.removeByObjectsWithKeys = function(_array, targetArray) {
         for (var i = targetArray.length - 1; i >= 0; i--) {
             mcs.util.removeByObjectWithKeys(_array, targetArray[i]);
         }
@@ -259,7 +278,7 @@ var mcs = mcs || {};
      * 从对象集合中删除指定对象
      *
      */
-    mcs.util.removeByObject = function (_array, obj) {
+    mcs.util.removeByObject = function(_array, obj) {
         for (var i = 0; i < _array.length; i++) {
             if (mcs.util.isObjectsEqual(_array[i], obj)) {
                 _array.splice(i, 1);
@@ -271,7 +290,7 @@ var mcs = mcs || {};
     /*
      * JS 产生一个新的GUID随机数
      */
-    mcs.util.newGuid = function () {
+    mcs.util.newGuid = function() {
         var guid = "";
         for (var i = 1; i <= 32; i++) {
             var n = Math.floor(Math.random() * 16.0).toString(16);
@@ -285,10 +304,10 @@ var mcs = mcs || {};
     /*
      * 格式化字符串
      */
-    mcs.util.format = function (str, args) {
+    mcs.util.format = function(str, args) {
         var result = str;
         if (arguments.length > 0) {
-            if (arguments.length == 2 && typeof (args) == "object") {
+            if (arguments.length == 2 && typeof(args) == "object") {
                 for (var key in args) {
                     if (args[key] != undefined) {
                         var reg = new RegExp("({" + key + "})", "g");
@@ -311,28 +330,47 @@ var mcs = mcs || {};
     /*
      * 判断是否为字符串
      */
-    mcs.util.isString = function (value) {
+    mcs.util.isString = function(value) {
         return typeof value === 'string';
     };
 
     /*
      * 判断是否为数组
      */
-    mcs.util.isArray = function (value) {
+    mcs.util.isArray = function(value) {
         return value instanceof Array && value.constructor == Array;
     };
 
     /*
      * 判断是否为对象
      */
-    mcs.util.isObject = function (value) {
+    mcs.util.isObject = function(value) {
         return value instanceof Object && value.constructor == Object;
+    };
+
+    /*
+     * 判断是否为身份证
+     */
+    mcs.util.isIdCard = function(value) {
+        return (/^(\d{18,18}|\d{15,15}|\d{17,17}x|\d{17,17}X)$/).test($.trim(value));
+    };
+
+    /*
+     * 判断是否为日期
+     */
+    mcs.util.isDate = function(value) {
+        var date = value;
+        var result = date.match(/^(\d{1,4})(-|\/)(\d{1,2})\2(\d{1,2})$/);
+
+        if (result == null) return false;
+        var d = new Date(result[1], result[3] - 1, result[4]);
+        return (d.getFullYear() == result[1] && (d.getMonth() + 1) == result[3] && d.getDate() == result[4]);
     };
 
     /*
      * 字典对象合并
      */
-    mcs.util.merge = function (dictionary) {
+    mcs.util.merge = function(dictionary) {
         for (var item in dictionary) {
             var prop = item;
             item = item.toLowerCase().indexOf('c_code_abbr_') == 0 ? item : 'c_codE_ABBR_' + item;
@@ -341,9 +379,9 @@ var mcs = mcs || {};
     };
 
     /*
-    * 字典对象转化
-    */
-    mcs.util.convert = function (dictionary) {
+     * 字典对象转化
+     */
+    mcs.util.convert = function(dictionary) {
         var items = {};
         for (var index in dictionary) {
             var item = dictionary[index];
@@ -357,14 +395,18 @@ var mcs = mcs || {};
      * 对象列表映射成字典
      * data 对象数组, kvp 键值对{key,value},category 所属类别
      */
-    mcs.util.mapping = function (data, kvp, category) {
+    mcs.util.mapping = function(data, kvp, category) {
         if (!data || !kvp.key || !kvp.value) return;
-        var getItems = function () {
+        var getItems = function() {
             var items = [];
             for (var i in data) {
+                if (isNaN(parseInt(i))) continue;
+                var key = data[i][kvp.key],
+                    value = data[i][kvp.value];
+                if (key == undefined || value == undefined) continue;
                 var item = {
-                    key: data[i][kvp.key],
-                    value: data[i][kvp.value]
+                    key: key,
+                    value: value
                 };
                 if (kvp.props) {
                     var props = mcs.util.toArray(kvp.props);
@@ -390,7 +432,7 @@ var mcs = mcs || {};
     /*
      * 限制文本框只能输入整数
      */
-    mcs.util.limit = function (input) {
+    mcs.util.limit = function(input) {
         if (input instanceof jQuery) {
             input = input[0];
         }
@@ -404,7 +446,7 @@ var mcs = mcs || {};
     /*
      * 检测只能输入小数
      */
-    mcs.util.number = function (input) {
+    mcs.util.number = function(input) {
         if (input instanceof jQuery) {
             input = input[0];
         }
@@ -419,9 +461,24 @@ var mcs = mcs || {};
     };
 
     /*
+     * 文本框禁止粘贴
+     */
+    mcs.util.disablePaste = function(evt) {
+        if (!window.event) {
+            var keycode = evt.keyCode;
+            var key = String.fromCharCode(keycode).toLowerCase();
+            if (evt.ctrlKey && key == "v") {
+                evt.preventDefault();
+                evt.stopPropagation();
+            }
+        }
+        return false;
+    };
+
+    /*
      * 从指定的数组集合中找到字符串或数组子集合中是否存在
      */
-    mcs.util.contains = function (data, elems, separator) {
+    mcs.util.contains = function(data, elems, separator) {
         if (!data || !elems) return false;
         var array = mcs.util.toArray(elems, separator);
         for (var i in array) {
@@ -436,7 +493,7 @@ var mcs = mcs || {};
     /*
      * 判断对象数组中是否包含指定属性的对象
      */
-    mcs.util.containsObject = function (data, elem, prop) {
+    mcs.util.containsObject = function(data, elem, prop) {
         if (!data || !data.length || !elem || !elem[prop]) return false;
         for (var index in data) {
             if (data[index][prop] == elem[prop]) {
@@ -449,14 +506,14 @@ var mcs = mcs || {};
     /*
      * 判断对象数组中是否包含指定属性的对象
      */
-    mcs.util.containsElement = function (data, elem) {
+    mcs.util.containsElement = function(data, elem) {
         return mcs.util.toArray(data).indexOf(elem) > -1;
     };
 
     /*
      * 将指定元素转化为数组
      */
-    mcs.util.toArray = function (data, separator) {
+    mcs.util.toArray = function(data, separator) {
         var result = [];
         if (typeof data == "number") {
             data = data + '';
@@ -464,11 +521,9 @@ var mcs = mcs || {};
         if (typeof data == 'string') {
             separator = separator || ',';
             var array = data.split(separator);
-            if (array.length > 1) {
-                result = array;
-            } else {
-                result.push(data);
-            }
+            result = array.map(function(item) {
+                return (item + '').trim();
+            });
         }
         if (data instanceof Array) {
             result = data;
@@ -479,14 +534,28 @@ var mcs = mcs || {};
     /*
      * 判断元素是否存在属性
      */
-    mcs.util.hasAttr = function (elem, attrName) {
+    mcs.util.hasAttr = function(elem, attrName) {
         return typeof elem.attr(attrName) != 'undefined';
+    };
+
+    /*
+     * 根据元素class获取
+     */
+    mcs.util.getElemsByClass = function(className, tagName) {
+        var elems = [],
+            all = document.getElementsByTagName(tagName || "*");
+        for (var i = 0; i < all.length; i++) {
+            if (all[i].className.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'))) {
+                elems[elems.length] = all[i];
+            }
+        }
+        return elems;
     };
 
     /*
      * 判断元素是否存在属性
      */
-    mcs.util.hasAttrs = function (elem, attrNames) {
+    mcs.util.hasAttrs = function(elem, attrNames) {
         var attrs = mcs.util.toArray(attrNames);
         for (var index in attrs) {
             if (mcs.util.hasAttr(elem, attrs[index])) {
@@ -497,9 +566,9 @@ var mcs = mcs || {};
     };
 
     /*
-    * 判断元素是否存在Class，以空格分隔
-    */
-    mcs.util.hasClasses = function (elem, classNames) {
+     * 判断元素是否存在Class，以空格分隔
+     */
+    mcs.util.hasClasses = function(elem, classNames) {
         var names = mcs.util.toArray(classNames, ' ');
         for (var index in names) {
             if (elem.hasClass(names[index])) {
@@ -512,7 +581,7 @@ var mcs = mcs || {};
     /*
      * 将字符串转化为bool类型, isIgnoreZero为解决单选框存在有0的选项
      */
-    mcs.util.bool = function (str, isIgnoreZero) {
+    mcs.util.bool = function(str, isIgnoreZero) {
         isIgnoreZero = isIgnoreZero || false;
         if (typeof str === 'boolean') return str;
         str += '';
@@ -526,8 +595,8 @@ var mcs = mcs || {};
     /*
      * 对象复制
      */
-    mcs.util.clone = function (obj) {
-        if (typeof (obj) != 'object') return obj;
+    mcs.util.clone = function(obj) {
+        if (typeof(obj) != 'object') return obj;
         if (obj == null) return obj;
         var newObject = new Object();
         for (var i in obj)
@@ -536,25 +605,33 @@ var mcs = mcs || {};
     };
 
     /*
-     * 从对象数组中查找某属性值对应的索引
+     * 从对象数组中查找满足某种条件/等于某种属性值对应的索引
      */
-    mcs.util.indexOf = function (data, key, value) {
+    mcs.util.indexOf = function(data, action, value) {
         if (!data || !data.length) return -1;
-        for (var index in data) {
-            if (!data[index]['key']) return -1;
-            if (data[index]['value'] == value) {
-                return index;
+        if (typeof(action) == 'function') {
+            for (var index in data) {
+                if (action(data[index])) return index;
+            }
+        } else {
+            var key = action;
+            for (var index in data) {
+                if (!data[index][key]) return -1;
+                if (data[index][key] == value) {
+                    return index;
+                }
             }
         }
+
         return -1;
     };
 
     /*
      * 全部选中
      */
-    mcs.util.selectAll = function (data) {
+    mcs.util.selectAll = function(data) {
         var selectedResult = [];
-        angular.forEach(data, function (item) {
+        angular.forEach(data, function(item) {
             selectedResult.push(item.key);
         });
         return selectedResult;
@@ -563,17 +640,17 @@ var mcs = mcs || {};
     /*
      * 全部不选中
      */
-    mcs.util.unSelectAll = function () {
+    mcs.util.unSelectAll = function() {
         return [];
     };
 
     /*
      * 反选
      */
-    mcs.util.inverseSelect = function (data, selectedResult) {
+    mcs.util.inverseSelect = function(data, selectedResult) {
         var temp = selectedResult;
         selectedResult = [];
-        angular.forEach(data, function (item) {
+        angular.forEach(data, function(item) {
             if (temp.indexOf(item.key) == -1) {
                 selectedResult.push(item.key);
             }
@@ -586,7 +663,7 @@ var mcs = mcs || {};
      * data 原数据源{key,value,parentkey},
      * result 构建后的新数据源{key:{value,children:[]}}
      */
-    mcs.util.buildCascadeDataSource = function (data, result) {
+    mcs.util.buildCascadeDataSource = function(data, result) {
         for (var index in data) {
             var source = data[index];
             if (source.parentKey == 0) {
@@ -616,7 +693,7 @@ var mcs = mcs || {};
     /*
      * 设置当前的操作项(checkbox)
      */
-    mcs.util.setSelectedItems = function (selected, item, event, length, defaultKey) {
+    mcs.util.setSelectedItems = function(selected, item, event, length, defaultKey) {
         var index = selected.indexOf(item.key);
         if (event.target.checked) {
             if (index === -1) {
@@ -638,7 +715,7 @@ var mcs = mcs || {};
     /*
      * 设置默认选中
      */
-    mcs.util.setDefaultSelected = function (items, key) {
+    mcs.util.setDefaultSelected = function(items, key) {
         if (!items || !items.length) return;
         for (var i = 0, len = items.length; i < len; i++) {
             var item = items[i];
@@ -649,7 +726,7 @@ var mcs = mcs || {};
     /*
      * 获取字典项的值
      */
-    mcs.util.getDictionaryItemValue = function (items, key) {
+    mcs.util.getDictionaryItemValue = function(items, key) {
         if (key == undefined) return '';
         if (!items || !items.length) return key;
         for (var i = 0, len = items.length; i < len; i++) {
@@ -661,13 +738,13 @@ var mcs = mcs || {};
         return key;
     };
 
-    mcs.util.loadDependencies = function (dependencies) {
+    mcs.util.loadDependencies = function(dependencies) {
         return {
-            resolver: ['$q', '$rootScope', function ($q, $rootScope) {
+            resolver: ['$q', '$rootScope', function($q, $rootScope) {
                 var defered = $q.defer();
 
-                require(dependencies, function () {
-                    $rootScope.$apply(function () {
+                require(dependencies, function() {
+                    $rootScope.$apply(function() {
                         defered.resolve();
                     });
                 });
@@ -680,7 +757,7 @@ var mcs = mcs || {};
     /*
      * 配置面包屑
      */
-    mcs.util.configBreadcrumb = function ($breadcrumbProvider, templateUrl) {
+    mcs.util.configBreadcrumb = function($breadcrumbProvider, templateUrl) {
         $breadcrumbProvider.setOptions({
             templateUrl: templateUrl
         });
@@ -689,7 +766,7 @@ var mcs = mcs || {};
     /*
      * 获取URL中的Querystring参数
      */
-    mcs.util.params = function (name) {
+    mcs.util.params = function(name) {
         var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
         var r = window.location.search.substr(1).match(reg);
         if (r != null) return unescape(r[2]);
@@ -697,11 +774,11 @@ var mcs = mcs || {};
     };
 
     /*
-    * 附加错误消息
-    */
-    mcs.util.appendMessage = function (elem, css) {
+     * 附加错误消息
+     */
+    mcs.util.appendMessage = function(elem, css) {
         css = css || '';
-        var validationItem = elem.closest('.form-group');
+        var validationItem = elem.closest('.form-group').length ? elem.closest('.form-group') : elem.closest('td');
         var message = validationItem.find('.help-block');
         var validateRow = elem.closest('.row');
         var validationItems = validateRow.find('.form-group');
@@ -720,13 +797,13 @@ var mcs = mcs || {};
      * $stateProvider, 路由提供者服务
      * route, 当前需要加载的路由
      */
-    mcs.util.loadRoute = function ($stateProvider, route) {
+    mcs.util.loadRoute = function($stateProvider, route) {
         var parentState = null,
             breadcrumb = route.breadcrumb;
         if (breadcrumb) {
             parentState = breadcrumb;
             if (!route.abstract && !breadcrumb.parent) {
-                parentState.parent = function ($lastViewScope) {
+                parentState.parent = function($lastViewScope) {
                     return $lastViewScope.$state.params.prev;
                 }
             }
@@ -750,7 +827,7 @@ var mcs = mcs || {};
      * $urlRouterProvider, URL路由提供者服务
      * defaultRoute, 默认路由(配置首次导航的页面或路由无法找到时进入的页面,包含url,templateUrl,controller,dependencies)
      */
-    mcs.util.loadDefaultRoute = function ($stateProvider, $urlRouterProvider, defaultRoute) {
+    mcs.util.loadDefaultRoute = function($stateProvider, $urlRouterProvider, defaultRoute) {
         if (!defaultRoute || !defaultRoute.name || !defaultRoute.url || !defaultRoute.templateUrl) {
             console.log('no default route settings or default route has no correct configuration, including name, url and templateUrl.');
             return;
@@ -801,7 +878,7 @@ var mcs = mcs || {};
     /**
      * 配置模块的Provider, 可配置全局模块, 也可以单独配置
      */
-    mcs.util.configProvider = function (ngModule, $controllerProvider, $compileProvider, $filterProvider, $provide) {
+    mcs.util.configProvider = function(ngModule, $controllerProvider, $compileProvider, $filterProvider, $provide) {
         if (!ngModule || !angular.isDefined(ngModule)) return;
 
         ngModule.registerController = $controllerProvider.register;
@@ -814,9 +891,9 @@ var mcs = mcs || {};
     };
 
     /*
-    * 配置应用程序的缓存模板
-    */
-    mcs.util.configCacheTemplate = function ($templateCache, key, content) {
+     * 配置应用程序的缓存模板
+     */
+    mcs.util.configCacheTemplate = function($templateCache, key, content) {
         var template = $templateCache.get(key);
         if (!template) {
             $templateCache.put(key, content);
@@ -826,8 +903,8 @@ var mcs = mcs || {};
     /**
      * 配置应用的拦截器以及设置白名单
      */
-    mcs.util.configInterceptor = function ($httpProvider, $sceDelegateProvider, interceptors) {
-        $httpProvider.defaults.transformResponse.unshift(function (data, headers) {
+    mcs.util.configInterceptor = function($httpProvider, $sceDelegateProvider, interceptors) {
+        $httpProvider.defaults.transformResponse.unshift(function(data, headers) {
             if (mcs.util.isString(data)) {
                 var JSON_PROTECTION_PREFIX = /^\)\]\}',?\n/;
                 var APPLICATION_JSON = 'application/json';
@@ -869,7 +946,7 @@ var mcs = mcs || {};
     return mcs.util;
 })();
 
-(function () {
+(function() {
     /** * 获取本周、本季度、本月、上月的开端日期、停止日期 */
     //当前日期 
     var now = new Date();
@@ -890,99 +967,186 @@ var mcs = mcs || {};
     var lastYear = lastMonthDate.getYear();
     var lastMonth = lastMonthDate.getMonth();
     //格局化日期：yyyy-MM-dd 
-    mcs.date.format = function (date) {
-        var myyear = date.getFullYear();
-        var mymonth = date.getMonth() + 1;
-        var myweekday = date.getDate();
-        if (mymonth < 10) {
-            mymonth = "0" + mymonth;
-        } if (myweekday < 10) {
-            myweekday = "0" + myweekday;
+    mcs.date.format = function(date) {
+            var myyear = date.getFullYear();
+            var mymonth = date.getMonth() + 1;
+            var myweekday = date.getDate();
+            if (mymonth < 10) {
+                mymonth = "0" + mymonth;
+            }
+            if (myweekday < 10) {
+                myweekday = "0" + myweekday;
+            }
+            return (myyear + "-" + mymonth + "-" + myweekday);
         }
-        return (myyear + "-" + mymonth + "-" + myweekday);
-    }
-    //比较两个时间的大小
-    mcs.date.compare = function (beginTime, endTime) {
+        //比较两个时间的大小
+    mcs.date.compare = function(beginTime, endTime) {
         //将字符串转换为日期
         var begin = new Date(beginTime.replace(/-/g, "/"));
         var end = new Date(endTime.replace(/-/g, "/"));
         return begin < end ? 1 : (begin == end ? 0 : -1);
     };
     //获得某月的天数 
-    mcs.date.getMonthDays = function (month) {
-        var monthStartDate = new Date(nowYear, month, 1);
-        var monthEndDate = new Date(nowYear, month + 1, 1);
-        var days = (monthEndDate - monthStartDate) / (1000 * 60 * 60 * 24);
-        return days;
-    }
-    //获得本季度的开端月份 
-    mcs.date.getQuarterStartMonth = function () {
-        var quarterStartMonth = 0;
-        if (nowMonth < 3) {
-            quarterStartMonth = 0;
-        } if (2 < nowMonth && nowMonth < 6) {
-            quarterStartMonth = 3;
-        } if (5 < nowMonth && nowMonth < 9) {
-            quarterStartMonth = 6;
-        } if (nowMonth > 8) {
-            quarterStartMonth = 9;
+    mcs.date.getMonthDays = function(month) {
+            var monthStartDate = new Date(nowYear, month, 1);
+            var monthEndDate = new Date(nowYear, month + 1, 1);
+            var days = (monthEndDate - monthStartDate) / (1000 * 60 * 60 * 24);
+            return days;
         }
-        return quarterStartMonth;
-    }
-    // 获取今天
-    mcs.date.today = function () {
-        var todayDate = new Date(nowYear, nowMonth, nowDay);
+        //获得本季度的开端月份 
+    mcs.date.getQuarterStartMonth = function() {
+            var quarterStartMonth = 0;
+            if (nowMonth < 3) {
+                quarterStartMonth = 0;
+            }
+            if (2 < nowMonth && nowMonth < 6) {
+                quarterStartMonth = 3;
+            }
+            if (5 < nowMonth && nowMonth < 9) {
+                quarterStartMonth = 6;
+            }
+            if (nowMonth > 8) {
+                quarterStartMonth = 9;
+            }
+            return quarterStartMonth;
+        }
+        // 获取今天
+    mcs.date.today = function() {
+        var todayDate = new Date(nowYear, nowMonth, nowDay, now.getHours(), now.getMinutes(), now.getSeconds());
         return todayDate;
     };
     //获取今天之前的某一天
-    mcs.date.lastDay = function (offsetDay) {
+    mcs.date.lastDay = function(offsetDay) {
         var lastStartDate = new Date(nowYear, nowMonth, nowDay + offsetDay + 1);
         return lastStartDate;
     };
+    //得到左边界时间点
+    mcs.date.getLeftBoundDatetime = function(date, offset) {
+        if (isNaN(offset)) {
+            return null;
+        }
+        var selectionTime = new Date(date || Date.now());
+        var ticks = selectionTime.getTime();
+        var times = selectionTime.getHours() * 60 * 60 * 1000 + selectionTime.getMinutes() * 60 * 1000 + selectionTime.getSeconds() * 1000;
+
+        if (offset < 0) {
+            return new Date(ticks + (offset + 1) * 24 * 60 * 60 * 1000 - times + 1000);
+        } else {
+            return new Date(ticks - times);
+        }
+    };
+    //得到右边界时间点
+    mcs.date.getRightBoundDatetime = function(date, offset) {
+        if (isNaN(offset)) {
+            return null;
+        }
+        var selectionTime = new Date(date || Date.now());
+        var ticks = selectionTime.getTime();
+        var times = selectionTime.getHours() * 60 * 60 * 1000 + selectionTime.getMinutes() * 60 * 1000 + selectionTime.getSeconds() * 1000;
+
+        if (offset < 0) {
+            return new Date(ticks - times + 1 * 24 * 60 * 60 * 1000 - 1000);
+
+        } else {
+
+            return new Date(ticks + (offset + 1) * 24 * 60 * 60 * 1000 - times - 1000);
+        }
+    };
+
+
+
+    // 获取指定日期的前后几天
+    // mcs.date.siblingsDay = function(date, offsetDay) {
+    //     var currentDay = new Date(date);
+    //     if (isNaN(parseInt(offsetDay))) return currentDay;
+    //     var currentYear = currentDay.getYear();
+    //     currentYear += (currentYear < 2000) ? 1900 : 0;
+    //     var siblingsDate = new Date(currentYear, currentDay.getMonth(), currentDay.getDate() + offsetDay, 23, 59, 59);
+    //     return siblingsDate;
+    // };
     //获得本周的开始日期 
-    mcs.date.getWeekStartDate = function () {
+    mcs.date.getWeekStartDate = function() {
         var weekStartDate = new Date(nowYear, nowMonth, nowDay - nowDayOfWeek);
         return weekStartDate;
-    }
+    };
     //获得本周的停止日期 
-    mcs.date.getWeekEndDate = function () {
+    mcs.date.getWeekEndDate = function() {
         var weekEndDate = new Date(nowYear, nowMonth, nowDay + (6 - nowDayOfWeek));
         return weekEndDate;
-    }
+    };
     //获得本月的开始日期 
-    mcs.date.getMonthStartDate = function () {
+    mcs.date.getMonthStartDate = function() {
         var monthStartDate = new Date(nowYear, nowMonth, 1);
         return monthStartDate;
-    }
+    };
     //获得本月的停止日期 
-    mcs.date.getMonthEndDate = function () {
+    mcs.date.getMonthEndDate = function() {
         var monthEndDate = new Date(nowYear, nowMonth, mcs.date.getMonthDays(nowMonth));
         return monthEndDate;
-    }
+    };
     //获得上月开始日期 
-    mcs.date.getLastMonthStartDate = function () {
+    mcs.date.getLastMonthStartDate = function() {
         var lastMonthStartDate = new Date(nowYear, lastMonth, 1);
         return lastMonthStartDate;
-    }
+    };
     //获得上月停止日期 
-    mcs.date.getLastMonthEndDate = function () {
+    mcs.date.getLastMonthEndDate = function() {
         var lastMonthEndDate = new Date(nowYear, lastMonth, mcs.date.getMonthDays(lastMonth));
         return lastMonthEndDate;
-    }
+    };
     //获得本季度的开始日期 
-    mcs.date.getQuarterStartDate = function () {
+    mcs.date.getQuarterStartDate = function() {
         var quarterStartDate = new Date(nowYear, getQuarterStartMonth(), 1);
         return quarterStartDate;
-    }
+    };
     //获得本季度的停止日期 
-    mcs.date.getQuarterEndDate = function () {
+    mcs.date.getQuarterEndDate = function() {
         var quarterEndMonth = getQuarterStartMonth() + 2;
         var quarterStartDate = new Date(nowYear, quarterEndMonth, mcs.date.getMonthDays(quarterEndMonth));
         return quarterStartDate;
-    }
+    };
+    //获取时间差
+    mcs.date.datepart = function(startDate, endDate, part) {
+        //if (!mcs.util.isDate(startDate) || !mcs.util.isDate(endDate)) return;
+        var start = new Date(startDate.replace(/-/g, "/"));
+        var end = new Date(endDate.replace(/-/g, "/"));
+        var diff = end.getTime() - start.getTime(); //时间差的毫秒数
+        var section = {};
+
+        section.year = diff / (12 * 30 * 24 * 3600 * 1000);
+        section.month = diff % (12 * 30 * 24 * 3600 * 1000);
+        section.day = section.month % (30 * 24 * 3600 * 1000);
+        section.hour = section.day % (24 * 3600 * 1000); //计算天数后剩余的毫秒数
+        section.minute = section.hour % (3600 * 1000); //计算小时数后剩余的毫秒数
+        section.second = section.minute % (60 * 1000); //计算分钟数后剩余的毫秒数
+
+        switch (part) {
+            case 'y':
+            case 'year':
+                return Math.floor(section.year);
+            case 'M':
+            case 'month':
+                return Math.floor(section.month / (30 * 24 * 3600 * 1000));
+            case 'd':
+            case 'day':
+                return Math.floor(section.day / (24 * 3600 * 1000));
+            case 'h':
+            case 'hour':
+                return Math.floor(section.hour / (3600 * 1000)) + (Math.floor(section.day / (24 * 3600 * 1000))) * 24;
+            case 'm':
+            case 'minute':
+                return Math.floor(section.minute / (60 * 1000)) + (Math.floor(section.hour / (3600 * 1000)) + (Math.floor(section.day / (24 * 3600 * 1000))) * 24) * 60;
+            case 's':
+            case 'second':
+                return Math.round(section.second / 1000) + (Math.floor(section.minute / (60 * 1000)) + (Math.floor(section.hour / (3600 * 1000)) + (Math.floor(section.day / (24 * 3600 * 1000))) * 24) * 6) * 60;
+            default:
+                return;
+        }
+    };
 
     return mcs.date;
 })();
+
 mcs.browser = function () {
     var _browser = {};
     var sUserAgent = navigator.userAgent;
@@ -1088,15 +1252,18 @@ var ppts = ppts || mcs.app;
     ppts.name = 'ppts';
     ppts.version = '1.0';
     ppts.user = ppts.user || {};
+    ppts.enum = ppts.enum || {};
 
     ppts.config = {
-        pageSizeItem: 20,
+        pageSizeItem: 20, // Datatable每页的数量
+        taskDisplayItem: 5, // 待办任务在右上角显示的数量
+        taskQueryInterval: 30 * 1000, // 待办任务轮询的周期(半分钟)
         datePickerFormat: 'yyyy-mm-dd',
-        datetimePickerFormat: 'yyyy-mm-dd hh:ii:ss',
+        datetimePickerFormat: 'yyyy-mm-dd hh:ii:00',
         datePickerLang: 'zh-CN',
         modules: {
             dashboard: 'app/dashboard/ppts.dashboard',
-            auditing: 'app/auditing/ppts.auditing',
+            task: 'app/task/ppts.task',
             customer: 'app/customer/ppts.customer',
             account: 'app/account/ppts.account',
             product: 'app/product/ppts.product',
@@ -1104,21 +1271,11 @@ var ppts = ppts || mcs.app;
             schedule: 'app/schedule/ppts.schedule',
             infra: 'app/infra/ppts.infra',
             custcenter: 'app/custcenter/ppts.custcenter',
-            contract: 'app/contract/ppts.contract',
+            query: 'app/query/ppts.query',
         },
         dictMappingConfig: {
             // 公共相关
-            dateRange: 'c_codE_ABBR_dateRange',
-            people: 'c_codE_ABBR_people',
-            relation: 'c_codE_ABBR_relation',
-            period: 'c_codE_ABBR_period',
-            ifElse: 'c_codE_ABBR_ifElse',
-            messageType: 'c_codE_ABBR_messageType',
-            week: 'c_codE_ABBR_week',
             region: 'c_codE_ABBR_LOCATION',
-            orgType: 'Common_OrgType',
-            teacherType: 'Common_TeacherType',
-            applyStatus: 'Common_ApplyStatus',
             grade: 'c_codE_ABBR_CUSTOMER_GRADE',
             gender: 'c_codE_ABBR_GENDER',
             idtype: 'c_codE_ABBR_BO_Customer_CertificateType',
@@ -1130,8 +1287,6 @@ var ppts = ppts || mcs.app;
             parent: 'c_codE_ABBR_PARENTDICTIONARY',
             child: 'c_codE_ABBR_CHILDDICTIONARY',
             source: 'c_codE_ABBR_BO_Customer_Source',
-            assignment: 'c_codE_ABBR_Customer_Assign',
-            valid: 'c_codE_ABBR_Customer_Valid',
             contactType: 'c_codE_ABBR_Customer_CRM_NewContactType',
             // 学年
             academicYear: 'c_codE_ABBR_ACDEMICYEAR',
@@ -1211,6 +1366,10 @@ var ppts = ppts || mcs.app;
             payStatus: 'c_codE_ABBR_account_PayStatus',
             //支付类型
             payType: 'c_codE_ABBR_account_PayType',
+            //发票状态
+            invoiceStatus: 'c_codE_ABBR_Account_InvoiceStatus',
+            //发票状态
+            invoiceRecordStatus: 'c_codE_ABBR_Account_InvoiceRecordStatus',
 
             /*
             * 成绩相关
@@ -1352,8 +1511,9 @@ var ppts = ppts || mcs.app;
             post: 'c_codE_ABBR_Order_Post',
             //特殊折扣原因
             orderSpecialType: 'c_codE_ABBR_Order_SpecialType',
-	    //订单类型
+            //订单类型
             orderType: 'c_codE_ABBR_Order_OrderType',
+            consumeType: 'c_codE_ABBR_Order_ConsumeType',
 
             /*
             * 客服相关
@@ -1365,11 +1525,6 @@ var ppts = ppts || mcs.app;
             complaintTimes: 'c_codE_ABBR_customer_ComplaintTimes',
             complaintLevel: 'c_codE_ABBR_customer_ComplaintLevel',
             complaintUpgrade: 'c_codE_ABBR_customer_ComplaintUpgrade',
-            /*客服下一个处理人字典*/
-            headquarters: 'c_codE_ABBR_Headquarters_Service',
-            update: 'c_codE_ABBR_Update_Service',
-            updateHeadquarters: 'c_codE_ABBR_Update_Headquarters_Service',
-            branch: 'c_codE_ABBR_Branch_Service',
 
             /*回访相关*/
             visitType: 'c_codE_ABBR_BO_Customer_ReturnInfoType',
@@ -1385,8 +1540,8 @@ var ppts = ppts || mcs.app;
             serviceFeeType: 'c_codE_ABBR_ServiceFee_ServiceType'
         },
         dataServiceConfig: {
-            // Auditing Services
-            auditingDataService: 'app/auditing/auditinglist/auditing.dataService',
+            // Task Services
+            taskDataService: 'app/task/task.dataService',
 
             // Customer Services
             customerService: 'app/customer/ppts.customer.service',
@@ -1449,11 +1604,105 @@ var ppts = ppts || mcs.app;
             // CustCenter Services
             custserviceDataService: 'app/custcenter/custservice/custservice.dataService',
 
-            // Contract Services
-            contractListDataService: 'app/contract/contractlist/contractlist.dataService',
-            payListDataService: 'app/contract/paylist/paylist.dataService',
-            refundListDataService: 'app/contract/refundlist/refundlist.dataService',
-        }
+            // Query Services
+            accountQueryService: 'app/query/account/account-query.service',
+            assignQueryService: 'app/query/assign/assign-query.service',
+            orderQueryService: 'app/query/order/order-query.service',
+            studentQueryService: 'app/query/student/student-query.service',
+            taskQueryService: 'app/query/task/task-query.service'
+        },
+        sidebarMenusConfig: [{
+            name: '首页', icon: 'home', route: 'ppts.dashboard', active: true
+        }, {
+            name: '审批管理', icon: 'check-square-o',
+            children: [
+                { name: '待办列表', route: 'ppts.userTask' },
+                { name: '已办列表', route: 'ppts.completedTask' },
+                { name: '通知列表', route: 'ppts.notify' },
+                { name: '流程表单', route: 'ppts.workflow' }
+            ]
+        }, {
+            name: '客户管理', icon: 'user',
+            permission: '潜客管理,潜客管理-本部门,潜客管理-本校区,潜客管理-本分公司,潜客管理-全国,市场资源,市场资源-本部门,市场资源-本校区,市场资源-本分公司,市场资源-全国,跟进管理（学员视图-跟进记录跟进记录详情）,跟进管理（学员视图-跟进记录跟进记录详情）-本部门,跟进管理（学员视图-跟进记录跟进记录详情）-本校区,跟进管理（学员视图-跟进记录跟进记录详情）-本分公司,跟进管理（跟进记录详情）-全国,上门管理,上门管理-本部门,上门管理-本校区,上门管理-本分公司,上门管理-全国,学员管理,学员管理-本部门,学员管理-本校区,学员管理-本分公司,学员管理-全国,回访管理（学员视图-回访、回访详情）,回访管理（学员视图-回访、回访详情）-本部门,回访管理（学员视图-回访、回访详情）-本校区,回访管理（学员视图-回访、回访详情）-本分公司,回访管理（学员视图-回访、回访详情）全国,成绩管理（学员视图-成绩）,成绩管理（学员视图-成绩、成绩详情）-本部门,成绩管理（学员视图-成绩、成绩详情）-本校区,成绩管理（学员视图-成绩、成绩详情）-本分公司,成绩管理（学员视图-成绩、成绩详情）-全国,教学服务会管理（学员视图-教学服务会、详情查看）,教学服务会管理（学员视图-教学服务会、详情查看）-本部门,教学服务会管理（学员视图-教学服务会、详情查看）-本校区,教学服务会管理（学员视图-教学服务会、详情查看）-本分公司,教学服务会管理（学员视图-教学服务会、详情查看）-全国,学大反馈管理（学员视图-家校互动）,学大反馈管理（学员视图-家校互动）-本部门,学大反馈管理（学员视图-家校互动）-本校区,学大反馈管理（学员视图-家校互动）-本分公司,学大反馈管理（学员视图-家校互动）-全国',
+            children: [
+               { name: '潜客管理', route: 'ppts.customer', permission: '潜客管理,潜客管理-本部门,潜客管理-本校区,潜客管理-本分公司,潜客管理-全国' },
+               { name: '市场资源', route: 'ppts.market', permission: '市场资源,市场资源-本部门,市场资源-本校区,市场资源-本分公司,市场资源-全国' },
+               { name: '跟进管理', route: 'ppts.follow', permission: '跟进管理（学员视图-跟进记录跟进记录详情）,跟进管理（学员视图-跟进记录跟进记录详情）-本部门,跟进管理（学员视图-跟进记录跟进记录详情）-本校区,跟进管理（学员视图-跟进记录跟进记录详情）-本分公司,跟进管理（跟进记录详情）-全国' },
+               { name: '上门管理', route: 'ppts.customerverify', permission: '上门管理,上门管理-本部门,上门管理-本校区,上门管理-本分公司,上门管理-全国' },
+               { name: '学员管理', route: 'ppts.student', permission: '学员管理,学员管理-本部门,学员管理-本校区,学员管理-本分公司,学员管理-全国' },
+               { name: '回访管理', route: 'ppts.customervisit', permission: '回访管理（学员视图-回访、回访详情）,回访管理（学员视图-回访、回访详情）-本部门,回访管理（学员视图-回访、回访详情）-本校区,回访管理（学员视图-回访、回访详情）-本分公司,回访管理（学员视图-回访、回访详情）全国' },
+               { name: '成绩管理', route: 'ppts.score', permission: '成绩管理（学员视图-成绩）,成绩管理（学员视图-成绩、成绩详情）-本部门,成绩管理（学员视图-成绩、成绩详情）-本校区,成绩管理（学员视图-成绩、成绩详情）-本分公司,成绩管理（学员视图-成绩、成绩详情）-全国' },
+               { name: '教学服务会', route: 'ppts.customermeeting', permission: '教学服务会管理（学员视图-教学服务会、详情查看）,教学服务会管理（学员视图-教学服务会、详情查看）-本部门,教学服务会管理（学员视图-教学服务会、详情查看）-本校区,教学服务会管理（学员视图-教学服务会、详情查看）-本分公司,教学服务会管理（学员视图-教学服务会、详情查看）-全国' },
+               { name: '学大反馈', route: 'ppts.feedback', permission: '学大反馈管理（学员视图-家校互动）,学大反馈管理（学员视图-家校互动）-本部门,学大反馈管理（学员视图-家校互动）-本校区,学大反馈管理（学员视图-家校互动）-本分公司,学大反馈管理（学员视图-家校互动）-全国' }
+            ]
+        }, {
+            name: '缴费管理', icon: 'credit-card',
+            permission: '缴费单管理（缴费单详情）,缴费单管理（缴费单详情）-本部门,缴费单管理（缴费单详情）-本校区,缴费单管理（缴费单详情）-本分公司,缴费单管理（缴费单详情）-全国,收款管理,收款管理-本部门,收款管理-本校区,收款管理-本分公司,收款管理-全国,退费管理,退费管理-本部门,退费管理-本校区,退费管理-本分公司,退费管理-全国',
+            children: [
+               { name: '缴费单管理', route: 'ppts.accountCharge-query', permission: '缴费单管理（缴费单详情）,缴费单管理（缴费单详情）-本部门,缴费单管理（缴费单详情）-本校区,缴费单管理（缴费单详情）-本分公司,缴费单管理（缴费单详情）-全国' },
+               { name: '收款管理', route: 'ppts.accountChargePayment-query', permission: '收款管理,收款管理-本部门,收款管理-本校区,收款管理-本分公司,收款管理-全国' },
+               { name: '退费管理', route: 'ppts.accountRefund-query', permission: '退费管理,退费管理-本部门,退费管理-本校区,退费管理-本分公司,退费管理-全国' }
+            ]
+        }, {
+            name: '订购管理', icon: 'shopping-bag',
+            permission: '订购管理列表（订购单详情）,订购管理列表（订购单详情）-本部门,订购管理列表（订购单详情）-本校区,订购管理列表（订购单详情）-本分公司,订购管理列表（订购单详情）-全国,退订管理列表,退订管理列表-本部门,退订管理列表-本校区,退订管理列表-本分公司,退订管理列表-全国',
+            children: [
+               { name: '订购列表', route: 'ppts.purchase', permission: '订购管理列表（订购单详情）,订购管理列表（订购单详情）-本部门,订购管理列表（订购单详情）-本校区,订购管理列表（订购单详情）-本分公司,订购管理列表（订购单详情）-全国' },
+               { name: '退订列表', route: 'ppts.unsubscribe', permission: '退订管理列表,退订管理列表-本部门,退订管理列表-本校区,退订管理列表-本分公司,退订管理列表-全国' }
+            ]
+        }, {
+            name: '排课管理', icon: 'calendar',
+            permission: '客户课表管理列表（打印课表）,客户课表管理列表（打印课表）-本部门,客户课表管理列表（打印课表）-本校区,客户课表管理列表（打印课表）-本分公司,客户课表管理列表（打印课表）-全国,按学员排课-本校区,按教师排课-本校区,教师课表,教师课表-本部门,教师课表-本校区,教师课表-本分公司,教师课表-全国,班级管理（按钮查看班级、按钮查看学生）-本校区,班级管理（按钮查看班级、按钮查看学生）-本分公司,班级管理（按钮查看班级、按钮查看学生）-全国,教师上课记录（打印上课记录）,教师上课记录（打印上课记录）-本部门,教师上课记录（打印上课记录）-本校区,教师上课记录（打印上课记录）-本分公司,教师上课记录（打印）-全国,按学员排课-本校区,按教师排课-本校区,班级管理（按钮查看班级、按钮查看学生）-本校区,班级管理（按钮查看班级、按钮查看学生）-本分公司,班级管理（按钮查看班级、按钮查看学生）-全国,教师课时量查询,教师上课记录（打印上课记录）,教师上课记录（打印上课记录）-本部门,教师上课记录（打印上课记录）-本校区,教师上课记录（打印上课记录）-本分公司,教师上课记录（打印）-全国,教师查看-教师课表',
+            children: [
+               { name: '客户课表', route: 'ppts.studentcourse', permission: '客户课表管理列表（打印课表）,客户课表管理列表（打印课表）-本部门,客户课表管理列表（打印课表）-本校区,客户课表管理列表（打印课表）-本分公司,客户课表管理列表（打印课表）-全国' },
+               { name: '按学员排课', route: 'ppts.schedule', permission: '按学员排课-本校区' },
+               { name: '按教师排课', route: 'ppts.schedule-tchasgmt', permission: '按教师排课-本校区' },
+               { name: '教师课表打印', route: 'ppts.teachercourse', permission: '教师课表,教师课表-本部门,教师课表-本校区,教师课表-本分公司,教师课表-全国' },
+               { name: '班级管理', route: 'ppts.classgroup', permission: '班级管理（按钮查看班级、按钮查看学生）-本校区,班级管理（按钮查看班级、按钮查看学生）-本分公司,班级管理（按钮查看班级、按钮查看学生）-全国' },
+               { name: '教师课时量', route: 'ppts.classgroupcourse', permission: '教师课时量查询' },
+               { name: '教师上课记录', route: 'ppts.teachercourserecord', permission: '教师上课记录（打印上课记录）,教师上课记录（打印上课记录）-本部门,教师上课记录（打印上课记录）-本校区,教师上课记录（打印上课记录）-本分公司,教师上课记录（打印）-全国' },
+               { name: '教师个人课表', route: 'ppts.tchcoursepsn', permission: '教师查看-教师课表' }
+            ]
+        }, {
+            name: '产品管理', icon: 'suitcase',
+            permission: '产品管理列表（产品详情）,产品管理列表（产品详情）-本校区,产品管理列表（产品详情）-本分公司,产品管理列表（产品详情）-全国',
+            children: [
+               { name: '产品列表', route: 'ppts.product', permission: '产品管理列表（产品详情）,产品管理列表（产品详情）-本校区,产品管理列表（产品详情）-本分公司,产品管理列表（产品详情）-全国' }
+            ]
+        }, {
+            name: '基础数据', icon: 'gear',
+            permission: '字典管理,折扣表管理-本分公司,折扣表管理-全国,综合服务费管理-本分公司,综合服务费管理-全国,买赠表管理-本分公司,买赠表管理-全国,校区维护-本分公司,信息来源维护',
+            children: [
+               { name: '字典管理', route: 'ppts.dictionary', permission: '字典管理' },
+               { name: '折扣表管理', route: 'ppts.discount', permission: '折扣表管理-本分公司,折扣表管理-全国' },
+               { name: '综合服务费管理', route: 'ppts.servicefee', permission: '综合服务费管理-本分公司,综合服务费管理-全国' },
+               { name: '买赠表管理', route: 'ppts.present', permission: '买赠表管理-本分公司,买赠表管理-全国' },
+               { name: '校区维护', route: 'ppts.school', permission: '校区维护-本分公司' },
+               { name: '信息来源维护', route: 'ppts.source', permission: '信息来源维护' }
+            ]
+        }, {
+            name: '客服中心', icon: 'microphone',
+            permission: '客户服务管理（客服详情）,客户服务管理（客服详情）-本部门,客户服务管理（客服详情）-本校区,客户服务管理（客服详情）-本分公司,客户服务管理（客服详情）-全国',
+            children: [
+               { name: '客户服务', route: 'ppts.custservice', permission: '客户服务管理（客服详情）,客户服务管理（客服详情）-本部门,客户服务管理（客服详情）-本校区,客户服务管理（客服详情）-本分公司,客户服务管理（客服详情）-全国' }
+            ]
+        }, {
+            name: '综合查询', icon: 'search',
+            children: [
+              { name: '全部待办查询', route: 'ppts.query-task', permission: '' },
+               { name: '学员信息列表查询', route: 'ppts.query-student-list', permission: '' },
+               { name: '缴费单查询', route: 'ppts.query-charge', permission: '' },
+               { name: '收款列表查询', route: 'ppts.query-payment', permission: '' },
+               { name: '退款列表查询', route: 'ppts.query-refund', permission: '' },
+               { name: 'POS刷卡列表查询', route: 'ppts.query-posrecord', permission: '' },
+               { name: '班组班级列表查询', route: 'ppts.query-class-group', permission: '' },
+               { name: '学员课时量查询', route: 'ppts.query-student-course', permission: '' },
+               { name: '教师课时量查询', route: 'ppts.query-teacher-course', permission: '' },
+               { name: '订购列表查询', route: 'ppts.query-order-list', permission: '' },
+               { name: '课时兑换列表查询', route: 'ppts.query-order-exchange', permission: '' },
+               { name: '库存单价查询', route: 'ppts.query-order-stock', permission: '' }
+            ]
+        }]
     };
 
     // 读取配置文件
@@ -1467,20 +1716,24 @@ var ppts = ppts || mcs.app;
 
     var initConfig = function () {
         window.onload = function () {
-            var configData = sessionStorage.getItem('configData');
-            if (!configData) {
-                var parameters = document.getElementById('configData');
-                sessionStorage.setItem('configData', parameters.value);
-                configData = sessionStorage.getItem('configData');
-                parameters.value = '';
+            //var configData = sessionStorage.getItem('configData');
+            //if (!configData) {
+            //    var parameters = document.getElementById('configData');
+            //    sessionStorage.setItem('configData', parameters.value);
+            //    configData = sessionStorage.getItem('configData');
+            //    parameters.value = '';
+            //}
+
+            if (document.getElementById('configData').value) {
+                var config = JSON.parse(document.getElementById('configData').value);
+
+                initConfigSection(config.pptsWebAPIs);
+
+                mcs.app.config.timeStamp = config.timestamp;
+
+                mcs.app.config.mcsComponentBaseUrl = ppts.config.mcsComponentBaseUrl;
+                mcs.app.config.pptsComponentBaseUrl = ppts.config.pptsComponentBaseUrl;
             }
-
-            var config = JSON.parse(configData);
-
-            initConfigSection(config.pptsWebAPIs);
-
-            mcs.app.config.mcsComponentBaseUrl = ppts.config.mcsComponentBaseUrl;
-            mcs.app.config.pptsComponentBaseUrl = ppts.config.pptsComponentBaseUrl;
 
             loadAssets();
         };
@@ -1492,9 +1745,6 @@ var ppts = ppts || mcs.app;
                 //<!--#bootstrap基础样式-->
                 'libs/bootstrap-3.3.5/css/bootstrap',
                 //<!--#datetime组件样式-->
-                'libs/date-time-3.0.0/css/datepicker',
-                'libs/date-time-3.0.0/css/bootstrap-timepicker',
-                'libs/date-time-3.0.0/css/daterangepicker',
                 'libs/date-time-3.0.0/css/bootstrap-datetimepicker',
                 //<!--#ztree组件样式-->
                 'libs/zTree-3.5.22/css/metroStyle/metroStyle',
@@ -1513,7 +1763,9 @@ var ppts = ppts || mcs.app;
                 'libs/mcs-jslib-1.0.0/component/mcs.component',
                 //<!--下拉框样式-->
                 'libs/angular-ui-select-0.13.2/dist/select2',
-                'libs/angular-dialog-service-5.3.0/dist/dialogs.min'
+                'libs/angular-dialog-service-5.3.0/dist/dialogs.min',
+                //<!--消息提示框-->
+                'libs/gritter-1.7.4/jquery.gritter'
             ], localCssFiles: [
                 //<!--#网站主样式-->
                 'assets/styles/site'

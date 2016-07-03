@@ -1,5 +1,4 @@
-﻿<!-- #开始：添加潜客Form -->
-<form class="form-horizontal" role="form">
+﻿<form class="form-horizontal" role="form">
     <div class="widget-box">
         <div class="widget-header">
             <h4>编辑成绩<small><i class="icon-double-angle-right"></i>(<span class="required"> * </span>表示必填字段)</small></h4>
@@ -14,76 +13,96 @@
                 <div class="page-header">
                     <span>学员姓名：{{ vm.customer.customerName }}</span>
                 </div>
-                <div class="form-group">
+                <div class="row">
                     <div class="col-sm-3">
-                        <mcs-label required="true" text="学年度：" css="col-sm-6" />
-                        <div class="col-sm-6 mcs-padding-0">
-                            <mcs-label text="{{vm.score.studyYear | studyYear}}" model="vm.score.studyYear" />
+                        <div class="form-group">
+                            <mcs-label required="true" text="学年度" css="col-sm-6" />
+                            <div class="col-sm-6 mcs-padding-0">
+                                <p class="form-control-static">{{vm.score.studyYear | studyYear}}</p>
+                            </div>
                         </div>
                     </div>
                     <div class="col-sm-3">
-                        <mcs-label required="true" text="学期：" css="col-sm-6" />
-                        <div class="col-sm-6 mcs-padding-0">
-                            <mcs-label text="{{vm.score.studyTerm | studyTerm}}" model="vm.score.studyTerm" />
+                        <div class="form-group">
+                            <mcs-label required="true" text="学期" css="col-sm-6" />
+                            <div class="col-sm-6 mcs-padding-0">
+                                <p class="form-control-static">{{vm.score.studyTerm | studyTerm}}</p>
+                            </div>
                         </div>
                     </div>
                     <div class="col-sm-3">
-                        <mcs-label required="true" text="考试年级：" css="col-sm-6" />
-                        <div class="col-sm-6 mcs-padding-0">
-                            <mcs-label text="{{vm.score.scoreGrade | grade}}" model="vm.score.scoreGrade" />
+                        <div class="form-group">
+                            <mcs-label required="true" text="考试年级" css="col-sm-6" />
+                            <div class="col-sm-6 mcs-padding-0">
+                                <p class="form-control-static">{{vm.score.scoreGrade | grade}}</p>
+                            </div>
                         </div>
                     </div>
                     <div class="col-sm-3" ng-show="vm.score.studyStage">
-                        <mcs-label text="考试学段：" css="col-sm-6" />
-                        <div class="col-sm-6 mcs-padding-0">
-                            <mcs-label text="{{vm.score.studyStage | studyStage}}" model="vm.score.studyStage" />
+                        <div class="form-group">
+                            <mcs-label text="考试学段" css="col-sm-6" />
+                            <div class="col-sm-6 mcs-padding-0">
+                                <p class="form-control-static">{{vm.score.studyStage | studyStage}}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="row">
                     <div class="col-sm-3">
-                        <mcs-label required="true" text="考试类型：" css="col-sm-6" />
-                        <div class="col-sm-6 mcs-padding-0">
-                            <mcs-label text="{{vm.score.scoreType | scoreType}}" model="vm.score.scoreType" />
-                            <span ng-if="vm.score.otherScoreTypeName">-</span> {{vm.score.otherScoreTypeName}}
+                        <div class="form-group">
+                            <mcs-label required="true" text="考试类型" css="col-sm-6" />
+                            <div class="col-sm-6 mcs-padding-0">
+                                <p class="form-control-static">{{vm.score.scoreType | scoreType}}</p>
+                                <span ng-if="vm.score.otherScoreTypeName">-</span> {{vm.score.otherScoreTypeName}}
+                            </div>
                         </div>
                     </div>
                     <div class="col-sm-3" ng-show="vm.score.scoreType == '6' || vm.score.scoreType == '10' || vm.score.scoreType == '14'">
-                        <mcs-label required="true" text="录取院校类别：" css="col-sm-6" />
-                        <div class="col-sm-6 mcs-padding-0">
-                            <ppts-select category="admissionType" model="vm.score.admissionType" filter="{{vm.score.scoreType}}" prop="parentKey" caption="录取院校类别" css="mcs-padding-0" />
+                        <div class="form-group">
+                            <mcs-label required="true" text="录取院校类别" css="col-sm-6" />
+                            <div class="col-sm-6 mcs-padding-0">
+                                <mcs-select category="admissionType" model="vm.score.admissionType" filter="{{vm.score.scoreType}}" prop="parentKey" caption="录取院校类别" required css="mcs-padding-0" />
+                            </div>
                         </div>
                     </div>
                     <div class="col-sm-3" ng-show="vm.score.scoreType == '6' || vm.score.scoreType == '10' || vm.score.scoreType == '14'">
-                        <mcs-label required="true" text="录取院校：" css="col-sm-6" />
-                        <div class="col-sm-6 mcs-padding-0">
-                            <mcs-input model="vm.score.admissionSchool" class="mcs-input-search" />
+                        <div class="form-group">
+                            <mcs-label text="录取院校" css="col-sm-6" />
+                            <div class="col-sm-6 mcs-padding-0">
+                                <mcs-input model="vm.score.admissionSchool" class="mcs-input-search" />
+                            </div>
                         </div>
                     </div>
                     <div class="col-sm-3" ng-show="vm.score.scoreType == '6' || vm.score.scoreType == '10' || vm.score.scoreType == '14'">
-                        <mcs-label required="true" text="属985或211院校：" css="col-sm-6" />
-                        <div class="col-sm-6 mcs-padding-0">
-                            <ppts-select category="ifElse" model="vm.score.isKeyCollege" css="mcs-padding-0" />
+                        <div class="form-group">
+                            <mcs-label text="属985或211院校" css="col-sm-6" />
+                            <div class="col-sm-6 mcs-padding-0">
+                                <mcs-select category="ifElse" model="vm.score.isKeyCollege" css="mcs-padding-0" />
+                            </div>
                         </div>
                     </div>
                     <div class="col-sm-3" ng-show="vm.score.scoreType == '15'">
-                        <mcs-label required="true" text="考试月份：" css="col-sm-6" />
-                        <div class="col-sm-6 mcs-padding-0">
-                            <ppts-select category="examMonth" model="vm.score.examineMonth" caption="考试月份" css="mcs-padding-0" />
+                        <div class="form-group">
+                            <mcs-label required="true" text="考试月份" css="col-sm-6" />
+                            <div class="col-sm-6 mcs-padding-0">
+                                <mcs-select category="examMonth" model="vm.score.examineMonth" caption="考试月份" required css="mcs-padding-0" />
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="row">
                     <div class="col-sm-3" ng-show="vm.score.scoreType == '14'">
-                        <mcs-label required="true" text="学员类别：" css="col-sm-6" />
-                        <div class="col-sm-6 mcs-padding-0">
-                            <ppts-select category="examCustomerType" model="vm.score.studentType" filter="{{vm.score.scoreType}}" prop="parentKey" caption="学员类别" css="mcs-padding-0" />
+                        <div class="form-group">
+                            <mcs-label required="true" text="学员类别" css="col-sm-6" />
+                            <div class="col-sm-6 mcs-padding-0">
+                                <mcs-select category="examCustomerType" model="vm.score.studentType" filter="{{vm.score.scoreType}}" prop="parentKey" caption="学员类别" required css="mcs-padding-0" />
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="row">
                     <div class="col-sm-3">
-                        <mcs-label required="true" text="录入成绩：" css="col-sm-6" />
+                        <mcs-label required="true" text="录入成绩" css="col-sm-6" />
                     </div>
                 </div>
             </div>
@@ -93,4 +112,3 @@
         </div>
     </div>
 </form>
-<!-- /结束：添加潜客Form -->

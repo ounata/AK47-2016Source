@@ -47,6 +47,28 @@ namespace PPTS.Data.Orders.Adapters
             return this.Load(builder => builder.AppendItem("OrderID", orderid)).SingleOrDefault();
         }
 
+        public void LoadInContext(string orderId, string[] campusIds,Action<OrderCollection> action)
+        {
+            var where = new WhereSqlClauseBuilder();
+            where.AppendItem("OrderID", orderId);
+            if (campusIds != null)
+            {
+                where.AppendItem("CampusID", campusIds, "in", true);
+            }
+            LoadByBuilderInContext(new ConnectiveLoadingCondition(where) , action);
+        }
+
+        public string IsExistsCampusIDSQL(string orderId, string[] campusIds)
+        {
+            var where = new WhereSqlClauseBuilder();
+            where.AppendItem("OrderID", orderId);
+            if (campusIds != null)
+            {
+                where.AppendItem("CampusID", campusIds, "in", true);
+            }
+            return string.Format(" ( select 1 from {0} where {1} )",GetQueryTableName(),where.ToSqlString(TSqlBuilder.Instance));
+        }
+
         public OrderCollection LoadCollection(IList<string> orderID)
         {
             return this.LoadByInBuilder(new InLoadingCondition(builder => builder.AppendItem(orderID.ToArray<string>()), dataField: "OrderID"));
@@ -85,7 +107,7 @@ end", this.GetTableName(), whereCustomerId);
         //    GetSqlContext().AppendSqlWithSperatorInContext(TSqlBuilder.Instance, "select 1");
         //}
         
-        public void Update(string orderId,Dictionary<string,object> param)
+        private void UpdateInContext(string orderId,Dictionary<string,object> param)
         {
             var updateBuilder = new UpdateSqlClauseBuilder();
             var whereBuilder = new WhereSqlClauseBuilder();
@@ -98,7 +120,42 @@ end", this.GetTableName(), whereCustomerId);
                 GetTableName(),
                 updateBuilder.ToSqlString(TSqlBuilder.Instance),
                 whereBuilder.ToSqlString(TSqlBuilder.Instance));
-            DbHelper.RunSql(sql, GetConnectionName());
+
+            GetSqlContext().AppendSqlWithSperatorInContext(TSqlBuilder.Instance, sql);
         }
+
+        public void ModifyProcessStatusInContext(string orderId,int processStatus)
+        {
+            UpdateInContext(orderId, new Dictionary<string, object>() { { "ProcessStatus", processStatus } });
+        }
+
+        public void ModifyStatusInContext(string orderId, int processStatus,int orderStatus,string modifyUserId=null,string modifyUserName=null)
+        {
+            var updateParam = new Dictionary<string, object>() { { "ProcessStatus", processStatus }, { "OrderStatus", orderStatus } };
+            if (!string.IsNullOrWhiteSpace(modifyUserId)) { updateParam.Add("ModifierID", modifyUserId); }
+            if (!string.IsNullOrWhiteSpace(modifyUserName)) { updateParam.Add("ModifierName", modifyUserName); }
+
+            UpdateInContext(orderId, updateParam);
+        }
+
+        public void ModifyChargeApply(Order model,string[] campusIds)
+        {
+            var where = new WhereSqlClauseBuilder();
+            where.AppendItem("OrderID", model.OrderID);
+            if (campusIds != null)
+            {
+                where.AppendItem("CampusID", campusIds, "in", true);
+            }
+            var sql = string.Format("if not exists(select 1 from {0} where {1}) begin \n return; \n",GetQueryTableName(), where.ToSqlString(TSqlBuilder.Instance));
+
+            UpdateInContext(model.OrderID, new Dictionary<string, object>() {
+                { "ChargeApplyID", model.ChargeApplyID },
+                { "ModifierID", model.ModifierID },
+                { "ModifierName", model.ModifierName },
+            });
+
+            GetDbContext().DoAction(db => db.ExecuteNonQuerySqlInContext());
+        }
+
     }
 }

@@ -1,6 +1,7 @@
 using MCS.Library.Core;
 using MCS.Library.Data.DataObjects;
 using MCS.Library.Data.Mapping;
+using PPTS.Data.Common.Authorization;
 using PPTS.Data.Common.Entities;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,11 @@ namespace PPTS.Data.Orders.Entities
     [Serializable]
     [ORTableMapping("OM.Assigns")]
     [DataContract]
+
+    [CustomerRelationScope(Name = "客户课表列表-本人", Functions = "客户课表列表-本人", ActionType = ActionType.Read, RelationType = RelationType.Teacher, RecordType = CustomerRecordType.Customer)]
+    [OrgCustomerRelationScope(Name = "客户课表列表-本校区", Functions = "客户课表列表-本校区", OrgType = Common.Authorization.OrgType.Campus, RecordType = CustomerRecordType.Customer)]
+    [OrgCustomerRelationScope(Name = "客户课表列表-本分公司", Functions = "客户课表列表-本分公司", OrgType = Common.Authorization.OrgType.Branch, RecordType = CustomerRecordType.Customer)]
+    [OrgCustomerRelationScope(Name = "客户课表列表-全国", Functions = "客户课表列表-全国", OrgType = Common.Authorization.OrgType.HQ, RecordType = CustomerRecordType.Customer)]
     public class Assign : IAssignAttr, IAssignShareAttr, IEntityWithCreator, IEntityWithModifier
     {
         public Assign()
@@ -250,6 +256,10 @@ namespace PPTS.Data.Orders.Entities
             get;
             set;
         }
+
+        [ORFieldMapping("ConfirmID")]
+        [DataMember]
+        public string ConfirmID { get; set; }
         #endregion
 
         #region IAssignShareAttr
@@ -605,12 +615,17 @@ namespace PPTS.Data.Orders.Entities
             set;
         }
 
+        string ConfirmID { get; set; }
+
         /// 确认时间
         DateTime ConfirmTime
         {
             get;
             set;
         }
+
+        /// 确认时价格
+        decimal ConfirmPrice { get; set; }
 
         /// 咨询师ID
         string ConsultantID
@@ -674,9 +689,6 @@ namespace PPTS.Data.Orders.Entities
             get;
             set;
         }
-
-        /// 确认时价格
-        decimal ConfirmPrice { get; set; }
 
         /// 开始时间
         DateTime StartTime

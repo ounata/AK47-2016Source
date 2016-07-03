@@ -72,6 +72,16 @@ namespace PPTS.Data.Orders.Adapters
                 collection => action(collection.SingleOrDefault()), DateTime.MinValue);
         }
 
+        protected override void BeforeInnerUpdateCollectionInContext(IEnumerable<T> data, SqlContextItem sqlContext, Dictionary<string, object> context)
+        {
+            base.BeforeInnerUpdateCollectionInContext(data, sqlContext, context);
+            data.ForEach(i =>
+            {
+                if (i.AssetCode.IsNullOrWhiteSpace()) { i.AssetCode = Helper.GetAssetCode("OD"); }
+                if (i.AssetName.IsNullOrWhiteSpace()) { i.AssetName = i.AssetCode + i.ProductName; }
+            });
+        }
+
         protected override void BeforeInnerUpdateCollection(IEnumerable<T> data, Dictionary<string, object> context)
         {
             base.BeforeInnerUpdateCollection(data, context);

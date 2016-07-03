@@ -23,16 +23,16 @@ namespace MCS.Library.SOA.DataObjects
         {
         }
 
-        public void Send(EmailMessage message, SmtpParameters sp)
+        public void Send(EmailMessage message, SmtpParameters sp, bool throwError = false)
         {
             EmailMessageCollection messages = new EmailMessageCollection();
 
             messages.Add(message);
 
-            Send(messages, sp);
+            Send(messages, sp, throwError);
         }
 
-        public void Send(IEnumerable<EmailMessage> messages, SmtpParameters sp)
+        public void Send(IEnumerable<EmailMessage> messages, SmtpParameters sp, bool throwError = false)
         {
             messages.NullCheck("messages");
             sp.NullCheck("sp");
@@ -56,6 +56,9 @@ namespace MCS.Library.SOA.DataObjects
                     }
                     catch (System.Exception ex)
                     {
+                        if (throwError)
+                            throw;
+
                         clonedMessage.Status = EmailMessageStatus.Fail;
                         clonedMessage.StatusText = ex.ToString();
                     }

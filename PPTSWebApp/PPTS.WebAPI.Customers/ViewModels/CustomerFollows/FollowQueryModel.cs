@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace PPTS.WebAPI.Customers.ViewModels.CustomerFollows
 {
     [Serializable]
-    public class FollowQueryModel: CustomerFollow
+    public class FollowQueryModel : CustomerFollow
     {
         /// <summary>
         /// 学员姓名
@@ -36,7 +36,18 @@ namespace PPTS.WebAPI.Customers.ViewModels.CustomerFollows
         /// 记录人及岗位
         /// </summary>
         [DataMember]
-        public string FollowerAndJobName { get; set; }
+        public string FollowerAndJobName
+        {
+            get
+            {
+                string result = "";
+                if (FollowerJobName != null || FollowerName != null)
+                {
+                    result = FollowerName + "(" + FollowerJobName + ")";
+                }
+                return result;
+            }
+        }
 
         [DataMember]
         public CustomerStatus CustomerStatus
@@ -50,7 +61,7 @@ namespace PPTS.WebAPI.Customers.ViewModels.CustomerFollows
         {
             get
             {
-                return this.CustomerStatus == PPTS.Data.Customers.CustomerStatus.Formal;
+                return CustomerStatus == PPTS.Data.Customers.CustomerStatus.Formal;
             }
         }
     }

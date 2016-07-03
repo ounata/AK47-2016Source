@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
@@ -61,6 +62,8 @@ namespace ResponsivePassportService.Anonymous
         protected override void OnPreRender(EventArgs e)
         {
             returnHref.InnerText = Translate("注销完成，点击这里返回应用");
+            logOffTitle.InnerText = Translate("用户注销");
+
             base.OnPreRender(e);
         }
 
@@ -127,7 +130,7 @@ namespace ResponsivePassportService.Anonymous
 
         private static string Translate(string sourceText)
         {
-            CultureInfo culture = new CultureInfo(GlobalizationWebHelper.GetUserDefaultLanguage());
+            CultureInfo culture = Thread.CurrentThread.CurrentUICulture;
 
             return Translator.Translate(Define.DefaultCategory, sourceText, culture);
         }

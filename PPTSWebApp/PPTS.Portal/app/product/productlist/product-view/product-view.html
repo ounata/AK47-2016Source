@@ -1,7 +1,16 @@
+
+
+
+
 <div class="container">
     <h3>基本信息</h3>
     <table class="table">
         <tbody>
+            <tr class="row">
+                <td colspan="4" class="text-right">
+                    <mcs-button icon="copy" text="复制并创建产品" click="vm.copyProduct()" ppts-job-functions="新建/删除/止售/延期产品-本分公司,新建/删除/止售/延期-全国,新建/删除/止售/延期-国际游学-全国"></mcs-button>
+                </td>
+            </tr>
             <tr class="row">
                 <td class="col-sm-2 text-right">
                     <label>
@@ -39,7 +48,7 @@
                     </label>
                 </td>
                 <td class="col-sm-4">
-                    <label>{{vm.product.createTime  }}</label>
+                    <label>{{vm.product.createTime |date:'yyyy-MM-dd' }}</label>
                 </td>
                 <td class="col-sm-2 text-right">
                     <label>颗粒度：</label>
@@ -65,7 +74,7 @@
                 </td>
             </tr>
 
-            <tr class="row"  ng-show="vm.product.categoryType == 2">
+            <tr class="row" ng-show="vm.product.categoryType == 2">
                 <td class="col-sm-2 text-right">
                     <label>总课次：</label>
                 </td>
@@ -81,7 +90,7 @@
                 </td>
             </tr>
 
-            <tr class="row"  ng-show="vm.product.categoryType == 2">
+            <tr class="row" ng-show="vm.product.categoryType == 2">
                 <td class="col-sm-2 text-right">
                     <label>总课时：</label>
                 </td>
@@ -113,7 +122,7 @@
                 </td>
             </tr>
 
-            <tr class="row" >
+            <tr class="row" ng-show="vm.product.categoryType<3 && vm.product.hasPartner==1">
                 <td class="col-sm-2 text-right">
                     <label class="control-label">薪酬规则：</label>
                 </td>
@@ -130,12 +139,38 @@
                     </div>
                 </td>
             </tr>
-            <tr class="row" ng-show="vm.product.partnerRatio>0">
+            <tr class="row" ng-show="vm.product.hasPartner==1">
+                <!--vm.product.partnerRatio>0-->
                 <td class="col-sm-2 text-right">
                     <label>分账比例：</label>
                 </td>
                 <td colspan="3" class="col-sm-10">
                     <label>学大订购金额{{(1-vm.product.partnerRatio)*100}}%，合作方学院占订购金额{{vm.product.partnerRatio*100}}%，合作单价{{vm.product.productPrice * ( 1 - vm.product.partnerRatio )}}元/时</label>
+                </td>
+            </tr>
+            <tr class="row">
+                <td class="col-sm-2 text-right">
+                    <label class="control-label">产品简介：</label>
+                </td>
+                <td colspan="3" class="col-sm-10">
+                    {{vm.product.productMemo}}
+                </td>
+            </tr>
+            <tr class="row" ng-show="vm.product.categoryType==2">
+                <td class="col-sm-2 text-right">
+                    <label class="control-label">是否允许跨校区组班：</label>
+                </td>
+                <td colspan="3" class="col-sm-10">
+                    {{ vm.exOfCourse.isCrossCampus | ifElse }}
+                </td>
+            </tr>
+            <tr class="row" ng-show="vm.product.categoryType==2 && vm.exOfCourse.isCrossCampus==1">
+                <td class="col-sm-2 text-right">
+                    <label class="control-label">跨校区班组课收归属：</label>
+                </td>
+                <td colspan="3" class="col-sm-10">
+                    <span ng-if="vm.exOfCourse.incomeBelonging==1">课收归学员所在机构</span>
+                    <span ng-if="vm.exOfCourse.incomeBelonging==0">课收归授课教师岗位所在机构</span>
                 </td>
             </tr>
         </tbody>
@@ -145,18 +180,43 @@
         <tbody>
             <tr class="row">
                 <td class="col-sm-2 text-right">
-                    <label>销售大区分公司：</label>
+                    <label>销售大区：</label>
+                </td>
+                <td>
+                    {{ vm.showRegions() }}
+                </td>
+            </tr>
+            <tr class="row">
+                <td class="col-sm-2 text-right">
+                    <label>分公司：</label>
+                </td>
+                <td>
+                    {{ vm.showCompanys() }}
+                </td>
+            </tr>
+            <tr class="row">
+                <td class="col-sm-2 text-right">
+                    <label>销售校区：</label>
                 </td>
                 <td>
                     {{ vm.showCampus() }}
                 </td>
             </tr>
+            <tr class="row" ng-show="vm.product.categoryType==41 || vm.product.categoryType==42 || vm.product.categoryType==43 ">
+                <td class="col-sm-2 text-right">
+                    <label>成本费用：</label>
+                </td>
+                <td>
+                    <label>{{vm.product.productCost | currency}}</label>
+                </td>
+            </tr>
+
             <tr class="row">
                 <td class="col-sm-2 text-right">
                     <label>产品启售时间：</label>
                 </td>
                 <td>
-                    <label>{{vm.product.startDate}}</label>
+                    <label>{{vm.product.startDate |date:'yyyy-MM-dd'}}</label>
                 </td>
             </tr>
             <tr class="row">
@@ -164,9 +224,35 @@
                     <label>产品止售时间：</label>
                 </td>
                 <td>
-                    <label>{{vm.product.endDate}}</label>
+                    <label>{{vm.product.endDate |date:'yyyy-MM-dd'}}</label>
                 </td>
             </tr>
+
+            <tr class="row" ng-show="vm.product.confirmMode==1 && vm.product.categoryType != 2 && vm.product.categoryType != 1">
+                <td class="col-sm-2 text-right">
+                    <label>收入确认启时间：</label>
+                </td>
+                <td>
+                    <label>{{vm.product.confirmStartDate |date:'yyyy-MM-dd'}}</label>
+                </td>
+            </tr>
+            <tr class="row" ng-show="vm.product.confirmMode==1 && vm.product.categoryType != 2 && vm.product.categoryType != 1">
+                <td class="col-sm-2 text-right">
+                    <label>收入确认止时间：</label>
+                </td>
+                <td>
+                    <label>{{vm.product.confirmEndDate |date:'yyyy-MM-dd'}}</label>
+                </td>
+            </tr>
+            <tr class="row" ng-show="vm.product.confirmMode==2 ">
+                <td class="col-sm-2 text-right">
+                    <label>收入确认时间：</label>
+                </td>
+                <td>
+                    <label class="control-label">分</label>{{vm.product.confirmStaging}}<label class="control-label">个自然月自动确认。(每月收入=实际订购金额 x学大占比 / N，N为填写的月份数)</label>
+                </td>
+            </tr>
+
             <tr class="row">
                 <td class="col-sm-2 text-right">
                     <label>创建人：</label>

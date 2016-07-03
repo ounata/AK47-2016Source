@@ -14,7 +14,7 @@ namespace PPTS.Data.Orders.Entities
 	/// 班组班级课次明细表
 	/// </summary>
 	[Serializable]
-    [ORTableMapping("ClassLessonItems")]
+    [ORTableMapping("OM.ClassLessonItems")]
     [DataContract]
 	public class ClassLessonItem : IEntityWithCreator, IEntityWithModifier
     {		

@@ -1,0 +1,70 @@
+﻿<form class="form-horizontal" role="form">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="alert" ng-click="vm.cancel()">
+            <i class="ace-icon fa fa-times"></i>
+        </button>
+        <h4 class="modal-title">登记发票</h4>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="form-group horizontal">
+                <mcs-label required="true" text="发票号" css="col-sm-3" />
+                <div class="col-sm-6">
+                    <mcs-input required data-validation-required-message="请填写发票号！" min="1" positive css="mcs-input-search mcs-width-full" model="vm.invoiceModel.invoiceNo" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group horizontal">
+                <mcs-label required="true" text="发票金额" css="col-sm-3" />
+                <div class="col-sm-6">
+                    <mcs-input required data-validation-required-message="请填写发票金额！"  min="1" positive css="mcs-input-search mcs-width-full" model="vm.invoiceModel.invoiceMoney" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group horizontal">
+                <mcs-label required="true" text="发票条目" css="col-sm-3" />
+                <div class="col-sm-6">
+                    <mcs-input required data-validation-required-message="请填写发票条目！" css="mcs-input-search mcs-width-full" model="vm.invoiceModel.invoiceClauses" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group horizontal">
+                <mcs-label required="true" text="发票抬头" css="col-sm-3" />
+                <div class="col-sm-6">
+                    <mcs-input required data-validation-required-message="请填写发票抬头！" css="mcs-input-search mcs-width-full" model="vm.invoiceModel.invoiceHeader" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group horizontal">
+                <mcs-label required="true" text="开票时间" css="col-sm-3" />
+                <div class="col-sm-6">
+                    <mcs-datetimepicker model="vm.invoiceModel.invoiceTime" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group horizontal">
+                <mcs-label text="发票状态" css="col-sm-3" />
+                <div class="col-sm-6">
+                   {{ vm.invoiceModel.invoiceStatus | invoiceStatus }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group horizontal">
+                <mcs-label text="开票人" css="col-sm-3" />
+                <div class="col-sm-6">
+                    {{ vm.invoiceModel.creatorName }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <mcs-button category="save" click="vm.save()" ppts-job-functions="按钮-登记发票,按钮-登记发票-本校区"/>
+        <mcs-button category="close" click="vm.cancel()" />
+    </div>
+</form>

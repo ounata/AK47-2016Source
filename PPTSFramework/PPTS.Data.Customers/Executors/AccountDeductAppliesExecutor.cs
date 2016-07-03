@@ -36,7 +36,7 @@ namespace PPTS.WebAPI.Customers.Executors
             foreach (AccountDeductApply apply in applies)
             {
                 if (apply.ApplyID.IsNullOrEmpty())
-                    apply.ApplyID = Guid.NewGuid().ToString().ToUpper();
+                    apply.ApplyID = UuidHelper.NewUuidString();
 
                 apply.ApplyTime = SNTPClient.AdjustedTime;
                 apply.SubmitTime = SNTPClient.AdjustedTime;
@@ -59,6 +59,10 @@ namespace PPTS.WebAPI.Customers.Executors
                     apply.EducatorName = educator.StaffName;
                     apply.EducatorJobID = educator.StaffJobID;
                 }
+
+                Account account = accounts.Find(x => x.AccountID == apply.AccountID);
+                if (account != null)
+                    account.AccountMoney += apply.ThisAccountMoney - apply.ThatAccountMoney;
             }
         }
 

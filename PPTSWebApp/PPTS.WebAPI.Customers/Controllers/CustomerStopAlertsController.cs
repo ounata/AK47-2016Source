@@ -4,6 +4,7 @@ using MCS.Web.MVC.Library.Filters;
 using PPTS.Data.Common.Adapters;
 using PPTS.Data.Common.Security;
 using PPTS.Data.Customers.Entities;
+using PPTS.Web.MVC.Library.Filters;
 using PPTS.WebAPI.Customers.DataSources;
 using PPTS.WebAPI.Customers.Executors;
 using PPTS.WebAPI.Customers.ViewModels.StopAlerts;
@@ -27,6 +28,7 @@ namespace PPTS.WebAPI.Customers.Controllers
         /// <param name="criteria">查询条件</param>
         /// <returns>返回带字典的跟进记录列表</returns>
         [HttpPost]
+        [PPTSJobFunctionAuthorize("PPTS:学员视图-停课休学/退费预警,学员视图-停课休学/退费预警-本部门,学员视图-停课休学/退费预警-本校区,学员视图-停课休学/退费预警-本分公司,学员视图-停课休学/退费预警-全国")]
         public StopAlertQueryResult GetAllStopAlerts(StopAlertCriteriaModel criteria)
         {
             return new StopAlertQueryResult
@@ -42,6 +44,7 @@ namespace PPTS.WebAPI.Customers.Controllers
         /// <param name="criteria">查询条件</param>
         /// <returns>返回不带字典的跟进记录列表</returns>
         [HttpPost]
+        [PPTSJobFunctionAuthorize("PPTS:学员视图-停课休学/退费预警,学员视图-停课休学/退费预警-本部门,学员视图-停课休学/退费预警-本校区,学员视图-停课休学/退费预警-本分公司,学员视图-停课休学/退费预警-全国")]
         public PagedQueryResult<StopAlertQueryModel, StopAlertQueryCollection> GetPagedStopAlerts(StopAlertCriteriaModel criteria)
         {
             return CustomerStopAlertDataSource.Instance.LoadCustomerStopAlerts(criteria.PageParams, criteria, criteria.OrderBy);
@@ -66,14 +69,18 @@ namespace PPTS.WebAPI.Customers.Controllers
         /// </summary>
         /// <param name="model"></param>
         [HttpPost]
+        [PPTSJobFunctionAuthorize("PPTS:新增停课/休学")]
         public void CreateStopAlert(StopAlertCreateModel model)
         {
-            //  model.StopAlert.AlertID = Guid.NewGuid().ToString();
+            #region 写入权限验证
+            PPTS.Data.Common.Authorization.ScopeAuthorization<CustomerStopAlerts>
+               .GetInstance(Data.Customers.ConnectionDefine.PPTSCustomerConnectionName).CheckEditAuth("", model.StopAlert.CustomerID);
+            #endregion
+
             model.StopAlert.OperatorID = DeluxeIdentity.CurrentUser.ID;
             model.StopAlert.OperatorJobID = DeluxeIdentity.CurrentUser.GetCurrentJob().ID;
             model.StopAlert.OperatorJobName = DeluxeIdentity.CurrentUser.GetCurrentJob().Name;
             model.StopAlert.OperatorName = DeluxeIdentity.CurrentUser.DisplayName;
-            //    model.StopAlert.AlertTime = DateTime.Now;
 
             AddCustomerStopAlertExecutor executor = new AddCustomerStopAlertExecutor(model);
             executor.Execute();

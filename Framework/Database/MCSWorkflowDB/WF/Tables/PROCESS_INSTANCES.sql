@@ -13,7 +13,7 @@
 	[TENANT_CODE]         NVARCHAR (36)   NULL DEFAULT 'D5561180-7617-4B67-B68B-1F0EA604B509',
     [DATA]                XML             NULL,
 	[EXT_DATA]            XML             NULL,		
-    [CREATE_TIME]         DATETIME        CONSTRAINT [DF_PROCESS_INSTANCES_CREATE_TIME] DEFAULT (getdate()) NULL,
+    [CREATE_TIME]         DATETIME        CONSTRAINT [DF_PROCESS_INSTANCES_CREATE_TIME] DEFAULT (GETUTCDATE()) NULL,
     [UPDATE_TAG]          INT             CONSTRAINT [DF_PROCESS_INSTANCES_UPDATE_TAG] DEFAULT ((0)) NULL,
 	[COMMITTED]			  NCHAR(1)		  CONSTRAINT [DF_PROCESS_INSTANCES_COMMITTED] DEFAULT (('1')) NULL,
     [START_TIME]          DATETIME        NULL,
@@ -105,11 +105,11 @@ EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'一个标�
 
 
 GO
-EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'开始时间', @level0type = N'SCHEMA', @level0name = N'WF', @level1type = N'TABLE', @level1name = N'PROCESS_INSTANCES', @level2type = N'COLUMN', @level2name = N'START_TIME';
+EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'开始时间(UTC)', @level0type = N'SCHEMA', @level0name = N'WF', @level1type = N'TABLE', @level1name = N'PROCESS_INSTANCES', @level2type = N'COLUMN', @level2name = N'START_TIME';
 
 
 GO
-EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'结束时间', @level0type = N'SCHEMA', @level0name = N'WF', @level1type = N'TABLE', @level1name = N'PROCESS_INSTANCES', @level2type = N'COLUMN', @level2name = N'END_TIME';
+EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'结束时间(UTC)', @level0type = N'SCHEMA', @level0name = N'WF', @level1type = N'TABLE', @level1name = N'PROCESS_INSTANCES', @level2type = N'COLUMN', @level2name = N'END_TIME';
 
 
 GO

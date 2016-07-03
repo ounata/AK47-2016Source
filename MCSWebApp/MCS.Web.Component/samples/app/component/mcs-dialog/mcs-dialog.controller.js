@@ -8,6 +8,8 @@
                 var vm = {};
                 $scope.vm = vm;
 
+                vm.name = 'tom';
+
 
 
                 vm.wait = function() {
@@ -35,7 +37,8 @@
                 vm.info = function() {
                     mcsDialogService.info({
                             title: '提示',
-                            message: 'info occurs!'
+                            message: 'info occurs!',
+                            backdrop: false
                         }
 
 
@@ -45,7 +48,10 @@
                 vm.error = function() {
                     mcsDialogService.error({
                             title: '警告',
-                            message: 'error occurs!'
+                            message: 'error occurs!',
+                            settings: {
+                                backdrop: 'static'
+                            }
                         }
 
 
@@ -58,8 +64,10 @@
                         controllerAs: 'vm'
                     });
                     dlg.result.then(function(userName) {
+                        vm.name = userName;
                         alert('you have entered: ' + userName);
                     }, function() {
+                        alert('hi');
 
                     });
                 }
@@ -69,10 +77,10 @@
             })
 
         .controller('customDialogCtrl', function($scope, $uibModalInstance) {
-            var vm = {};
+            var vm = this;
             $scope.vm = vm;
             vm.user = {
-                name: 'tom'
+                name: ''
             };
 
 

@@ -28,45 +28,17 @@ namespace PPTS.Contracts.Proxies
             this.SingleCall(action => action.UpdateByCustomerInfo(model));
         }
 
-        private WfServiceOperationDefinition PrepareCustomerWfServiceOperation(string customerID)
+        public void UpdateByCustomerCollectionInfo(List<CustomerSearchUpdateModel> modelCollection)
         {
-            WfServiceOperationParameterCollection parameters = new WfServiceOperationParameterCollection();
-            parameters.Add(new WfServiceOperationParameter("customerID", customerID));
-            WfServiceOperationDefinition serviceDefine = new WfServiceOperationDefinition(
-                new WfServiceAddressDefinition(WfServiceRequestMethod.Post,
-                this.GetService().Endpoint.Address.Uri.ToString(),
-                WfServiceContentType.Json)
-                , "UpdateByCustomerTextInfo"
-                , parameters
-                , "");
-            return serviceDefine;
+            this.SingleCall(action => action.UpdateByCustomerCollectionInfo(modelCollection));
         }
 
-        public void UpdateByCustomerInfoByTask(CustomerSearchUpdateModel model)
-        {
-            InvokeServiceTask task = new InvokeServiceTask()
-            {
-                TaskID = UuidHelper.NewUuidString(),
-                TaskTitle = "CustomerSearch更新客户信息任务",
-                ResourceID = UuidHelper.NewUuidString()
-            };
-            task.SvcOperationDefs.Add(PrepareCustomerWfServiceOperation(model));
-            task.FillData();
-            InvokeServiceTaskAdapter.Instance.Push(task);
-        }
+        #endregion
 
-        public WfServiceOperationDefinition PrepareCustomerWfServiceOperation(CustomerSearchUpdateModel model)
+        #region 初始化客户信息部分
+        public void InitCustomerSearch(List<string> customerIDs)
         {
-            WfServiceOperationParameterCollection parameters = new WfServiceOperationParameterCollection();
-            parameters.Add(new WfServiceOperationParameter("model", model));
-            WfServiceOperationDefinition serviceDefine = new WfServiceOperationDefinition(
-                new WfServiceAddressDefinition(WfServiceRequestMethod.Post,
-                this.GetService().Endpoint.Address.Uri.ToString(),
-                WfServiceContentType.Json)
-                , "UpdateByCustomerInfo"
-                , parameters
-                , "");
-            return serviceDefine;
+            this.SingleCall(action => action.InitCustomerSearch(customerIDs));
         }
         #endregion
 

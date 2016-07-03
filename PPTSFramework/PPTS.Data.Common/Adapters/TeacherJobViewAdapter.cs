@@ -34,6 +34,13 @@ namespace PPTS.Data.Common.Adapters
             return this.Load(wLC);
         }
 
+        public string GetSql(string colName,string colValue)
+        {
+            string sql = string.Format(@" exists(select 1 from [MT].[TeacherTeachings] where {0}.TeacherID = [MT].[TeacherTeachings].TeacherID 
+                and [MT].[TeacherTeachings].{1}='{2}')",this.GetTableName(), colName, colValue);
+            return sql;
+        }
+
         public TeacherJobView Load(string teacherJobID)
         {
            return this.Load(p => p.AppendItem("JobID", teacherJobID, "=")).FirstOrDefault();

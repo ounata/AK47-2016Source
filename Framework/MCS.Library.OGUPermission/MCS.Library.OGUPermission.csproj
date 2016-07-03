@@ -115,7 +115,9 @@
     <Compile Include="Commands\OutputHelper.cs" />
     <Compile Include="Commands\QueryHelper.cs" />
     <Compile Include="Commands\RemoveOguCache.cs" />
+    <Compile Include="Configuration\OguConnectionMappingElement.cs" />
     <Compile Include="Configuration\OguPermissionSettings.cs" />
+    <Compile Include="Configuration\OrganizationMappingElement.cs" />
     <Compile Include="IApplicationMemberPropertyAccessible.cs" />
     <Compile Include="Mechanism\AppAdminMechanism.cs" />
     <Compile Include="Mechanism\IOguImplInterface.cs" />

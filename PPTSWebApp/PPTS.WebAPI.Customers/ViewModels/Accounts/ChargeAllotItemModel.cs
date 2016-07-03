@@ -19,6 +19,11 @@ namespace PPTS.WebAPI.Customers.ViewModels.Accounts
     [DataContract]
     public class ChargeAllotItemModel : AccountChargeAllot
     {
-
+        [DataMember]
+        public List<TeacherJobModel> TeacherJobs
+        {
+            set;
+            get;
+        }
     }
 }

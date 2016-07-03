@@ -1,6 +1,8 @@
 using MCS.Library.Core;
 using MCS.Library.Data.DataObjects;
 using MCS.Library.Data.Mapping;
+using MCS.Web.MVC.Library.Models;
+using PPTS.Data.Common.Authorization;
 using PPTS.Data.Common.Entities;
 using System;
 using System.Collections.Generic;
@@ -16,10 +18,44 @@ namespace PPTS.Data.Customers.Entities
     [Serializable]
     [ORTableMapping("CM.CustomerMeetings")]
     [DataContract]
+    #region 数据范围权限(存入识别)
+    [EntityAuth(RecordType = RecordType.CustomerMeeting)]
+    #endregion 
+
+    #region 数据范围权限(数据读取权限)
+    [CustomerRelationScope(Name = "教学服务会管理（学员视图-教学服务会、详情查看）", Functions = "教学服务会管理（学员视图-教学服务会、详情查看）", RecordType = CustomerRecordType.Customer)]
+    [OrgCustomerRelationScope(Name = "教学服务会管理（学员视图-教学服务会、详情查看）-本部门", Functions = "教学服务会管理（学员视图-教学服务会、详情查看）-本部门", RecordType = CustomerRecordType.Customer)]
+    [OrgCustomerRelationScope(Name = "教学服务会管理（学员视图-教学服务会、详情查看）-本校区", Functions = "教学服务会管理（学员视图-教学服务会、详情查看）-本校区", RecordType = CustomerRecordType.Customer)]
+    [OrgCustomerRelationScope(Name = "教学服务会管理（学员视图-教学服务会、详情查看）-本分公司", Functions = "教学服务会管理（学员视图-教学服务会、详情查看）-本分公司", RecordType = CustomerRecordType.Customer)]
+    [OrgCustomerRelationScope(Name = "教学服务会管理（学员视图-教学服务会、详情查看）-全国", Functions = "教学服务会管理（学员视图-教学服务会、详情查看）-全国", RecordType = CustomerRecordType.Customer)]
+    #endregion
+
+    #region 数据范围权限(编辑操作权限)
+    [CustomerRelationScope(Name = "新增/编辑教学服务会", Functions = "新增/编辑教学服务会", ActionType = ActionType.Edit, RecordType = CustomerRecordType.Customer)]
+    #endregion
     public class CustomerMeeting : IEntityWithCreator, IEntityWithModifier
     {
         public CustomerMeeting()
         {
+        }
+       
+        [NoMapping]
+        [DataMember]
+        public string ResourceId
+        {
+            set;
+            get;
+        }
+
+        /// <summary>
+        /// 附件列表
+        /// </summary>
+        [NoMapping]
+        [DataMember]
+        public MaterialModelCollection Materials
+        {
+            set;
+            get;
         }
 
         /// <summary>
@@ -48,16 +84,27 @@ namespace PPTS.Data.Customers.Entities
         /// 学员ID
         /// </summary>
         [ORFieldMapping("CustomerID")]
+        [CustomerFieldMapping("CustomerID")]
         [DataMember]
         public string CustomerID
         {
             get;
             set;
         }
-
+        /// <summary>
+        /// 学员姓名
+        /// </summary>
+        [NoMapping]
+        [DataMember]
+        public string CustomerName
+        {
+            get;
+            set;
+        }
         /// <summary>
         /// 学情会ID
         /// </summary>
+        [KeyFieldMapping("MeetingID")]
         [ORFieldMapping("MeetingID", PrimaryKey = true)]
         [DataMember]
         public string MeetingID
@@ -69,7 +116,7 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 开会时间
         /// </summary>
-        [ORFieldMapping("MeetingTime")]
+        [ORFieldMapping("MeetingTime", UtcTimeToLocal = true)]
         [DataMember]
         public DateTime MeetingTime
         {
@@ -80,7 +127,7 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 会议结束时间
         /// </summary>
-        [ORFieldMapping("MeetingEndTime")]
+        [ORFieldMapping("MeetingEndTime", UtcTimeToLocal = true)]
         [DataMember]
         public DateTime MeetingEndTime
         {
@@ -181,7 +228,7 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 预计下次会议时间
         /// </summary>
-        [ORFieldMapping("NextMeetingTime")]
+        [ORFieldMapping("NextMeetingTime", UtcTimeToLocal = true)]
         [DataMember]
         public DateTime NextMeetingTime
         {
@@ -226,7 +273,7 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 创建时间
         /// </summary>
-        [ORFieldMapping("CreateTime")]
+        [ORFieldMapping("CreateTime", UtcTimeToLocal = true)]
         [DataMember]
         public DateTime CreateTime
         {
@@ -270,7 +317,7 @@ namespace PPTS.Data.Customers.Entities
         /// <summary>
         /// 会议主题代码
         /// </summary>
-        
+
         [ORFieldMapping("MeetingTitle")]
         [DataMember]
         [ConstantCategory("c_codE_ABBR_MeetingTitle")]

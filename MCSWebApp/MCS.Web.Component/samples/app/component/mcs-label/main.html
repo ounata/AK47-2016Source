@@ -31,10 +31,13 @@
                 <div class="col-sm-12">
                     <h3 class="header smaller lighter green">应用范例</h3>
                     <div>
-                        <mcs-label text="学生家长"/> 
-                        <mcs-label required="true" text="学生家长"/> 
-                        <mcs-label required="true" text="学生家长" for-input="parentName"/> 
-                        <mcs-label required="true" text="学生家长" for-input="parentName" css="hightlight"/>     
+                        默认用法：<mcs-label text="学生家长"/> <br/>
+                        设置必填：<mcs-label required="true" text="学生家长"/> <br />
+                        设置前图标：<mcs-label required="true" text="学生家长" icons="star,square,caret-up"/> <br />
+                        设置前缀：<mcs-label required="true" text="学生家长" prefix="小明的"/> <br />
+                        设置后缀：<mcs-label required="true" text="学生家长" prefix="小明的" suffix="|"/> <br />
+                        设置指定的文本框：<mcs-label required="true" text="学生家长" for-input="parentName"/> <br />
+                        添加自定义样式：<mcs-label required="true" text="学生家长" for-input="parentName" css="hightlight"/>     
                         <mcs-input id="parentName"/>       
                     </div>
                 </div>
@@ -46,6 +49,9 @@
                         <code><b>Html</b></code><br />
                         &lt;mcs-label text="学生家长"/&gt;
                         &lt;mcs-label required="true" text="学生家长"/&gt;
+                        &lt;mcs-label required="true" text="学生家长" icons="star,square,caret-up" /&gt;
+                        &lt;mcs-label required="true" text="学生家长" prefix="小明的" /&gt;
+                        &lt;mcs-label required="true" text="学生家长" prefix="小明的" suffix="," /&gt;
                         &lt;mcs-label required="true" text="学生家长" for-input="parentName"/&gt;
                         &lt;mcs-label required="true" text="学生家长" for-input="parentName" css="hightlight"/&gt;    
                         &lt;mcs-input id="parentName"/&gt;
@@ -86,12 +92,37 @@
                                 <td>&lt;mcs-label required="true" text="学生家长"/&gt;</td>
                             </tr>
                             <tr>
+                                <td><code>icons</code></td>
+                                <td>为标签添加前置的图标</td>
+                                <td>无</td>
+                                <td>无</td>
+                                <td>&lt;mcs-label required="true" text="学生家长" icons="square,caret-up"/&gt;</td>
+                            </tr>
+                            <tr>
                                 <td><code>for-input</code></td>
                                 <td>关联到一个文本框,值为文本框id(点击标签可以将焦点移到文本框)</td>
                                 <td>无</td>
                                 <td>无</td>
                                 <td>&lt;mcs-label required="true" text="学生家长" for-input="parentName"/&gt;
                                     &lt;mcs-input id="parentName"/&gt;</td>
+                            </tr>
+                            <tr>
+                                <td><code>prefix</code></td>
+                                <td>设置在文字前面添加指定的字符，默认为空</td>
+                                <td>无</td>
+                                <td></td>
+                                <td>
+                                    &lt;mcs-label required="true" text="学生家长" prefix="小明的"/&gt;
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>suffix</code></td>
+                                <td>设置在文字末尾添加指定的字符，默认为：</td>
+                                <td>无</td>
+                                <td>：</td>
+                                <td>
+                                    &lt;mcs-label required="true" text="学生家长" prefix="小明的" suffix="," /&gt;
+                                </td>
                             </tr>
                             <tr>
                                 <td><code>css</code></td>

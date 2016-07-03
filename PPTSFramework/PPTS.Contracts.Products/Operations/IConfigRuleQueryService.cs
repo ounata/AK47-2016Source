@@ -15,7 +15,7 @@ namespace PPTS.Contracts.Products.Operations
     public interface IConfigRuleQueryService
     {
         /// <summary>
-        /// 通过校区获得对应的折扣配置信息
+        /// 通过校区ID获得对应的折扣配置信息
         /// </summary>
         /// <param name="campusID">校区ID</param>
         /// <returns></returns>
@@ -23,7 +23,15 @@ namespace PPTS.Contracts.Products.Operations
         DiscountQueryResult QueryDiscountByCampusID(string campusID);
 
         /// <summary>
-        ///  通过校区获得对应的服务费信息
+        /// 通过折扣ID获得对应的折扣配置信息
+        /// </summary>
+        /// <param name="discountID">折扣ID</param>
+        /// <returns></returns>
+        [OperationContract]
+        DiscountQueryResult QueryDiscountByDiscountID(string discountID);
+
+        /// <summary>
+        ///  通过校区ID获得对应的服务费信息
         /// </summary>
         /// <param name="campusID">校区ID</param>
         /// <returns></returns>
@@ -31,7 +39,7 @@ namespace PPTS.Contracts.Products.Operations
         ExpenseQueryResult QueryExpenseByCampusID(string campusID);
 
         /// <summary>
-        ///  通过校区获得对应的买赠折扣配置信息
+        ///  通过校区ID获得对应的买赠折扣配置信息
         /// </summary>
         /// <param name="campusID">校区ID</param>
         /// <returns></returns>

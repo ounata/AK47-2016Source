@@ -23,11 +23,32 @@ namespace PPTS.WebAPI.Customers.Executors
             //model.PrimaryParent.NullCheck("PrimaryParent");
         }
 
+        protected override object DoOperation(DataExecutionContext<UserOperationLogCollection> context)
+        {
+            #region 生成数据权限范围数据
+
+            PPTS.Data.Common.Authorization.ScopeAuthorization<CustomerFollow>
+
+               .GetInstance(PPTS.Data.Customers.ConnectionDefine.PPTSCustomerConnectionName)
+
+               .UpdateAuthInContext(DeluxeIdentity.CurrentUser.GetCurrentJob()
+
+               , DeluxeIdentity.CurrentUser.GetCurrentJob().Organization()
+
+               , this.Model.Follow.CustomerID
+
+               , PPTS.Data.Common.Authorization.RelationType.Owner);
+
+            #endregion 生成数据权限范围数据
+
+            return base.DoOperation(context);
+        }
+
         protected override void PrepareData(DataExecutionContext<UserOperationLogCollection> context)
         {
             base.PrepareData(context);
             this.Model.Follow.FillCreator();
-            this.Model.InitVerifier(DeluxeIdentity.CurrentUser);
+            this.Model.InitFollower(DeluxeIdentity.CurrentUser);
             CustomerFollowAdapter.Instance.UpdateInContext(this.Model.Follow);
 
             //准备更新潜客或者学员的跟进信息的SQL

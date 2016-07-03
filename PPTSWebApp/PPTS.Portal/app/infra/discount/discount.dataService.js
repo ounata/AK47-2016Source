@@ -36,6 +36,10 @@
             resource.post({ operation: 'disableDiscount' }, criteria, success, error);
         }
 
+        resource.getDiscountWorkflowInfo = function (criteria, success, error) {
+            resource.post({ operation: 'getDiscountWorkflowInfo' }, criteria, success, error);
+        }
+
         return resource;
     }]);
 
@@ -50,13 +54,13 @@
             name: "折扣编码",
             template: '<a ui-sref="ppts.discount-view({discountId:row.discountID})">{{row.discountCode}}</a>',
         }, {
-            field: "ownOrgName",
+            field: "branchName",
             name: "分公司",
-            template: '<span>{{row.ownOrgName}}</span>',
+            template: '<span>{{row.branchName}}</span>',
         }, {
             field: "startDate",
             name: "启用时间",
-            template: '<span>{{row.startDate | date:"yyyy-MM-dd"}}</span>'
+            template: '<span>{{row.startDate | date:"yyyy-MM-dd" | normalize}}</span>'
         }, {
             field: "discountStatus",
             name: "状态",
@@ -68,20 +72,20 @@
         }, {
             field: "approveTime",
             name: "审批日期",
-            template: '<span>{{ row.approveTime | date:"yyyy-MM-dd"}}</span>',
+            template: '<span>{{ row.approveTime | date:"yyyy-MM-dd" | normalize}}</span>',
         }
         , {
             field: "approverName",
             name: "最终审批人",
-            template: '<span>{{ row.alertStatus | refundAlertStatus }}</span>',
+            template: '<span>{{ row.approverName }}</span>',
         }, {
             field: "approverJobName",
             name: "审批人岗位",
-            template: '<span>{{ row.alertStatus | refundAlertStatus }}</span>',
+            template: '<span>{{ row.approverJobName }}</span>',
         }, {
             field: "createTime",
             name: "创建日期",
-            template: '<span>{{ row.createTime | date:"yyyy-MM-dd" }}</span>',
+            template: '<span>{{ row.createTime | date:"yyyy-MM-dd" | normalize }}</span>',
         }],
         pager: {
             pageIndex: 1,
@@ -128,13 +132,13 @@
             field: 'discountStandard',
             name: '充值额(万元)',
             headerCss: 'datatable-header',
-            template: '<span ng-class=\'{"has-error":!row.validStandard}\'><mcs-input model="row.discountStandard" class="input-width-100" validate="vm.updateDiscountStandardRank(row, $index)" datatype="float"/><span class=\'help-inline\' ng-if="!row.validStandard">需大于上档小于下档!</span></span>'
+            template: '<span ng-class=\'{"has-error":!row.validStandard}\'><mcs-input model="row.discountStandard" class="input-width-100" validate="vm.updateDiscountStandardRank(row, $index)" self-validate="true" datatype="number"/><span class=\'help-inline\' ng-if="!row.validStandard">{{row.errorStandardMessage}}</span></span>'
         },
         {
             field: 'discountValue',
             name: '折扣率(精确到0.01)',
             headerCss: 'datatable-header',
-            template: '<span ng-class=\'{"has-error":!row.validValue}\'><mcs-input model="row.discountValue" class="input-width-100" validate="vm.updateDiscountValueRank(row, $index)" datatype="float"/><span class=\'help-inline\' ng-if="!row.validValue">{{vm.errorRowMessage}}</span></span>'
+            template: '<span ng-class=\'{"has-error":!row.validValue}\'><mcs-input model="row.discountValue" class="input-width-100" validate="vm.updateDiscountValueRank(row, $index)" self-validate="true" datatype="number"/><span class=\'help-inline\' ng-if="!row.validValue">{{row.errorValueMessage}}</span></span>'
         }],
         pager: {
             pagable: false,
@@ -178,17 +182,6 @@
     function (discountDataService, dataSyncService, discountMaximum) {
         var service = this;
 
-        // 配置折扣表列表表头
-        service.configDiscountListHeaders = function (vm, header) {
-            vm.data = header;
-            vm.data.pager.pageChange = function () {
-                dataSyncService.initCriteria(vm);
-                discountDataService.getPagedDiscounts(vm.criteria, function (result) {
-                    vm.data.rows = result.pagedData;
-                });
-            }
-        };
-
         service.configDiscountAddDataTable = function (vm, data, campusData) {
             vm.relationData = data;
             vm.campusData = campusData;
@@ -204,8 +197,9 @@
                         endTime: (campuses.endTimes ? campuses.endTimes[index] : '-')
                     });
                 }
-                if (rowCount < discountMaximum) {
-                    for (var i = 0; i < discountMaximum - rowCount; i++) {
+                var relationDataLength = (vm.relationData.rows.length > discountMaximum ? vm.relationData.rows.length : discountMaximum);
+                if (rowCount < relationDataLength) {
+                    for (var i = 0; i < relationDataLength - rowCount; i++) {
                         vm.campusData.rows.push({
                             campusName: '',
                             usedState: '-',
@@ -213,28 +207,17 @@
                         });
                     }
                 } else {
-                    for (var i = 0; i < rowCount - discountMaximum; i++) {
+                    for (var i = 0; i < rowCount - relationDataLength; i++) {
                         vm.relationData.rows.push({
                             stall: vm.relationData.rows.length + 1,
-                            discountStandard: 0,
-                            discountValue: 0.0
+                            discountStandard: '',
+                            discountValue: '',
+                            validValue: true,
+                            validStandard: true
                         });
                     }
                 }
             }
-        };
-
-        // 初始化折扣表列表数据
-        service.initDiscountList = function (vm, callback) {
-            dataSyncService.initCriteria(vm);
-            discountDataService.getAllDiscounts(vm.criteria, function (result) {
-                vm.data.rows = result.queryResult.pagedData;
-                dataSyncService.injectPageDict(['dateRange', 'ifElse']);
-                dataSyncService.updateTotalCount(vm, result.queryResult);
-                if (ng.isFunction(callback)) {
-                    callback();
-                }
-            });
         };
 
         return service;

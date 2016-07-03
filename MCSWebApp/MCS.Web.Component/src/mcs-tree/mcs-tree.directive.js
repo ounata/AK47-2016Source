@@ -24,6 +24,9 @@
                 }
 
             },
+            callback: {
+
+            },
             check: {
                 enable: true
             },
@@ -64,7 +67,24 @@
 
                         zTreeObj.checkAllNodes(false);
 
-                    }
+                    };
+
+                    $scope.setting.expendCheckedNode = function(treeId, treeNode) {
+                        zTreeObj.expandNode(treeNode, true, true, true);
+                    };
+                    treeSetting.callback.onAsyncSuccess = function(event, treeId, treeNode, msg) {
+                        zTreeObj.checkNode(treeNode, true, true);
+                    };
+
+                    treeSetting.callback.beforeCheck = $scope.setting.expendCheckedNode;
+
+                    $scope.setting.checkNodes = function(nodes) {
+
+                        nodes.forEach(function(node) {
+                            zTreeObj.checkNode(node, true, true);
+                        });
+
+                    };
 
                     $scope.setting.justCheckWithinSameParent = function(treeId, treeNode) {
 

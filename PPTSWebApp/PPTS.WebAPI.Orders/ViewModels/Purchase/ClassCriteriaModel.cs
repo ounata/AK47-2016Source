@@ -46,26 +46,26 @@ namespace PPTS.WebAPI.Orders.ViewModels.Purchase
         public IDictionary<string, IEnumerable<BaseConstantEntity>> Dictionaries { get; set; }
     }
 
-    public class ClassModel : Class {
+    //public class ClassModel : Class {
 
-        [NoMapping]
-        [DataMember]
-        public string OrderAmount { set; get; }
-    }
+    //    [NoMapping]
+    //    [DataMember]
+    //    public string OrderAmount { set; get; }
+    //}
 
-    public class ClassCollectionModel: EditableDataObjectCollectionBase<ClassModel> {
+    //public class ClassCollectionModel: EditableDataObjectCollectionBase<ClassModel> {
 
-        //public void FillOrderAmount()
-        //{
-        //    var classIds = this.Select(m => m.ClassID).ToArray();
+    //    //public void FillOrderAmount()
+    //    //{
+    //    //    var classIds = this.Select(m => m.ClassID).ToArray();
             
-        //    var openAccountDate = Service.CommonService.GetOpenAccountDate();
-        //    ClassLessonsAdapter.Instance.GetNoOpenAccountLessonCount(openAccountDate, classIds)
-        //        .ToList()
-        //        .ForEach(kv => {
-        //            this.Single(s => s.ClassID == kv.Key).OrderAmount = kv.Value.ToString();
-        //        });
-        //}
-    }
+    //    //    var openAccountDate = Service.CommonService.GetOpenAccountDate();
+    //    //    ClassLessonsAdapter.Instance.GetNoOpenAccountLessonCount(openAccountDate, classIds)
+    //    //        .ToList()
+    //    //        .ForEach(kv => {
+    //    //            this.Single(s => s.ClassID == kv.Key).OrderAmount = kv.Value.ToString();
+    //    //        });
+    //    //}
+    //}
 
 }

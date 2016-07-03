@@ -64,18 +64,19 @@ define(['angular', ppts.config.modules.customer], function (ng, customerVisit) {
         headers: [
         {
             field: "customerName",
-            name: "学员姓名"
+            name: "学员姓名",
+            template: '<a ui-sref="ppts.student-view.profiles({id:row.customerID,prev:\'ppts.student\'})">{{row.customerName}}</a>'
         }, {
             field: "customerCode",
             name: "学员编号"
         }, {
             field: "parentName",
-            name: "家长姓名",
-            sortable: true
+            name: "家长姓名"
         },  {
-            field: "visitTime",
+            field: "c.visitTime",
             name: "回访时间",
-            template: '<span>{{row.visitTime | date:"yyyy-MM-dd"}}</span>'
+            template: '<a ui-sref="ppts.student-view.visit-info({visitId:row.visitID,prev:\'ppts.student\'})">{{row.visitTime | date:"yyyy-MM-dd"}}</a>',
+            sortable: true
         }, {
             field: "visitWay",
             name: "回访方式",
@@ -95,7 +96,7 @@ define(['angular', ppts.config.modules.customer], function (ng, customerVisit) {
         {
             field: "visitContent",
             name: "回访内容",
-            template: '<span uib-tooltip="{{row.visitContent}}">{{row.visitContent | truncate:10}}</span>'
+            template: '<span uib-popover="{{row.visitContent|tooltip:30}}" popover-trigger="mouseenter">{{row.visitContent | truncate:30}}</span>'
         }
         ],
         pager: {
@@ -134,7 +135,7 @@ define(['angular', ppts.config.modules.customer], function (ng, customerVisit) {
         {
             field: "visitContent",
             name: "回访内容",
-            template: '<span>{{row.visitContent }}</span>'
+            template: '<span uib-popover="{{row.visitContent|tooltip:30}}" popover-trigger="mouseenter">{{row.visitContent | truncate:30}}</span>'
         }
         ],
         pager: {
@@ -158,35 +159,35 @@ define(['angular', ppts.config.modules.customer], function (ng, customerVisit) {
         }, {
             field: 'visitWay',
             name: '回访方式',
-            template: '<ppts-select category="visitWay" model="row.visitWay" async="false" style="width:90px;" required/>',
+            template: '<mcs-select category="visitWay" model="row.visitWay" async="false"  required/>'
         }, {
             field: 'visitType',
             name: '回访类型',
-            template: '<ppts-select category="visitType" model="row.visitType" async="false" style="width:90px;" required/>',
+            template: '<mcs-select category="visitType" model="row.visitType" async="false"  required/>'
         }, {
             field: 'visitTime',
             name: '回访时间',
-            template: '<ppts-datetimepicker model="row.visitTime" style="width:90px;" required/>'
+            template: '<mcs-datetimepicker model="row.visitTime" start-date="vm.startDate" end-date="vm.endDate" required/>'
         }, {
             field: 'satisficing',
             name: '家长满意度',
-            template: '<ppts-select category="satisficing" model="row.satisficing" async="false" style="width:90px;" required/>',
+            template: '<mcs-select category="satisficing" model="row.satisficing" async="false"  required/>'
         }, {
             field: 'visitContent',
             name: '回访内容',
-            template: '<textarea class="col-sm-8" id="textArea" ng-model="row.visitContent" css="mcs-padding-0" style="width:200px;" required></textarea>',
+            template: '<textarea id="textArea" ng-model="row.visitContent" cols="20"  required></textarea>'
         }, {
             field: 'nextVisitTime',
             name: '预计下次回访时间',
-            template: '<ppts-datetimepicker model="row.nextVisitTime" style="width:90px;" required/>'
+            template: '<mcs-datetimepicker model="row.nextVisitTime" required/>'
         }, {
             field: 'remainTime',
             name: '设置提醒时间',
-            template: ''
+            template: '<mcs-datetimepicker model="row.remindTime" required />'
         }, {
-            field: 'remainType',
+            field: 'selectTypes',
             name: '提醒类型',
-            template: ''
+            template: '<ppts-radiobutton-group category="messageType" model="row.selectType" async="false" required/>'
         }],
         rows: [],
         pager: {
@@ -198,6 +199,25 @@ define(['angular', ppts.config.modules.customer], function (ng, customerVisit) {
     customerVisit.registerFactory('customerVisitDataViewService', ['$state', '$stateParams', 'customerVisitDataService', 'dataSyncService', 'customerVisitListDataHeader', 'customerVisitListDataSingleHeader',
      function ($state,$stateParams, customerVisitDataService, dataSyncService, customerVisitListDataHeader, customerVisitListDataSingleHeader) {
          var service = this;
+
+         //初始化回访时间范围
+         service.initDate = function (vm) {
+             var syNow = new Date();
+             var year = syNow.getFullYear();        //年
+             var month = syNow.getMonth() + 1;     //月
+             var day = syNow.getDate();            //天
+             vm.startDate = new Date(new Date(year + "-" + month + "-" + day).getTime() - 3 * 24 * 60 * 60 * 1000);
+             vm.endDate = new Date(new Date(year + "-" + month + "-" + day + " 23:59").getTime());
+
+         }
+
+         service.initDateEdit = function (vm) {
+             var year = vm.customerVisit.visitTime.getFullYear();        //年
+             var month = vm.customerVisit.visitTime.getMonth() + 1;     //月
+             var day = vm.customerVisit.visitTime.getDate();            //天
+             vm.startDate = new Date(new Date(year + "-" + month + "-" + day).getTime() - 3 * 24 * 60 * 60 * 1000);
+             vm.endDate = new Date(new Date(year + "-" + month + "-" + day).getTime() + 4 * 24 * 60 * 60 * 1000);
+         }
 
          // 配置客户回访列表表头
          service.configCustomerVisitListHeaders = function (vm) {
@@ -226,6 +246,7 @@ define(['angular', ppts.config.modules.customer], function (ng, customerVisit) {
 
              customerVisitDataService.getAllCustomerVisits(vm.criteria, function (result) {
                  vm.data.rows = result.queryResult.pagedData;
+                 vm.data.searching();
                  dataSyncService.updateTotalCount(vm, result.queryResult);
                  if (ng.isFunction(callback)) {
                      callback();
@@ -250,6 +271,7 @@ define(['angular', ppts.config.modules.customer], function (ng, customerVisit) {
              vm.criteria.customerID = $stateParams.id;
              customerVisitDataService.getAllCustomerVisits(vm.criteria, function (result) {
                  vm.data.rows = result.queryResult.pagedData;
+                 vm.data.searching();
                  dataSyncService.updateTotalCount(vm, result.queryResult);
                  if (ng.isFunction(callback)) {
                      callback();

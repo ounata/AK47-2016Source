@@ -22,6 +22,11 @@ namespace PPTS.Data.Orders.Adapters
             return ConnectionDefine.PPTSOrderConnectionName;
         }
 
+        public DebookOrder Load(string debookID)
+        {
+            return Load(b => b.AppendItem("DebookID", debookID)).FirstOrDefault();
+        }
+
 
         public void ExistsPendingApprovalInContext(string customerId)
         {

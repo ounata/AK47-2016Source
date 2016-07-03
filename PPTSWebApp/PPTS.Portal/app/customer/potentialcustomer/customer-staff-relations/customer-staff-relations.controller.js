@@ -40,7 +40,7 @@
                                 };
                                 customerStaffRelations.push(cr);
                             }
-                            customerDataService.createCustomerStaffRelations({ customerStaffRelations: customerStaffRelations }, function () {
+                            customerDataService.createCustomerStaffRelations({ customerStaffRelations: customerStaffRelations,messageType:vm.selectTypes }, function () {
                                 $uibModalInstance.close();
                             });
                         };

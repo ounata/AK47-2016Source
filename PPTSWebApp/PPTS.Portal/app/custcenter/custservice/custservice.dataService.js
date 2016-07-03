@@ -27,6 +27,10 @@
             resource.save({ operation: 'updateCustomerService' }, model, success, error);
         };
 
+        resource.accessProcess = function (model, success, error) {
+            resource.save({ operation: 'accessProcess' }, model, success, error);
+        };
+
         resource.getCustomerServiceInfo = function (id, success, error) {
             resource.query({ operation: 'getCustomerServiceInfo', id: id }, success, error);
         }
@@ -48,68 +52,75 @@
 
 
     custcenter.registerValue('custserviceListDataHeader', {
-        headers: [{
+        headers: [
+            {
+                field: "orgName",
+                name: "分公司",
+                template: '<span ng-if="row.complaintLevel == 2 || row.complaintLevel == 3" class="important">*</span><span> {{row.orgName}}</span>'
+            },
+            {
+                field: "campusName",
+                name: "校区"
+            }, {
             field: "parentName",
-            name: "家长姓名",
-            template: '<a ui-sref="ppts.custservice-view({id:row.serviceID})">{{row.parentName}}</a>',
-            sortable: true
-        },
-        {
-            field: "customerName",
-            name: "学员姓名"
-        }, {
-            field: "grade",
-            name: "当前年级",
-            template: '<span>{{row.grade | grade}}</span>'
-        }, {
-            field: "acceptTime",
-            name: "受理时间",
-            template: '<span>{{row.acceptTime | date:"yyyy-MM-dd"}}</span>'
-        }, {
-            field: "serviceType",
-            name: "服务类型",
-            template: '<span>{{row.serviceType | serviceType}}</span>'
-        }, {
-            field: "accepterName",
-            name: "客服受理人"
-        }, {
-            field: "serviceStatus",
-            name: "当前受理状态",
-            template: '<span>{{row.serviceStatus | serviceStatus}}</span>',
-            description: 'customer handleStatus'
-        }, {
-            field: "handlerName",
-            name: "当前受理人"
-        }, {
-            field: "complaintTimes",
-            name: "投诉次数",
-            template: '<span>{{row.complaintTimes | complaintTimes}}</span>'
-        },
-        {
-            field: "schoolMemo",
-            name: "校区反馈",
-            template: '<span>{{row.schoolMemo }}</span>'
-        }, {
-            field: 'isUpgradeHandle',
-            name: "是否升级",
-            template: '<span>{{row.isUpgradeHandle | ifElse}}</span>'
-        }, {
-            field: 'voiceID',
-            name: "通话录音",
-            template: '<span>{{row.voiceID}}</span>'
-        }, {
-            field: 'voiceStatus',
-            name: "录音状态",
-            template: '<span>{{row.voiceStatus}}</span>'
-        }
-        ],
-        pager: {
-            pageIndex: 1,
-            pageSize: ppts.config.pageSizeItem,
-            totalCount: -1
-        },
-        orderBy: [{ dataField: 'cs.CreateTime', sortDirection: 1 }]
-    });
+            name: "家长姓名"
+            },
+            {
+                field: "customerName",
+                name: "学员姓名",
+                template: '<a ui-sref="ppts.customer-view.profiles({id:row.customerID,prev:\'ppts.customer\'})"> <span style="color:red" ng-if="row.serviceType != 3 || row.isUpgradeHandle == 1">{{row.customerName}}</span><span ng-if="row.serviceType == 3">{{row.customerName}}</span></a>'
+            }
+            //, {
+            //    field: "grade",
+            //    name: "当前年级",
+            //    template: '<span>{{row.grade | grade}}</span>'
+            //}
+            , {
+                field: "acceptTime",
+                name: "受理时间",
+                template: '<a ui-sref="ppts.custservice-view({id:row.serviceID})">{{row.acceptTime | date:"yyyy-MM-dd"}}</a>'
+            }, {
+                field: "serviceType",
+                name: "服务类型",
+                template: '<span>{{row.serviceType | serviceType}}</span>'
+            }, {
+                field: "accepterName",
+                name: "客服受理人"
+            }, {
+                field: "serviceStatus",
+                name: "当前受理状态",
+                template: '<span>{{row.serviceStatus | serviceStatus}}</span>',
+                description: 'customer handleStatus'
+            }, {
+                field: "handlerName",
+                name: "当前受理人"
+            }, {
+                field: "complaintTimes",
+                name: "投诉次数",
+                template: '<span>{{row.complaintTimes | complaintTimes}}</span>'
+            }
+            //,
+            //{
+            //    field: "schoolMemo",
+            //    name: "校区反馈",
+            //    template: '<span>{{row.schoolMemo }}</span>'
+            //}
+            , {
+                field: 'isUpgradeHandle',
+                name: "是否升级",
+                template: '<span>{{row.isUpgradeHandle | ifElse}}</span>'
+            }, {
+                field: 'voiceID',
+                name: "通话录音",
+                template: '<span>{{row.voiceID}}</span>'
+            }, {
+                field: 'voiceStatus',
+                name: "录音状态",
+                template: '<span>{{row.voiceStatus}}</span>'
+            }
+            ],
+            orderBy: [{ dataField: 'cs.CreateTime', sortDirection: 1 }]
+        });
 
     custcenter.registerValue('customerListDataHeader', {
         selection: 'checkbox',
@@ -175,7 +186,7 @@
         ],
         pager: {
             pageIndex: 1,
-            pageSize: ppts.config.pageSizeItem,
+            pageSize: 1000,
             totalCount: -1
         },
         orderBy: [{ dataField: 'ci.ItemID', sortDirection: 1 }]
@@ -212,10 +223,10 @@
     custcenter.registerValue('custserviceAdvanceSearchItems', [
         { name: '当前年级：', template: '<ppts-checkbox-group category="grade" model="vm.criteria.grades" async="false"/>' },
         { name: '受理状态：', template: '<ppts-checkbox-group category="serviceStatus" model="vm.criteria.serviceStatuses" async="false"/>' },
-        { name: '来电日期：', template: '<ppts-daterangepicker start-date="vm.criteria.callTimeStart" end-date="vm.criteria.callTimeEnd" width="41.5%" css="mcs-margin-left-10"/>' },
+        { name: '来电日期：', template: '<mcs-daterangepicker start-date="vm.criteria.callTimeStart" end-date="vm.criteria.callTimeEnd" width="41.5%" css="mcs-margin-left-10"/>' },
         { name: '服务类型：', template: '<ppts-checkbox-group category="serviceType" model="vm.criteria.serviceTypes" async="false"/>' },
         { name: '投诉次数：', template: '<ppts-checkbox-group category="complaintTimes" model="vm.criteria.complaintTimes" async="false"/>' },
-        { name: '客服升级：', template: '<ppts-checkbox-group category="complaintUpgrade" model="vm.criteria.complaintUpgrades" async="false"/>' },
+        { name: '客诉升级：', template: '<ppts-checkbox-group category="complaintUpgrade" model="vm.criteria.complaintUpgrades" async="false"/>' },
         { name: '是否升级：', template: '<ppts-radiobutton-group category="ifElse" model="vm.criteria.isUpgradeHandle" show-all="true" async="false" css="mcs-padding-left-10"/>' },
         { name: '严重程度：', template: '<ppts-checkbox-group category="complaintLevel" model="vm.criteria.complaintLevels" async="false"/>' },
 
@@ -225,30 +236,39 @@
      function ($state, $stateParams, custserviceDataService, dataSyncService, custserviceListDataHeader, customerListDataHeader, customerServiceItemDataHeader, customerServiceItemAllDataHeader) {
          var service = this;
 
-         // 配置客户服务列表表头
-         service.configCustomerServiceListHeaders = function (vm) {
-             vm.data = custserviceListDataHeader;
+         //var syNow = new Date();
+         //var year = syNow.getFullYear();        //年
+         //var month = syNow.getMonth()+1;     //月
+         //var day = syNow.getDate();
+         //var startDate = new Date(new Date(year + "-" + month + "-" + 1).getTime());
+         //var endDate = new Date(new Date(year + "-" + month + "-" + day).getTime());
 
-             vm.data.pager.pageChange = function () {
-                 dataSyncService.initCriteria(vm);
-                 custserviceDataService.getPagedCustomerServices(vm.criteria, function (result) {
-                     vm.data.rows = result.pagedData;
-                 });
-             }
-         };
+         // 配置客户服务列表表头
+         //service.configCustomerServiceListHeaders = function (vm) {
+         //    vm.data = custserviceListDataHeader;
+
+         //    vm.data.pager.pageChange = function () {
+         //        dataSyncService.initCriteria(vm);
+         //        custserviceDataService.getPagedCustomerServices(vm.criteria, function (result) {
+         //            vm.data.rows = result.pagedData;
+                     
+         //        });
+         //    }
+         //}
 
          // 初始化客户服务列表
-         service.initCustomerServiceList = function (vm, callback) {
-             dataSyncService.initCriteria(vm);
-             custserviceDataService.getAllCustomerServices(vm.criteria, function (result) {
-                 vm.data.rows = result.queryResult.pagedData;
-                 dataSyncService.injectPageDict(['ifElse']);
-                 dataSyncService.updateTotalCount(vm, result.queryResult);
-                 if (ng.isFunction(callback)) {
-                     callback();
-                 }
-             });
-         };
+         //service.initCustomerServiceList = function (vm, callback) {
+         //    dataSyncService.initCriteria(vm);
+         //    custserviceDataService.getAllCustomerServices(vm.criteria, function (result) {
+         //        vm.data.rows = result.queryResult.pagedData;
+         //        vm.data.searching();
+         //        dataSyncService.injectDynamicDict('ifElse');
+         //        dataSyncService.updateTotalCount(vm, result.queryResult);
+         //        if (ng.isFunction(callback)) {
+         //            callback();
+         //        }
+         //    });
+         //};
 
          // 配置客户服务明细列表表头
          service.configCustomerServiceItemListHeaders = function (vm) {
@@ -266,7 +286,7 @@
 
          service.initCustomerServiceItemAllList = function (vm, callback) {
              dataSyncService.initCriteria(vm);
-             vm.criteria.customerID = vm.customer.customerID;
+             vm.criteria.customerID = vm.pCustomer.customerID;
              custserviceDataService.getCustomerServicesItemsAll(vm.criteria, function (result) {
                  vm.data.rows = result.queryResult.pagedData;
                  vm.data1 = {};
@@ -311,7 +331,7 @@
          // 初始化新增客服信息
          service.initCreateCustomerServiceInfo = function (vm, callback) {
              custserviceDataService.getCustomerServiceForCreate(function (result) {
-                 dataSyncService.injectPageDict(['ifElse']);
+                 dataSyncService.injectDynamicDict('ifElse');
                  vm.title = '客服';
                  switch (vm.customerService.serviceType) {
                      case 1:

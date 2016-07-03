@@ -22,6 +22,9 @@
                 <div class="col-sm-12">
                     <h3 class="header smaller lighter green">应用范例</h3>
                     <div ng-controller="MCSDatatableController">
+                        <h4>避免分页时带入未生效的条件</h4>
+                        <p>datatable 控件提供一个新的接口 condition="vm.yourConditionObject" 来引用到列表查询条件对象，在进行search的时候请先调用 vm.data.searching() 这里的searching函数是控件添加到列表数据配置对象上的函数，可以直接调用。 大家在使用datatable新接口searching的时候要注意：调用这个函数的时机一定要在进行新的search时，且在拿到数据并赋值给rows以后再调用
+                        </p>
                         <h4>交互式问答布局示例</h4>
                         <div class="dialogs ace-scroll scroll-active" style="
     width: 700px;
@@ -87,6 +90,8 @@
                         </div>
                     </div>
                     <div>
+                        <h3>没有数据时，添加自定义的提示文本</h3>
+                        <p>datatable 控件提供了nodata-tip配置接口，示例：nodata-tip="没找到数据"</p>
                         <button class="btn btn-primary" type="button" ng-click="vm.addRow()">添加一行</button>
                         <button class="btn btn-primary" type="button" ng-click="vm.removeRow()">删除一行</button>
                         <button class="btn btn-primary" type="button" ng-click="vm.clearSelections()">清除已选行的状态记录</button>
@@ -94,6 +99,7 @@
                         <button type="button" class="btn btn-primary" ng-click="vm.print()">打印</button>
                         <button type="button" class="btn btn-primary" ng-click="vm.exportExcel()">导出</button>
                         <button type="button" class="btn btn-primary" ng-click="vm.importExcel()">导入</button>
+                        <button class="btn btn-primary" type="button" ng-click="vm.fireEvent()">触发自定义事件</button>
                     </div>
                     <div id="table">
                         <div clas="datatable-container table-responsive" style="
@@ -122,12 +128,16 @@
                                 </tbody>
                             </table>
                         </div>
+                        <div>
+                            <input type="text" ng-model="vm.condition.name" placeholder="name">
+                            <button type="button" ng-click="vm.search()" class="btn btn-info">search</button>
+                        </div>
                         <mcs-datatable id="printArea" style="
     display: inline-block;
     width: 800px;
     border-left: 0px;
     margin-left: 0px;
-" on-order="vm.reorder(field,direction)" data="vm.data" />
+" on-order="vm.reorder(field,direction)" data="vm.data" model="vm" nodata-tip="实在没有发现任何东东！！" />
                     </div>
                 </div>
                 <div>

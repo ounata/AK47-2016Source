@@ -9,386 +9,390 @@ using MCS.Library.Data.DataObjects;
 
 namespace MCS.Library.SOA.DataObjects
 {
-	public enum EmailMessageStatus
-	{
-		NotSend = 0,
-		Sent = 1,
-		Fail = 2
-	}
+    public enum EmailMessageStatus
+    {
+        NotSend = 0,
+        Sent = 1,
+        Fail = 2
+    }
 
-	[Serializable]
-	[ORTableMapping("MSG.EMAIL_MESSAGES")]
+    [Serializable]
+    [ORTableMapping("MSG.EMAIL_MESSAGES")]
     [TenantRelativeObject]
-	public class EmailMessage
-	{
-		public EmailMessage()
-		{
-			this.ID = UuidHelper.NewUuidString();
-		}
+    public class EmailMessage
+    {
+        public EmailMessage()
+        {
+            this.ID = UuidHelper.NewUuidString();
+        }
 
-		public EmailMessage(EmailAddress sendToAddress, string subject, string body)
-		{
-			this.ID = UuidHelper.NewUuidString();
+        public EmailMessage(EmailAddress sendToAddress, string subject, string body)
+        {
+            this.ID = UuidHelper.NewUuidString();
 
-			if (sendToAddress != null)
-				this.To.Add(sendToAddress);
+            if (sendToAddress != null)
+                this.To.Add(sendToAddress);
 
-			this.Subject = subject;
-			this.Body = body;
-		}
+            this.Subject = subject;
+            this.Body = body;
+        }
 
-		public EmailMessage(string sendToAddress, string subject, string body)
-		{
-			this.ID = UuidHelper.NewUuidString();
+        public EmailMessage(string sendToAddress, string subject, string body)
+        {
+            this.ID = UuidHelper.NewUuidString();
 
-			if (sendToAddress.IsNotEmpty())
-			{
-				this.To.Add(EmailAddress.FromDescription(sendToAddress));
-			}
-	
-			this.Subject = subject;
-			this.Body = body;
-		}
+            if (sendToAddress.IsNotEmpty())
+            {
+                this.To.Add(EmailAddress.FromDescription(sendToAddress));
+            }
 
-		[ORFieldMapping("MESSAGE_ID", PrimaryKey = true)]
-		public string ID
-		{
-			get;
-			set;
-		}
+            this.Subject = subject;
+            this.Body = body;
+        }
 
-		[ORFieldMapping("SORT_ID", IsIdentity = true)]
-		[SqlBehavior(BindingFlags = ClauseBindingFlags.Select | ClauseBindingFlags.Where)]
-		public int SortID
-		{
-			get;
-			set;
-		}
+        [ORFieldMapping("MESSAGE_ID", PrimaryKey = true)]
+        public string ID
+        {
+            get;
+            set;
+        }
 
-		internal EmailAddressCollection _Bcc = null;
+        [ORFieldMapping("SORT_ID", IsIdentity = true)]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.Select | ClauseBindingFlags.Where)]
+        public int SortID
+        {
+            get;
+            set;
+        }
 
-		/// <summary>
-		/// 邮件的Bcc人员
-		/// </summary>
-		[NoMapping]
-		public EmailAddressCollection Bcc
-		{
-			get
-			{
-				EmailMessageAdapter.Instance.EnsureChildPropertiesLoaded(this);
+        internal EmailAddressCollection _Bcc = null;
 
-				return this._Bcc;
-			}
-		}
+        /// <summary>
+        /// 邮件的Bcc人员
+        /// </summary>
+        [NoMapping]
+        public EmailAddressCollection Bcc
+        {
+            get
+            {
+                EmailMessageAdapter.Instance.EnsureChildPropertiesLoaded(this);
 
-		/// <summary>
-		/// 邮件体
-		/// </summary>
-		[ORFieldMapping("BODY")]
-		public string Body
-		{
-			get;
-			set;
-		}
+                return this._Bcc;
+            }
+        }
 
-		private Encoding _BodyEncoding = Encoding.UTF8;
+        /// <summary>
+        /// 邮件体
+        /// </summary>
+        [ORFieldMapping("BODY")]
+        public string Body
+        {
+            get;
+            set;
+        }
 
-		/// <summary>
-		/// 邮件体的编码方式
-		/// </summary>
-		[NoMapping]
-		public Encoding BodyEncoding
-		{
-			get
-			{
-				return this._BodyEncoding;
-			}
-			set
-			{
-				this._BodyEncoding = value;
-			}
-		}
+        private Encoding _BodyEncoding = Encoding.UTF8;
 
-		internal EmailAddressCollection _CC = null;
+        /// <summary>
+        /// 邮件体的编码方式
+        /// </summary>
+        [NoMapping]
+        public Encoding BodyEncoding
+        {
+            get
+            {
+                return this._BodyEncoding;
+            }
+            set
+            {
+                this._BodyEncoding = value;
+            }
+        }
 
-		/// <summary>
-		/// 邮件的抄送人
-		/// </summary>
-		[NoMapping]
-		public EmailAddressCollection CC
-		{
-			get
-			{
-				EmailMessageAdapter.Instance.EnsureChildPropertiesLoaded(this);
+        internal EmailAddressCollection _CC = null;
 
-				return this._CC;
-			}
-		}
+        /// <summary>
+        /// 邮件的抄送人
+        /// </summary>
+        [NoMapping]
+        public EmailAddressCollection CC
+        {
+            get
+            {
+                EmailMessageAdapter.Instance.EnsureChildPropertiesLoaded(this);
 
-		internal EmailAddress _From = null;
+                return this._CC;
+            }
+        }
 
-		/// <summary>
-		/// 发件人
-		/// </summary>
-		[NoMapping]
-		public EmailAddress From
-		{
-			get
-			{
-				EmailMessageAdapter.Instance.EnsureChildPropertiesLoaded(this);
+        internal EmailAddress _From = null;
 
-				return this._From;
-			}
-			set
-			{
-				this._From = value;
-			}
-		}
+        /// <summary>
+        /// 发件人
+        /// </summary>
+        [NoMapping]
+        public EmailAddress From
+        {
+            get
+            {
+                EmailMessageAdapter.Instance.EnsureChildPropertiesLoaded(this);
 
-		private Encoding _HeadersEncoding = Encoding.UTF8;
+                return this._From;
+            }
+            set
+            {
+                this._From = value;
+            }
+        }
 
-		/// <summary>
-		/// Header的Encoding方式
-		/// </summary>
-		[NoMapping]
-		public Encoding HeadersEncoding
-		{
-			get
-			{
-				return this._HeadersEncoding;
-			}
-			set
-			{
-				this._HeadersEncoding = value;
-			}
-		}
+        private Encoding _HeadersEncoding = Encoding.UTF8;
 
-		private bool _IsBodyHtml = false;
+        /// <summary>
+        /// Header的Encoding方式
+        /// </summary>
+        [NoMapping]
+        public Encoding HeadersEncoding
+        {
+            get
+            {
+                return this._HeadersEncoding;
+            }
+            set
+            {
+                this._HeadersEncoding = value;
+            }
+        }
 
-		/// <summary>
-		/// 是否是Html的邮件体
-		/// </summary>
-		[ORFieldMapping("IS_BODY_HTML")]
-		public bool IsBodyHtml
-		{
-			get
-			{
-				return this._IsBodyHtml;
-			}
-			set
-			{
-				this._IsBodyHtml = value;
-			}
-		}
+        private bool _IsBodyHtml = false;
 
-		private MailPriority _Priority = MailPriority.Normal;
+        /// <summary>
+        /// 是否是Html的邮件体
+        /// </summary>
+        [ORFieldMapping("IS_BODY_HTML")]
+        public bool IsBodyHtml
+        {
+            get
+            {
+                return this._IsBodyHtml;
+            }
+            set
+            {
+                this._IsBodyHtml = value;
+            }
+        }
 
-		/// <summary>
-		/// 优先级
-		/// </summary>
-		[ORFieldMapping("PRIORITY")]
-		public MailPriority Priority
-		{
-			get
-			{
-				return this._Priority;
-			}
-			set
-			{
-				this._Priority = value;
-			}
-		}
+        private MailPriority _Priority = MailPriority.Normal;
 
-		internal EmailAddressCollection _ReplyToList = null;
+        /// <summary>
+        /// 优先级
+        /// </summary>
+        [ORFieldMapping("PRIORITY")]
+        public MailPriority Priority
+        {
+            get
+            {
+                return this._Priority;
+            }
+            set
+            {
+                this._Priority = value;
+            }
+        }
 
-		/// <summary>
-		/// 邮件回复地址
-		/// </summary>
-		[NoMapping]
-		public EmailAddressCollection ReplyToList
-		{
-			get
-			{
-				EmailMessageAdapter.Instance.EnsureChildPropertiesLoaded(this);
+        internal EmailAddressCollection _ReplyToList = null;
 
-				return this._ReplyToList;
-			}
-		}
+        /// <summary>
+        /// 邮件回复地址
+        /// </summary>
+        [NoMapping]
+        public EmailAddressCollection ReplyToList
+        {
+            get
+            {
+                EmailMessageAdapter.Instance.EnsureChildPropertiesLoaded(this);
 
-		internal EmailAddress _Sender = null;
+                return this._ReplyToList;
+            }
+        }
 
-		/// <summary>
-		/// 邮件的发件人
-		/// </summary>
-		[NoMapping]
-		public EmailAddress Sender
-		{
-			get
-			{
-				EmailMessageAdapter.Instance.EnsureChildPropertiesLoaded(this);
+        internal EmailAddress _Sender = null;
 
-				return this._Sender;
-			}
-			set
-			{
-				this._Sender = value;
-			}
-		}
+        /// <summary>
+        /// 邮件的发件人
+        /// </summary>
+        [NoMapping]
+        public EmailAddress Sender
+        {
+            get
+            {
+                EmailMessageAdapter.Instance.EnsureChildPropertiesLoaded(this);
 
-		/// <summary>
-		/// 邮件的标题
-		/// </summary>
-		[ORFieldMapping("SUBJECT")]
-		public string Subject
-		{
-			get;
-			set;
-		}
+                return this._Sender;
+            }
+            set
+            {
+                this._Sender = value;
+            }
+        }
 
-		private Encoding _SubjectEncoding = Encoding.UTF8;
+        /// <summary>
+        /// 邮件的标题
+        /// </summary>
+        [ORFieldMapping("SUBJECT")]
+        public string Subject
+        {
+            get;
+            set;
+        }
 
-		/// <summary>
-		/// 标题的编码方式
-		/// </summary>
-		[NoMapping]
-		public Encoding SubjectEncoding
-		{
-			get
-			{
-				return this._SubjectEncoding;
-			}
-			set
-			{
-				this._SubjectEncoding = value;
-			}
-		}
+        private Encoding _SubjectEncoding = Encoding.UTF8;
 
-		internal EmailAddressCollection _To = null;
+        /// <summary>
+        /// 标题的编码方式
+        /// </summary>
+        [NoMapping]
+        public Encoding SubjectEncoding
+        {
+            get
+            {
+                return this._SubjectEncoding;
+            }
+            set
+            {
+                this._SubjectEncoding = value;
+            }
+        }
 
-		/// <summary>
-		/// 邮件的发送人
-		/// </summary>
-		[NoMapping]
-		public EmailAddressCollection To
-		{
-			get
-			{
-				EmailMessageAdapter.Instance.EnsureChildPropertiesLoaded(this);
+        internal EmailAddressCollection _To = null;
 
-				return this._To;
-			}
-		}
+        /// <summary>
+        /// 邮件的发送人
+        /// </summary>
+        [NoMapping]
+        public EmailAddressCollection To
+        {
+            get
+            {
+                EmailMessageAdapter.Instance.EnsureChildPropertiesLoaded(this);
 
-		private EmailAttachmentCollection _Attachments = null;
+                return this._To;
+            }
+        }
 
-		[NoMapping]
-		public EmailAttachmentCollection Attachments
-		{
-			get
-			{
-				if (this._Attachments == null)
-				{
-					if (this.Loaded)
-						this._Attachments = EmailMessageAdapter.Instance.LoadAttachments(this.ID);
-					else
-						this._Attachments = new EmailAttachmentCollection();
-				}
+        private EmailAttachmentCollection _Attachments = null;
 
-				return this._Attachments;
-			}
-		}
+        [NoMapping]
+        public EmailAttachmentCollection Attachments
+        {
+            get
+            {
+                if (this._Attachments == null)
+                {
+                    if (this.Loaded)
+                        this._Attachments = EmailMessageAdapter.Instance.LoadAttachments(this.ID);
+                    else
+                        this._Attachments = new EmailAttachmentCollection();
+                }
 
-		[ORFieldMapping("STATUS")]
-		public EmailMessageStatus Status
-		{
-			get;
-			set;
-		}
+                return this._Attachments;
+            }
+        }
 
-		[ORFieldMapping("STATUS_TEXT")]
-		public string StatusText
-		{
-			get;
-			set;
-		}
+        [ORFieldMapping("STATUS")]
+        public EmailMessageStatus Status
+        {
+            get;
+            set;
+        }
 
-		[ORFieldMapping("SENT_TIME")]
-		[SqlBehavior(BindingFlags = ClauseBindingFlags.Select | ClauseBindingFlags.Where)]
-		public DateTime SentTime
-		{
-			get;
-			set;
-		}
+        [ORFieldMapping("STATUS_TEXT")]
+        public string StatusText
+        {
+            get;
+            set;
+        }
 
-		[NoMapping]
-		internal bool Loaded
-		{
-			get;
-			set;
-		}
+        [ORFieldMapping("SENT_TIME")]
+        [SqlBehavior(BindingFlags = ClauseBindingFlags.Select | ClauseBindingFlags.Where)]
+        public DateTime SentTime
+        {
+            get;
+            set;
+        }
 
-		[NoMapping]
-		internal bool ChildrenPropertiesLoaded
-		{
-			get;
-			set;
-		}
+        [NoMapping]
+        internal bool Loaded
+        {
+            get;
+            set;
+        }
 
-		/// <summary>
-		/// 转换为标准SMTP的邮件消息
-		/// </summary>
-		/// <returns></returns>
-		public MailMessage ToMailMessage()
-		{
-			MailMessage result = new MailMessage();
+        [NoMapping]
+        internal bool ChildrenPropertiesLoaded
+        {
+            get;
+            set;
+        }
 
-			this.Bcc.CopyTo(result.Bcc);
-			result.Body = this.Body;
-			result.BodyEncoding = this.BodyEncoding;
-			this.CC.CopyTo(result.CC);
-			result.From = this.From.ToMailAddress();
-			result.IsBodyHtml = this.IsBodyHtml;
-			result.Priority = this.Priority;
-			this.ReplyToList.CopyTo(result.ReplyToList);
+        /// <summary>
+        /// 转换为标准SMTP的邮件消息
+        /// </summary>
+        /// <returns></returns>
+        public MailMessage ToMailMessage()
+        {
+            MailMessage result = new MailMessage();
 
-			result.Sender = this.Sender.ToMailAddress();
-			result.Subject = this.Subject;
-			result.SubjectEncoding = this.SubjectEncoding;
-			this.To.CopyTo(result.To);
-			this.Attachments.CopyTo(result.Attachments);
+            this.Bcc.CopyTo(result.Bcc);
+            result.Body = this.Body;
+            result.BodyEncoding = this.BodyEncoding;
 
-			return result;
-		}
+            this.CC.CopyTo(result.CC);
 
-		public EmailMessage Clone()
-		{
-			EmailMessage result = new EmailMessage();
+            result.From = this.From.ToMailAddress();
+            result.IsBodyHtml = this.IsBodyHtml;
+            result.Priority = this.Priority;
+            this.ReplyToList.CopyTo(result.ReplyToList);
 
-			result.ID = this.ID;
-			result.SortID = this.SortID;
-			result._Attachments = this._Attachments;
-			result._Bcc = this._Bcc;
-			result.Body = this.Body;
-			result._BodyEncoding = this._BodyEncoding;
-			result._CC = this._CC;
-			result._From = this._From;
-			result._HeadersEncoding = this._HeadersEncoding;
-			result._IsBodyHtml = this._IsBodyHtml;
-			result._Priority = this._Priority;
-			result._ReplyToList = this._ReplyToList;
-			result._Sender = this._Sender;
-			result.Subject = this.Subject;
-			result._SubjectEncoding = this._SubjectEncoding;
-			result._To = this._To;
-			result.Loaded = this.Loaded;
-			result.ChildrenPropertiesLoaded = this.ChildrenPropertiesLoaded;
+            result.Sender = this.Sender.ToMailAddress();
 
-			return result;
-		}
-	}
+            result.Subject = this.Subject;
+            result.SubjectEncoding = this.SubjectEncoding;
+            this.To.CopyTo(result.To);
 
-	[Serializable]
-	public class EmailMessageCollection : EditableDataObjectCollectionBase<EmailMessage>
-	{
-	}
+            this.Attachments.CopyTo(result.Attachments);
+
+            return result;
+        }
+
+        public EmailMessage Clone()
+        {
+            EmailMessage result = new EmailMessage();
+
+            result.ID = this.ID;
+            result.SortID = this.SortID;
+            result._Attachments = this._Attachments;
+            result._Bcc = this._Bcc;
+            result.Body = this.Body;
+            result._BodyEncoding = this._BodyEncoding;
+            result._CC = this._CC;
+            result._From = this._From;
+            result._HeadersEncoding = this._HeadersEncoding;
+            result._IsBodyHtml = this._IsBodyHtml;
+            result._Priority = this._Priority;
+            result._ReplyToList = this._ReplyToList;
+            result._Sender = this._Sender;
+            result.Subject = this.Subject;
+            result._SubjectEncoding = this._SubjectEncoding;
+            result._To = this._To;
+            result.Loaded = this.Loaded;
+            result.ChildrenPropertiesLoaded = this.ChildrenPropertiesLoaded;
+
+            return result;
+        }
+    }
+
+    [Serializable]
+    public class EmailMessageCollection : EditableDataObjectCollectionBase<EmailMessage>
+    {
+    }
 }

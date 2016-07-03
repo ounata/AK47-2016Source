@@ -76,9 +76,9 @@
     <Compile Include="Models\ExpenseQueryResult.cs" />
     <Compile Include="Models\PresentQueryResult.cs" />
     <Compile Include="Models\ProductViewQueryResult.cs" />
-    <Compile Include="Operations\ICategoryQueryService.cs" />
     <Compile Include="Operations\IProductQueryService.cs" />
     <Compile Include="Operations\IConfigRuleQueryService.cs" />
+    <Compile Include="Operations\IWorkflowService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

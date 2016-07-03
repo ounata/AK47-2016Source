@@ -14,11 +14,13 @@ define([ppts.config.modules.customer,
                 function ($state, $scope, customerVisitDataService, customerVisitDataViewService, dataSyncService, visitAddBatchDataHeader, storage) {
                     var vm = this;
 
+                    customerVisitDataViewService.initDate(vm);
+
                     customerVisitDataViewService.configVisitAddBatchHeaders(vm, visitAddBatchDataHeader);
 
                     (function () {
                         customerVisitDataViewService.initCreateCustomerVisitInfo(vm, function () {
-                            dataSyncService.injectPageDict(['messageType']);
+                            dataSyncService.injectDynamicDict('messageType');
                             vm.data.rows = storage.get('selectedStudents');
                             //$scope.$on('selectedStudentsUpdated', function () {
                             //    vm.data.rows = customerService.selectedStudents;
